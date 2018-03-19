@@ -107,6 +107,10 @@
             // previous
             // 
             this.previous.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.previous.FlatAppearance.BorderSize = 0;
+            this.previous.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.previous.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.previous.ForeColor = System.Drawing.Color.White;
             this.previous.Location = new System.Drawing.Point(0, 0);
             this.previous.Margin = new System.Windows.Forms.Padding(0);
             this.previous.Name = "previous";
@@ -118,6 +122,10 @@
             // playPause
             // 
             this.playPause.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playPause.FlatAppearance.BorderSize = 0;
+            this.playPause.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.playPause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.playPause.ForeColor = System.Drawing.Color.White;
             this.playPause.Location = new System.Drawing.Point(89, 0);
             this.playPause.Margin = new System.Windows.Forms.Padding(0);
             this.playPause.Name = "playPause";
@@ -129,6 +137,10 @@
             // next
             // 
             this.next.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.next.FlatAppearance.BorderSize = 0;
+            this.next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.next.ForeColor = System.Drawing.Color.White;
             this.next.Location = new System.Drawing.Point(178, 0);
             this.next.Margin = new System.Windows.Forms.Padding(0);
             this.next.Name = "next";
