@@ -23,8 +23,8 @@ namespace AudioBand
     public partial class AudioBand : CSDeskBandWin
     {
         private const int FixedWidth = 250;
-        private readonly int MaxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
-        private readonly int MinHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
+        private readonly int _maxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
+        private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
         private readonly EnhancedProgressBar audioProgress = new EnhancedProgressBar();
         private readonly SvgDocument _playButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
         private readonly SvgDocument _nextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
@@ -47,8 +47,8 @@ namespace AudioBand
 
             Options.Fixed = true;
             Options.Increment = 0;
-            Options.Horizontal = Size = new Size(FixedWidth, MaxHeight);
-            Options.MinHorizontal = MinimumSize = new Size(FixedWidth, MinHeight);
+            Options.Horizontal = Size = new Size(FixedWidth, _maxHeight);
+            Options.MinHorizontal = MinimumSize = new Size(FixedWidth, _minHeight);
             Options.MaxHorizontal = MaximumSize = Size;
 
             SizeChanged += OnSizeChanged;
