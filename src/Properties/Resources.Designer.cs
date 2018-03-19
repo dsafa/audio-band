@@ -59,5 +59,35 @@ namespace AudioBand.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] next {
+            get {
+                object obj = ResourceManager.GetObject("next", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] play {
+            get {
+                object obj = ResourceManager.GetObject("play", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] previous {
+            get {
+                object obj = ResourceManager.GetObject("previous", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

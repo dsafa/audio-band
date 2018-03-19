@@ -35,6 +35,9 @@
     <Reference Include="CSDeskBand.Win, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\CSDeskBand.Win.1.0.0\lib\net461\CSDeskBand.Win.dll</HintPath>
     </Reference>
+    <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
+      <HintPath>packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -76,6 +79,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\play.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\next.svg" />
+    <Content Include="Resources\previous.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
