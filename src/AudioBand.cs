@@ -30,7 +30,7 @@ namespace AudioBand
         private readonly SvgDocument _pauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
         private readonly SvgDocument _nextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private readonly SvgDocument _previousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
-        private AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
+        private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
 
         public AudioBand()
         {
@@ -55,12 +55,25 @@ namespace AudioBand
 
             SizeChanged += OnSizeChanged;
             playPauseButton.Click += PlayPauseButtonOnClick;
+            _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
+
+            nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.IsPlaying));
+        }
+
+        private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            switch (propertyChangedEventArgs.PropertyName)
+            {
+                case nameof(AudioBandViewModel.IsPlaying):
+                    DrawControlSvgs();
+                    break;
+                default: break;
+            }
         }
 
         private void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
         {
             _audioBandViewModel.IsPlaying = !_audioBandViewModel.IsPlaying;
-            DrawControlSvgs();
         }
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
@@ -71,13 +84,11 @@ namespace AudioBand
 
         private void UpdateAlbumArt()
         {
-            var length = mainTable.GetRowHeights().Take(2).Sum();
-            nowPlayingText.Text = length + "";
+            var height = mainTable.GetRowHeights().Take(2).Sum();
             mainTable.ColumnStyles[0].SizeType = SizeType.Absolute;
-            mainTable.ColumnStyles[0].Width = length;
-            nowPlayingText.Text += " " + mainTable.ColumnStyles[1].Width;
+            mainTable.ColumnStyles[0].Width = height;
 
-            albumArt.Image = new Bitmap(length, length);
+            albumArt.Image = new Bitmap(height, height);
             using (var g = Graphics.FromImage(albumArt.Image))
             {
                 g.Clear(Color.Red);

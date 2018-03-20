@@ -12,6 +12,7 @@ namespace AudioBand
     public class AudioBandViewModel : INotifyPropertyChanged
     {
         private bool _isPlaying;
+        private string _nowPlayingText;
 
         public bool IsPlaying
         {
@@ -20,6 +21,17 @@ namespace AudioBand
             {
                 if (value == _isPlaying) return;
                 _isPlaying = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NowPlayingText
+        {
+            get => _nowPlayingText;
+            set
+            {
+                if (value == _nowPlayingText) return;
+                _nowPlayingText = value;
                 OnPropertyChanged();
             }
         }
