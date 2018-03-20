@@ -55,6 +55,8 @@ namespace AudioBand
 
             SizeChanged += OnSizeChanged;
             playPauseButton.Click += PlayPauseButtonOnClick;
+            previousButton.Click += PreviousButtonOnClick;
+            nextButton.Click += NextButtonOnClick;
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
 
             nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.IsPlaying));
@@ -76,6 +78,16 @@ namespace AudioBand
         private void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
         {
             _audioBandViewModel.IsPlaying = !_audioBandViewModel.IsPlaying;
+        }
+
+        private void PreviousButtonOnClick(object sender, EventArgs eventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void NextButtonOnClick(object sender, EventArgs eventArgs)
+        {
+            throw new NotImplementedException();
         }
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
