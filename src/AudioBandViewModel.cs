@@ -16,6 +16,7 @@ namespace AudioBand
         private bool _isPlaying;
         private string _nowPlayingText;
         private Bitmap _albumArt = new Bitmap(10, 10);
+        private int _audioProgress;
 
         public bool IsPlaying
         {
@@ -56,6 +57,17 @@ namespace AudioBand
                     graphics.DrawImage(value, 0, 0, AlbumArtSize.Width, AlbumArtSize.Height);
                 }
 
+                OnPropertyChanged();
+            }
+        }
+
+        public int AudioProgress
+        {
+            get => _audioProgress;
+            set
+            {
+                if (value == _audioProgress) return;
+                _audioProgress = value;
                 OnPropertyChanged();
             }
         }
