@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,6 +15,7 @@ namespace AudioBand
     {
         private bool _isPlaying;
         private string _nowPlayingText;
+        private Bitmap _albumArt = new Bitmap(10, 10);
 
         public bool IsPlaying
         {
@@ -35,6 +38,29 @@ namespace AudioBand
                 OnPropertyChanged();
             }
         }
+
+        public Bitmap AlbumArt
+        {
+            get => _albumArt;
+            set
+            {
+                if (Equals(value, _albumArt)) return;
+                _albumArt = new Bitmap(AlbumArtSize.Width, AlbumArtSize.Height);
+                using (var graphics = Graphics.FromImage(_albumArt))
+                {
+                    graphics.CompositingMode = CompositingMode.SourceCopy;
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphics.SmoothingMode = SmoothingMode.HighQuality;
+                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    graphics.DrawImage(value, 0, 0, AlbumArtSize.Width, AlbumArtSize.Height);
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        public Size AlbumArtSize { get; set; } = new Size(10, 10);
 
         public event PropertyChangedEventHandler PropertyChanged;
 

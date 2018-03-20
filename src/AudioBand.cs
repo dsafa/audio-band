@@ -58,6 +58,7 @@ namespace AudioBand
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
 
             nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.IsPlaying));
+            albumArt.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
         }
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -78,21 +79,16 @@ namespace AudioBand
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
         {
-            UpdateAlbumArt();
+            UpdateAlbumArtSize();
             DrawControlSvgs();
         }
 
-        private void UpdateAlbumArt()
+        private void UpdateAlbumArtSize()
         {
             var height = mainTable.GetRowHeights().Take(2).Sum();
             mainTable.ColumnStyles[0].SizeType = SizeType.Absolute;
             mainTable.ColumnStyles[0].Width = height;
-
-            albumArt.Image = new Bitmap(height, height);
-            using (var g = Graphics.FromImage(albumArt.Image))
-            {
-                g.Clear(Color.Red);
-            }
+            _audioBandViewModel.AlbumArtSize = new Size(height, height);
         }
 
         private void DrawControlSvgs()
@@ -118,12 +114,12 @@ namespace AudioBand
         private Bitmap DrawSvg(SvgDocument svg)
         {
             var bmp = new Bitmap((int)svg.Width.Value, (int)svg.Height.Value);
-            using (var g = Graphics.FromImage(bmp))
+            using (var graphics = Graphics.FromImage(bmp))
             {
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.CompositingQuality = CompositingQuality.HighQuality;
-                g.InterpolationMode = InterpolationMode.High;
-                svg.Draw(g);
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.High;
+                svg.Draw(graphics);
                 return bmp;
             }
         }
