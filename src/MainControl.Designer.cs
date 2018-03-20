@@ -1,6 +1,6 @@
 ﻿namespace AudioBand
 {
-    partial class AudioBand
+    partial class MainControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -35,6 +35,7 @@
             this.previousButton = new System.Windows.Forms.Button();
             this.playPauseButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
+            this.audioProgress = new AudioBand.EnhancedProgressBar();
             this.mainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.albumArt)).BeginInit();
             this.buttonsTable.SuspendLayout();
@@ -50,6 +51,7 @@
             this.mainTable.Controls.Add(this.albumArt, 0, 0);
             this.mainTable.Controls.Add(this.nowPlayingText, 1, 0);
             this.mainTable.Controls.Add(this.buttonsTable, 1, 1);
+            this.mainTable.Controls.Add(this.audioProgress, 0, 2);
             this.mainTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTable.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.mainTable.Location = new System.Drawing.Point(0, 0);
@@ -115,7 +117,7 @@
             this.previousButton.Location = new System.Drawing.Point(0, 0);
             this.previousButton.Margin = new System.Windows.Forms.Padding(0);
             this.previousButton.Name = "previousButton";
-            this.previousButton.Size = new System.Drawing.Size(89, 17);
+            this.previousButton.Size = new System.Drawing.Size(90, 17);
             this.previousButton.TabIndex = 0;
             this.previousButton.UseVisualStyleBackColor = true;
             // 
@@ -127,10 +129,10 @@
             this.playPauseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.playPauseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.playPauseButton.ForeColor = System.Drawing.Color.White;
-            this.playPauseButton.Location = new System.Drawing.Point(89, 0);
+            this.playPauseButton.Location = new System.Drawing.Point(90, 0);
             this.playPauseButton.Margin = new System.Windows.Forms.Padding(0);
             this.playPauseButton.Name = "playPauseButton";
-            this.playPauseButton.Size = new System.Drawing.Size(89, 17);
+            this.playPauseButton.Size = new System.Drawing.Size(90, 17);
             this.playPauseButton.TabIndex = 1;
             this.playPauseButton.UseVisualStyleBackColor = true;
             // 
@@ -142,14 +144,26 @@
             this.nextButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.nextButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.nextButton.ForeColor = System.Drawing.Color.White;
-            this.nextButton.Location = new System.Drawing.Point(178, 0);
+            this.nextButton.Location = new System.Drawing.Point(180, 0);
             this.nextButton.Margin = new System.Windows.Forms.Padding(0);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(92, 17);
+            this.nextButton.Size = new System.Drawing.Size(90, 17);
             this.nextButton.TabIndex = 2;
             this.nextButton.UseVisualStyleBackColor = true;
             // 
-            // AudioBand
+            // audioProgress
+            // 
+            this.mainTable.SetColumnSpan(this.audioProgress, 2);
+            this.audioProgress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.audioProgress.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.audioProgress.Location = new System.Drawing.Point(0, 38);
+            this.audioProgress.Margin = new System.Windows.Forms.Padding(0);
+            this.audioProgress.Name = "audioProgress";
+            this.audioProgress.Size = new System.Drawing.Size(300, 2);
+            this.audioProgress.TabIndex = 3;
+            this.audioProgress.Value = 100;
+            // 
+            // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -160,7 +174,7 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MaximumSize = new System.Drawing.Size(300, 40);
             this.MinimumSize = new System.Drawing.Size(300, 30);
-            this.Name = "AudioBand";
+            this.Name = "MainControl";
             this.Size = new System.Drawing.Size(300, 40);
             this.mainTable.ResumeLayout(false);
             this.mainTable.PerformLayout();
@@ -179,5 +193,6 @@
         private System.Windows.Forms.Button previousButton;
         private System.Windows.Forms.Button playPauseButton;
         private System.Windows.Forms.Button nextButton;
+        private AudioBand.EnhancedProgressBar audioProgress;
     }
 }

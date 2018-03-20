@@ -50,11 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioBand.cs">
+    <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AudioBand.Designer.cs">
-      <DependentUpon>AudioBand.cs</DependentUpon>
+    <Compile Include="MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioBandViewModel.cs" />
     <Compile Include="EnhancedProgressBar.cs">
@@ -69,8 +69,8 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AudioBand.resx">
-      <DependentUpon>AudioBand.cs</DependentUpon>
+    <EmbeddedResource Include="MainControl.resx">
+      <DependentUpon>MainControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

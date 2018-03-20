@@ -20,32 +20,22 @@ namespace AudioBand
     [Guid("957D8782-5B07-4126-9B24-1E917BAAAD64")]
     [ComVisible(true)]
     [CSDeskBandRegistration(Name = "Audio Band")]
-    public partial class AudioBand : CSDeskBandWin
+    public partial class MainControl : CSDeskBandWin
     {
         private const int FixedWidth = 250;
         private readonly int _maxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
-        private readonly EnhancedProgressBar audioProgress = new EnhancedProgressBar();
         private readonly SvgDocument _playButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
         private readonly SvgDocument _pauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
         private readonly SvgDocument _nextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private readonly SvgDocument _previousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
 
-        public AudioBand()
+        public MainControl()
         {
             InitializeComponent();
 
-            mainTable.Controls.Add(audioProgress, 0, 2);
-            mainTable.SetColumnSpan(audioProgress, 2);
-            audioProgress.Dock = DockStyle.Fill;
-            audioProgress.ForeColor = Color.DodgerBlue;
-            audioProgress.Location = new Point(0, 28);
-            audioProgress.Margin = new Padding(0);
-            audioProgress.Name = "audioProgress";
-            audioProgress.Size = new Size(300, 2);
-            audioProgress.TabIndex = 3;
-            audioProgress.Value = 100;
+
 
             Options.Fixed = true;
             Options.Increment = 0;
@@ -59,9 +49,9 @@ namespace AudioBand
             nextButton.Click += NextButtonOnClick;
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
 
-            nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.IsPlaying));
-            albumArt.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
-            audioProgress.DataBindings.Add("Value", _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
+            //nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.IsPlaying));
+            //albumArt.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
+            //audioProgress.DataBindings.Add("Value", _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
         }
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)

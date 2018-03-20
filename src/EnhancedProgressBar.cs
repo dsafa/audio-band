@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace AudioBand
 {
     // So we can draw with our own color
-    class EnhancedProgressBar : ProgressBar
+    public class EnhancedProgressBar : ProgressBar
     {
         public EnhancedProgressBar()
         {
