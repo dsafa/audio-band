@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\next.svg" />
+    <Content Include="Resources\pause.svg" />
     <Content Include="Resources\previous.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

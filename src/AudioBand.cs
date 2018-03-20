@@ -27,8 +27,10 @@ namespace AudioBand
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
         private readonly EnhancedProgressBar audioProgress = new EnhancedProgressBar();
         private readonly SvgDocument _playButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
+        private readonly SvgDocument _pauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
         private readonly SvgDocument _nextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private readonly SvgDocument _previousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
+        private AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
 
         public AudioBand()
         {
@@ -52,6 +54,13 @@ namespace AudioBand
             Options.MaxHorizontal = MaximumSize = Size;
 
             SizeChanged += OnSizeChanged;
+            playPauseButton.Click += PlayPauseButtonOnClick;
+        }
+
+        private void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
+        {
+            _audioBandViewModel.IsPlaying = !_audioBandViewModel.IsPlaying;
+            DrawControlSvgs();
         }
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
@@ -81,9 +90,10 @@ namespace AudioBand
             const int padding = 3;
             var height = buttonsTable.GetRowHeights()[0] - padding;
 
-            _playButtonSvg.Width = height;
-            _playButtonSvg.Height = height;
-            playPauseButton.Image = DrawSvg(_playButtonSvg);
+            SvgDocument playPauseSvg = _audioBandViewModel.IsPlaying ? _pauseButtonSvg : _playButtonSvg;
+            playPauseSvg.Width = playPauseButton.Width;
+            playPauseSvg.Height = height;
+            playPauseButton.Image = DrawSvg(playPauseSvg);
 
             _nextButtonSvg.Width = nextButton.Width;
             _nextButtonSvg.Height = height;
