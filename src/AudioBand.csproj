@@ -88,5 +88,11 @@
     <Content Include="Resources\pause.svg" />
     <Content Include="Resources\previous.svg" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AudioBand.Connector\AudioBand.Connector.csproj">
+      <Project>{30f2bfea-788a-494d-88e7-f2070528ebea}</Project>
+      <Name>AudioBand.Connector</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

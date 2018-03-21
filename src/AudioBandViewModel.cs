@@ -12,10 +12,10 @@ namespace AudioBand
         private bool _isPlaying;
         private string _nowPlayingText;
         private int _audioProgress;
-        private Bitmap _albumArt = new Bitmap(1, 1);
-        private Bitmap _previousButtonBitmap = new Bitmap(1, 1);
-        private Bitmap _nextButtonBitmap = new Bitmap(1, 1);
-        private Bitmap _playPauseButtonBitmap = new Bitmap(1, 1);
+        private Image _albumArt = new Bitmap(1, 1);
+        private Image _previousButtonBitmap = new Bitmap(1, 1);
+        private Image _nextButtonBitmap = new Bitmap(1, 1);
+        private Image _playPauseButtonBitmap = new Bitmap(1, 1);
 
         public bool IsPlaying
         {
@@ -39,7 +39,7 @@ namespace AudioBand
             }
         }
 
-        public Bitmap AlbumArt
+        public Image AlbumArt
         {
             get => _albumArt;
             set
@@ -71,7 +71,7 @@ namespace AudioBand
             }
         }
 
-        public Bitmap PreviousButtonBitmap
+        public Image PreviousButtonBitmap
         {
             get => _previousButtonBitmap;
             set
@@ -82,7 +82,7 @@ namespace AudioBand
             }
         }
 
-        public Bitmap NextButtonBitmap
+        public Image NextButtonBitmap
         {
             get => _nextButtonBitmap;
             set
@@ -93,7 +93,7 @@ namespace AudioBand
             }
         }
 
-        public Bitmap PlayPauseButtonBitmap
+        public Image PlayPauseButtonBitmap
         {
             get => _playPauseButtonBitmap;
             set
