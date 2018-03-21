@@ -35,8 +35,6 @@ namespace AudioBand
         {
             InitializeComponent();
 
-
-
             Options.Fixed = true;
             Options.Increment = 0;
             Options.Horizontal = Size = new Size(FixedWidth, _maxHeight);
