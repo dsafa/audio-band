@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CSDeskBand.Annotations;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using CSDeskBand.Annotations;
+using Svg;
 
 namespace AudioBand
 {
-    public class AudioBandViewModel : INotifyPropertyChanged
+    internal class AudioBandViewModel : INotifyPropertyChanged
     {
         private bool _isPlaying;
         private string _nowPlayingText;
-        private Bitmap _albumArt = new Bitmap(10, 10);
         private int _audioProgress;
+        private Bitmap _albumArt = new Bitmap(1, 1);
+        private Bitmap _previousButtonBitmap = new Bitmap(1, 1);
+        private Bitmap _nextButtonBitmap = new Bitmap(1, 1);
+        private Bitmap _playPauseButtonBitmap = new Bitmap(1, 1);
 
         public bool IsPlaying
         {
@@ -72,7 +71,40 @@ namespace AudioBand
             }
         }
 
-        public Size AlbumArtSize { get; set; } = new Size(10, 10);
+        public Bitmap PreviousButtonBitmap
+        {
+            get => _previousButtonBitmap;
+            set
+            {
+                if (Equals(value, _previousButtonBitmap)) return;
+                _previousButtonBitmap = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Bitmap NextButtonBitmap
+        {
+            get => _nextButtonBitmap;
+            set
+            {
+                if (Equals(value, _nextButtonBitmap)) return;
+                _nextButtonBitmap = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Bitmap PlayPauseButtonBitmap
+        {
+            get => _playPauseButtonBitmap;
+            set
+            {
+                if (Equals(value, _playPauseButtonBitmap)) return;
+                _playPauseButtonBitmap = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Size AlbumArtSize { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -49,9 +49,12 @@ namespace AudioBand
             nextButton.Click += NextButtonOnClick;
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
 
-            //nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.IsPlaying));
-            //albumArt.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
-            //audioProgress.DataBindings.Add("Value", _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
+            nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.IsPlaying));
+            albumArt.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
+            audioProgress.DataBindings.Add("Value", _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
+            previousButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
+            playPauseButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
+            nextButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
         }
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -59,7 +62,7 @@ namespace AudioBand
             switch (propertyChangedEventArgs.PropertyName)
             {
                 case nameof(AudioBandViewModel.IsPlaying):
-                    DrawControlSvgs();
+                    UpdateControlSvgs();
                     break;
                 default: break;
             }
@@ -83,7 +86,7 @@ namespace AudioBand
         private void OnSizeChanged(object sender, EventArgs eventArgs)
         {
             UpdateAlbumArtSize();
-            DrawControlSvgs();
+            UpdateControlSvgs();
         }
 
         private void UpdateAlbumArtSize()
@@ -94,7 +97,7 @@ namespace AudioBand
             _audioBandViewModel.AlbumArtSize = new Size(height, height);
         }
 
-        private void DrawControlSvgs()
+        private void UpdateControlSvgs()
         {
             // Issues with svg
             const int padding = 3;
@@ -103,15 +106,15 @@ namespace AudioBand
             SvgDocument playPauseSvg = _audioBandViewModel.IsPlaying ? _pauseButtonSvg : _playButtonSvg;
             playPauseSvg.Width = playPauseButton.Width;
             playPauseSvg.Height = height;
-            playPauseButton.Image = DrawSvg(playPauseSvg);
+            _audioBandViewModel.PlayPauseButtonBitmap = DrawSvg(playPauseSvg);
 
             _nextButtonSvg.Width = nextButton.Width;
             _nextButtonSvg.Height = height;
-            nextButton.Image = DrawSvg(_nextButtonSvg);
+            _audioBandViewModel.NextButtonBitmap = DrawSvg(_nextButtonSvg);
 
             _previousButtonSvg.Width = previousButton.Width;
             _previousButtonSvg.Height = height;
-            previousButton.Image = DrawSvg(_previousButtonSvg);
+            _audioBandViewModel.PreviousButtonBitmap = DrawSvg(_previousButtonSvg);
         }
 
         private Bitmap DrawSvg(SvgDocument svg)
