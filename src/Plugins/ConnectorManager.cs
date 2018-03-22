@@ -25,7 +25,7 @@ namespace AudioBand.Plugins
 
         private DirectoryCatalog BuildCatalog()
         {
-            var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            var basePath = DirectoryHelper.BaseDirectory;
             var pluginFolderPath = Path.Combine(basePath, PluginFolderName);
             if (!Directory.Exists(pluginFolderPath))
             {
