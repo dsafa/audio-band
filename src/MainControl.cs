@@ -4,6 +4,7 @@ using CSDeskBand.Win;
 using NLog;
 using Svg;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -11,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using AudioBand.Connector;
 using NLog.Config;
 using Size = System.Drawing.Size;
 
@@ -32,6 +34,8 @@ namespace AudioBand
         private readonly Image _albumArt = new Bitmap(1, 1);
         private readonly ConnectorManager _connectorManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
+        private IAudioConnector _connector;
+
 
         public MainControl()
         {
@@ -63,7 +67,31 @@ namespace AudioBand
             }
 
             _connectorManager = new ConnectorManager();
+
+            Options.ContextMenuItems = BuildContextMenu();
         }
+
+        private List<CSDeskBandMenuItem> BuildContextMenu()
+        {
+            var pluginList = _connectorManager.AudioConnectors.Select(connector =>
+            {
+                var item = new CSDeskBandMenuAction(connector.ConnectorName);
+                item.Clicked += ConnectorMenuItemOnClicked;
+                return item;
+            });
+
+            var pluginSubMenu = new CSDeskBandMenu("Plugins", pluginList);
+
+            return new List<CSDeskBandMenuItem>{pluginSubMenu};
+        }
+
+        private void ConnectorMenuItemOnClicked(object sender, EventArgs eventArgs)
+        {
+            var item = (CSDeskBandMenuAction)sender;
+            item.Checked = true;
+            _connector = _connectorManager.AudioConnectors.First(c => c.ConnectorName == item.Text);
+        }
+
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
