@@ -1,9 +1,21 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 
 namespace AudioBand.Connector
 {
+    [InheritedExport(typeof(IAudioConnector))]
     public interface IAudioConnector
     {
+        /// <summary>
+        /// Name of the connector which is displayed
+        /// </summary>
+        string ConnectorName { get; }
+
+        /// <summary>
+        /// The current progress of the audio track
+        /// </summary>
+        IObservable<int> TrackProgress { get; }
+
         /// <summary>
         /// User changed the state
         /// </summary>
@@ -19,11 +31,6 @@ namespace AudioBand.Connector
         /// User requested the next track
         /// </summary>
         void NextTrack();
-
-        /// <summary>
-        /// The current progress of the audio track
-        /// </summary>
-        IObservable<int> TrackProgress { get; }
 
         /// <summary>
         /// Track information has changed

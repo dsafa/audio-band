@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AudioBand.Plugins;
 using CSDeskBand;
 using CSDeskBand.Win;
 using Svg;
@@ -31,6 +32,7 @@ namespace AudioBand
         private readonly SvgDocument _previousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
         private readonly Image _albumArt = new Bitmap(1, 1);
+        private readonly ConnectorManager _connectorManager;
 
         public MainControl()
         {
@@ -54,6 +56,8 @@ namespace AudioBand
             previousButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
             playPauseButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
             nextButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
+
+            _connectorManager = new ConnectorManager();
         }
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
