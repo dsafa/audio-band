@@ -30,6 +30,7 @@ namespace AudioBand
         private readonly SvgDocument _nextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private readonly SvgDocument _previousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
+        private readonly Image _albumArt = new Bitmap(1, 1);
 
         public MainControl()
         {
@@ -83,16 +84,28 @@ namespace AudioBand
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
         {
-            UpdateAlbumArtSize();
+            UpdateAlbumArt();
             UpdateControlSvgs();
         }
 
-        private void UpdateAlbumArtSize()
+        private void UpdateAlbumArt()
         {
             var height = mainTable.GetRowHeights().Take(2).Sum();
             mainTable.ColumnStyles[0].SizeType = SizeType.Absolute;
             mainTable.ColumnStyles[0].Width = height;
-            _audioBandViewModel.AlbumArtSize = new Size(height, height);
+
+            var newAlbumArt = new Bitmap(height, height);
+            using (var graphics = Graphics.FromImage(newAlbumArt))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphics.DrawImage(_albumArt, 0, 0, newAlbumArt.Width, newAlbumArt.Height);
+            }
+
+            _audioBandViewModel.AlbumArt = newAlbumArt;
         }
 
         private void UpdateControlSvgs()

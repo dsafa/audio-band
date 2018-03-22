@@ -45,17 +45,7 @@ namespace AudioBand
             set
             {
                 if (Equals(value, _albumArt)) return;
-                _albumArt = new Bitmap(AlbumArtSize.Width, AlbumArtSize.Height);
-                using (var graphics = Graphics.FromImage(_albumArt))
-                {
-                    graphics.CompositingMode = CompositingMode.SourceCopy;
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphics.SmoothingMode = SmoothingMode.HighQuality;
-                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    graphics.DrawImage(value, 0, 0, AlbumArtSize.Width, AlbumArtSize.Height);
-                }
-
+                _albumArt = value;
                 OnPropertyChanged();
             }
         }
@@ -103,8 +93,6 @@ namespace AudioBand
                 OnPropertyChanged();
             }
         }
-
-        public Size AlbumArtSize { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
