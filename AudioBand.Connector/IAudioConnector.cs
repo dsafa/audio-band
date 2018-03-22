@@ -26,8 +26,18 @@ namespace AudioBand.Connector
         IObservable<int> TrackProgress { get; }
 
         /// <summary>
-        /// Track has changed
+        /// Track information has changed
         /// </summary>
-        event EventHandler<TrackChangedEventArgs> TrackChanged;
+        event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
+
+        /// <summary>
+        /// Album art has changed
+        /// </summary>
+        event EventHandler<AlbumArtChangedEventArgs> AlbumArtChanged;
+
+        /// <summary>
+        /// Audio state has changed
+        /// </summary>
+        event EventHandler<AudioStateChangedEventArgs> AudioStateChanged;
     }
 }
