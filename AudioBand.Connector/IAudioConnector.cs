@@ -17,7 +17,7 @@ namespace AudioBand.Connector
         IObservable<int> TrackProgress { get; }
 
         /// <summary>
-        /// User changed the state
+        /// User changed the state. This should trigger the <see cref="AudioStateChanged"/> event if successful
         /// </summary>
         /// <param name="newAudioState">The new state</param>
         void ChangeState(AudioState newAudioState);

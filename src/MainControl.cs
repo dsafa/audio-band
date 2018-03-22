@@ -31,11 +31,10 @@ namespace AudioBand
         private readonly SvgDocument _nextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private readonly SvgDocument _previousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
-        private readonly Image _albumArt = new Bitmap(1, 1);
         private readonly ConnectorManager _connectorManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private IAudioConnector _connector;
-
+        private CSDeskBandMenu _pluginSubMenu;
 
         public MainControl()
         {
@@ -80,18 +79,73 @@ namespace AudioBand
                 return item;
             });
 
-            var pluginSubMenu = new CSDeskBandMenu("Plugins", pluginList);
+            _pluginSubMenu = new CSDeskBandMenu("Plugins", pluginList);
 
-            return new List<CSDeskBandMenuItem>{pluginSubMenu};
+            return new List<CSDeskBandMenuItem>{ _pluginSubMenu };
         }
 
         private void ConnectorMenuItemOnClicked(object sender, EventArgs eventArgs)
         {
             var item = (CSDeskBandMenuAction)sender;
+            if (item.Checked)
+            {
+                UnsubscribeToConnector(_connector);
+                _connector = null;
+                return;
+            }
+
+            // Uncheck old item and unsubscribe from the current connector
+            var lastItemChecked = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == _connector.ConnectorName);
+            if (lastItemChecked != null)
+            {
+                lastItemChecked.Checked = false;
+                UnsubscribeToConnector(_connector);
+            }
+
             item.Checked = true;
             _connector = _connectorManager.AudioConnectors.First(c => c.ConnectorName == item.Text);
+            SubscribeToConnector(_connector);
         }
 
+        private void SubscribeToConnector(IAudioConnector connector)
+        {
+            connector.TrackInfoChanged += ConnectorOnTrackInfoChanged;
+            connector.AlbumArtChanged += ConnectorOnAlbumArtChanged;
+            connector.AudioStateChanged += ConnectorOnAudioStateChanged;
+        }
+
+        private void UnsubscribeToConnector(IAudioConnector connector)
+        {
+            connector.TrackInfoChanged -= ConnectorOnTrackInfoChanged;
+            connector.AlbumArtChanged -= ConnectorOnAlbumArtChanged;
+            connector.AudioStateChanged -= ConnectorOnAudioStateChanged;
+        }
+
+        private void ConnectorOnAudioStateChanged(object sender, AudioStateChangedEventArgs audioStateChangedEventArgs)
+        {
+            switch (audioStateChangedEventArgs.State)
+            {
+                case AudioState.Paused:
+                    _audioBandViewModel.IsPlaying = false;
+                    break;
+                case AudioState.Playing:
+                    _audioBandViewModel.IsPlaying = true;
+                    break;
+                default:
+                    _logger.Error($"Unknown audio state: {audioStateChangedEventArgs.State}");
+                    break;
+            }
+        }
+
+        private void ConnectorOnAlbumArtChanged(object sender, AlbumArtChangedEventArgs albumArtChangedEventArgs)
+        {
+            UpdateAlbumArt(albumArtChangedEventArgs.AlbumArt);
+        }
+
+        private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
+        {
+            _audioBandViewModel.NowPlayingText = trackInfoChangedEventArgs.TrackName;
+        }
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
@@ -106,26 +160,26 @@ namespace AudioBand
 
         private void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
         {
-            _audioBandViewModel.IsPlaying = !_audioBandViewModel.IsPlaying;
+            _connector?.ChangeState(_audioBandViewModel.IsPlaying ? AudioState.Paused : AudioState.Playing);
         }
 
         private void PreviousButtonOnClick(object sender, EventArgs eventArgs)
         {
-            throw new NotImplementedException();
+            _connector?.PreviousTrack();
         }
 
         private void NextButtonOnClick(object sender, EventArgs eventArgs)
         {
-            throw new NotImplementedException();
+            _connector?.NextTrack();
         }
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
         {
-            UpdateAlbumArt();
+            UpdateAlbumArt(_audioBandViewModel.AlbumArt);
             UpdateControlSvgs();
         }
 
-        private void UpdateAlbumArt()
+        private void UpdateAlbumArt(Image albumArt)
         {
             var height = mainTable.GetRowHeights().Take(2).Sum();
             mainTable.ColumnStyles[0].SizeType = SizeType.Absolute;
@@ -139,7 +193,7 @@ namespace AudioBand
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphics.DrawImage(_albumArt, 0, 0, newAlbumArt.Width, newAlbumArt.Height);
+                graphics.DrawImage(albumArt, 0, 0, newAlbumArt.Width, newAlbumArt.Height);
             }
 
             _audioBandViewModel.AlbumArt = newAlbumArt;
