@@ -29,6 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,6 +54,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)AudioBand\bin\release\connectors\</PostBuildEvent>
+    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)AudioBand\bin\release\connectors\ /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
