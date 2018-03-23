@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AudioBand.Connector;
 using NLog.Config;
@@ -48,9 +49,9 @@ namespace AudioBand
             Options.MaxHorizontal = MaximumSize = Size;
 
             SizeChanged += OnSizeChanged;
-            playPauseButton.Click += PlayPauseButtonOnClick;
-            previousButton.Click += PreviousButtonOnClick;
-            nextButton.Click += NextButtonOnClick;
+            playPauseButton.Click += async (sender, eventArgs) => await PlayPauseButtonOnClick(sender, eventArgs);
+            previousButton.Click += async (sender, eventArgs) => await PreviousButtonOnClick(sender, eventArgs);
+            nextButton.Click += async (sender, eventArgs) => await NextButtonOnClick(sender, eventArgs);
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
 
             nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
@@ -120,7 +121,9 @@ namespace AudioBand
 
             connector.TrackInfoChanged += ConnectorOnTrackInfoChanged;
             connector.AlbumArtChanged += ConnectorOnAlbumArtChanged;
-            connector.AudioStateChanged += ConnectorOnAudioStateChanged;
+            connector.TrackPlaying += ConnectorOnTrackPlaying;
+            connector.TrackPaused += ConnectorOnTrackPaused;
+            connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
         }
 
         private void UnsubscribeToConnector(IAudioConnector connector)
@@ -132,23 +135,24 @@ namespace AudioBand
 
             connector.TrackInfoChanged -= ConnectorOnTrackInfoChanged;
             connector.AlbumArtChanged -= ConnectorOnAlbumArtChanged;
-            connector.AudioStateChanged -= ConnectorOnAudioStateChanged;
+            connector.TrackPlaying -= ConnectorOnTrackPlaying;
+            connector.TrackPaused -= ConnectorOnTrackPaused;
+            connector.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
         }
 
-        private void ConnectorOnAudioStateChanged(object sender, AudioStateChangedEventArgs audioStateChangedEventArgs)
+        private void ConnectorOnTrackProgressChanged(object o, int progress)
         {
-            switch (audioStateChangedEventArgs.State)
-            {
-                case AudioState.Paused:
-                    _audioBandViewModel.IsPlaying = false;
-                    break;
-                case AudioState.Playing:
-                    _audioBandViewModel.IsPlaying = true;
-                    break;
-                default:
-                    _logger.Error($"Unknown audio state: {audioStateChangedEventArgs.State}");
-                    break;
-            }
+            BeginInvoke(new Action(() => { _audioBandViewModel.AudioProgress = progress; }));
+        }
+
+        private void ConnectorOnTrackPaused(object o, EventArgs args)
+        {
+            _audioBandViewModel.IsPlaying = false;
+        }
+
+        private void ConnectorOnTrackPlaying(object o, EventArgs args)
+        {
+            _audioBandViewModel.IsPlaying = true;
         }
 
         private void ConnectorOnAlbumArtChanged(object sender, AlbumArtChangedEventArgs albumArtChangedEventArgs)
@@ -172,19 +176,27 @@ namespace AudioBand
             }
         }
 
-        private void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
+        private async Task PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
         {
-            _connector?.ChangeState(_audioBandViewModel.IsPlaying ? AudioState.Paused : AudioState.Playing);
+            if (_audioBandViewModel.IsPlaying)
+            {
+                await (_connector?.PlayTrackAsync() ?? Task.CompletedTask);
+            }
+            else
+            {
+                await (_connector?.PauseTrackAsync() ?? Task.CompletedTask);
+            }
+
         }
 
-        private void PreviousButtonOnClick(object sender, EventArgs eventArgs)
+        private async Task PreviousButtonOnClick(object sender, EventArgs eventArgs)
         {
-            _connector?.PreviousTrack();
+            await (_connector?.PreviousTrackAsync() ?? Task.CompletedTask);
         }
 
-        private void NextButtonOnClick(object sender, EventArgs eventArgs)
+        private async Task NextButtonOnClick(object sender, EventArgs eventArgs)
         {
-            _connector?.NextTrack();
+            await (_connector?.NextTrackAsync() ?? Task.CompletedTask);
         }
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)

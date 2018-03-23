@@ -42,7 +42,6 @@
   <ItemGroup>
     <Compile Include="Connector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpotifyTrackProgress.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AudioBand.Connector\AudioBand.Connector.csproj">

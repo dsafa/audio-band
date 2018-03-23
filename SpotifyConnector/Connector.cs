@@ -10,34 +10,43 @@ namespace SpotifyConnector
     public class Connector : IAudioConnector
     {
         public string ConnectorName { get; } = "Spotify";
-        public IObservable<int> TrackProgress { get; } = new SpotifyTrackProgress();
 
-        public void ChangeState(AudioState newAudioState)
+        public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
+        public event EventHandler<AlbumArtChangedEventArgs> AlbumArtChanged;
+        public event EventHandler TrackPlaying;
+        public event EventHandler TrackPaused;
+        public event EventHandler<int> TrackProgressChanged;
+
+        public Task PlayTrackAsync()
         {
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
-            {
-                TrackName = newAudioState.ToString()
-            });   
+            TrackPlaying?.Invoke(this, EventArgs.Empty);
+            return Task.CompletedTask;
         }
 
-        public void PreviousTrack()
+        public Task PauseTrackAsync()
+        {
+            TrackPaused?.Invoke(this, EventArgs.Empty);
+            return Task.CompletedTask;
+        }
+
+        public Task PreviousTrackAsync()
         {
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
             {
                 TrackName = "previous track"
             });
+
+            return Task.CompletedTask;
         }
 
-        public void NextTrack()
+        public Task NextTrackAsync()
         {
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
             {
                 TrackName = "next track"
             });
-        }
 
-        public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
-        public event EventHandler<AlbumArtChangedEventArgs> AlbumArtChanged;
-        public event EventHandler<AudioStateChangedEventArgs> AudioStateChanged;
+            return Task.CompletedTask;
+        }
     }
 }

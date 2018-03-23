@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Threading.Tasks;
 
 namespace AudioBand.Connector
 {
@@ -12,27 +13,6 @@ namespace AudioBand.Connector
         string ConnectorName { get; }
 
         /// <summary>
-        /// The current progress of the audio track
-        /// </summary>
-        IObservable<int> TrackProgress { get; }
-
-        /// <summary>
-        /// User changed the state. This should trigger the <see cref="AudioStateChanged"/> event if successful
-        /// </summary>
-        /// <param name="newAudioState">The new state</param>
-        void ChangeState(AudioState newAudioState);
-
-        /// <summary>
-        /// User requested the previous track
-        /// </summary>
-        void PreviousTrack();
-
-        /// <summary>
-        /// User requested the next track
-        /// </summary>
-        void NextTrack();
-
-        /// <summary>
         /// Track information has changed
         /// </summary>
         event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
@@ -43,8 +23,38 @@ namespace AudioBand.Connector
         event EventHandler<AlbumArtChangedEventArgs> AlbumArtChanged;
 
         /// <summary>
-        /// Audio state has changed
+        /// Track is now playing
         /// </summary>
-        event EventHandler<AudioStateChangedEventArgs> AudioStateChanged;
+        event EventHandler TrackPlaying;
+
+        /// <summary>
+        /// Track is paused
+        /// </summary>
+        event EventHandler TrackPaused;
+
+        /// <summary>
+        /// Track progress has changed
+        /// </summary>
+        event EventHandler<int> TrackProgressChanged;
+
+        /// <summary>
+        /// User requested to play the track. This should trigger <see cref="TrackPlaying"/> if successful
+        /// </summary>
+        Task PlayTrackAsync();
+
+        /// <summary>
+        /// User requested to pause the track. This should trigger <see cref="TrackPaused"/> if successful
+        /// </summary>
+        Task PauseTrackAsync();
+
+        /// <summary>
+        /// User requested the previous track
+        /// </summary>
+        Task PreviousTrackAsync();
+
+        /// <summary>
+        /// User requested the next track
+        /// </summary>
+        Task NextTrackAsync();
     }
 }
