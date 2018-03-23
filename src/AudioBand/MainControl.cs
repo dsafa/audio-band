@@ -61,16 +61,19 @@ namespace AudioBand
             playPauseButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
             nextButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
 
+            _connectorManager = new ConnectorManager();
+
+            Options.ContextMenuItems = BuildContextMenu();
+        }
+
+        static MainControl()
+        {
             // Fix nlog path
             var nlogConfigFile = Path.Combine(DirectoryHelper.BaseDirectory, "NLog.config");
             if (File.Exists(nlogConfigFile))
             {
                 LogManager.Configuration = new XmlLoggingConfiguration(nlogConfigFile);
             }
-
-            _connectorManager = new ConnectorManager();
-
-            Options.ContextMenuItems = BuildContextMenu();
         }
 
         private List<CSDeskBandMenuItem> BuildContextMenu()
