@@ -125,6 +125,7 @@ namespace AudioBand
             connector.TrackPlaying += ConnectorOnTrackPlaying;
             connector.TrackPaused += ConnectorOnTrackPaused;
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
+            connector.Activate();
         }
 
         private void UnsubscribeToConnector(IAudioConnector connector)
@@ -139,6 +140,7 @@ namespace AudioBand
             connector.TrackPlaying -= ConnectorOnTrackPlaying;
             connector.TrackPaused -= ConnectorOnTrackPaused;
             connector.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
+            connector.Deactivate();
         }
 
         private void ConnectorOnTrackProgressChanged(object o, int progress)

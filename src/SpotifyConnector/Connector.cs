@@ -48,5 +48,15 @@ namespace SpotifyConnector
 
             return Task.CompletedTask;
         }
+
+        public void Activate()
+        {
+            
+        }
+
+        public void Deactivate()
+        {
+           
+        }
     }
 }

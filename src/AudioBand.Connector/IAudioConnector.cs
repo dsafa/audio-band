@@ -56,5 +56,15 @@ namespace AudioBand.Connector
         /// User requested the next track
         /// </summary>
         Task NextTrackAsync();
+
+        /// <summary>
+        /// Connector is selected as the audio source
+        /// </summary>
+        void Activate();
+
+        /// <summary>
+        /// Connector is no longer the audio source
+        /// </summary>
+        void Deactivate();
     }
 }
