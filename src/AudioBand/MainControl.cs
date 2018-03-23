@@ -180,11 +180,11 @@ namespace AudioBand
         {
             if (_audioBandViewModel.IsPlaying)
             {
-                await (_connector?.PlayTrackAsync() ?? Task.CompletedTask);
+                await (_connector?.PauseTrackAsync() ?? Task.CompletedTask);
             }
             else
             {
-                await (_connector?.PauseTrackAsync() ?? Task.CompletedTask);
+                await (_connector?.PlayTrackAsync() ?? Task.CompletedTask);
             }
 
         }
