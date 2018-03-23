@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using AudioBand.Connector;
 using NLog.Config;
+using NLog.LayoutRenderers;
 using Size = System.Drawing.Size;
 
 namespace AudioBand
@@ -59,6 +60,7 @@ namespace AudioBand
             playPauseButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
             nextButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
 
+            // Fix nlog path
             var nlogConfigFile = Path.Combine(DirectoryHelper.BaseDirectory, "NLog.config");
             if (File.Exists(nlogConfigFile))
             {
@@ -79,7 +81,7 @@ namespace AudioBand
                 return item;
             });
 
-            _pluginSubMenu = new CSDeskBandMenu("Plugins", pluginList);
+            _pluginSubMenu = new CSDeskBandMenu("Audio Source", pluginList);
 
             return new List<CSDeskBandMenuItem>{ _pluginSubMenu };
         }
@@ -91,16 +93,18 @@ namespace AudioBand
             {
                 UnsubscribeToConnector(_connector);
                 _connector = null;
+                _audioBandViewModel.NowPlayingText = "";
+                _audioBandViewModel.IsPlaying = false;
                 return;
             }
-
             // Uncheck old item and unsubscribe from the current connector
-            var lastItemChecked = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == _connector.ConnectorName);
+            var lastItemChecked = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == _connector?.ConnectorName);
             if (lastItemChecked != null)
             {
                 lastItemChecked.Checked = false;
-                UnsubscribeToConnector(_connector);
             }
+
+            UnsubscribeToConnector(_connector);
 
             item.Checked = true;
             _connector = _connectorManager.AudioConnectors.First(c => c.ConnectorName == item.Text);
@@ -109,6 +113,11 @@ namespace AudioBand
 
         private void SubscribeToConnector(IAudioConnector connector)
         {
+            if (connector == null)
+            {
+                return;
+            }
+
             connector.TrackInfoChanged += ConnectorOnTrackInfoChanged;
             connector.AlbumArtChanged += ConnectorOnAlbumArtChanged;
             connector.AudioStateChanged += ConnectorOnAudioStateChanged;
@@ -116,6 +125,11 @@ namespace AudioBand
 
         private void UnsubscribeToConnector(IAudioConnector connector)
         {
+            if (connector == null)
+            {
+                return;
+            }
+
             connector.TrackInfoChanged -= ConnectorOnTrackInfoChanged;
             connector.AlbumArtChanged -= ConnectorOnAlbumArtChanged;
             connector.AudioStateChanged -= ConnectorOnAudioStateChanged;
