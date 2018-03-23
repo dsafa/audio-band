@@ -51,6 +51,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)\bin\release\connectors</PostBuildEvent>
+    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)AudioBand\bin\release\connectors\</PostBuildEvent>
   </PropertyGroup>
 </Project>

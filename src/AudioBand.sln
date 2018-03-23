@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioBand", "AudioBand.csproj", "{B69832AD-8373-47AC-A52A-183238903896}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioBand", "AudioBand\AudioBand.csproj", "{B69832AD-8373-47AC-A52A-183238903896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioBand.Connector", "..\AudioBand.Connector\AudioBand.Connector.csproj", "{30F2BFEA-788A-494D-88E7-F2070528EBEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioBand.Connector", "AudioBand.Connector\AudioBand.Connector.csproj", "{30F2BFEA-788A-494D-88E7-F2070528EBEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyConnector", "..\SpotifyConnector\SpotifyConnector.csproj", "{43B57D81-7FAE-40D0-921E-E29F7E848288}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyConnector", "SpotifyConnector\SpotifyConnector.csproj", "{43B57D81-7FAE-40D0-921E-E29F7E848288}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
