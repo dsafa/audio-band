@@ -92,6 +92,7 @@ namespace AudioBand
             var item = (CSDeskBandMenuAction)sender;
             if (item.Checked)
             {
+                item.Checked = false;
                 UnsubscribeToConnector(_connector);
                 _connector = null;
                 _audioBandViewModel.NowPlayingText = "";
