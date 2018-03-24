@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -61,9 +62,20 @@ namespace AudioBand
             playPauseButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
             nextButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
 
-            _connectorManager = new ConnectorManager();
-
-            Options.ContextMenuItems = BuildContextMenu();
+            try
+            {
+                _connectorManager = new ConnectorManager();
+                Options.ContextMenuItems = BuildContextMenu();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                _logger.Error(e);
+                foreach (var loaderException in e.LoaderExceptions)
+                {
+                    _logger.Error(loaderException);
+                }
+                throw;
+            }
         }
 
         static MainControl()
@@ -148,7 +160,7 @@ namespace AudioBand
 
         private void ConnectorOnTrackProgressChanged(object o, int progress)
         {
-            BeginInvoke(new Action(() => { _audioBandViewModel.AudioProgress = progress; }));
+            BeginInvoke(new Action(() => { _audioBandViewModel.AudioProgress = progress;}));
         }
 
         private void ConnectorOnTrackPaused(object o, EventArgs args)
