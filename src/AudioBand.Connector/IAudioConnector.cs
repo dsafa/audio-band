@@ -34,7 +34,7 @@ namespace AudioBand.Connector
         event EventHandler TrackPaused;
 
         /// <summary>
-        /// Track progress has changed
+        /// Track progress has changed. Track progress is from [0 - 100]
         /// </summary>
         event EventHandler<int> TrackProgressChanged;
 

@@ -1,4 +1,5 @@
-﻿using CSDeskBand.Annotations;
+﻿using System;
+using CSDeskBand.Annotations;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -56,7 +57,7 @@ namespace AudioBand
             set
             {
                 if (value == _audioProgress) return;
-                _audioProgress = value;
+                _audioProgress = Math.Min(100, value);
                 OnPropertyChanged();
             }
         }
