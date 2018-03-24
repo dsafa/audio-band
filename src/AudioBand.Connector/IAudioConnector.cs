@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AudioBand.Connector
@@ -40,22 +41,22 @@ namespace AudioBand.Connector
         /// <summary>
         /// User requested to play the track. This should trigger <see cref="TrackPlaying"/> if successful
         /// </summary>
-        Task PlayTrackAsync();
+        Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// User requested to pause the track. This should trigger <see cref="TrackPaused"/> if successful
         /// </summary>
-        Task PauseTrackAsync();
+        Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// User requested the previous track
         /// </summary>
-        Task PreviousTrackAsync();
+        Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// User requested the next track
         /// </summary>
-        Task NextTrackAsync();
+        Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Connector is selected as the audio source

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AudioBand.Connector;
 
@@ -17,19 +18,19 @@ namespace SpotifyConnector
         public event EventHandler TrackPaused;
         public event EventHandler<int> TrackProgressChanged;
 
-        public Task PlayTrackAsync()
+        public Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             TrackPlaying?.Invoke(this, EventArgs.Empty);
             return Task.CompletedTask;
         }
 
-        public Task PauseTrackAsync()
+        public Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             TrackPaused?.Invoke(this, EventArgs.Empty);
             return Task.CompletedTask;
         }
 
-        public Task PreviousTrackAsync()
+        public Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
             {
@@ -39,7 +40,7 @@ namespace SpotifyConnector
             return Task.CompletedTask;
         }
 
-        public Task NextTrackAsync()
+        public Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
             {
