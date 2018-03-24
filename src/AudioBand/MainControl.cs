@@ -153,22 +153,22 @@ namespace AudioBand
 
         private void ConnectorOnTrackPaused(object o, EventArgs args)
         {
-            _audioBandViewModel.IsPlaying = false;
+            BeginInvoke(new Action(() =>_audioBandViewModel.IsPlaying = false));
         }
 
         private void ConnectorOnTrackPlaying(object o, EventArgs args)
         {
-            _audioBandViewModel.IsPlaying = true;
+            BeginInvoke(new Action(() => _audioBandViewModel.IsPlaying = true));
         }
 
         private void ConnectorOnAlbumArtChanged(object sender, AlbumArtChangedEventArgs albumArtChangedEventArgs)
         {
-            UpdateAlbumArt(albumArtChangedEventArgs.AlbumArt);
+            BeginInvoke(new Action(() => UpdateAlbumArt(albumArtChangedEventArgs.AlbumArt)));
         }
 
         private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
-            _audioBandViewModel.NowPlayingText = trackInfoChangedEventArgs.TrackName;
+            BeginInvoke(new Action(() => _audioBandViewModel.NowPlayingText = trackInfoChangedEventArgs.TrackName));
         }
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
