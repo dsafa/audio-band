@@ -90,13 +90,13 @@ namespace AudioBand
             return new List<CSDeskBandMenuItem>{ _pluginSubMenu };
         }
 
-        private void ConnectorMenuItemOnClicked(object sender, EventArgs eventArgs)
+        private async void ConnectorMenuItemOnClicked(object sender, EventArgs eventArgs)
         {
             var item = (CSDeskBandMenuAction)sender;
             if (item.Checked)
             {
                 item.Checked = false;
-                UnsubscribeToConnector(_connector);
+                await UnsubscribeToConnector(_connector);
                 _connector = null;
                 _audioBandViewModel.NowPlayingText = "";
                 _audioBandViewModel.IsPlaying = false;
@@ -109,14 +109,14 @@ namespace AudioBand
                 lastItemChecked.Checked = false;
             }
 
-            UnsubscribeToConnector(_connector);
+            await UnsubscribeToConnector(_connector);
 
             item.Checked = true;
             _connector = _connectorManager.AudioConnectors.First(c => c.ConnectorName == item.Text);
-            SubscribeToConnector(_connector);
+            await SubscribeToConnector(_connector);
         }
 
-        private void SubscribeToConnector(IAudioConnector connector)
+        private async Task SubscribeToConnector(IAudioConnector connector)
         {
             if (connector == null)
             {
@@ -128,10 +128,10 @@ namespace AudioBand
             connector.TrackPlaying += ConnectorOnTrackPlaying;
             connector.TrackPaused += ConnectorOnTrackPaused;
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
-            connector.ActivateAsync();
+            await connector.ActivateAsync();
         }
 
-        private void UnsubscribeToConnector(IAudioConnector connector)
+        private async Task UnsubscribeToConnector(IAudioConnector connector)
         {
             if (connector == null)
             {
@@ -143,7 +143,7 @@ namespace AudioBand
             connector.TrackPlaying -= ConnectorOnTrackPlaying;
             connector.TrackPaused -= ConnectorOnTrackPaused;
             connector.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
-            connector.DeactivateAsync();
+            await connector.DeactivateAsync();
         }
 
         private void ConnectorOnTrackProgressChanged(object o, int progress)

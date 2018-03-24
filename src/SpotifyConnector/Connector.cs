@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using AudioBand.Connector;
+using SpotifyAPI.Local;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AudioBand.Connector;
-using SpotifyAPI.Local;
 
 namespace SpotifyConnector
 {
@@ -21,7 +18,7 @@ namespace SpotifyConnector
 
         private SpotifyLocalAPI _spotifyClient;
 
-        public void ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             if (!(SpotifyLocalAPI.IsSpotifyRunning() && SpotifyLocalAPI.IsSpotifyWebHelperRunning() && _spotifyClient.Connect()))
             {
@@ -29,15 +26,17 @@ namespace SpotifyConnector
                                   $"Running? {SpotifyLocalAPI.IsSpotifyRunning()} | " +
                                   $"Web Helper running?  {SpotifyLocalAPI.IsSpotifyWebHelperRunning()}");
                 TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "Spotify not available" });
-                return;
+                return Task.CompletedTask;
             }
 
             _spotifyClient = new SpotifyLocalAPI();
+            return Task.CompletedTask;
         }
 
-        public void DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             _spotifyClient.Dispose();
+            return Task.CompletedTask;
         }
 
         public Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))

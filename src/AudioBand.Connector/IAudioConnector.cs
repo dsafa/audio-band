@@ -41,12 +41,12 @@ namespace AudioBand.Connector
         /// <summary>
         /// Connector is selected as the audio source
         /// </summary>
-        void ActivateAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Connector is no longer the audio source
         /// </summary>
-        void DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// User requested to play the track. This should trigger <see cref="TrackPlaying"/> if successful
