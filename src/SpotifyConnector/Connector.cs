@@ -18,6 +18,7 @@ namespace SpotifyConnector
         public event EventHandler<int> TrackProgressChanged;
 
         private SpotifyLocalAPI _spotifyClient;
+        private int _trackLength;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -36,6 +37,8 @@ namespace SpotifyConnector
             var status = _spotifyClient.GetStatus();
 
             var track = status.Track;
+            _trackLength = track.Length;
+            TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(status.PlayingPosition));
             AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size160) });
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
             {
@@ -43,8 +46,7 @@ namespace SpotifyConnector
                 Artist = track.ArtistResource.Name
             });
 
-            var playing = status.Playing;
-            if (playing)
+            if (status.Playing)
             {
                 TrackPlaying?.Invoke(this, EventArgs.Empty);
             }
@@ -52,42 +54,12 @@ namespace SpotifyConnector
             {
                 TrackPaused?.Invoke(this, EventArgs.Empty);
             }
-
-            TrackProgressChanged?.Invoke(this, (int)status.PlayingPosition);
 
             _spotifyClient.OnPlayStateChange += SpotifyClientOnOnPlayStateChange;
             _spotifyClient.OnTrackChange += SpotifyClientOnOnTrackChange;
             _spotifyClient.OnTrackTimeChange += SpotifyClientOnOnTrackTimeChange;
 
             return Task.CompletedTask;
-        }
-
-        private void SpotifyClientOnOnTrackTimeChange(object sender, TrackTimeChangeEventArgs trackTimeChangeEventArgs)
-        {
-            TrackProgressChanged?.Invoke(this, (int)trackTimeChangeEventArgs.TrackTime);
-        }
-
-        private void SpotifyClientOnOnTrackChange(object sender, TrackChangeEventArgs trackChangeEventArgs)
-        {
-            var track = trackChangeEventArgs.NewTrack;
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
-            {
-                TrackName = track.ArtistResource.Name,
-                Artist = track.ArtistResource.Name,
-            });
-            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size160) });
-        }
-
-        private void SpotifyClientOnOnPlayStateChange(object sender, PlayStateEventArgs playStateEventArgs)
-        {
-            if (playStateEventArgs.Playing)
-            {
-                TrackPlaying?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                TrackPaused?.Invoke(this, EventArgs.Empty);
-            }
         }
 
         public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -116,6 +88,41 @@ namespace SpotifyConnector
         {
             _spotifyClient.Skip();
             return Task.CompletedTask;
+        }
+
+        private void SpotifyClientOnOnTrackTimeChange(object sender, TrackTimeChangeEventArgs trackTimeChangeEventArgs)
+        {
+            
+            TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(trackTimeChangeEventArgs.TrackTime));
+        }
+
+        private void SpotifyClientOnOnTrackChange(object sender, TrackChangeEventArgs trackChangeEventArgs)
+        {
+            var track = trackChangeEventArgs.NewTrack;
+            _trackLength = track.Length;
+            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
+            {
+                TrackName = track.ArtistResource.Name,
+                Artist = track.ArtistResource.Name,
+            });
+            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size160) });
+        }
+
+        private void SpotifyClientOnOnPlayStateChange(object sender, PlayStateEventArgs playStateEventArgs)
+        {
+            if (playStateEventArgs.Playing)
+            {
+                TrackPlaying?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                TrackPaused?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private int CalculateTrackPercentange(double trackTime)
+        {
+            return (int)(trackTime / _trackLength * 100);
         }
     }
 }

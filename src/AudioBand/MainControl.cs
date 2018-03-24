@@ -49,6 +49,7 @@ namespace AudioBand
             Options.MinHorizontal = MinimumSize = new Size(FixedWidth, _minHeight);
             Options.MaxHorizontal = MaximumSize = Size;
 
+            ResetViewModel();
             SizeChanged += OnSizeChanged;
             playPauseButton.Click += async (sender, eventArgs) => await PlayPauseButtonOnClick(sender, eventArgs);
             previousButton.Click += async (sender, eventArgs) => await PreviousButtonOnClick(sender, eventArgs);
@@ -110,8 +111,6 @@ namespace AudioBand
                 item.Checked = false;
                 await UnsubscribeToConnector(_connector);
                 _connector = null;
-                _audioBandViewModel.NowPlayingText = "";
-                _audioBandViewModel.IsPlaying = false;
                 return;
             }
             // Uncheck old item and unsubscribe from the current connector
@@ -156,6 +155,8 @@ namespace AudioBand
             connector.TrackPaused -= ConnectorOnTrackPaused;
             connector.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
             await connector.DeactivateAsync();
+
+            ResetViewModel();
         }
 
         private void ConnectorOnTrackProgressChanged(object o, int progress)
@@ -274,6 +275,14 @@ namespace AudioBand
                 svg.Draw(graphics);
                 return bmp;
             }
+        }
+
+        private void ResetViewModel()
+        {
+            _audioBandViewModel.NowPlayingText = "";
+            _audioBandViewModel.IsPlaying = false;
+            _audioBandViewModel.AlbumArt = new Bitmap(1, 1);
+            _audioBandViewModel.AudioProgress = 0;
         }
     }
 }
