@@ -102,7 +102,7 @@ namespace SpotifyConnector
             _trackLength = track.Length;
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
             {
-                TrackName = track.ArtistResource.Name,
+                TrackName = track.TrackResource.Name,
                 Artist = track.ArtistResource.Name,
             });
             AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size160) });
