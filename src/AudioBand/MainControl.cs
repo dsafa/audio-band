@@ -181,7 +181,8 @@ namespace AudioBand
 
         private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
-            BeginInvoke(new Action(() => _audioBandViewModel.NowPlayingText = trackInfoChangedEventArgs.TrackName));
+            var text = BuildNowPlayingText(trackInfoChangedEventArgs.Artist, trackInfoChangedEventArgs.TrackName);
+            BeginInvoke(new Action(() => _audioBandViewModel.NowPlayingText = text));
         }
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -283,6 +284,11 @@ namespace AudioBand
             _audioBandViewModel.IsPlaying = false;
             _audioBandViewModel.AlbumArt = new Bitmap(1, 1);
             _audioBandViewModel.AudioProgress = 0;
+        }
+
+        private string BuildNowPlayingText(string artist, string name)
+        {
+            return $"{(artist == null ? "" : artist + " - ")}{name}";
         }
     }
 }
