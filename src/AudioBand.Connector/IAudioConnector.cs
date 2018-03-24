@@ -39,6 +39,16 @@ namespace AudioBand.Connector
         event EventHandler<int> TrackProgressChanged;
 
         /// <summary>
+        /// Connector is selected as the audio source
+        /// </summary>
+        void ActivateAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Connector is no longer the audio source
+        /// </summary>
+        void DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// User requested to play the track. This should trigger <see cref="TrackPlaying"/> if successful
         /// </summary>
         Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
@@ -57,15 +67,5 @@ namespace AudioBand.Connector
         /// User requested the next track
         /// </summary>
         Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Connector is selected as the audio source
-        /// </summary>
-        void Activate();
-
-        /// <summary>
-        /// Connector is no longer the audio source
-        /// </summary>
-        void Deactivate();
     }
 }

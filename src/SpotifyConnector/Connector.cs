@@ -21,6 +21,25 @@ namespace SpotifyConnector
 
         private SpotifyLocalAPI _spotifyClient;
 
+        public void ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (!(SpotifyLocalAPI.IsSpotifyRunning() && SpotifyLocalAPI.IsSpotifyWebHelperRunning() && _spotifyClient.Connect()))
+            {
+                Console.WriteLine("Cannot connect to spotify. " +
+                                  $"Running? {SpotifyLocalAPI.IsSpotifyRunning()} | " +
+                                  $"Web Helper running?  {SpotifyLocalAPI.IsSpotifyWebHelperRunning()}");
+                TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "Spotify not available" });
+                return;
+            }
+
+            _spotifyClient = new SpotifyLocalAPI();
+        }
+
+        public void DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _spotifyClient.Dispose();
+        }
+
         public Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             TrackPlaying?.Invoke(this, EventArgs.Empty);
@@ -51,25 +70,6 @@ namespace SpotifyConnector
             });
 
             return Task.CompletedTask;
-        }
-
-        public void Activate()
-        {
-            if (!(SpotifyLocalAPI.IsSpotifyRunning() && SpotifyLocalAPI.IsSpotifyWebHelperRunning() && _spotifyClient.Connect()))
-            {
-                Console.WriteLine("Cannot connect to spotify. " +
-                                  $"Running? {SpotifyLocalAPI.IsSpotifyRunning()} | " +
-                                  $"Web Helper running?  {SpotifyLocalAPI.IsSpotifyWebHelperRunning()}");
-                TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs{TrackName = "Spotify not available"});
-                return;
-            }
-
-            _spotifyClient = new SpotifyLocalAPI();
-        }
-
-        public void Deactivate()
-        {
-            _spotifyClient.Dispose();
         }
     }
 }
