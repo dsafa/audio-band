@@ -38,6 +38,7 @@ namespace AudioBand
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
+        private Image _albumArt = new Bitmap(1, 1);
 
         public MainControl()
         {
@@ -176,7 +177,8 @@ namespace AudioBand
 
         private void ConnectorOnAlbumArtChanged(object sender, AlbumArtChangedEventArgs albumArtChangedEventArgs)
         {
-            BeginInvoke(new Action(() => UpdateAlbumArt(albumArtChangedEventArgs.AlbumArt)));
+            _albumArt = albumArtChangedEventArgs.AlbumArt;
+            BeginInvoke(new Action(() => UpdateAlbumArt(_albumArt)));
         }
 
         private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
@@ -221,7 +223,7 @@ namespace AudioBand
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
         {
-            UpdateAlbumArt(_audioBandViewModel.AlbumArt);
+            UpdateAlbumArt(_albumArt);
             UpdateControlSvgs();
         }
 
