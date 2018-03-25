@@ -30,11 +30,11 @@
         {
             this.mainTable = new System.Windows.Forms.TableLayoutPanel();
             this.albumArt = new System.Windows.Forms.PictureBox();
-            this.nowPlayingText = new System.Windows.Forms.Label();
             this.buttonsTable = new System.Windows.Forms.TableLayoutPanel();
             this.previousButton = new System.Windows.Forms.Button();
             this.playPauseButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
+            this.nowPlayingText = new AudioBand.MarqueeLabel();
             this.audioProgress = new AudioBand.EnhancedProgressBar();
             this.mainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.albumArt)).BeginInit();
@@ -43,7 +43,6 @@
             // 
             // mainTable
             // 
-            this.mainTable.AutoSize = true;
             this.mainTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.mainTable.ColumnCount = 2;
             this.mainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -61,7 +60,7 @@
             this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2F));
-            this.mainTable.Size = new System.Drawing.Size(300, 40);
+            this.mainTable.Size = new System.Drawing.Size(300, 30);
             this.mainTable.TabIndex = 0;
             // 
             // albumArt
@@ -71,22 +70,9 @@
             this.albumArt.Margin = new System.Windows.Forms.Padding(0);
             this.albumArt.Name = "albumArt";
             this.mainTable.SetRowSpan(this.albumArt, 2);
-            this.albumArt.Size = new System.Drawing.Size(30, 38);
+            this.albumArt.Size = new System.Drawing.Size(30, 28);
             this.albumArt.TabIndex = 0;
             this.albumArt.TabStop = false;
-            // 
-            // nowPlayingText
-            // 
-            this.nowPlayingText.AutoSize = true;
-            this.nowPlayingText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nowPlayingText.ForeColor = System.Drawing.Color.White;
-            this.nowPlayingText.Location = new System.Drawing.Point(30, 0);
-            this.nowPlayingText.Margin = new System.Windows.Forms.Padding(0);
-            this.nowPlayingText.Name = "nowPlayingText";
-            this.nowPlayingText.Size = new System.Drawing.Size(270, 19);
-            this.nowPlayingText.TabIndex = 2;
-            this.nowPlayingText.Text = "label1";
-            this.nowPlayingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // buttonsTable
             // 
@@ -98,12 +84,12 @@
             this.buttonsTable.Controls.Add(this.playPauseButton, 1, 0);
             this.buttonsTable.Controls.Add(this.nextButton, 2, 0);
             this.buttonsTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonsTable.Location = new System.Drawing.Point(30, 19);
+            this.buttonsTable.Location = new System.Drawing.Point(30, 14);
             this.buttonsTable.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.buttonsTable.Name = "buttonsTable";
             this.buttonsTable.RowCount = 1;
             this.buttonsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.buttonsTable.Size = new System.Drawing.Size(270, 17);
+            this.buttonsTable.Size = new System.Drawing.Size(270, 12);
             this.buttonsTable.TabIndex = 3;
             // 
             // previousButton
@@ -117,7 +103,7 @@
             this.previousButton.Location = new System.Drawing.Point(0, 0);
             this.previousButton.Margin = new System.Windows.Forms.Padding(0);
             this.previousButton.Name = "previousButton";
-            this.previousButton.Size = new System.Drawing.Size(90, 17);
+            this.previousButton.Size = new System.Drawing.Size(90, 12);
             this.previousButton.TabIndex = 0;
             this.previousButton.UseVisualStyleBackColor = true;
             // 
@@ -132,7 +118,7 @@
             this.playPauseButton.Location = new System.Drawing.Point(90, 0);
             this.playPauseButton.Margin = new System.Windows.Forms.Padding(0);
             this.playPauseButton.Name = "playPauseButton";
-            this.playPauseButton.Size = new System.Drawing.Size(90, 17);
+            this.playPauseButton.Size = new System.Drawing.Size(90, 12);
             this.playPauseButton.TabIndex = 1;
             this.playPauseButton.UseVisualStyleBackColor = true;
             // 
@@ -147,16 +133,28 @@
             this.nextButton.Location = new System.Drawing.Point(180, 0);
             this.nextButton.Margin = new System.Windows.Forms.Padding(0);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(90, 17);
+            this.nextButton.Size = new System.Drawing.Size(90, 12);
             this.nextButton.TabIndex = 2;
             this.nextButton.UseVisualStyleBackColor = true;
+            // 
+            // nowPlayingText
+            // 
+            this.nowPlayingText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nowPlayingText.ForeColor = System.Drawing.Color.White;
+            this.nowPlayingText.Location = new System.Drawing.Point(30, 0);
+            this.nowPlayingText.Margin = new System.Windows.Forms.Padding(0);
+            this.nowPlayingText.Name = "nowPlayingText";
+            this.nowPlayingText.Size = new System.Drawing.Size(270, 14);
+            this.nowPlayingText.TabIndex = 2;
+            this.nowPlayingText.Text = "label1";
+            this.nowPlayingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // audioProgress
             // 
             this.mainTable.SetColumnSpan(this.audioProgress, 2);
             this.audioProgress.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audioProgress.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.audioProgress.Location = new System.Drawing.Point(0, 38);
+            this.audioProgress.Location = new System.Drawing.Point(0, 28);
             this.audioProgress.Margin = new System.Windows.Forms.Padding(0);
             this.audioProgress.Name = "audioProgress";
             this.audioProgress.Size = new System.Drawing.Size(300, 2);
@@ -175,20 +173,18 @@
             this.MaximumSize = new System.Drawing.Size(300, 40);
             this.MinimumSize = new System.Drawing.Size(300, 30);
             this.Name = "MainControl";
-            this.Size = new System.Drawing.Size(300, 40);
+            this.Size = new System.Drawing.Size(300, 30);
             this.mainTable.ResumeLayout(false);
-            this.mainTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.albumArt)).EndInit();
             this.buttonsTable.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.TableLayoutPanel mainTable;
         private System.Windows.Forms.PictureBox albumArt;
-        private System.Windows.Forms.Label nowPlayingText;
+        private MarqueeLabel nowPlayingText;
         private System.Windows.Forms.TableLayoutPanel buttonsTable;
         private System.Windows.Forms.Button previousButton;
         private System.Windows.Forms.Button playPauseButton;

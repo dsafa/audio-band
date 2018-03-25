@@ -62,6 +62,8 @@ namespace AudioBand
             Options.MaxHorizontal = MaximumSize = Size;
 
             ResetState();
+            nowPlayingText.MaxWidth = FixedWidth;
+
             SizeChanged += OnSizeChanged;
             playPauseButton.Click += PlayPauseButtonOnClick;
             previousButton.Click += PreviousButtonOnClick;
@@ -92,6 +94,7 @@ namespace AudioBand
                 throw;
             }
         }
+
 
         private void AlbumArtOnMouseLeave(object o, EventArgs args)
         {
