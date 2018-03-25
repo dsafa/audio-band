@@ -29,6 +29,7 @@ namespace AudioBand
         {
             OwnerDraw = true;
             IsBalloon = false;
+            ShowAlways = true;
             AutomaticDelay = 200;
 
             Popup += OnPopup;
