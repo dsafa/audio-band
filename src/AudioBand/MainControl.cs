@@ -116,7 +116,7 @@ namespace AudioBand
             }
 
             var pos = new Point(0, yOffset);
-            _albumArtTooltip.Show("album art", this, pos);
+            _albumArtTooltip.ShowWithoutRequireFocus("Album Art", this, pos);
         }
 
         private List<CSDeskBandMenuItem> BuildContextMenu()

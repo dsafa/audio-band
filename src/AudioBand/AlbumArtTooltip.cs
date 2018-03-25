@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace AudioBand
@@ -7,6 +8,7 @@ namespace AudioBand
     public class AlbumArtTooltip : ToolTip
     {
         private Image _albumArt;
+        private MethodInfo _setToolMethod = typeof(ToolTip).GetMethod("SetTool", BindingFlags.Instance | BindingFlags.NonPublic);
 
         public Image AlbumArt
         {
@@ -29,6 +31,13 @@ namespace AudioBand
 
             Popup += OnPopup;
             Draw += OnDraw;
+        }
+
+        public void ShowWithoutRequireFocus(string name, Control control, Point relativePosition)
+        {
+            const int AbsolutePos = 2;
+            var point = control.PointToScreen(new Point(0, 0));
+            _setToolMethod.Invoke(this, new object[] { control, name, AbsolutePos, new Point(point.X + relativePosition.X, point.Y + relativePosition.Y) });
         }
 
         private void OnPopup(object sender, PopupEventArgs popupEventArgs)
