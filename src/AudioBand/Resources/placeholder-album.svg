@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://simpleicon.com/music-note-5.html -->
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+  <defs>
+    <radialGradient id="backgroundGradient">
+      <stop offset="0%" stop-color="#dddddd"/>
+      <stop offset="100%" stop-color="#999999"/>
+    </radialGradient>
+    <rect id="a2OFevSqx" x="0" y="0" width="100%" height="100%"/>
+    <path id="ukwNHQztq" d="M160,96v304.594C143,390.375,120.688,384,96,384c-53,0-96,28.625-96,64s43,64,96,64s96-28.625,96-64V151.281l288-78.563
+	    v231.875C463,294.375,440.688,288,416,288c-53,0-96,28.625-96,64s43,64,96,64s96-28.625,96-64V0L160,96z"/>
+  </defs>
+  <g>
+	  <use xlink:href="#a2OFevSqx" opacity="1" fill="url(#backgroundGradient)" fill-opacity="1" ></use>
+	  <use xlink:href="#ukwNHQztq" transform="translate(128, 128) scale(0.5)" opacity="1" fill="#000000" fill-opacity="1"></use>
+  </g>
+</svg>

@@ -83,6 +83,16 @@ namespace AudioBand.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] placeholder_album {
+            get {
+                object obj = ResourceManager.GetObject("placeholder_album", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] play {
             get {
                 object obj = ResourceManager.GetObject("play", resourceCulture);

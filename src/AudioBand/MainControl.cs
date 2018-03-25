@@ -26,19 +26,20 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private const int FixedWidth = 250;
+        private static readonly SvgDocument PlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
+        private static readonly SvgDocument PauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
+        private static readonly SvgDocument NextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
+        private static readonly SvgDocument PreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
+        private static readonly SvgDocument AlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
         private readonly int _maxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
-        private readonly SvgDocument _playButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
-        private readonly SvgDocument _pauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
-        private readonly SvgDocument _nextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
-        private readonly SvgDocument _previousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
         private readonly ConnectorManager _connectorManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
-        private Image _albumArt = new Bitmap(1, 1);
+        private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg);
 
         static MainControl()
         {
@@ -279,21 +280,21 @@ namespace AudioBand
             const int padding = 3;
             var height = buttonsTable.GetRowHeights()[0] - padding;
 
-            SvgDocument playPauseSvg = _audioBandViewModel.IsPlaying ? _pauseButtonSvg : _playButtonSvg;
+            SvgDocument playPauseSvg = _audioBandViewModel.IsPlaying ? PauseButtonSvg : PlayButtonSvg;
             playPauseSvg.Width = playPauseButton.Width;
             playPauseSvg.Height = height;
             _audioBandViewModel.PlayPauseButtonBitmap = DrawSvg(playPauseSvg);
 
-            _nextButtonSvg.Width = nextButton.Width;
-            _nextButtonSvg.Height = height;
-            _audioBandViewModel.NextButtonBitmap = DrawSvg(_nextButtonSvg);
+            NextButtonSvg.Width = nextButton.Width;
+            NextButtonSvg.Height = height;
+            _audioBandViewModel.NextButtonBitmap = DrawSvg(NextButtonSvg);
 
-            _previousButtonSvg.Width = previousButton.Width;
-            _previousButtonSvg.Height = height;
-            _audioBandViewModel.PreviousButtonBitmap = DrawSvg(_previousButtonSvg);
+            PreviousButtonSvg.Width = previousButton.Width;
+            PreviousButtonSvg.Height = height;
+            _audioBandViewModel.PreviousButtonBitmap = DrawSvg(PreviousButtonSvg);
         }
 
-        private Bitmap DrawSvg(SvgDocument svg)
+        private static Bitmap DrawSvg(SvgDocument svg)
         {
             var bmp = new Bitmap((int)svg.Width.Value, (int)svg.Height.Value);
             using (var graphics = Graphics.FromImage(bmp))
@@ -308,9 +309,11 @@ namespace AudioBand
 
         private void ResetState()
         {
+            var placeholder = DrawSvg(AlbumArtPlaceholderSvg);
+            _albumArt = placeholder;
+            UpdateAlbumArt(placeholder);
             _audioBandViewModel.NowPlayingText = "";
             _audioBandViewModel.IsPlaying = false;
-            _audioBandViewModel.AlbumArt = new Bitmap(1, 1);
             _audioBandViewModel.AudioProgress = 0;
             _albumArtTooltip.AlbumArt = null;
         }
