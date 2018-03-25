@@ -1,7 +1,9 @@
-﻿using AudioBand.Plugins;
+﻿using AudioBand.Connector;
+using AudioBand.Plugins;
 using CSDeskBand;
 using CSDeskBand.Win;
 using NLog;
+using NLog.Config;
 using Svg;
 using System;
 using System.Collections.Generic;
@@ -14,9 +16,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AudioBand.Connector;
-using NLog.Config;
-using NLog.LayoutRenderers;
 using Size = System.Drawing.Size;
 
 namespace AudioBand
@@ -41,6 +40,16 @@ namespace AudioBand
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = new Bitmap(1, 1);
 
+        static MainControl()
+        {
+            // Fix nlog path
+            var nlogConfigFile = Path.Combine(DirectoryHelper.BaseDirectory, "NLog.config");
+            if (File.Exists(nlogConfigFile))
+            {
+                LogManager.Configuration = new XmlLoggingConfiguration(nlogConfigFile);
+            }
+        }
+
         public MainControl()
         {
             InitializeComponent();
@@ -53,9 +62,9 @@ namespace AudioBand
 
             ResetState();
             SizeChanged += OnSizeChanged;
-            playPauseButton.Click += async (sender, eventArgs) => await PlayPauseButtonOnClick(sender, eventArgs);
-            previousButton.Click += async (sender, eventArgs) => await PreviousButtonOnClick(sender, eventArgs);
-            nextButton.Click += async (sender, eventArgs) => await NextButtonOnClick(sender, eventArgs);
+            playPauseButton.Click += PlayPauseButtonOnClick;
+            previousButton.Click += PreviousButtonOnClick;
+            nextButton.Click += NextButtonOnClick;
             albumArt.MouseHover += AlbumArtOnMouseHover;
             albumArt.MouseLeave += AlbumArtOnMouseLeave;
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
@@ -104,16 +113,6 @@ namespace AudioBand
 
             var pos = new Point(0, yOffset);
             _albumArtTooltip.Show("album art", this, pos);
-        }
-
-        static MainControl()
-        {
-            // Fix nlog path
-            var nlogConfigFile = Path.Combine(DirectoryHelper.BaseDirectory, "NLog.config");
-            if (File.Exists(nlogConfigFile))
-            {
-                LogManager.Configuration = new XmlLoggingConfiguration(nlogConfigFile);
-            }
         }
 
         private List<CSDeskBandMenuItem> BuildContextMenu()
@@ -225,7 +224,7 @@ namespace AudioBand
             }
         }
 
-        private async Task PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
+        private async void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
         {
             if (_audioBandViewModel.IsPlaying)
             {
@@ -238,12 +237,12 @@ namespace AudioBand
 
         }
 
-        private async Task PreviousButtonOnClick(object sender, EventArgs eventArgs)
+        private async void PreviousButtonOnClick(object sender, EventArgs eventArgs)
         {
             await (_connector?.PreviousTrackAsync() ?? Task.CompletedTask);
         }
 
-        private async Task NextButtonOnClick(object sender, EventArgs eventArgs)
+        private async void NextButtonOnClick(object sender, EventArgs eventArgs)
         {
             await (_connector?.NextTrackAsync() ?? Task.CompletedTask);
         }

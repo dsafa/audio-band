@@ -30,26 +30,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CSDeskBand, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\CSDeskBand.1.0.0\lib\net461\CSDeskBand.dll</HintPath>
+      <HintPath>..\packages\CSDeskBand.1.0.0\lib\net461\CSDeskBand.dll</HintPath>
     </Reference>
     <Reference Include="CSDeskBand.Win, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\CSDeskBand.Win.1.0.0\lib\net461\CSDeskBand.Win.dll</HintPath>
+      <HintPath>..\packages\CSDeskBand.Win.1.0.0\lib\net461\CSDeskBand.Win.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>packages\NLog.4.4.13\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.4.13\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
-      <HintPath>packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
+      <HintPath>..\packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>

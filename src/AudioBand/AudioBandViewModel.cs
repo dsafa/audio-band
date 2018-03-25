@@ -1,10 +1,8 @@
-﻿using System;
-using CSDeskBand.Annotations;
+﻿using CSDeskBand.Annotations;
+using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Runtime.CompilerServices;
-using Svg;
 
 namespace AudioBand
 {
