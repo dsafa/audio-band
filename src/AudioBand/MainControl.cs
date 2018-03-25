@@ -36,6 +36,7 @@ namespace AudioBand
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
         private readonly ConnectorManager _connectorManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
+        private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = new Bitmap(1, 1);
@@ -50,11 +51,13 @@ namespace AudioBand
             Options.MinHorizontal = MinimumSize = new Size(FixedWidth, _minHeight);
             Options.MaxHorizontal = MaximumSize = Size;
 
-            ResetViewModel();
+            ResetState();
             SizeChanged += OnSizeChanged;
             playPauseButton.Click += async (sender, eventArgs) => await PlayPauseButtonOnClick(sender, eventArgs);
             previousButton.Click += async (sender, eventArgs) => await PreviousButtonOnClick(sender, eventArgs);
             nextButton.Click += async (sender, eventArgs) => await NextButtonOnClick(sender, eventArgs);
+            albumArt.MouseHover += AlbumArtOnMouseHover;
+            albumArt.MouseLeave += AlbumArtOnMouseLeave;
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
 
             nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
@@ -78,6 +81,29 @@ namespace AudioBand
                 }
                 throw;
             }
+        }
+
+        private void AlbumArtOnMouseLeave(object o, EventArgs args)
+        {
+            _albumArtTooltip.Hide(this);
+        }
+
+        private void AlbumArtOnMouseHover(object o, EventArgs args)
+        {
+            const int margin = 4;
+
+            int yOffset = 0;
+            if (TaskbarInfo.Edge == Edge.Bottom)
+            {
+                yOffset = -FixedWidth - margin;
+            }
+            else if (TaskbarInfo.Edge == Edge.Top)
+            {
+                yOffset = Height + margin;
+            }
+
+            var pos = new Point(0, yOffset);
+            _albumArtTooltip.Show("album art", this, pos);
         }
 
         static MainControl()
@@ -157,7 +183,7 @@ namespace AudioBand
             connector.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
             await connector.DeactivateAsync();
 
-            ResetViewModel();
+            ResetState();
         }
 
         private void ConnectorOnTrackProgressChanged(object o, int progress)
@@ -178,6 +204,7 @@ namespace AudioBand
         private void ConnectorOnAlbumArtChanged(object sender, AlbumArtChangedEventArgs albumArtChangedEventArgs)
         {
             _albumArt = albumArtChangedEventArgs.AlbumArt;
+            _albumArtTooltip.AlbumArt = _albumArt;
             BeginInvoke(new Action(() => UpdateAlbumArt(_albumArt)));
         }
 
@@ -280,12 +307,13 @@ namespace AudioBand
             }
         }
 
-        private void ResetViewModel()
+        private void ResetState()
         {
             _audioBandViewModel.NowPlayingText = "";
             _audioBandViewModel.IsPlaying = false;
             _audioBandViewModel.AlbumArt = new Bitmap(1, 1);
             _audioBandViewModel.AudioProgress = 0;
+            _albumArtTooltip.AlbumArt = null;
         }
 
         private string BuildNowPlayingText(string artist, string name)
