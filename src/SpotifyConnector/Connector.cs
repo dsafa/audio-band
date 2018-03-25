@@ -39,7 +39,7 @@ namespace SpotifyConnector
             var track = status.Track;
             _trackLength = track.Length;
             TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(status.PlayingPosition));
-            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size160) });
+            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640) });
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
             {
                 TrackName = track.TrackResource.Name,
@@ -105,7 +105,7 @@ namespace SpotifyConnector
                 TrackName = track.TrackResource.Name,
                 Artist = track.ArtistResource.Name,
             });
-            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size160) });
+            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640) });
         }
 
         private void SpotifyClientOnOnPlayStateChange(object sender, PlayStateEventArgs playStateEventArgs)
