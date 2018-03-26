@@ -50,17 +50,18 @@
             this.appearanceTab.VerticalScrollbarBarColor = true;
             this.appearanceTab.VerticalScrollbarHighlightOnWheel = false;
             this.appearanceTab.VerticalScrollbarSize = 10;
-            this.appearanceTab.Click += new System.EventHandler(this.appearanceTab_Click);
             // 
             // SettingsWindow
             // 
             this.ClientSize = new System.Drawing.Size(300, 500);
             this.Controls.Add(this.tabControl);
+            this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "SettingsWindow";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.ShadowType = MetroFramework.Forms.MetroFormShadowType.SystemShadow;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Settings";
             this.TopMost = true;

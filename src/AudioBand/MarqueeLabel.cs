@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -73,6 +74,7 @@ namespace AudioBand
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             if (!_scrolling)
             {
                 base.OnPaint(e);

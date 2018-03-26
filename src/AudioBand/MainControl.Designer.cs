@@ -30,11 +30,11 @@
         {
             this.mainTable = new System.Windows.Forms.TableLayoutPanel();
             this.albumArt = new System.Windows.Forms.PictureBox();
+            this.nowPlayingText = new AudioBand.MarqueeLabel();
             this.buttonsTable = new System.Windows.Forms.TableLayoutPanel();
             this.previousButton = new System.Windows.Forms.Button();
             this.playPauseButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
-            this.nowPlayingText = new AudioBand.MarqueeLabel();
             this.audioProgress = new AudioBand.EnhancedProgressBar();
             this.mainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.albumArt)).BeginInit();
@@ -73,6 +73,20 @@
             this.albumArt.Size = new System.Drawing.Size(30, 28);
             this.albumArt.TabIndex = 0;
             this.albumArt.TabStop = false;
+            // 
+            // nowPlayingText
+            // 
+            this.nowPlayingText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nowPlayingText.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nowPlayingText.ForeColor = System.Drawing.Color.White;
+            this.nowPlayingText.Location = new System.Drawing.Point(30, 0);
+            this.nowPlayingText.Margin = new System.Windows.Forms.Padding(0);
+            this.nowPlayingText.MaxWidth = 0;
+            this.nowPlayingText.Name = "nowPlayingText";
+            this.nowPlayingText.Size = new System.Drawing.Size(270, 14);
+            this.nowPlayingText.TabIndex = 2;
+            this.nowPlayingText.Text = "label1";
+            this.nowPlayingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // buttonsTable
             // 
@@ -136,18 +150,6 @@
             this.nextButton.Size = new System.Drawing.Size(90, 12);
             this.nextButton.TabIndex = 2;
             this.nextButton.UseVisualStyleBackColor = true;
-            // 
-            // nowPlayingText
-            // 
-            this.nowPlayingText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nowPlayingText.ForeColor = System.Drawing.Color.White;
-            this.nowPlayingText.Location = new System.Drawing.Point(30, 0);
-            this.nowPlayingText.Margin = new System.Windows.Forms.Padding(0);
-            this.nowPlayingText.Name = "nowPlayingText";
-            this.nowPlayingText.Size = new System.Drawing.Size(270, 14);
-            this.nowPlayingText.TabIndex = 2;
-            this.nowPlayingText.Text = "label1";
-            this.nowPlayingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // audioProgress
             // 

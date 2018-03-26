@@ -14,15 +14,5 @@ namespace AudioBand.Settings
             InitializeComponent();
 
         }
-
-        private void appearanceTab_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void metroProgressBar1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
