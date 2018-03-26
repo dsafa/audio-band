@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AudioBand.Settings;
 using Size = System.Drawing.Size;
 
 namespace AudioBand
@@ -37,6 +38,7 @@ namespace AudioBand
         private readonly ConnectorManager _connectorManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
+        private readonly SettingsManager _settingsManager;
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg);
@@ -83,6 +85,9 @@ namespace AudioBand
             {
                 _connectorManager = new ConnectorManager();
                 Options.ContextMenuItems = BuildContextMenu();
+
+                _settingsManager = new SettingsManager();
+                ReadSettings();
             }
             catch (ReflectionTypeLoadException e)
             {
@@ -91,10 +96,15 @@ namespace AudioBand
                 {
                     _logger.Error(loaderException);
                 }
+
+                throw;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
                 throw;
             }
         }
-
 
         private void AlbumArtOnMouseLeave(object o, EventArgs args)
         {
@@ -170,6 +180,8 @@ namespace AudioBand
             connector.TrackPaused += ConnectorOnTrackPaused;
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
             await connector.ActivateAsync();
+
+            _settingsManager.AppSettings.Connector = connector.ConnectorName;
         }
 
         private async Task UnsubscribeToConnector(IAudioConnector connector)
@@ -187,6 +199,7 @@ namespace AudioBand
             await connector.DeactivateAsync();
 
             ResetState();
+            _settingsManager.AppSettings.Connector = null;
         }
 
         private void ConnectorOnTrackProgressChanged(object o, int progress)
@@ -324,6 +337,25 @@ namespace AudioBand
         private string BuildNowPlayingText(string artist, string name)
         {
             return $"{(artist == null ? "" : artist + " - ")}{name}";
+        }
+
+        protected override void OnClose()
+        {
+            base.OnClose();
+            _settingsManager.Save();
+        }
+
+        private void ReadSettings()
+        {
+            var connector = _settingsManager.AppSettings.Connector;
+            if (!String.IsNullOrEmpty(connector))
+            {
+                var menuItem = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == connector);
+                if (menuItem != null)
+                {
+                    ConnectorMenuItemOnClicked(menuItem, EventArgs.Empty);
+                }
+            }
         }
     }
 }
