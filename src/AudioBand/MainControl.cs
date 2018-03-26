@@ -42,6 +42,7 @@ namespace AudioBand
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg);
+        private SettingsWindow _settingsWindow;
 
         static MainControl()
         {
@@ -88,6 +89,7 @@ namespace AudioBand
                 Options.ContextMenuItems = BuildContextMenu();
 
                 _settingsManager = new SettingsManager();
+                _settingsWindow = new SettingsWindow();
                 ReadSettings();
             }
             catch (ReflectionTypeLoadException e)
@@ -145,8 +147,15 @@ namespace AudioBand
             });
 
             _pluginSubMenu = new CSDeskBandMenu("Audio Source", pluginList);
+            var settingsMenuItem = new CSDeskBandMenuAction("Audio Band Settings");
+            settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
 
-            return new List<CSDeskBandMenuItem>{ _pluginSubMenu };
+            return new List<CSDeskBandMenuItem>{ settingsMenuItem, _pluginSubMenu };
+        }
+
+        private void SettingsMenuItemOnClicked(object sender, EventArgs eventArgs)
+        {
+            _settingsWindow.Show(this);
         }
 
         private async void ConnectorMenuItemOnClicked(object sender, EventArgs eventArgs)
