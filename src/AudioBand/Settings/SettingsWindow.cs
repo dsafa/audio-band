@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using MetroFramework.Forms;
 
 namespace AudioBand.Settings
@@ -13,6 +14,13 @@ namespace AudioBand.Settings
         {
             InitializeComponent();
 
+            FormClosing += OnFormClosing;
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
+        {
+            formClosingEventArgs.Cancel = true;
+            Hide();
         }
     }
 }
