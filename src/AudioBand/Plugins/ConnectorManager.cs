@@ -1,29 +1,34 @@
-﻿using AudioBand.Connector;
-using System;
+﻿using System;
+using AudioBand.Connector;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Linq;
 
 namespace AudioBand.Plugins
 {
     internal class ConnectorManager
     {
-        [ImportMany]
+        [ImportMany(AllowRecomposition = true)]
         public IEnumerable <IAudioConnector> AudioConnectors { get; private set; }
 
+        public event EventHandler PluginsChanged;
+
         private const string PluginFolderName = "connectors";
-        private DirectoryCatalog _catalog;
+        private AggregateCatalog _catalog;
         private CompositionContainer _container;
+        private List<DirectoryCatalog> _directoryCatalogs;
+        private FileSystemWatcher _fileSystemWatcher;
 
         public ConnectorManager()
         {
-            _catalog = BuildCatalog();
-            _container = BuildContainer();
+            BuildCatalog();
+            BuildContainer();
             AudioConnectors = _container.GetExportedValues<IAudioConnector>();
         }
 
-        private DirectoryCatalog BuildCatalog()
+        private void BuildCatalog()
         {
             var basePath = DirectoryHelper.BaseDirectory;
             var pluginFolderPath = Path.Combine(basePath, PluginFolderName);
@@ -32,12 +37,35 @@ namespace AudioBand.Plugins
                 Directory.CreateDirectory(pluginFolderPath);
             }
 
-            return new DirectoryCatalog(pluginFolderPath);
+            _directoryCatalogs = Directory.EnumerateDirectories(pluginFolderPath, "*", SearchOption.TopDirectoryOnly)
+                .Select(d => new DirectoryCatalog(d))
+                .ToList();
+
+            _catalog = new AggregateCatalog(_directoryCatalogs);
+
+            _fileSystemWatcher = new FileSystemWatcher(pluginFolderPath)
+            {
+                EnableRaisingEvents =  true,
+                IncludeSubdirectories = true,
+                Filter = "*.dll"
+            };
+            _fileSystemWatcher.Created += FileSystemWatcherOnCreated;
         }
 
-        private CompositionContainer BuildContainer()
+        private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            return new CompositionContainer(_catalog);
+            foreach (var directoryCatalog in _directoryCatalogs)
+            {
+                directoryCatalog.Refresh();
+            }
+
+            AudioConnectors = _container.GetExportedValues<IAudioConnector>();
+            PluginsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void BuildContainer()
+        {
+            _container =  new CompositionContainer(_catalog, CompositionOptions.IsThreadSafe);
         }
     }
 }

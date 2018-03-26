@@ -1,5 +1,6 @@
 ﻿using AudioBand.Connector;
 using AudioBand.Plugins;
+using AudioBand.Settings;
 using CSDeskBand;
 using CSDeskBand.Win;
 using NLog;
@@ -16,7 +17,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AudioBand.Settings;
 using Size = System.Drawing.Size;
 
 namespace AudioBand
@@ -84,6 +84,7 @@ namespace AudioBand
             try
             {
                 _connectorManager = new ConnectorManager();
+                _connectorManager.PluginsChanged += ConnectorManagerOnPluginsChanged;
                 Options.ContextMenuItems = BuildContextMenu();
 
                 _settingsManager = new SettingsManager();
@@ -104,6 +105,11 @@ namespace AudioBand
                 _logger.Error(e);
                 throw;
             }
+        }
+
+        private void ConnectorManagerOnPluginsChanged(object sender, EventArgs eventArgs)
+        {
+            BeginInvoke(new Action(() => { Options.ContextMenuItems = BuildContextMenu(); }));
         }
 
         private void AlbumArtOnMouseLeave(object o, EventArgs args)
