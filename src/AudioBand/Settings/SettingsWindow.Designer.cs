@@ -18,9 +18,9 @@
             this.tabControl.ItemSize = new System.Drawing.Size(50, 34);
             this.tabControl.Location = new System.Drawing.Point(20, 60);
             this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 1;
+            this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(260, 420);
-            this.tabControl.TabIndex = 0;
+            this.tabControl.TabIndex = 1;
             this.tabControl.UseSelectable = true;
             // 
             // generalSettingsTab
