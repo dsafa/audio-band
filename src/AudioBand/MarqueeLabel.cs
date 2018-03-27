@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace AudioBand
             TextChanged += OnTextChanged;
         }
 
-        private async void OnTextChanged(object sender, EventArgs eventArgs)
+        private void OnTextChanged(object sender, EventArgs eventArgs)
         {
             using (var graphics = CreateGraphics())
             {
@@ -43,12 +44,11 @@ namespace AudioBand
                 _textWidth = (int) size.Width + 1;
             }
 
-            _nowPlayingXPos = 0;
+            _nowPlayingXPos = MaxWidth / 4;
             _duplicateXPos = _nowPlayingXPos + _textWidth + TextMargin;
             _scrolling = true;
 
             _tokenSource = new CancellationTokenSource();
-            await Task.Delay(3000, _tokenSource.Token).ContinueWith(t => Task.CompletedTask);
             _nowPlayingTimer.Start();
         }
 
@@ -83,10 +83,20 @@ namespace AudioBand
 
             var graphics = e.Graphics;
 
-            var brush = new SolidBrush(ForeColor);
+            var textBrush = new SolidBrush(ForeColor);
             graphics.Clear(BackColor);
-            graphics.DrawString(Text, Font, brush , _nowPlayingXPos, e.ClipRectangle.Y);
-            graphics.DrawString(Text, Font, brush, _duplicateXPos, e.ClipRectangle.Y);
+            graphics.DrawString(Text, Font, textBrush , _nowPlayingXPos, e.ClipRectangle.Y);
+            graphics.DrawString(Text, Font, textBrush, _duplicateXPos, e.ClipRectangle.Y);
+
+            var edgeBrush = new LinearGradientBrush(e.ClipRectangle, BackColor, BackColor, LinearGradientMode.Horizontal)
+            {
+                InterpolationColors = new ColorBlend(4)
+                {
+                    Colors = new[] {BackColor, Color.FromArgb(0, 0, 0, 0), Color.FromArgb(0, 0, 0, 0), BackColor},
+                    Positions = new[] {0, 0.1f, 0.9f, 1}
+                }
+            };
+            graphics.FillRectangle(edgeBrush, e.ClipRectangle);
         }
 
         protected override void Dispose(bool disposing)
