@@ -1,9 +1,11 @@
 ﻿using AudioBand.Connector;
 using SpotifyAPI.Local;
+using SpotifyAPI.Local.Enums;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SpotifyAPI.Local.Enums;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace SpotifyConnector
 {
@@ -19,52 +21,67 @@ namespace SpotifyConnector
 
         private SpotifyLocalAPI _spotifyClient;
         private int _trackLength;
+        private Timer _checkForSpotifytimer;
+        private bool _spotifyStarted;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             _spotifyClient = new SpotifyLocalAPI();
 
-            if (!(SpotifyLocalAPI.IsSpotifyRunning() && SpotifyLocalAPI.IsSpotifyWebHelperRunning() && _spotifyClient.Connect()))
+            _checkForSpotifytimer = new Timer(1000);
+            _checkForSpotifytimer.Elapsed += CheckForSpotifytimerOnElapsed;
+
+            try
             {
-                Console.WriteLine("Cannot connect to spotify. " +
-                                  $"Running? {SpotifyLocalAPI.IsSpotifyRunning()} | " +
-                                  $"Web Helper running?  {SpotifyLocalAPI.IsSpotifyWebHelperRunning()}");
-                TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "Spotify not available" });
+                if (SpotifyRunning())
+                {
+                    Connect();
+                    _spotifyStarted = true;
+                    return Task.CompletedTask;
+                }
+
+                RaiseNotAvailable();
+
                 return Task.CompletedTask;
             }
-
-            _spotifyClient.ListenForEvents = true;
-            var status = _spotifyClient.GetStatus();
-
-            var track = status.Track;
-            _trackLength = track.Length;
-            TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(status.PlayingPosition));
-            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640) });
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
+            finally
             {
-                TrackName = track.TrackResource.Name,
-                Artist = track.ArtistResource.Name
-            });
-
-            if (status.Playing)
-            {
-                TrackPlaying?.Invoke(this, EventArgs.Empty);
+                _checkForSpotifytimer.Start();
             }
-            else
+        }
+
+        private async void CheckForSpotifytimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            // If spotify was started and not anymore
+            if (_spotifyStarted && !SpotifyRunning())
             {
-                TrackPaused?.Invoke(this, EventArgs.Empty);
+                _spotifyStarted = false;
+                RaiseNotAvailable();
+                return;
             }
 
-            _spotifyClient.OnPlayStateChange += SpotifyClientOnOnPlayStateChange;
-            _spotifyClient.OnTrackChange += SpotifyClientOnOnTrackChange;
-            _spotifyClient.OnTrackTimeChange += SpotifyClientOnOnTrackTimeChange;
+            if (!SpotifyRunning())
+            {
+                return;
+            }
 
-            return Task.CompletedTask;
+            // Need spotify to be fully initialized. Need better alternative
+            await Task.Delay(3000);
+            try
+            {
+                Connect();
+                _spotifyStarted = true;
+            }
+            catch (Exception)
+            {
+                // Timing is off, retry
+            }
         }
 
         public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             _spotifyClient?.Dispose();
+            _checkForSpotifytimer.Dispose();
             return Task.CompletedTask;
         }
 
@@ -92,7 +109,6 @@ namespace SpotifyConnector
 
         private void SpotifyClientOnOnTrackTimeChange(object sender, TrackTimeChangeEventArgs trackTimeChangeEventArgs)
         {
-            
             TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(trackTimeChangeEventArgs.TrackTime));
         }
 
@@ -123,6 +139,55 @@ namespace SpotifyConnector
         private int CalculateTrackPercentange(double trackTime)
         {
             return (int)(trackTime / _trackLength * 100);
+        }
+
+        private void Connect()
+        {
+            _spotifyClient.Connect();
+            _spotifyClient.ListenForEvents = true;
+
+            var status = _spotifyClient.GetStatus();
+            var track = status.Track;
+            _trackLength = track.Length;
+
+            TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(status.PlayingPosition));
+            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640) });
+            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
+            {
+                TrackName = track.TrackResource.Name,
+                Artist = track.ArtistResource.Name
+            });
+
+            if (status.Playing)
+            {
+                TrackPlaying?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                TrackPaused?.Invoke(this, EventArgs.Empty);
+            }
+
+            _spotifyClient.OnPlayStateChange += SpotifyClientOnOnPlayStateChange;
+            _spotifyClient.OnTrackChange += SpotifyClientOnOnTrackChange;
+            _spotifyClient.OnTrackTimeChange += SpotifyClientOnOnTrackTimeChange;
+        }
+
+        private bool SpotifyRunning()
+        {
+            return SpotifyLocalAPI.IsSpotifyRunning() && SpotifyLocalAPI.IsSpotifyWebHelperRunning();
+        }
+
+        private void RaiseNotAvailable()
+        {
+            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "Spotify not available" });
+            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = null });
+            TrackPaused?.Invoke(this, EventArgs.Empty);
+            TrackProgressChanged?.Invoke(this, 0);
+        }
+
+        ~Connector()
+        {
+            _checkForSpotifytimer?.Dispose();
         }
     }
 }
