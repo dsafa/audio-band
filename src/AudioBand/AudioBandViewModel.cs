@@ -55,7 +55,18 @@ namespace AudioBand
             set
             {
                 if (value == _audioProgress) return;
-                _audioProgress = Math.Min(100, value);
+                if (value > 100)
+                {
+                    _audioProgress = 100;
+                }
+                else if (value < 0)
+                {
+                    _audioProgress = 0;
+                }
+                else
+                {
+                    _audioProgress = value;
+                }
                 OnPropertyChanged();
             }
         }

@@ -236,6 +236,11 @@ namespace AudioBand
         {
             _albumArt = albumArtChangedEventArgs.AlbumArt;
             _albumArtTooltip.AlbumArt = _albumArt;
+            if (_albumArt == null)
+            {
+                _albumArt = DrawSvg(AlbumArtPlaceholderSvg);
+            }
+
             BeginInvoke(new Action(() => UpdateAlbumArt(_albumArt)));
         }
 
