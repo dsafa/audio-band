@@ -11,19 +11,17 @@ namespace AudioBand
 {
     public class MarqueeLabel : Label
     {
-        // Have some issues getting the correct size of the control
-        public int MaxWidth { get; set; }
-
         private bool _scrolling;
         private int _textWidth;
         private int _nowPlayingXPos;
         private int _duplicateXPos;
-        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
         private readonly Timer _nowPlayingTimer = new Timer { Interval = 20 };
         private const int TextMargin = 10;
+        private Rectangle _clipRectangle;
 
         public MarqueeLabel()
         {
+            UpdateClipRectangle();
             _nowPlayingTimer.Tick += NowPlayingTimerOnTick;
             TextChanged += OnTextChanged;
         }
@@ -33,22 +31,20 @@ namespace AudioBand
             using (var graphics = CreateGraphics())
             {
                 var size = graphics.MeasureString(Text, Font);
-                if (size.Width <= MaxWidth)
+                if (size.Width <= _clipRectangle.Width)
                 {
                     _scrolling = false;
                     _nowPlayingTimer.Stop();
-                    _tokenSource.Cancel();
                     return;
                 }
 
                 _textWidth = (int) size.Width + 1;
             }
 
-            _nowPlayingXPos = MaxWidth / 4;
+            _nowPlayingXPos = _clipRectangle.Width / 4;
             _duplicateXPos = _nowPlayingXPos + _textWidth + TextMargin;
             _scrolling = true;
 
-            _tokenSource = new CancellationTokenSource();
             _nowPlayingTimer.Start();
         }
 
@@ -103,6 +99,17 @@ namespace AudioBand
         {
             base.Dispose(disposing);
             _nowPlayingTimer.Stop();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            UpdateClipRectangle();
+        }
+
+        private void UpdateClipRectangle()
+        {
+            _clipRectangle = RectangleToClient(ClientRectangle);
         }
     }
 }

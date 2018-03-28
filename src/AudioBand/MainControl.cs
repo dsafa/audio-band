@@ -65,7 +65,6 @@ namespace AudioBand
             Options.MaxHorizontal = MaximumSize = Size;
 
             ResetState();
-            nowPlayingText.MaxWidth = FixedWidth;
 
             SizeChanged += OnSizeChanged;
             playPauseButton.Click += PlayPauseButtonOnClick;

@@ -81,7 +81,6 @@
             this.nowPlayingText.ForeColor = System.Drawing.Color.White;
             this.nowPlayingText.Location = new System.Drawing.Point(30, 0);
             this.nowPlayingText.Margin = new System.Windows.Forms.Padding(0);
-            this.nowPlayingText.MaxWidth = 0;
             this.nowPlayingText.Name = "nowPlayingText";
             this.nowPlayingText.Size = new System.Drawing.Size(270, 14);
             this.nowPlayingText.TabIndex = 2;
