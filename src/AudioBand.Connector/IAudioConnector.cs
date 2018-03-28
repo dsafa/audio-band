@@ -19,11 +19,6 @@ namespace AudioBand.Connector
         event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
         /// <summary>
-        /// Album art has changed
-        /// </summary>
-        event EventHandler<AlbumArtChangedEventArgs> AlbumArtChanged;
-
-        /// <summary>
         /// Track is now playing
         /// </summary>
         event EventHandler TrackPlaying;

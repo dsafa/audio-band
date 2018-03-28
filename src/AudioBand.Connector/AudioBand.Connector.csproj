@@ -36,7 +36,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlbumArtChangedEventArgs.cs" />
     <Compile Include="IAudioConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrackInfoChangedEventArgs.cs" />

@@ -41,7 +41,7 @@ namespace AudioBand
         private readonly SettingsManager _settingsManager;
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
-        private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg);
+        private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg); // Used so album art can be resized
         private SettingsWindow _settingsWindow;
 
         static MainControl()
@@ -189,7 +189,6 @@ namespace AudioBand
             }
 
             connector.TrackInfoChanged += ConnectorOnTrackInfoChanged;
-            connector.AlbumArtChanged += ConnectorOnAlbumArtChanged;
             connector.TrackPlaying += ConnectorOnTrackPlaying;
             connector.TrackPaused += ConnectorOnTrackPaused;
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
@@ -206,7 +205,6 @@ namespace AudioBand
             }
 
             connector.TrackInfoChanged -= ConnectorOnTrackInfoChanged;
-            connector.AlbumArtChanged -= ConnectorOnAlbumArtChanged;
             connector.TrackPlaying -= ConnectorOnTrackPlaying;
             connector.TrackPaused -= ConnectorOnTrackPaused;
             connector.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
@@ -231,22 +229,22 @@ namespace AudioBand
             BeginInvoke(new Action(() => _audioBandViewModel.IsPlaying = true));
         }
 
-        private void ConnectorOnAlbumArtChanged(object sender, AlbumArtChangedEventArgs albumArtChangedEventArgs)
+        private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
-            _albumArt = albumArtChangedEventArgs.AlbumArt;
+            var text = BuildNowPlayingText(trackInfoChangedEventArgs.Artist, trackInfoChangedEventArgs.TrackName);
+
+            _albumArt = trackInfoChangedEventArgs.AlbumArt;
             _albumArtTooltip.AlbumArt = _albumArt;
             if (_albumArt == null)
             {
                 _albumArt = DrawSvg(AlbumArtPlaceholderSvg);
             }
 
-            BeginInvoke(new Action(() => UpdateAlbumArt(_albumArt)));
-        }
-
-        private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
-        {
-            var text = BuildNowPlayingText(trackInfoChangedEventArgs.Artist, trackInfoChangedEventArgs.TrackName);
-            BeginInvoke(new Action(() => _audioBandViewModel.NowPlayingText = text));
+            BeginInvoke(new Action(() =>
+            {
+                _audioBandViewModel.NowPlayingText = text;
+                UpdateAlbumArt(_albumArt);
+            }));
         }
 
         private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)

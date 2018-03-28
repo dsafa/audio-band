@@ -14,7 +14,6 @@ namespace SpotifyConnector
         public string ConnectorName { get; } = "Spotify";
 
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
-        public event EventHandler<AlbumArtChangedEventArgs> AlbumArtChanged;
         public event EventHandler TrackPlaying;
         public event EventHandler TrackPaused;
         public event EventHandler<int> TrackProgressChanged;
@@ -120,8 +119,8 @@ namespace SpotifyConnector
             {
                 TrackName = track.TrackResource.Name,
                 Artist = track.ArtistResource.Name,
+                AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640)
             });
-            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640) });
         }
 
         private void SpotifyClientOnOnPlayStateChange(object sender, PlayStateEventArgs playStateEventArgs)
@@ -151,11 +150,11 @@ namespace SpotifyConnector
             _trackLength = track.Length;
 
             TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(status.PlayingPosition));
-            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640) });
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
             {
                 TrackName = track.TrackResource.Name,
-                Artist = track.ArtistResource.Name
+                Artist = track.ArtistResource.Name,
+                AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640)
             });
 
             if (status.Playing)
@@ -179,8 +178,7 @@ namespace SpotifyConnector
 
         private void RaiseNotAvailable()
         {
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "Spotify not available" });
-            AlbumArtChanged?.Invoke(this, new AlbumArtChangedEventArgs { AlbumArt = null });
+            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "Spotify not available", AlbumArt = null });
             TrackPaused?.Invoke(this, EventArgs.Empty);
             TrackProgressChanged?.Invoke(this, 0);
         }
