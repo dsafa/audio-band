@@ -60,7 +60,7 @@ namespace SpotifyConnector
                 return;
             }
 
-            if (!SpotifyRunning())
+            if (_spotifyStarted)
             {
                 return;
             }
