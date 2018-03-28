@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -31,14 +29,14 @@ namespace AudioBand
             using (var graphics = CreateGraphics())
             {
                 var size = graphics.MeasureString(Text, Font);
+                _textWidth = (int) size.Width + 1;
+
                 if (size.Width <= _clipRectangle.Width)
                 {
                     _scrolling = false;
                     _nowPlayingTimer.Stop();
                     return;
                 }
-
-                _textWidth = (int) size.Width + 1;
             }
 
             _nowPlayingXPos = _clipRectangle.Width / 4;
@@ -52,18 +50,7 @@ namespace AudioBand
         {
             BeginInvoke(new Action(() =>
             {
-                if (_nowPlayingXPos <= -_textWidth - TextMargin)
-                {
-                    _nowPlayingXPos = _textWidth + TextMargin;
-                }
-
-                if (_duplicateXPos <= -_textWidth - TextMargin)
-                {
-                    _duplicateXPos = _nowPlayingXPos + _textWidth + TextMargin;
-                }
-
-                _nowPlayingXPos--;
-                _duplicateXPos--;
+                UpdateTextPositions();
                 Refresh();
             }));
         }
@@ -105,11 +92,33 @@ namespace AudioBand
         {
             base.OnResize(e);
             UpdateClipRectangle();
+
+            using (var graphics = CreateGraphics())
+            {
+                var size = graphics.MeasureString(Text, Font);
+                _textWidth = (int)size.Width + 1;
+            }
         }
 
         private void UpdateClipRectangle()
         {
             _clipRectangle = RectangleToClient(ClientRectangle);
+        }
+
+        private void UpdateTextPositions()
+        {
+            if (_nowPlayingXPos + _textWidth + TextMargin < 0)
+            {
+                _nowPlayingXPos = _duplicateXPos + _textWidth + TextMargin;
+            }
+
+            if (_duplicateXPos + _textWidth + TextMargin < 0)
+            {
+                _duplicateXPos = _nowPlayingXPos + _textWidth + TextMargin;
+            }
+
+            _nowPlayingXPos--;
+            _duplicateXPos--;
         }
     }
 }
