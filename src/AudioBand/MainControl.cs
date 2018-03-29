@@ -74,7 +74,7 @@ namespace AudioBand
             albumArt.MouseLeave += AlbumArtOnMouseLeave;
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
 
-            nowPlayingText.DataBindings.Add("Text", _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
+            nowPlayingText.DataBindings.Add("NowPlayingText", _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
             albumArt.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
             audioProgress.DataBindings.Add("Value", _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
             previousButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
@@ -231,8 +231,6 @@ namespace AudioBand
 
         private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
-            var text = BuildNowPlayingText(trackInfoChangedEventArgs.Artist, trackInfoChangedEventArgs.TrackName);
-
             _albumArt = trackInfoChangedEventArgs.AlbumArt;
             _albumArtTooltip.AlbumArt = _albumArt;
             if (_albumArt == null)
@@ -242,7 +240,12 @@ namespace AudioBand
 
             BeginInvoke(new Action(() =>
             {
-                _audioBandViewModel.NowPlayingText = text;
+                _audioBandViewModel.NowPlayingText = new NowPlayingText
+                {
+                    Artist = trackInfoChangedEventArgs.Artist,
+                    TrackName = trackInfoChangedEventArgs.TrackName
+                };
+
                 UpdateAlbumArt(_albumArt);
             }));
         }
@@ -345,15 +348,10 @@ namespace AudioBand
             var placeholder = DrawSvg(AlbumArtPlaceholderSvg);
             _albumArt = placeholder;
             UpdateAlbumArt(placeholder);
-            _audioBandViewModel.NowPlayingText = "";
+            _audioBandViewModel.NowPlayingText = new NowPlayingText();
             _audioBandViewModel.IsPlaying = false;
             _audioBandViewModel.AudioProgress = 0;
             _albumArtTooltip.AlbumArt = null;
-        }
-
-        private string BuildNowPlayingText(string artist, string name)
-        {
-            return $"{(artist == null ? "" : artist + " - ")}{name}";
         }
 
         protected override void OnClose()

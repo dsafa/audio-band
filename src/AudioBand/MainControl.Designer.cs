@@ -85,7 +85,6 @@
             this.nowPlayingText.Size = new System.Drawing.Size(270, 14);
             this.nowPlayingText.TabIndex = 2;
             this.nowPlayingText.Text = "label1";
-            this.nowPlayingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // buttonsTable
             // 

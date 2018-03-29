@@ -9,12 +9,12 @@ namespace AudioBand
     internal class AudioBandViewModel : INotifyPropertyChanged
     {
         private bool _isPlaying;
-        private string _nowPlayingText;
         private int _audioProgress;
         private Image _albumArt = new Bitmap(1, 1);
         private Image _previousButtonBitmap = new Bitmap(1, 1);
         private Image _nextButtonBitmap = new Bitmap(1, 1);
         private Image _playPauseButtonBitmap = new Bitmap(1, 1);
+        private NowPlayingText _nowPlayingText;
 
         public bool IsPlaying
         {
@@ -27,12 +27,12 @@ namespace AudioBand
             }
         }
 
-        public string NowPlayingText
+        public NowPlayingText NowPlayingText
         {
             get => _nowPlayingText;
             set
             {
-                if (value == _nowPlayingText) return;
+                if (value.Equals(_nowPlayingText)) return;
                 _nowPlayingText = value;
                 OnPropertyChanged();
             }

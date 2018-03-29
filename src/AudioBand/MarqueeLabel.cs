@@ -7,31 +7,57 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace AudioBand
 {
-    public class MarqueeLabel : Label
+    public struct NowPlayingText
     {
+        public string Artist { get; set; }
+        public string TrackName { get; set; }
+    }
+
+    public class MarqueeLabel : Control
+    {
+        public NowPlayingText NowPlayingText
+        {
+            get => _nowPlayingText;
+            set
+            {
+                if (value.Equals(_nowPlayingText))
+                {
+                    return;
+                }
+
+                _nowPlayingText = value;
+                OnNowPlayingTextChanged();
+                Refresh();
+            }
+        }
+
+        public Font ArtistFont { get; set; } = new Font(new FontFamily("Segoe UI"), 8.5f, FontStyle.Bold, GraphicsUnit.Point);
+        public Color ArtistColor { get; set; } = Color.LightSlateGray;
+
+        private NowPlayingText _nowPlayingText;
         private bool _scrolling;
-        private int _textWidth;
+        private int _nowPlayingTextWidth;
         private int _nowPlayingXPos;
         private int _duplicateXPos;
         private readonly Timer _nowPlayingTimer = new Timer { Interval = 20 };
-        private const int TextMargin = 10;
-        private Rectangle _clipRectangle;
+        private const int TextMargin = 60; //Spacing between scrolling text
+        private Rectangle _clipRectangle; // Real size
 
         public MarqueeLabel()
         {
+            DoubleBuffered = true;
             UpdateClipRectangle();
             _nowPlayingTimer.Tick += NowPlayingTimerOnTick;
-            TextChanged += OnTextChanged;
         }
 
-        private void OnTextChanged(object sender, EventArgs eventArgs)
+        private void OnNowPlayingTextChanged()
         {
             using (var graphics = CreateGraphics())
             {
-                var size = graphics.MeasureString(Text, Font);
-                _textWidth = (int) size.Width + 1;
+                var textSize = MeasureNowPlayingText(graphics);
+                _nowPlayingTextWidth = (int) textSize.Width + 1;
 
-                if (size.Width <= _clipRectangle.Width)
+                if (textSize.Width <= _clipRectangle.Width)
                 {
                     _scrolling = false;
                     _nowPlayingTimer.Stop();
@@ -40,7 +66,7 @@ namespace AudioBand
             }
 
             _nowPlayingXPos = _clipRectangle.Width / 4;
-            _duplicateXPos = _nowPlayingXPos + _textWidth + TextMargin;
+            _duplicateXPos = _nowPlayingXPos + _nowPlayingTextWidth + TextMargin;
             _scrolling = true;
 
             _nowPlayingTimer.Start();
@@ -57,19 +83,16 @@ namespace AudioBand
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+            var graphics = e.Graphics;
+            graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             if (!_scrolling)
             {
-                base.OnPaint(e);
+                DrawNowPlayingText(e.Graphics, null);
                 return;
             }
 
-            var graphics = e.Graphics;
-
-            var textBrush = new SolidBrush(ForeColor);
-            graphics.Clear(BackColor);
-            graphics.DrawString(Text, Font, textBrush , _nowPlayingXPos, e.ClipRectangle.Y);
-            graphics.DrawString(Text, Font, textBrush, _duplicateXPos, e.ClipRectangle.Y);
+            DrawNowPlayingText(graphics, _nowPlayingXPos);
+            DrawNowPlayingText(graphics, _duplicateXPos);
 
             var edgeBrush = new LinearGradientBrush(e.ClipRectangle, BackColor, BackColor, LinearGradientMode.Horizontal)
             {
@@ -92,12 +115,6 @@ namespace AudioBand
         {
             base.OnResize(e);
             UpdateClipRectangle();
-
-            using (var graphics = CreateGraphics())
-            {
-                var size = graphics.MeasureString(Text, Font);
-                _textWidth = (int)size.Width + 1;
-            }
         }
 
         private void UpdateClipRectangle()
@@ -107,18 +124,42 @@ namespace AudioBand
 
         private void UpdateTextPositions()
         {
-            if (_nowPlayingXPos + _textWidth + TextMargin < 0)
+            if (_nowPlayingXPos + _nowPlayingTextWidth + TextMargin < 0)
             {
-                _nowPlayingXPos = _duplicateXPos + _textWidth + TextMargin;
+                _nowPlayingXPos = _duplicateXPos + _nowPlayingTextWidth + TextMargin;
             }
 
-            if (_duplicateXPos + _textWidth + TextMargin < 0)
+            if (_duplicateXPos + _nowPlayingTextWidth + TextMargin < 0)
             {
-                _duplicateXPos = _nowPlayingXPos + _textWidth + TextMargin;
+                _duplicateXPos = _nowPlayingXPos + _nowPlayingTextWidth + TextMargin;
             }
 
             _nowPlayingXPos--;
             _duplicateXPos--;
+        }
+
+        private void DrawNowPlayingText(Graphics graphics, float? x)
+        {
+            if (x == null)
+            {
+                var size = MeasureNowPlayingText(graphics);
+                x = _clipRectangle.Width / 2 - size.Width / 2;
+            }
+
+            var artistText = NowPlayingText.Artist;
+            var trackNameText = NowPlayingText.TrackName;
+            var artistTextSize = graphics.MeasureString(artistText, ArtistFont);
+            var y = 0;
+
+            graphics.DrawString(artistText, ArtistFont, new SolidBrush(ArtistColor), x.Value, y);
+            graphics.DrawString(trackNameText, Font, new SolidBrush(ForeColor), x.Value + artistTextSize.Width, y);
+        }
+
+        private SizeF MeasureNowPlayingText(Graphics graphics)
+        {
+            var artistSize = graphics.MeasureString(_nowPlayingText.Artist, ArtistFont);
+            var trackNameSize = graphics.MeasureString(_nowPlayingText.TrackName, Font);
+            return artistSize + trackNameSize;
         }
     }
 }
