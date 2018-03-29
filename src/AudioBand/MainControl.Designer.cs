@@ -30,7 +30,7 @@
         {
             this.mainTable = new System.Windows.Forms.TableLayoutPanel();
             this.albumArt = new System.Windows.Forms.PictureBox();
-            this.nowPlayingText = new AudioBand.MarqueeLabel();
+            this.nowPlayingText = new AudioBand.NowPlayingDisplay();
             this.buttonsTable = new System.Windows.Forms.TableLayoutPanel();
             this.previousButton = new System.Windows.Forms.Button();
             this.playPauseButton = new System.Windows.Forms.Button();
@@ -184,7 +184,7 @@
         #endregion
         private System.Windows.Forms.TableLayoutPanel mainTable;
         private System.Windows.Forms.PictureBox albumArt;
-        private MarqueeLabel nowPlayingText;
+        private AudioBand.NowPlayingDisplay nowPlayingText;
         private System.Windows.Forms.TableLayoutPanel buttonsTable;
         private System.Windows.Forms.Button previousButton;
         private System.Windows.Forms.Button playPauseButton;

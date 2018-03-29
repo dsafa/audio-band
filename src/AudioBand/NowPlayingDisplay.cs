@@ -13,7 +13,7 @@ namespace AudioBand
         public string TrackName { get; set; }
     }
 
-    public class MarqueeLabel : Control
+    public class NowPlayingDisplay : Control
     {
         public NowPlayingText NowPlayingText
         {
@@ -43,7 +43,7 @@ namespace AudioBand
         private const int TextMargin = 60; //Spacing between scrolling text
         private Rectangle _clipRectangle; // Real size
 
-        public MarqueeLabel()
+        public NowPlayingDisplay()
         {
             DoubleBuffered = true;
             UpdateClipRectangle();

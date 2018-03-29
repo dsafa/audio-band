@@ -77,7 +77,7 @@
     <Compile Include="EnhancedProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MarqueeLabel.cs">
+    <Compile Include="NowPlayingDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Plugins\ConnectorManager.cs" />
