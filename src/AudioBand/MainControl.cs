@@ -35,6 +35,7 @@ namespace AudioBand
         private readonly int _maxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
+        private readonly AppearanceViewModel _appearanceViewModel = new AppearanceViewModel();
         private readonly ConnectorManager _connectorManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
@@ -75,8 +76,13 @@ namespace AudioBand
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
 
             nowPlayingText.DataBindings.Add("NowPlayingText", _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
+            nowPlayingText.DataBindings.Add("ArtistFont", _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingArtistFont));
+            nowPlayingText.DataBindings.Add("ArtistColor", _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingArtistColor));
+            nowPlayingText.DataBindings.Add("Font", _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingTrackNameFont));
+            nowPlayingText.DataBindings.Add("ForeColor", _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingTrackNameColor));
             albumArt.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
             audioProgress.DataBindings.Add("Value", _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
+            audioProgress.DataBindings.Add("ForeColor", _appearanceViewModel, nameof(AppearanceViewModel.TrackProgessColor));
             previousButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
             playPauseButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
             nextButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));

@@ -66,6 +66,7 @@
     <Compile Include="AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="AppearanceViewModel.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>

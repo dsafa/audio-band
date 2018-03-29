@@ -77,8 +77,6 @@
             // nowPlayingText
             // 
             this.nowPlayingText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nowPlayingText.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nowPlayingText.ForeColor = System.Drawing.Color.White;
             this.nowPlayingText.Location = new System.Drawing.Point(30, 0);
             this.nowPlayingText.Margin = new System.Windows.Forms.Padding(0);
             this.nowPlayingText.Name = "nowPlayingText";
@@ -153,7 +151,6 @@
             // 
             this.mainTable.SetColumnSpan(this.audioProgress, 2);
             this.audioProgress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.audioProgress.ForeColor = System.Drawing.Color.DodgerBlue;
             this.audioProgress.Location = new System.Drawing.Point(0, 28);
             this.audioProgress.Margin = new System.Windows.Forms.Padding(0);
             this.audioProgress.Name = "audioProgress";

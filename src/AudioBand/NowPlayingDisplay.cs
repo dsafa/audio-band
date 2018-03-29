@@ -31,8 +31,8 @@ namespace AudioBand
             }
         }
 
-        public Font ArtistFont { get; set; } = new Font(new FontFamily("Segoe UI"), 8.5f, FontStyle.Bold, GraphicsUnit.Point);
-        public Color ArtistColor { get; set; } = Color.LightSlateGray;
+        public Font ArtistFont { get; set; }
+        public Color ArtistColor { get; set; }
 
         private NowPlayingText _nowPlayingText;
         private bool _scrolling;
