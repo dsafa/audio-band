@@ -31,8 +31,35 @@ namespace AudioBand
             }
         }
 
-        public Font ArtistFont { get; set; }
-        public Color ArtistColor { get; set; }
+        public Font ArtistFont
+        {
+            get => _artistFont;
+            set
+            {
+                if (Equals(value, _artistFont))
+                {
+                    return;
+                }
+
+                _artistFont = value;
+                Refresh();
+            }
+        }
+
+        public Color ArtistColor
+        {
+            get => _artistColor;
+            set
+            {
+                if (value.Equals(_artistColor))
+                {
+                    return;
+                }
+
+                _artistColor = value;
+                Refresh();
+            }
+        }
 
         private NowPlayingText _nowPlayingText;
         private bool _scrolling;
@@ -42,6 +69,8 @@ namespace AudioBand
         private readonly Timer _nowPlayingTimer = new Timer { Interval = 20 };
         private const int TextMargin = 60; //Spacing between scrolling text
         private Rectangle _clipRectangle; // Real size
+        private Font _artistFont;
+        private Color _artistColor;
 
         public NowPlayingDisplay()
         {

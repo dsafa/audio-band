@@ -40,10 +40,10 @@ namespace AudioBand
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
         private readonly SettingsManager _settingsManager;
+        private readonly SettingsWindow _settingsWindow;
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg); // Used so album art can be resized
-        private SettingsWindow _settingsWindow;
 
         static MainControl()
         {
@@ -94,8 +94,8 @@ namespace AudioBand
                 Options.ContextMenuItems = BuildContextMenu();
 
                 _settingsManager = new SettingsManager();
-                _settingsWindow = new SettingsWindow();
                 ReadSettings();
+                _settingsWindow = new SettingsWindow(_appearanceViewModel);
             }
             catch (ReflectionTypeLoadException e)
             {
