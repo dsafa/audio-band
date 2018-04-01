@@ -66,7 +66,7 @@
     <Compile Include="AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AppearanceViewModel.cs" />
+    <Compile Include="Settings\AudioBandAppearance.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>
@@ -88,7 +88,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="Settings\AudioBandSettings.cs" />
+    <Compile Include="Settings\Converters.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\SettingsWindow.cs">
       <SubType>Form</SubType>

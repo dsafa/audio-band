@@ -7,28 +7,28 @@ namespace AudioBand.Settings
 {
     internal partial class SettingsWindow : MetroForm
     {
-        private readonly AppearanceViewModel _appearanceViewModel;
+        private readonly AudioBandAppearance _audioBandAppearance;
 
-        public SettingsWindow(AppearanceViewModel appearanceViewModel)
+        public SettingsWindow(AudioBandAppearance audioBandAppearance)
         {
             InitializeComponent();
 
-            _appearanceViewModel = appearanceViewModel;
+            _audioBandAppearance = audioBandAppearance;
 
-            artistFontDialog.Font = _appearanceViewModel.NowPlayingArtistFont;
-            artistFontDisplay.DataBindings.Add(nameof(artistFontDisplay.Text), _appearanceViewModel, $"{nameof(_appearanceViewModel.NowPlayingArtistFont)}.Name");
+            artistFontDialog.Font = _audioBandAppearance.NowPlayingArtistFont;
+            artistFontDisplay.DataBindings.Add(nameof(artistFontDisplay.Text), _audioBandAppearance, $"{nameof(_audioBandAppearance.NowPlayingArtistFont)}.Name");
 
-            artistColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_appearanceViewModel.NowPlayingArtistColor)};
-            artistColorDisplay.DataBindings.Add(nameof(artistColorDisplay.BackColor), _appearanceViewModel, nameof(_appearanceViewModel.NowPlayingArtistColor));
+            artistColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.NowPlayingArtistColor)};
+            artistColorDisplay.DataBindings.Add(nameof(artistColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.NowPlayingArtistColor));
 
-            songFontDialog.Font = _appearanceViewModel.NowPlayingTrackNameFont;
-            songFontDisplay.DataBindings.Add(nameof(songFontDisplay.Text), _appearanceViewModel, $"{nameof(_appearanceViewModel.NowPlayingTrackNameFont)}.Name");
+            songFontDialog.Font = _audioBandAppearance.NowPlayingTrackNameFont;
+            songFontDisplay.DataBindings.Add(nameof(songFontDisplay.Text), _audioBandAppearance, $"{nameof(_audioBandAppearance.NowPlayingTrackNameFont)}.Name");
 
-            songColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_appearanceViewModel.NowPlayingTrackNameColor)};
-            songColorDisplay.DataBindings.Add(nameof(songColorDisplay.BackColor), _appearanceViewModel, nameof(_appearanceViewModel.NowPlayingTrackNameColor));
+            songColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.NowPlayingTrackNameColor)};
+            songColorDisplay.DataBindings.Add(nameof(songColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.NowPlayingTrackNameColor));
 
-            progressColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_appearanceViewModel.TrackProgessColor)};
-            progressColorDisplay.DataBindings.Add(nameof(progressColorDisplay.BackColor), _appearanceViewModel, nameof(_appearanceViewModel.TrackProgessColor));
+            progressColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.TrackProgessColor)};
+            progressColorDisplay.DataBindings.Add(nameof(progressColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.TrackProgessColor));
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
@@ -41,7 +41,7 @@ namespace AudioBand.Settings
         {
             if (artistFontDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _appearanceViewModel.NowPlayingArtistFont = artistFontDialog.Font;
+                _audioBandAppearance.NowPlayingArtistFont = artistFontDialog.Font;
             }
         }
 
@@ -49,7 +49,7 @@ namespace AudioBand.Settings
         {
             if (artistColorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _appearanceViewModel.NowPlayingArtistColor = artistColorDialog.Color;
+                _audioBandAppearance.NowPlayingArtistColor = artistColorDialog.Color;
             }
         }
 
@@ -57,7 +57,7 @@ namespace AudioBand.Settings
         {
             if (songFontDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _appearanceViewModel.NowPlayingTrackNameFont = songFontDialog.Font;
+                _audioBandAppearance.NowPlayingTrackNameFont = songFontDialog.Font;
             }
         }
 
@@ -65,7 +65,7 @@ namespace AudioBand.Settings
         {
             if (songColorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _appearanceViewModel.NowPlayingTrackNameColor = songColorDialog.Color;
+                _audioBandAppearance.NowPlayingTrackNameColor = songColorDialog.Color;
             }
         }
 
@@ -73,7 +73,7 @@ namespace AudioBand.Settings
         {
             if (progressColorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _appearanceViewModel.TrackProgessColor = progressColorDialog.Color;
+                _audioBandAppearance.TrackProgessColor = progressColorDialog.Color;
             }
         }
     }

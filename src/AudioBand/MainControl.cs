@@ -35,7 +35,6 @@ namespace AudioBand
         private readonly int _maxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
-        private readonly AppearanceViewModel _appearanceViewModel = new AppearanceViewModel();
         private readonly ConnectorManager _connectorManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
@@ -44,6 +43,7 @@ namespace AudioBand
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg); // Used so album art can be resized
+        private AudioBandAppearance _audioBandAppearance;
 
         static MainControl()
         {
@@ -65,31 +65,34 @@ namespace AudioBand
             Options.MinHorizontal = MinimumSize = new Size(FixedWidth, _minHeight);
             Options.MaxHorizontal = MaximumSize = Size;
 
-            ResetState();
-            _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
-            SizeChanged += OnSizeChanged;
-
-            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
-            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingArtistFont));
-            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingArtistColor));
-            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.Font),_appearanceViewModel, nameof(AppearanceViewModel.NowPlayingTrackNameFont));
-            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ForeColor), _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingTrackNameColor));
-            albumArt.DataBindings.Add(nameof(albumArt.Image), _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
-            audioProgress.DataBindings.Add(nameof(audioProgress.Value), _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
-            audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), _appearanceViewModel, nameof(AppearanceViewModel.TrackProgessColor));
-            previousButton.DataBindings.Add(nameof(previousButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
-            playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
-            nextButton.DataBindings.Add(nameof(nextButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
-
             try
             {
+                _settingsManager = new SettingsManager();
+                _audioBandAppearance = _settingsManager.AudioBandSettings.AudioBandAppearance;
+                _settingsWindow = new SettingsWindow(_audioBandAppearance);
+                _settingsWindow.Closing += SettingsWindowOnClosing;
+
+                ResetState();
+                _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
+                SizeChanged += OnSizeChanged;
+
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), _audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistFont));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), _audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistColor));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.Font), _audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameFont));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ForeColor), _audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameColor));
+                albumArt.DataBindings.Add(nameof(albumArt.Image), _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
+                audioProgress.DataBindings.Add(nameof(audioProgress.Value), _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
+                audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), _audioBandAppearance, nameof(AudioBandAppearance.TrackProgessColor));
+                previousButton.DataBindings.Add(nameof(previousButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
+                playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
+                nextButton.DataBindings.Add(nameof(nextButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
+
                 _connectorManager = new ConnectorManager();
                 _connectorManager.PluginsChanged += ConnectorManagerOnPluginsChanged;
                 Options.ContextMenuItems = BuildContextMenu();
 
-                _settingsManager = new SettingsManager();
                 ApplySettings();
-                _settingsWindow = new SettingsWindow(_appearanceViewModel);
             }
             catch (ReflectionTypeLoadException e)
             {
@@ -106,6 +109,11 @@ namespace AudioBand
                 _logger.Error(e);
                 throw;
             }
+        }
+
+        private void SettingsWindowOnClosing(object sender, CancelEventArgs cancelEventArgs)
+        {
+            _settingsManager.Save();
         }
 
         private void ConnectorManagerOnPluginsChanged(object sender, EventArgs eventArgs)
@@ -194,7 +202,7 @@ namespace AudioBand
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
             await connector.ActivateAsync();
 
-            _settingsManager.AppSettings.Connector = connector.ConnectorName;
+            _settingsManager.AudioBandSettings.Connector = connector.ConnectorName;
         }
 
         private async Task UnsubscribeToConnector(IAudioConnector connector)
@@ -211,7 +219,7 @@ namespace AudioBand
             await connector.DeactivateAsync();
 
             ResetState();
-            _settingsManager.AppSettings.Connector = null;
+            _settingsManager.AudioBandSettings.Connector = null;
         }
 
         private void ConnectorOnTrackProgressChanged(object o, int progress)
@@ -361,7 +369,7 @@ namespace AudioBand
 
         private void ApplySettings()
         {
-            var connector = _settingsManager.AppSettings.Connector;
+            var connector = _settingsManager.AudioBandSettings.Connector;
             if (!String.IsNullOrEmpty(connector))
             {
                 var menuItem = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == connector);

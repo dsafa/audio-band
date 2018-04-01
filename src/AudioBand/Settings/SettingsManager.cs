@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Nett;
+﻿using Nett;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 
 namespace AudioBand.Settings
 {
@@ -14,11 +12,12 @@ namespace AudioBand.Settings
         public static string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         public static string SettingsFile = Path.Combine(SettingsDirectory, "settings.toml");
 
-        public AppSettings AppSettings { get; }
+        public AudioBandSettings AudioBandSettings { get; }
 
         private const string SettingsKey = "AudioBand";
         private readonly TomlTable _root;
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        private readonly TomlSettings _tomlSettings;
 
         public SettingsManager()
         {
@@ -32,15 +31,27 @@ namespace AudioBand.Settings
                 File.CreateText(SettingsFile).Close();
             }
 
-            _root = Toml.ReadFile(SettingsFile);
+            _tomlSettings = TomlSettings.Create(cfg =>
+            {
+                cfg.ConfigureType<Color>(type => type.WithConversionFor<TomlString>(convert => convert
+                    .ToToml(ColorTranslator.ToHtml)
+                    .FromToml(tomlInt => ColorTranslator.FromHtml(tomlInt.Value))));
+
+                cfg.ConfigureType<Font>(type => type.WithConversionFor<TomlString>(convert => convert
+                    .ToToml(Converters.FontToString)
+                    .FromToml(tomlString => Converters.StringToFont(tomlString.Value))));
+            });
+
+
+            _root = Toml.ReadFile(SettingsFile, _tomlSettings);
             try
             {
-                AppSettings = _root.Get<AppSettings>(SettingsKey);
+                AudioBandSettings = _root.Get<AudioBandSettings>(SettingsKey);
             }
             catch (KeyNotFoundException)
             {
-                AppSettings = new AppSettings();
-                _root[SettingsKey] = Toml.Create(AppSettings);
+                AudioBandSettings = new AudioBandSettings();
+                _root[SettingsKey] = Toml.Create(AudioBandSettings, _tomlSettings);
             }
 
         }
@@ -49,8 +60,8 @@ namespace AudioBand.Settings
         {
             try
             {
-                _root[SettingsKey] = Toml.Create(AppSettings);
-                Toml.WriteFile(_root, SettingsFile);
+                _root[SettingsKey] = Toml.Create(AudioBandSettings, _tomlSettings);
+                Toml.WriteFile(_root, SettingsFile, _tomlSettings);
             }
             catch (Exception e)
             {

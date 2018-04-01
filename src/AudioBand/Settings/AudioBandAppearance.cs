@@ -1,11 +1,11 @@
-﻿using CSDeskBand.Annotations;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using CSDeskBand.Annotations;
 
-namespace AudioBand
+namespace AudioBand.Settings
 {
-    internal class AppearanceViewModel : INotifyPropertyChanged
+    internal class AudioBandAppearance : INotifyPropertyChanged
     {
         private Color _trackProgessColor = Color.DodgerBlue;
         private Font _nowPlayingArtistFont = new Font(new FontFamily("Segoe UI"), 8.5f, FontStyle.Bold, GraphicsUnit.Point);
