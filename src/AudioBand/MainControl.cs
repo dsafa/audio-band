@@ -66,26 +66,20 @@ namespace AudioBand
             Options.MaxHorizontal = MaximumSize = Size;
 
             ResetState();
-
-            SizeChanged += OnSizeChanged;
-            playPauseButton.Click += PlayPauseButtonOnClick;
-            previousButton.Click += PreviousButtonOnClick;
-            nextButton.Click += NextButtonOnClick;
-            albumArt.MouseHover += AlbumArtOnMouseHover;
-            albumArt.MouseLeave += AlbumArtOnMouseLeave;
             _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
+            SizeChanged += OnSizeChanged;
 
-            nowPlayingText.DataBindings.Add("NowPlayingText", _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
-            nowPlayingText.DataBindings.Add("ArtistFont", _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingArtistFont));
-            nowPlayingText.DataBindings.Add("ArtistColor", _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingArtistColor));
-            nowPlayingText.DataBindings.Add("Font", _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingTrackNameFont));
-            nowPlayingText.DataBindings.Add("ForeColor", _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingTrackNameColor));
-            albumArt.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
-            audioProgress.DataBindings.Add("Value", _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
-            audioProgress.DataBindings.Add("ForeColor", _appearanceViewModel, nameof(AppearanceViewModel.TrackProgessColor));
-            previousButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
-            playPauseButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
-            nextButton.DataBindings.Add("Image", _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
+            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
+            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingArtistFont));
+            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingArtistColor));
+            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.Font),_appearanceViewModel, nameof(AppearanceViewModel.NowPlayingTrackNameFont));
+            nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ForeColor), _appearanceViewModel, nameof(AppearanceViewModel.NowPlayingTrackNameColor));
+            albumArt.DataBindings.Add(nameof(albumArt.Image), _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
+            audioProgress.DataBindings.Add(nameof(audioProgress.Value), _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
+            audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), _appearanceViewModel, nameof(AppearanceViewModel.TrackProgessColor));
+            previousButton.DataBindings.Add(nameof(previousButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
+            playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
+            nextButton.DataBindings.Add(nameof(nextButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
 
             try
             {
@@ -94,7 +88,7 @@ namespace AudioBand
                 Options.ContextMenuItems = BuildContextMenu();
 
                 _settingsManager = new SettingsManager();
-                ReadSettings();
+                ApplySettings();
                 _settingsWindow = new SettingsWindow(_appearanceViewModel);
             }
             catch (ReflectionTypeLoadException e)
@@ -263,7 +257,6 @@ namespace AudioBand
                 case nameof(AudioBandViewModel.IsPlaying):
                     UpdateControlSvgs();
                     break;
-                default: break;
             }
         }
 
@@ -296,24 +289,24 @@ namespace AudioBand
             UpdateControlSvgs();
         }
 
-        private void UpdateAlbumArt(Image albumArt)
+        private void UpdateAlbumArt(Image newAlbumArt)
         {
             var height = mainTable.GetRowHeights().Take(2).Sum();
             mainTable.ColumnStyles[0].SizeType = SizeType.Absolute;
             mainTable.ColumnStyles[0].Width = height;
 
-            var newAlbumArt = new Bitmap(height, height);
-            using (var graphics = Graphics.FromImage(newAlbumArt))
+            var sizedAlbumArt = new Bitmap(height, height);
+            using (var graphics = Graphics.FromImage(sizedAlbumArt))
             {
                 graphics.CompositingMode = CompositingMode.SourceCopy;
                 graphics.CompositingQuality = CompositingQuality.HighQuality;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphics.DrawImage(albumArt, 0, 0, newAlbumArt.Width, newAlbumArt.Height);
+                graphics.DrawImage(newAlbumArt, 0, 0, sizedAlbumArt.Width, sizedAlbumArt.Height);
             }
 
-            _audioBandViewModel.AlbumArt = newAlbumArt;
+            _audioBandViewModel.AlbumArt = sizedAlbumArt;
         }
 
         private void UpdateControlSvgs()
@@ -366,7 +359,7 @@ namespace AudioBand
             _settingsManager.Save();
         }
 
-        private void ReadSettings()
+        private void ApplySettings()
         {
             var connector = _settingsManager.AppSettings.Connector;
             if (!String.IsNullOrEmpty(connector))
