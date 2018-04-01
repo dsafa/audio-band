@@ -26,7 +26,7 @@ namespace AudioBand
                 }
 
                 _nowPlayingText = value;
-                OnNowPlayingTextChanged();
+                CheckNowPlayingText();
                 Refresh();
             }
         }
@@ -42,6 +42,7 @@ namespace AudioBand
                 }
 
                 _artistFont = value;
+                CheckNowPlayingText();
                 Refresh();
             }
         }
@@ -79,7 +80,14 @@ namespace AudioBand
             _nowPlayingTimer.Tick += NowPlayingTimerOnTick;
         }
 
-        private void OnNowPlayingTextChanged()
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
+            CheckNowPlayingText();
+            Refresh();
+        }
+
+        private void CheckNowPlayingText()
         {
             using (var graphics = CreateGraphics())
             {
@@ -92,6 +100,11 @@ namespace AudioBand
                     _nowPlayingTimer.Stop();
                     return;
                 }
+            }
+
+            if (_nowPlayingTimer.Enabled)
+            {
+                return;
             }
 
             _nowPlayingXPos = _clipRectangle.Width / 4;
