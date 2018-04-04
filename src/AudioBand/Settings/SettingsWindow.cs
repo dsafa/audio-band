@@ -15,20 +15,12 @@ namespace AudioBand.Settings
 
             _audioBandAppearance = audioBandAppearance;
 
-            artistFontDialog.Font = _audioBandAppearance.NowPlayingArtistFont;
             artistFontDisplay.DataBindings.Add(nameof(artistFontDisplay.Text), _audioBandAppearance, $"{nameof(_audioBandAppearance.NowPlayingArtistFont)}.Name");
-
-            artistColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.NowPlayingArtistColor)};
             artistColorDisplay.DataBindings.Add(nameof(artistColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.NowPlayingArtistColor));
-
-            songFontDialog.Font = _audioBandAppearance.NowPlayingTrackNameFont;
             songFontDisplay.DataBindings.Add(nameof(songFontDisplay.Text), _audioBandAppearance, $"{nameof(_audioBandAppearance.NowPlayingTrackNameFont)}.Name");
-
-            songColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.NowPlayingTrackNameColor)};
             songColorDisplay.DataBindings.Add(nameof(songColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.NowPlayingTrackNameColor));
-
-            progressColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.TrackProgressColor)};
             progressColorDisplay.DataBindings.Add(nameof(progressColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.TrackProgressColor));
+            progressBackColorDisplay.DataBindings.Add(nameof(progressBackColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.TrackProgressBackColor));
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
@@ -39,41 +31,55 @@ namespace AudioBand.Settings
 
         private void ArtistFontButtonOnClick(object sender, EventArgs e)
         {
-            if (artistFontDialog.ShowDialog(this) == DialogResult.OK)
+            fontDialog.Font = _audioBandAppearance.NowPlayingArtistFont;
+            if (fontDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _audioBandAppearance.NowPlayingArtistFont = artistFontDialog.Font;
+                _audioBandAppearance.NowPlayingArtistFont = fontDialog.Font;
             }
         }
 
         private void ArtistColorButtonOnClick(object sender, EventArgs e)
         {
-            if (artistColorDialog.ShowDialog(this) == DialogResult.OK)
+            colorDialog.CustomColors = new[] { ColorTranslator.ToOle(_audioBandAppearance.NowPlayingArtistColor) };
+            if (colorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _audioBandAppearance.NowPlayingArtistColor = artistColorDialog.Color;
+                _audioBandAppearance.NowPlayingArtistColor = colorDialog.Color;
             }
         }
 
         private void SongFontButtonOnClick(object sender, EventArgs e)
         {
-            if (songFontDialog.ShowDialog(this) == DialogResult.OK)
+            fontDialog.Font = _audioBandAppearance.NowPlayingTrackNameFont;
+            if (fontDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _audioBandAppearance.NowPlayingTrackNameFont = songFontDialog.Font;
+                _audioBandAppearance.NowPlayingTrackNameFont = fontDialog.Font;
             }
         }
 
         private void SongColorButtonOnClick(object sender, EventArgs e)
         {
-            if (songColorDialog.ShowDialog(this) == DialogResult.OK)
+            colorDialog.CustomColors = new[] { ColorTranslator.ToOle(_audioBandAppearance.NowPlayingTrackNameColor) };
+            if (colorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _audioBandAppearance.NowPlayingTrackNameColor = songColorDialog.Color;
+                _audioBandAppearance.NowPlayingTrackNameColor = colorDialog.Color;
             }
         }
 
         private void ProgressColorButtonOnClick(object sender, EventArgs e)
         {
-            if (progressColorDialog.ShowDialog(this) == DialogResult.OK)
+            colorDialog.CustomColors = new[] { ColorTranslator.ToOle(_audioBandAppearance.TrackProgressColor) };
+            if (colorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _audioBandAppearance.TrackProgressColor = progressColorDialog.Color;
+                _audioBandAppearance.TrackProgressColor = colorDialog.Color;
+            }
+        }
+
+        private void ProgressBackColorButtonOnClick(object sender, EventArgs e)
+        {
+            colorDialog.CustomColors = new[] { ColorTranslator.ToOle(_audioBandAppearance.TrackProgressBackColor) };
+            if (colorDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                _audioBandAppearance.TrackProgressBackColor = colorDialog.Color;
             }
         }
     }

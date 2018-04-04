@@ -17,13 +17,10 @@
             this.songFontDisplay = new MetroFramework.Controls.MetroLabel();
             this.songColorDisplay = new System.Windows.Forms.PictureBox();
             this.progressColorDisplay = new System.Windows.Forms.PictureBox();
-            this.artistFontDialog = new System.Windows.Forms.FontDialog();
-            this.artistColorDialog = new System.Windows.Forms.ColorDialog();
-            this.songFontDialog = new System.Windows.Forms.FontDialog();
-            this.songColorDialog = new System.Windows.Forms.ColorDialog();
-            this.progressColorDialog = new System.Windows.Forms.ColorDialog();
             this.progressBackColorButton = new MetroFramework.Controls.MetroButton();
             this.progressBackColorDisplay = new System.Windows.Forms.PictureBox();
+            this.fontDialog = new System.Windows.Forms.FontDialog();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.tabControl.SuspendLayout();
             this.appearanceTab.SuspendLayout();
             this.appearanceTabLayout.SuspendLayout();
@@ -214,6 +211,7 @@
             this.progressBackColorButton.TabIndex = 13;
             this.progressBackColorButton.Text = "Progress Background";
             this.progressBackColorButton.UseSelectable = true;
+            this.progressBackColorButton.Click += new System.EventHandler(this.ProgressBackColorButtonOnClick);
             // 
             // progressBackColorDisplay
             // 
@@ -254,21 +252,18 @@
 
         private MetroFramework.Controls.MetroTabControl tabControl;
         private MetroFramework.Controls.MetroTabPage appearanceTab;
-        private System.Windows.Forms.FontDialog artistFontDialog;
+        private System.Windows.Forms.FontDialog fontDialog;
         private System.Windows.Forms.TableLayoutPanel appearanceTabLayout;
         private MetroFramework.Controls.MetroLabel artistFontDisplay;
         private MetroFramework.Controls.MetroButton artistColorButton;
         private MetroFramework.Controls.MetroButton artistFontButton;
-        private System.Windows.Forms.ColorDialog artistColorDialog;
+        private System.Windows.Forms.ColorDialog colorDialog;
         private System.Windows.Forms.PictureBox artistColorDisplay;
         private MetroFramework.Controls.MetroButton songFontButton;
         private MetroFramework.Controls.MetroButton songColorButton;
         private MetroFramework.Controls.MetroButton progressColorButton;
         private MetroFramework.Controls.MetroLabel songFontDisplay;
         private System.Windows.Forms.PictureBox songColorDisplay;
-        private System.Windows.Forms.FontDialog songFontDialog;
-        private System.Windows.Forms.ColorDialog songColorDialog;
-        private System.Windows.Forms.ColorDialog progressColorDialog;
         private System.Windows.Forms.PictureBox progressColorDisplay;
         private MetroFramework.Controls.MetroButton progressBackColorButton;
         private System.Windows.Forms.PictureBox progressBackColorDisplay;
