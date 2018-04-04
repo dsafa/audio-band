@@ -7,19 +7,31 @@ namespace AudioBand.Settings
 {
     internal class AudioBandAppearance : INotifyPropertyChanged
     {
-        private Color _trackProgessColor = Color.DodgerBlue;
+        private Color _trackProgressColor = Color.DodgerBlue;
         private Font _nowPlayingArtistFont = new Font(new FontFamily("Segoe UI"), 8.5f, FontStyle.Bold, GraphicsUnit.Point);
         private Color _nowPlayingArtistColor = Color.LightSlateGray;
         private Font _nowPlayingTrackNameFont = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
         private Color _nowPlayingTrackNameColor = Color.White;
+        private Color _trackProgressBackColor = Color.Black;
 
-        public Color TrackProgessColor
+        public Color TrackProgressColor
         {
-            get => _trackProgessColor;
+            get => _trackProgressColor;
             set
             {
-                if (value.Equals(_trackProgessColor)) return;
-                _trackProgessColor = value;
+                if (value.Equals(_trackProgressColor)) return;
+                _trackProgressColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Color TrackProgressBackColor
+        {
+            get => _trackProgressBackColor;
+            set
+            {
+                if (value.Equals(_trackProgressBackColor)) return;
+                _trackProgressBackColor = value;
                 OnPropertyChanged();
             }
         }

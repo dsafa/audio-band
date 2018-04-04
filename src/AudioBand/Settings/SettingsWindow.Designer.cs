@@ -16,18 +16,21 @@
             this.progressColorButton = new MetroFramework.Controls.MetroButton();
             this.songFontDisplay = new MetroFramework.Controls.MetroLabel();
             this.songColorDisplay = new System.Windows.Forms.PictureBox();
+            this.progressColorDisplay = new System.Windows.Forms.PictureBox();
             this.artistFontDialog = new System.Windows.Forms.FontDialog();
             this.artistColorDialog = new System.Windows.Forms.ColorDialog();
             this.songFontDialog = new System.Windows.Forms.FontDialog();
             this.songColorDialog = new System.Windows.Forms.ColorDialog();
             this.progressColorDialog = new System.Windows.Forms.ColorDialog();
-            this.progressColorDisplay = new System.Windows.Forms.PictureBox();
+            this.progressBackColorButton = new MetroFramework.Controls.MetroButton();
+            this.progressBackColorDisplay = new System.Windows.Forms.PictureBox();
             this.tabControl.SuspendLayout();
             this.appearanceTab.SuspendLayout();
             this.appearanceTabLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.artistColorDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.songColorDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressColorDisplay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.progressBackColorDisplay)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -75,18 +78,21 @@
             this.appearanceTabLayout.Controls.Add(this.songFontDisplay, 1, 2);
             this.appearanceTabLayout.Controls.Add(this.songColorDisplay, 1, 3);
             this.appearanceTabLayout.Controls.Add(this.progressColorDisplay, 1, 4);
+            this.appearanceTabLayout.Controls.Add(this.progressBackColorButton, 0, 5);
+            this.appearanceTabLayout.Controls.Add(this.progressBackColorDisplay, 1, 5);
             this.appearanceTabLayout.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.appearanceTabLayout.Location = new System.Drawing.Point(0, 0);
             this.appearanceTabLayout.Margin = new System.Windows.Forms.Padding(0);
             this.appearanceTabLayout.Name = "appearanceTabLayout";
             this.appearanceTabLayout.Padding = new System.Windows.Forms.Padding(0, 6, 0, 6);
-            this.appearanceTabLayout.RowCount = 5;
+            this.appearanceTabLayout.RowCount = 6;
             this.appearanceTabLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.appearanceTabLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.appearanceTabLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.appearanceTabLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.appearanceTabLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.appearanceTabLayout.Size = new System.Drawing.Size(252, 162);
+            this.appearanceTabLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.appearanceTabLayout.Size = new System.Drawing.Size(252, 192);
             this.appearanceTabLayout.TabIndex = 2;
             // 
             // artistFontDisplay
@@ -198,6 +204,26 @@
             this.progressColorDisplay.TabIndex = 12;
             this.progressColorDisplay.TabStop = false;
             // 
+            // progressBackColorButton
+            // 
+            this.progressBackColorButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBackColorButton.Location = new System.Drawing.Point(0, 159);
+            this.progressBackColorButton.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.progressBackColorButton.Name = "progressBackColorButton";
+            this.progressBackColorButton.Size = new System.Drawing.Size(123, 24);
+            this.progressBackColorButton.TabIndex = 13;
+            this.progressBackColorButton.Text = "Progress Background";
+            this.progressBackColorButton.UseSelectable = true;
+            // 
+            // progressBackColorDisplay
+            // 
+            this.progressBackColorDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBackColorDisplay.Location = new System.Drawing.Point(129, 159);
+            this.progressBackColorDisplay.Name = "progressBackColorDisplay";
+            this.progressBackColorDisplay.Size = new System.Drawing.Size(120, 24);
+            this.progressBackColorDisplay.TabIndex = 0;
+            this.progressBackColorDisplay.TabStop = false;
+            // 
             // SettingsWindow
             // 
             this.ClientSize = new System.Drawing.Size(300, 500);
@@ -221,6 +247,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.artistColorDisplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.songColorDisplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressColorDisplay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.progressBackColorDisplay)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -243,5 +270,7 @@
         private System.Windows.Forms.ColorDialog songColorDialog;
         private System.Windows.Forms.ColorDialog progressColorDialog;
         private System.Windows.Forms.PictureBox progressColorDisplay;
+        private MetroFramework.Controls.MetroButton progressBackColorButton;
+        private System.Windows.Forms.PictureBox progressBackColorDisplay;
     }
 }

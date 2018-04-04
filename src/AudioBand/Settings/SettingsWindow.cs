@@ -27,8 +27,8 @@ namespace AudioBand.Settings
             songColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.NowPlayingTrackNameColor)};
             songColorDisplay.DataBindings.Add(nameof(songColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.NowPlayingTrackNameColor));
 
-            progressColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.TrackProgessColor)};
-            progressColorDisplay.DataBindings.Add(nameof(progressColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.TrackProgessColor));
+            progressColorDialog.CustomColors = new[] {ColorTranslator.ToOle(_audioBandAppearance.TrackProgressColor)};
+            progressColorDisplay.DataBindings.Add(nameof(progressColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.TrackProgressColor));
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
@@ -73,7 +73,7 @@ namespace AudioBand.Settings
         {
             if (progressColorDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _audioBandAppearance.TrackProgessColor = progressColorDialog.Color;
+                _audioBandAppearance.TrackProgressColor = progressColorDialog.Color;
             }
         }
     }

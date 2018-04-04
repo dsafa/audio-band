@@ -43,7 +43,6 @@ namespace AudioBand
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg); // Used so album art can be resized
-        private AudioBandAppearance _audioBandAppearance;
 
         static MainControl()
         {
@@ -68,8 +67,8 @@ namespace AudioBand
             try
             {
                 _settingsManager = new SettingsManager();
-                _audioBandAppearance = _settingsManager.AudioBandSettings.AudioBandAppearance;
-                _settingsWindow = new SettingsWindow(_audioBandAppearance);
+                var audioBandAppearance = _settingsManager.AudioBandSettings.AudioBandAppearance;
+                _settingsWindow = new SettingsWindow(audioBandAppearance);
                 _settingsWindow.Closing += SettingsWindowOnClosing;
 
                 ResetState();
@@ -77,13 +76,14 @@ namespace AudioBand
                 SizeChanged += OnSizeChanged;
 
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), _audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistFont));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), _audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistColor));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.Font), _audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameFont));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ForeColor), _audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameColor));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistFont));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistColor));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.Font), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameFont));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ForeColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameColor));
                 albumArt.DataBindings.Add(nameof(albumArt.Image), _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
                 audioProgress.DataBindings.Add(nameof(audioProgress.Value), _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
-                audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), _audioBandAppearance, nameof(AudioBandAppearance.TrackProgessColor));
+                audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressColor));
+                audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressBackColor));
                 previousButton.DataBindings.Add(nameof(previousButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
                 nextButton.DataBindings.Add(nameof(nextButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
