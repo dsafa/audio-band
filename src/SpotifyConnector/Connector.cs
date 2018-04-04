@@ -64,10 +64,12 @@ namespace SpotifyConnector
                 return;
             }
 
-            // Need spotify to be fully initialized. Need better alternative
+            // Need spotify to be fully initialized. Spotify can be open but not ready. Need better alternative
             await Task.Delay(3000);
             try
             {
+                // Only try to connect once
+                _spotifyClient = new SpotifyLocalAPI();
                 Connect();
                 _spotifyStarted = true;
             }
@@ -178,7 +180,7 @@ namespace SpotifyConnector
 
         private void RaiseNotAvailable()
         {
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "Spotify not available", AlbumArt = null });
+            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "", AlbumArt = null });
             TrackPaused?.Invoke(this, EventArgs.Empty);
             TrackProgressChanged?.Invoke(this, 0);
         }
