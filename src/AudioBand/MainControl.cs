@@ -222,7 +222,7 @@ namespace AudioBand
             _settingsManager.AudioBandSettings.Connector = null;
         }
 
-        private void ConnectorOnTrackProgressChanged(object o, int progress)
+        private void ConnectorOnTrackProgressChanged(object o, double progress)
         {
             BeginInvoke(new Action(() => { _audioBandViewModel.AudioProgress = progress;}));
         }

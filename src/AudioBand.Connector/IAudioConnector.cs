@@ -31,7 +31,7 @@ namespace AudioBand.Connector
         /// <summary>
         /// Track progress has changed. Track progress is from [0 - 100]
         /// </summary>
-        event EventHandler<int> TrackProgressChanged;
+        event EventHandler<double> TrackProgressChanged;
 
         /// <summary>
         /// Connector is selected as the audio source

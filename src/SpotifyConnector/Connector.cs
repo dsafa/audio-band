@@ -16,7 +16,7 @@ namespace SpotifyConnector
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
         public event EventHandler TrackPlaying;
         public event EventHandler TrackPaused;
-        public event EventHandler<int> TrackProgressChanged;
+        public event EventHandler<double> TrackProgressChanged;
 
         private SpotifyLocalAPI _spotifyClient;
         private int _trackLength;
@@ -137,9 +137,9 @@ namespace SpotifyConnector
             }
         }
 
-        private int CalculateTrackPercentange(double trackTime)
+        private double CalculateTrackPercentange(double trackTime)
         {
-            return (int)(trackTime / _trackLength * 100);
+            return trackTime / _trackLength * 100;
         }
 
         private void Connect()

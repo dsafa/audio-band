@@ -9,7 +9,7 @@ namespace AudioBand
     internal class AudioBandViewModel : INotifyPropertyChanged
     {
         private bool _isPlaying;
-        private int _audioProgress;
+        private double _audioProgress;
         private Image _albumArt = new Bitmap(1, 1);
         private Image _previousButtonBitmap = new Bitmap(1, 1);
         private Image _nextButtonBitmap = new Bitmap(1, 1);
@@ -49,12 +49,12 @@ namespace AudioBand
             }
         }
 
-        public int AudioProgress
+        public double AudioProgress
         {
             get => _audioProgress;
             set
             {
-                if (value == _audioProgress) return;
+                if (Math.Abs(value - _audioProgress) < 0.001) return;
                 if (value > 100)
                 {
                     _audioProgress = 100;
