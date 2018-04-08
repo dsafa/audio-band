@@ -27,7 +27,11 @@ namespace SpotifyConnector
         {
             _spotifyClient = new SpotifyLocalAPI();
 
-            _checkForSpotifytimer = new Timer(1000);
+            _checkForSpotifytimer = new Timer
+            {
+                Interval = 1000,
+                AutoReset = false
+            };
             _checkForSpotifytimer.Elapsed += CheckForSpotifytimerOnElapsed;
 
             try
@@ -39,7 +43,7 @@ namespace SpotifyConnector
                     return Task.CompletedTask;
                 }
 
-                RaiseNotAvailable();
+                ResetState();
 
                 return Task.CompletedTask;
             }
@@ -49,25 +53,28 @@ namespace SpotifyConnector
             }
         }
 
-        private async void CheckForSpotifytimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        private void CheckForSpotifytimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            // If spotify was started and not anymore
-            if (_spotifyStarted && !SpotifyRunning())
-            {
-                _spotifyStarted = false;
-                RaiseNotAvailable();
-                return;
-            }
-
-            if (_spotifyStarted)
-            {
-                return;
-            }
-
-            // Need spotify to be fully initialized. Spotify can be open but not ready. Need better alternative
-            await Task.Delay(3000);
             try
             {
+                // If spotify was started and not anymore
+                if (_spotifyStarted && !SpotifyRunning())
+                {
+                    _spotifyStarted = false;
+                    ResetState();
+                    return;
+                }
+
+                if (_spotifyStarted)
+                {
+                    return;
+                }
+
+                if (!SpotifyRunning())
+                {
+                    return;
+                }
+
                 // Only try to connect once
                 _spotifyClient = new SpotifyLocalAPI();
                 Connect();
@@ -75,14 +82,23 @@ namespace SpotifyConnector
             }
             catch (Exception)
             {
-                // Timing is off, retry
+                // Random http 403 errors
+            }
+            finally
+            {
+                _checkForSpotifytimer.Enabled = true;
             }
         }
 
         public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             _spotifyClient?.Dispose();
-            _checkForSpotifytimer.Dispose();
+            if (_checkForSpotifytimer != null)
+            {
+                _checkForSpotifytimer.Elapsed -= CheckForSpotifytimerOnElapsed;
+                _checkForSpotifytimer.Dispose();
+            }
+
             return Task.CompletedTask;
         }
 
@@ -178,7 +194,7 @@ namespace SpotifyConnector
             return SpotifyLocalAPI.IsSpotifyRunning() && SpotifyLocalAPI.IsSpotifyWebHelperRunning();
         }
 
-        private void RaiseNotAvailable()
+        private void ResetState()
         {
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "", AlbumArt = null });
             TrackPaused?.Invoke(this, EventArgs.Empty);
@@ -187,7 +203,11 @@ namespace SpotifyConnector
 
         ~Connector()
         {
-            _checkForSpotifytimer?.Dispose();
+            if (_checkForSpotifytimer != null)
+            {
+                _checkForSpotifytimer.Elapsed -= CheckForSpotifytimerOnElapsed;
+                _checkForSpotifytimer.Dispose();
+            }
         }
     }
 }
