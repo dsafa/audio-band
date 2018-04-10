@@ -58,11 +58,11 @@ namespace AudioBand
         {
             InitializeComponent();
 
-            Options.Fixed = true;
             Options.Increment = 0;
-            Options.Horizontal = Size = new Size(FixedWidth, _maxHeight);
-            Options.MinHorizontal = MinimumSize = new Size(FixedWidth, _minHeight);
-            Options.MaxHorizontal = MaximumSize = Size;
+            var maxSize = new Size(FixedWidth, _maxHeight);
+            Options.Horizontal = Size = mainTable.Size = maxSize;
+            Options.MaxHorizontal = MaximumSize = mainTable.MaximumSize = maxSize;
+            Options.MinHorizontal = MinimumSize = mainTable.MinimumSize = new Size(FixedWidth, _minHeight);
 
             try
             {
