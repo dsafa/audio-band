@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/v32xl29r8uucuwj3?svg=true)](https://ci.appveyor.com/project/dsafa/audio-band)
+
 # Audio Band
 *This is still a work in progress!*
 
