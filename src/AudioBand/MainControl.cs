@@ -113,16 +113,6 @@ namespace AudioBand
             }
         }
 
-        private void SettingsWindowOnClosing(object sender, CancelEventArgs cancelEventArgs)
-        {
-            _settingsManager.Save();
-        }
-
-        private void ConnectorManagerOnPluginsChanged(object sender, EventArgs eventArgs)
-        {
-            BeginInvoke(new Action(() => { Options.ContextMenuItems = BuildContextMenu(); }));
-        }
-
         private void AlbumArtOnMouseLeave(object o, EventArgs args)
         {
             _albumArtTooltip.Hide(this);
@@ -144,6 +134,11 @@ namespace AudioBand
 
             var pos = new Point(0, yOffset);
             _albumArtTooltip.ShowWithoutRequireFocus("Album Art", this, pos);
+        }
+
+        private void ConnectorManagerOnPluginsChanged(object sender, EventArgs eventArgs)
+        {
+            BeginInvoke(new Action(() => { Options.ContextMenuItems = BuildContextMenu(); }));
         }
 
         private List<CSDeskBandMenuItem> BuildContextMenu()
@@ -369,6 +364,11 @@ namespace AudioBand
         protected override void OnClose()
         {
             base.OnClose();
+            _settingsManager.Save();
+        }
+
+        private void SettingsWindowOnClosing(object sender, CancelEventArgs cancelEventArgs)
+        {
             _settingsManager.Save();
         }
 
