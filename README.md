@@ -31,3 +31,7 @@ Help is appreciated
 
 ## Screenshots
 ![Screenshot](./screenshots/screenshot.png)
+
+## License
+[LICENSE](https://github.com/dsafa/audio-band/blob/master/LICENSE)
+[THIRD PARTY](https://github.com/dsafa/audio-band/blob/master/LICENSE-3RD-PARTY)
