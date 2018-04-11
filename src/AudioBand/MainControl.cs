@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Size = System.Drawing.Size;
@@ -43,6 +44,7 @@ namespace AudioBand
         private IAudioConnector _connector;
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg); // Used so album art can be resized
+        private CancellationTokenSource _connectorTokenSource = new CancellationTokenSource();
 
         static MainControl()
         {
@@ -200,6 +202,8 @@ namespace AudioBand
             connector.TrackPlaying += ConnectorOnTrackPlaying;
             connector.TrackPaused += ConnectorOnTrackPaused;
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
+
+            _connectorTokenSource = new CancellationTokenSource();
             await connector.ActivateAsync();
 
             _settingsManager.AudioBandSettings.Connector = connector.ConnectorName;
@@ -216,6 +220,8 @@ namespace AudioBand
             connector.TrackPlaying -= ConnectorOnTrackPlaying;
             connector.TrackPaused -= ConnectorOnTrackPaused;
             connector.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
+
+            _connectorTokenSource.Cancel();
             await connector.DeactivateAsync();
 
             ResetState();
@@ -272,23 +278,22 @@ namespace AudioBand
         {
             if (_audioBandViewModel.IsPlaying)
             {
-                await (_connector?.PauseTrackAsync() ?? Task.CompletedTask);
+                await (_connector?.PauseTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
             }
             else
             {
-                await (_connector?.PlayTrackAsync() ?? Task.CompletedTask);
+                await (_connector?.PlayTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
             }
-
         }
 
         private async void PreviousButtonOnClick(object sender, EventArgs eventArgs)
         {
-            await (_connector?.PreviousTrackAsync() ?? Task.CompletedTask);
+            await (_connector?.PreviousTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
         }
 
         private async void NextButtonOnClick(object sender, EventArgs eventArgs)
         {
-            await (_connector?.NextTrackAsync() ?? Task.CompletedTask);
+            await (_connector?.NextTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
         }
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
