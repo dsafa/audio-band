@@ -104,12 +104,12 @@ namespace SpotifyConnector
 
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _spotifyClient.Play();
+            await _spotifyClient.Play().ConfigureAwait(false);
         }
 
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _spotifyClient.Pause();
+            await _spotifyClient.Pause().ConfigureAwait(false);
         }
 
         public Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
