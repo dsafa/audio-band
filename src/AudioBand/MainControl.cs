@@ -61,7 +61,6 @@ namespace AudioBand
             InitializeComponent();
 
             Options.Increment = 0;
-            Options.NoMargins = true;
             var maxSize = new Size(FixedWidth, _maxHeight);
             Options.Horizontal = Size = mainTable.Size = maxSize;
             Options.MaxHorizontal = MaximumSize = mainTable.MaximumSize = maxSize;
