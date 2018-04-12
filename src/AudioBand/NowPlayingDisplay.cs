@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
@@ -58,6 +59,39 @@ namespace AudioBand
                 }
 
                 _artistColor = value;
+                UpdateBrushes(_nowPlayingTimer.Enabled);
+                Refresh();
+            }
+        }
+
+        public Font TrackNameFont
+        {
+            get => _trackNameFont;
+            set
+            {
+                if (Equals(value, _trackNameFont))
+                {
+                    return;
+                }
+
+                _trackNameFont = value;
+                CheckNowPlayingText();
+                Refresh();
+            }
+        }
+
+        public Color TrackNameColor
+        {
+            get => _trackNameColor;
+            set
+            {
+                if (value.Equals(_trackNameColor))
+                {
+                    return;
+                }
+
+                _trackNameColor = value;
+                UpdateBrushes(_nowPlayingTimer.Enabled);
                 Refresh();
             }
         }
@@ -72,19 +106,16 @@ namespace AudioBand
         private Rectangle _clipRectangle; // Real size
         private Font _artistFont;
         private Color _artistColor;
+        private Brush _artistBrush;
+        private Font _trackNameFont;
+        private Color _trackNameColor;
+        private Brush _songBrush;
 
         public NowPlayingDisplay()
         {
             DoubleBuffered = true;
             UpdateClipRectangle();
             _nowPlayingTimer.Tick += NowPlayingTimerOnTick;
-        }
-
-        protected override void OnFontChanged(EventArgs e)
-        {
-            base.OnFontChanged(e);
-            CheckNowPlayingText();
-            Refresh();
         }
 
         private void CheckNowPlayingText()
@@ -98,6 +129,7 @@ namespace AudioBand
                 {
                     _scrolling = false;
                     _nowPlayingTimer.Stop();
+                    UpdateBrushes(false);
                     return;
                 }
             }
@@ -111,6 +143,7 @@ namespace AudioBand
             _duplicateXPos = _nowPlayingXPos + _nowPlayingTextWidth + TextMargin;
             _scrolling = true;
 
+            UpdateBrushes(true);
             _nowPlayingTimer.Start();
         }
 
@@ -135,16 +168,6 @@ namespace AudioBand
 
             DrawNowPlayingText(graphics, _nowPlayingXPos);
             DrawNowPlayingText(graphics, _duplicateXPos);
-
-            var edgeBrush = new LinearGradientBrush(e.ClipRectangle, BackColor, BackColor, LinearGradientMode.Horizontal)
-            {
-                InterpolationColors = new ColorBlend(4)
-                {
-                    Colors = new[] {BackColor, Color.FromArgb(0, 0, 0, 0), Color.FromArgb(0, 0, 0, 0), BackColor},
-                    Positions = new[] {0, 0.1f, 0.9f, 1}
-                }
-            };
-            graphics.FillRectangle(edgeBrush, e.ClipRectangle);
         }
 
         protected override void Dispose(bool disposing)
@@ -193,8 +216,8 @@ namespace AudioBand
             var artistTextSize = graphics.MeasureString(artistText, ArtistFont);
             var y = 0;
 
-            graphics.DrawString(artistText, ArtistFont, new SolidBrush(ArtistColor), x.Value, y);
-            graphics.DrawString(trackNameText, Font, new SolidBrush(ForeColor), x.Value + artistTextSize.Width, y);
+            graphics.DrawString(artistText, ArtistFont, _artistBrush, x.Value, y);
+            graphics.DrawString(trackNameText, TrackNameFont, _songBrush, x.Value + artistTextSize.Width, y);
         }
 
         private SizeF MeasureNowPlayingText(Graphics graphics)
@@ -202,6 +225,31 @@ namespace AudioBand
             var artistSize = graphics.MeasureString(_nowPlayingText.Artist, ArtistFont);
             var trackNameSize = graphics.MeasureString(_nowPlayingText.TrackName, Font);
             return artistSize + trackNameSize;
+        }
+
+        private void UpdateBrushes(bool fade)
+        {
+            if (!fade)
+            {
+                _artistBrush = new SolidBrush(ArtistColor);
+                _songBrush = new SolidBrush(TrackNameColor);
+                return;
+            }
+
+            _artistBrush = CreateFadeBrush(ArtistColor);
+            _songBrush = CreateFadeBrush(TrackNameColor);
+        }
+
+        private LinearGradientBrush CreateFadeBrush(Color color)
+        {
+            return new LinearGradientBrush(_clipRectangle, color, color, LinearGradientMode.Horizontal)
+            {
+                InterpolationColors = new ColorBlend(4)
+                {
+                    Colors = new[] { Color.FromArgb(0, BackColor), color, color, Color.FromArgb(0, BackColor) },
+                    Positions = new[] { 0, 0.1f, 0.9f, 1 }
+                }
+            };
         }
     }
 }

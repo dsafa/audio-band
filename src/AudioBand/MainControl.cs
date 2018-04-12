@@ -81,8 +81,8 @@ namespace AudioBand
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistFont));
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistColor));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.Font), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameFont));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ForeColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameColor));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameFont), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameFont));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameColor));
                 albumArt.DataBindings.Add(nameof(albumArt.Image), _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
                 audioProgress.DataBindings.Add(nameof(audioProgress.Value), _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
                 audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressColor));
