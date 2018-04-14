@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
@@ -103,7 +102,6 @@ namespace AudioBand
         private int _duplicateXPos;
         private readonly Timer _nowPlayingTimer = new Timer { Interval = 20 };
         private const int TextMargin = 60; //Spacing between scrolling text
-        private Rectangle _clipRectangle; // Real size
         private Font _artistFont;
         private Color _artistColor;
         private Brush _artistBrush;
@@ -114,7 +112,6 @@ namespace AudioBand
         public NowPlayingDisplay()
         {
             DoubleBuffered = true;
-            UpdateClipRectangle();
             _nowPlayingTimer.Tick += NowPlayingTimerOnTick;
         }
 
@@ -125,7 +122,7 @@ namespace AudioBand
                 var textSize = MeasureNowPlayingText(graphics);
                 _nowPlayingTextWidth = (int) textSize.Width + 1;
 
-                if (textSize.Width <= _clipRectangle.Width)
+                if (textSize.Width <= ClientRectangle.Width)
                 {
                     _scrolling = false;
                     _nowPlayingTimer.Stop();
@@ -139,7 +136,7 @@ namespace AudioBand
                 return;
             }
 
-            _nowPlayingXPos = _clipRectangle.Width / 4;
+            _nowPlayingXPos = ClientRectangle.Width / 4;
             _duplicateXPos = _nowPlayingXPos + _nowPlayingTextWidth + TextMargin;
             _scrolling = true;
 
@@ -176,17 +173,6 @@ namespace AudioBand
             _nowPlayingTimer.Stop();
         }
 
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-            UpdateClipRectangle();
-        }
-
-        private void UpdateClipRectangle()
-        {
-            _clipRectangle = RectangleToClient(ClientRectangle);
-        }
-
         private void UpdateTextPositions()
         {
             if (_nowPlayingXPos + _nowPlayingTextWidth + TextMargin < 0)
@@ -207,8 +193,9 @@ namespace AudioBand
         {
             if (x == null)
             {
+                
                 var size = MeasureNowPlayingText(graphics);
-                x = _clipRectangle.Width / 2 - size.Width / 2;
+                x = ClientRectangle.Width / 2 - size.Width / 2;
             }
 
             var artistText = NowPlayingText.Artist;
@@ -242,11 +229,11 @@ namespace AudioBand
 
         private LinearGradientBrush CreateFadeBrush(Color color)
         {
-            return new LinearGradientBrush(_clipRectangle, color, color, LinearGradientMode.Horizontal)
+            return new LinearGradientBrush(ClientRectangle, color, color, LinearGradientMode.Horizontal)
             {
                 InterpolationColors = new ColorBlend(4)
                 {
-                    Colors = new[] { Color.FromArgb(0, BackColor), color, color, Color.FromArgb(0, BackColor) },
+                    Colors = new[] { Color.FromArgb(0, 0, 0, 0), color, color, Color.FromArgb(0, 0, 0, 0) },
                     Positions = new[] { 0, 0.1f, 0.9f, 1 }
                 }
             };
