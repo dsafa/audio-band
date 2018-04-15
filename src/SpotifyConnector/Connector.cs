@@ -21,11 +21,12 @@ namespace SpotifyConnector
         private SpotifyLocalAPI _spotifyClient;
         private int _trackLength;
         private Timer _checkForSpotifytimer;
-        private bool _spotifyStarted;
+        private bool _hasConnected;
+        private bool _isOpen;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            _spotifyClient = new SpotifyLocalAPI();
+            SetupClient();
 
             _checkForSpotifytimer = new Timer
             {
@@ -33,52 +34,43 @@ namespace SpotifyConnector
                 AutoReset = false
             };
             _checkForSpotifytimer.Elapsed += CheckForSpotifytimerOnElapsed;
+            _checkForSpotifytimer.Start();
 
-            try
-            {
-                if (SpotifyRunning())
-                {
-                    Connect();
-                    _spotifyStarted = true;
-                    return Task.CompletedTask;
-                }
-
-                ResetState();
-
-                return Task.CompletedTask;
-            }
-            finally
-            {
-                _checkForSpotifytimer.Start();
-            }
+            return Task.CompletedTask;
         }
 
         private void CheckForSpotifytimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             try
             {
-                // If spotify was started and not anymore
-                if (_spotifyStarted && !SpotifyRunning())
+                // If spotify was connected to and not anymore
+                if (_hasConnected && !SpotifyRunning())
                 {
-                    _spotifyStarted = false;
                     ResetState();
+                    _isOpen = false;
                     return;
                 }
 
-                if (_spotifyStarted)
+                if (_hasConnected && SpotifyRunning())
                 {
+                    if (_isOpen)
+                    {
+                        return;
+                    }
+
+                    // Spotify was reopened. It may fail to update in which case we will retry next timer tick
+                    _isOpen = UpdateSongInfo();
                     return;
                 }
 
+                // Spotify isnt running so don't try to connect
                 if (!SpotifyRunning())
                 {
                     return;
                 }
 
-                // Only try to connect once
-                _spotifyClient = new SpotifyLocalAPI();
+                // Spotify was never connected to
                 Connect();
-                _spotifyStarted = true;
             }
             catch (Exception)
             {
@@ -93,12 +85,14 @@ namespace SpotifyConnector
         public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             _spotifyClient?.Dispose();
+            _hasConnected = false;
             if (_checkForSpotifytimer != null)
             {
                 _checkForSpotifytimer.Elapsed -= CheckForSpotifytimerOnElapsed;
                 _checkForSpotifytimer.Dispose();
             }
 
+            ResetState();
             return Task.CompletedTask;
         }
 
@@ -160,11 +154,27 @@ namespace SpotifyConnector
 
         private void Connect()
         {
-            _spotifyClient.Connect();
-            _spotifyClient.ListenForEvents = true;
+            if (!_spotifyClient.Connect())
+            {
+                _hasConnected = false;
+                _isOpen = false;
+                return;
+            }
 
+            _isOpen = UpdateSongInfo();
+            _spotifyClient.ListenForEvents = true;
+            _hasConnected = true;
+        }
+
+        private bool UpdateSongInfo()
+        {
             var status = _spotifyClient.GetStatus();
-            var track = status.Track;
+
+            var track = status?.Track;
+            if (track == null)
+            {
+                return false;
+            }
             _trackLength = track.Length;
 
             TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(status.PlayingPosition));
@@ -183,6 +193,13 @@ namespace SpotifyConnector
             {
                 TrackPaused?.Invoke(this, EventArgs.Empty);
             }
+
+            return true;
+        }
+
+        private void SetupClient()
+        {
+            _spotifyClient = new SpotifyLocalAPI();
 
             _spotifyClient.OnPlayStateChange += SpotifyClientOnOnPlayStateChange;
             _spotifyClient.OnTrackChange += SpotifyClientOnOnTrackChange;
