@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog.Targets;
 using Size = System.Drawing.Size;
 
 namespace AudioBand
@@ -48,12 +49,19 @@ namespace AudioBand
 
         static MainControl()
         {
-            // Fix nlog path
-            var nlogConfigFile = Path.Combine(DirectoryHelper.BaseDirectory, "NLog.config");
-            if (File.Exists(nlogConfigFile))
+            var fileTarget = new FileTarget
             {
-                LogManager.Configuration = new XmlLoggingConfiguration(nlogConfigFile);
-            }
+                DeleteOldFileOnStartup = true,
+                FileName = "${environment:variable=TEMP}/AudioBand.log"
+            };
+
+            var fileRule = new LoggingRule("*", LogLevel.Debug, fileTarget);
+
+            var config = new LoggingConfiguration();
+            config.AddTarget("logfile", fileTarget);
+            config.LoggingRules.Add(fileRule);
+
+            LogManager.Configuration = config;
         }
 
         public MainControl()
@@ -230,16 +238,22 @@ namespace AudioBand
 
         private void ConnectorOnTrackPaused(object o, EventArgs args)
         {
+            _logger.Debug("State set to paused");
+
             BeginInvoke(new Action(() =>_audioBandViewModel.IsPlaying = false));
         }
 
         private void ConnectorOnTrackPlaying(object o, EventArgs args)
         {
+            _logger.Debug("State set to playing");
+
             BeginInvoke(new Action(() => _audioBandViewModel.IsPlaying = true));
         }
 
         private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
+            _logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
+
             _albumArt = trackInfoChangedEventArgs.AlbumArt;
             _albumArtTooltip.AlbumArt = _albumArt;
             if (_albumArt == null)
