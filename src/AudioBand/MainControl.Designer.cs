@@ -163,7 +163,7 @@
             this.audioProgress.Name = "audioProgress";
             this.audioProgress.Size = new System.Drawing.Size(300, 2);
             this.audioProgress.TabIndex = 3;
-            this.audioProgress.Value = 100;
+            this.audioProgress.Progress = 100;
             // 
             // MainControl
             // 
