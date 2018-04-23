@@ -102,12 +102,12 @@ namespace AudioBand
         private int _duplicateXPos;
         private readonly Timer _nowPlayingTimer = new Timer { Interval = 20 };
         private const int TextMargin = 60; //Spacing between scrolling text
-        private Font _artistFont;
-        private Color _artistColor;
-        private Brush _artistBrush;
-        private Font _trackNameFont;
-        private Color _trackNameColor;
-        private Brush _songBrush;
+        private Font _artistFont = new Font("Segoe UI", 8.5f);
+        private Color _artistColor = Color.SlateGray;
+        private Brush _artistBrush = new SolidBrush(Color.SlateGray);
+        private Font _trackNameFont = new Font("Segoe UI", 8.5f);
+        private Color _trackNameColor = Color.White;
+        private Brush _songBrush = new SolidBrush(Color.White);
 
         public NowPlayingDisplay()
         {
