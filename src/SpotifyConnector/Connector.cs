@@ -156,6 +156,10 @@ namespace SpotifyConnector
 
         private double CalculateTrackPercentange(double trackTime)
         {
+            if (_trackLength == 0)
+            {
+                return 0;
+            }
             return trackTime / _trackLength * 100;
         }
 
