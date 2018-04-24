@@ -252,6 +252,12 @@ namespace AudioBand
 
         private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
+            if (trackInfoChangedEventArgs?.TrackName == null || trackInfoChangedEventArgs?.Artist == null)
+            {
+                _logger.Warn($"Trackname or artist is null, track '{trackInfoChangedEventArgs?.TrackName}' artist '{trackInfoChangedEventArgs?.Artist}'");
+                return;
+            }
+
             _logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
 
             _albumArt = trackInfoChangedEventArgs.AlbumArt;
