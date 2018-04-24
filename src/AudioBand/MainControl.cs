@@ -38,7 +38,7 @@ namespace AudioBand
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
         private readonly ConnectorManager _connectorManager;
-        private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
+        private readonly NLog.ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
         private readonly SettingsManager _settingsManager;
         private readonly SettingsWindow _settingsWindow;
@@ -207,7 +207,7 @@ namespace AudioBand
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
 
             _connectorTokenSource = new CancellationTokenSource();
-            await connector.ActivateAsync();
+            await connector.ActivateAsync(new ConnectorLogger(connector.ConnectorName));
 
             _settingsManager.AudioBandSettings.Connector = connector.ConnectorName;
         }
