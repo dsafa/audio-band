@@ -104,13 +104,11 @@ namespace SpotifyConnector
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             await _spotifyClient.Play().ConfigureAwait(false);
-            _logger.Debug("Spotify playing");
         }
 
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             await _spotifyClient.Pause().ConfigureAwait(false);
-            _logger.Debug("Spotify stopped");
         }
 
         public Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -146,11 +144,13 @@ namespace SpotifyConnector
         {
             if (playStateEventArgs.Playing)
             {
+                _logger.Debug("Spotify playing");
                 TrackPlaying?.Invoke(this, EventArgs.Empty);
             }
             else
             {
                 TrackPaused?.Invoke(this, EventArgs.Empty);
+                _logger.Debug("Spotify stopped");
             }
         }
 
