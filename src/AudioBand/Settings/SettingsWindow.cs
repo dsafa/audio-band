@@ -1,6 +1,8 @@
 ﻿using MetroFramework.Forms;
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace AudioBand.Settings
@@ -14,6 +16,8 @@ namespace AudioBand.Settings
             InitializeComponent();
 
             _audioBandAppearance = audioBandAppearance;
+            versionLabel.Text = @"AudioBand " + typeof(SettingsWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            projectSiteLink.Text = @"https://github.com/dsafa/audio-band";
 
             artistFontDisplay.DataBindings.Add(nameof(artistFontDisplay.Text), _audioBandAppearance, $"{nameof(_audioBandAppearance.NowPlayingArtistFont)}.Name");
             artistColorDisplay.DataBindings.Add(nameof(artistColorDisplay.BackColor), _audioBandAppearance, nameof(_audioBandAppearance.NowPlayingArtistColor));
@@ -81,6 +85,11 @@ namespace AudioBand.Settings
             {
                 _audioBandAppearance.TrackProgressBackColor = colorDialog.Color;
             }
+        }
+
+        private void ProjectSiteLinkOnClick(object sender, EventArgs e)
+        {
+            Process.Start(projectSiteLink.Text);
         }
     }
 }

@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog.Targets;
 using Size = System.Drawing.Size;
 
 namespace AudioBand
@@ -37,7 +38,7 @@ namespace AudioBand
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
         private readonly ConnectorManager _connectorManager;
-        private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
+        private readonly NLog.ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
         private readonly SettingsManager _settingsManager;
         private readonly SettingsWindow _settingsWindow;
@@ -48,12 +49,19 @@ namespace AudioBand
 
         static MainControl()
         {
-            // Fix nlog path
-            var nlogConfigFile = Path.Combine(DirectoryHelper.BaseDirectory, "NLog.config");
-            if (File.Exists(nlogConfigFile))
+            var fileTarget = new FileTarget
             {
-                LogManager.Configuration = new XmlLoggingConfiguration(nlogConfigFile);
-            }
+                DeleteOldFileOnStartup = true,
+                FileName = "${environment:variable=TEMP}/AudioBand.log"
+            };
+
+            var fileRule = new LoggingRule("*", LogLevel.Debug, fileTarget);
+
+            var config = new LoggingConfiguration();
+            config.AddTarget("logfile", fileTarget);
+            config.LoggingRules.Add(fileRule);
+
+            LogManager.Configuration = config;
         }
 
         public MainControl()
@@ -83,7 +91,7 @@ namespace AudioBand
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameFont), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameFont));
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameColor));
                 albumArt.DataBindings.Add(nameof(albumArt.Image), _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
-                audioProgress.DataBindings.Add(nameof(audioProgress.Value), _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
+                audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
                 audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressColor));
                 audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressBackColor));
                 previousButton.DataBindings.Add(nameof(previousButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
@@ -199,7 +207,7 @@ namespace AudioBand
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
 
             _connectorTokenSource = new CancellationTokenSource();
-            await connector.ActivateAsync();
+            await connector.ActivateAsync(new ConnectorLogger(connector.ConnectorName));
 
             _settingsManager.AudioBandSettings.Connector = connector.ConnectorName;
         }
@@ -230,16 +238,28 @@ namespace AudioBand
 
         private void ConnectorOnTrackPaused(object o, EventArgs args)
         {
+            _logger.Debug("State set to paused");
+
             BeginInvoke(new Action(() =>_audioBandViewModel.IsPlaying = false));
         }
 
         private void ConnectorOnTrackPlaying(object o, EventArgs args)
         {
+            _logger.Debug("State set to playing");
+
             BeginInvoke(new Action(() => _audioBandViewModel.IsPlaying = true));
         }
 
         private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
+            if (trackInfoChangedEventArgs?.TrackName == null || trackInfoChangedEventArgs?.Artist == null)
+            {
+                _logger.Warn($"Trackname or artist is null, track '{trackInfoChangedEventArgs?.TrackName}' artist '{trackInfoChangedEventArgs?.Artist}'");
+                return;
+            }
+
+            _logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
+
             _albumArt = trackInfoChangedEventArgs.AlbumArt;
             _albumArtTooltip.AlbumArt = _albumArt;
             if (_albumArt == null)

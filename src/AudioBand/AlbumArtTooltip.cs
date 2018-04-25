@@ -8,11 +8,11 @@ namespace AudioBand
     public class AlbumArtTooltip : ToolTip
     {
         private Image _albumArt;
-        private MethodInfo _setToolMethod = typeof(ToolTip).GetMethod("SetTool", BindingFlags.Instance | BindingFlags.NonPublic);
+        private readonly MethodInfo _setToolMethod = typeof(ToolTip).GetMethod("SetTool", BindingFlags.Instance | BindingFlags.NonPublic);
 
         public Image AlbumArt
         {
-            get { return _albumArt; }
+            get => _albumArt;
             set
             {
                 _albumArt = value;
@@ -35,6 +35,11 @@ namespace AudioBand
 
         public void ShowWithoutRequireFocus(string name, Control control, Point relativePosition)
         {
+            if (AlbumArt == null)
+            {
+                return;
+            }
+
             const int AbsolutePos = 2;
             var point = control.PointToScreen(new Point(0, 0));
             _setToolMethod.Invoke(this, new object[] { control, name, AbsolutePos, new Point(point.X + relativePosition.X, point.Y + relativePosition.Y) });

@@ -19,6 +19,11 @@
             this.progressColorDisplay = new System.Windows.Forms.PictureBox();
             this.progressBackColorButton = new MetroFramework.Controls.MetroButton();
             this.progressBackColorDisplay = new System.Windows.Forms.PictureBox();
+            this.aboutTab = new MetroFramework.Controls.MetroTabPage();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.projectSiteLink = new MetroFramework.Controls.MetroLink();
+            this.projectSiteLabel = new MetroFramework.Controls.MetroLabel();
+            this.versionLabel = new MetroFramework.Controls.MetroLabel();
             this.fontDialog = new System.Windows.Forms.FontDialog();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.tabControl.SuspendLayout();
@@ -28,18 +33,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.songColorDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressColorDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressBackColorDisplay)).BeginInit();
+            this.aboutTab.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
             // 
             this.tabControl.Controls.Add(this.appearanceTab);
+            this.tabControl.Controls.Add(this.aboutTab);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.HotTrack = true;
             this.tabControl.ItemSize = new System.Drawing.Size(50, 34);
             this.tabControl.Location = new System.Drawing.Point(20, 60);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(260, 420);
-            this.tabControl.TabIndex = 1;
+            this.tabControl.TabIndex = 0;
             this.tabControl.UseSelectable = true;
             // 
             // appearanceTab
@@ -222,6 +231,78 @@
             this.progressBackColorDisplay.TabIndex = 0;
             this.progressBackColorDisplay.TabStop = false;
             // 
+            // aboutTab
+            // 
+            this.aboutTab.Controls.Add(this.tableLayoutPanel1);
+            this.aboutTab.HorizontalScrollbarBarColor = true;
+            this.aboutTab.HorizontalScrollbarHighlightOnWheel = false;
+            this.aboutTab.HorizontalScrollbarSize = 10;
+            this.aboutTab.Location = new System.Drawing.Point(4, 38);
+            this.aboutTab.Name = "aboutTab";
+            this.aboutTab.Size = new System.Drawing.Size(252, 378);
+            this.aboutTab.TabIndex = 2;
+            this.aboutTab.Text = "About";
+            this.aboutTab.VerticalScrollbarBarColor = true;
+            this.aboutTab.VerticalScrollbarHighlightOnWheel = false;
+            this.aboutTab.VerticalScrollbarSize = 10;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.projectSiteLink, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.projectSiteLabel, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.versionLabel, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(252, 100);
+            this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // projectSiteLink
+            // 
+            this.projectSiteLink.Location = new System.Drawing.Point(0, 70);
+            this.projectSiteLink.Margin = new System.Windows.Forms.Padding(0);
+            this.projectSiteLink.Name = "projectSiteLink";
+            this.projectSiteLink.Size = new System.Drawing.Size(252, 20);
+            this.projectSiteLink.TabIndex = 3;
+            this.projectSiteLink.Text = "projectSiteLink";
+            this.projectSiteLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.projectSiteLink.UseSelectable = true;
+            this.projectSiteLink.Click += new System.EventHandler(this.ProjectSiteLinkOnClick);
+            // 
+            // projectSiteLabel
+            // 
+            this.projectSiteLabel.AutoSize = true;
+            this.projectSiteLabel.FontSize = MetroFramework.MetroLabelSize.Small;
+            this.projectSiteLabel.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.projectSiteLabel.Location = new System.Drawing.Point(0, 53);
+            this.projectSiteLabel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.projectSiteLabel.Name = "projectSiteLabel";
+            this.projectSiteLabel.Size = new System.Drawing.Size(69, 15);
+            this.projectSiteLabel.TabIndex = 4;
+            this.projectSiteLabel.Text = "Project Site:";
+            // 
+            // versionLabel
+            // 
+            this.versionLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.versionLabel.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.versionLabel.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.versionLabel.Location = new System.Drawing.Point(8, 2);
+            this.versionLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.versionLabel.Name = "versionLabel";
+            this.versionLabel.Size = new System.Drawing.Size(236, 25);
+            this.versionLabel.TabIndex = 2;
+            this.versionLabel.Text = "versionText";
+            this.versionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // SettingsWindow
             // 
             this.ClientSize = new System.Drawing.Size(300, 500);
@@ -246,11 +327,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.songColorDisplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressColorDisplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressBackColorDisplay)).EndInit();
+            this.aboutTab.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
-
-        private MetroFramework.Controls.MetroTabControl tabControl;
         private MetroFramework.Controls.MetroTabPage appearanceTab;
         private System.Windows.Forms.FontDialog fontDialog;
         private System.Windows.Forms.TableLayoutPanel appearanceTabLayout;
@@ -267,5 +349,11 @@
         private System.Windows.Forms.PictureBox progressColorDisplay;
         private MetroFramework.Controls.MetroButton progressBackColorButton;
         private System.Windows.Forms.PictureBox progressBackColorDisplay;
+        private MetroFramework.Controls.MetroTabPage aboutTab;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private MetroFramework.Controls.MetroLink projectSiteLink;
+        private MetroFramework.Controls.MetroLabel projectSiteLabel;
+        private MetroFramework.Controls.MetroLabel versionLabel;
+        private MetroFramework.Controls.MetroTabControl tabControl;
     }
 }

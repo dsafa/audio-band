@@ -67,6 +67,7 @@
     <Compile Include="AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ConnectorLogger.cs" />
     <Compile Include="Settings\AudioBandAppearance.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
@@ -113,9 +114,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

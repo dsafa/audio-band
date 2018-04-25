@@ -23,9 +23,11 @@ namespace SpotifyConnector
         private Timer _checkForSpotifytimer;
         private bool _hasConnected;
         private bool _isOpen;
+        private ILogger _logger;
 
-        public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task ActivateAsync(ILogger logger, CancellationToken cancellationToken = default(CancellationToken))
         {
+            _logger = logger;
             SetupClient();
 
             _checkForSpotifytimer = new Timer
@@ -48,6 +50,7 @@ namespace SpotifyConnector
                 {
                     ResetState();
                     _isOpen = false;
+                    _logger.Debug("Spotify is not running anymore");
                     return;
                 }
 
@@ -60,6 +63,7 @@ namespace SpotifyConnector
 
                     // Spotify was reopened. It may fail to update in which case we will retry next timer tick
                     _isOpen = UpdateSongInfo();
+                    _logger.Debug("Spotify reopened");
                     return;
                 }
 
@@ -71,6 +75,7 @@ namespace SpotifyConnector
 
                 // Spotify was never connected to
                 Connect();
+                _logger.Debug("Connected to spotify");
             }
             catch (Exception)
             {
@@ -139,16 +144,22 @@ namespace SpotifyConnector
         {
             if (playStateEventArgs.Playing)
             {
+                _logger.Debug("Spotify playing");
                 TrackPlaying?.Invoke(this, EventArgs.Empty);
             }
             else
             {
                 TrackPaused?.Invoke(this, EventArgs.Empty);
+                _logger.Debug("Spotify stopped");
             }
         }
 
         private double CalculateTrackPercentange(double trackTime)
         {
+            if (_trackLength == 0)
+            {
+                return 0;
+            }
             return trackTime / _trackLength * 100;
         }
 
