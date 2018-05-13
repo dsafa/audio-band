@@ -36,7 +36,7 @@ namespace AudioBand.Connector
         /// <summary>
         /// Connector is selected as the audio source
         /// </summary>
-        Task ActivateAsync(ILogger logger, CancellationToken cancellationToken = default(CancellationToken));
+        Task ActivateAsync(IConnectorContext context, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Connector is no longer the audio source

@@ -67,6 +67,7 @@
     <Compile Include="AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ConnectorContext.cs" />
     <Compile Include="ConnectorLogger.cs" />
     <Compile Include="Settings\AudioBandAppearance.cs" />
     <Compile Include="DirectoryHelper.cs" />
