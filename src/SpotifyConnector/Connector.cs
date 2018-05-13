@@ -144,13 +144,11 @@ namespace SpotifyConnector
         {
             if (playStateEventArgs.Playing)
             {
-                _logger.Debug("Spotify playing");
                 TrackPlaying?.Invoke(this, EventArgs.Empty);
             }
             else
             {
                 TrackPaused?.Invoke(this, EventArgs.Empty);
-                _logger.Debug("Spotify stopped");
             }
         }
 
