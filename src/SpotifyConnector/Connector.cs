@@ -23,11 +23,11 @@ namespace SpotifyConnector
         private Timer _checkForSpotifytimer;
         private bool _hasConnected;
         private bool _isOpen;
-        private ILogger _logger;
+        private IConnectorLogger _logger;
 
-        public Task ActivateAsync(ILogger logger, CancellationToken cancellationToken = default(CancellationToken))
+        public Task ActivateAsync(IConnectorContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger = logger;
+            _logger = context.Logger;
             SetupClient();
 
             _checkForSpotifytimer = new Timer
