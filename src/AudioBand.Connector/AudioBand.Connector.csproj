@@ -38,7 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAudioConnector.cs" />
-    <Compile Include="ILogger.cs" />
+    <Compile Include="IConnectorContext.cs" />
+    <Compile Include="IConnectorLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrackInfoChangedEventArgs.cs" />
   </ItemGroup>

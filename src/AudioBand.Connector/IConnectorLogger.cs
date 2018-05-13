@@ -1,6 +1,6 @@
 ﻿namespace AudioBand.Connector
 {
-    public interface ILogger
+    public interface IConnectorLogger
     {
         void Debug(string message);
         void Info(string message);

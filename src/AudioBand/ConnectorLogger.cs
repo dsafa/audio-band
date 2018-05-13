@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AudioBand.Connector;
 using NLog;
 
 namespace AudioBand
 {
-    internal class ConnectorLogger : Connector.ILogger
+    internal class ConnectorLogger : IConnectorLogger
     {
-        private readonly NLog.ILogger _logger;
+        private readonly ILogger _logger;
 
         public ConnectorLogger(string name)
         {

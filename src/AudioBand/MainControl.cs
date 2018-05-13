@@ -207,7 +207,7 @@ namespace AudioBand
             connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
 
             _connectorTokenSource = new CancellationTokenSource();
-            await connector.ActivateAsync(new ConnectorLogger(connector.ConnectorName));
+            await connector.ActivateAsync(new ConnectorContext(connector.ConnectorName));
 
             _settingsManager.AudioBandSettings.Connector = connector.ConnectorName;
         }
