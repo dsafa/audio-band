@@ -1,5 +1,4 @@
-﻿using AudioBand.Connector;
-using AudioBand.Plugins;
+﻿using AudioBand.AudioSource;
 using AudioBand.Settings;
 using CSDeskBand;
 using CSDeskBand.Win;
@@ -37,12 +36,12 @@ namespace AudioBand
         private readonly int _maxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
         private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
-        private readonly ConnectorManager _connectorManager;
+        private readonly AudioSourceManager _audioSourceManager;
         private readonly NLog.ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
         private readonly SettingsManager _settingsManager;
         private readonly SettingsWindow _settingsWindow;
-        private IAudioConnector _connector;
+        private IAudioSource _currentAudioSource;
         private CSDeskBandMenu _pluginSubMenu;
         private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg); // Used so album art can be resized
         private CancellationTokenSource _connectorTokenSource = new CancellationTokenSource();
@@ -98,8 +97,8 @@ namespace AudioBand
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
                 nextButton.DataBindings.Add(nameof(nextButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
 
-                _connectorManager = new ConnectorManager();
-                _connectorManager.PluginsChanged += ConnectorManagerOnPluginsChanged;
+                _audioSourceManager = new AudioSourceManager();
+                _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
                 Options.ContextMenuItems = BuildContextMenu();
 
                 ApplySettings();
@@ -144,14 +143,14 @@ namespace AudioBand
             _albumArtTooltip.ShowWithoutRequireFocus("Album Art", this, pos);
         }
 
-        private void ConnectorManagerOnPluginsChanged(object sender, EventArgs eventArgs)
+        private void AudioSourceManagerOnAudioSourcesChanged(object sender, EventArgs eventArgs)
         {
             BeginInvoke(new Action(() => { Options.ContextMenuItems = BuildContextMenu(); }));
         }
 
         private List<CSDeskBandMenuItem> BuildContextMenu()
         {
-            var pluginList = _connectorManager.AudioConnectors.Select(connector =>
+            var pluginList = _audioSourceManager.AudioConnectors.Select(connector =>
             {
                 var item = new CSDeskBandMenuAction(connector.ConnectorName);
                 item.Clicked += ConnectorMenuItemOnClicked;
@@ -176,56 +175,56 @@ namespace AudioBand
             if (item.Checked)
             {
                 item.Checked = false;
-                await UnsubscribeToConnector(_connector);
-                _connector = null;
+                await UnsubscribeToConnector(_currentAudioSource);
+                _currentAudioSource = null;
                 return;
             }
-            // Uncheck old item and unsubscribe from the current connector
-            var lastItemChecked = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == _connector?.ConnectorName);
+            // Uncheck old item and unsubscribe from the current source
+            var lastItemChecked = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.ConnectorName);
             if (lastItemChecked != null)
             {
                 lastItemChecked.Checked = false;
             }
 
-            await UnsubscribeToConnector(_connector);
+            await UnsubscribeToConnector(_currentAudioSource);
 
             item.Checked = true;
-            _connector = _connectorManager.AudioConnectors.First(c => c.ConnectorName == item.Text);
-            await SubscribeToConnector(_connector);
+            _currentAudioSource = _audioSourceManager.AudioConnectors.First(c => c.ConnectorName == item.Text);
+            await SubscribeToConnector(_currentAudioSource);
         }
 
-        private async Task SubscribeToConnector(IAudioConnector connector)
+        private async Task SubscribeToConnector(IAudioSource source)
         {
-            if (connector == null)
+            if (source == null)
             {
                 return;
             }
 
-            connector.TrackInfoChanged += ConnectorOnTrackInfoChanged;
-            connector.TrackPlaying += ConnectorOnTrackPlaying;
-            connector.TrackPaused += ConnectorOnTrackPaused;
-            connector.TrackProgressChanged += ConnectorOnTrackProgressChanged;
+            source.TrackInfoChanged += ConnectorOnTrackInfoChanged;
+            source.TrackPlaying += ConnectorOnTrackPlaying;
+            source.TrackPaused += ConnectorOnTrackPaused;
+            source.TrackProgressChanged += ConnectorOnTrackProgressChanged;
 
             _connectorTokenSource = new CancellationTokenSource();
-            await connector.ActivateAsync(new ConnectorContext(connector.ConnectorName));
+            await source.ActivateAsync(new AudioSourceContext(source.ConnectorName));
 
-            _settingsManager.AudioBandSettings.Connector = connector.ConnectorName;
+            _settingsManager.AudioBandSettings.Connector = source.ConnectorName;
         }
 
-        private async Task UnsubscribeToConnector(IAudioConnector connector)
+        private async Task UnsubscribeToConnector(IAudioSource source)
         {
-            if (connector == null)
+            if (source == null)
             {
                 return;
             }
 
-            connector.TrackInfoChanged -= ConnectorOnTrackInfoChanged;
-            connector.TrackPlaying -= ConnectorOnTrackPlaying;
-            connector.TrackPaused -= ConnectorOnTrackPaused;
-            connector.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
+            source.TrackInfoChanged -= ConnectorOnTrackInfoChanged;
+            source.TrackPlaying -= ConnectorOnTrackPlaying;
+            source.TrackPaused -= ConnectorOnTrackPaused;
+            source.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
 
             _connectorTokenSource.Cancel();
-            await connector.DeactivateAsync();
+            await source.DeactivateAsync();
 
             ResetState();
             _settingsManager.AudioBandSettings.Connector = null;
@@ -293,22 +292,22 @@ namespace AudioBand
         {
             if (_audioBandViewModel.IsPlaying)
             {
-                await (_connector?.PauseTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
+                await (_currentAudioSource?.PauseTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
             }
             else
             {
-                await (_connector?.PlayTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
+                await (_currentAudioSource?.PlayTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
             }
         }
 
         private async void PreviousButtonOnClick(object sender, EventArgs eventArgs)
         {
-            await (_connector?.PreviousTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
+            await (_currentAudioSource?.PreviousTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
         }
 
         private async void NextButtonOnClick(object sender, EventArgs eventArgs)
         {
-            await (_connector?.NextTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
+            await (_currentAudioSource?.NextTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
         }
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)

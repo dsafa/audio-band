@@ -1,4 +1,4 @@
-﻿using AudioBand.Connector;
+﻿using AudioBand.AudioSource;
 using SpotifyAPI.Local;
 using SpotifyAPI.Local.Enums;
 using System;
@@ -9,7 +9,7 @@ using Timer = System.Timers.Timer;
 
 namespace SpotifyConnector
 {
-    public class Connector : IAudioConnector
+    public class SpotifyAudioSource : IAudioSource
     {
         public string ConnectorName { get; } = "Spotify";
 
@@ -23,9 +23,9 @@ namespace SpotifyConnector
         private Timer _checkForSpotifytimer;
         private bool _hasConnected;
         private bool _isOpen;
-        private IConnectorLogger _logger;
+        private IAudioSourceLogger _logger;
 
-        public Task ActivateAsync(IConnectorContext context, CancellationToken cancellationToken = default(CancellationToken))
+        public Task ActivateAsync(IAudioSourceContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger = context.Logger;
             SetupClient();
@@ -227,7 +227,7 @@ namespace SpotifyConnector
             TrackProgressChanged?.Invoke(this, 0);
         }
 
-        ~Connector()
+        ~SpotifyAudioSource()
         {
             if (_checkForSpotifytimer != null)
             {

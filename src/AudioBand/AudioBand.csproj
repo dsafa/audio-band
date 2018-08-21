@@ -72,8 +72,8 @@
     <Compile Include="AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ConnectorContext.cs" />
-    <Compile Include="ConnectorLogger.cs" />
+    <Compile Include="AudioSourceContext.cs" />
+    <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Settings\AudioBandAppearance.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
@@ -89,7 +89,7 @@
     <Compile Include="NowPlayingDisplay.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Plugins\ConnectorManager.cs" />
+    <Compile Include="AudioSource\AudioSourceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -132,9 +132,9 @@
     <Content Include="Resources\previous.svg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AudioBand.Connector\AudioBand.Connector.csproj">
+    <ProjectReference Include="..\AudioBand.AudioSource\AudioBand.AudioSource.csproj">
       <Project>{30f2bfea-788a-494d-88e7-f2070528ebea}</Project>
-      <Name>AudioBand.Connector</Name>
+      <Name>AudioBand.AudioSource</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

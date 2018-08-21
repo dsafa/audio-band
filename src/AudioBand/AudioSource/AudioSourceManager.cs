@@ -1,31 +1,30 @@
 ﻿using System;
-using AudioBand.Connector;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 
-namespace AudioBand.Plugins
+namespace AudioBand.AudioSource
 {
-    internal class ConnectorManager
+    internal class AudioSourceManager
     {
         [ImportMany(AllowRecomposition = true)]
-        public IEnumerable <IAudioConnector> AudioConnectors { get; private set; }
+        public IEnumerable <IAudioSource> AudioConnectors { get; private set; }
 
-        public event EventHandler PluginsChanged;
+        public event EventHandler AudioSourcesChanged;
 
-        private const string PluginFolderName = "connectors";
+        private const string PluginFolderName = "AudioSources";
         private AggregateCatalog _catalog;
         private CompositionContainer _container;
         private List<DirectoryCatalog> _directoryCatalogs;
         private FileSystemWatcher _fileSystemWatcher;
 
-        public ConnectorManager()
+        public AudioSourceManager()
         {
             BuildCatalog();
             BuildContainer();
-            AudioConnectors = _container.GetExportedValues<IAudioConnector>();
+            AudioConnectors = _container.GetExportedValues<IAudioSource>();
         }
 
         private void BuildCatalog()
@@ -59,8 +58,8 @@ namespace AudioBand.Plugins
                 directoryCatalog.Refresh();
             }
 
-            AudioConnectors = _container.GetExportedValues<IAudioConnector>();
-            PluginsChanged?.Invoke(this, EventArgs.Empty);
+            AudioConnectors = _container.GetExportedValues<IAudioSource>();
+            AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void BuildContainer()

@@ -3,10 +3,10 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AudioBand.Connector
+namespace AudioBand.AudioSource
 {
-    [InheritedExport(typeof(IAudioConnector))]
-    public interface IAudioConnector
+    [InheritedExport(typeof(IAudioSource))]
+    public interface IAudioSource
     {
         /// <summary>
         /// Name of the connector which is displayed
@@ -36,7 +36,7 @@ namespace AudioBand.Connector
         /// <summary>
         /// Connector is selected as the audio source
         /// </summary>
-        Task ActivateAsync(IConnectorContext context, CancellationToken cancellationToken = default(CancellationToken));
+        Task ActivateAsync(IAudioSourceContext context, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Connector is no longer the audio source
