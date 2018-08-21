@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
+using NLog;
 
 namespace AudioBand.AudioSource
 {
@@ -19,6 +20,7 @@ namespace AudioBand.AudioSource
         private CompositionContainer _container;
         private List<DirectoryCatalog> _directoryCatalogs;
         private FileSystemWatcher _fileSystemWatcher;
+        private ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public AudioSourceManager()
         {
@@ -31,6 +33,8 @@ namespace AudioBand.AudioSource
         {
             var basePath = DirectoryHelper.BaseDirectory;
             var pluginFolderPath = Path.Combine(basePath, PluginFolderName);
+            _logger.Debug($"Searching for audio sources in path `{pluginFolderPath}`");
+
             if (!Directory.Exists(pluginFolderPath))
             {
                 Directory.CreateDirectory(pluginFolderPath);
@@ -39,6 +43,7 @@ namespace AudioBand.AudioSource
             _directoryCatalogs = Directory.EnumerateDirectories(pluginFolderPath, "*", SearchOption.TopDirectoryOnly)
                 .Select(d => new DirectoryCatalog(d))
                 .ToList();
+            _directoryCatalogs.ForEach(d => _logger.Debug($"Found subfolder {d.Path}"));
 
             _catalog = new AggregateCatalog(_directoryCatalogs);
 
@@ -53,6 +58,7 @@ namespace AudioBand.AudioSource
 
         private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
+            _logger.Debug($"Detected new audio source folder `{fileSystemEventArgs.FullPath}");
             foreach (var directoryCatalog in _directoryCatalogs)
             {
                 directoryCatalog.Refresh();
