@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace SpotifyConnector
+namespace SpotifyAudioSource
 {
     public class SpotifyAudioSource : IAudioSource
     {
-        public string ConnectorName { get; } = "Spotify";
+        public string Name { get; } = "Spotify";
 
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
         public event EventHandler TrackPlaying;

@@ -11,7 +11,7 @@ namespace AudioBand.AudioSource
     internal class AudioSourceManager
     {
         [ImportMany(AllowRecomposition = true)]
-        public IEnumerable <IAudioSource> AudioConnectors { get; private set; }
+        public IEnumerable <IAudioSource> AudioSources { get; private set; }
 
         public event EventHandler AudioSourcesChanged;
 
@@ -20,13 +20,18 @@ namespace AudioBand.AudioSource
         private CompositionContainer _container;
         private List<DirectoryCatalog> _directoryCatalogs;
         private FileSystemWatcher _fileSystemWatcher;
-        private ILogger _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public AudioSourceManager()
         {
             BuildCatalog();
             BuildContainer();
-            AudioConnectors = _container.GetExportedValues<IAudioSource>();
+            AudioSources = _container.GetExportedValues<IAudioSource>();
+
+            foreach (var audioSource in AudioSources)
+            {
+                _logger.Debug($"Audio source loaded: `{audioSource.Name}`");
+            }
         }
 
         private void BuildCatalog()
@@ -64,7 +69,7 @@ namespace AudioBand.AudioSource
                 directoryCatalog.Refresh();
             }
 
-            AudioConnectors = _container.GetExportedValues<IAudioSource>();
+            AudioSources = _container.GetExportedValues<IAudioSource>();
             AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
         }
 

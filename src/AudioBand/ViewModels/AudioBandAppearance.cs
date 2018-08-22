@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
-namespace AudioBand.Settings
+namespace AudioBand.ViewModels
 {
     internal class AudioBandAppearance : INotifyPropertyChanged
     {

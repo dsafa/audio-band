@@ -6,9 +6,9 @@ namespace AudioBand
     {
         public IAudioSourceLogger Logger { get; }
 
-        public AudioSourceContext(string connectorName)
+        public AudioSourceContext(string audioSourceName)
         {
-            Logger = new AudioSourceLogger(connectorName);
+            Logger = new AudioSourceLogger(audioSourceName);
         }
     }
 }

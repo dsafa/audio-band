@@ -74,7 +74,8 @@
     </Compile>
     <Compile Include="AudioSourceContext.cs" />
     <Compile Include="AudioSourceLogger.cs" />
-    <Compile Include="Settings\AudioBandAppearance.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="ViewModels\AudioBandAppearance.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>
@@ -82,7 +83,7 @@
     <Compile Include="MainControl.Designer.cs">
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AudioBandViewModel.cs" />
+    <Compile Include="ViewModels\PlaybackViewModel.cs" />
     <Compile Include="EnhancedProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>

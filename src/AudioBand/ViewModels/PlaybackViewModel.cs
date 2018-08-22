@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
-namespace AudioBand
+namespace AudioBand.ViewModels
 {
-    internal class AudioBandViewModel : INotifyPropertyChanged
+    internal class PlaybackViewModel : INotifyPropertyChanged
     {
         private bool _isPlaying;
         private double _audioProgress;

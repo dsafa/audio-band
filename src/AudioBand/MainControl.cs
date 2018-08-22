@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AudioBand.ViewModels;
 using NLog.Targets;
 using Size = System.Drawing.Size;
 
@@ -36,16 +37,16 @@ namespace AudioBand
         private static readonly SvgDocument AlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
         private readonly int _maxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
-        private readonly AudioBandViewModel _audioBandViewModel = new AudioBandViewModel();
+        private readonly PlaybackViewModel _trackViewModel = new PlaybackViewModel();
         private readonly AudioSourceManager _audioSourceManager;
-        private readonly NLog.ILogger _logger = LogManager.GetLogger("Audio Band");
+        private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
         private readonly SettingsManager _settingsManager;
         private readonly SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu;
-        private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg); // Used so album art can be resized
-        private CancellationTokenSource _connectorTokenSource = new CancellationTokenSource();
+        private Image _albumArt = AlbumArtPlaceholderSvg.ToBitmap(); // Used so album art can be resized
+        private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
 
         static MainControl()
         {
@@ -72,6 +73,7 @@ namespace AudioBand
             var maxSize = new Size(FixedWidth, _maxHeight);
             Options.HorizontalSize = Size = mainTable.Size = maxSize;
             mainTable.Height = maxSize.Height;
+            mainTable.MaximumSize = maxSize;
             Options.MaxHorizontalHeight = maxSize.Height;
             Options.MinHorizontalSize = MinimumSize = mainTable.MinimumSize = new Size(FixedWidth, _minHeight);
 
@@ -83,27 +85,27 @@ namespace AudioBand
                 _settingsWindow.Closing += SettingsWindowOnClosing;
 
                 ResetState();
-                _audioBandViewModel.PropertyChanged += AudioBandViewModelOnPropertyChanged;
+                _trackViewModel.PropertyChanged += TrackViewModelOnPropertyChanged;
                 SizeChanged += OnSizeChanged;
 
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _audioBandViewModel, nameof(AudioBandViewModel.NowPlayingText));
+                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _trackViewModel, nameof(PlaybackViewModel.NowPlayingText));
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistFont));
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistColor));
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameFont), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameFont));
                 nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameColor));
-                albumArt.DataBindings.Add(nameof(albumArt.Image), _audioBandViewModel, nameof(AudioBandViewModel.AlbumArt));
-                audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _audioBandViewModel, nameof(AudioBandViewModel.AudioProgress));
+                albumArt.DataBindings.Add(nameof(albumArt.Image), _trackViewModel, nameof(PlaybackViewModel.AlbumArt));
+                audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _trackViewModel, nameof(PlaybackViewModel.AudioProgress));
                 audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressColor));
                 audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressBackColor));
-                previousButton.DataBindings.Add(nameof(previousButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PreviousButtonBitmap));
-                playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.PlayPauseButtonBitmap));
-                nextButton.DataBindings.Add(nameof(nextButton.Image), _audioBandViewModel, nameof(AudioBandViewModel.NextButtonBitmap));
+                previousButton.DataBindings.Add(nameof(previousButton.Image), _trackViewModel, nameof(PlaybackViewModel.PreviousButtonBitmap));
+                playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _trackViewModel, nameof(PlaybackViewModel.PlayPauseButtonBitmap));
+                nextButton.DataBindings.Add(nameof(nextButton.Image), _trackViewModel, nameof(PlaybackViewModel.NextButtonBitmap));
 
                 _audioSourceManager = new AudioSourceManager();
                 _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
                 Options.ContextMenuItems = BuildContextMenu();
 
-                ApplySettings();
+                SelectAudioSourceFromSettings();
             }
             catch (ReflectionTypeLoadException e)
             {
@@ -152,10 +154,10 @@ namespace AudioBand
 
         private List<DeskBandMenuItem> BuildContextMenu()
         {
-            var pluginList = _audioSourceManager.AudioConnectors.Select(connector =>
+            var pluginList = _audioSourceManager.AudioSources.Select(audioSource =>
             {
-                var item = new DeskBandMenuAction(connector.ConnectorName);
-                item.Clicked += ConnectorMenuItemOnClicked;
+                var item = new DeskBandMenuAction(audioSource.Name);
+                item.Clicked += AudioSourceMenuItemOnClicked;
                 return item;
             });
 
@@ -171,87 +173,87 @@ namespace AudioBand
             _settingsWindow.Show(this);
         }
 
-        private async void ConnectorMenuItemOnClicked(object sender, EventArgs eventArgs)
+        private async void AudioSourceMenuItemOnClicked(object sender, EventArgs eventArgs)
         {
             var item = (DeskBandMenuAction)sender;
             if (item.Checked)
             {
                 item.Checked = false;
-                await UnsubscribeToConnector(_currentAudioSource);
+                await UnsubscribeToAudioSource(_currentAudioSource);
                 _currentAudioSource = null;
                 return;
             }
             // Uncheck old item and unsubscribe from the current source
-            var lastItemChecked = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.ConnectorName);
+            var lastItemChecked = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.Name);
             if (lastItemChecked != null)
             {
                 lastItemChecked.Checked = false;
             }
 
-            await UnsubscribeToConnector(_currentAudioSource);
+            await UnsubscribeToAudioSource(_currentAudioSource);
 
             item.Checked = true;
-            _currentAudioSource = _audioSourceManager.AudioConnectors.First(c => c.ConnectorName == item.Text);
-            await SubscribeToConnector(_currentAudioSource);
+            _currentAudioSource = _audioSourceManager.AudioSources.First(c => c.Name == item.Text);
+            await SubscribeToAudioSource(_currentAudioSource);
         }
 
-        private async Task SubscribeToConnector(IAudioSource source)
+        private async Task SubscribeToAudioSource(IAudioSource source)
         {
             if (source == null)
             {
                 return;
             }
 
-            source.TrackInfoChanged += ConnectorOnTrackInfoChanged;
-            source.TrackPlaying += ConnectorOnTrackPlaying;
-            source.TrackPaused += ConnectorOnTrackPaused;
-            source.TrackProgressChanged += ConnectorOnTrackProgressChanged;
+            source.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
+            source.TrackPlaying += AudioSourceOnTrackPlaying;
+            source.TrackPaused += AudioSourceOnTrackPaused;
+            source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
-            _connectorTokenSource = new CancellationTokenSource();
-            await source.ActivateAsync(new AudioSourceContext(source.ConnectorName));
+            _audioSourceTokenSource = new CancellationTokenSource();
+            await source.ActivateAsync(new AudioSourceContext(source.Name));
 
-            _settingsManager.AudioBandSettings.Connector = source.ConnectorName;
+            _settingsManager.AudioBandSettings.AudioSource = source.Name;
         }
 
-        private async Task UnsubscribeToConnector(IAudioSource source)
+        private async Task UnsubscribeToAudioSource(IAudioSource source)
         {
             if (source == null)
             {
                 return;
             }
 
-            source.TrackInfoChanged -= ConnectorOnTrackInfoChanged;
-            source.TrackPlaying -= ConnectorOnTrackPlaying;
-            source.TrackPaused -= ConnectorOnTrackPaused;
-            source.TrackProgressChanged -= ConnectorOnTrackProgressChanged;
+            source.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
+            source.TrackPlaying -= AudioSourceOnTrackPlaying;
+            source.TrackPaused -= AudioSourceOnTrackPaused;
+            source.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
 
-            _connectorTokenSource.Cancel();
+            _audioSourceTokenSource.Cancel();
             await source.DeactivateAsync();
 
             ResetState();
-            _settingsManager.AudioBandSettings.Connector = null;
+            _settingsManager.AudioBandSettings.AudioSource = null;
         }
 
-        private void ConnectorOnTrackProgressChanged(object o, double progress)
+        private void AudioSourceOnTrackProgressChanged(object o, double progress)
         {
-            BeginInvoke(new Action(() => { _audioBandViewModel.AudioProgress = progress;}));
+            BeginInvoke(new Action(() => { _trackViewModel.AudioProgress = progress;}));
         }
 
-        private void ConnectorOnTrackPaused(object o, EventArgs args)
+        private void AudioSourceOnTrackPaused(object o, EventArgs args)
         {
             _logger.Debug("State set to paused");
 
-            BeginInvoke(new Action(() =>_audioBandViewModel.IsPlaying = false));
+            BeginInvoke(new Action(() =>_trackViewModel.IsPlaying = false));
         }
 
-        private void ConnectorOnTrackPlaying(object o, EventArgs args)
+        private void AudioSourceOnTrackPlaying(object o, EventArgs args)
         {
             _logger.Debug("State set to playing");
 
-            BeginInvoke(new Action(() => _audioBandViewModel.IsPlaying = true));
+            BeginInvoke(new Action(() => _trackViewModel.IsPlaying = true));
         }
 
-        private void ConnectorOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
+        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
             if (trackInfoChangedEventArgs?.TrackName == null || trackInfoChangedEventArgs?.Artist == null)
             {
@@ -261,16 +263,12 @@ namespace AudioBand
 
             _logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
 
-            _albumArt = trackInfoChangedEventArgs.AlbumArt;
+            _albumArt = trackInfoChangedEventArgs.AlbumArt ?? AlbumArtPlaceholderSvg.ToBitmap();
             _albumArtTooltip.AlbumArt = _albumArt;
-            if (_albumArt == null)
-            {
-                _albumArt = DrawSvg(AlbumArtPlaceholderSvg);
-            }
 
             BeginInvoke(new Action(() =>
             {
-                _audioBandViewModel.NowPlayingText = new NowPlayingText
+                _trackViewModel.NowPlayingText = new NowPlayingText
                 {
                     Artist = trackInfoChangedEventArgs.Artist,
                     TrackName = trackInfoChangedEventArgs.TrackName
@@ -280,36 +278,34 @@ namespace AudioBand
             }));
         }
 
-        private void AudioBandViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void TrackViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            switch (propertyChangedEventArgs.PropertyName)
+            if (propertyChangedEventArgs.PropertyName == nameof(PlaybackViewModel.IsPlaying))
             {
-                case nameof(AudioBandViewModel.IsPlaying):
-                    UpdateControlSvgs();
-                    break;
+                UpdateControlSvgs();
             }
         }
 
         private async void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
         {
-            if (_audioBandViewModel.IsPlaying)
+            if (_trackViewModel.IsPlaying)
             {
-                await (_currentAudioSource?.PauseTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
+                await (_currentAudioSource?.PauseTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
             }
             else
             {
-                await (_currentAudioSource?.PlayTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
+                await (_currentAudioSource?.PlayTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
             }
         }
 
         private async void PreviousButtonOnClick(object sender, EventArgs eventArgs)
         {
-            await (_currentAudioSource?.PreviousTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
+            await (_currentAudioSource?.PreviousTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
         }
 
         private async void NextButtonOnClick(object sender, EventArgs eventArgs)
         {
-            await (_currentAudioSource?.NextTrackAsync(_connectorTokenSource.Token) ?? Task.CompletedTask);
+            await (_currentAudioSource?.NextTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
         }
 
         private void OnSizeChanged(object sender, EventArgs eventArgs)
@@ -335,50 +331,39 @@ namespace AudioBand
                 graphics.DrawImage(newAlbumArt, 0, 0, sizedAlbumArt.Width, sizedAlbumArt.Height);
             }
 
-            _audioBandViewModel.AlbumArt = sizedAlbumArt;
+            _trackViewModel.AlbumArt = sizedAlbumArt;
         }
 
+        // Update the svgs for play/pause, prev, next buttons
         private void UpdateControlSvgs()
         {
-            // Issues with svg
+            // Issues with svg so need padding
             const int padding = 3;
             var height = buttonsTable.GetRowHeights()[0] - padding;
 
-            SvgDocument playPauseSvg = _audioBandViewModel.IsPlaying ? PauseButtonSvg : PlayButtonSvg;
+            SvgDocument playPauseSvg = _trackViewModel.IsPlaying ? PauseButtonSvg : PlayButtonSvg;
             playPauseSvg.Width = playPauseButton.Width;
             playPauseSvg.Height = height;
-            _audioBandViewModel.PlayPauseButtonBitmap = DrawSvg(playPauseSvg);
+            _trackViewModel.PlayPauseButtonBitmap = playPauseSvg.ToBitmap();
 
             NextButtonSvg.Width = nextButton.Width;
             NextButtonSvg.Height = height;
-            _audioBandViewModel.NextButtonBitmap = DrawSvg(NextButtonSvg);
+            _trackViewModel.NextButtonBitmap = NextButtonSvg.ToBitmap();
 
             PreviousButtonSvg.Width = previousButton.Width;
             PreviousButtonSvg.Height = height;
-            _audioBandViewModel.PreviousButtonBitmap = DrawSvg(PreviousButtonSvg);
+            _trackViewModel.PreviousButtonBitmap = PreviousButtonSvg.ToBitmap();
         }
 
-        private static Bitmap DrawSvg(SvgDocument svg)
-        {
-            var bmp = new Bitmap((int)svg.Width.Value, (int)svg.Height.Value);
-            using (var graphics = Graphics.FromImage(bmp))
-            {
-                graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.High;
-                svg.Draw(graphics);
-                return bmp;
-            }
-        }
-
+        // Reset all images to blank state
         private void ResetState()
         {
-            var placeholder = DrawSvg(AlbumArtPlaceholderSvg);
+            var placeholder = AlbumArtPlaceholderSvg.ToBitmap();
             _albumArt = placeholder;
             UpdateAlbumArt(placeholder);
-            _audioBandViewModel.NowPlayingText = new NowPlayingText();
-            _audioBandViewModel.IsPlaying = false;
-            _audioBandViewModel.AudioProgress = 0;
+            _trackViewModel.NowPlayingText = new NowPlayingText();
+            _trackViewModel.IsPlaying = false;
+            _trackViewModel.AudioProgress = 0;
             _albumArtTooltip.AlbumArt = null;
         }
 
@@ -393,16 +378,18 @@ namespace AudioBand
             _settingsManager.Save();
         }
 
-        private void ApplySettings()
+        private void SelectAudioSourceFromSettings()
         {
-            var connector = _settingsManager.AudioBandSettings.Connector;
-            if (!String.IsNullOrEmpty(connector))
+            var audioSource = _settingsManager.AudioBandSettings.AudioSource;
+            if (String.IsNullOrEmpty(audioSource))
             {
-                var menuItem = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == connector);
-                if (menuItem != null)
-                {
-                    ConnectorMenuItemOnClicked(menuItem, EventArgs.Empty);
-                }
+                return;
+            }
+
+            var menuItem = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == audioSource);
+            if (menuItem != null)
+            {
+                AudioSourceMenuItemOnClicked(menuItem, EventArgs.Empty);
             }
         }
     }

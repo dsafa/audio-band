@@ -7,8 +7,8 @@
     <ProjectGuid>{30F2BFEA-788A-494D-88E7-F2070528EBEA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AudioBand.Connector</RootNamespace>
-    <AssemblyName>AudioBand.Connector</AssemblyName>
+    <RootNamespace>AudioBand.AudioSource</RootNamespace>
+    <AssemblyName>AudioBand.AudioSource</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

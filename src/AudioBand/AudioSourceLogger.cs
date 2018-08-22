@@ -9,7 +9,7 @@ namespace AudioBand
 
         public AudioSourceLogger(string name)
         {
-            _logger = LogManager.GetLogger("Connector:" + name);
+            _logger = LogManager.GetLogger("AudioSource:" + name);
         }
 
         public void Debug(string message)
