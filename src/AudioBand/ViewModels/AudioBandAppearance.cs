@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using CSDeskBand.Annotations;
 
-namespace AudioBand.Settings
+namespace AudioBand.ViewModels
 {
     internal class AudioBandAppearance : INotifyPropertyChanged
     {
@@ -82,7 +81,6 @@ namespace AudioBand.Settings
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

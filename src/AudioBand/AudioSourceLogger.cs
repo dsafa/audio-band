@@ -1,15 +1,15 @@
-﻿using AudioBand.Connector;
+﻿using AudioBand.AudioSource;
 using NLog;
 
 namespace AudioBand
 {
-    internal class ConnectorLogger : IConnectorLogger
+    internal class AudioSourceLogger : IAudioSourceLogger
     {
         private readonly ILogger _logger;
 
-        public ConnectorLogger(string name)
+        public AudioSourceLogger(string name)
         {
-            _logger = LogManager.GetLogger("Connector:" + name);
+            _logger = LogManager.GetLogger("AudioSource:" + name);
         }
 
         public void Debug(string message)

@@ -3,15 +3,18 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AudioBand.Connector
+namespace AudioBand.AudioSource
 {
-    [InheritedExport(typeof(IAudioConnector))]
-    public interface IAudioConnector
+    /// <summary>
+    /// Provides information from an audio source and exposes controls
+    /// </summary>
+    [InheritedExport(typeof(IAudioSource))]
+    public interface IAudioSource
     {
         /// <summary>
-        /// Name of the connector which is displayed
+        /// Name of the audio source which is displayed
         /// </summary>
-        string ConnectorName { get; }
+        string Name { get; }
 
         /// <summary>
         /// Track information has changed
@@ -34,12 +37,12 @@ namespace AudioBand.Connector
         event EventHandler<double> TrackProgressChanged;
 
         /// <summary>
-        /// Connector is selected as the audio source
+        /// This audio source has been selected
         /// </summary>
-        Task ActivateAsync(IConnectorContext context, CancellationToken cancellationToken = default(CancellationToken));
+        Task ActivateAsync(IAudioSourceContext context, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Connector is no longer the audio source
+        /// The audio source is no longer active
         /// </summary>
         Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken));
 

@@ -1,37 +1,45 @@
 ﻿using System;
-using AudioBand.Connector;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
+using NLog;
 
-namespace AudioBand.Plugins
+namespace AudioBand.AudioSource
 {
-    internal class ConnectorManager
+    internal class AudioSourceManager
     {
         [ImportMany(AllowRecomposition = true)]
-        public IEnumerable <IAudioConnector> AudioConnectors { get; private set; }
+        public IEnumerable <IAudioSource> AudioSources { get; private set; }
 
-        public event EventHandler PluginsChanged;
+        public event EventHandler AudioSourcesChanged;
 
-        private const string PluginFolderName = "connectors";
+        private const string PluginFolderName = "AudioSources";
         private AggregateCatalog _catalog;
         private CompositionContainer _container;
         private List<DirectoryCatalog> _directoryCatalogs;
         private FileSystemWatcher _fileSystemWatcher;
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
-        public ConnectorManager()
+        public AudioSourceManager()
         {
             BuildCatalog();
             BuildContainer();
-            AudioConnectors = _container.GetExportedValues<IAudioConnector>();
+            AudioSources = _container.GetExportedValues<IAudioSource>();
+
+            foreach (var audioSource in AudioSources)
+            {
+                _logger.Debug($"Audio source loaded: `{audioSource.Name}`");
+            }
         }
 
         private void BuildCatalog()
         {
             var basePath = DirectoryHelper.BaseDirectory;
             var pluginFolderPath = Path.Combine(basePath, PluginFolderName);
+            _logger.Debug($"Searching for audio sources in path `{pluginFolderPath}`");
+
             if (!Directory.Exists(pluginFolderPath))
             {
                 Directory.CreateDirectory(pluginFolderPath);
@@ -40,6 +48,7 @@ namespace AudioBand.Plugins
             _directoryCatalogs = Directory.EnumerateDirectories(pluginFolderPath, "*", SearchOption.TopDirectoryOnly)
                 .Select(d => new DirectoryCatalog(d))
                 .ToList();
+            _directoryCatalogs.ForEach(d => _logger.Debug($"Found subfolder {d.Path}"));
 
             _catalog = new AggregateCatalog(_directoryCatalogs);
 
@@ -54,13 +63,14 @@ namespace AudioBand.Plugins
 
         private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
+            _logger.Debug($"Detected new audio source folder `{fileSystemEventArgs.FullPath}");
             foreach (var directoryCatalog in _directoryCatalogs)
             {
                 directoryCatalog.Refresh();
             }
 
-            AudioConnectors = _container.GetExportedValues<IAudioConnector>();
-            PluginsChanged?.Invoke(this, EventArgs.Empty);
+            AudioSources = _container.GetExportedValues<IAudioSource>();
+            AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void BuildContainer()

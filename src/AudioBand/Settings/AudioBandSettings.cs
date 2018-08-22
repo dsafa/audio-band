@@ -1,8 +1,10 @@
-﻿namespace AudioBand.Settings
+﻿using AudioBand.ViewModels;
+
+namespace AudioBand.Settings
 {
     internal class AudioBandSettings
     {
-        public string Connector { get; set; }
+        public string AudioSource { get; set; }
         public AudioBandAppearance AudioBandAppearance { get; set; } = new AudioBandAppearance();
     }
 }

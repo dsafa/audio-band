@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace AudioBand.Connector
+namespace AudioBand.AudioSource
 {
     public class TrackInfoChangedEventArgs : EventArgs
     {
