@@ -134,7 +134,7 @@ namespace AudioBand
             int yOffset = 0;
             if (TaskbarInfo.Edge == Edge.Bottom)
             {
-                yOffset = -FixedWidth - margin;
+                yOffset = -_albumArtTooltip.Size.Height - margin;
             }
             else if (TaskbarInfo.Edge == Edge.Top)
             {
