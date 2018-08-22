@@ -1,6 +1,7 @@
 ﻿using AudioBand.AudioSource;
 using AudioBand.Settings;
 using CSDeskBand;
+using CSDeskBand.ContextMenu;
 using CSDeskBand.Win;
 using NLog;
 using NLog.Config;
@@ -42,7 +43,7 @@ namespace AudioBand
         private readonly SettingsManager _settingsManager;
         private readonly SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
-        private CSDeskBandMenu _pluginSubMenu;
+        private DeskBandMenu _pluginSubMenu;
         private Image _albumArt = DrawSvg(AlbumArtPlaceholderSvg); // Used so album art can be resized
         private CancellationTokenSource _connectorTokenSource = new CancellationTokenSource();
 
@@ -67,11 +68,12 @@ namespace AudioBand
         {
             InitializeComponent();
 
-            Options.Increment = 0;
+            Options.HeightIncrement = 0;
             var maxSize = new Size(FixedWidth, _maxHeight);
-            Options.Horizontal = Size = mainTable.Size = maxSize;
-            Options.MaxHorizontal = MaximumSize = mainTable.MaximumSize = maxSize;
-            Options.MinHorizontal = MinimumSize = mainTable.MinimumSize = new Size(FixedWidth, _minHeight);
+            Options.HorizontalSize = Size = mainTable.Size = maxSize;
+            mainTable.Height = maxSize.Height;
+            Options.MaxHorizontalHeight = maxSize.Height;
+            Options.MinHorizontalSize = MinimumSize = mainTable.MinimumSize = new Size(FixedWidth, _minHeight);
 
             try
             {
@@ -148,20 +150,20 @@ namespace AudioBand
             BeginInvoke(new Action(() => { Options.ContextMenuItems = BuildContextMenu(); }));
         }
 
-        private List<CSDeskBandMenuItem> BuildContextMenu()
+        private List<DeskBandMenuItem> BuildContextMenu()
         {
             var pluginList = _audioSourceManager.AudioConnectors.Select(connector =>
             {
-                var item = new CSDeskBandMenuAction(connector.ConnectorName);
+                var item = new DeskBandMenuAction(connector.ConnectorName);
                 item.Clicked += ConnectorMenuItemOnClicked;
                 return item;
             });
 
-            _pluginSubMenu = new CSDeskBandMenu("Audio Source", pluginList);
-            var settingsMenuItem = new CSDeskBandMenuAction("Audio Band Settings");
+            _pluginSubMenu = new DeskBandMenu("Audio Source", pluginList);
+            var settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
             settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
 
-            return new List<CSDeskBandMenuItem>{ settingsMenuItem, _pluginSubMenu };
+            return new List<DeskBandMenuItem>{ settingsMenuItem, _pluginSubMenu };
         }
 
         private void SettingsMenuItemOnClicked(object sender, EventArgs eventArgs)
@@ -171,7 +173,7 @@ namespace AudioBand
 
         private async void ConnectorMenuItemOnClicked(object sender, EventArgs eventArgs)
         {
-            var item = (CSDeskBandMenuAction)sender;
+            var item = (DeskBandMenuAction)sender;
             if (item.Checked)
             {
                 item.Checked = false;
@@ -180,7 +182,7 @@ namespace AudioBand
                 return;
             }
             // Uncheck old item and unsubscribe from the current source
-            var lastItemChecked = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.ConnectorName);
+            var lastItemChecked = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.ConnectorName);
             if (lastItemChecked != null)
             {
                 lastItemChecked.Checked = false;
@@ -396,7 +398,7 @@ namespace AudioBand
             var connector = _settingsManager.AudioBandSettings.Connector;
             if (!String.IsNullOrEmpty(connector))
             {
-                var menuItem = _pluginSubMenu.Items.Cast<CSDeskBandMenuAction>().FirstOrDefault(i => i.Text == connector);
+                var menuItem = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == connector);
                 if (menuItem != null)
                 {
                     ConnectorMenuItemOnClicked(menuItem, EventArgs.Empty);

@@ -30,11 +30,11 @@
     <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSDeskBand, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSDeskBand.1.0.0\lib\net461\CSDeskBand.dll</HintPath>
+    <Reference Include="CSDeskBand, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66d19cfc65a1cc19, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSDeskBand.2.0.0\lib\net461\CSDeskBand.dll</HintPath>
     </Reference>
-    <Reference Include="CSDeskBand.Win, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSDeskBand.Win.1.0.0\lib\net461\CSDeskBand.Win.dll</HintPath>
+    <Reference Include="CSDeskBand.Win, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66d19cfc65a1cc19, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSDeskBand.Win.2.0.0\lib\net461\CSDeskBand.Win.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
@@ -49,7 +49,7 @@
       <HintPath>..\packages\Nett.0.9.0\lib\Net40\Nett.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.4\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.8\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>..\packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
