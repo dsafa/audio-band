@@ -17,8 +17,11 @@ There is currently no installer available, however there are prereleases in the 
 
 ## Usage
 1. Right click on the taskbar and select `Audio Band` from the toolbars submenu.
-2. Right click on the Audio Band toolbar and select an audio source
-_images here_
+2. Right click on the Audio Band toolbar and select an audio source (ex. Spotify)
+
+![](./screenshots/hover-over.png)
+
+![](./screenshots/click-audiosource.png)
 
 ### Current Supported Audio Sources
 - Sotify
