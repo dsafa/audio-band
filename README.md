@@ -1,8 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/v32xl29r8uucuwj3?svg=true)](https://ci.appveyor.com/project/dsafa/audio-band)
 
 # Audio Band
-*IMPORTANT! Getting song information from spotify is currently unavailable*
-
 Audio Band allows you to display song information in the taskbar.
 
 ![Demo](./screenshots/demo.gif)
@@ -17,11 +15,14 @@ There is currently no installer available, however there are prereleases in the 
 
 ## Usage
 1. Right click on the taskbar and select `Audio Band` from the toolbars submenu.
-2. Right click on the Audio Band toolbar and select an audio source
-_images here_
+2. Right click on the Audio Band toolbar and select an audio source (ex. Spotify)
+
+![](./screenshots/hover-over.png)
+
+![](./screenshots/click-audiosource.png)
 
 ### Current Supported Audio Sources
-- Sotify
+- Spotify (**IMPORTANT** due to an [issue](https://github.com/dsafa/audio-band/issues/17), No album art will be displayed. Also the first time it starts, it will only update once spotify is playing a song.)
 
 ## Building
 This project uses C# 7 features so a compatible compiler is required.
@@ -36,4 +37,5 @@ Help is appreciated
 
 ## License
 [LICENSE](https://github.com/dsafa/audio-band/blob/master/LICENSE)
+
 [THIRD PARTY](https://github.com/dsafa/audio-band/blob/master/LICENSE-3RD-PARTY)

@@ -1,6 +1,4 @@
 ﻿using AudioBand.AudioSource;
-using SpotifyAPI.Local;
-using SpotifyAPI.Local.Enums;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,221 +16,159 @@ namespace SpotifyAudioSource
         public event EventHandler TrackPaused;
         public event EventHandler<double> TrackProgressChanged;
 
-        private SpotifyLocalAPI _spotifyClient;
-        private int _trackLength;
-        private Timer _checkForSpotifytimer;
-        private bool _hasConnected;
-        private bool _isOpen;
+        private Timer _checkSpotifyTimer;
         private IAudioSourceLogger _logger;
+        private readonly SpotifyControls _spotifyControls = new SpotifyControls();
+        private const string NotPlayingTitle = "Spotify"; // Window title when no song is playing
+
+        private string _currentSong;
+        private string _currentArtist;
+        private bool _currentIsPlaying;
+        private bool _spotifyRunning = true;
 
         public Task ActivateAsync(IAudioSourceContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger = context.Logger;
-            SetupClient();
 
-            _checkForSpotifytimer = new Timer
+            _checkSpotifyTimer = new Timer
             {
-                Interval = 1000,
+                Interval = 100,
                 AutoReset = false
             };
-            _checkForSpotifytimer.Elapsed += CheckForSpotifytimerOnElapsed;
-            _checkForSpotifytimer.Start();
+            _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
+            _checkSpotifyTimer.Start();
 
             return Task.CompletedTask;
         }
 
-        private void CheckForSpotifytimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        private void CheckSpotifyTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             try
             {
-                // If spotify was connected to and not anymore
-                if (_hasConnected && !SpotifyRunning())
-                {
-                    ResetState();
-                    _isOpen = false;
-                    _logger.Debug("Spotify is not running anymore");
-                    return;
-                }
+                var spotifyTitle = _spotifyControls.GetSpotifyTitle();
 
-                if (_hasConnected && SpotifyRunning())
+                // Spotify not open
+                if (string.IsNullOrEmpty(spotifyTitle))
                 {
-                    if (_isOpen)
+                    // Already blanked
+                    if (!_spotifyRunning)
                     {
                         return;
                     }
 
-                    // Spotify was reopened. It may fail to update in which case we will retry next timer tick
-                    _isOpen = UpdateSongInfo();
-                    _logger.Debug("Spotify reopened");
+                    SetBlankState();
+
+                    _spotifyRunning = false;
                     return;
                 }
 
-                // Spotify isnt running so don't try to connect
-                if (!SpotifyRunning())
+                _spotifyRunning = true;
+
+                if (spotifyTitle == NotPlayingTitle)
                 {
+                    // already paused
+                    if (!_currentIsPlaying)
+                    {
+                        return;
+                    }
+
+                    TrackPaused?.Invoke(this, EventArgs.Empty);
+                    _currentIsPlaying = false;
                     return;
                 }
 
-                // Spotify was never connected to
-                Connect();
-                _logger.Debug("Connected to spotify");
-            }
-            catch (Exception)
-            {
-                // Random http 403 errors
+                ExtractTitle(spotifyTitle);
             }
             finally
             {
-                _checkForSpotifytimer.Enabled = true;
+                _checkSpotifyTimer.Enabled = true;
             }
         }
 
         public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            _spotifyClient?.Dispose();
-            _hasConnected = false;
-            if (_checkForSpotifytimer != null)
+            if (_checkSpotifyTimer != null)
             {
-                _checkForSpotifytimer.Elapsed -= CheckForSpotifytimerOnElapsed;
-                _checkForSpotifytimer.Dispose();
+                _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
+                _checkSpotifyTimer.Dispose();
             }
 
-            ResetState();
+            SetBlankState();
             return Task.CompletedTask;
         }
 
-        public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _spotifyClient.Play().ConfigureAwait(false);
+            _spotifyControls.Play();
+            return Task.CompletedTask;
         }
 
-        public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _spotifyClient.Pause().ConfigureAwait(false);
+            _spotifyControls.Pause();
+            return Task.CompletedTask;
         }
 
         public Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            _spotifyClient.Previous();
+            _spotifyControls.Previous();
             return Task.CompletedTask;
         }
 
         public Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            _spotifyClient.Skip();
+            _spotifyControls.Next();
             return Task.CompletedTask;
         }
 
-        private void SpotifyClientOnOnTrackTimeChange(object sender, TrackTimeChangeEventArgs trackTimeChangeEventArgs)
+        private void SetBlankState()
         {
-            TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(trackTimeChangeEventArgs.TrackTime));
+            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs());
+            TrackPaused?.Invoke(this, EventArgs.Empty);
+            TrackProgressChanged?.Invoke(this, 0);
+
+            _currentIsPlaying = false;
+            _currentArtist = null;
+            _currentSong = null;
         }
 
-        private void SpotifyClientOnOnTrackChange(object sender, TrackChangeEventArgs trackChangeEventArgs)
+        private void ExtractTitle(string title)
         {
-            var track = trackChangeEventArgs.NewTrack;
-            _trackLength = track.Length;
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
+            // Spotify title is in the form of <artist> - <title>
+            var parts = title.Split(new string[]{" - "}, StringSplitOptions.None);
+            if (parts.Length != 2)
             {
-                TrackName = track.TrackResource.Name,
-                Artist = track.ArtistResource.Name,
-                AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640)
-            });
-        }
-
-        private void SpotifyClientOnOnPlayStateChange(object sender, PlayStateEventArgs playStateEventArgs)
-        {
-            if (playStateEventArgs.Playing)
-            {
-                TrackPlaying?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                TrackPaused?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        private double CalculateTrackPercentange(double trackTime)
-        {
-            if (_trackLength == 0)
-            {
-                return 0;
-            }
-            return trackTime / _trackLength * 100;
-        }
-
-        private void Connect()
-        {
-            if (!_spotifyClient.Connect())
-            {
-                _hasConnected = false;
-                _isOpen = false;
+                _logger.Warn($"Spotify title invalid: {title}");
                 return;
             }
 
-            _isOpen = UpdateSongInfo();
-            _spotifyClient.ListenForEvents = true;
-            _hasConnected = true;
-        }
+            var artist = parts[0];
+            var song = parts[1];
 
-        private bool UpdateSongInfo()
-        {
-            var status = _spotifyClient.GetStatus();
-
-            var track = status?.Track;
-            if (track == null)
+            if (artist != _currentArtist || song != _currentSong)
             {
-                return false;
-            }
-            _trackLength = track.Length;
-
-            TrackProgressChanged?.Invoke(this, CalculateTrackPercentange(status.PlayingPosition));
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs
-            {
-                TrackName = track.TrackResource.Name,
-                Artist = track.ArtistResource.Name,
-                AlbumArt = track.GetAlbumArt(AlbumArtSize.Size640)
-            });
-
-            if (status.Playing)
-            {
-                TrackPlaying?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                TrackPaused?.Invoke(this, EventArgs.Empty);
+                TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs{TrackName = song, Artist = artist});
             }
 
-            return true;
-        }
+            _currentArtist = artist;
+            _currentSong = song;
 
-        private void SetupClient()
-        {
-            _spotifyClient = new SpotifyLocalAPI();
+            // Already playing
+            if (_currentIsPlaying)
+            {
+                return;
+            }
 
-            _spotifyClient.OnPlayStateChange += SpotifyClientOnOnPlayStateChange;
-            _spotifyClient.OnTrackChange += SpotifyClientOnOnTrackChange;
-            _spotifyClient.OnTrackTimeChange += SpotifyClientOnOnTrackTimeChange;
-        }
-
-        private bool SpotifyRunning()
-        {
-            return SpotifyLocalAPI.IsSpotifyRunning() && SpotifyLocalAPI.IsSpotifyWebHelperRunning();
-        }
-
-        private void ResetState()
-        {
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs { TrackName = "", AlbumArt = null });
-            TrackPaused?.Invoke(this, EventArgs.Empty);
-            TrackProgressChanged?.Invoke(this, 0);
+            TrackPlaying?.Invoke(this, EventArgs.Empty);
+            _currentIsPlaying = true;
         }
 
         ~SpotifyAudioSource()
         {
-            if (_checkForSpotifytimer != null)
+            if (_checkSpotifyTimer != null)
             {
-                _checkForSpotifytimer.Elapsed -= CheckForSpotifytimerOnElapsed;
-                _checkForSpotifytimer.Dispose();
+                _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
+                _checkSpotifyTimer.Dispose();
             }
         }
     }
