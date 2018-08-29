@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using AudioBand.ViewModels;
 using NLog.Targets;
 using Size = System.Drawing.Size;
@@ -81,7 +82,8 @@ namespace AudioBand
             {
                 _settingsManager = new SettingsManager();
                 var audioBandAppearance = _settingsManager.AudioBandSettings.AudioBandAppearance;
-                _settingsWindow = new SettingsWindow(audioBandAppearance);
+                _settingsWindow = new SettingsWindow();
+                ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
                 _settingsWindow.Closing += SettingsWindowOnClosing;
 
                 ResetState();
@@ -170,7 +172,7 @@ namespace AudioBand
 
         private void SettingsMenuItemOnClicked(object sender, EventArgs eventArgs)
         {
-            _settingsWindow.Show(this);
+            _settingsWindow.Show();
         }
 
         private async void AudioSourceMenuItemOnClicked(object sender, EventArgs eventArgs)
