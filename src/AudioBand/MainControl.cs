@@ -255,10 +255,22 @@ namespace AudioBand
 
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
-            if (trackInfoChangedEventArgs?.TrackName == null || trackInfoChangedEventArgs?.Artist == null)
+            if (trackInfoChangedEventArgs == null)
             {
-                _logger.Warn($"Trackname or artist is null, track '{trackInfoChangedEventArgs?.TrackName}' artist '{trackInfoChangedEventArgs?.Artist}'");
+                _logger.Error("TrackInforChanged event arg is empty");
                 return;
+            }
+
+            if (trackInfoChangedEventArgs.TrackName == null)
+            {
+                trackInfoChangedEventArgs.TrackName = "";
+                _logger.Warn("Track name is null");
+            }
+
+            if (trackInfoChangedEventArgs.Artist == null)
+            {
+                trackInfoChangedEventArgs.Artist = "";
+                _logger.Warn("Artist is null");
             }
 
             _logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
