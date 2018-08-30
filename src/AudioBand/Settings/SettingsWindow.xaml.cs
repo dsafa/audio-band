@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -48,6 +49,12 @@ namespace AudioBand.Settings
             var filename = Path.Combine(dir, asmName);
 
             return !File.Exists(filename) ? null : Assembly.LoadFrom(filename);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }
