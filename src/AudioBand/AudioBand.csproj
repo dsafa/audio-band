@@ -98,11 +98,13 @@
     <Compile Include="AudioSourceContext.cs" />
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Settings\Mapping.cs" />
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\AudioBandAppearance.cs" />
+    <Compile Include="ViewModels\AlbumArtAppearance.cs" />
+    <Compile Include="ViewModels\AppearanceViewModel.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>
@@ -110,6 +112,9 @@
     <Compile Include="MainControl.Designer.cs">
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AudioBandAppearance.cs" />
+    <Compile Include="ViewModels\Appearance.cs" />
+    <Compile Include="ViewModels\PlaybackControlsAppearance.cs" />
     <Compile Include="ViewModels\PlaybackViewModel.cs" />
     <Compile Include="EnhancedProgressBar.cs">
       <SubType>Component</SubType>
@@ -127,6 +132,8 @@
     <Compile Include="Settings\AudioBandSettings.cs" />
     <Compile Include="Settings\Converters.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="ViewModels\ProgressBarAppearance.cs" />
+    <Compile Include="ViewModels\TextAppearance.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>

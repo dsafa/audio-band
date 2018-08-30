@@ -1,17 +1,18 @@
-﻿<metro:MetroWindow x:Class="AudioBand.Settings.SettingsWindow"
+﻿<metro:MetroWindow
             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
             xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:viewModels="clr-namespace:AudioBand.ViewModels" x:Class="AudioBand.Settings.SettingsWindow" 
             mc:Ignorable="d" 
             d:DesignHeight="800" d:DesignWidth="700"
             Title="Audio Band Settings"
             Height="800"
             Width="700"
             GlowBrush="{DynamicResource AccentColorBrush}"
-            WindowStartupLocation="CenterScreen">
+            WindowStartupLocation="CenterScreen" x:ClassModifier="internal">
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,36 +26,47 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Buttons.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="TabStackPanel" TargetType="{x:Type StackPanel}">
-                <Setter Property="Margin" Value="20, 0, 0, 0"></Setter>
-                <Setter Property="Orientation" Value="Vertical"></Setter>
+                <Setter Property="Margin" Value="20, 0, 0, 0"/>
+                <Setter Property="Orientation" Value="Vertical"/>
             </Style>
             <Style x:Key="TabListView" TargetType="{x:Type ListView}" BasedOn="{StaticResource {x:Type ListView}}">
-                <Setter Property="Margin" Value="20, 0, 0, 0"></Setter>
-                <Setter Property="BorderThickness" Value="0"></Setter>
+                <Setter Property="Margin" Value="20, 0, 0, 0"/>
+                <Setter Property="BorderThickness" Value="0"/>
             </Style>
             <Style x:Key="GridLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-                <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"></Setter>
-                <Setter Property="Margin" Value="2"></Setter>
+                <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"/>
+                <Setter Property="Margin" Value="2"/>
             </Style>
             <Style x:Key="GridNumericInput" TargetType="{x:Type metro:NumericUpDown}">
-                <Setter Property="Margin" Value="2"></Setter>
+                <Setter Property="Margin" Value="2"/>
+                <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"></Setter>
             </Style>
             <Style x:Key="GridSizeInput" TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource GridNumericInput}">
-                <Setter Property="NumericInputMode" Value="Numbers"></Setter>
-                <Setter Property="Minimum" Value="0"></Setter>
-                <Setter Property="Interval" Value="1"></Setter>
+                <Setter Property="NumericInputMode" Value="Numbers"/>
+                <Setter Property="Minimum" Value="0"/>
+                <Setter Property="Interval" Value="1"/>
             </Style>
             <Style x:Key="GridToggle" TargetType="{x:Type metro:ToggleSwitch}" BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
-                <Setter Property="Margin" Value="2"></Setter>
+                <Setter Property="Margin" Value="2"/>
             </Style>
             <Style x:Key="GridButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SquareButtonStyle}">
-                <Setter Property="Margin" Value="2"></Setter>
+                <Setter Property="Margin" Value="2"/>
             </Style>
             <Style x:Key="GridColorPicker" TargetType="{x:Type xctk:ColorPicker}">
-                <Setter Property="Margin" Value="2"></Setter>
+                <Setter Property="Margin" Value="2"/>
+            </Style>
+            <Style x:Key="GridTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="Margin" Value="2"/>
+                <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"/>
+            </Style>
+            <Style x:Key="GridComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                <Setter Property="Margin" Value="2"/>
             </Style>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
+    <metro:MetroWindow.DataContext>
+        <viewModels:AppearanceViewModel/>
+    </metro:MetroWindow.DataContext>
     <DockPanel LastChildFill="True">
         <TabControl Margin="10" TabStripPlacement="Left">
             <TabItem  Header="General">
@@ -70,10 +82,10 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Content="Width" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="0" Grid.Column="1" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="0" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding AudioBandAppearance.Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Height" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding AudioBandAppearance.Height, Mode=TwoWay}"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -97,26 +109,26 @@
                                 <ColumnDefinition Width="70" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" Style="{StaticResource GridLabel}"/>
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden"/>
+                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden" IsChecked="{Binding PlaybackControlsAppearance.PlayPauseButtonAppearance.IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.PlayPauseButtonAppearance.Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.PlayPauseButtonAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.PlayPauseButtonAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.PlayPauseButtonAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Play Button Image" Style="{StaticResource GridLabel}"/>
-                            <Label Grid.Row="5" Grid.Column="1" Content="Default" Style="{StaticResource GridLabel}"/>
+                            <Label Grid.Row="5" Grid.Column="1" Content="{Binding PlaybackControlsAppearance.PlayPauseButtonAppearance.PlayImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
                             <Button Grid.Row="5"  Grid.Column="2" Content="Browse" Style="{StaticResource GridButton}"/>
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Pause Button Image" Style="{StaticResource GridLabel}"/>
-                            <Label Grid.Row="6" Grid.Column="1" Content="Default" Style="{StaticResource GridLabel}"/>
+                            <Label Grid.Row="6" Grid.Column="1" Content="{Binding PlaybackControlsAppearance.PlayPauseButtonAppearance.PauseImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
                             <Button Grid.Row="6"  Grid.Column="2" Content="Browse" Style="{StaticResource GridButton}"/>
                         </Grid>
                     </Expander>
@@ -137,22 +149,22 @@
                                 <ColumnDefinition Width="70" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" Style="{StaticResource GridLabel}"/>
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden"/>
+                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden" IsChecked="{Binding PlaybackControlsAppearance.NextSongButtonAppearance.IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.NextSongButtonAppearance.Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.NextSongButtonAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.NextSongButtonAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.NextSongButtonAppearance.YPosition, Mode=TwoWay}"/>
 
-                            <Label Grid.Row="5" Grid.Column="0" Content="Next Song Button Image" Style="{StaticResource GridLabel}"/>
-                            <Label Grid.Row="5" Grid.Column="1" Content="Default" Style="{StaticResource GridLabel}"/>
+                            <Label Grid.Row="5" Grid.Column="0" Content="Button Image" Style="{StaticResource GridLabel}"/>
+                            <Label Grid.Row="5" Grid.Column="1" Content="{Binding PlaybackControlsAppearance.NextSongButtonAppearance.ImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
                             <Button Grid.Row="5"  Grid.Column="2" Content="Browse" Style="{StaticResource GridButton}"/>
                         </Grid>
                     </Expander>
@@ -173,31 +185,89 @@
                                 <ColumnDefinition Width="70" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" Style="{StaticResource GridLabel}"/>
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden"/>
+                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden" IsChecked="{Binding PlaybackControlsAppearance.PreviousSongButtonAppearance.IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.PreviousSongButtonAppearance.Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.PreviousSongButtonAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.PreviousSongButtonAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlaybackControlsAppearance.PreviousSongButtonAppearance.YPosition, Mode=TwoWay}"/>
 
-                            <Label Grid.Row="5" Grid.Column="0" Content="Previous Song Button Image" Style="{StaticResource GridLabel}"/>
-                            <Label Grid.Row="5" Grid.Column="1" Content="Default" Style="{StaticResource GridLabel}"/>
+                            <Label Grid.Row="5" Grid.Column="0" Content="Button Image" Style="{StaticResource GridLabel}"/>
+                            <Label Grid.Row="5" Grid.Column="1" Content="{Binding PlaybackControlsAppearance.PreviousSongButtonAppearance.ImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
                             <Button Grid.Row="5"  Grid.Column="2" Content="Browse" Style="{StaticResource GridButton}"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Text Labels">
-                <ListView Style="{StaticResource TabListView}">
+                <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding TextAppearances}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                            <Setter Property="Focusable" Value="false"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
+                            <Expander Header="{Binding Name}" IsExpanded="True">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="0" Grid.Column="0" Content="Label Name" Style="{StaticResource GridLabel}"/>
+                                    <TextBox Grid.Row="0" Grid.Column="1" metro:TextBoxHelper.ClearTextButton="True" Style="{StaticResource GridTextBox}" Text="{Binding Name, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="1" Grid.Column="0" Content="Visibility" Style="{StaticResource GridLabel}"/>
+                                    <metro:ToggleSwitch Grid.Row="1" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden" IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0" Content="Width" Style="{StaticResource GridLabel}"/>
+                                    <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding Width, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="3" Grid.Column="0" Content="Height" Style="{StaticResource GridLabel}"/>
+                                    <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding Height, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="4" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
+                                    <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding XPosition, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="5" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
+                                    <metro:NumericUpDown Grid.Row="5" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding YPosition, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="6" Grid.Column="0" Content="Font Family" Style="{StaticResource GridLabel}"/>
+                                    <TextBox Grid.Row="6" Grid.Column="1" metro:TextBoxHelper.ClearTextButton="True" Style="{StaticResource GridTextBox}" Text="{Binding FontFamily, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="7" Grid.Column="0" Content="Font Size" Style="{StaticResource GridLabel}"/>
+                                    <metro:NumericUpDown Grid.Row="7" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding FontSize, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="8" Grid.Column="0" Content="Font Alignment" Style="{StaticResource GridLabel}"/>
+                                    <ComboBox Grid.Row="8" Grid.Column="1" Style="{StaticResource GridComboBox}"/>
+                                    
+                                    <Label Grid.Row="9" Grid.Column="0" Content="Background Color" Style="{StaticResource GridLabel}"/>
+                                    <xctk:ColorPicker Grid.Row="9" Grid.Column="1" Style="{StaticResource GridColorPicker}" SelectedColor="{Binding BackgroundColor, Mode=TwoWay}"/>
+
+                                    <Label Grid.Row="10" Grid.Column="0" Content="Format" Style="{StaticResource GridLabel}"/>
+                                    <TextBox Grid.Row="10" Grid.Column="1" metro:TextBoxHelper.ClearTextButton="True" Style="{StaticResource GridTextBox}" Text="{Binding FormatString, Mode=TwoWay}"/>
+                                </Grid>
+                            </Expander>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -220,25 +290,25 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" Style="{StaticResource GridLabel}"/>
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden"/>
+                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden" IsChecked="{Binding ProgressBarAppearance.IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ProgressBarAppearance.Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ProgressBarAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ProgressBarAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ProgressBarAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Background Colour" Style="{StaticResource GridLabel}"/>
-                            <xctk:ColorPicker Grid.Row="5" Grid.Column="1" Style="{StaticResource GridColorPicker}"/>
+                            <xctk:ColorPicker Grid.Row="5" Grid.Column="1" Style="{StaticResource GridColorPicker}" SelectedColor="{Binding ProgressBarAppearance.BackgroundColor, Mode=TwoWay}"/>
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Foreground Color" Style="{StaticResource GridLabel}"/>
-                            <xctk:ColorPicker Grid.Row="6" Grid.Column="1" Style="{StaticResource GridColorPicker}" />
+                            <xctk:ColorPicker Grid.Row="6" Grid.Column="1" Style="{StaticResource GridColorPicker}" SelectedColor="{Binding ProgressBarAppearance.ForegroundColor, Mode=TwoWay}"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -254,34 +324,33 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="200" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="60" />
+                                <ColumnDefinition Width="70" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" Style="{StaticResource GridLabel}"/>
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden"/>
+                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden" IsChecked="{Binding Album.AlbumArtDisplay.IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding Album.AlbumArtDisplay.Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"  Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding Album.AlbumArtDisplay.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"  Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding Album.AlbumArtDisplay.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"  Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding Album.AlbumArtDisplay.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Placeholder Image" Style="{StaticResource GridLabel}"/>
-                            <Label Grid.Row="5" Grid.Column="1" Content="Default" Style="{StaticResource GridLabel}"/>
+                            <Label Grid.Row="5" Grid.Column="1" Content="{Binding Album.AlbumArtDisplay.PlaceholderPath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
                             <Button Grid.Row="5"  Grid.Column="2" Content="Browse" Style="{StaticResource GridButton}"/>
                         </Grid>
                     </Expander>
-                    <Expander Header="Album Art Hover" IsExpanded="True">
+                    <Expander Header="Album Art Popup" IsExpanded="True">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -293,22 +362,21 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="200" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="60" />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" Style="{StaticResource GridLabel}"/>
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden"/>
+                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Visible" OffLabel="Hidden" IsChecked="{Binding Album.AlbumArtPopup.IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding Album.AlbumArtPopup.Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"  Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding Album.AlbumArtPopup.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="Relative X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"  Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding Album.AlbumArtPopup.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Relative Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"  Style="{StaticResource GridSizeInput}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding Album.AlbumArtPopup.YPosition, Mode=TwoWay}"/>
                         </Grid>
                     </Expander>
                 </StackPanel>

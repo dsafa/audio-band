@@ -1,86 +1,39 @@
 ﻿using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.CompilerServices;
+using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
     internal class AudioBandAppearance : INotifyPropertyChanged
     {
-        private Color _trackProgressColor = Color.DodgerBlue;
-        private Font _nowPlayingArtistFont = new Font(new FontFamily("Segoe UI"), 8.5f, FontStyle.Bold, GraphicsUnit.Point);
-        private Color _nowPlayingArtistColor = Color.LightSlateGray;
-        private Font _nowPlayingTrackNameFont = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-        private Color _nowPlayingTrackNameColor = Color.White;
-        private Color _trackProgressBackColor = Color.Black;
+        private int _width;
+        private int _height;
 
-        public Color TrackProgressColor
+        public int Width
         {
-            get => _trackProgressColor;
+            get => _width;
             set
             {
-                if (value.Equals(_trackProgressColor)) return;
-                _trackProgressColor = value;
+                if (value == _width) return;
+                _width = value;
                 OnPropertyChanged();
             }
         }
 
-        public Color TrackProgressBackColor
+        public int Height
         {
-            get => _trackProgressBackColor;
+            get => _height;
             set
             {
-                if (value.Equals(_trackProgressBackColor)) return;
-                _trackProgressBackColor = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Font NowPlayingArtistFont
-        {
-            get => _nowPlayingArtistFont;
-            set
-            {
-                if (Equals(value, _nowPlayingArtistFont)) return;
-                _nowPlayingArtistFont = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Color NowPlayingArtistColor
-        {
-            get => _nowPlayingArtistColor;
-            set
-            {
-                if (value.Equals(_nowPlayingArtistColor)) return;
-                _nowPlayingArtistColor = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Font NowPlayingTrackNameFont
-        {
-            get => _nowPlayingTrackNameFont;
-            set
-            {
-                if (Equals(value, _nowPlayingTrackNameFont)) return;
-                _nowPlayingTrackNameFont = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Color NowPlayingTrackNameColor
-        {
-            get => _nowPlayingTrackNameColor;
-            set
-            {
-                if (value.Equals(_nowPlayingTrackNameColor)) return;
-                _nowPlayingTrackNameColor = value;
+                if (value == _height) return;
+                _height = value;
                 OnPropertyChanged();
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
