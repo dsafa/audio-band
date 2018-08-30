@@ -81,8 +81,7 @@ namespace AudioBand
             try
             {
                 _settingsManager = new SettingsManager();
-                var audioBandAppearance = _settingsManager.AudioBandSettings.AudioBandAppearance;
-                _settingsWindow = new SettingsWindow();
+                _settingsWindow = new SettingsWindow(_settingsManager.AudioBandSettings.AppearanceViewModel);
                 ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
                 _settingsWindow.Closing += SettingsWindowOnClosing;
 
@@ -90,18 +89,18 @@ namespace AudioBand
                 _trackViewModel.PropertyChanged += TrackViewModelOnPropertyChanged;
                 SizeChanged += OnSizeChanged;
 
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _trackViewModel, nameof(PlaybackViewModel.NowPlayingText));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistFont));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingArtistColor));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameFont), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameFont));
-                nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameColor), audioBandAppearance, nameof(AudioBandAppearance.NowPlayingTrackNameColor));
-                albumArt.DataBindings.Add(nameof(albumArt.Image), _trackViewModel, nameof(PlaybackViewModel.AlbumArt));
-                audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _trackViewModel, nameof(PlaybackViewModel.AudioProgress));
-                audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressColor));
-                audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), audioBandAppearance, nameof(AudioBandAppearance.TrackProgressBackColor));
-                previousButton.DataBindings.Add(nameof(previousButton.Image), _trackViewModel, nameof(PlaybackViewModel.PreviousButtonBitmap));
-                playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _trackViewModel, nameof(PlaybackViewModel.PlayPauseButtonBitmap));
-                nextButton.DataBindings.Add(nameof(nextButton.Image), _trackViewModel, nameof(PlaybackViewModel.NextButtonBitmap));
+                //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _trackViewModel, nameof(PlaybackViewModel.NowPlayingText));
+                //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), audioBandAppearance, nameof(AppearanceViewModel.NowPlayingArtistFont));
+                //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), audioBandAppearance, nameof(AppearanceViewModel.NowPlayingArtistColor));
+                //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameFont), audioBandAppearance, nameof(AppearanceViewModel.NowPlayingTrackNameFont));
+                //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameColor), audioBandAppearance, nameof(AppearanceViewModel.NowPlayingTrackNameColor));
+                //albumArt.DataBindings.Add(nameof(albumArt.Image), _trackViewModel, nameof(PlaybackViewModel.AlbumArt));
+                //audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _trackViewModel, nameof(PlaybackViewModel.AudioProgress));
+                //audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), audioBandAppearance, nameof(AppearanceViewModel.TrackProgressColor));
+                //audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), audioBandAppearance, nameof(AppearanceViewModel.TrackProgressBackColor));
+                //previousButton.DataBindings.Add(nameof(previousButton.Image), _trackViewModel, nameof(PlaybackViewModel.PreviousButtonBitmap));
+                //playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _trackViewModel, nameof(PlaybackViewModel.PlayPauseButtonBitmap));
+                //nextButton.DataBindings.Add(nameof(nextButton.Image), _trackViewModel, nameof(PlaybackViewModel.NextButtonBitmap));
 
                 _audioSourceManager = new AudioSourceManager();
                 _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;

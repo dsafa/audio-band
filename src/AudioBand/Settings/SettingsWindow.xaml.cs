@@ -13,20 +13,25 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using AudioBand.ViewModels;
 using MahApps.Metro.Controls;
 using NLog;
 
 namespace AudioBand.Settings
 {
-    public partial class SettingsWindow
+    internal partial class SettingsWindow
     {
         private ILogger _logger = LogManager.GetCurrentClassLogger();
+        internal AppearanceViewModel Appearance { get; set; }
 
-        public SettingsWindow()
+        internal SettingsWindow(AppearanceViewModel appearance)
         {
+            Appearance = appearance;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
             InitializeComponent();
+            DataContext = Appearance;
+            _logger.Debug($"app {Appearance.AudioBandAppearance}");
         }
 
         // Problem loading xceed.wpf.toolkit assembly normally
