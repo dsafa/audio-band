@@ -41,10 +41,20 @@ namespace AudioBand.Settings
                 {
                     t.IgnoreProperty(o => o.PlayImage);
                     t.IgnoreProperty(o => o.PauseImage);
+                    t.IgnoreProperty(o => o.CurrentImage);
+                    t.IgnoreProperty(o => o.Location);
                 });
 
-                cfg.ConfigureType<NextSongButtonAppearance>(t => t.IgnoreProperty(o => o.Image));
-                cfg.ConfigureType<PreviousSongButtonAppearance>(t => t.IgnoreProperty(o => o.Image));
+                cfg.ConfigureType<NextSongButtonAppearance>(t =>
+                {
+                    t.IgnoreProperty(o => o.Location);
+                    t.IgnoreProperty(o => o.Image);
+                });
+                cfg.ConfigureType<PreviousSongButtonAppearance>(t =>
+                {
+                    t.IgnoreProperty(o => o.Location);
+                    t.IgnoreProperty(o => o.Image);
+                });
                 cfg.ConfigureType<AlbumArtDisplay>(t =>
                 {
                     t.IgnoreProperty(o => o.Location);
