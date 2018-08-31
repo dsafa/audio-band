@@ -114,8 +114,8 @@
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AudioBandAppearance.cs" />
+    <Compile Include="ViewModels\AudioSourceStatus.cs" />
     <Compile Include="ViewModels\PlaybackControlsAppearance.cs" />
-    <Compile Include="ViewModels\PlaybackViewModel.cs" />
     <Compile Include="EnhancedProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
