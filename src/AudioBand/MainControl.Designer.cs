@@ -49,6 +49,7 @@
             // 
             // previousButton
             // 
+            this.previousButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.previousButton.FlatAppearance.BorderSize = 0;
             this.previousButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.previousButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -64,6 +65,7 @@
             // 
             // playPauseButton
             // 
+            this.playPauseButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.playPauseButton.FlatAppearance.BorderSize = 0;
             this.playPauseButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.playPauseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -79,6 +81,7 @@
             // 
             // nextButton
             // 
+            this.nextButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.nextButton.FlatAppearance.BorderSize = 0;
             this.nextButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.nextButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));

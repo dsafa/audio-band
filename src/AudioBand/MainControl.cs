@@ -95,7 +95,7 @@ namespace AudioBand
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Width), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Width));
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Height), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Height));
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Location), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Location));
-                playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.CurrentImage));
+                playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Image));
 
                 previousButton.DataBindings.Add(nameof(previousButton.Visible), _appearance.PreviousSongButtonAppearance, nameof(PreviousSongButtonAppearance.IsVisible));
                 previousButton.DataBindings.Add(nameof(previousButton.Width), _appearance.PreviousSongButtonAppearance, nameof(PreviousSongButtonAppearance.Width));
@@ -305,9 +305,7 @@ namespace AudioBand
                 return;
             }
 
-            _appearance.PlayPauseButtonAppearance.CurrentImage = _audioSourceStatus.IsPlaying 
-                ? _appearance.PlayPauseButtonAppearance.PlayImage 
-                : _appearance.PlayPauseButtonAppearance.PauseImage;
+            _appearance.PlayPauseButtonAppearance.IsPlaying = _audioSourceStatus.IsPlaying;
         }
 
         private void AudioBandAppearanceOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
