@@ -79,8 +79,8 @@
     </metro:MetroWindow.DataContext>
     <DockPanel LastChildFill="True">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-            <Button Margin="4" Width="70" Content="Cancel" Style="{DynamicResource SquareButtonStyle}"/>
-            <Button Margin="4" Width="70" Content="Save" Style="{StaticResource AccentedSquareButtonStyle}"/>
+            <Button x:Name="Save" Margin="4" Width="70" Content="Cancel" Style="{DynamicResource SquareButtonStyle}" Click="Save_OnClick"/>
+            <Button x:Name="Cancel" Margin="4" Width="70" Content="Save" Style="{StaticResource AccentedSquareButtonStyle}" Click="Cancel_OnClick"/>
         </StackPanel>
         <TabControl Margin="10" TabStripPlacement="Left">
             <TabItem  Header="General">
