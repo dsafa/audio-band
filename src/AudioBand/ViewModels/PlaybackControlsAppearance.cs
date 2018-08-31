@@ -16,6 +16,7 @@ namespace AudioBand.ViewModels
         private int _height = 12;
         private int _width = 73;
         private bool _isVisible = true;
+        private Image _currentImage = new Bitmap(1, 1);
 
         public Image PlayImage
         {
@@ -25,6 +26,7 @@ namespace AudioBand.ViewModels
                 if (Equals(value, _playImage)) return;
                 _playImage = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentImage));
             }
         }
 
@@ -47,6 +49,7 @@ namespace AudioBand.ViewModels
                 if (Equals(value, _pauseImage)) return;
                 _pauseImage = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentImage));
             }
         }
 
@@ -115,6 +118,17 @@ namespace AudioBand.ViewModels
                 _yPosition = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Location));
+            }
+        }
+
+        public Image CurrentImage
+        {
+            get => _currentImage;
+            set
+            {
+                if (Equals(value, _currentImage)) return;
+                _currentImage = value;
+                OnPropertyChanged();
             }
         }
 

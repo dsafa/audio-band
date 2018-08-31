@@ -104,7 +104,7 @@ namespace AudioBand
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Width), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Width));
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Height), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Height));
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Location), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Location));
-                // TODO play pause
+                playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.CurrentImage));
 
                 previousButton.DataBindings.Add(nameof(previousButton.Visible), _appearance.PreviousSongButtonAppearance, nameof(PreviousSongButtonAppearance.IsVisible));
                 previousButton.DataBindings.Add(nameof(previousButton.Width), _appearance.PreviousSongButtonAppearance, nameof(PreviousSongButtonAppearance.Width));
