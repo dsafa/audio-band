@@ -42,6 +42,12 @@ namespace AudioBand
         private DeskBandMenu _pluginSubMenu; 
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
 
+        public bool AlbumArtPopupIsVisible { get; set; }
+        public int AlbumArtPopupWidth { get; set; }
+        public int AlbumArtPopupHeight { get; set; }
+        public int AlbumArtPopupX { get; set; }
+        public int AlbumArtPopupY { get; set; }
+
         static MainControl()
         {
             var fileTarget = new FileTarget
@@ -109,6 +115,13 @@ namespace AudioBand
                 nextButton.DataBindings.Add(nameof(nextButton.Location), _appearance.NextSongButtonAppearance, nameof(NextSongButtonAppearance.Location));
                 nextButton.DataBindings.Add(nameof(nextButton.Image), _appearance.NextSongButtonAppearance, nameof(NextSongButtonAppearance.Image));
 
+                // Add bindings here since tooltips dont have any
+                DataBindings.Add(nameof(AlbumArtPopupIsVisible), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.IsVisible));
+                DataBindings.Add(nameof(AlbumArtPopupWidth), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.Width));
+                DataBindings.Add(nameof(AlbumArtPopupHeight), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.Height));
+                DataBindings.Add(nameof(AlbumArtPopupX), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.XOffset));
+                DataBindings.Add(nameof(AlbumArtPopupY), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.Margin));
+
                 _audioSourceManager = new AudioSourceManager();
                 _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
                 Options.ContextMenuItems = BuildContextMenu();
@@ -140,23 +153,7 @@ namespace AudioBand
 
         private void AlbumArtOnMouseHover(object o, EventArgs args)
         {
-            _albumArtTooltip.Size = new Size(_appearance.AlbumArtPopupAppearance.Width, _appearance.AlbumArtPopupAppearance.Height);
-            var margin = _appearance.AlbumArtPopupAppearance.Margin;
-            var xOffSet = _appearance.AlbumArtPopupAppearance.XOffset;
-            int yOffset = 0;
-
-            if (TaskbarInfo.Edge == Edge.Bottom)
-            {
-                yOffset = -_albumArtTooltip.Size.Height - margin;
-            }
-            else if (TaskbarInfo.Edge == Edge.Top)
-            {
-                yOffset = Height + margin;
-            }
-
-            var pos = new Point(xOffSet, yOffset);
-
-            _albumArtTooltip.ShowWithoutRequireFocus("Album Art", this, pos);
+            _albumArtTooltip.ShowWithoutRequireFocus("Album Art", this, TaskbarInfo);
         }
 
         private void AudioSourceManagerOnAudioSourcesChanged(object sender, EventArgs eventArgs)

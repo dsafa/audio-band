@@ -1,6 +1,8 @@
-﻿using Svg;
+﻿using System;
+using Svg;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
 namespace AudioBand
 {
@@ -65,6 +67,20 @@ namespace AudioBand
             svg.Width -= 3;
             svg.Height -= 3;
             return svg;
+        }
+
+        public static T As<T>(this Binding binding)
+        {
+            if (binding == null)
+            {
+                throw new Exception("Binding is null");
+            }
+
+            //Get binding value.
+            var manager = binding.BindingManagerBase;
+            var itemProperty = manager.GetItemProperties().Find(binding.BindingMemberInfo.BindingField, true);
+
+            return (T)itemProperty.GetValue(manager.Current);
         }
     }
 }
