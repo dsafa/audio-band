@@ -2,7 +2,9 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Runtime.CompilerServices;
+using Svg;
 
 namespace AudioBand.ViewModels
 {
@@ -13,7 +15,8 @@ namespace AudioBand.ViewModels
         private int _audioLength;
         private string _songName = "";
         private string _artist = "";
-        private Image _albumArt = new Bitmap(1, 1);
+        private Image _albumArt;
+        private Image _albumArtTooltip;
 
         public bool IsPlaying
         {
@@ -66,17 +69,6 @@ namespace AudioBand.ViewModels
             {
                 if (value == _artist) return;
                 _artist = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Image AlbumArt
-        {
-            get => _albumArt;
-            set
-            {
-                if (Equals(value, _albumArt)) return;
-                _albumArt = value;
                 OnPropertyChanged();
             }
         }

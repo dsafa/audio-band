@@ -59,6 +59,7 @@ namespace AudioBand.Settings
                 {
                     t.IgnoreProperty(o => o.Location);
                     t.IgnoreProperty(o => o.Placeholder);
+                    t.IgnoreProperty(o => o.CurrentAlbumArt);
                 });
                 cfg.ConfigureType<ProgressBarAppearance>(t => t.IgnoreProperty(o => o.Location));
             });
