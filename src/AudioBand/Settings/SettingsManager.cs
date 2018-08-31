@@ -45,7 +45,12 @@ namespace AudioBand.Settings
 
                 cfg.ConfigureType<NextSongButtonAppearance>(t => t.IgnoreProperty(o => o.Image));
                 cfg.ConfigureType<PreviousSongButtonAppearance>(t => t.IgnoreProperty(o => o.Image));
-                cfg.ConfigureType<AlbumArtDisplay>(t => t.IgnoreProperty(o => o.Placeholder));
+                cfg.ConfigureType<AlbumArtDisplay>(t =>
+                {
+                    t.IgnoreProperty(o => o.Location);
+                    t.IgnoreProperty(o => o.Placeholder);
+                });
+                cfg.ConfigureType<ProgressBarAppearance>(t => t.IgnoreProperty(o => o.Location));
             });
 
             if (!Directory.Exists(SettingsDirectory))
