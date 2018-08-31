@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using AudioBand.ViewModels;
 
 namespace AudioBand.Settings
 {
@@ -40,6 +41,16 @@ namespace AudioBand.Settings
                 cfg.ConfigureType<Font>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(Converters.FontToString)
                     .FromToml(tomlString => Converters.StringToFont(tomlString.Value))));
+
+                cfg.ConfigureType<PlayPauseButtonAppearance>(t =>
+                {
+                    t.IgnoreProperty(o => o.PlayImage);
+                    t.IgnoreProperty(o => o.PauseImage);
+                });
+
+                cfg.ConfigureType<NextSongButtonAppearance>(t => t.IgnoreProperty(o => o.Image));
+                cfg.ConfigureType<PreviousSongButtonAppearance>(t => t.IgnoreProperty(o => o.Image));
+                cfg.ConfigureType<AlbumArtDisplay>(t => t.IgnoreProperty(o => o.Placeholder));
             });
 
 

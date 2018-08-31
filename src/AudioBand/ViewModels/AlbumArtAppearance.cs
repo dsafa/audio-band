@@ -13,7 +13,7 @@ namespace AudioBand.ViewModels
 
     internal class AlbumArtDisplay : INotifyPropertyChanged
     {
-        private bool _isVisible;
+        private bool _isVisible = true;
         private int _width;
         private int _height;
         private int _xPosition;
