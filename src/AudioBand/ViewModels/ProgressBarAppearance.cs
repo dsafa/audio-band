@@ -1,19 +1,19 @@
 ﻿using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
-using System.Windows.Media;
 using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
     internal class ProgressBarAppearance : INotifyPropertyChanged
     {
-        private Color _foregroundColor;
-        private Color _backgroundColor;
-        private bool _isVisible;
-        private int _yPosition;
-        private int _xPosition;
-        private int _height;
-        private int _width;
+        private Color _foregroundColor = Color.DodgerBlue;
+        private Color _backgroundColor = Color.Black;
+        private bool _isVisible = true;
+        private int _yPosition = 28;
+        private int _xPosition = 0;
+        private int _height = 2;
+        private int _width = 250;
 
         public Color ForegroundColor
         {

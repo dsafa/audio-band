@@ -30,11 +30,11 @@
         {
             this.mainTable = new System.Windows.Forms.TableLayoutPanel();
             this.albumArt = new System.Windows.Forms.PictureBox();
+            this.nowPlayingText = new AudioBand.NowPlayingDisplay();
             this.buttonsTable = new System.Windows.Forms.TableLayoutPanel();
             this.previousButton = new System.Windows.Forms.Button();
             this.playPauseButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
-            this.nowPlayingText = new AudioBand.NowPlayingDisplay();
             this.audioProgress = new AudioBand.EnhancedProgressBar();
             this.mainTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.albumArt)).BeginInit();
@@ -60,7 +60,7 @@
             this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2F));
-            this.mainTable.Size = new System.Drawing.Size(300, 30);
+            this.mainTable.Size = new System.Drawing.Size(250, 30);
             this.mainTable.TabIndex = 0;
             // 
             // albumArt
@@ -75,6 +75,20 @@
             this.albumArt.TabStop = false;
             this.albumArt.MouseLeave += new System.EventHandler(this.AlbumArtOnMouseLeave);
             this.albumArt.MouseHover += new System.EventHandler(this.AlbumArtOnMouseHover);
+            // 
+            // nowPlayingText
+            // 
+            this.nowPlayingText.ArtistColor = System.Drawing.Color.Empty;
+            this.nowPlayingText.ArtistFont = null;
+            this.nowPlayingText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nowPlayingText.Location = new System.Drawing.Point(30, 0);
+            this.nowPlayingText.Margin = new System.Windows.Forms.Padding(0);
+            this.nowPlayingText.Name = "nowPlayingText";
+            this.nowPlayingText.Size = new System.Drawing.Size(220, 14);
+            this.nowPlayingText.TabIndex = 2;
+            this.nowPlayingText.Text = "label1";
+            this.nowPlayingText.TrackNameColor = System.Drawing.Color.White;
+            this.nowPlayingText.TrackNameFont = new System.Drawing.Font("Segoe UI", 8.5F);
             // 
             // buttonsTable
             // 
@@ -91,7 +105,7 @@
             this.buttonsTable.Name = "buttonsTable";
             this.buttonsTable.RowCount = 1;
             this.buttonsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.buttonsTable.Size = new System.Drawing.Size(270, 12);
+            this.buttonsTable.Size = new System.Drawing.Size(220, 12);
             this.buttonsTable.TabIndex = 3;
             // 
             // previousButton
@@ -105,7 +119,7 @@
             this.previousButton.Location = new System.Drawing.Point(0, 0);
             this.previousButton.Margin = new System.Windows.Forms.Padding(0);
             this.previousButton.Name = "previousButton";
-            this.previousButton.Size = new System.Drawing.Size(90, 12);
+            this.previousButton.Size = new System.Drawing.Size(73, 12);
             this.previousButton.TabIndex = 0;
             this.previousButton.UseVisualStyleBackColor = true;
             this.previousButton.Click += new System.EventHandler(this.PreviousButtonOnClick);
@@ -118,10 +132,10 @@
             this.playPauseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.playPauseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.playPauseButton.ForeColor = System.Drawing.Color.White;
-            this.playPauseButton.Location = new System.Drawing.Point(90, 0);
+            this.playPauseButton.Location = new System.Drawing.Point(73, 0);
             this.playPauseButton.Margin = new System.Windows.Forms.Padding(0);
             this.playPauseButton.Name = "playPauseButton";
-            this.playPauseButton.Size = new System.Drawing.Size(90, 12);
+            this.playPauseButton.Size = new System.Drawing.Size(73, 12);
             this.playPauseButton.TabIndex = 1;
             this.playPauseButton.UseVisualStyleBackColor = true;
             this.playPauseButton.Click += new System.EventHandler(this.PlayPauseButtonOnClick);
@@ -134,25 +148,13 @@
             this.nextButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.nextButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.nextButton.ForeColor = System.Drawing.Color.White;
-            this.nextButton.Location = new System.Drawing.Point(180, 0);
+            this.nextButton.Location = new System.Drawing.Point(146, 0);
             this.nextButton.Margin = new System.Windows.Forms.Padding(0);
             this.nextButton.Name = "nextButton";
-            this.nextButton.Size = new System.Drawing.Size(90, 12);
+            this.nextButton.Size = new System.Drawing.Size(74, 12);
             this.nextButton.TabIndex = 2;
             this.nextButton.UseVisualStyleBackColor = true;
             this.nextButton.Click += new System.EventHandler(this.NextButtonOnClick);
-            // 
-            // nowPlayingText
-            // 
-            this.nowPlayingText.ArtistColor = System.Drawing.Color.Empty;
-            this.nowPlayingText.ArtistFont = null;
-            this.nowPlayingText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nowPlayingText.Location = new System.Drawing.Point(30, 0);
-            this.nowPlayingText.Margin = new System.Windows.Forms.Padding(0);
-            this.nowPlayingText.Name = "nowPlayingText";
-            this.nowPlayingText.Size = new System.Drawing.Size(270, 14);
-            this.nowPlayingText.TabIndex = 2;
-            this.nowPlayingText.Text = "label1";
             // 
             // audioProgress
             // 
@@ -161,9 +163,9 @@
             this.audioProgress.Location = new System.Drawing.Point(0, 28);
             this.audioProgress.Margin = new System.Windows.Forms.Padding(0);
             this.audioProgress.Name = "audioProgress";
-            this.audioProgress.Size = new System.Drawing.Size(300, 2);
+            this.audioProgress.Progress = 100D;
+            this.audioProgress.Size = new System.Drawing.Size(250, 2);
             this.audioProgress.TabIndex = 3;
-            this.audioProgress.Progress = 100;
             // 
             // MainControl
             // 
@@ -174,10 +176,10 @@
             this.BackColor = System.Drawing.Color.Black;
             this.Controls.Add(this.mainTable);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MaximumSize = new System.Drawing.Size(300, 40);
-            this.MinimumSize = new System.Drawing.Size(300, 30);
+            this.MaximumSize = new System.Drawing.Size(250, 40);
+            this.MinimumSize = new System.Drawing.Size(250, 30);
             this.Name = "MainControl";
-            this.Size = new System.Drawing.Size(300, 30);
+            this.Size = new System.Drawing.Size(250, 30);
             this.mainTable.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.albumArt)).EndInit();
             this.buttonsTable.ResumeLayout(false);

@@ -17,15 +17,20 @@ using System.Windows.Navigation;
 using AudioBand.ViewModels;
 using MahApps.Metro.Controls;
 using NLog;
+using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
 namespace AudioBand.Settings
 {
     internal partial class SettingsWindow
     {
-        private ILogger _logger = LogManager.GetCurrentClassLogger();
-        internal AppearanceViewModel Appearance { get; set; }
+        internal event EventHandler Saved;
 
-        internal SettingsWindow(AppearanceViewModel appearance)
+        private ILogger _logger = LogManager.GetCurrentClassLogger();
+        internal Appearance Appearance { get; set; }
+
+        public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
+
+        internal SettingsWindow(Appearance appearance)
         {
             Appearance = appearance;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
@@ -55,6 +60,7 @@ namespace AudioBand.Settings
         {
             e.Cancel = true;
             Hide();
+            Saved?.Invoke(this, EventArgs.Empty);
         }
     }
 }

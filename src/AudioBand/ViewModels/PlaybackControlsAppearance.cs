@@ -5,24 +5,17 @@ using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
-    internal class PlaybackControlsAppearance
-    {
-        public PlayPauseButtonAppearance PlayPauseButtonAppearance { get; set; }
-        public NextSongButtonAppearance NextSongButtonAppearance { get; set; }
-        public PreviousSongButtonAppearance PreviousSongButtonAppearance { get; set; }
-    }
-
     internal class PlayPauseButtonAppearance : INotifyPropertyChanged
     {
         private Image _playImage;
         private string _playImagePath;
         private Image _pauseImage;
         private string _pauseImagePath;
-        private int _yPosition;
-        private int _xPosition;
-        private int _height;
-        private int _width;
-        private bool _isVisible;
+        private int _yPosition = 14;
+        private int _xPosition = 103;
+        private int _height = 12;
+        private int _width = 73;
+        private bool _isVisible = true;
 
         public Image PlayImage
         {
@@ -136,11 +129,11 @@ namespace AudioBand.ViewModels
     {
         private Image _image;
         private string _imagePath;
-        private int _yPosition;
-        private int _xPosition;
-        private int _height;
-        private int _width;
-        private bool _isVisible;
+        private int _yPosition = 14;
+        private int _xPosition = 176;
+        private int _height = 12;
+        private int _width = 73;
+        private bool _isVisible = true;
 
         public Image Image
         {
@@ -232,11 +225,11 @@ namespace AudioBand.ViewModels
     {
         private Image _image;
         private string _imagePath;
-        private bool _isVisible;
-        private int _width;
-        private int _height;
-        private int _xPosition;
-        private int _yPosition;
+        private bool _isVisible = true;
+        private int _width = 73;
+        private int _height = 12;
+        private int _xPosition = 30;
+        private int _yPosition = 14;
 
         public Image Image
         {
