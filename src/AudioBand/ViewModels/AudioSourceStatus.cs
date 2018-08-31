@@ -15,8 +15,6 @@ namespace AudioBand.ViewModels
         private int _audioLength;
         private string _songName = "";
         private string _artist = "";
-        private Image _albumArt;
-        private Image _albumArtTooltip;
 
         public bool IsPlaying
         {

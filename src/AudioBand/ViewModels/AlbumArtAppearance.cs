@@ -99,7 +99,7 @@ namespace AudioBand.ViewModels
             {
                 _placeholderPath = value;
                 OnPropertyChanged();
-                UpdatePlaceholder();
+                LoadPlaceholder();
             }
         }
 
@@ -124,18 +124,21 @@ namespace AudioBand.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void UpdatePlaceholder()
+        public AlbumArtDisplay()
+        {
+            LoadPlaceholder();
+        }
+
+        private void LoadPlaceholder()
         {
             try
             {
-                Placeholder = string.IsNullOrEmpty(_placeholderPath) ? DefaultAlbumArtPlaceholderSvg.ToBitmap(512, 512) : Image.FromFile(_placeholderPath);
+                Placeholder = string.IsNullOrEmpty(_placeholderPath) ? DefaultAlbumArtPlaceholderSvg.ToBitmap() : Image.FromFile(_placeholderPath);
             }
             catch (Exception e)
             {
-                // Ignored
+                Placeholder = DefaultAlbumArtPlaceholderSvg.ToBitmap();
             }
-
-            OnPropertyChanged(nameof(Placeholder));
         }
     }
 
@@ -205,10 +208,11 @@ namespace AudioBand.ViewModels
 
         public Image CurrentAlbumArt
         {
-            get => _currentAlbumArt;
+            get => _currentAlbumArt.Resize(Width, Height);
             set
             {
-                _currentAlbumArt = value.Resize(Width, Height);
+                if (value == _currentAlbumArt) return;
+                _currentAlbumArt = value;
                 OnPropertyChanged();
             }
         }

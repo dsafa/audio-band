@@ -41,8 +41,9 @@ namespace AudioBand.Settings
                 {
                     t.IgnoreProperty(o => o.PlayImage);
                     t.IgnoreProperty(o => o.PauseImage);
-                    t.IgnoreProperty(o => o.CurrentImage);
+                    t.IgnoreProperty(o => o.Image);
                     t.IgnoreProperty(o => o.Location);
+                    t.IgnoreProperty(o => o.IsPlaying);
                 });
 
                 cfg.ConfigureType<NextSongButtonAppearance>(t =>
@@ -61,6 +62,7 @@ namespace AudioBand.Settings
                     t.IgnoreProperty(o => o.Placeholder);
                     t.IgnoreProperty(o => o.CurrentAlbumArt);
                 });
+                cfg.ConfigureType<AlbumArtPopup>(t => t.IgnoreProperty(o => o.CurrentAlbumArt));
                 cfg.ConfigureType<ProgressBarAppearance>(t => t.IgnoreProperty(o => o.Location));
             });
 

@@ -1,27 +1,27 @@
-﻿using System;
+﻿using AudioBand.Annotations;
+using Svg;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
-using AudioBand.Annotations;
-using Svg;
 
 namespace AudioBand.ViewModels
 {
     internal class PlayPauseButtonAppearance : INotifyPropertyChanged
     {
-        private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
+        private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play)).SizeFix();
         private static readonly SvgDocument DefaultPauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
-        private Image _playImage = new Bitmap(1, 1);
-        private string _playImagePath;
-        private Image _pauseImage = new Bitmap(1, 1);
-        private string _pauseImagePath;
+        private Image _playImage;
+        private string _playImagePath = "";
+        private Image _pauseImage;
+        private string _pauseImagePath = "";
         private int _yPosition = 14;
         private int _xPosition = 103;
         private int _height = 12;
         private int _width = 73;
         private bool _isVisible = true;
-        private Image _currentImage = new Bitmap(1, 1);
+        private bool _isPlaying;
 
         public Image PlayImage
         {
@@ -31,7 +31,7 @@ namespace AudioBand.ViewModels
                 if (Equals(value, _playImage)) return;
                 _playImage = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(CurrentImage));
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -40,21 +40,9 @@ namespace AudioBand.ViewModels
             get => _playImagePath;
             set
             {
-                if (value == _playImagePath) return;
                 _playImagePath = value;
-
-                try
-                {
-                    PlayImage = _playImagePath == null ? DefaultPlayButtonSvg.ToBitmap(Width, Height) : Image.FromFile(_playImagePath);
-                }
-                catch (Exception e)
-                {
-                    // Ignored
-                }
-                finally
-                {
-                    OnPropertyChanged();
-                }
+                OnPropertyChanged();
+                LoadPlayImage();
             }
         }
 
@@ -66,7 +54,7 @@ namespace AudioBand.ViewModels
                 if (Equals(value, _pauseImage)) return;
                 _pauseImage = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(CurrentImage));
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -75,21 +63,9 @@ namespace AudioBand.ViewModels
             get => _pauseImagePath;
             set
             {
-                if (value == _pauseImagePath) return;
                 _pauseImagePath = value;
-
-                try
-                {
-                    PauseImage = _playImagePath == null ? DefaultPauseButtonSvg.ToBitmap(Width, Height) : Image.FromFile(_playImagePath);
-                }
-                catch (Exception e)
-                {
-                    // Ignored
-                }
-                finally
-                {
-                    OnPropertyChanged();
-                }
+                LoadPauseImage();
+                OnPropertyChanged();
             }
         }
 
@@ -112,6 +88,7 @@ namespace AudioBand.ViewModels
                 if (value == _width) return;
                 _width = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -123,6 +100,7 @@ namespace AudioBand.ViewModels
                 if (value == _height) return;
                 _height = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -150,14 +128,22 @@ namespace AudioBand.ViewModels
             }
         }
 
-        public Image CurrentImage
+        public Image Image
         {
-            get => _currentImage;
+            get
+            {
+                var image = _isPlaying ? PlayImage : PauseImage;
+                return image.Scale(Width, Height);
+            }
+        }
+
+        public bool IsPlaying
+        {
+            get => _isPlaying;
             set
             {
-                if (Equals(value, _currentImage)) return;
-                _currentImage = value;
-                OnPropertyChanged();
+                _isPlaying = value;
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -170,13 +156,43 @@ namespace AudioBand.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public PlayPauseButtonAppearance()
+        {
+            LoadPlayImage();
+            LoadPauseImage();
+        }
+
+        private void LoadPauseImage()
+        {
+            try
+            {
+                PauseImage = string.IsNullOrEmpty(PauseImagePath) ? DefaultPauseButtonSvg.ToBitmap() : Image.FromFile(_pauseImagePath);
+            }
+            catch (Exception e)
+            {
+                PauseImage = DefaultPauseButtonSvg.ToBitmap();
+            }
+        }
+
+        private void LoadPlayImage()
+        {
+            try
+            {
+                PlayImage = string.IsNullOrEmpty(_playImagePath) ? DefaultPlayButtonSvg.ToBitmap() : Image.FromFile(_playImagePath);
+            }
+            catch (Exception e)
+            {
+                PlayImage = DefaultPlayButtonSvg.ToBitmap();
+            }
+        }
     }
 
     internal class NextSongButtonAppearance : INotifyPropertyChanged
     {
         private static readonly SvgDocument DefaultNextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
-        private Image _image = new Bitmap(1, 1);
-        private string _imagePath;
+        private Image _image;
+        private string _imagePath = "";
         private int _yPosition = 14;
         private int _xPosition = 176;
         private int _height = 12;
@@ -185,7 +201,7 @@ namespace AudioBand.ViewModels
 
         public Image Image
         {
-            get => _image;
+            get => _image.Scale(Width, Height);
             set
             {
                 if (Equals(value, _image)) return;
@@ -199,21 +215,9 @@ namespace AudioBand.ViewModels
             get => _imagePath;
             set
             {
-                if (value == _imagePath) return;
                 _imagePath = value;
-
-                try
-                {
-                    Image = _imagePath == null ? DefaultNextButtonSvg.ToBitmap(Width, Height) : Image.FromFile(_imagePath);
-                }
-                catch (Exception e)
-                {
-                    // Ignored
-                }
-                finally
-                {
-                    OnPropertyChanged();
-                }
+                OnPropertyChanged();
+                LoadImage();
             }
         }
 
@@ -236,6 +240,7 @@ namespace AudioBand.ViewModels
                 if (value == _width) return;
                 _width = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -247,6 +252,7 @@ namespace AudioBand.ViewModels
                 if (value == _height) return;
                 _height = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -283,13 +289,30 @@ namespace AudioBand.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public NextSongButtonAppearance()
+        {
+            LoadImage();
+        }
+
+        private void LoadImage()
+        {
+            try
+            {
+                Image = string.IsNullOrEmpty(_imagePath) ? DefaultNextButtonSvg.ToBitmap() : Image.FromFile(_imagePath);
+            }
+            catch (Exception e)
+            {
+                Image = DefaultNextButtonSvg.ToBitmap();
+            }
+        }
     }
 
     internal class PreviousSongButtonAppearance : INotifyPropertyChanged
     {
-        private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
-        private Image _image = new Bitmap(1, 1);
-        private string _imagePath;
+        private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous)).SizeFix();
+        private Image _image;
+        private string _imagePath = "";
         private bool _isVisible = true;
         private int _width = 73;
         private int _height = 12;
@@ -298,7 +321,7 @@ namespace AudioBand.ViewModels
 
         public Image Image
         {
-            get => _image;
+            get => _image.Scale(Width, Height);
             set
             {
                 if (Equals(value, _image)) return;
@@ -312,21 +335,9 @@ namespace AudioBand.ViewModels
             get => _imagePath;
             set
             {
-                if (value == _imagePath) return;
                 _imagePath = value;
-
-                try
-                {
-                    Image = _imagePath == null ? DefaultPreviousButtonSvg.ToBitmap(Width, Height) : Image.FromFile(_imagePath);
-                }
-                catch (Exception e)
-                {
-                    // Ignored
-                }
-                finally
-                {
-                    OnPropertyChanged();
-                }
+                OnPropertyChanged();
+                LoadImage();
             }
         }
 
@@ -349,6 +360,7 @@ namespace AudioBand.ViewModels
                 if (value == _width) return;
                 _width = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -360,6 +372,7 @@ namespace AudioBand.ViewModels
                 if (value == _height) return;
                 _height = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Image));
             }
         }
 
@@ -395,6 +408,23 @@ namespace AudioBand.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public PreviousSongButtonAppearance()
+        {
+            LoadImage();
+        }
+
+        private void LoadImage()
+        {
+            try
+            {
+                Image = string.IsNullOrEmpty(_imagePath) ? DefaultPreviousButtonSvg.ToBitmap() : Image.FromFile(_imagePath);
+            }
+            catch (Exception e)
+            {
+                Image = DefaultPreviousButtonSvg.ToBitmap();
+            }
         }
     }
 }
