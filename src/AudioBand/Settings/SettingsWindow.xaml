@@ -412,7 +412,7 @@
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding AlbumArtPopupAppearance.XOffset, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Margin" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding AlbumArtPopupAppearance.Margin, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding AlbumArtPopupAppearance.Margin, Mode=TwoWay}"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
