@@ -24,10 +24,7 @@ namespace AudioBand.Settings
     internal partial class SettingsWindow
     {
         internal event EventHandler Saved;
-
-        private ILogger _logger = LogManager.GetCurrentClassLogger();
         internal Appearance Appearance { get; set; }
-
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
 
         internal SettingsWindow(Appearance appearance)
@@ -37,7 +34,6 @@ namespace AudioBand.Settings
 
             InitializeComponent();
             DataContext = Appearance;
-            _logger.Debug($"app {Appearance.AudioBandAppearance}");
         }
 
         // Problem loading xceed.wpf.toolkit assembly normally
@@ -60,7 +56,17 @@ namespace AudioBand.Settings
         {
             e.Cancel = true;
             Hide();
+        }
+
+        private void Save_OnClick(object sender, RoutedEventArgs e)
+        {
             Saved?.Invoke(this, EventArgs.Empty);
+            Close();
+        }
+
+        private void Cancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
