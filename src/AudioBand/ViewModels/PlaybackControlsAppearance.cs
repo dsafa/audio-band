@@ -1,12 +1,17 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Runtime.CompilerServices;
 using AudioBand.Annotations;
+using Svg;
 
 namespace AudioBand.ViewModels
 {
     internal class PlayPauseButtonAppearance : INotifyPropertyChanged
     {
+        private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
+        private static readonly SvgDocument DefaultPauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
         private Image _playImage = new Bitmap(1, 1);
         private string _playImagePath;
         private Image _pauseImage = new Bitmap(1, 1);
@@ -37,7 +42,19 @@ namespace AudioBand.ViewModels
             {
                 if (value == _playImagePath) return;
                 _playImagePath = value;
-                OnPropertyChanged();
+
+                try
+                {
+                    PlayImage = _playImagePath == null ? DefaultPlayButtonSvg.ToBitmap(Width, Height) : Image.FromFile(_playImagePath);
+                }
+                catch (Exception e)
+                {
+                    // Ignored
+                }
+                finally
+                {
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -60,7 +77,19 @@ namespace AudioBand.ViewModels
             {
                 if (value == _pauseImagePath) return;
                 _pauseImagePath = value;
-                OnPropertyChanged();
+
+                try
+                {
+                    PauseImage = _playImagePath == null ? DefaultPauseButtonSvg.ToBitmap(Width, Height) : Image.FromFile(_playImagePath);
+                }
+                catch (Exception e)
+                {
+                    // Ignored
+                }
+                finally
+                {
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -145,6 +174,7 @@ namespace AudioBand.ViewModels
 
     internal class NextSongButtonAppearance : INotifyPropertyChanged
     {
+        private static readonly SvgDocument DefaultNextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private Image _image = new Bitmap(1, 1);
         private string _imagePath;
         private int _yPosition = 14;
@@ -171,7 +201,19 @@ namespace AudioBand.ViewModels
             {
                 if (value == _imagePath) return;
                 _imagePath = value;
-                OnPropertyChanged();
+
+                try
+                {
+                    Image = _imagePath == null ? DefaultNextButtonSvg.ToBitmap(Width, Height) : Image.FromFile(_imagePath);
+                }
+                catch (Exception e)
+                {
+                    // Ignored
+                }
+                finally
+                {
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -245,6 +287,7 @@ namespace AudioBand.ViewModels
 
     internal class PreviousSongButtonAppearance : INotifyPropertyChanged
     {
+        private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private Image _image = new Bitmap(1, 1);
         private string _imagePath;
         private bool _isVisible = true;
@@ -271,7 +314,19 @@ namespace AudioBand.ViewModels
             {
                 if (value == _imagePath) return;
                 _imagePath = value;
-                OnPropertyChanged();
+
+                try
+                {
+                    Image = _imagePath == null ? DefaultPreviousButtonSvg.ToBitmap(Width, Height) : Image.FromFile(_imagePath);
+                }
+                catch (Exception e)
+                {
+                    // Ignored
+                }
+                finally
+                {
+                    OnPropertyChanged();
+                }
             }
         }
 

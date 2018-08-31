@@ -31,13 +31,6 @@ namespace AudioBand
     [CSDeskBandRegistration(Name = "Audio Band")]
     public partial class MainControl : CSDeskBandWin
     {
-        private static readonly SvgDocument PlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
-        private static readonly SvgDocument PauseButtonSvg = SvgDocument.Open<SvgDocument>(new  MemoryStream(Properties.Resources.pause));
-        private static readonly SvgDocument NextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
-        private static readonly SvgDocument PreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
-        private static readonly SvgDocument AlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
-        private const string LocationXPropertyName = "Location.X";
-        private const string LocationYPropertyName = "Location.Y";
         private readonly AudioSourceStatus _audioSourceStatus = new AudioSourceStatus();
         private readonly AudioSourceManager _audioSourceManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
@@ -47,7 +40,6 @@ namespace AudioBand
         private readonly Appearance _appearance;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
-        private Image _albumArt = AlbumArtPlaceholderSvg.ToBitmap(); // Used so album art can be resized
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
 
         static MainControl()
@@ -89,8 +81,7 @@ namespace AudioBand
                 albumArt.DataBindings.Add(nameof(albumArt.Width), _appearance.AlbumArtAppearance, nameof(AlbumArtDisplay.Width));
                 albumArt.DataBindings.Add(nameof(albumArt.Height), _appearance.AlbumArtAppearance, nameof(AlbumArtDisplay.Height));
                 albumArt.DataBindings.Add(nameof(albumArt.Location), _appearance.AlbumArtAppearance, nameof(AlbumArtDisplay.Location));
-                albumArt.DataBindings.Add(nameof(albumArt.Image), _audioSourceStatus, nameof(AudioSourceStatus.AlbumArt));
-                // TODO load placeholder
+                albumArt.DataBindings.Add(nameof(albumArt.Image), _appearance.AlbumArtAppearance, nameof(AlbumArtDisplay.CurrentAlbumArt));
 
                 audioProgress.DataBindings.Add(nameof(audioProgress.Visible), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.IsVisible));
                 audioProgress.DataBindings.Add(nameof(audioProgress.Width), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.Width));
@@ -123,6 +114,7 @@ namespace AudioBand
                 Options.ContextMenuItems = BuildContextMenu();
 
                 SelectAudioSourceFromSettings();
+                ResetState();
             }
             catch (ReflectionTypeLoadException e)
             {
@@ -250,7 +242,6 @@ namespace AudioBand
             _audioSourceTokenSource.Cancel();
             await source.DeactivateAsync();
 
-            ResetState();
             _settingsManager.AudioSource = null;
         }
 
@@ -295,27 +286,28 @@ namespace AudioBand
 
             _logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
 
-            _albumArt = trackInfoChangedEventArgs.AlbumArt ?? AlbumArtPlaceholderSvg.ToBitmap();
-            _albumArtTooltip.AlbumArt = _albumArt;
-
             BeginInvoke(new Action(() =>
             {
-                //_audioSourceStatus.NowPlayingText = new NowPlayingText
-                //{
-                //    Artist = trackInfoChangedEventArgs.Artist,
-                //    TrackName = trackInfoChangedEventArgs.TrackName
-                //};
+                var art = trackInfoChangedEventArgs.AlbumArt ?? _appearance.AlbumArtAppearance.Placeholder;
+                _appearance.AlbumArtAppearance.CurrentAlbumArt = art;
+                _appearance.AlbumArtPopupAppearance.CurrentAlbumArt = art;
+                _albumArtTooltip.AlbumArt = _appearance.AlbumArtPopupAppearance.CurrentAlbumArt;
 
-                UpdateAlbumArt(_albumArt);
+                _audioSourceStatus.Artist = trackInfoChangedEventArgs.Artist;
+                _audioSourceStatus.SongName = trackInfoChangedEventArgs.TrackName;
             }));
         }
 
         private void AudioSourceStatusOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            if (propertyChangedEventArgs.PropertyName == nameof(AudioSourceStatus.IsPlaying))
+            if (propertyChangedEventArgs.PropertyName != nameof(AudioSourceStatus.IsPlaying))
             {
-                UpdateControlSvgs();
+                return;
             }
+
+            _appearance.PlayPauseButtonAppearance.CurrentImage = _audioSourceStatus.IsPlaying 
+                ? _appearance.PlayPauseButtonAppearance.PlayImage 
+                : _appearance.PlayPauseButtonAppearance.PauseImage;
         }
 
         private void AudioBandAppearanceOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -353,54 +345,6 @@ namespace AudioBand
             await (_currentAudioSource?.NextTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
         }
 
-        private void UpdateAlbumArt(Image newAlbumArt)
-        {
-            var sizedAlbumArt = new Bitmap(1, 1);
-            using (var graphics = Graphics.FromImage(sizedAlbumArt))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphics.DrawImage(newAlbumArt, 0, 0, sizedAlbumArt.Width, sizedAlbumArt.Height);
-            }
-
-            //_audioSourceStatus.AlbumArt = sizedAlbumArt;
-        }
-
-        // Update the svgs for play/pause, prev, next buttons
-        private void UpdateControlSvgs()
-        {
-            // Issues with svg so need padding
-            const int padding = 3;
-            var height = padding;
-
-            SvgDocument playPauseSvg = _audioSourceStatus.IsPlaying ? PauseButtonSvg : PlayButtonSvg;
-            playPauseSvg.Width = playPauseButton.Width;
-            playPauseSvg.Height = height;
-            //_audioSourceStatus.PlayPauseButtonBitmap = playPauseSvg.ToBitmap();
-
-            NextButtonSvg.Width = nextButton.Width;
-            NextButtonSvg.Height = height;
-            //_audioSourceStatus.NextButtonBitmap = NextButtonSvg.ToBitmap();
-
-            PreviousButtonSvg.Width = previousButton.Width;
-            PreviousButtonSvg.Height = height;
-            //_audioSourceStatus.PreviousButtonBitmap = PreviousButtonSvg.ToBitmap();
-        }
-
-        // Reset all images to blank state
-        private void ResetState()
-        {
-            var placeholder = AlbumArtPlaceholderSvg.ToBitmap();
-            _albumArt = placeholder;
-            UpdateAlbumArt(placeholder);
-            _audioSourceStatus.IsPlaying = false;
-            _audioSourceStatus.AudioProgress = 0;
-            _albumArtTooltip.AlbumArt = null;
-        }
-
         protected override void OnClose()
         {
             base.OnClose();
@@ -410,6 +354,18 @@ namespace AudioBand
         private void SettingsWindowOnSaved(object sender, EventArgs eventArgs)
         {
             _settingsManager.Save();
+        }
+
+        private void ResetState()
+        {
+            var art = _appearance.AlbumArtAppearance.Placeholder;
+            _appearance.AlbumArtAppearance.CurrentAlbumArt = art;
+            _appearance.AlbumArtPopupAppearance.CurrentAlbumArt = art;
+            _albumArtTooltip.AlbumArt = _appearance.AlbumArtPopupAppearance.CurrentAlbumArt;
+
+            _audioSourceStatus.Artist = "";
+            _audioSourceStatus.SongName = "";
+            _audioSourceStatus.IsPlaying = false;
         }
 
         private void SelectAudioSourceFromSettings()

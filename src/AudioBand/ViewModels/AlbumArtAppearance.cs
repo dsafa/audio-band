@@ -1,7 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Runtime.CompilerServices;
 using AudioBand.Annotations;
+using NLog;
+using Svg;
+using AudioBand;
 
 namespace AudioBand.ViewModels
 {
@@ -14,6 +19,8 @@ namespace AudioBand.ViewModels
         private int _yPosition = 0;
         private Image _placeholder;
         private string _placeholderPath;
+        private Image _currentAlbumArt = new Bitmap(1, 1);
+        private static readonly SvgDocument DefaultAlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
 
         public bool IsVisible
         {
@@ -34,6 +41,7 @@ namespace AudioBand.ViewModels
                 if (value == _width) return;
                 _width = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentAlbumArt));
             }
         }
 
@@ -45,6 +53,7 @@ namespace AudioBand.ViewModels
                 if (value == _height) return;
                 _height = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentAlbumArt));
             }
         }
 
@@ -88,8 +97,19 @@ namespace AudioBand.ViewModels
             get => _placeholderPath;
             set
             {
-                if (value == _placeholderPath) return;
                 _placeholderPath = value;
+                OnPropertyChanged();
+                UpdatePlaceholder();
+            }
+        }
+
+        public Image CurrentAlbumArt
+        {
+            get => _currentAlbumArt.Resize(Width, Height);
+            set
+            {
+                if (value == _currentAlbumArt) return;
+                _currentAlbumArt = value;
                 OnPropertyChanged();
             }
         }
@@ -103,6 +123,20 @@ namespace AudioBand.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        private void UpdatePlaceholder()
+        {
+            try
+            {
+                Placeholder = string.IsNullOrEmpty(_placeholderPath) ? DefaultAlbumArtPlaceholderSvg.ToBitmap(512, 512) : Image.FromFile(_placeholderPath);
+            }
+            catch (Exception e)
+            {
+                // Ignored
+            }
+
+            OnPropertyChanged(nameof(Placeholder));
+        }
     }
 
     internal class AlbumArtPopup : INotifyPropertyChanged
@@ -112,6 +146,7 @@ namespace AudioBand.ViewModels
         private int _height = 250;
         private int _xOffset;
         private int _margin;
+        private Image _currentAlbumArt = new Bitmap(1, 1);
 
         public bool IsVisible
         {
@@ -164,6 +199,16 @@ namespace AudioBand.ViewModels
             {
                 if (value == _margin) return;
                 _margin = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Image CurrentAlbumArt
+        {
+            get => _currentAlbumArt;
+            set
+            {
+                _currentAlbumArt = value.Resize(Width, Height);
                 OnPropertyChanged();
             }
         }

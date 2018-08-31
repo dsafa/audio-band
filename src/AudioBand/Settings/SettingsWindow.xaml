@@ -47,7 +47,11 @@
             </Style>
             <Style x:Key="GridSizeInput" TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource GridNumericInput}">
                 <Setter Property="NumericInputMode" Value="Numbers"/>
-                <Setter Property="Minimum" Value="0"/>
+                <Setter Property="Minimum" Value="1"/>
+                <Setter Property="Interval" Value="1"/>
+            </Style>
+            <Style x:Key="GridPosInput" TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource GridNumericInput}">
+                <Setter Property="NumericInputMode" Value="Numbers"/>
                 <Setter Property="Interval" Value="1"/>
             </Style>
             <Style x:Key="GridFontSizeInput" TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource GridNumericInput}">
@@ -132,10 +136,10 @@
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlayPauseButtonAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlayPauseButtonAppearance.XPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridPosInput}" Value="{Binding PlayPauseButtonAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PlayPauseButtonAppearance.YPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridPosInput}" Value="{Binding PlayPauseButtonAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Play Button Image" Style="{StaticResource GridLabel}"/>
                             <Label Grid.Row="5" Grid.Column="1" Content="{Binding PlayPauseButtonAppearance.PlayImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
@@ -172,10 +176,10 @@
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding NextSongButtonAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding NextSongButtonAppearance.XPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridPosInput}" Value="{Binding NextSongButtonAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding NextSongButtonAppearance.YPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridPosInput}" Value="{Binding NextSongButtonAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" Style="{StaticResource GridLabel}"/>
                             <Label Grid.Row="5" Grid.Column="1" Content="{Binding NextSongButtonAppearance.ImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
@@ -208,10 +212,10 @@
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PreviousSongButtonAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PreviousSongButtonAppearance.XPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridPosInput}" Value="{Binding PreviousSongButtonAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding PreviousSongButtonAppearance.YPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridPosInput}" Value="{Binding PreviousSongButtonAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" Style="{StaticResource GridLabel}"/>
                             <Label Grid.Row="5" Grid.Column="1" Content="{Binding PreviousSongButtonAppearance.ImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
@@ -267,10 +271,10 @@
                                         <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding Height, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="4" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                                        <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding XPosition, Mode=TwoWay}"/>
+                                        <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding XPosition, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="5" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                                        <metro:NumericUpDown Grid.Row="5" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding YPosition, Mode=TwoWay}"/>
+                                        <metro:NumericUpDown Grid.Row="5" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding YPosition, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="6" Grid.Column="0" Content="Font Family" Style="{StaticResource GridLabel}"/>
                                         <TextBox Grid.Row="6" Grid.Column="1" metro:TextBoxHelper.ClearTextButton="True" Style="{StaticResource GridTextBox}" Text="{Binding FontFamily, Mode=TwoWay}"/>
@@ -331,10 +335,10 @@
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ProgressBarAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ProgressBarAppearance.XPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding ProgressBarAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ProgressBarAppearance.YPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding ProgressBarAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Background Colour" Style="{StaticResource GridLabel}"/>
                             <xctk:ColorPicker Grid.Row="5" Grid.Column="1" Style="{StaticResource GridColorPicker}" SelectedColor="{Binding ProgressBarAppearance.BackgroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
@@ -372,10 +376,10 @@
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding AlbumArtAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding AlbumArtAppearance.XPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridPosInput}" Value="{Binding AlbumArtAppearance.XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridSizeInput}" Value="{Binding AlbumArtAppearance.YPosition, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource GridPosInput}" Value="{Binding AlbumArtAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Placeholder Image" Style="{StaticResource GridLabel}"/>
                             <Label Grid.Row="5" Grid.Column="1" Content="{Binding AlbumArtAppearance.PlaceholderPath, Mode=TwoWay}" Style="{StaticResource GridLabel}"/>
@@ -405,7 +409,7 @@
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding AlbumArtPopupAppearance.Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" Style="{StaticResource GridLabel}"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding AlbumArtPopupAppearance.XOffset, Mode=TwoWay}"/>
+                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding AlbumArtPopupAppearance.XOffset, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Margin" Style="{StaticResource GridLabel}"/>
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding AlbumArtPopupAppearance.Margin, Mode=TwoWay}"/>
