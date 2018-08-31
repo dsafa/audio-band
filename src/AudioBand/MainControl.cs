@@ -38,7 +38,7 @@ namespace AudioBand
         private static readonly SvgDocument AlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
         private readonly int _maxHeight = CSDeskBandOptions.TaskbarHorizontalHeightLarge;
         private readonly int _minHeight = CSDeskBandOptions.TaskbarHorizontalHeightSmall;
-        private readonly PlaybackViewModel _trackViewModel = new PlaybackViewModel();
+        private readonly AudioSourceStatus _trackViewModel = new AudioSourceStatus();
         private readonly AudioSourceManager _audioSourceManager;
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(FixedWidth, FixedWidth) };
@@ -89,18 +89,18 @@ namespace AudioBand
                 _trackViewModel.PropertyChanged += TrackViewModelOnPropertyChanged;
                 SizeChanged += OnSizeChanged;
 
-                //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _trackViewModel, nameof(PlaybackViewModel.NowPlayingText));
+                //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.NowPlayingText), _trackViewModel, nameof(AudioSourceStatus.NowPlayingText));
                 //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistFont), audioBandAppearance, nameof(AppearanceViewModel.NowPlayingArtistFont));
                 //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.ArtistColor), audioBandAppearance, nameof(AppearanceViewModel.NowPlayingArtistColor));
                 //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameFont), audioBandAppearance, nameof(AppearanceViewModel.NowPlayingTrackNameFont));
                 //nowPlayingText.DataBindings.Add(nameof(nowPlayingText.TrackNameColor), audioBandAppearance, nameof(AppearanceViewModel.NowPlayingTrackNameColor));
-                //albumArt.DataBindings.Add(nameof(albumArt.Image), _trackViewModel, nameof(PlaybackViewModel.AlbumArt));
-                //audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _trackViewModel, nameof(PlaybackViewModel.AudioProgress));
+                //albumArt.DataBindings.Add(nameof(albumArt.Image), _trackViewModel, nameof(AudioSourceStatus.AlbumArt));
+                //audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _trackViewModel, nameof(AudioSourceStatus.AudioProgress));
                 //audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), audioBandAppearance, nameof(AppearanceViewModel.TrackProgressColor));
                 //audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), audioBandAppearance, nameof(AppearanceViewModel.TrackProgressBackColor));
-                //previousButton.DataBindings.Add(nameof(previousButton.Image), _trackViewModel, nameof(PlaybackViewModel.PreviousButtonBitmap));
-                //playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _trackViewModel, nameof(PlaybackViewModel.PlayPauseButtonBitmap));
-                //nextButton.DataBindings.Add(nameof(nextButton.Image), _trackViewModel, nameof(PlaybackViewModel.NextButtonBitmap));
+                //previousButton.DataBindings.Add(nameof(previousButton.Image), _trackViewModel, nameof(AudioSourceStatus.PreviousButtonBitmap));
+                //playPauseButton.DataBindings.Add(nameof(playPauseButton.Image), _trackViewModel, nameof(AudioSourceStatus.PlayPauseButtonBitmap));
+                //nextButton.DataBindings.Add(nameof(nextButton.Image), _trackViewModel, nameof(AudioSourceStatus.NextButtonBitmap));
 
                 _audioSourceManager = new AudioSourceManager();
                 _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
@@ -281,11 +281,11 @@ namespace AudioBand
 
             BeginInvoke(new Action(() =>
             {
-                _trackViewModel.NowPlayingText = new NowPlayingText
-                {
-                    Artist = trackInfoChangedEventArgs.Artist,
-                    TrackName = trackInfoChangedEventArgs.TrackName
-                };
+                //_trackViewModel.NowPlayingText = new NowPlayingText
+                //{
+                //    Artist = trackInfoChangedEventArgs.Artist,
+                //    TrackName = trackInfoChangedEventArgs.TrackName
+                //};
 
                 UpdateAlbumArt(_albumArt);
             }));
@@ -293,7 +293,7 @@ namespace AudioBand
 
         private void TrackViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            if (propertyChangedEventArgs.PropertyName == nameof(PlaybackViewModel.IsPlaying))
+            if (propertyChangedEventArgs.PropertyName == nameof(AudioSourceStatus.IsPlaying))
             {
                 UpdateControlSvgs();
             }
@@ -344,7 +344,7 @@ namespace AudioBand
                 graphics.DrawImage(newAlbumArt, 0, 0, sizedAlbumArt.Width, sizedAlbumArt.Height);
             }
 
-            _trackViewModel.AlbumArt = sizedAlbumArt;
+            //_trackViewModel.AlbumArt = sizedAlbumArt;
         }
 
         // Update the svgs for play/pause, prev, next buttons
@@ -357,15 +357,15 @@ namespace AudioBand
             SvgDocument playPauseSvg = _trackViewModel.IsPlaying ? PauseButtonSvg : PlayButtonSvg;
             playPauseSvg.Width = playPauseButton.Width;
             playPauseSvg.Height = height;
-            _trackViewModel.PlayPauseButtonBitmap = playPauseSvg.ToBitmap();
+            //_trackViewModel.PlayPauseButtonBitmap = playPauseSvg.ToBitmap();
 
             NextButtonSvg.Width = nextButton.Width;
             NextButtonSvg.Height = height;
-            _trackViewModel.NextButtonBitmap = NextButtonSvg.ToBitmap();
+            //_trackViewModel.NextButtonBitmap = NextButtonSvg.ToBitmap();
 
             PreviousButtonSvg.Width = previousButton.Width;
             PreviousButtonSvg.Height = height;
-            _trackViewModel.PreviousButtonBitmap = PreviousButtonSvg.ToBitmap();
+            //_trackViewModel.PreviousButtonBitmap = PreviousButtonSvg.ToBitmap();
         }
 
         // Reset all images to blank state
@@ -374,7 +374,6 @@ namespace AudioBand
             var placeholder = AlbumArtPlaceholderSvg.ToBitmap();
             _albumArt = placeholder;
             UpdateAlbumArt(placeholder);
-            _trackViewModel.NowPlayingText = new NowPlayingText();
             _trackViewModel.IsPlaying = false;
             _trackViewModel.AudioProgress = 0;
             _albumArtTooltip.AlbumArt = null;
