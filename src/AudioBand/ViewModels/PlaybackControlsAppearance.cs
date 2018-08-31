@@ -132,7 +132,7 @@ namespace AudioBand.ViewModels
         {
             get
             {
-                var image = _isPlaying ? PlayImage : PauseImage;
+                var image = _isPlaying ? PauseImage : PlayImage;
                 return image.Scale(Width, Height);
             }
         }
