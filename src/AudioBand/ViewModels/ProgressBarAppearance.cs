@@ -78,6 +78,7 @@ namespace AudioBand.ViewModels
                 if (value == _xPosition) return;
                 _xPosition = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Location));
             }
         }
 
@@ -89,8 +90,11 @@ namespace AudioBand.ViewModels
                 if (value == _yPosition) return;
                 _yPosition = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Location));
             }
         }
+
+        public Point Location => new Point(_xPosition, _yPosition);
 
         public event PropertyChangedEventHandler PropertyChanged;
 

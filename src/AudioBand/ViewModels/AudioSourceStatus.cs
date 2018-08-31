@@ -1,6 +1,7 @@
 ﻿using AudioBand.Annotations;
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 
 namespace AudioBand.ViewModels
@@ -10,8 +11,9 @@ namespace AudioBand.ViewModels
         private bool _isPlaying;
         private double _audioProgress;
         private int _audioLength;
-        private string _songName;
-        private string _artist;
+        private string _songName = "";
+        private string _artist = "";
+        private Image _albumArt = new Bitmap(1, 1);
 
         public bool IsPlaying
         {
@@ -64,6 +66,17 @@ namespace AudioBand.ViewModels
             {
                 if (value == _artist) return;
                 _artist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Image AlbumArt
+        {
+            get => _albumArt;
+            set
+            {
+                if (Equals(value, _albumArt)) return;
+                _albumArt = value;
                 OnPropertyChanged();
             }
         }

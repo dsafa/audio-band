@@ -7,9 +7,9 @@ namespace AudioBand.ViewModels
 {
     internal class PlayPauseButtonAppearance : INotifyPropertyChanged
     {
-        private Image _playImage;
+        private Image _playImage = new Bitmap(1, 1);
         private string _playImagePath;
-        private Image _pauseImage;
+        private Image _pauseImage = new Bitmap(1, 1);
         private string _pauseImagePath;
         private int _yPosition = 14;
         private int _xPosition = 103;
@@ -102,6 +102,7 @@ namespace AudioBand.ViewModels
                 if (value == _xPosition) return;
                 _xPosition = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Location));
             }
         }
 
@@ -113,8 +114,11 @@ namespace AudioBand.ViewModels
                 if (value == _yPosition) return;
                 _yPosition = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Location));
             }
         }
+
+        public Point Location => new Point(_xPosition, _yPosition);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -127,7 +131,7 @@ namespace AudioBand.ViewModels
 
     internal class NextSongButtonAppearance : INotifyPropertyChanged
     {
-        private Image _image;
+        private Image _image = new Bitmap(1, 1);
         private string _imagePath;
         private int _yPosition = 14;
         private int _xPosition = 176;
@@ -198,6 +202,7 @@ namespace AudioBand.ViewModels
                 if (value == _xPosition) return;
                 _xPosition = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Location));
             }
         }
 
@@ -209,8 +214,11 @@ namespace AudioBand.ViewModels
                 if (value == _yPosition) return;
                 _yPosition = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Location));
             }
         }
+
+        public Point Location => new Point(_xPosition, _yPosition);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -223,7 +231,7 @@ namespace AudioBand.ViewModels
 
     internal class PreviousSongButtonAppearance : INotifyPropertyChanged
     {
-        private Image _image;
+        private Image _image = new Bitmap(1, 1);
         private string _imagePath;
         private bool _isVisible = true;
         private int _width = 73;
@@ -294,6 +302,7 @@ namespace AudioBand.ViewModels
                 if (value == _xPosition) return;
                 _xPosition = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Location));
             }
         }
 
@@ -305,8 +314,11 @@ namespace AudioBand.ViewModels
                 if (value == _yPosition) return;
                 _yPosition = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Location));
             }
         }
+
+        public Point Location => new Point(_xPosition, _yPosition);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
