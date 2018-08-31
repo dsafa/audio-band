@@ -5,19 +5,13 @@ using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
-    internal class AlbumArtAppearance
-    {
-        public AlbumArtDisplay AlbumArtDisplay { get; set; }
-        public AlbumArtPopup AlbumArtPopup { get; set; }
-    }
-
     internal class AlbumArtDisplay : INotifyPropertyChanged
     {
         private bool _isVisible = true;
-        private int _width;
-        private int _height;
-        private int _xPosition;
-        private int _yPosition;
+        private int _width = 30;
+        private int _height = 30;
+        private int _xPosition = 0;
+        private int _yPosition = 0;
         private Image _placeholder;
         private string _placeholderPath;
 
@@ -109,11 +103,11 @@ namespace AudioBand.ViewModels
 
     internal class AlbumArtPopup : INotifyPropertyChanged
     {
-        private bool _isVisible;
-        private int _width;
-        private int _height;
-        private int _xPosition;
-        private int _yPosition;
+        private bool _isVisible = true;
+        private int _width = 250;
+        private int _height = 250;
+        private int _xOffset;
+        private int _margin;
 
         public bool IsVisible
         {
@@ -148,24 +142,24 @@ namespace AudioBand.ViewModels
             }
         }
 
-        public int XPosition
+        public int XOffset
         {
-            get => _xPosition;
+            get => _xOffset;
             set
             {
-                if (value == _xPosition) return;
-                _xPosition = value;
+                if (value == _xOffset) return;
+                _xOffset = value;
                 OnPropertyChanged();
             }
         }
 
-        public int YPosition
+        public int Margin
         {
-            get => _yPosition;
+            get => _margin;
             set
             {
-                if (value == _yPosition) return;
-                _yPosition = value;
+                if (value == _margin) return;
+                _margin = value;
                 OnPropertyChanged();
             }
         }

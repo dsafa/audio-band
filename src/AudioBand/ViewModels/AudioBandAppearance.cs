@@ -6,8 +6,8 @@ namespace AudioBand.ViewModels
 {
     internal class AudioBandAppearance : INotifyPropertyChanged
     {
-        private int _width;
-        private int _height;
+        private int _width = 250;
+        private int _height = 30;
 
         public int Width
         {

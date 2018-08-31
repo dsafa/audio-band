@@ -103,8 +103,9 @@
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\ValueConverters\WinColorToWpfColorConverter.cs" />
     <Compile Include="ViewModels\AlbumArtAppearance.cs" />
-    <Compile Include="ViewModels\AppearanceViewModel.cs" />
+    <Compile Include="ViewModels\Appearance.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>
@@ -113,7 +114,6 @@
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AudioBandAppearance.cs" />
-    <Compile Include="ViewModels\Appearance.cs" />
     <Compile Include="ViewModels\PlaybackControlsAppearance.cs" />
     <Compile Include="ViewModels\PlaybackViewModel.cs" />
     <Compile Include="EnhancedProgressBar.cs">

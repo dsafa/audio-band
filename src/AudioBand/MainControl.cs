@@ -81,9 +81,9 @@ namespace AudioBand
             try
             {
                 _settingsManager = new SettingsManager();
-                _settingsWindow = new SettingsWindow(_settingsManager.AudioBandSettings.AppearanceViewModel);
+                _settingsWindow = new SettingsWindow(_settingsManager.Appearance);
+                _settingsWindow.Saved += SettingsWindowOnSaved;
                 ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
-                _settingsWindow.Closing += SettingsWindowOnClosing;
 
                 ResetState();
                 _trackViewModel.PropertyChanged += TrackViewModelOnPropertyChanged;
@@ -213,7 +213,7 @@ namespace AudioBand
             _audioSourceTokenSource = new CancellationTokenSource();
             await source.ActivateAsync(new AudioSourceContext(source.Name));
 
-            _settingsManager.AudioBandSettings.AudioSource = source.Name;
+            _settingsManager.AudioSource = source.Name;
         }
 
         private async Task UnsubscribeToAudioSource(IAudioSource source)
@@ -232,7 +232,7 @@ namespace AudioBand
             await source.DeactivateAsync();
 
             ResetState();
-            _settingsManager.AudioBandSettings.AudioSource = null;
+            _settingsManager.AudioSource = null;
         }
 
         private void AudioSourceOnTrackProgressChanged(object o, double progress)
@@ -386,14 +386,14 @@ namespace AudioBand
             _settingsManager.Save();
         }
 
-        private void SettingsWindowOnClosing(object sender, CancelEventArgs cancelEventArgs)
+        private void SettingsWindowOnSaved(object sender, EventArgs eventArgs)
         {
             _settingsManager.Save();
         }
 
         private void SelectAudioSourceFromSettings()
         {
-            var audioSource = _settingsManager.AudioBandSettings.AudioSource;
+            var audioSource = _settingsManager.AudioSource;
             if (String.IsNullOrEmpty(audioSource))
             {
                 return;

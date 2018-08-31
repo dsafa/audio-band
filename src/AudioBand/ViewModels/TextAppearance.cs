@@ -7,17 +7,20 @@ namespace AudioBand.ViewModels
 {
     internal class TextAppearance : INotifyPropertyChanged
     {
-        private bool _isVisible;
-        private string _fontFamily;
-        private float _fontSize;
-        private Color _backgroundColor;
-        private string _formatString;
-        private TextAlignment _textAlignment;
-        private int _yPosition;
-        private int _xPosition;
+        private bool _isVisible = true;
+        private string _fontFamily = "Segoe UI";
+        private float _fontSize = 8.5f;
+        private Color _backgroundColor = Color.Transparent;
+        private string _formatString = "";
+        private TextAlignment _textAlignment = TextAlignment.Left;
+        private int _yPosition = 0;
+        private int _xPosition = 0;
         private int _height;
         private int _width;
         private string _name;
+        private bool _scrollingEnabled;
+        private bool _scrollingFadeEnabled;
+        private Color _scrollingFadeColor;
 
         public string Name
         {
@@ -136,6 +139,39 @@ namespace AudioBand.ViewModels
             {
                 if (value == _yPosition) return;
                 _yPosition = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ScrollingEnabled
+        {
+            get => _scrollingEnabled;
+            set
+            {
+                if (value == _scrollingEnabled) return;
+                _scrollingEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ScrollingFadeEnabled
+        {
+            get => _scrollingFadeEnabled;
+            set
+            {
+                if (value == _scrollingFadeEnabled) return;
+                _scrollingFadeEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Color ScrollingFadeColor
+        {
+            get => _scrollingFadeColor;
+            set
+            {
+                if (value.Equals(_scrollingFadeColor)) return;
+                _scrollingFadeColor = value;
                 OnPropertyChanged();
             }
         }
