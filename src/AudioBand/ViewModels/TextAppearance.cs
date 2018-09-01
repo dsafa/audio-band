@@ -10,14 +10,14 @@ namespace AudioBand.ViewModels
         private bool _isVisible = true;
         private string _fontFamily = "Segoe UI";
         private float _fontSize = 8.5f;
-        private Color _backgroundColor = Color.Transparent;
-        private string _formatString = "";
+        private Color _color = Color.White;
+        private string _formatString = "{artist} - {song}";
         private TextAlignment _textAlignment = TextAlignment.Left;
         private int _yPosition = 0;
-        private int _xPosition = 0;
-        private int _height;
-        private int _width;
-        private string _name;
+        private int _xPosition = 30;
+        private int _height = 14;
+        private int _width = 220;
+        private string _name = "Now Playing";
         private bool _scrollingEnabled;
         private bool _scrollingFadeEnabled;
         private Color _scrollingFadeColor;
@@ -66,13 +66,13 @@ namespace AudioBand.ViewModels
             }
         }
 
-        public Color BackgroundColor
+        public Color Color
         {
-            get => _backgroundColor;
+            get => _color;
             set
             {
-                if (value.Equals(_backgroundColor)) return;
-                _backgroundColor = value;
+                if (value.Equals(_color)) return;
+                _color = value;
                 OnPropertyChanged();
             }
         }
@@ -176,6 +176,8 @@ namespace AudioBand.ViewModels
             }
         }
 
+        public Point Location => new Point(_xPosition, _yPosition);
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -185,7 +187,7 @@ namespace AudioBand.ViewModels
         }
     }
 
-    internal enum TextAlignment
+    public enum TextAlignment
     {
         Left,
         Right,

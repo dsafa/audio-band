@@ -285,8 +285,8 @@
                                         <Label Grid.Row="8" Grid.Column="0" Content="Alignment" Style="{StaticResource GridLabel}"/>
                                         <ComboBox Grid.Row="8" Grid.Column="1" Style="{StaticResource GridComboBox}" ItemsSource="{Binding ElementName=Window, Path=TextAlignValues}" SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
 
-                                        <Label Grid.Row="9" Grid.Column="0" Content="Background Color" Style="{StaticResource GridLabel}"/>
-                                        <xctk:ColorPicker Grid.Row="9" Grid.Column="1" Style="{StaticResource GridColorPicker}" SelectedColor="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+                                        <Label Grid.Row="9" Grid.Column="0" Content="Text Color" Style="{StaticResource GridLabel}"/>
+                                        <xctk:ColorPicker Grid.Row="9" Grid.Column="1" Style="{StaticResource GridColorPicker}" SelectedColor="{Binding Color, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
                                         <Label Grid.Row="10" Grid.Column="0" Content="Scrolling Enabled" Style="{StaticResource GridLabel}"/>
                                         <metro:ToggleSwitch x:Name="ScrollingToggle" Grid.Row="10" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Enabled" OffLabel="Disabled" IsChecked="{Binding ScrollingEnabled, Mode=TwoWay}"/>
