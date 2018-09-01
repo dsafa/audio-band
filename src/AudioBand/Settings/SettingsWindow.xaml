@@ -226,7 +226,7 @@
             </TabItem>
             <TabItem Header="Text Labels">
                 <DockPanel Style="{StaticResource TabDockPanel}">
-                    <Button DockPanel.Dock="Bottom" HorizontalAlignment="Left" Content="Add New Text" Style="{StaticResource GridButton}"/>
+                    <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add New Text" Style="{StaticResource GridButton}"/>
                     <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding TextAppearances}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
@@ -282,7 +282,7 @@
                                         <Label Grid.Row="7" Grid.Column="0" Content="Font Size" Style="{StaticResource GridLabel}"/>
                                         <metro:NumericUpDown Grid.Row="7" Grid.Column="1" Style="{StaticResource GridFontSizeInput}" Value="{Binding FontSize, Mode=TwoWay}"/>
 
-                                        <Label Grid.Row="8" Grid.Column="0" Content="Font Alignment" Style="{StaticResource GridLabel}"/>
+                                        <Label Grid.Row="8" Grid.Column="0" Content="Alignment" Style="{StaticResource GridLabel}"/>
                                         <ComboBox Grid.Row="8" Grid.Column="1" Style="{StaticResource GridComboBox}" ItemsSource="{Binding ElementName=Window, Path=TextAlignValues}" SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="9" Grid.Column="0" Content="Background Color" Style="{StaticResource GridLabel}"/>
