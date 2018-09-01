@@ -98,8 +98,8 @@
     <Compile Include="AudioSourceContext.cs" />
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FormattedTextRenderer.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Settings\Mapping.cs" />
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -119,7 +119,7 @@
     <Compile Include="EnhancedProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="NowPlayingDisplay.cs">
+    <Compile Include="FormattedTextLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AudioSource\AudioSourceManager.cs" />

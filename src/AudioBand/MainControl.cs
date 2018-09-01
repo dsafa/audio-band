@@ -95,7 +95,7 @@ namespace AudioBand
                 audioProgress.DataBindings.Add(nameof(audioProgress.Location), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.Location));
                 audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.ForegroundColor));
                 audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.BackgroundColor));
-                audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _audioSourceStatus, nameof(AudioSourceStatus.AudioProgress));
+                audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _audioSourceStatus, nameof(AudioSourceStatus.SongProgress));
 
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Visible), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.IsVisible));
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Width), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Width));
@@ -121,6 +121,8 @@ namespace AudioBand
                 DataBindings.Add(nameof(AlbumArtPopupHeight), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.Height));
                 DataBindings.Add(nameof(AlbumArtPopupX), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.XOffset));
                 DataBindings.Add(nameof(AlbumArtPopupY), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.Margin));
+
+                LoadLabelsFromSettings();
 
                 _audioSourceManager = new AudioSourceManager();
                 _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
@@ -244,7 +246,7 @@ namespace AudioBand
 
         private void AudioSourceOnTrackProgressChanged(object o, double progress)
         {
-            BeginInvoke(new Action(() => { _audioSourceStatus.AudioProgress = progress;}));
+            //BeginInvoke(new Action(() => { _audioSourceStatus.SongProgress = progress;}));
         }
 
         private void AudioSourceOnTrackPaused(object o, EventArgs args)
@@ -376,6 +378,45 @@ namespace AudioBand
             {
                 AudioSourceMenuItemOnClicked(menuItem, EventArgs.Empty);
             }
+        }
+
+        private void LoadLabelsFromSettings()
+        {
+            foreach (var textAppearance in _appearance.TextAppearances)
+            {
+                var label = CreateTextLabel(textAppearance);
+                Controls.Add(label);
+            }
+        }
+
+        private FormattedTextLabel CreateTextLabel(TextAppearance appearance)
+        {
+            var label = new FormattedTextLabel(appearance.FormatString, appearance.Color, appearance.FontSize, appearance.FontFamily, appearance.TextAlignment);
+            label.DataBindings.Add(nameof(label.Format), appearance, nameof(appearance.FormatString));
+            label.DataBindings.Add(nameof(label.DefaultColor), appearance, nameof(appearance.Color));
+            label.DataBindings.Add(nameof(label.FontSize), appearance, nameof(appearance.FontSize));
+            label.DataBindings.Add(nameof(label.FontFamily), appearance, nameof(appearance.FontFamily));
+            label.DataBindings.Add(nameof(label.Alignment), appearance, nameof(appearance.TextAlignment));
+
+            label.DataBindings.Add(nameof(label.Visible), appearance, nameof(appearance.IsVisible));
+            label.DataBindings.Add(nameof(label.Width), appearance, nameof(appearance.Width));
+            label.DataBindings.Add(nameof(label.Height), appearance, nameof(appearance.Height));
+            label.DataBindings.Add(nameof(label.Location), appearance, nameof(appearance.Location));
+
+
+            label.AlbumName = _audioSourceStatus.AlbumName;
+            label.Artist = _audioSourceStatus.Artist;
+            label.SongName = _audioSourceStatus.SongName;
+            label.SongLength = _audioSourceStatus.SongLength;
+            label.SongProgress = _audioSourceStatus.SongProgress;
+
+            label.DataBindings.Add(nameof(label.AlbumName), _audioSourceStatus, nameof(_audioSourceStatus.AlbumName));
+            label.DataBindings.Add(nameof(label.Artist), _audioSourceStatus, nameof(_audioSourceStatus.Artist));
+            label.DataBindings.Add(nameof(label.SongName), _audioSourceStatus, nameof(_audioSourceStatus.SongName));
+            label.DataBindings.Add(nameof(label.SongLength), _audioSourceStatus, nameof(_audioSourceStatus.SongLength));
+            label.DataBindings.Add(nameof(label.SongProgress), _audioSourceStatus, nameof(_audioSourceStatus.SongProgress));
+
+            return label;
         }
     }
 }

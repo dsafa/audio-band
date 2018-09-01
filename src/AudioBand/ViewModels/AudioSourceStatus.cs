@@ -11,10 +11,11 @@ namespace AudioBand.ViewModels
     internal class AudioSourceStatus : INotifyPropertyChanged
     {
         private bool _isPlaying;
-        private double _audioProgress;
-        private int _audioLength;
+        private TimeSpan _songProgress;
+        private TimeSpan _songLength;
         private string _songName = "";
         private string _artist = "";
+        private string _albumName;
 
         public bool IsPlaying
         {
@@ -27,24 +28,23 @@ namespace AudioBand.ViewModels
             }
         }
 
-        public double AudioProgress
+        public TimeSpan SongProgress
         {
-            get => _audioProgress;
+            get => _songProgress;
             set
             {
-                if (Math.Abs(value - _audioProgress) < 0.001) return;
-                _audioProgress = value;
+                _songProgress = value;
                 OnPropertyChanged();
             }
         }
 
-        public int AudioLength
+        public TimeSpan SongLength
         {
-            get => _audioLength;
+            get => _songLength;
             set
             {
-                if (value == _audioLength) return;
-                _audioLength = value;
+                if (value == _songLength) return;
+                _songLength = value;
                 OnPropertyChanged();
             }
         }
@@ -67,6 +67,17 @@ namespace AudioBand.ViewModels
             {
                 if (value == _artist) return;
                 _artist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string AlbumName
+        {
+            get => _albumName;
+            set
+            {
+                if (value == _albumName) return;
+                _albumName = value;
                 OnPropertyChanged();
             }
         }

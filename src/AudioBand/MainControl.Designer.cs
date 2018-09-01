@@ -100,7 +100,6 @@
             this.audioProgress.Location = new System.Drawing.Point(0, 28);
             this.audioProgress.Margin = new System.Windows.Forms.Padding(0);
             this.audioProgress.Name = "audioProgress";
-            this.audioProgress.Progress = 100D;
             this.audioProgress.Size = new System.Drawing.Size(250, 2);
             this.audioProgress.TabIndex = 3;
             // 
