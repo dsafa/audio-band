@@ -226,7 +226,7 @@
             </TabItem>
             <TabItem Header="Text Labels">
                 <DockPanel Style="{StaticResource TabDockPanel}">
-                    <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add New Text" Style="{StaticResource GridButton}"/>
+                    <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add New label" Style="{StaticResource GridButton}"/>
                     <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding TextAppearances}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
@@ -288,19 +288,13 @@
                                         <Label Grid.Row="9" Grid.Column="0" Content="Text Color" Style="{StaticResource GridLabel}"/>
                                         <xctk:ColorPicker Grid.Row="9" Grid.Column="1" Style="{StaticResource GridColorPicker}" SelectedColor="{Binding Color, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
-                                        <Label Grid.Row="10" Grid.Column="0" Content="Scrolling Enabled" Style="{StaticResource GridLabel}"/>
-                                        <metro:ToggleSwitch x:Name="ScrollingToggle" Grid.Row="10" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Enabled" OffLabel="Disabled" IsChecked="{Binding ScrollingEnabled, Mode=TwoWay}"/>
+                                        <Label Grid.Row="10" Grid.Column="0" Content="Scrolling Speed" Style="{StaticResource GridLabel}"/>
+                                        <metro:NumericUpDown Grid.Row="10" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ScrollSpeed, Mode=TwoWay}"/>
 
-                                        <Label Grid.Row="11" Grid.Column="0" Content="Scrolling Fade" Style="{StaticResource GridLabel}"/>
-                                        <metro:ToggleSwitch Grid.Row="11" Grid.Column="1" Style="{StaticResource GridToggle}" OnLabel="Enabled" OffLabel="Disabled" IsEnabled="{Binding ElementName=ScrollingToggle, Path=IsChecked}" IsChecked="{Binding ScrollingFadeEnabled, Mode=TwoWay}"/>
+                                        <Label Grid.Row="11" Grid.Column="0" Content="Format" Style="{StaticResource GridLabel}"/>
+                                        <TextBox Grid.Row="11" Grid.Column="1" metro:TextBoxHelper.ClearTextButton="True" Style="{StaticResource GridTextBox}" Text="{Binding FormatString, Mode=TwoWay}"/>
 
-                                        <Label Grid.Row="12" Grid.Column="0" Content="Scrolling Fade Color" Style="{StaticResource GridLabel}"/>
-                                        <xctk:ColorPicker Grid.Row="12" Grid.Column="1" Style="{StaticResource GridColorPicker}" IsEnabled="{Binding ElementName=ScrollingToggle, Path=IsChecked}" SelectedColor="{Binding ScrollingFadeColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
-
-                                        <Label Grid.Row="13" Grid.Column="0" Content="Format" Style="{StaticResource GridLabel}"/>
-                                        <TextBox Grid.Row="13" Grid.Column="1" metro:TextBoxHelper.ClearTextButton="True" Style="{StaticResource GridTextBox}" Text="{Binding FormatString, Mode=TwoWay}"/>
-
-                                        <Button Grid.Row="14" HorizontalAlignment="Right" Grid.Column="1" Content="Delete" Style="{StaticResource GridButton}"/>
+                                        <Button Grid.Row="12" HorizontalAlignment="Right" Grid.Column="1" Content="Delete" Style="{StaticResource GridButton}"/>
                                     </Grid>
                                 </Expander>
                             </DataTemplate>

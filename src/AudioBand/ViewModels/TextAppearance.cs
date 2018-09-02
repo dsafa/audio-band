@@ -12,15 +12,13 @@ namespace AudioBand.ViewModels
         private float _fontSize = 8.5f;
         private Color _color = Color.White;
         private string _formatString = "{artist} - {song}";
-        private TextAlignment _textAlignment = TextAlignment.Left;
+        private TextAlignment _textAlignment = TextAlignment.Center;
         private int _yPosition = 0;
         private int _xPosition = 30;
         private int _height = 14;
         private int _width = 220;
         private string _name = "Now Playing";
-        private bool _scrollingEnabled;
-        private bool _scrollingFadeEnabled;
-        private Color _scrollingFadeColor;
+        private int _scrollSpeed = 2;
 
         public string Name
         {
@@ -143,35 +141,13 @@ namespace AudioBand.ViewModels
             }
         }
 
-        public bool ScrollingEnabled
+        public int ScrollSpeed
         {
-            get => _scrollingEnabled;
+            get => _scrollSpeed;
             set
             {
-                if (value == _scrollingEnabled) return;
-                _scrollingEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool ScrollingFadeEnabled
-        {
-            get => _scrollingFadeEnabled;
-            set
-            {
-                if (value == _scrollingFadeEnabled) return;
-                _scrollingFadeEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Color ScrollingFadeColor
-        {
-            get => _scrollingFadeColor;
-            set
-            {
-                if (value.Equals(_scrollingFadeColor)) return;
-                _scrollingFadeColor = value;
+                if (value == _scrollSpeed) return;
+                _scrollSpeed = value;
                 OnPropertyChanged();
             }
         }

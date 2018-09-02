@@ -120,6 +120,12 @@ namespace AudioBand
             }
         }
 
+        public int ScrollSpeed
+        {
+            get => _scrollSpeed;
+            set => _scrollSpeed = value;
+        }
+
         private readonly Timer _nowPlayingTimer = new Timer { Interval = 20 };
         private const int TextMargin = 60; //Spacing between scrolling text
 
@@ -134,6 +140,7 @@ namespace AudioBand
         private string _albumName;
         private TimeSpan _songProgress;
         private TimeSpan _songLength;
+        private int _scrollSpeed;
 
         public FormattedTextLabel(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
         {
