@@ -195,12 +195,14 @@ namespace AudioBand
                 _renderer.Draw(graphics, (int)_duplicateXPos);
             }
 
-            if (_textWidth > ClientRectangle.Width && !_scrollingTimer.Enabled)
+            var textTooLong = _textWidth > ClientRectangle.Width - 4; // extra padding in case
+
+            if (textTooLong && !_scrollingTimer.Enabled)
             {
                 _duplicateXPos = _textXPos + _textWidth + TextMargin;
                 _scrollingTimer.Start();
             }
-            else if (_textWidth <= ClientRectangle.Width && _scrollingTimer.Enabled)
+            else if (!textTooLong && _scrollingTimer.Enabled)
             {
                 _scrollingTimer.Stop();
                 _textXPos = 0;
