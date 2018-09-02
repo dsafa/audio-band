@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
@@ -20,6 +22,9 @@ namespace AudioBand
         private const string AlbumNamePlaceholder = "album";
         private const string CurrentTimePlaceholder = "time";
         private const string SongLengthPlaceholder = "length";
+        private const string BoldStyle = "*";
+        private const string ItalicsStyle = "&";
+        private const string UnderlineStyle = "_";
 
         public List<TextChunk> Chunks { get; set; }
 
@@ -69,7 +74,7 @@ namespace AudioBand
             set
             {
                 _songProgress = value;
-                UpdatePlaceholderValue(TextFormat.CurrentTime, value.ToString());
+                UpdatePlaceholderValue(TextFormat.CurrentTime, value.ToString(TimeFormat));
             }
         }
 
@@ -79,7 +84,7 @@ namespace AudioBand
             set
             {
                 _songLength = value;
-                UpdatePlaceholderValue(TextFormat.SongLength, value.ToString());
+                UpdatePlaceholderValue(TextFormat.SongLength, value.ToString(TimeFormat));
             }
         }
 
@@ -114,6 +119,11 @@ namespace AudioBand
         private TimeSpan _songProgress;
         private TimeSpan _songLength;
         private Color _defaultColor;
+        private const string TimeFormat = @"m\:ss";
+
+        private const string Styles = BoldStyle + ItalicsStyle + UnderlineStyle;
+        private const string Tags = ArtistPlaceholder + "|" + SongNamePlaceholder + "|" + AlbumNamePlaceholder + "|" + CurrentTimePlaceholder + "|" + SongLengthPlaceholder;
+        private static readonly Regex PlaceholderPattern = new Regex($@"(?<style>[{Styles}])?(?<tag>({Tags}))(:(?<color>#[A-Fa-f0-9]{{6}}))?", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 
         public FormattedTextRenderer(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
         {
@@ -194,51 +204,77 @@ namespace AudioBand
             text.Clear();
         }
 
-        private void ParsePlaceholder(string format, out string value, out TextFormat type, out Color color)
+        private void ParsePlaceholder(string formatString, out string value, out TextFormat format, out Color color)
         {
-            // either artist or artist:#ffffffff
-            var split = format.Split(new[] {":"}, 2, StringSplitOptions.None);
+            var match = PlaceholderPattern.Match(formatString);
+            format = TextFormat.Normal;
 
-            switch (split[0])
+            if (!match.Success)
             {
-                case ArtistPlaceholder:
-                    value = Artist;
-                    type = TextFormat.Artist;
-                    break;
-                case SongNamePlaceholder:
-                    value = SongName;
-                    type = TextFormat.Song;
-                    break;
-                case AlbumNamePlaceholder:
-                    value = AlbumName;
-                    type = TextFormat.Album;
-                    break;
-                case CurrentTimePlaceholder:
-                    value = SongProgress.ToString();
-                    type = TextFormat.CurrentTime;
-                    break;
-                case SongLengthPlaceholder:
-                    value = SongLength.ToString(); //TODO time format
-                    type = TextFormat.SongLength;
-                    break;
-                default:
-                    value = "! invalid format !";
-                    type = TextFormat.Normal;
-                    break;
-            }
-
-            if (split.Length == 1)
-            {
+                value = "! invalid format !";
+                format = TextFormat.Normal;
                 color = DefaultColor;
                 return;
             }
 
-            try
+            if (match.Groups["style"].Success)
             {
-                color = ColorTranslator.FromHtml(split[1]);
-                type |= TextFormat.Colored;
+                switch (match.Groups["style"].Value)
+                {
+                    case BoldStyle:
+                        format |= TextFormat.Bold;
+                        break;
+                    case ItalicsStyle:
+                        format |= TextFormat.Italic;
+                        break;
+                    case UnderlineStyle:
+                        format |= TextFormat.Underline;
+                        break;
+                    default:
+                        break;
+                }
             }
-            catch (Exception)
+
+            switch (match.Groups["tag"].Value)
+            {
+                case ArtistPlaceholder:
+                    value = Artist;
+                    format |= TextFormat.Artist;
+                    break;
+                case SongNamePlaceholder:
+                    value = SongName;
+                    format |= TextFormat.Song;
+                    break;
+                case AlbumNamePlaceholder:
+                    value = AlbumName;
+                    format |= TextFormat.Album;
+                    break;
+                case CurrentTimePlaceholder:
+                    value = SongProgress.ToString(TimeFormat);
+                    format |= TextFormat.CurrentTime;
+                    break;
+                case SongLengthPlaceholder:
+                    value = SongLength.ToString(TimeFormat);
+                    format |= TextFormat.SongLength;
+                    break;
+                default:
+                    value = "invalid";
+                    break;
+            }
+
+            if (match.Groups["color"].Success)
+            {
+                try
+                {
+                    color = ColorTranslator.FromHtml(match.Groups["color"].Value);
+                    format |= TextFormat.Colored;
+                }
+                catch (Exception e)
+                {
+                    color = DefaultColor;
+                }
+            }
+            else
             {
                 color = DefaultColor;
             }
@@ -246,8 +282,33 @@ namespace AudioBand
 
         public void Draw(Graphics graphics, int x)
         {
-            var font = new Font(FontFamily, FontSize, FontStyle.Regular, GraphicsUnit.Point);
+            TextLength = 0;
+            foreach (var textChunk in Chunks)
+            {
+                var font = new Font(FontFamily, FontSize, FontStyle.Regular, GraphicsUnit.Point);
+                if (textChunk.Type.HasFlag(TextFormat.Bold))
+                {
+                    font = new Font(FontFamily, FontSize, FontStyle.Bold, GraphicsUnit.Point);
+                }
+                else if (textChunk.Type.HasFlag(TextFormat.Italic))
+                {
+                    font = new Font(FontFamily, FontSize, FontStyle.Italic, GraphicsUnit.Point);
+                }
+                else if (textChunk.Type.HasFlag(TextFormat.Underline))
+                {
+                    font = new Font(FontFamily, FontSize, FontStyle.Underline, GraphicsUnit.Point);
+                }
 
+                var textLength = TextRenderer.MeasureText(textChunk.Text, font, new Size(1000, 1000), TextFormatFlags.NoPrefix).Width - MeasurePadding(font);
+                textChunk.Draw(graphics, font, x, 0);
+
+                TextLength += textLength;
+                x += textLength;
+            }
+        }
+
+        private int MeasurePadding(Font font)
+        {
             // Get the extra padding added by TextRenderer.MeasureText https://stackoverflow.com/a/12171682
             // Let width of character = x 
             // Let width of padding = y
@@ -259,15 +320,7 @@ namespace AudioBand
             var singleCharacterWidth = TextRenderer.MeasureText(" ", font).Width;
             var padding = singleCharacterWidth - (twoCharacterWidth - singleCharacterWidth);
 
-            TextLength = 0;
-            foreach (var textChunk in Chunks)
-            {
-                var textLength = TextRenderer.MeasureText(textChunk.Text, font).Width - padding;
-                textChunk.Draw(graphics, font, x, 0);
-
-                TextLength += textLength;
-                x += textLength;
-            }
+            return padding;
         }
 
         private void UpdatePlaceholderValue(TextFormat type, string value)
@@ -311,7 +364,10 @@ namespace AudioBand
             Album = 4,
             CurrentTime = 8,
             SongLength = 16,
-            Colored = 32
+            Colored = 32,
+            Bold = 64,
+            Italic = 128,
+            Underline = 256
         }
     }
 }
