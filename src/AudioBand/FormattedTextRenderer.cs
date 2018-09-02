@@ -298,7 +298,7 @@ namespace AudioBand
 
             public void Draw(Graphics g, Font font, int x, int y)
             {
-                TextRenderer.DrawText(g, Text, font, new Point(x, y), Color);
+                TextRenderer.DrawText(g, Text, font, new Point(x, y), Color, TextFormatFlags.NoPrefix);
             }
         }
 
