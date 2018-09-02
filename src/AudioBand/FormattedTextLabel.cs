@@ -123,11 +123,18 @@ namespace AudioBand
         public int ScrollSpeed
         {
             get => _scrollSpeed;
-            set => _scrollSpeed = value;
+            set
+            {
+                _scrollSpeed = value;
+                Refresh();
+            }
         }
 
-        private readonly Timer _nowPlayingTimer = new Timer { Interval = 20 };
+        private readonly Timer _scrollingTimer = new Timer { Interval = 20};
         private const int TextMargin = 60; //Spacing between scrolling text
+        private int _textXPos;
+        private int _duplicateXPos; // Draw 2 labels so that there wont be a gap between
+        private int _textWidth;
 
         private FormattedTextRenderer _renderer;
         private string _format;
@@ -146,6 +153,32 @@ namespace AudioBand
         {
             DoubleBuffered = true;
             _renderer = new FormattedTextRenderer(format, defaultColor, fontSize, fontFamily, alignment);
+            _scrollingTimer.Tick += ScrollingTimerOnTick;
+        }
+
+        private void ScrollingTimerOnTick(object sender, EventArgs eventArgs)
+        {
+            BeginInvoke(new Action(() =>
+            {
+                UpdateTextPositions();
+                Refresh();
+            }));
+        }
+
+        private void UpdateTextPositions()
+        {
+            if (_textXPos + _textWidth + TextMargin < 0)
+            {
+                _textXPos = _duplicateXPos + _textWidth + TextMargin;
+            }
+
+            if (_duplicateXPos + _textWidth + TextMargin < 0)
+            {
+                _duplicateXPos = _textXPos + _textWidth + TextMargin;
+            }
+
+            _textXPos -= ScrollSpeed;
+            _duplicateXPos -= ScrollSpeed;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -153,25 +186,30 @@ namespace AudioBand
             var graphics = e.Graphics;
             graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-            _renderer.Draw(graphics, 0);
+            _renderer.Draw(graphics, _textXPos);
+            _textWidth = _renderer.TextLength;
+
+            if (_scrollingTimer.Enabled)
+            {
+                _renderer.Draw(graphics, _duplicateXPos);
+            }
+
+            if (_textWidth > ClientRectangle.Width && !_scrollingTimer.Enabled)
+            {
+                _scrollingTimer.Start();
+            }
+            else if (_textWidth <= ClientRectangle.Width && _scrollingTimer.Enabled)
+            {
+                _scrollingTimer.Stop();
+                _textXPos = 0;
+            }
+
         }
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            _nowPlayingTimer.Stop();
-        }
-
-        private LinearGradientBrush CreateFadeBrush(Color color)
-        {
-            return new LinearGradientBrush(ClientRectangle, color, color, LinearGradientMode.Horizontal)
-            {
-                InterpolationColors = new ColorBlend(4)
-                {
-                    Colors = new[] { Color.FromArgb(0, 0, 0, 0), color, color, Color.FromArgb(0, 0, 0, 0) },
-                    Positions = new[] { 0, 0.1f, 0.9f, 1 }
-                }
-            };
+            _scrollingTimer.Stop();
         }
     }
 }
