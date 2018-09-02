@@ -402,7 +402,7 @@ namespace AudioBand
             label.DataBindings.Add(nameof(label.Width), appearance, nameof(appearance.Width));
             label.DataBindings.Add(nameof(label.Height), appearance, nameof(appearance.Height));
             label.DataBindings.Add(nameof(label.Location), appearance, nameof(appearance.Location));
-
+            label.DataBindings.Add(nameof(label.ScrollSpeed), appearance, nameof(appearance.ScrollSpeed));
 
             label.AlbumName = _audioSourceStatus.AlbumName;
             label.Artist = _audioSourceStatus.Artist;

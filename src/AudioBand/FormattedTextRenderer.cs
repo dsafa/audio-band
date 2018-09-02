@@ -128,6 +128,7 @@ namespace AudioBand
 
         private void Parse()
         {
+            // Build up chunks, each chunk is a sparately formatted piece of text
             Chunks = new List<TextChunk>();
             var currentText = new StringBuilder();
 
@@ -246,16 +247,27 @@ namespace AudioBand
         public void Draw(Graphics graphics, int x)
         {
             var font = new Font(FontFamily, FontSize, FontStyle.Regular, GraphicsUnit.Point);
+
+            // Get the extra padding added by TextRenderer.MeasureText https://stackoverflow.com/a/12171682
+            // Let width of character = x 
+            // Let width of padding = y
+            // measuring 2 characters -> 2x + y
+            // measuring 1 character -> x + y
+            // (2x + y) - (x + y) = x = width of one character
+            // x + y - x = y = padding
+            var twoCharacterWidth = TextRenderer.MeasureText("  ", font).Width;
+            var singleCharacterWidth = TextRenderer.MeasureText(" ", font).Width;
+            var padding = singleCharacterWidth - (twoCharacterWidth - singleCharacterWidth);
+
             // Use as text location
             TextLength = 0;
             foreach (var textChunk in Chunks)
             {
-                var textSize = TextRenderer.MeasureText(textChunk.Text, font);
+                var textLength = TextRenderer.MeasureText(textChunk.Text, font).Width - padding;
                 textChunk.Draw(graphics, font, x, 0);
 
-                var width = textSize.Width;
-                TextLength += width;
-                x += width;
+                TextLength += textLength;
+                x += textLength;
             }
         }
 
