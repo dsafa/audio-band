@@ -18,7 +18,7 @@ namespace AudioBand.ViewModels
         private int _height = 14;
         private int _width = 220;
         private string _name = "Now Playing";
-        private int _scrollSpeed = 2;
+        private int _scrollSpeed = 50;
 
         public string Name
         {

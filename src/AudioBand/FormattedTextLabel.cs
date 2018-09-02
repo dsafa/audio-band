@@ -126,14 +126,17 @@ namespace AudioBand
             set
             {
                 _scrollSpeed = value;
+                _scrollDelta = (float)_scrollSpeed / TickPerS;
                 Refresh();
             }
         }
 
-        private readonly Timer _scrollingTimer = new Timer { Interval = 20};
+        private const int TickRateMs = 10;
+        private const int TickPerS = 1000 / TickRateMs;
+        private readonly Timer _scrollingTimer = new Timer { Interval = TickRateMs};
         private const int TextMargin = 60; //Spacing between scrolling text
-        private int _textXPos;
-        private int _duplicateXPos; // Draw 2 labels so that there wont be a gap between
+        private float _textXPos;
+        private float _duplicateXPos; // Draw 2 labels so that there wont be a gap between
         private int _textWidth;
 
         private FormattedTextRenderer _renderer;
@@ -148,6 +151,7 @@ namespace AudioBand
         private TimeSpan _songProgress;
         private TimeSpan _songLength;
         private int _scrollSpeed;
+        private float _scrollDelta;
 
         public FormattedTextLabel(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
         {
@@ -158,11 +162,8 @@ namespace AudioBand
 
         private void ScrollingTimerOnTick(object sender, EventArgs eventArgs)
         {
-            BeginInvoke(new Action(() =>
-            {
-                UpdateTextPositions();
-                Refresh();
-            }));
+            UpdateTextPositions();
+            Refresh();
         }
 
         private void UpdateTextPositions()
@@ -177,8 +178,8 @@ namespace AudioBand
                 _duplicateXPos = _textXPos + _textWidth + TextMargin;
             }
 
-            _textXPos -= ScrollSpeed;
-            _duplicateXPos -= ScrollSpeed;
+            _textXPos -= _scrollDelta;
+            _duplicateXPos -= _scrollDelta;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -186,12 +187,12 @@ namespace AudioBand
             var graphics = e.Graphics;
             graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-            _renderer.Draw(graphics, _textXPos);
+            _renderer.Draw(graphics, (int)_textXPos);
             _textWidth = _renderer.TextLength;
 
             if (_scrollingTimer.Enabled)
             {
-                _renderer.Draw(graphics, _duplicateXPos);
+                _renderer.Draw(graphics, (int)_duplicateXPos);
             }
 
             if (_textWidth > ClientRectangle.Width && !_scrollingTimer.Enabled)
