@@ -10,7 +10,7 @@ namespace AudioBand.ViewModels
 {
     internal class PlayPauseButtonAppearance : INotifyPropertyChanged
     {
-        private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play)).SizeFix();
+        private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
         private static readonly SvgDocument DefaultPauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
         private Image _playImage;
         private string _playImagePath = "";
@@ -133,7 +133,7 @@ namespace AudioBand.ViewModels
             get
             {
                 var image = _isPlaying ? PauseImage : PlayImage;
-                return image.Scale(Width, Height);
+                return image.Scale(Width - 1, Height - 1); // To fit image in button
             }
         }
 
@@ -201,7 +201,7 @@ namespace AudioBand.ViewModels
 
         public Image Image
         {
-            get => _image.Scale(Width, Height);
+            get => _image.Scale(Width - 1, Height - 1);
             set
             {
                 if (Equals(value, _image)) return;
@@ -310,7 +310,7 @@ namespace AudioBand.ViewModels
 
     internal class PreviousSongButtonAppearance : INotifyPropertyChanged
     {
-        private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous)).SizeFix();
+        private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private Image _image;
         private string _imagePath = "";
         private bool _isVisible = true;
@@ -321,7 +321,7 @@ namespace AudioBand.ViewModels
 
         public Image Image
         {
-            get => _image.Scale(Width, Height);
+            get => _image.Scale(Width - 1, Height - 1);
             set
             {
                 if (Equals(value, _image)) return;
