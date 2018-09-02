@@ -31,8 +31,8 @@ namespace AudioBand
         public static Image Resize(this Image image, int width, int height)
         {
             // Padding issues
-            var rect = new Rectangle(0, 0, width - 2, height - 2);
-            var newImage = new Bitmap(width - 2, height - 2);
+            var rect = new Rectangle(0, 0, width, height);
+            var newImage = new Bitmap(width, height);
             using (var graphics = Graphics.FromImage(newImage))
             {
                 graphics.CompositingMode = CompositingMode.SourceCopy;
@@ -60,13 +60,6 @@ namespace AudioBand
             {
                 return Resize(image, (int) (image.Width / ratioh), targetHeight);
             }
-        }
-
-        public static SvgDocument SizeFix(this SvgDocument svg)
-        {
-            svg.Width -= 3;
-            svg.Height -= 3;
-            return svg;
         }
 
         public static T As<T>(this Binding binding)
