@@ -259,7 +259,6 @@ namespace AudioBand
             var singleCharacterWidth = TextRenderer.MeasureText(" ", font).Width;
             var padding = singleCharacterWidth - (twoCharacterWidth - singleCharacterWidth);
 
-            // Use as text location
             TextLength = 0;
             foreach (var textChunk in Chunks)
             {

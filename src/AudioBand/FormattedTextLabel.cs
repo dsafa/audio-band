@@ -196,6 +196,7 @@ namespace AudioBand
 
             if (_textWidth > ClientRectangle.Width && !_scrollingTimer.Enabled)
             {
+                _duplicateXPos = _textXPos + _textWidth + TextMargin;
                 _scrollingTimer.Start();
             }
             else if (_textWidth <= ClientRectangle.Width && _scrollingTimer.Enabled)
