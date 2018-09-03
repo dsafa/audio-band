@@ -88,8 +88,6 @@ namespace AudioBand
             }
         }
 
-        public int TextLength { get; private set; }
-
         public Color DefaultColor
         {
             get => _defaultColor;
@@ -280,9 +278,20 @@ namespace AudioBand
             }
         }
 
-        public void Draw(Graphics graphics, int x)
+        // Better if we draw once and then just copy it if we need to move it
+        public int Draw(Graphics graphics, int x)
         {
-            TextLength = 0;
+            return Draw(graphics, x, false);
+        }
+
+        public int Measure(Graphics graphics)
+        {
+            return Draw(graphics, 0, true);
+        }
+
+        private int Draw(Graphics graphics, int x, bool measure)
+        {
+            var totalTextLength = 0;
             foreach (var textChunk in Chunks)
             {
                 var font = new Font(FontFamily, FontSize, FontStyle.Regular, GraphicsUnit.Point);
@@ -300,11 +309,16 @@ namespace AudioBand
                 }
 
                 var textLength = TextRenderer.MeasureText(textChunk.Text, font, new Size(1000, 1000), TextFormatFlags.NoPrefix).Width - MeasurePadding(font);
-                textChunk.Draw(graphics, font, x, 0);
+                if (!measure)
+                {
+                    textChunk.Draw(graphics, font, x, 0);
+                }
 
-                TextLength += textLength;
+                totalTextLength += textLength;
                 x += textLength;
             }
+
+            return totalTextLength;
         }
 
         private int MeasurePadding(Font font)
