@@ -10,7 +10,7 @@ using AudioBand;
 
 namespace AudioBand.ViewModels
 {
-    internal class AlbumArtDisplay : INotifyPropertyChanged
+    internal class AlbumArtDisplay : INotifyPropertyChanged, IEditableObject
     {
         private bool _isVisible = true;
         private int _width = 30;
@@ -21,6 +21,8 @@ namespace AudioBand.ViewModels
         private string _placeholderPath;
         private Image _currentAlbumArt = new Bitmap(1, 1);
         private static readonly SvgDocument DefaultAlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
+
+        private AlbumArtDisplay _backup;
 
         public bool IsVisible
         {
@@ -140,9 +142,37 @@ namespace AudioBand.ViewModels
                 Placeholder = DefaultAlbumArtPlaceholderSvg.ToBitmap();
             }
         }
+
+        public void BeginEdit()
+        {
+            _backup = new AlbumArtDisplay
+            {
+                Height = Height,
+                Width = Width,
+                YPosition = YPosition,
+                XPosition = XPosition,
+                IsVisible = IsVisible,
+                PlaceholderPath = PlaceholderPath == null ? null : string.Copy(PlaceholderPath),
+            };
+        }
+
+        public void EndEdit()
+        {
+            
+        }
+
+        public void CancelEdit()
+        {
+            Height = _backup.Height;
+            Width = _backup.Width;
+            XPosition = _backup.XPosition;
+            YPosition = _backup.YPosition;
+            PlaceholderPath = _backup.PlaceholderPath;
+            IsVisible = _backup.IsVisible;
+        }
     }
 
-    internal class AlbumArtPopup : INotifyPropertyChanged
+    internal class AlbumArtPopup : INotifyPropertyChanged, IEditableObject
     {
         private bool _isVisible = true;
         private int _width = 250;
@@ -150,6 +180,8 @@ namespace AudioBand.ViewModels
         private int _xOffset;
         private int _margin;
         private Image _currentAlbumArt = new Bitmap(1, 1);
+
+        private AlbumArtPopup _backup;
 
         public bool IsVisible
         {
@@ -223,6 +255,32 @@ namespace AudioBand.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void BeginEdit()
+        {
+            _backup = new AlbumArtPopup
+            {
+                IsVisible = IsVisible,
+                Width = Width,
+                Height = Height,
+                XOffset = XOffset,
+                Margin = Margin
+            };
+        }
+
+        public void EndEdit()
+        {
+
+        }
+
+        public void CancelEdit()
+        {
+            IsVisible = _backup.IsVisible;
+            Width = _backup.Width;
+            Height = _backup.Height;
+            XOffset = _backup.XOffset;
+            Margin = _backup.Margin;
         }
     }
 }

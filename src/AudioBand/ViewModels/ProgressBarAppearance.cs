@@ -5,7 +5,7 @@ using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
-    internal class ProgressBarAppearance : INotifyPropertyChanged
+    internal class ProgressBarAppearance : INotifyPropertyChanged, IEditableObject
     {
         private Color _foregroundColor = Color.DodgerBlue;
         private Color _backgroundColor = Color.Black;
@@ -14,6 +14,8 @@ namespace AudioBand.ViewModels
         private int _xPosition = 0;
         private int _height = 2;
         private int _width = 250;
+
+        private ProgressBarAppearance _backup;
 
         public Color ForegroundColor
         {
@@ -102,6 +104,36 @@ namespace AudioBand.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void BeginEdit()
+        {
+            _backup = new ProgressBarAppearance
+            {
+                IsVisible = IsVisible,
+                Width = Width,
+                Height = Height,
+                XPosition = XPosition,
+                YPosition = YPosition,
+                BackgroundColor = BackgroundColor,
+                ForegroundColor = ForegroundColor
+            };
+        }
+
+        public void EndEdit()
+        {
+
+        }
+
+        public void CancelEdit()
+        {
+            IsVisible = _backup.IsVisible;
+            Width = _backup.Width;
+            Height = _backup.Height;
+            XPosition = _backup.XPosition;
+            YPosition = _backup.YPosition;
+            BackgroundColor = _backup.BackgroundColor;
+            ForegroundColor = _backup.ForegroundColor;
         }
     }
 }

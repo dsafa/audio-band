@@ -5,7 +5,7 @@ using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
-    internal class TextAppearance : INotifyPropertyChanged
+    internal class TextAppearance : INotifyPropertyChanged, IEditableObject
     {
         private bool _isVisible = true;
         private string _fontFamily = "Segoe UI";
@@ -19,6 +19,8 @@ namespace AudioBand.ViewModels
         private int _width = 220;
         private string _name = "Now Playing";
         private int _scrollSpeed = 50;
+
+        private TextAppearance _backup;
 
         public string Name
         {
@@ -164,6 +166,46 @@ namespace AudioBand.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void BeginEdit()
+        {
+            _backup = new TextAppearance
+            {
+                IsVisible = IsVisible,
+                Width = Width,
+                Height = Height,
+                XPosition = XPosition,
+                YPosition = YPosition,
+                Color = Color,
+                TextAlignment = TextAlignment,
+                FontFamily = FontFamily,
+                FontSize = FontSize,
+                FormatString = FormatString,
+                Name = Name,
+                ScrollSpeed = ScrollSpeed
+            };
+        }
+
+        public void EndEdit()
+        {
+
+        }
+
+        public void CancelEdit()
+        {
+            IsVisible = _backup.IsVisible;
+            Width = _backup.Width;
+            Height = _backup.Height;
+            XPosition = _backup.XPosition;
+            YPosition = _backup.YPosition;
+            Color = _backup.Color;
+            TextAlignment = _backup.TextAlignment;
+            FontFamily = _backup.FontFamily;
+            FontSize = _backup.FontSize;
+            FormatString = _backup.FormatString;
+            Name = _backup.Name;
+            ScrollSpeed = _backup.ScrollSpeed;
         }
     }
 

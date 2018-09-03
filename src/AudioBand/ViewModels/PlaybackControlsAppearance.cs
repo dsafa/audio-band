@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace AudioBand.ViewModels
 {
-    internal class PlayPauseButtonAppearance : INotifyPropertyChanged
+    internal class PlayPauseButtonAppearance : INotifyPropertyChanged, IEditableObject
     {
         private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
         private static readonly SvgDocument DefaultPauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
@@ -22,6 +22,8 @@ namespace AudioBand.ViewModels
         private int _width = 73;
         private bool _isVisible = true;
         private bool _isPlaying;
+
+        private PlayPauseButtonAppearance _backup;
 
         public Image PlayImage
         {
@@ -186,9 +188,39 @@ namespace AudioBand.ViewModels
                 PlayImage = DefaultPlayButtonSvg.ToBitmap();
             }
         }
+
+        public void BeginEdit()
+        {
+            _backup = new PlayPauseButtonAppearance
+            {
+                IsVisible = IsVisible,
+                Width = Width,
+                Height = Height,
+                XPosition = XPosition,
+                YPosition = YPosition,
+                PlayImagePath = PlayImagePath == null ? null : string.Copy(PlayImagePath),
+                PauseImagePath = PauseImagePath == null ? null : string.Copy(PauseImagePath),
+            };
+        }
+
+        public void EndEdit()
+        {
+
+        }
+
+        public void CancelEdit()
+        {
+            IsVisible = _backup.IsVisible;
+            Width = _backup.Width;
+            Height = _backup.Height;
+            XPosition = _backup.XPosition;
+            YPosition = _backup.YPosition;
+            PlayImagePath = _backup.PlayImagePath;
+            PauseImagePath = _backup.PauseImagePath;
+        }
     }
 
-    internal class NextSongButtonAppearance : INotifyPropertyChanged
+    internal class NextSongButtonAppearance : INotifyPropertyChanged, IEditableObject
     {
         private static readonly SvgDocument DefaultNextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private Image _image;
@@ -198,6 +230,8 @@ namespace AudioBand.ViewModels
         private int _height = 12;
         private int _width = 73;
         private bool _isVisible = true;
+
+        private NextSongButtonAppearance _backup;
 
         public Image Image
         {
@@ -306,9 +340,37 @@ namespace AudioBand.ViewModels
                 Image = DefaultNextButtonSvg.ToBitmap();
             }
         }
+
+        public void BeginEdit()
+        {
+            _backup = new NextSongButtonAppearance
+            {
+                IsVisible = IsVisible,
+                Width = Width,
+                Height = Height,
+                XPosition = XPosition,
+                YPosition = YPosition,
+                ImagePath = ImagePath == null ? null : string.Copy(ImagePath)
+            };
+        }
+
+        public void EndEdit()
+        {
+
+        }
+
+        public void CancelEdit()
+        {
+            IsVisible = _backup.IsVisible;
+            Width = _backup.Width;
+            Height = _backup.Height;
+            XPosition = _backup.XPosition;
+            YPosition = _backup.YPosition;
+            ImagePath = _backup.ImagePath;
+        }
     }
 
-    internal class PreviousSongButtonAppearance : INotifyPropertyChanged
+    internal class PreviousSongButtonAppearance : INotifyPropertyChanged, IEditableObject
     {
         private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private Image _image;
@@ -318,6 +380,8 @@ namespace AudioBand.ViewModels
         private int _height = 12;
         private int _xPosition = 30;
         private int _yPosition = 14;
+
+        private PreviousSongButtonAppearance _backup;
 
         public Image Image
         {
@@ -425,6 +489,34 @@ namespace AudioBand.ViewModels
             {
                 Image = DefaultPreviousButtonSvg.ToBitmap();
             }
+        }
+
+        public void BeginEdit()
+        {
+            _backup = new PreviousSongButtonAppearance
+            {
+                IsVisible = IsVisible,
+                Width = Width,
+                Height = Height,
+                XPosition = XPosition,
+                YPosition = YPosition,
+                ImagePath = ImagePath == null ? null : string.Copy(ImagePath)
+            };
+        }
+
+        public void EndEdit()
+        {
+
+        }
+
+        public void CancelEdit()
+        {
+            IsVisible = _backup.IsVisible;
+            Width = _backup.Width;
+            Height = _backup.Height;
+            XPosition = _backup.XPosition;
+            YPosition = _backup.YPosition;
+            ImagePath = _backup.ImagePath;
         }
     }
 }
