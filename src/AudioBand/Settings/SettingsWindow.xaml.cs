@@ -163,9 +163,9 @@ namespace AudioBand.Settings
 
         private string SelectImage()
         {
-            var dlg = new Microsoft.Win32.OpenFileDialog();
+            var dlg = new OpenFileDialog();
 
-            var codecs = ImageCodecInfo.GetImageEncoders();;
+            var codecs = ImageCodecInfo.GetImageEncoders();
             var filters = new List<string>();
             var fileExtensions = new List<string>();
 
