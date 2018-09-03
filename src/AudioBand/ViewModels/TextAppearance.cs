@@ -15,7 +15,7 @@ namespace AudioBand.ViewModels
         private TextAlignment _textAlignment = TextAlignment.Center;
         private int _yPosition = 0;
         private int _xPosition = 30;
-        private int _height = 14;
+        private int _height = 15;
         private int _width = 220;
         private string _name = "Now Playing";
         private int _scrollSpeed = 50;

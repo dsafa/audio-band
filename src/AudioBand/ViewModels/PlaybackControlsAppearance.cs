@@ -16,7 +16,7 @@ namespace AudioBand.ViewModels
         private string _playImagePath = "";
         private Image _pauseImage;
         private string _pauseImagePath = "";
-        private int _yPosition = 14;
+        private int _yPosition = 15;
         private int _xPosition = 103;
         private int _height = 12;
         private int _width = 73;
@@ -225,7 +225,7 @@ namespace AudioBand.ViewModels
         private static readonly SvgDocument DefaultNextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private Image _image;
         private string _imagePath = "";
-        private int _yPosition = 14;
+        private int _yPosition = 15;
         private int _xPosition = 176;
         private int _height = 12;
         private int _width = 73;
@@ -379,7 +379,7 @@ namespace AudioBand.ViewModels
         private int _width = 73;
         private int _height = 12;
         private int _xPosition = 30;
-        private int _yPosition = 14;
+        private int _yPosition = 15;
 
         private PreviousSongButtonAppearance _backup;
 
