@@ -317,7 +317,31 @@
                                         <Label Grid.Row="10" Grid.Column="0" Content="Scrolling Speed" Style="{StaticResource GridLabel}"/>
                                         <metro:NumericUpDown Grid.Row="10" Grid.Column="1" Style="{StaticResource GridSizeInput}" Value="{Binding ScrollSpeed, Mode=TwoWay}"/>
 
-                                        <Label Grid.Row="11" Grid.Column="0" Content="Format" Style="{StaticResource GridLabel}"/>
+                                        <Label Grid.Row="11" Grid.Column="0" Content="Format" Style="{StaticResource GridLabel}" ToolTipService.ShowDuration="60000">
+                                            <Label.ToolTip>
+                                                <TextBlock>
+                                                    Format for the text that is displayed which can include placeholders. <LineBreak/>
+                                                    Placeholders will be substituted with their corresponding values. Placeholders are in the format {[style]&lt;tag&gt;:[color]}. <LineBreak/>
+                                                    <Bold>Tags</Bold> <LineBreak/>
+                                                    &#8226; artist - Artist for the current song <LineBreak/>
+                                                    &#8226; song - The title of the current song <LineBreak/>
+                                                    &#8226; album - Album name for the current song <LineBreak/>
+                                                    &#8226; time - Current playback time for the current song <LineBreak/>
+                                                    &#8226; length - Total length of the current song <LineBreak/>
+                                                    <Bold>Styles</Bold> <LineBreak/>
+                                                    &#8226; * - Bolds the placeholder <LineBreak/>
+                                                    &#8226; &amp; - Italicizes the placeholder <LineBreak/>
+                                                    &#8226; _ - Underlines the placeholder <LineBreak/>
+                                                    <Bold>Colors</Bold> <LineBreak/>
+                                                    Use an html color code in the format #RRGGBB <LineBreak/>
+                                                    <Bold>Example formats</Bold> <LineBreak/>
+                                                    Normal label showing the song and artist : {song} by {artist} <LineBreak/>
+                                                    Showing the album name in bold : {*album} <LineBreak/>
+                                                    Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9} <LineBreak/>
+                                                    Using style and color : {*artist:#a9a9a9} <LineBreak/>
+                                                </TextBlock>
+                                            </Label.ToolTip>
+                                        </Label>
                                         <TextBox Grid.Row="11" Grid.Column="1" metro:TextBoxHelper.ClearTextButton="True" Style="{StaticResource GridTextBox}" Text="{Binding FormatString, Mode=TwoWay}"/>
 
                                         <Button Grid.Row="12" HorizontalAlignment="Right" Grid.Column="1" Content="Delete" Style="{StaticResource GridButton}" Click="DeleteLabelOnClick"/>
