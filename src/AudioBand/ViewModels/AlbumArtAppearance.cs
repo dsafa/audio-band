@@ -178,7 +178,7 @@ namespace AudioBand.ViewModels
         private int _width = 250;
         private int _height = 250;
         private int _xOffset;
-        private int _margin;
+        private int _margin = 4;
         private Image _currentAlbumArt = new Bitmap(1, 1);
 
         private AlbumArtPopup _backup;
