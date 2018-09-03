@@ -140,6 +140,7 @@ namespace AudioBand
         private float _textXPos;
         private float _duplicateXPos; // Draw 2 labels so that there wont be a gap between
         private int _textWidth;
+        private const int WidthPadding = 4;
 
         private FormattedTextRenderer _renderer;
         private string _format;
@@ -189,15 +190,8 @@ namespace AudioBand
             var graphics = e.Graphics;
             graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-            _renderer.Draw(graphics, (int)_textXPos);
-            _textWidth = _renderer.TextLength;
-
-            if (_scrollingTimer.Enabled)
-            {
-                _renderer.Draw(graphics, (int)_duplicateXPos);
-            }
-
-            var textTooLong = _textWidth > ClientRectangle.Width - 4; // extra padding in case
+            _textWidth = _renderer.Measure(graphics);
+            var textTooLong = _textWidth > ClientRectangle.Width - WidthPadding; // extra padding in case
 
             if (textTooLong && !_scrollingTimer.Enabled)
             {
@@ -207,9 +201,37 @@ namespace AudioBand
             else if (!textTooLong && _scrollingTimer.Enabled)
             {
                 _scrollingTimer.Stop();
-                _textXPos = 0;
+                _textXPos = GetNormalTextPos();
             }
 
+            if (!_scrollingTimer.Enabled)
+            {
+                _textXPos = GetNormalTextPos();
+            }
+
+            _renderer.Draw(graphics, (int) _textXPos);
+
+            if (_scrollingTimer.Enabled)
+            {
+                _renderer.Draw(graphics, (int) _duplicateXPos);
+
+            }
+        }
+
+        // Text position when not scrolling
+        private int GetNormalTextPos()
+        {
+            switch (Alignment)
+            {
+                case TextAlignment.Left:
+                    return 0;
+                case TextAlignment.Center:
+                    return (ClientRectangle.Width - WidthPadding - _textWidth) / 2;
+                case TextAlignment.Right:
+                    return ClientRectangle.Width - WidthPadding - _textWidth;
+            }
+
+            return 0;
         }
 
         protected override void Dispose(bool disposing)
