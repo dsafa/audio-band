@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -24,16 +25,22 @@ namespace AudioBand.Settings
     internal partial class SettingsWindow
     {
         internal event EventHandler Saved;
-        internal Appearance Appearance { get; set; }
+        internal event EventHandler<TextLabelChangedEventArgs> NewLabelCreated;
+        internal event EventHandler<TextLabelChangedEventArgs> LabelDeleted;
+
+        private Appearance Appearance { get; set; }
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
+        public ObservableCollection<TextAppearance> TextAppearancesCollection { get; set; }
 
         internal SettingsWindow(Appearance appearance)
         {
             Appearance = appearance;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
-            InitializeComponent();
             DataContext = Appearance;
+            TextAppearancesCollection = new ObservableCollection<TextAppearance>(appearance.TextAppearances);
+
+            InitializeComponent();
         }
 
         // Problem loading xceed.wpf.toolkit assembly normally
@@ -60,6 +67,9 @@ namespace AudioBand.Settings
 
         private void Save_OnClick(object sender, RoutedEventArgs e)
         {
+            Appearance.TextAppearances.Clear();
+            Appearance.TextAppearances.AddRange(TextAppearancesCollection);
+
             Saved?.Invoke(this, EventArgs.Empty);
             Close();
         }
@@ -67,6 +77,33 @@ namespace AudioBand.Settings
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void NewLabelButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            var appearance = new TextAppearance {Name = "New label"};
+            TextAppearancesCollection.Add(appearance);
+
+            NewLabelCreated?.Invoke(this, new TextLabelChangedEventArgs(appearance));
+        }
+
+        private void DeleteLabelOnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var appearance = button.DataContext as TextAppearance;
+            TextAppearancesCollection.Remove(TextAppearancesCollection.Single(t => t.Tag == appearance.Tag));
+
+            LabelDeleted?.Invoke(this, new TextLabelChangedEventArgs(appearance));
+        }
+    }
+
+    internal class TextLabelChangedEventArgs : EventArgs
+    {
+        public TextAppearance Appearance { get; }
+
+        public TextLabelChangedEventArgs(TextAppearance appearance)
+        {
+            Appearance = appearance;
         }
     }
 }
