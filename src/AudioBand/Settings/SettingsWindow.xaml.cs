@@ -31,6 +31,8 @@ namespace AudioBand.Settings
         private Appearance Appearance { get; set; }
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
         public ObservableCollection<TextAppearance> TextAppearancesCollection { get; set; }
+        private List<TextAppearance> _deletedTextAppearances;
+        private List<TextAppearance> _addedTextAppearances;
 
         internal SettingsWindow(Appearance appearance)
         {
@@ -41,6 +43,8 @@ namespace AudioBand.Settings
 
             InitializeComponent();
             DataContext = appearance;
+
+            StartEdit();
         }
 
         // Problem loading xceed.wpf.toolkit assembly normally
@@ -59,39 +63,84 @@ namespace AudioBand.Settings
             return !File.Exists(filename) ? null : Assembly.LoadFrom(filename);
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            e.Cancel = true;
-            Hide();
-        }
-
         private void Save_OnClick(object sender, RoutedEventArgs e)
         {
-            Appearance.TextAppearances.Clear();
-            Appearance.TextAppearances.AddRange(TextAppearancesCollection);
-
             Saved?.Invoke(this, EventArgs.Empty);
             Close();
         }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
+            CancelEdit();
             Close();
         }
 
         private void NewLabelButtonOnClick(object sender, RoutedEventArgs e)
         {
-            var appearance = new TextAppearance {Name = "New label"};
-            TextAppearancesCollection.Add(appearance);
+            var appearance = new TextAppearance { Name = "New label" };
+            CreateLabel(appearance);
 
-            NewLabelCreated?.Invoke(this, new TextLabelChangedEventArgs(appearance));
+            _addedTextAppearances.Add(appearance);
+            appearance.BeginEdit();
         }
 
         private void DeleteLabelOnClick(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             var appearance = button.DataContext as TextAppearance;
+            DeleteLabel(appearance);
+            _deletedTextAppearances.Add(appearance);
+        }
+
+        private void StartEdit()
+        {
+            Appearance.AlbumArtPopupAppearance.BeginEdit();
+            Appearance.TextAppearances.ForEach(a => a.BeginEdit());
+            Appearance.AlbumArtAppearance.BeginEdit();
+            Appearance.AudioBandAppearance.BeginEdit();
+            Appearance.NextSongButtonAppearance.BeginEdit();
+            Appearance.PreviousSongButtonAppearance.BeginEdit();
+            Appearance.PlayPauseButtonAppearance.BeginEdit();
+            Appearance.ProgressBarAppearance.BeginEdit();
+
+            _addedTextAppearances = new List<TextAppearance>();
+            _deletedTextAppearances = new List<TextAppearance>();
+        }
+
+        private void CancelEdit()
+        {
+            Appearance.AlbumArtPopupAppearance.CancelEdit();
+            Appearance.TextAppearances.ForEach(a => a.CancelEdit());
+            Appearance.AlbumArtAppearance.CancelEdit();
+            Appearance.AudioBandAppearance.CancelEdit();
+            Appearance.NextSongButtonAppearance.CancelEdit();
+            Appearance.PreviousSongButtonAppearance.CancelEdit();
+            Appearance.PlayPauseButtonAppearance.CancelEdit();
+            Appearance.ProgressBarAppearance.CancelEdit();
+
+            foreach (var addedTextAppearance in _addedTextAppearances)
+            {
+                DeleteLabel(addedTextAppearance);
+            }
+
+            foreach (var deletedTextAppearance in _deletedTextAppearances)
+            {
+                CreateLabel(deletedTextAppearance);
+            }
+        }
+
+        private void CreateLabel(TextAppearance appearance)
+        {
+            Appearance.TextAppearances.Add(appearance);
+            TextAppearancesCollection.Add(appearance);
+
+            NewLabelCreated?.Invoke(this, new TextLabelChangedEventArgs(appearance));
+        }
+
+        private void DeleteLabel(TextAppearance appearance)
+        {
             TextAppearancesCollection.Remove(TextAppearancesCollection.Single(t => t.Tag == appearance.Tag));
+            Appearance.TextAppearances.Remove(Appearance.TextAppearances.Single(t => t.Tag == appearance.Tag));
 
             LabelDeleted?.Invoke(this, new TextLabelChangedEventArgs(appearance));
         }

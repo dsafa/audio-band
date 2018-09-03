@@ -37,7 +37,7 @@ namespace AudioBand
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(100, 100) };
         private readonly SettingsManager _settingsManager;
-        private readonly SettingsWindow _settingsWindow;
+        private SettingsWindow _settingsWindow;
         private readonly Appearance _appearance;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
@@ -76,11 +76,7 @@ namespace AudioBand
             {
                 _settingsManager = new SettingsManager();
                 _appearance = _settingsManager.Appearance;
-                _settingsWindow = new SettingsWindow(_appearance);
-                _settingsWindow.Saved += SettingsWindowOnSaved;
-                _settingsWindow.NewLabelCreated += SettingsWindowOnNewLabelCreated;
-                _settingsWindow.LabelDeleted += SettingsWindowOnLabelDeleted;
-                ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
+                CreateSettingsWindow();
 
                 Options.HeightIncrement = 0;
                 UpdateSize();
@@ -356,6 +352,21 @@ namespace AudioBand
         private void SettingsWindowOnSaved(object sender, EventArgs eventArgs)
         {
             _settingsManager.Save();
+        }
+
+        private void CreateSettingsWindow()
+        {
+            _settingsWindow = new SettingsWindow(_appearance);
+            _settingsWindow.Saved += SettingsWindowOnSaved;
+            _settingsWindow.NewLabelCreated += SettingsWindowOnNewLabelCreated;
+            _settingsWindow.LabelDeleted += SettingsWindowOnLabelDeleted;
+            _settingsWindow.Closed += SettingsWindowOnClosed;
+            ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
+        }
+
+        private void SettingsWindowOnClosed(object sender, EventArgs eventArgs)
+        {
+            CreateSettingsWindow();
         }
 
         private void ResetState()
