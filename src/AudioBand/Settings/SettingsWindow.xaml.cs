@@ -242,6 +242,31 @@ namespace AudioBand.Settings
 
             Appearance.AlbumArtAppearance.PlaceholderPath = path;
         }
+
+        private void PreviousButtonImageResetOnClick(object sender, RoutedEventArgs e)
+        {
+            Appearance.PreviousSongButtonAppearance.ImagePath = "";
+        }
+
+        private void NextButtonImageResetOnClick(object sender, RoutedEventArgs e)
+        {
+            Appearance.NextSongButtonAppearance.ImagePath = "";
+        }
+
+        private void PauseButtonImageResetOnClick(object sender, RoutedEventArgs e)
+        {
+            Appearance.PlayPauseButtonAppearance.PauseImagePath = "";
+        }
+
+        private void PlayButtonImageResetOnClick(object sender, RoutedEventArgs e)
+        {
+            Appearance.PlayPauseButtonAppearance.PlayImagePath = "";
+        }
+
+        private void AlbumArtPlaceholderResetOnClick(object sender, RoutedEventArgs e)
+        {
+            Appearance.AlbumArtAppearance.PlaceholderPath = "";
+        }
     }
 
     internal class TextLabelChangedEventArgs : EventArgs
