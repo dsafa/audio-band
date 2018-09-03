@@ -131,6 +131,8 @@ namespace AudioBand
             }
         }
 
+        internal int TagId { get; set; }
+
         private const int TickRateMs = 10;
         private const int TickPerS = 1000 / TickRateMs;
         private readonly Timer _scrollingTimer = new Timer { Interval = TickRateMs};

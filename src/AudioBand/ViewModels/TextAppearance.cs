@@ -156,6 +156,8 @@ namespace AudioBand.ViewModels
 
         public Point Location => new Point(_xPosition, _yPosition);
 
+        public int Tag { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

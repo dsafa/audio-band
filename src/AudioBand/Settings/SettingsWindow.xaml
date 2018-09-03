@@ -83,8 +83,8 @@
     </metro:MetroWindow.DataContext>
     <DockPanel LastChildFill="True">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-            <Button x:Name="Save" Margin="4" Width="70" Content="Cancel" Style="{DynamicResource SquareButtonStyle}" Click="Save_OnClick"/>
-            <Button x:Name="Cancel" Margin="4" Width="70" Content="Save" Style="{StaticResource AccentedSquareButtonStyle}" Click="Cancel_OnClick"/>
+            <Button x:Name="Cancel" Margin="4" Width="70" Content="Cancel" Style="{DynamicResource SquareButtonStyle}" Click="Cancel_OnClick"/>
+            <Button x:Name="Save" Margin="4" Width="70" Content="Save" Style="{StaticResource AccentedSquareButtonStyle}" Click="Save_OnClick"/>
         </StackPanel>
         <TabControl Margin="10" TabStripPlacement="Left">
             <TabItem  Header="General">
@@ -226,8 +226,8 @@
             </TabItem>
             <TabItem Header="Text Labels">
                 <DockPanel Style="{StaticResource TabDockPanel}">
-                    <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add New label" Style="{StaticResource GridButton}"/>
-                    <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding TextAppearances}">
+                    <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Add New label" Style="{StaticResource GridButton}" Click="NewLabelButtonOnClick"/>
+                    <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding ElementName=Window, Path=TextAppearancesCollection}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                 <Setter Property="Focusable" Value="true"/>
@@ -294,7 +294,7 @@
                                         <Label Grid.Row="11" Grid.Column="0" Content="Format" Style="{StaticResource GridLabel}"/>
                                         <TextBox Grid.Row="11" Grid.Column="1" metro:TextBoxHelper.ClearTextButton="True" Style="{StaticResource GridTextBox}" Text="{Binding FormatString, Mode=TwoWay}"/>
 
-                                        <Button Grid.Row="12" HorizontalAlignment="Right" Grid.Column="1" Content="Delete" Style="{StaticResource GridButton}"/>
+                                        <Button Grid.Row="12" HorizontalAlignment="Right" Grid.Column="1" Content="Delete" Style="{StaticResource GridButton}" Click="DeleteLabelOnClick"/>
                                     </Grid>
                                 </Expander>
                             </DataTemplate>

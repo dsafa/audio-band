@@ -64,7 +64,11 @@ namespace AudioBand.Settings
                 });
                 cfg.ConfigureType<AlbumArtPopup>(t => t.IgnoreProperty(o => o.CurrentAlbumArt));
                 cfg.ConfigureType<ProgressBarAppearance>(t => t.IgnoreProperty(o => o.Location));
-                cfg.ConfigureType<TextAppearance>(t => t.IgnoreProperty(o => o.Location));
+                cfg.ConfigureType<TextAppearance>(t =>
+                {
+                    t.IgnoreProperty(o => o.Tag);
+                    t.IgnoreProperty(o => o.Location);
+                });
             });
 
             if (!Directory.Exists(SettingsDirectory))

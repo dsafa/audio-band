@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -41,6 +42,7 @@ namespace AudioBand
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
+        private int _nextTag = 0;
 
         public bool AlbumArtPopupIsVisible { get; set; }
         public int AlbumArtPopupWidth { get; set; }
@@ -53,7 +55,8 @@ namespace AudioBand
             var fileTarget = new FileTarget
             {
                 DeleteOldFileOnStartup = true,
-                FileName = "${environment:variable=TEMP}/AudioBand.log"
+                FileName = "${environment:variable=TEMP}/AudioBand.log",
+                ConcurrentWrites = true
             };
 
             var fileRule = new LoggingRule("*", LogLevel.Debug, fileTarget);
@@ -75,6 +78,8 @@ namespace AudioBand
                 _appearance = _settingsManager.Appearance;
                 _settingsWindow = new SettingsWindow(_appearance);
                 _settingsWindow.Saved += SettingsWindowOnSaved;
+                _settingsWindow.NewLabelCreated += SettingsWindowOnNewLabelCreated;
+                _settingsWindow.LabelDeleted += SettingsWindowOnLabelDeleted;
                 ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
 
                 Options.HeightIncrement = 0;
@@ -384,12 +389,11 @@ namespace AudioBand
         {
             foreach (var textAppearance in _appearance.TextAppearances)
             {
-                var label = CreateTextLabel(textAppearance);
-                Controls.Add(label);
+                CreateTextLabel(textAppearance);
             }
         }
 
-        private FormattedTextLabel CreateTextLabel(TextAppearance appearance)
+        private void CreateTextLabel(TextAppearance appearance)
         {
             var label = new FormattedTextLabel(appearance.FormatString, appearance.Color, appearance.FontSize, appearance.FontFamily, appearance.TextAlignment);
             label.DataBindings.Add(nameof(label.Format), appearance, nameof(appearance.FormatString));
@@ -416,7 +420,20 @@ namespace AudioBand
             label.DataBindings.Add(nameof(label.SongLength), _audioSourceStatus, nameof(_audioSourceStatus.SongLength));
             label.DataBindings.Add(nameof(label.SongProgress), _audioSourceStatus, nameof(_audioSourceStatus.SongProgress));
 
-            return label;
+            appearance.Tag = _nextTag++;
+            label.TagId = appearance.Tag;
+            label.Name = "formatted label";
+            Controls.Add(label);
+        }
+
+        private void SettingsWindowOnNewLabelCreated(object sender, TextLabelChangedEventArgs textLabelChangedEventArgs)
+        {
+            CreateTextLabel(textLabelChangedEventArgs.Appearance);
+        }
+
+        private void SettingsWindowOnLabelDeleted(object sender, TextLabelChangedEventArgs textLabelChangedEventArgs)
+        {
+            Controls.Remove(Controls.Find("formatted label", true).Cast<FormattedTextLabel>().FirstOrDefault(l => l.TagId == textLabelChangedEventArgs.Appearance.Tag));
         }
     }
 }
