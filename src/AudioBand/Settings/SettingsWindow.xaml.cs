@@ -34,13 +34,13 @@ namespace AudioBand.Settings
 
         internal SettingsWindow(Appearance appearance)
         {
-            Appearance = appearance;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
-            DataContext = Appearance;
+            Appearance = appearance;
             TextAppearancesCollection = new ObservableCollection<TextAppearance>(appearance.TextAppearances);
 
             InitializeComponent();
+            DataContext = appearance;
         }
 
         // Problem loading xceed.wpf.toolkit assembly normally
