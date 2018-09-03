@@ -83,6 +83,7 @@ namespace AudioBand
 
                 _audioSourceStatus.PropertyChanged += AudioSourceStatusOnPropertyChanged;
                 _appearance.AudioBandAppearance.PropertyChanged += AudioBandAppearanceOnPropertyChanged;
+                _appearance.AlbumArtAppearance.PropertyChanged += AlbumArtAppearanceOnPropertyChanged;
 
                 albumArt.DataBindings.Add(nameof(albumArt.Visible), _appearance.AlbumArtAppearance, nameof(AlbumArtDisplay.IsVisible));
                 albumArt.DataBindings.Add(nameof(albumArt.Width), _appearance.AlbumArtAppearance, nameof(AlbumArtDisplay.Width));
@@ -311,6 +312,16 @@ namespace AudioBand
         private void AudioBandAppearanceOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             UpdateSize();
+        }
+
+        private void AlbumArtAppearanceOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            // if not playing update placeholder
+            if (propertyChangedEventArgs.PropertyName == nameof(AlbumArtDisplay.Placeholder) && !_audioSourceStatus.IsPlaying)
+            {
+                _appearance.AlbumArtAppearance.CurrentAlbumArt = _appearance.AlbumArtAppearance.Placeholder;
+                _albumArtTooltip.AlbumArt = _appearance.AlbumArtAppearance.Placeholder;
+            }
         }
 
         private void UpdateSize()
