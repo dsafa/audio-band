@@ -33,6 +33,7 @@ namespace AudioBand.Settings
         public ObservableCollection<TextAppearance> TextAppearancesCollection { get; set; }
         private List<TextAppearance> _deletedTextAppearances;
         private List<TextAppearance> _addedTextAppearances;
+        private bool _xClosed = true;
 
         internal SettingsWindow(Appearance appearance)
         {
@@ -63,14 +64,27 @@ namespace AudioBand.Settings
             return !File.Exists(filename) ? null : Assembly.LoadFrom(filename);
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            // if closed by x button
+            if (_xClosed)
+            {
+                CancelEdit();
+            }
+
+            base.OnClosed(e);
+        }
+
         private void Save_OnClick(object sender, RoutedEventArgs e)
         {
+            _xClosed = false;
             Saved?.Invoke(this, EventArgs.Empty);
             Close();
         }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
+            _xClosed = false;
             CancelEdit();
             Close();
         }
