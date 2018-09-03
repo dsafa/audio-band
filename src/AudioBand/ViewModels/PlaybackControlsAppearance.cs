@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
+using NLog;
 
 namespace AudioBand.ViewModels
 {
@@ -173,6 +174,7 @@ namespace AudioBand.ViewModels
             }
             catch (Exception e)
             {
+                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {PlayImagePath}, {e}");
                 PauseImage = DefaultPauseButtonSvg.ToBitmap();
             }
         }
@@ -185,6 +187,7 @@ namespace AudioBand.ViewModels
             }
             catch (Exception e)
             {
+                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {PauseImagePath}, {e}");
                 PlayImage = DefaultPlayButtonSvg.ToBitmap();
             }
         }
@@ -337,6 +340,7 @@ namespace AudioBand.ViewModels
             }
             catch (Exception e)
             {
+                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {ImagePath}, {e}");
                 Image = DefaultNextButtonSvg.ToBitmap();
             }
         }
@@ -487,6 +491,7 @@ namespace AudioBand.ViewModels
             }
             catch (Exception e)
             {
+                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {ImagePath}, {e}");
                 Image = DefaultPreviousButtonSvg.ToBitmap();
             }
         }

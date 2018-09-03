@@ -88,7 +88,6 @@ namespace AudioBand.ViewModels
             get => _placeholder;
             set
             {
-                if (Equals(value, _placeholder)) return;
                 _placeholder = value;
                 OnPropertyChanged();
             }
@@ -139,6 +138,7 @@ namespace AudioBand.ViewModels
             }
             catch (Exception e)
             {
+                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {_placeholderPath}, {e}");
                 Placeholder = DefaultAlbumArtPlaceholderSvg.ToBitmap();
             }
         }

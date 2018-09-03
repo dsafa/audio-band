@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using AudioBand.ViewModels;
 using MahApps.Metro.Controls;
+using Microsoft.Win32;
 using NLog;
 using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
@@ -157,6 +159,88 @@ namespace AudioBand.Settings
             Appearance.TextAppearances.Remove(Appearance.TextAppearances.Single(t => t.Tag == appearance.Tag));
 
             LabelDeleted?.Invoke(this, new TextLabelChangedEventArgs(appearance));
+        }
+
+        private string SelectImage()
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog();
+
+            var codecs = ImageCodecInfo.GetImageEncoders();;
+            var filters = new List<string>();
+            var fileExtensions = new List<string>();
+
+            foreach (var codec in codecs)
+            {
+                var codecName = codec.CodecName.Substring(8).Replace("Codec", "Files").Trim();
+                filters.Add($"{codecName} ({codec.FilenameExtension})|{codec.FilenameExtension}");
+                fileExtensions.Add(codec.FilenameExtension);
+            }
+
+            var allFilter = "All |" + string.Join(";", fileExtensions);
+            dlg.Filter = allFilter + "|" + string.Join("|", filters);
+
+            var res = dlg.ShowDialog();
+            if (res.HasValue && res.Value)
+            {
+                return dlg.FileName;
+            }
+
+            return null;
+        }
+
+        private void PlayButtonImageBrowseOnClick(object sender, RoutedEventArgs e)
+        {
+            var path = SelectImage();
+            if (path == null)
+            {
+                return;
+            }
+
+            Appearance.PlayPauseButtonAppearance.PlayImagePath = path;
+        }
+
+        private void PauseButtonImageBrowseOnClick(object sender, RoutedEventArgs e)
+        {
+            var path = SelectImage();
+            if (path == null)
+            {
+                return;
+            }
+
+            Appearance.PlayPauseButtonAppearance.PauseImagePath = path;
+        }
+
+        private void NextButtonImageBrowseOnClick(object sender, RoutedEventArgs e)
+        {
+            var path = SelectImage();
+            if (path == null)
+            {
+                return;
+            }
+
+            Appearance.NextSongButtonAppearance.ImagePath = path;
+        }
+
+        private void PreviousButtonImageBrowseOnClick(object sender, RoutedEventArgs e)
+        {
+            var path = SelectImage();
+            if (path == null)
+            {
+                return;
+            }
+
+            Appearance.PreviousSongButtonAppearance.ImagePath = path;
+        }
+
+        private void AlbumArtPlaceholderBrowseOnClick(object sender, RoutedEventArgs e)
+        {
+            var path = SelectImage();
+            if (path == null)
+            {
+                return;
+            }
+
+            Appearance.AlbumArtAppearance.PlaceholderPath = path;
         }
     }
 
