@@ -327,9 +327,12 @@ namespace AudioBand
         private void UpdateSize()
         {
             var audioBandSize = new Size(_appearance.AudioBandAppearance.Width, _appearance.AudioBandAppearance.Height);
-            Options.HorizontalSize = Size = audioBandSize;
+            Options.MinHorizontalSize = audioBandSize;
+            Options.HorizontalSize = audioBandSize;
             Options.MaxHorizontalHeight = audioBandSize.Height;
-            Options.MinHorizontalSize = MinimumSize = audioBandSize;
+
+            MinimumSize = audioBandSize;
+            Size = audioBandSize;
         }
 
         private async void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
