@@ -104,8 +104,20 @@ namespace AudioBand.Settings
         {
             var button = sender as Button;
             var appearance = button.DataContext as TextAppearance;
+
             DeleteLabel(appearance);
-            _deletedTextAppearances.Add(appearance);
+
+            // check if we are deleting a new label
+            var newAppearance = _addedTextAppearances.FirstOrDefault(a => a.Tag == appearance.Tag);
+            if (newAppearance != null)
+            {
+                // it was a new appearance
+                _addedTextAppearances.Remove(newAppearance);
+            }
+            else
+            {
+                _deletedTextAppearances.Add(appearance);
+            }
         }
 
         private void StartEdit()
