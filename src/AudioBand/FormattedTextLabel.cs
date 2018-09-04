@@ -8,6 +8,9 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace AudioBand
 {
+    /// <summary>
+    /// A text label that supports formatting with placeholders
+    /// </summary>
     public class FormattedTextLabel : Control
     {
         public string Format
@@ -133,7 +136,7 @@ namespace AudioBand
 
         internal int TagId { get; set; }
 
-        private const int TickRateMs = 10;
+        private const int TickRateMs = 17;
         private const int TickPerS = 1000 / TickRateMs;
         private readonly Timer _scrollingTimer = new Timer { Interval = TickRateMs};
         private const int TextMargin = 60; //Spacing between scrolling text

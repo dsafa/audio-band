@@ -43,6 +43,7 @@ namespace AudioBand
                 return;
             }
 
+            // since tooltips dont support binding, we will bind to the main control and just read the properties here
             Size = new Size(control.DataBindings[nameof(MainControl.AlbumArtPopupWidth)].As<int>(), control.DataBindings[nameof(MainControl.AlbumArtPopupHeight)].As<int>());
 
             var margin = control.DataBindings[nameof(MainControl.AlbumArtPopupY)].As<int>();
