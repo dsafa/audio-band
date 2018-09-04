@@ -38,7 +38,7 @@ namespace AudioBand
 
         public void ShowWithoutRequireFocus(string name, Control control, TaskbarInfo taskbarInfo)
         {
-            if (AlbumArt == null)
+            if (AlbumArt == null || !control.DataBindings[nameof(MainControl.AlbumArtPopupIsVisible)].As<bool>())
             {
                 return;
             }
