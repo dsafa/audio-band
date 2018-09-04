@@ -56,7 +56,6 @@ namespace AudioBand
             else
             {
                 yOffset = -Size.Height - margin;
-                LogManager.GetCurrentClassLogger().Debug("bottom" + yOffset);
             }
 
             const int AbsolutePos = 2;
