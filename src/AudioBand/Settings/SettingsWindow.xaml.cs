@@ -30,12 +30,14 @@ namespace AudioBand.Settings
         internal event EventHandler<TextLabelChangedEventArgs> NewLabelCreated;
         internal event EventHandler<TextLabelChangedEventArgs> LabelDeleted;
 
-        private Appearance Appearance { get; set; }
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
         public ObservableCollection<TextAppearance> TextAppearancesCollection { get; set; }
+
         private List<TextAppearance> _deletedTextAppearances;
         private List<TextAppearance> _addedTextAppearances;
         private bool _xClosed = true;
+        private Appearance Appearance { get; set; }
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         internal SettingsWindow(Appearance appearance)
         {
@@ -122,29 +124,14 @@ namespace AudioBand.Settings
 
         private void StartEdit()
         {
-            Appearance.AlbumArtPopupAppearance.BeginEdit();
-            Appearance.TextAppearances.ForEach(a => a.BeginEdit());
-            Appearance.AlbumArtAppearance.BeginEdit();
-            Appearance.AudioBandAppearance.BeginEdit();
-            Appearance.NextSongButtonAppearance.BeginEdit();
-            Appearance.PreviousSongButtonAppearance.BeginEdit();
-            Appearance.PlayPauseButtonAppearance.BeginEdit();
-            Appearance.ProgressBarAppearance.BeginEdit();
-
+            Appearance.BeginEdit();
             _addedTextAppearances = new List<TextAppearance>();
             _deletedTextAppearances = new List<TextAppearance>();
         }
 
         private void CancelEdit()
         {
-            Appearance.AlbumArtPopupAppearance.CancelEdit();
-            Appearance.TextAppearances.ForEach(a => a.CancelEdit());
-            Appearance.AlbumArtAppearance.CancelEdit();
-            Appearance.AudioBandAppearance.CancelEdit();
-            Appearance.NextSongButtonAppearance.CancelEdit();
-            Appearance.PreviousSongButtonAppearance.CancelEdit();
-            Appearance.PlayPauseButtonAppearance.CancelEdit();
-            Appearance.ProgressBarAppearance.CancelEdit();
+            Appearance.CancelEdit();
 
             foreach (var addedTextAppearance in _addedTextAppearances)
             {
@@ -200,84 +187,44 @@ namespace AudioBand.Settings
             return null;
         }
 
-        private void PlayButtonImageBrowseOnClick(object sender, RoutedEventArgs e)
+        private void ResetImagePathOnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            var label = e.Parameter as Label;
+            if (label == null)
+            {
+                _logger.Error("Image path reset command parameter is not a label");
+                return;
+            }
+
+            label.Content = "";
+        }
+
+        private void ResetImagePathCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void ChooseImageOnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var label = e.Parameter as Label;
+            if (label == null)
+            {
+                _logger.Error("Choose image command parameter is not a label");
+                return;
+            }
+
             var path = SelectImage();
             if (path == null)
             {
                 return;
             }
 
-            Appearance.PlayPauseButtonAppearance.PlayImagePath = path;
+            label.Content = path;
         }
 
-        private void PauseButtonImageBrowseOnClick(object sender, RoutedEventArgs e)
+        private void ChooseImageCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            var path = SelectImage();
-            if (path == null)
-            {
-                return;
-            }
-
-            Appearance.PlayPauseButtonAppearance.PauseImagePath = path;
-        }
-
-        private void NextButtonImageBrowseOnClick(object sender, RoutedEventArgs e)
-        {
-            var path = SelectImage();
-            if (path == null)
-            {
-                return;
-            }
-
-            Appearance.NextSongButtonAppearance.ImagePath = path;
-        }
-
-        private void PreviousButtonImageBrowseOnClick(object sender, RoutedEventArgs e)
-        {
-            var path = SelectImage();
-            if (path == null)
-            {
-                return;
-            }
-
-            Appearance.PreviousSongButtonAppearance.ImagePath = path;
-        }
-
-        private void AlbumArtPlaceholderBrowseOnClick(object sender, RoutedEventArgs e)
-        {
-            var path = SelectImage();
-            if (path == null)
-            {
-                return;
-            }
-
-            Appearance.AlbumArtAppearance.PlaceholderPath = path;
-        }
-
-        private void PreviousButtonImageResetOnClick(object sender, RoutedEventArgs e)
-        {
-            Appearance.PreviousSongButtonAppearance.ImagePath = "";
-        }
-
-        private void NextButtonImageResetOnClick(object sender, RoutedEventArgs e)
-        {
-            Appearance.NextSongButtonAppearance.ImagePath = "";
-        }
-
-        private void PauseButtonImageResetOnClick(object sender, RoutedEventArgs e)
-        {
-            Appearance.PlayPauseButtonAppearance.PauseImagePath = "";
-        }
-
-        private void PlayButtonImageResetOnClick(object sender, RoutedEventArgs e)
-        {
-            Appearance.PlayPauseButtonAppearance.PlayImagePath = "";
-        }
-
-        private void AlbumArtPlaceholderResetOnClick(object sender, RoutedEventArgs e)
-        {
-            Appearance.AlbumArtAppearance.PlaceholderPath = "";
+            e.CanExecute = true;
         }
     }
 
