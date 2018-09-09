@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AudioBand.ViewModels
 {
-    internal class Appearance
+    internal class Appearance : IEditableObject
     {
         public AudioBandAppearance AudioBandAppearance { get; set; }
         public PlayPauseButtonAppearance PlayPauseButtonAppearance { get; set; }
@@ -12,5 +13,31 @@ namespace AudioBand.ViewModels
         public ProgressBarAppearance ProgressBarAppearance { get; set; }
         public AlbumArtDisplay AlbumArtAppearance { get; set; }
         public AlbumArtPopup AlbumArtPopupAppearance { get; set; }
+
+        public void BeginEdit()
+        {
+            AlbumArtPopupAppearance.BeginEdit();
+            TextAppearances.ForEach(a => a.BeginEdit());
+            AlbumArtAppearance.BeginEdit();
+            AudioBandAppearance.BeginEdit();
+            NextSongButtonAppearance.BeginEdit();
+            PreviousSongButtonAppearance.BeginEdit();
+            PlayPauseButtonAppearance.BeginEdit();
+            ProgressBarAppearance.BeginEdit();
+        }
+
+        public void EndEdit() {}
+
+        public void CancelEdit()
+        {
+            AlbumArtPopupAppearance.CancelEdit();
+            TextAppearances.ForEach(a => a.CancelEdit());
+            AlbumArtAppearance.CancelEdit();
+            AudioBandAppearance.CancelEdit();
+            NextSongButtonAppearance.CancelEdit();
+            PreviousSongButtonAppearance.CancelEdit();
+            PlayPauseButtonAppearance.CancelEdit();
+            ProgressBarAppearance.CancelEdit();
+        }
     }
 }
