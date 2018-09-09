@@ -20,78 +20,18 @@
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.ToggleSwitch.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Buttons.xaml" />
+                <ResourceDictionary Source="Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="TabStackPanel" TargetType="{x:Type StackPanel}">
-                <Setter Property="Margin" Value="20, 0, 0, 0"/>
-                <Setter Property="Orientation" Value="Vertical"/>
-            </Style>
-            <Style x:Key="TabDockPanel" TargetType="{x:Type DockPanel}">
-                <Setter Property="Margin" Value="20, 0, 0, 0"/>
-            </Style>
-            <Style x:Key="TabListView" TargetType="{x:Type ListView}" BasedOn="{StaticResource {x:Type ListView}}">
-                <Setter Property="BorderThickness" Value="0"/>
-            </Style>
-            <Style x:Key="GridLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-                <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"/>
-                <Setter Property="Margin" Value="2"/>
-            </Style>
-            <Style x:Key="GridNumericInput" TargetType="{x:Type metro:NumericUpDown}">
-                <Setter Property="Margin" Value="2"/>
-                <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"></Setter>
-            </Style>
-            <Style x:Key="GridSizeInput" TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource GridNumericInput}">
-                <Setter Property="NumericInputMode" Value="Numbers"/>
-                <Setter Property="Minimum" Value="1"/>
-                <Setter Property="Interval" Value="1"/>
-            </Style>
-            <Style x:Key="GridPosInput" TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource GridNumericInput}">
-                <Setter Property="NumericInputMode" Value="Numbers"/>
-                <Setter Property="Interval" Value="1"/>
-            </Style>
-            <Style x:Key="GridFontSizeInput" TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource GridNumericInput}">
-                <Setter Property="NumericInputMode" Value="Decimal"/>
-                <Setter Property="Minimum" Value="0"/>
-                <Setter Property="Interval" Value="0.5"/>
-            </Style>
-            <Style x:Key="GridToggle" TargetType="{x:Type metro:ToggleSwitch}" BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
-                <Setter Property="Margin" Value="2"/>
-            </Style>
-            <Style x:Key="GridButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SquareButtonStyle}">
-                <Setter Property="Margin" Value="2"/>
-                <Setter Property="metro:ControlsHelper.ContentCharacterCasing" Value="Normal"></Setter>
-            </Style>
-            <Style x:Key="GridColorPicker" TargetType="{x:Type xctk:ColorPicker}">
-                <Setter Property="Margin" Value="2"/>
-            </Style>
-            <Style x:Key="GridTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                <Setter Property="Margin" Value="2"/>
-                <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"/>
-            </Style>
-            <Style x:Key="GridComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-                <Setter Property="Margin" Value="2"/>
-            </Style>
             <converters:WinColorToWpfColorConverter x:Key="WinColorToWpfColorConverter"/>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <metro:MetroWindow.DataContext>
         <viewModels:Appearance/>
     </metro:MetroWindow.DataContext>
-    <metro:MetroWindow.CommandBindings>
-        <CommandBinding Command="audioBand:SettingsCommands.ResetImagePath" Executed="ResetImagePathOnExecuted" CanExecute="ResetImagePathCanExecute"/>
-        <CommandBinding Command="audioBand:SettingsCommands.ChooseImage" Executed="ChooseImageOnExecuted" CanExecute="ChooseImageCanExecute"/>
-    </metro:MetroWindow.CommandBindings>
     <DockPanel LastChildFill="True">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-            <Button x:Name="Cancel" Margin="4" Width="70" Content="Cancel" Style="{DynamicResource SquareButtonStyle}" Click="Cancel_OnClick"/>
-            <Button x:Name="Save" Margin="4" Width="70" Content="Save" Style="{StaticResource AccentedSquareButtonStyle}" Click="Save_OnClick"/>
+            <Button x:Name="Cancel" Margin="4" Width="70" Content="Cancel" Style="{DynamicResource SquareButtonStyle}" Click="Cancel_OnClick" metro:ControlsHelper.ContentCharacterCasing="Normal"/>
+            <Button x:Name="Save" Margin="4" Width="70" Content="Save" Style="{StaticResource AccentedSquareButtonStyle}" Click="Save_OnClick" metro:ControlsHelper.ContentCharacterCasing="Normal"/>
         </StackPanel>
         <TabControl Margin="10" TabStripPlacement="Left">
             <TabItem  Header="General">
@@ -148,26 +88,10 @@
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding PlayPauseButtonAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Play Button Image" Style="{StaticResource GridLabel}"/>
-                            <DockPanel Grid.Row="5" Grid.Column="1">
-                                <Button DockPanel.Dock="Right" Content="Reset" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ResetImagePath" CommandParameter="{Binding ElementName=PlayImagePath}"/>
-                                <Button DockPanel.Dock="Right" Content="Browse" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ChooseImage" CommandParameter="{Binding ElementName=PlayImagePath}"/>
-                                <Label x:Name="PlayImagePath" Content="{Binding PlayPauseButtonAppearance.PlayImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}">
-                                    <Label.ToolTip>
-                                        <TextBlock Text="{Binding PlayPauseButtonAppearance.PlayImagePath}"/>
-                                    </Label.ToolTip>
-                                </Label>
-                            </DockPanel>
+                            <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" ImagePath="{Binding PlayPauseButtonAppearance.PlayImagePath, Mode=TwoWay}" />
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Pause Button Image" Style="{StaticResource GridLabel}"/>
-                            <DockPanel Grid.Row="6" Grid.Column="1">
-                                <Button DockPanel.Dock="Right" Content="Reset" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ResetImagePath" CommandParameter="{Binding ElementName=PauseImagePath}"/>
-                                <Button DockPanel.Dock="Right" Content="Browse" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ChooseImage" CommandParameter="{Binding ElementName=PauseImagePath}"/>
-                                <Label x:Name="PauseImagePath"  Content="{Binding PlayPauseButtonAppearance.PauseImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}">
-                                    <Label.ToolTip>
-                                        <TextBlock Text="{Binding PlayPauseButtonAppearance.PauseImagePath}"/>
-                                    </Label.ToolTip>
-                                </Label>
-                            </DockPanel>
+                            <audioBand:ImagePicker Grid.Row="6" Grid.Column="1" ImagePath="{Binding PlayPauseButtonAppearance.PauseImagePath, Mode=TwoWay}" />
                         </Grid>
                     </Expander>
                     <Expander Header="Next Song Button" IsExpanded="True">
@@ -201,15 +125,7 @@
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding NextSongButtonAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" Style="{StaticResource GridLabel}"/>
-                            <DockPanel Grid.Row="5" Grid.Column="1">
-                                <Button DockPanel.Dock="Right" Content="Reset" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ResetImagePath" CommandParameter="{Binding ElementName=NextSongImagePath}"/>
-                                <Button DockPanel.Dock="Right" Content="Browse" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ChooseImage" CommandParameter="{Binding ElementName=NextSongImagePath}"/>
-                                <Label x:Name="NextSongImagePath" Content="{Binding NextSongButtonAppearance.ImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}">
-                                    <Label.ToolTip>
-                                        <TextBlock Text="{Binding NextSongButtonAppearance.ImagePath}"/>
-                                    </Label.ToolTip>
-                                </Label>
-                            </DockPanel>
+                            <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" ImagePath="{Binding NextSongButtonAppearance.ImagePath}"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Previous Song Button" IsExpanded="True">
@@ -243,15 +159,7 @@
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding PreviousSongButtonAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" Style="{StaticResource GridLabel}"/>
-                            <DockPanel Grid.Row="5" Grid.Column="1">
-                                <Button DockPanel.Dock="Right" Content="Reset" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ResetImagePath" CommandParameter="{Binding ElementName=PreviousSongImagePath}"/>
-                                <Button DockPanel.Dock="Right" Content="Browse" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ChooseImage" CommandParameter="{Binding ElementName=PreviousSongImagePath}"/>
-                                <Label x:Name="PreviousSongImagePath"  Content="{Binding PreviousSongButtonAppearance.ImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}">
-                                    <Label.ToolTip>
-                                        <TextBlock Text="{Binding NextSongButtonAppearance.ImagePath}"/>
-                                    </Label.ToolTip>
-                                </Label>
-                            </DockPanel>
+                            <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" ImagePath="{Binding PreviousSongButtonAppearance.ImagePath}"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -431,15 +339,7 @@
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" Style="{StaticResource GridPosInput}" Value="{Binding AlbumArtAppearance.YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Placeholder Image" Style="{StaticResource GridLabel}"/>
-                            <DockPanel Grid.Row="5" Grid.Column="1">
-                                <Button DockPanel.Dock="Right" Content="Reset" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ResetImagePath" CommandParameter="{Binding ElementName=AlbumArtPlaceholderImagePath}"/>
-                                <Button DockPanel.Dock="Right" Content="Browse" Style="{StaticResource GridButton}" Command="audioBand:SettingsCommands.ChooseImage" CommandParameter="{Binding ElementName=AlbumArtPlaceholderImagePath}"/>
-                                <Label x:Name="AlbumArtPlaceholderImagePath" Content="{Binding AlbumArtAppearance.PlaceholderPath, Mode=TwoWay}" Style="{StaticResource GridLabel}">
-                                    <Label.ToolTip>
-                                        <TextBlock Text="{Binding AlbumArtAppearance.PlaceholderPath}"/>
-                                    </Label.ToolTip>
-                                </Label>
-                            </DockPanel>
+                            <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" ImagePath="{Binding AlbumArtAppearance.PlaceholderPath, Mode=TwoWay}"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Album Art Popup" IsExpanded="True">
