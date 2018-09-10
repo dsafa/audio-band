@@ -1,25 +1,13 @@
-﻿using System;
+﻿using AudioBand.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using AudioBand.ViewModels;
-using MahApps.Metro.Controls;
-using Microsoft.Win32;
-using NLog;
 using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
 namespace AudioBand.Settings
@@ -35,9 +23,8 @@ namespace AudioBand.Settings
 
         private List<TextAppearance> _deletedTextAppearances;
         private List<TextAppearance> _addedTextAppearances;
-        private bool _xClosed = true;
+        private bool _cancelEdit = true;
         private Appearance Appearance { get; set; }
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         internal SettingsWindow(Appearance appearance)
         {
@@ -68,28 +55,30 @@ namespace AudioBand.Settings
             return !File.Exists(filename) ? null : Assembly.LoadFrom(filename);
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
+            base.OnClosing(e);
+
             // if closed by x button
-            if (_xClosed)
+            if (_cancelEdit)
             {
                 CancelEdit();
             }
-
-            base.OnClosed(e);
+            else
+            {
+                Saved?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void Save_OnClick(object sender, RoutedEventArgs e)
         {
-            _xClosed = false;
-            Saved?.Invoke(this, EventArgs.Empty);
+            _cancelEdit = false;
             Close();
         }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
-            _xClosed = false;
-            CancelEdit();
+            _cancelEdit = true;
             Close();
         }
 

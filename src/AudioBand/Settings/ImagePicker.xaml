@@ -18,9 +18,9 @@
         <CommandBinding Command="local:SettingsCommands.ChooseImage" Executed="ChooseImageOnExecuted" CanExecute="ChooseImageCanExecute"/>
     </UserControl.CommandBindings>
     <DockPanel x:Name="Root">
-        <Button DockPanel.Dock="Right" Content="Reset" Style="{StaticResource GridButton}" Command="local:SettingsCommands.ResetImagePath"/>
-        <Button DockPanel.Dock="Right" Content="Browse" Style="{StaticResource GridButton}" Command="local:SettingsCommands.ChooseImage" />
-        <Label x:Name="ImagePathLabel" Content="{Binding ImagePath, Mode=TwoWay}" Style="{StaticResource GridLabel}">
+        <Button DockPanel.Dock="Right" Margin="2" Content="Reset" Style="{StaticResource SettingsButton}" Command="local:SettingsCommands.ResetImagePath"/>
+        <Button DockPanel.Dock="Right" Margin="2" Content="Browse" Style="{StaticResource SettingsButton}" Command="local:SettingsCommands.ChooseImage" />
+        <Label x:Name="ImagePathLabel" Margin="2" Content="{Binding ImagePath, Mode=TwoWay}" Style="{StaticResource SettingsLabel}">
             <Label.ToolTip>
                 <TextBlock Text="{Binding ImagePath}"/>
             </Label.ToolTip>
