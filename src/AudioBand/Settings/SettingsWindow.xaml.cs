@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
 using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
@@ -83,7 +84,7 @@ namespace AudioBand.Settings
             Close();
         }
 
-        private void NewLabelButtonOnClick(object sender, RoutedEventArgs e)
+        private void NewLabelOnExecute(object sender, ExecutedRoutedEventArgs e)
         {
             var appearance = new TextAppearance { Name = "New label" };
             CreateLabel(appearance);
@@ -92,7 +93,12 @@ namespace AudioBand.Settings
             appearance.BeginEdit();
         }
 
-        private async void DeleteLabelOnClick(object sender, RoutedEventArgs e)
+        private void NewLabelCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (TabControl.SelectedItem as TabItem)?.Name == "Labels";
+        }
+
+        private async void DeleteLabelOnExecute(object sender, ExecutedRoutedEventArgs e)
         {
             var dialogSettings = new MetroDialogSettings
             {
@@ -108,8 +114,7 @@ namespace AudioBand.Settings
                 return;
             }
 
-            var button = sender as Button;
-            var appearance = button.DataContext as TextAppearance;
+            var appearance = e.Parameter as TextAppearance;
 
             DeleteLabel(appearance);
 
@@ -124,6 +129,11 @@ namespace AudioBand.Settings
             {
                 _deletedTextAppearances.Add(appearance);
             }
+        }
+
+        private void DeleteLabelCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
 
         private void StartEdit()
