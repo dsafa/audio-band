@@ -103,6 +103,7 @@
     <Compile Include="Settings\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\AttachedProperties.cs" />
     <Compile Include="Settings\SettingsCommands.cs" />
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
