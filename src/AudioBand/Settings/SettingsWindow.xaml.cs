@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
 namespace AudioBand.Settings
@@ -91,8 +92,22 @@ namespace AudioBand.Settings
             appearance.BeginEdit();
         }
 
-        private void DeleteLabelOnClick(object sender, RoutedEventArgs e)
+        private async void DeleteLabelOnClick(object sender, RoutedEventArgs e)
         {
+            var dialogSettings = new MetroDialogSettings
+            {
+                AffirmativeButtonText = "Yes",
+                NegativeButtonText = "No",
+                AnimateHide = false,
+                AnimateShow = false
+            };
+
+            var res = await this.ShowMessageAsync("Delete label", "Are you sure you want to delete this label?", MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+            if (res != MessageDialogResult.Affirmative)
+            {
+                return;
+            }
+
             var button = sender as Button;
             var appearance = button.DataContext as TextAppearance;
 
