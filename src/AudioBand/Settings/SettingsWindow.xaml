@@ -31,13 +31,14 @@
     <metro:MetroWindow.CommandBindings>
         <CommandBinding Command="audioBand:SettingsCommands.AddLabel" Executed="NewLabelOnExecute" CanExecute="NewLabelCanExecute"/>
         <CommandBinding Command="audioBand:SettingsCommands.DeleteLabel" Executed="DeleteLabelOnExecute" CanExecute="DeleteLabelCanExecute"/>
+        <CommandBinding Command="audioBand:SettingsCommands.ShowAbout" Executed="ShowAboutOnExecuted" CanExecute="ShowAboutCanExecute"/>
     </metro:MetroWindow.CommandBindings>
     <metro:MetroWindow.InputBindings>
         <KeyBinding Command="audioBand:SettingsCommands.AddLabel" Key="N" Modifiers="Control"/>
     </metro:MetroWindow.InputBindings>
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
-            <Button Content="About"></Button>
+            <Button Content="About" Command="audioBand:SettingsCommands.ShowAbout"/>
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
@@ -489,6 +490,25 @@
             </TabItem>
         </TabControl>
     </DockPanel>
+    <metro:MetroWindow.Flyouts>
+        <metro:FlyoutsControl>
+            <metro:Flyout x:Name="AboutDialog" Header="About AudioBand" 
+                          Position="Left" Width="500"
+                          Theme="Adapt"
+                          DataContext="{Binding ElementName=Window, Path=About}">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Label Content="Version" FontWeight="Bold" FontSize="20"/>
+                    <Label Content="{Binding Version, Mode=OneTime}" FontSize="20"/>
+                    <Label Content="Project Link" FontWeight="Bold" FontSize="20" Margin="0, 10, 0, 0"/>
+                    <Label FontSize="20">
+                        <Hyperlink NavigateUri="{Binding ProjectLink, Mode=OneTime}" RequestNavigate="Hyperlink_OnRequestNavigate">
+                            <Run Text="{Binding ProjectLink, Mode=OneTime}"/>
+                        </Hyperlink>
+                    </Label>
+                </StackPanel>
+            </metro:Flyout>
+        </metro:FlyoutsControl>
+    </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>
 
 
