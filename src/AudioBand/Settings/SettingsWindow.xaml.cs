@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using MahApps.Metro.Controls.Dialogs;
 using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
@@ -22,6 +24,7 @@ namespace AudioBand.Settings
 
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
         public ObservableCollection<TextAppearance> TextAppearancesCollection { get; set; }
+                public About About { get; } = new About();
 
         private List<TextAppearance> _deletedTextAppearances;
         private List<TextAppearance> _addedTextAppearances;
@@ -173,6 +176,21 @@ namespace AudioBand.Settings
 
             LabelDeleted?.Invoke(this, new TextLabelChangedEventArgs(appearance));
         }
+
+        private void ShowAboutOnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            AboutDialog.IsOpen = true;
+        }
+
+        private void ShowAboutCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.AbsoluteUri);
+        }
     }
 
     internal class TextLabelChangedEventArgs : EventArgs
@@ -183,5 +201,11 @@ namespace AudioBand.Settings
         {
             Appearance = appearance;
         }
+    }
+
+    internal class About
+    {
+        public string Version { get; } = "AudioBand " + typeof(SettingsWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        public string ProjectLink { get; } = @"https://github.com/dsafa/audio-band";
     }
 }
