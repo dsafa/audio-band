@@ -11,9 +11,9 @@ namespace AudioBand.ViewModels
         private Color _backgroundColor = Color.Black;
         private bool _isVisible = true;
         private int _yPosition = 28;
-        private int _xPosition = 0;
+        private int _xPosition = 30;
         private int _height = 2;
-        private int _width = 250;
+        private int _width = 220;
 
         private ProgressBarAppearance _backup;
 
