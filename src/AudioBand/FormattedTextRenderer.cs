@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -110,6 +112,8 @@ namespace AudioBand
 
         public TextAlignment Alignment { get; set; }
 
+        public TextFormat Formats { get; private set; }
+
         private string _format;
         private string _artist;
         private string _songName;
@@ -180,6 +184,7 @@ namespace AudioBand
             }
 
             AddChunk(currentText, false);
+            AddChunk(new StringBuilder(" ", 1), false); // Padding because the last character is being cut off
         }
 
         private void AddChunk(StringBuilder text, bool placeholder)
@@ -193,6 +198,7 @@ namespace AudioBand
             {
                 ParsePlaceholder(text.ToString(), out string value, out TextFormat type, out Color c);
                 Chunks.Add(new TextChunk(value, type, c));
+                Formats |= type;
             }
             else
             {
@@ -278,20 +284,34 @@ namespace AudioBand
             }
         }
 
-        // Better if we draw once and then just copy it if we need to move it
-        public int Draw(Graphics graphics, int x)
+        public Bitmap Draw()
         {
-            return Draw(graphics, x, false);
+            var size = Measure();
+            if (size.Width < 1 || size.Height < 1)
+            {
+                return new Bitmap(100, 20);
+            }
+
+            var bitmap = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
+            using (var graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+                Draw(graphics, false);
+            }
+
+            return bitmap;
         }
 
-        public int Measure(Graphics graphics)
+        public Size Measure()
         {
-            return Draw(graphics, 0, true);
+            return Draw(null, true);
         }
 
-        private int Draw(Graphics graphics, int x, bool measure)
+        private Size Draw(Graphics graphics, bool measure)
         {
-            var totalTextLength = 0;
+            var totalTextSize = new Size();
+            var x = 0;
+
             foreach (var textChunk in Chunks)
             {
                 var font = new Font(FontFamily, FontSize, FontStyle.Regular, GraphicsUnit.Point);
@@ -308,17 +328,24 @@ namespace AudioBand
                     font = new Font(FontFamily, FontSize, FontStyle.Underline, GraphicsUnit.Point);
                 }
 
-                var textLength = TextRenderer.MeasureText(textChunk.Text, font, new Size(1000, 1000), TextFormatFlags.NoPrefix).Width - MeasurePadding(font);
+                var textSize = TextRenderer.MeasureText(textChunk.Text, font, new Size(1000, 1000), TextFormatFlags.NoPrefix);
+                if (textSize.Width > 0 )
+                {
+                    // keep padding in last item
+                    textSize.Width -= MeasurePadding(font);
+                }
+
                 if (!measure)
                 {
                     textChunk.Draw(graphics, font, x, 0);
                 }
 
-                totalTextLength += textLength;
-                x += textLength;
+                totalTextSize.Width += textSize.Width;
+                totalTextSize.Height = textSize.Height;
+                x += textSize.Width;
             }
 
-            return totalTextLength;
+            return totalTextSize;
         }
 
         private int MeasurePadding(Font font)

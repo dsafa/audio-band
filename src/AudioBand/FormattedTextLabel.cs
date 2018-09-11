@@ -20,7 +20,7 @@ namespace AudioBand
             {
                 _format = value;
                 _renderer.Format = value;
-                Refresh();
+                Redraw();
             }
         }
 
@@ -31,7 +31,7 @@ namespace AudioBand
             {
                 _defaultColor = value;
                 _renderer.DefaultColor = value;
-                Refresh();
+                Redraw();
             }
         }
 
@@ -42,7 +42,7 @@ namespace AudioBand
             {
                 _fontSize = value;
                 _renderer.FontSize = value;
-                Refresh();
+                Redraw();
             }
         }
 
@@ -53,7 +53,7 @@ namespace AudioBand
             {
                 _fontFamily = value;
                 _renderer.FontFamily = value;
-                Refresh();
+                Redraw();
             }
         }
 
@@ -64,7 +64,7 @@ namespace AudioBand
             {
                 _alignment = value;
                 _renderer.Alignment = value;
-                Refresh();
+                Redraw();
             }
         }
 
@@ -75,7 +75,11 @@ namespace AudioBand
             {
                 _artist = value;
                 _renderer.Artist = value;
-                Refresh();
+
+                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.Artist))
+                {
+                    Redraw();
+                }
             }
         }
 
@@ -86,7 +90,11 @@ namespace AudioBand
             {
                 _songName = value;
                 _renderer.SongName = value;
-                Refresh();
+
+                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.Song))
+                {
+                    Redraw();
+                }
             }
         }
 
@@ -97,7 +105,11 @@ namespace AudioBand
             {
                 _albumName = value;
                 _renderer.AlbumName = value;
-                Refresh();
+
+                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.Album))
+                {
+                    Redraw();
+                }
             }
         }
 
@@ -108,7 +120,11 @@ namespace AudioBand
             {
                 _songProgress = value;
                 _renderer.SongProgress = value;
-                Refresh();
+
+                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.CurrentTime))
+                {
+                    Redraw();
+                }
             }
         }
 
@@ -119,7 +135,11 @@ namespace AudioBand
             {
                 _songLength = value;
                 _renderer.SongLength = value;
-                Refresh();
+
+                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.SongLength))
+                {
+                    Redraw();
+                }
             }
         }
 
@@ -136,7 +156,7 @@ namespace AudioBand
 
         internal int TagId { get; set; }
 
-        private const int TickRateMs = 17;
+        private const int TickRateMs = 20;
         private const int TickPerS = 1000 / TickRateMs;
         private readonly Timer _scrollingTimer = new Timer { Interval = TickRateMs};
         private const int TextMargin = 60; //Spacing between scrolling text
@@ -145,7 +165,7 @@ namespace AudioBand
         private int _textWidth;
         private const int WidthPadding = 4;
 
-        private FormattedTextRenderer _renderer;
+        private readonly FormattedTextRenderer _renderer;
         private string _format;
         private Color _defaultColor;
         private float _fontSize;
@@ -158,6 +178,7 @@ namespace AudioBand
         private TimeSpan _songLength;
         private int _scrollSpeed;
         private float _scrollDelta;
+        private Bitmap _renderedText;
 
         public FormattedTextLabel(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
         {
@@ -190,12 +211,11 @@ namespace AudioBand
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            var graphics = e.Graphics;
-            graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-
-            _textWidth = _renderer.Measure(graphics);
+            // measure
+            _textWidth = _renderer.Measure().Width;
             var textTooLong = _textWidth > ClientRectangle.Width - WidthPadding; // extra padding in case
 
+            // to long and not scrolling -> start scrolling
             if (textTooLong && !_scrollingTimer.Enabled)
             {
                 _duplicateXPos = _textXPos + _textWidth + TextMargin;
@@ -203,20 +223,22 @@ namespace AudioBand
             }
             else if (!textTooLong && _scrollingTimer.Enabled)
             {
+                // text no longer too long -> stop scrolling
                 _scrollingTimer.Stop();
                 _textXPos = GetNormalTextPos();
             }
 
+            // if not scrolling get the x position for the text based on alignment
             if (!_scrollingTimer.Enabled)
             {
                 _textXPos = GetNormalTextPos();
             }
 
-            _renderer.Draw(graphics, (int) _textXPos);
+            Draw(e.Graphics, (int) _textXPos);
 
             if (_scrollingTimer.Enabled)
             {
-                _renderer.Draw(graphics, (int) _duplicateXPos);
+                Draw(e.Graphics, (int) _duplicateXPos);
 
             }
         }
@@ -235,6 +257,19 @@ namespace AudioBand
             }
 
             return 0;
+        }
+
+        private void Redraw()
+        {
+            _renderedText = _renderer.Draw();
+            Refresh();
+        }
+
+        private void Draw(Graphics g, int xpos)
+        {
+            var rect = ClientRectangle;
+            rect.X = xpos;
+            g.DrawImage(_renderedText, xpos, 0, _renderedText.Width, _renderedText.Height);
         }
 
         protected override void Dispose(bool disposing)
