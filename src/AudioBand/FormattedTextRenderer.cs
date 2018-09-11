@@ -184,7 +184,6 @@ namespace AudioBand
             }
 
             AddChunk(currentText, false);
-            AddChunk(new StringBuilder(" ", 1), false); // Padding because the last character is being cut off
         }
 
         private void AddChunk(StringBuilder text, bool placeholder)
@@ -312,6 +311,7 @@ namespace AudioBand
             var totalTextSize = new Size();
             var x = 0;
 
+            AddChunk(new StringBuilder(" ", 1), false); // Padding because the last character is being cut off
             foreach (var textChunk in Chunks)
             {
                 var font = new Font(FontFamily, FontSize, FontStyle.Regular, GraphicsUnit.Point);
@@ -344,6 +344,8 @@ namespace AudioBand
                 totalTextSize.Height = textSize.Height;
                 x += textSize.Width;
             }
+
+            Chunks.RemoveAt(Chunks.Count - 1);
 
             return totalTextSize;
         }
