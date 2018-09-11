@@ -135,7 +135,7 @@ namespace SpotifyAudioSource
         private void ExtractTitle(string title)
         {
             // Spotify title is in the form of <artist> - <title>
-            var parts = title.Split(new string[]{" - "}, StringSplitOptions.None);
+            var parts = title.Split(new string[]{" - "}, 2, StringSplitOptions.None);
             if (parts.Length != 2)
             {
                 _logger.Warn($"Spotify title invalid: {title}");

@@ -2,6 +2,9 @@
 using System.Drawing.Drawing2D;
 using System.Reflection;
 using System.Windows.Forms;
+using CSDeskBand;
+using NLog;
+using Size = System.Drawing.Size;
 
 namespace AudioBand
 {
@@ -33,16 +36,32 @@ namespace AudioBand
             Draw += OnDraw;
         }
 
-        public void ShowWithoutRequireFocus(string name, Control control, Point relativePosition)
+        public void ShowWithoutRequireFocus(string name, Control control, TaskbarInfo taskbarInfo)
         {
-            if (AlbumArt == null)
+            if (AlbumArt == null || !control.DataBindings[nameof(MainControl.AlbumArtPopupIsVisible)].As<bool>())
             {
                 return;
             }
 
+            // since tooltips dont support binding, we will bind to the main control and just read the properties here
+            Size = new Size(control.DataBindings[nameof(MainControl.AlbumArtPopupWidth)].As<int>(), control.DataBindings[nameof(MainControl.AlbumArtPopupHeight)].As<int>());
+
+            var margin = control.DataBindings[nameof(MainControl.AlbumArtPopupY)].As<int>();
+            var xOffSet = control.DataBindings[nameof(MainControl.AlbumArtPopupX)].As<int>();
+            int yOffset = 0;
+
+            if (taskbarInfo.Edge == Edge.Top)
+            {
+                yOffset = control.Height + margin;
+            }
+            else
+            {
+                yOffset = -Size.Height - margin;
+            }
+
             const int AbsolutePos = 2;
-            var point = control.PointToScreen(new Point(0, 0));
-            _setToolMethod.Invoke(this, new object[] { control, name, AbsolutePos, new Point(point.X + relativePosition.X, point.Y + relativePosition.Y) });
+            var controlScreenLocation = control.PointToScreen(new Point(0, 0));
+            _setToolMethod.Invoke(this, new object[] { control, name, AbsolutePos, new Point(controlScreenLocation.X + xOffSet, controlScreenLocation.Y + yOffset) });
         }
 
         private void OnPopup(object sender, PopupEventArgs popupEventArgs)

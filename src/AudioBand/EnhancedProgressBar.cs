@@ -11,34 +11,25 @@ namespace AudioBand
     // So we can draw with our own color
     public class EnhancedProgressBar : ProgressBar
     {
-        private double _progress;
+        private TimeSpan _progress;
+        private TimeSpan _total;
 
-        public double Progress
+        public TimeSpan Progress
         {
             get => _progress;
             set
             {
-                try
-                {
-                    var progress = Convert.ToInt32(value);
-                    if (progress <= Minimum)
-                    {
-                        _progress = Minimum;
-                    }
-                    else if (progress >= Maximum)
-                    {
-                        _progress = Maximum;
-                    }
-                    else
-                    {
-                        _progress = value;
-                    }
-                }
-                catch (OverflowException)
-                {
-                    _progress = Minimum;
-                }
-                
+                _progress = value;
+                Refresh();
+            }
+        }
+
+        public TimeSpan Total
+        {
+            get => _total;
+            set
+            {
+                _total = value;
                 Refresh();
             }
         }
@@ -51,7 +42,18 @@ namespace AudioBand
         protected override void OnPaint(PaintEventArgs e)
         {
             var rect = e.ClipRectangle;
-            rect.Width = (int)(rect.Width * Progress / Maximum);
+
+            var progress = Progress.TotalSeconds / Total.TotalSeconds;
+            if (progress <= 0)
+            {
+                progress = 0;
+            }
+            else if (progress >= Maximum)
+            {
+                progress = 1;
+            }
+
+            rect.Width = (int)(rect.Width * progress);
             e.Graphics.FillRectangle(new SolidBrush(ForeColor), 0, 0, rect.Width, rect.Height);
         }
     }

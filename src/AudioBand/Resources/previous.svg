@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" viewBox="0 0 18 10" width="100%" height="100%">
-<defs>
-	<path d="M 20 0 L 20 10 L 10 5 Z" id="a2OFevSqx"></path>
-	<path d="M 12 0 L 12 10 L 2 5 Z" id="ukwNHQztq"></path>
-</defs>
-<g>
-	<use xlink:href="#a2OFevSqx" opacity="1" fill="#ffffff" fill-opacity="1"></use>
-	<use xlink:href="#ukwNHQztq" opacity="1" fill="#ffffff" fill-opacity="1"></use>
-</g>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+	<defs>
+		<path d="M 0 256 L 512 0 L 512 512 Z" id="triangle"></path>
+		<rect x="0" y="0" width="100" height="100%" id="rect"></rect>
+	</defs>
+	<g>
+		<use xlink:href="#triangle" opacity="1" fill="#ffffff" fill-opacity="1"></use>
+		<use xlink:href="#rect" opacity="1" fill="#ffffff" fill-opacity="1"></use>
+	</g>
 </svg>
