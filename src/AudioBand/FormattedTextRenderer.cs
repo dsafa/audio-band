@@ -272,7 +272,7 @@ namespace AudioBand
                     color = ColorTranslator.FromHtml(match.Groups["color"].Value);
                     format |= TextFormat.Colored;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     color = DefaultColor;
                 }
