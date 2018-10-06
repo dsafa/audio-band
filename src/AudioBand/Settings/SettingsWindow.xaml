@@ -165,7 +165,7 @@
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" />
                             <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" 
-                                                   ImagePath="{Binding NextSongButtonAppearance.ImagePath}"/>
+                                                   ImagePath="{Binding NextSongButtonAppearance.ImagePath, Mode=TwoWay}"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Previous Song Button" IsExpanded="True">
@@ -210,7 +210,7 @@
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" />
                             <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" 
-                                                   ImagePath="{Binding PreviousSongButtonAppearance.ImagePath}"/>
+                                                   ImagePath="{Binding PreviousSongButtonAppearance.ImagePath, Mode=TwoWay}"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
