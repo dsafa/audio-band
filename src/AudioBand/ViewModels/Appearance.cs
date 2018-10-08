@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace AudioBand.ViewModels
 {
-    internal class Appearance : IEditableObject
+    internal class Appearance : IEditableObject, IResettableObject
     {
         public AudioBandAppearance AudioBandAppearance { get; set; }
         public PlayPauseButtonAppearance PlayPauseButtonAppearance { get; set; }
@@ -38,6 +38,18 @@ namespace AudioBand.ViewModels
             PreviousSongButtonAppearance.CancelEdit();
             PlayPauseButtonAppearance.CancelEdit();
             ProgressBarAppearance.CancelEdit();
+        }
+
+        public void Reset()
+        {
+            AlbumArtPopupAppearance.Reset();
+            TextAppearances = new List<TextAppearance> {new TextAppearance()};
+            AlbumArtAppearance.Reset();
+            AudioBandAppearance.Reset();
+            NextSongButtonAppearance.Reset();
+            PreviousSongButtonAppearance.Reset();
+            PlayPauseButtonAppearance.Reset();
+            ProgressBarAppearance.Reset();
         }
     }
 }

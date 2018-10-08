@@ -134,11 +134,6 @@ namespace AudioBand.Settings
             }
         }
 
-        private void DeleteLabelCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
         private void StartEdit()
         {
             Appearance.BeginEdit();
@@ -182,14 +177,22 @@ namespace AudioBand.Settings
             AboutDialog.IsOpen = true;
         }
 
-        private void ShowAboutCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.AbsoluteUri);
+        }
+
+        private void ResetSettingOnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Parameter is IResettableObject resettable)
+            {
+                resettable.Reset();
+            }
+        }
+
+        private void AlwaysCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
     }
 

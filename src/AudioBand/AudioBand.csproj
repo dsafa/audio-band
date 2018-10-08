@@ -99,6 +99,7 @@
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FormattedTextRenderer.cs" />
+    <Compile Include="IResettableObject.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Settings\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
