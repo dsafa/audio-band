@@ -4,10 +4,10 @@ using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
-    internal class AudioBandAppearance : INotifyPropertyChanged, IEditableObject
+    internal class AudioBandAppearance : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
-        private int _width = 250;
-        private int _height = 30;
+        private int _width;
+        private int _height;
 
         private AudioBandAppearance _backup;
 
@@ -35,10 +35,9 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public AudioBandAppearance()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Reset();
         }
 
         public void BeginEdit()
@@ -59,6 +58,18 @@ namespace AudioBand.ViewModels
         {
             Width = _backup.Width;
             Height = _backup.Height;
+        }
+
+        public void Reset()
+        {
+            Width = 250;
+            Height = 30;
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

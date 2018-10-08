@@ -30,8 +30,9 @@
     </metro:MetroWindow.DataContext>
     <metro:MetroWindow.CommandBindings>
         <CommandBinding Command="audioBand:SettingsCommands.AddLabel" Executed="NewLabelOnExecute" CanExecute="NewLabelCanExecute"/>
-        <CommandBinding Command="audioBand:SettingsCommands.DeleteLabel" Executed="DeleteLabelOnExecute" CanExecute="DeleteLabelCanExecute"/>
-        <CommandBinding Command="audioBand:SettingsCommands.ShowAbout" Executed="ShowAboutOnExecuted" CanExecute="ShowAboutCanExecute"/>
+        <CommandBinding Command="audioBand:SettingsCommands.DeleteLabel" Executed="DeleteLabelOnExecute" CanExecute="AlwaysCanExecute"/>
+        <CommandBinding Command="audioBand:SettingsCommands.ShowAbout" Executed="ShowAboutOnExecuted" CanExecute="AlwaysCanExecute"/>
+        <CommandBinding Command="audioBand:SettingsCommands.ResetSetting" Executed="ResetSettingOnExecuted" CanExecute="AlwaysCanExecute"/>
     </metro:MetroWindow.CommandBindings>
     <metro:MetroWindow.InputBindings>
         <KeyBinding Command="audioBand:SettingsCommands.AddLabel" Key="N" Modifiers="Control"/>
@@ -43,6 +44,7 @@
     </metro:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+            <Button x:Name="ResetAll" Margin="4" Width="70" Content="Reset All" Style="{DynamicResource SquareButtonStyle}" Command="audioBand:SettingsCommands.ResetSetting" metro:ControlsHelper.ContentCharacterCasing="Normal"/>
             <Button x:Name="Cancel" Margin="4" Width="70" Content="Cancel" Style="{DynamicResource SquareButtonStyle}" Click="Cancel_OnClick" metro:ControlsHelper.ContentCharacterCasing="Normal"/>
             <Button x:Name="Save" Margin="4" Width="70" Content="Save" Style="{StaticResource AccentedSquareButtonStyle}" Click="Save_OnClick" metro:ControlsHelper.ContentCharacterCasing="Normal"/>
         </StackPanel>

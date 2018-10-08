@@ -6,19 +6,19 @@ using System.Runtime.CompilerServices;
 using AudioBand.Annotations;
 using NLog;
 using Svg;
-using AudioBand;
 
 namespace AudioBand.ViewModels
 {
-    internal class AlbumArtDisplay : INotifyPropertyChanged, IEditableObject
+    internal class AlbumArtDisplay : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
-        private bool _isVisible = true;
-        private int _width = 30;
-        private int _height = 30;
-        private int _xPosition = 0;
-        private int _yPosition = 0;
-        private Image _placeholder;
+        private bool _isVisible;
+        private int _width;
+        private int _height;
+        private int _xPosition;
+        private int _yPosition;
         private string _placeholderPath;
+
+        private Image _placeholder;
         private Image _currentAlbumArt = new Bitmap(1, 1);
         private static readonly SvgDocument DefaultAlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
 
@@ -119,15 +119,9 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public AlbumArtDisplay()
         {
-            LoadPlaceholder();
+            Reset();
         }
 
         private void LoadPlaceholder()
@@ -158,7 +152,7 @@ namespace AudioBand.ViewModels
 
         public void EndEdit()
         {
-            
+            // No op
         }
 
         public void CancelEdit()
@@ -170,15 +164,32 @@ namespace AudioBand.ViewModels
             PlaceholderPath = _backup.PlaceholderPath;
             IsVisible = _backup.IsVisible;
         }
+
+        public void Reset()
+        {
+            IsVisible = true;
+            Width = 30;
+            Height = 30;
+            XPosition = 0;
+            YPosition = 0;
+            PlaceholderPath = "";
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    internal class AlbumArtPopup : INotifyPropertyChanged, IEditableObject
+    internal class AlbumArtPopup : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
-        private bool _isVisible = true;
-        private int _width = 250;
-        private int _height = 250;
+        private bool _isVisible;
+        private int _width;
+        private int _height;
         private int _xOffset;
-        private int _margin = 4;
+        private int _margin;
+
         private Image _currentAlbumArt = new Bitmap(1, 1);
 
         private AlbumArtPopup _backup;
@@ -251,10 +262,9 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public AlbumArtPopup()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Reset();
         }
 
         public void BeginEdit()
@@ -271,7 +281,7 @@ namespace AudioBand.ViewModels
 
         public void EndEdit()
         {
-
+            // No op
         }
 
         public void CancelEdit()
@@ -281,6 +291,21 @@ namespace AudioBand.ViewModels
             Height = _backup.Height;
             XOffset = _backup.XOffset;
             Margin = _backup.Margin;
+        }
+
+        public void Reset()
+        {
+            IsVisible = true;
+            Width = 250;
+            Height = 250;
+            XOffset = 0;
+            Margin = 4;
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
