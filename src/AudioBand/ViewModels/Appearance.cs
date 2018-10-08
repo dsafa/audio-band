@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace AudioBand.ViewModels
 {
-    internal class Appearance : IEditableObject, IResettableObject
+    internal class Appearance : IEditableObject
     {
         public AudioBandAppearance AudioBandAppearance { get; set; }
         public PlayPauseButtonAppearance PlayPauseButtonAppearance { get; set; }
