@@ -65,5 +65,13 @@ namespace AudioBand.AudioSource
         /// User requested the next track
         /// </summary>
         Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// The setting is being changed to a new value.
+        /// </summary>
+        /// <param name="settingName">The name of the setting being changed.</param>
+        /// <param name="newValue">The value that the setting is being changed to.</param>
+        /// <returns>True if the new value is valid. False if the new value is invalid.</returns>
+        bool ValidateSettingChange(string settingName, object newValue);
     }
 }
