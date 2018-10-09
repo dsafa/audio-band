@@ -13,5 +13,10 @@ namespace AudioBand.AudioSource
         /// Name that will be seen by user.
         /// </summary>
         public string Name { get; set; }
+
+        public AudioSourceSettingAttribute(string name)
+        {
+            Name = name;
+        }
     }
 }
