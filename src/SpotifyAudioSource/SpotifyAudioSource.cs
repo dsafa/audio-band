@@ -11,6 +11,12 @@ namespace SpotifyAudioSource
     {
         public string Name { get; } = "Spotify";
 
+        [AudioSourceSetting("Spotify Client ID")]
+        public string ClientId { get; set; }
+
+        [AudioSourceSetting("Spotify Client secret")]
+        public string ClientSecret { get; set; }
+
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
         public event EventHandler TrackPlaying;
         public event EventHandler TrackPaused;
@@ -119,6 +125,11 @@ namespace SpotifyAudioSource
         {
             _spotifyControls.Next();
             return Task.CompletedTask;
+        }
+
+        public bool ValidateSettingChange(string settingName, object newValue)
+        {
+            return true;
         }
 
         private void SetBlankState()
