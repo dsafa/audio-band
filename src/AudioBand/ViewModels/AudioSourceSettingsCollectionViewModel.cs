@@ -16,7 +16,7 @@ namespace AudioBand.ViewModels
     internal class AudioSourceSettingsCollectionViewModel : INotifyPropertyChanged
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-        private Dictionary<string, AudioSourceSettingViewModel> _selectedSettings;
+        private Dictionary<string, AudioSourceSettingViewModel> _selectedSettings = new Dictionary<string, AudioSourceSettingViewModel>();
 
         // audio source -> (setting name -> viewmodel)
         public Dictionary<string, Dictionary<string, AudioSourceSettingViewModel>> Settings { get; } = new Dictionary<string, Dictionary<string, AudioSourceSettingViewModel>>();
@@ -100,9 +100,10 @@ namespace AudioBand.ViewModels
     // Holds additional information about the original source and property
     internal class AudioSourceSettingViewModel : INotifyPropertyChanged
     {
-        private AudioSourceSetting _audioSourceSetting;
-        private PropertyInfo _propertyInfo;
-        private IAudioSource _audioSource;
+        private readonly AudioSourceSetting _audioSourceSetting;
+        private readonly PropertyInfo _propertyInfo;
+        private readonly IAudioSource _audioSource;
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public string Name
         {
@@ -110,7 +111,7 @@ namespace AudioBand.ViewModels
             set
             {
                 _audioSourceSetting.Name = value;
-                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged();
             }
         }
 
@@ -127,9 +128,17 @@ namespace AudioBand.ViewModels
 
                 // Update the value in the audio source
                 _audioSourceSetting.Value = value;
-                _propertyInfo.GetSetMethod(true)?.Invoke(_audioSource, new[] {value});
 
-                OnPropertyChanged(nameof(Value));
+                try
+                {
+                    _propertyInfo.GetSetMethod(true)?.Invoke(_audioSource, new[] {value});
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e);
+                }
+
+                OnPropertyChanged();
             }
         }
 
