@@ -8,6 +8,7 @@
             xmlns:viewModels="clr-namespace:AudioBand.ViewModels"
             xmlns:converters="clr-namespace:AudioBand.Settings.ValueConverters"
             xmlns:audioBand="clr-namespace:AudioBand.Settings"
+            xmlns:system="clr-namespace:System;assembly=mscorlib"
             x:Class="AudioBand.Settings.SettingsWindow" 
             mc:Ignorable="d" 
             x:Name="Window"
@@ -514,13 +515,22 @@
             <TabItem Header="Audio Source Settings">
                 <StackPanel Style="{StaticResource TabStackPanel}" DataContext="{Binding ElementName=Window, Path=AudioSourceSettingsViewModel}">
                     <Label Style="{StaticResource SettingsLabel}" Content="Audio Source"/>
-                    <ComboBox ItemsSource="{Binding Settings}" DisplayMemberPath="Key" SelectedValuePath="Value" SelectedItem="{Binding SelectedSettings}" IsSynchronizedWithCurrentItem="True">
-                        
-                    </ComboBox>
-                    <ListView ItemsSource="{Binding SelectedSettings}">
+                    <ComboBox ItemsSource="{Binding Settings}" SelectedValue="{Binding SelectedSettings}"
+                              DisplayMemberPath="Key" SelectedValuePath="Value" IsSynchronizedWithCurrentItem="True"/>
+                    <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding SelectedSettings}" Margin="0, 6, 0, 0">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Label> test </Label>
+                                <Grid DataContext="{Binding Value}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Style="{StaticResource SettingsLabel}" Content="{Binding Name}"/>
+                                    <TextBox Grid.Column="1" Style="{StaticResource SettingsTextBox}" Text="{Binding Value, Mode=TwoWay}"/>
+                                </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
