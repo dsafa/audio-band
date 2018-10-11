@@ -98,6 +98,8 @@
     </Compile>
     <Compile Include="AudioSourceContext.cs" />
     <Compile Include="AudioSourceLogger.cs" />
+    <Compile Include="Models\AudioSourceSetting.cs" />
+    <Compile Include="Models\AudioSourceSettingsCollection.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FormattedTextRenderer.cs" />
     <Compile Include="IResettableObject.cs" />
@@ -124,6 +126,7 @@
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AudioBandAppearance.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingsCollectionViewModel.cs" />
     <Compile Include="ViewModels\AudioSourceStatus.cs" />
     <Compile Include="ViewModels\PlaybackControlsAppearance.cs" />
     <Compile Include="EnhancedProgressBar.cs">

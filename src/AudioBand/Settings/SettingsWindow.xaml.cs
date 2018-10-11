@@ -1,4 +1,6 @@
-﻿using AudioBand.ViewModels;
+﻿using AudioBand.AudioSource;
+using AudioBand.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,12 +10,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Web.UI.Design.WebControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using MahApps.Metro.Controls.Dialogs;
+using AudioBand.Models;
 using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
 namespace AudioBand.Settings
@@ -27,18 +28,20 @@ namespace AudioBand.Settings
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
         public ObservableCollection<TextAppearance> TextAppearancesCollection { get; set; }
         public About About { get; } = new About();
+        public AudioSourceSettingsCollectionViewModel AudioSourceSettingsViewModel { get; }
 
         private List<TextAppearance> _deletedTextAppearances;
         private List<TextAppearance> _addedTextAppearances;
         private bool _cancelEdit = true;
         private Appearance Appearance { get; set; }
 
-        internal SettingsWindow(Appearance appearance)
+        internal SettingsWindow(Appearance appearance,List<IAudioSource> audioSources, List<AudioSourceSettingsCollection> audioSourceSettings)
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
             Appearance = appearance;
             TextAppearancesCollection = new ObservableCollection<TextAppearance>(appearance.TextAppearances);
+            AudioSourceSettingsViewModel = new AudioSourceSettingsCollectionViewModel(audioSources, audioSourceSettings);
 
             InitializeComponent();
             DataContext = appearance;

@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using AudioBand.Models;
 using AudioBand.ViewModels;
 using NLog.Targets;
 using Appearance = AudioBand.ViewModels.Appearance;
@@ -74,6 +75,10 @@ namespace AudioBand
 
             try
             {
+                _audioSourceManager = new AudioSourceManager();
+                _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
+                Options.ContextMenuItems = BuildContextMenu();
+
                 _settingsManager = new SettingsManager();
                 _appearance = _settingsManager.Appearance;
                 CreateSettingsWindow();
@@ -125,11 +130,6 @@ namespace AudioBand
                 DataBindings.Add(nameof(AlbumArtPopupY), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.Margin));
 
                 LoadLabelsFromSettings();
-
-                _audioSourceManager = new AudioSourceManager();
-                _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
-                Options.ContextMenuItems = BuildContextMenu();
-
                 SelectAudioSourceFromSettings();
                 ResetState();
             }
@@ -370,7 +370,7 @@ namespace AudioBand
 
         private void CreateSettingsWindow()
         {
-            _settingsWindow = new SettingsWindow(_appearance);
+            _settingsWindow = new SettingsWindow(_appearance, _audioSourceManager.AudioSources.ToList(), _settingsManager.AudioSourceSettings);
             _settingsWindow.Saved += SettingsWindowOnSaved;
             _settingsWindow.NewLabelCreated += SettingsWindowOnNewLabelCreated;
             _settingsWindow.LabelDeleted += SettingsWindowOnLabelDeleted;

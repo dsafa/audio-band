@@ -511,6 +511,21 @@
                     </Expander>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="Audio Source Settings">
+                <StackPanel Style="{StaticResource TabStackPanel}" DataContext="{Binding ElementName=Window, Path=AudioSourceSettingsViewModel}">
+                    <Label Style="{StaticResource SettingsLabel}" Content="Audio Source"/>
+                    <ComboBox ItemsSource="{Binding Settings}" DisplayMemberPath="Key" SelectedValuePath="Value" SelectedItem="{Binding SelectedSettings}" IsSynchronizedWithCurrentItem="True">
+                        
+                    </ComboBox>
+                    <ListView ItemsSource="{Binding SelectedSettings}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Label> test </Label>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </TabItem>
         </TabControl>
     </DockPanel>
     <metro:MetroWindow.Flyouts>
