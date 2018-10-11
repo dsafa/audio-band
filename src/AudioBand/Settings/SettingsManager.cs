@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using AudioBand.AudioSource;
+using AudioBand.Models;
 using AudioBand.ViewModels;
 
 namespace AudioBand.Settings
@@ -14,6 +16,7 @@ namespace AudioBand.Settings
         public static string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
 
         public Appearance Appearance => _settings.ToModel();
+        public List<AudioSourceSettingsCollection> AudioSourceSettings => _settings.AudioSourceSettings;
         public string Version => _settings.Version;
         public string AudioSource
         {
