@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using AudioBand.Models;
 using AudioBand.ViewModels;
+using NLog.Internal.Fakeables;
 using NLog.Targets;
 using Appearance = AudioBand.ViewModels.Appearance;
 using Size = System.Drawing.Size;
@@ -365,6 +366,7 @@ namespace AudioBand
 
         private void SettingsWindowOnSaved(object sender, EventArgs eventArgs)
         {
+            _settingsManager.AudioSourceSettings = _settingsWindow.AudioSourceSettingsViewModel.ToModel();
             _settingsManager.Save();
         }
 

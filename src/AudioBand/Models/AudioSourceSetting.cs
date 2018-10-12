@@ -11,8 +11,16 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Value of the setting
+        /// Value of the setting serialized as a string
         /// </summary>
-        public object Value { get; set; }
+        public string Value { get; set; }
+
+        public AudioSourceSetting(){}
+
+        public AudioSourceSetting(string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
     }
 }

@@ -15,9 +15,7 @@ namespace SpotifyAudioSource
         public string ClientId { get; set; }
 
         [AudioSourceSetting("Spotify Client secret")]
-        public string ClientSecret { get => "";
-            set => _logger.Debug(value);
-        }
+        public string ClientSecret { get; set; }
 
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
         public event EventHandler TrackPlaying;

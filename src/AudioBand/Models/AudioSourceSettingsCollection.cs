@@ -15,6 +15,6 @@ namespace AudioBand.Models
         /// <summary>
         /// List of settings that the audio source exposes
         /// </summary>
-        public List<AudioSourceSetting> Settings { get; set; }
+        public List<AudioSourceSetting> Settings { get; set; } = new List<AudioSourceSetting>();
     }
 }
