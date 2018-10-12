@@ -532,8 +532,10 @@
                                     <ContentControl Grid.Column="1" Content="{Binding Value}">
                                         <ContentControl.Resources>
                                             <DataTemplate DataType="{x:Type system:String}">
-                                                <TextBox Style="{StaticResource SettingsTextBox}" 
-                                                         Text="{Binding Path=DataContext.Value, RelativeSource={RelativeSource AncestorType=ContentControl}, Mode=TwoWay}"/>
+                                                <TextBox Style="{StaticResource SettingsTextBox}"
+                                                        Text="{Binding Path=DataContext.Value, RelativeSource={RelativeSource AncestorType=ContentControl},
+                                                               Mode=TwoWay, ValidatesOnExceptions=True}">
+                                                </TextBox>
                                             </DataTemplate>
                                         </ContentControl.Resources>
                                     </ContentControl>
@@ -565,6 +567,10 @@
         </metro:FlyoutsControl>
     </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>
+
+
+
+
 
 
 
