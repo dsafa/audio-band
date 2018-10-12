@@ -3,11 +3,14 @@ using AudioBand.AudioSource;
 using AudioBand.Models;
 using NLog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 
 namespace AudioBand.ViewModels
 {
@@ -87,7 +90,7 @@ namespace AudioBand.ViewModels
                                 ? saved[audioSource.Name][attr.Name].Value 
                                 : p.Property.GetGetMethod(true).Invoke(audioSource, null)?.ToString();
 
-                            return new AudioSourceSettingViewModel(audioSource, p.Property, type, value, attr.Name);
+                            return new AudioSourceSettingViewModel(audioSource, p.Property, attr, type, value);
                         }
                         catch (MissingMethodException)
                         {
@@ -106,13 +109,15 @@ namespace AudioBand.ViewModels
         }
     }
 
-    internal class AudioSourceSettingViewModel : INotifyPropertyChanged
+    internal class AudioSourceSettingViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         private readonly PropertyInfo _propertyInfo;
         private readonly IAudioSource _audioSource;
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly Type _valueType;
         private object _value;
+        private readonly AudioSourceSettingAttribute _audioSourceSettingAttribute;
+        private SettingValidationResult _lastValidationResult;
 
         /// <summary>
         /// Setting name
@@ -146,6 +151,13 @@ namespace AudioBand.ViewModels
                     }
                 }
 
+                _lastValidationResult = Validate(value);
+                if (!_lastValidationResult.IsValid)
+                {
+                    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(Value)));
+                    return;
+                }
+
                 _value = value;
 
                 try
@@ -161,18 +173,22 @@ namespace AudioBand.ViewModels
             }
         }
 
+        public bool HasErrors => !_lastValidationResult.IsValid;
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AudioSourceSettingViewModel(IAudioSource source, PropertyInfo propertyInfo, Type valueType, string valueString, string settingName)
+        public AudioSourceSettingViewModel(IAudioSource source, PropertyInfo propertyInfo, AudioSourceSettingAttribute attribute, Type valueType, string valueString)
         {
-            Name = settingName;
+            Name = attribute.Name;
+            _audioSourceSettingAttribute = attribute;
             _valueType = valueType;
             _audioSource = source;
             _propertyInfo = propertyInfo;
 
             try
             {
-                _value = TypeDescriptor.GetConverter(valueType).ConvertFromString(valueString);
+                Value = TypeDescriptor.GetConverter(valueType).ConvertFromString(valueString);
             }
             catch (Exception e)
             {
@@ -185,10 +201,34 @@ namespace AudioBand.ViewModels
             return new AudioSourceSetting(Name, _value.ToString());
         }
 
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (propertyName != nameof(Value))
+            {
+                return null;
+            }
+
+            return new[] {_lastValidationResult.ErrorMessage};
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private SettingValidationResult Validate(object value)
+        {
+            try
+            {
+                return _audioSourceSettingAttribute.Validate(_audioSource, value, _propertyInfo.Name);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Exception during validation: {_audioSource.Name}({Name}, {value}) | {e}");
+                return new SettingValidationResult(false, "Exception:" + e.Message);
+            }
+
         }
     }
 }
