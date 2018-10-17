@@ -52,7 +52,7 @@ There is currently no installer available, however there are prereleases in the 
 This project uses C# 7 features so a compatible compiler is required.
 
 ## Contributing
-Help is appreciated
+Help is appreciated, but the code base is messy right now.
 - Ask questions, report bugs, suggest features in issues
 - Send pull requests
 
