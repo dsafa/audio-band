@@ -11,7 +11,7 @@ Audio Band allows you to display song information in the taskbar.
 - Add support for your music player of choice through plugins
 
 ## Installation
-There is currently no installer available, however there are prereleases in the [Release](https://github.com/dsafa/audio-band/releases) page.
+There is currently no installer available, however there are prereleases in the [Release](https://github.com/dsafa/audio-band/releases) page that come with a script to install manually.
 
 ## Usage
 1. Right click on the taskbar and select `Audio Band` from the toolbars submenu.
@@ -20,6 +20,8 @@ There is currently no installer available, however there are prereleases in the 
 ![](./screenshots/hover-over.png)
 
 ![](./screenshots/click-audiosource.png)
+
+**IMPORTANT** If nothing happens after selecting `Audio Band` from the toolbars menu or if there are no options in the `Audio Source` menu, some files are being blocked by windows. To fix it, right click the files -> properties and click unblock. If there are still problems, feel free to post an issue.
 
 ### Current Supported Audio Sources
 - Spotify (**IMPORTANT** due to an [issue](https://github.com/dsafa/audio-band/issues/17), No album art will be displayed. Also the first time it starts, it will only update once spotify is playing a song.)

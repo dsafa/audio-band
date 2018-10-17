@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Web.UI.Design.WebControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -24,7 +26,7 @@ namespace AudioBand.Settings
 
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
         public ObservableCollection<TextAppearance> TextAppearancesCollection { get; set; }
-                public About About { get; } = new About();
+        public About About { get; } = new About();
 
         private List<TextAppearance> _deletedTextAppearances;
         private List<TextAppearance> _addedTextAppearances;
@@ -103,15 +105,7 @@ namespace AudioBand.Settings
 
         private async void DeleteLabelOnExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            var dialogSettings = new MetroDialogSettings
-            {
-                AffirmativeButtonText = "Yes",
-                NegativeButtonText = "No",
-                AnimateHide = false,
-                AnimateShow = false
-            };
-
-            var res = await this.ShowMessageAsync("Delete label", "Are you sure you want to delete this label?", MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+            var res = await ShowConfirmationDialog("Delete label", "Are you sure you want to delete this label?");
             if (res != MessageDialogResult.Affirmative)
             {
                 return;
@@ -132,11 +126,6 @@ namespace AudioBand.Settings
             {
                 _deletedTextAppearances.Add(appearance);
             }
-        }
-
-        private void DeleteLabelCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
         }
 
         private void StartEdit()
@@ -182,14 +171,39 @@ namespace AudioBand.Settings
             AboutDialog.IsOpen = true;
         }
 
-        private void ShowAboutCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.AbsoluteUri);
+        }
+
+        private async void ResetSettingOnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var res = await ShowConfirmationDialog("Reset Setting", "Are you sure you want to reset this setting to the default values?");
+            if (res != MessageDialogResult.Affirmative)
+            {
+                return;
+            }
+
+            var resettableObj = e.Parameter as IResettableObject;
+            resettableObj.Reset();
+        }
+
+        private void AlwaysCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
         }
 
-        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        private async Task<MessageDialogResult> ShowConfirmationDialog(string title, string message)
         {
-            Process.Start(e.Uri.AbsoluteUri);
+            var dialogSettings = new MetroDialogSettings
+            {
+                AffirmativeButtonText = "Yes",
+                NegativeButtonText = "No",
+                AnimateHide = false,
+                AnimateShow = false
+            };
+
+            return await this.ShowMessageAsync(title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
         }
     }
 

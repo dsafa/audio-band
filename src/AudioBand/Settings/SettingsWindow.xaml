@@ -13,7 +13,7 @@
             x:Name="Window"
             d:DesignHeight="800" d:DesignWidth="700"
             Title="Audio Band Settings"
-            Height="850"
+            Height="950"
             Width="800"
             GlowBrush="{DynamicResource AccentColorBrush}"
             WindowStartupLocation="CenterScreen" x:ClassModifier="internal">
@@ -30,8 +30,9 @@
     </metro:MetroWindow.DataContext>
     <metro:MetroWindow.CommandBindings>
         <CommandBinding Command="audioBand:SettingsCommands.AddLabel" Executed="NewLabelOnExecute" CanExecute="NewLabelCanExecute"/>
-        <CommandBinding Command="audioBand:SettingsCommands.DeleteLabel" Executed="DeleteLabelOnExecute" CanExecute="DeleteLabelCanExecute"/>
-        <CommandBinding Command="audioBand:SettingsCommands.ShowAbout" Executed="ShowAboutOnExecuted" CanExecute="ShowAboutCanExecute"/>
+        <CommandBinding Command="audioBand:SettingsCommands.DeleteLabel" Executed="DeleteLabelOnExecute" CanExecute="AlwaysCanExecute"/>
+        <CommandBinding Command="audioBand:SettingsCommands.ShowAbout" Executed="ShowAboutOnExecuted" CanExecute="AlwaysCanExecute"/>
+        <CommandBinding Command="audioBand:SettingsCommands.ResetSetting" Executed="ResetSettingOnExecuted" CanExecute="AlwaysCanExecute"/>
     </metro:MetroWindow.CommandBindings>
     <metro:MetroWindow.InputBindings>
         <KeyBinding Command="audioBand:SettingsCommands.AddLabel" Key="N" Modifiers="Control"/>
@@ -50,8 +51,9 @@
             <TabItem  Header="General">
                 <StackPanel Style="{StaticResource TabStackPanel}">
                     <Expander Header="AudioBand Size" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}">
+                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding AudioBandAppearance}">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
@@ -62,12 +64,14 @@
                             <Label Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="0" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding AudioBandAppearance.Width, Mode=TwoWay}"/>
+                                                 Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding AudioBandAppearance.Height, Mode=TwoWay}"/>
+                                                 Value="{Binding Height, Mode=TwoWay}"/>
+
+                            <audioBand:ResetButton Grid.Row="2" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -75,8 +79,9 @@
             <TabItem Header="Playback Controls">
                 <StackPanel Style="{StaticResource TabStackPanel}">
                     <Expander Header="Play / Pause Button" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}">
+                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding PlayPauseButtonAppearance}">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -92,45 +97,48 @@
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
                             <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
                                                 OnLabel="Visible" OffLabel="Hidden" 
-                                                IsChecked="{Binding PlayPauseButtonAppearance.IsVisible, Mode=TwoWay}"/>
+                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding PlayPauseButtonAppearance.Width, Mode=TwoWay}"/>
+                                                 Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding PlayPauseButtonAppearance.Height, Mode=TwoWay}"/>
+                                                 Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding PlayPauseButtonAppearance.XPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding PlayPauseButtonAppearance.YPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Play Button Image" />
                             <audioBand:ImagePicker Grid.Row="5" Grid.Column="1"
-                                                   ImagePath="{Binding PlayPauseButtonAppearance.PlayImagePath, Mode=TwoWay}" />
+                                                   ImagePath="{Binding PlayImagePath, Mode=TwoWay}" />
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Pause Button Image" />
                             <audioBand:ImagePicker Grid.Row="6" Grid.Column="1" 
-                                                   ImagePath="{Binding PlayPauseButtonAppearance.PauseImagePath, Mode=TwoWay}" />
+                                                   ImagePath="{Binding PauseImagePath, Mode=TwoWay}" />
+
+                            <audioBand:ResetButton Grid.Row="7" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Next Song Button" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}">
+                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding NextSongButtonAppearance}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
@@ -141,41 +149,44 @@
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
                             <metro:ToggleSwitch Grid.Row="0" Grid.Column="1"
                                                 OnLabel="Visible" OffLabel="Hidden"
-                                                IsChecked="{Binding NextSongButtonAppearance.IsVisible, Mode=TwoWay}"/>
+                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding NextSongButtonAppearance.Width, Mode=TwoWay}"/>
+                                                 Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding NextSongButtonAppearance.Height, Mode=TwoWay}"/>
+                                                 Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding NextSongButtonAppearance.XPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding NextSongButtonAppearance.YPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" />
                             <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" 
-                                                   ImagePath="{Binding NextSongButtonAppearance.ImagePath}"/>
+                                                   ImagePath="{Binding ImagePath, Mode=TwoWay}"/>
+
+                            <audioBand:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Previous Song Button" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}">
+                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding PreviousSongButtonAppearance}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
@@ -186,31 +197,33 @@
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
                             <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
                                                 OnLabel="Visible" OffLabel="Hidden"
-                                                IsChecked="{Binding PreviousSongButtonAppearance.IsVisible, Mode=TwoWay}"/>
+                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding PreviousSongButtonAppearance.Width, Mode=TwoWay}"/>
+                                                 Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding PreviousSongButtonAppearance.Height, Mode=TwoWay}"/>
+                                                 Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding PreviousSongButtonAppearance.XPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding PreviousSongButtonAppearance.YPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" />
                             <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" 
-                                                   ImagePath="{Binding PreviousSongButtonAppearance.ImagePath}"/>
+                                                   ImagePath="{Binding ImagePath, Mode=TwoWay}"/>
+
+                            <audioBand:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -337,12 +350,13 @@
                                                  metro:TextBoxHelper.ClearTextButton="True"
                                                  Text="{Binding FormatString, Mode=TwoWay}"/>
 
-                                        <Button Grid.Row="12" Grid.Column="1"
-                                                HorizontalAlignment="Right"
-                                                Margin="2"
-                                                Content="Delete" Style="{StaticResource SettingsButton}"
-                                                Command="audioBand:SettingsCommands.DeleteLabel"
-                                                CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                                        <StackPanel Grid.Row="12" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                                            <audioBand:ResetButton Margin="2"/>
+                                            <Button Margin="2"
+                                                    Content="Delete" Style="{StaticResource SettingsButton}"
+                                                    Command="audioBand:SettingsCommands.DeleteLabel"
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                                        </StackPanel>
                                     </Grid>
                                 </Expander>
                             </DataTemplate>
@@ -353,9 +367,10 @@
             <TabItem Header="Progress Bar">
                 <StackPanel Style="{StaticResource TabStackPanel}">
                     <Expander Header="Progress Bar" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}">
+                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding ProgressBarAppearance}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -370,35 +385,37 @@
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
                             <metro:ToggleSwitch Grid.Row="0" Grid.Column="1"
                                                 OnLabel="Visible" OffLabel="Hidden"
-                                                IsChecked="{Binding ProgressBarAppearance.IsVisible, Mode=TwoWay}"/>
+                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding ProgressBarAppearance.Width, Mode=TwoWay}"/>
+                                                 Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding ProgressBarAppearance.Height, Mode=TwoWay}"/>
+                                                 Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding ProgressBarAppearance.XPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding ProgressBarAppearance.YPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Background Colour" />
                             <xctk:ColorPicker Grid.Row="5" Grid.Column="1"
-                                              SelectedColor="{Binding ProgressBarAppearance.BackgroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+                                              SelectedColor="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Foreground Color" />
                             <xctk:ColorPicker Grid.Row="6" Grid.Column="1" 
-                                              SelectedColor="{Binding ProgressBarAppearance.ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+                                              SelectedColor="{Binding ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+
+                            <audioBand:ResetButton Grid.Row="7" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -406,9 +423,10 @@
             <TabItem Header="Album Art">
                 <StackPanel Style="{StaticResource TabStackPanel}">
                     <Expander Header="Album Art" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}">
+                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding AlbumArtAppearance}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -422,37 +440,40 @@
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
                             <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
                                                 OnLabel="Visible" OffLabel="Hidden" 
-                                                IsChecked="{Binding AlbumArtAppearance.IsVisible, Mode=TwoWay}"/>
+                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding AlbumArtAppearance.Width, Mode=TwoWay}"/>
+                                                 Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding AlbumArtAppearance.Height, Mode=TwoWay}"/>
+                                                 Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding AlbumArtAppearance.XPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
                                                  audioBand:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding AlbumArtAppearance.YPosition, Mode=TwoWay}"/>
+                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Placeholder Image" />
                             <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" 
-                                                   ImagePath="{Binding AlbumArtAppearance.PlaceholderPath, Mode=TwoWay}"/>
+                                                   ImagePath="{Binding PlaceholderPath, Mode=TwoWay}"/>
+
+                            <audioBand:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Album Art Popup" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}">
+                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding AlbumArtPopupAppearance}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -465,25 +486,27 @@
                             <Label Grid.Row="0" Grid.Column="0" Content="Visibility"/>
                             <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
                                                 OnLabel="Visible" OffLabel="Hidden"
-                                                IsChecked="{Binding AlbumArtPopupAppearance.IsVisible, Mode=TwoWay}"/>
+                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width"/>
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding AlbumArtPopupAppearance.Width, Mode=TwoWay}"/>
+                                                 Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height"/>
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 Value="{Binding AlbumArtPopupAppearance.Height, Mode=TwoWay}"/>
+                                                 Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position"/>
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
                                                  audioBand:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding AlbumArtPopupAppearance.XOffset, Mode=TwoWay}"/>
+                                                 Value="{Binding XOffset, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Margin"/>
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                                 Value="{Binding AlbumArtPopupAppearance.Margin, Mode=TwoWay}"/>
+                                                 Value="{Binding Margin, Mode=TwoWay}"/>
+
+                            <audioBand:ResetButton Grid.Row="5" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                 </StackPanel>

@@ -59,6 +59,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
@@ -99,11 +100,15 @@
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FormattedTextRenderer.cs" />
+    <Compile Include="IResettableObject.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Settings\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\AttachedProperties.cs" />
+    <Compile Include="Settings\ResetButton.xaml.cs">
+      <DependentUpon>ResetButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\SettingsCommands.cs" />
     <Compile Include="Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -170,6 +175,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Settings\ImagePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\ResetButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -5,20 +5,20 @@ using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
-    internal class TextAppearance : INotifyPropertyChanged, IEditableObject
+    internal class TextAppearance : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
-        private bool _isVisible = true;
-        private string _fontFamily = "Segoe UI";
-        private float _fontSize = 8.5f;
-        private Color _color = Color.White;
-        private string _formatString = "{artist} - {song}";
-        private TextAlignment _textAlignment = TextAlignment.Center;
-        private int _yPosition = 0;
-        private int _xPosition = 30;
-        private int _height = 15;
-        private int _width = 220;
-        private string _name = "Now Playing";
-        private int _scrollSpeed = 50;
+        private bool _isVisible;
+        private string _fontFamily;
+        private float _fontSize;
+        private Color _color;
+        private string _formatString;
+        private TextAlignment _textAlignment;
+        private int _yPosition;
+        private int _xPosition;
+        private int _height;
+        private int _width;
+        private string _name;
+        private int _scrollSpeed;
 
         private TextAppearance _backup;
 
@@ -162,10 +162,9 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public TextAppearance()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Reset();
         }
 
         public void BeginEdit()
@@ -189,7 +188,7 @@ namespace AudioBand.ViewModels
 
         public void EndEdit()
         {
-
+            // No op
         }
 
         public void CancelEdit()
@@ -206,6 +205,28 @@ namespace AudioBand.ViewModels
             FormatString = _backup.FormatString;
             Name = _backup.Name;
             ScrollSpeed = _backup.ScrollSpeed;
+        }
+
+        public void Reset()
+        {
+            IsVisible = true;
+            FontFamily = "Segoe UI";
+            FontSize = 8.5f;
+            Color = Color.White;
+            FormatString = "{artist} - {song}";
+            TextAlignment = TextAlignment.Center;
+            YPosition = 0;
+            XPosition = 30;
+            Height = 15;
+            Width = 220;
+            Name = "Now Playing";
+            ScrollSpeed = 50;
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 

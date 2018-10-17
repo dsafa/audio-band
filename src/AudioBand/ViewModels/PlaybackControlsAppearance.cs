@@ -9,20 +9,21 @@ using NLog;
 
 namespace AudioBand.ViewModels
 {
-    internal class PlayPauseButtonAppearance : INotifyPropertyChanged, IEditableObject
+    internal class PlayPauseButtonAppearance : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
         private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
         private static readonly SvgDocument DefaultPauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
         private Image _playImage;
-        private string _playImagePath = "";
         private Image _pauseImage;
-        private string _pauseImagePath = "";
-        private int _yPosition = 15;
-        private int _xPosition = 103;
-        private int _height = 12;
-        private int _width = 73;
-        private bool _isVisible = true;
         private bool _isPlaying;
+
+        private string _playImagePath;
+        private string _pauseImagePath;
+        private int _yPosition;
+        private int _xPosition;
+        private int _height;
+        private int _width;
+        private bool _isVisible;
 
         private PlayPauseButtonAppearance _backup;
 
@@ -45,7 +46,7 @@ namespace AudioBand.ViewModels
             {
                 _playImagePath = value;
                 OnPropertyChanged();
-                LoadPlayImage();
+                PlayImage = LoadImage(value, DefaultPlayButtonSvg.ToBitmap());
             }
         }
 
@@ -67,8 +68,8 @@ namespace AudioBand.ViewModels
             set
             {
                 _pauseImagePath = value;
-                LoadPauseImage();
                 OnPropertyChanged();
+                PauseImage = LoadImage(value, DefaultPauseButtonSvg.ToBitmap());
             }
         }
 
@@ -154,41 +155,21 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public PlayPauseButtonAppearance()
         {
-            LoadPlayImage();
-            LoadPauseImage();
+            Reset();
         }
 
-        private void LoadPauseImage()
+        private Image LoadImage(string path, Image defaultImage)
         {
             try
             {
-                PauseImage = string.IsNullOrEmpty(PauseImagePath) ? DefaultPauseButtonSvg.ToBitmap() : Image.FromFile(_pauseImagePath);
+                return string.IsNullOrEmpty(path) ? defaultImage : Image.FromFile(path);
             }
             catch (Exception e)
             {
-                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {PlayImagePath}, {e}");
-                PauseImage = DefaultPauseButtonSvg.ToBitmap();
-            }
-        }
-
-        private void LoadPlayImage()
-        {
-            try
-            {
-                PlayImage = string.IsNullOrEmpty(_playImagePath) ? DefaultPlayButtonSvg.ToBitmap() : Image.FromFile(_playImagePath);
-            }
-            catch (Exception e)
-            {
-                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {PauseImagePath}, {e}");
-                PlayImage = DefaultPlayButtonSvg.ToBitmap();
+                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {path}, {e}");
+                return defaultImage;
             }
         }
 
@@ -208,7 +189,7 @@ namespace AudioBand.ViewModels
 
         public void EndEdit()
         {
-
+            // No op
         }
 
         public void CancelEdit()
@@ -221,18 +202,36 @@ namespace AudioBand.ViewModels
             PlayImagePath = _backup.PlayImagePath;
             PauseImagePath = _backup.PauseImagePath;
         }
+
+        public void Reset()
+        {
+            PlayImagePath = "";
+            PauseImagePath = "";
+            YPosition = 15;
+            XPosition = 103;
+            Height = 12;
+            Width = 73;
+            IsVisible = true;
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    internal class NextSongButtonAppearance : INotifyPropertyChanged, IEditableObject
+    internal class NextSongButtonAppearance : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
         private static readonly SvgDocument DefaultNextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private Image _image;
-        private string _imagePath = "";
-        private int _yPosition = 15;
-        private int _xPosition = 176;
-        private int _height = 12;
-        private int _width = 73;
-        private bool _isVisible = true;
+
+        private string _imagePath;
+        private int _yPosition;
+        private int _xPosition;
+        private int _height;
+        private int _width;
+        private bool _isVisible;
 
         private NextSongButtonAppearance _backup;
 
@@ -321,15 +320,9 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public NextSongButtonAppearance()
         {
-            LoadImage();
+            Reset();
         }
 
         private void LoadImage()
@@ -360,7 +353,7 @@ namespace AudioBand.ViewModels
 
         public void EndEdit()
         {
-
+            // No op
         }
 
         public void CancelEdit()
@@ -372,18 +365,35 @@ namespace AudioBand.ViewModels
             YPosition = _backup.YPosition;
             ImagePath = _backup.ImagePath;
         }
+
+        public void Reset()
+        {
+            ImagePath = "";
+            YPosition = 15;
+            XPosition = 176;
+            Height = 12;
+            Width = 73;
+            IsVisible = true;
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    internal class PreviousSongButtonAppearance : INotifyPropertyChanged, IEditableObject
+    internal class PreviousSongButtonAppearance : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
         private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private Image _image;
-        private string _imagePath = "";
-        private bool _isVisible = true;
-        private int _width = 73;
-        private int _height = 12;
-        private int _xPosition = 30;
-        private int _yPosition = 15;
+
+        private string _imagePath;
+        private bool _isVisible;
+        private int _width;
+        private int _height;
+        private int _xPosition;
+        private int _yPosition;
 
         private PreviousSongButtonAppearance _backup;
 
@@ -472,15 +482,9 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public PreviousSongButtonAppearance()
         {
-            LoadImage();
+            Reset();
         }
 
         private void LoadImage()
@@ -511,7 +515,7 @@ namespace AudioBand.ViewModels
 
         public void EndEdit()
         {
-
+            // No op
         }
 
         public void CancelEdit()
@@ -522,6 +526,22 @@ namespace AudioBand.ViewModels
             XPosition = _backup.XPosition;
             YPosition = _backup.YPosition;
             ImagePath = _backup.ImagePath;
+        }
+
+        public void Reset()
+        {
+            ImagePath = "";
+            IsVisible = true;
+            Width = 73;
+            Height = 12;
+            XPosition = 30;
+            YPosition = 15;
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

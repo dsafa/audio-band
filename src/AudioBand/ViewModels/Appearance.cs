@@ -39,5 +39,17 @@ namespace AudioBand.ViewModels
             PlayPauseButtonAppearance.CancelEdit();
             ProgressBarAppearance.CancelEdit();
         }
+
+        public void Reset()
+        {
+            AlbumArtPopupAppearance.Reset();
+            TextAppearances = new List<TextAppearance> {new TextAppearance()};
+            AlbumArtAppearance.Reset();
+            AudioBandAppearance.Reset();
+            NextSongButtonAppearance.Reset();
+            PreviousSongButtonAppearance.Reset();
+            PlayPauseButtonAppearance.Reset();
+            ProgressBarAppearance.Reset();
+        }
     }
 }

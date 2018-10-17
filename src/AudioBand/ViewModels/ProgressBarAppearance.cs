@@ -5,15 +5,15 @@ using AudioBand.Annotations;
 
 namespace AudioBand.ViewModels
 {
-    internal class ProgressBarAppearance : INotifyPropertyChanged, IEditableObject
+    internal class ProgressBarAppearance : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
-        private Color _foregroundColor = Color.DodgerBlue;
-        private Color _backgroundColor = Color.Black;
-        private bool _isVisible = true;
-        private int _yPosition = 28;
-        private int _xPosition = 30;
-        private int _height = 2;
-        private int _width = 220;
+        private Color _foregroundColor;
+        private Color _backgroundColor;
+        private bool _isVisible;
+        private int _yPosition;
+        private int _xPosition;
+        private int _height;
+        private int _width;
 
         private ProgressBarAppearance _backup;
 
@@ -100,10 +100,9 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public ProgressBarAppearance()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Reset();
         }
 
         public void BeginEdit()
@@ -122,7 +121,7 @@ namespace AudioBand.ViewModels
 
         public void EndEdit()
         {
-
+            // No op
         }
 
         public void CancelEdit()
@@ -134,6 +133,23 @@ namespace AudioBand.ViewModels
             YPosition = _backup.YPosition;
             BackgroundColor = _backup.BackgroundColor;
             ForegroundColor = _backup.ForegroundColor;
+        }
+
+        public void Reset()
+        {
+            ForegroundColor = Color.DodgerBlue;
+            BackgroundColor = Color.Black;
+            IsVisible = true;
+            YPosition = 28;
+            XPosition = 30;
+            Height = 2;
+            Width = 220;
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

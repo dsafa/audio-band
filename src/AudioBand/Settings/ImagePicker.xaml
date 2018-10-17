@@ -18,8 +18,16 @@
         <CommandBinding Command="local:SettingsCommands.ChooseImage" Executed="ChooseImageOnExecuted" CanExecute="ChooseImageCanExecute"/>
     </UserControl.CommandBindings>
     <DockPanel x:Name="Root">
-        <Button DockPanel.Dock="Right" Margin="2" Content="Reset" Style="{StaticResource SettingsButton}" Command="local:SettingsCommands.ResetImagePath"/>
-        <Button DockPanel.Dock="Right" Margin="2" Content="Browse" Style="{StaticResource SettingsButton}" Command="local:SettingsCommands.ChooseImage" />
+        <Button DockPanel.Dock="Right" Margin="2" Content="Default" Style="{StaticResource SettingsButton}" Command="local:SettingsCommands.ResetImagePath">
+            <Button.ToolTip>
+                <TextBlock Text="Reset image to its default." />
+            </Button.ToolTip>
+        </Button>
+        <Button DockPanel.Dock="Right" Margin="2" Content="Browse" Style="{StaticResource SettingsButton}" Command="local:SettingsCommands.ChooseImage" >
+            <Button.ToolTip>
+                <TextBlock Text="Browse the system for an image to use."/>
+            </Button.ToolTip>
+        </Button>
         <Label x:Name="ImagePathLabel" Margin="2" Content="{Binding ImagePath, Mode=TwoWay}" Style="{StaticResource SettingsLabel}">
             <Label.ToolTip>
                 <TextBlock Text="{Binding ImagePath}"/>

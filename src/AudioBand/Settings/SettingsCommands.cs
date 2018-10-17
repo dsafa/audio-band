@@ -9,5 +9,7 @@ namespace AudioBand.Settings
         public static readonly RoutedCommand AddLabel = new RoutedCommand(nameof(AddLabel), typeof(SettingsCommands));
         public static readonly RoutedCommand DeleteLabel = new RoutedCommand(nameof(DeleteLabel), typeof(SettingsCommands));
         public static readonly RoutedCommand ShowAbout = new RoutedCommand(nameof(ShowAbout), typeof(SettingsCommands));
+        public static readonly RoutedCommand ResetSetting = new RoutedCommand(nameof(ResetSetting), typeof(SettingsCommands));
+        public static readonly RoutedCommand ResetAll = new RoutedCommand(nameof(ResetAll), typeof(SettingsCommands));
     }
 }

@@ -5,7 +5,7 @@ using AudioBand;
 using System.Drawing;
 using AudioBand.ViewModels;
 
-namespace AudioBand.Text
+namespace AudioBand.Test
 {
     [TestClass]
     public class TextRendererTests
