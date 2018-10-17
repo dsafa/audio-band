@@ -10,10 +10,12 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace AudioBand.ViewModels
 {
+    // TODO move logic away from view models
     internal class AudioSourceSettingsCollectionViewModel : INotifyPropertyChanged
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
@@ -146,29 +148,12 @@ namespace AudioBand.ViewModels
                     }
                     else
                     {
-                        _logger.Warn($"Trying to set invalid type for setting {Name} - {value} {value?.GetType()}");
+                        _logger.Warn($"Trying to set invalid type for setting {Name} - {value} {value.GetType()}");
                         return;
                     }
                 }
 
-                _lastValidationResult = Validate(value);
-                if (!_lastValidationResult.IsValid)
-                {
-                    ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(Value)));
-                    return;
-                }
-
                 _value = value;
-
-                try
-                {
-                    _propertyInfo.GetSetMethod(true)?.Invoke(_audioSource, new[] {value});
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e);
-                }
-
                 OnPropertyChanged();
             }
         }
@@ -188,12 +173,43 @@ namespace AudioBand.ViewModels
 
             try
             {
+                // Attach listener so its easier to validate changes async
+                PropertyChanged += OnValueChanged;
                 Value = TypeDescriptor.GetConverter(valueType).ConvertFromString(valueString);
             }
             catch (Exception e)
             {
                 _logger.Error($"Setting value does not match the type exported: {e}");
             }
+        }
+
+        private async void OnValueChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var res =_audioSourceSettingAttribute.Validate(_audioSource, Value, _propertyInfo.Name);
+                    if (!res.IsValid)
+                    {
+                        InvokeError(res);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.Error($"Exception during validation: {_audioSource.Name}({Name}, {Value}) | {e}");
+                    InvokeError(new SettingValidationResult(false, "Exception:" + e.Message));
+                }
+
+                try
+                {
+                    _propertyInfo.GetSetMethod(true)?.Invoke(_audioSource, new[] { Value });
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e);
+                }
+            });
         }
 
         public AudioSourceSetting ToModel()
@@ -211,24 +227,16 @@ namespace AudioBand.ViewModels
             return new[] {_lastValidationResult.ErrorMessage};
         }
 
+        private void InvokeError(SettingValidationResult res)
+        {
+            _lastValidationResult = res;
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(Value)));
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private SettingValidationResult Validate(object value)
-        {
-            try
-            {
-                return _audioSourceSettingAttribute.Validate(_audioSource, value, _propertyInfo.Name);
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Exception during validation: {_audioSource.Name}({Name}, {value}) | {e}");
-                return new SettingValidationResult(false, "Exception:" + e.Message);
-            }
-
         }
     }
 }

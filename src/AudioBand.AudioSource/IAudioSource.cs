@@ -32,9 +32,9 @@ namespace AudioBand.AudioSource
         event EventHandler TrackPaused;
 
         /// <summary>
-        /// Track progress has changed. Track progress is from [0 - 100]
+        /// Track progress has changed to the current song duration
         /// </summary>
-        event EventHandler<double> TrackProgressChanged;
+        event EventHandler<TimeSpan> TrackProgressChanged;
 
         /// <summary>
         /// This audio source has been selected
