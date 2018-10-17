@@ -34,7 +34,7 @@ namespace SpotifyAudioSource
             return title.ToString();
         }
 
-        public string GetSpotifyTitle()
+        public string GetSpotifyWindowTitle()
         {
             // find spotify window by class name since the title changes depending on if a song is playing
             var hwnd = FindWindowEx(IntPtr.Zero, IntPtr.Zero, SpotifyWindowClassName, null);

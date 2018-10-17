@@ -1,29 +1,21 @@
 ﻿using AudioBand.AudioSource;
 using AudioBand.Settings;
+using AudioBand.ViewModels;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
 using CSDeskBand.Win;
 using NLog;
 using NLog.Config;
-using Svg;
+using NLog.Targets;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Forms.Integration;
-using AudioBand.Models;
-using AudioBand.ViewModels;
-using NLog.Internal.Fakeables;
-using NLog.Targets;
 using Appearance = AudioBand.ViewModels.Appearance;
 using Size = System.Drawing.Size;
 
@@ -68,6 +60,8 @@ namespace AudioBand
             config.LoggingRules.Add(fileRule);
 
             LogManager.Configuration = config;
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) => LogManager.GetCurrentClassLogger().Error((Exception) args.ExceptionObject);
         }
 
         public MainControl()
@@ -247,9 +241,9 @@ namespace AudioBand
             _settingsManager.AudioSource = null;
         }
 
-        private void AudioSourceOnTrackProgressChanged(object o, double progress)
+        private void AudioSourceOnTrackProgressChanged(object o, TimeSpan progress)
         {
-            //BeginInvoke(new Action(() => { _audioSourceStatus.SongProgress = progress;}));
+            BeginInvoke(new Action(() => { _audioSourceStatus.SongProgress = progress;}));
         }
 
         private void AudioSourceOnTrackPaused(object o, EventArgs args)
