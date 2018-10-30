@@ -98,6 +98,7 @@ namespace AudioBand
                 audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.ForegroundColor));
                 audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.BackgroundColor));
                 audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _audioSourceStatus, nameof(AudioSourceStatus.SongProgress));
+                audioProgress.DataBindings.Add(nameof(audioProgress.Total), _audioSourceStatus, nameof(AudioSourceStatus.SongLength));
 
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Visible), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.IsVisible));
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Width), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Width));
@@ -291,6 +292,7 @@ namespace AudioBand
 
                 _audioSourceStatus.Artist = trackInfoChangedEventArgs.Artist;
                 _audioSourceStatus.SongName = trackInfoChangedEventArgs.TrackName;
+                _audioSourceStatus.SongLength = trackInfoChangedEventArgs.TrackLength;
             }));
         }
 
