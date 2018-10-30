@@ -47,19 +47,25 @@ namespace SpotifyAudioSource
         public event EventHandler TrackPaused;
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
+        private const string SpotifyPausedWindowTitle = "Spotify";
         private readonly SpotifyControls _spotifyControls = new SpotifyControls();
-        private string _currentSpotifyWindowTitle;
+        private readonly Stopwatch _trackProgressStopwatch = new Stopwatch();
+        private readonly Timer _checkSpotifyTimer = new Timer(200);
+        private readonly Timer _progressTimer = new Timer(500);
+        private string _lastSpotifyWindowTitle;
         private string _clientSecret = "";
         private string _clientId = "";
         private SpotifyWebAPI _spotifyApi;
-        private Timer _checkSpotifyTimer;
-        private Timer _progressTimer;
         private bool _isAuthorizing;
-        private TimeSpan _initialTrackProgress;
-        private Stopwatch _trackProgressStopwatch = new Stopwatch();
+        private TimeSpan _baseTrackProgress;
+
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
+            _progressTimer.Elapsed += ProgressTimerOnElapsed;
+
+            UpdateSecrets();
             return Task.CompletedTask;
         }
 
@@ -102,9 +108,6 @@ namespace SpotifyAudioSource
 
             await UpdateStatusFromSpotify();
 
-            _checkSpotifyTimer?.Stop();
-            _checkSpotifyTimer = new Timer(200);
-            _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
             _checkSpotifyTimer.Start();
         }
 
@@ -116,33 +119,32 @@ namespace SpotifyAudioSource
             var albumArtImage = await GetAlbumArt(new Uri(item.Album.Images[0].Url));
             var trackName = item.Name;
             var artist = item.Artists[0].Name;
+            var trackLength = TimeSpan.FromMilliseconds(item.DurationMs);
             var trackInfo = new TrackInfoChangedEventArgs
             {
                 Artist = artist,
                 TrackName = trackName,
-                AlbumArt = albumArtImage
+                AlbumArt = albumArtImage,
+                TrackLength = trackLength
             };
             TrackInfoChanged?.Invoke(this, trackInfo);
 
-            _initialTrackProgress = TimeSpan.FromSeconds(item.DurationMs);
-            TrackProgressChanged?.Invoke(this, _initialTrackProgress);
+            _baseTrackProgress = TimeSpan.FromMilliseconds(item.DurationMs);
+            TrackProgressChanged?.Invoke(this, _baseTrackProgress);
 
             var isPlaying = playback.IsPlaying;
             if (isPlaying)
             {
                 TrackPlaying?.Invoke(this, EventArgs.Empty);
 
-                // we use a timer to estimate the track progress instead of hitting the api very often. might be changed.
+                // If the track is playing then we use a timer to estimate the track progress instead of hitting the api every second. might be changed.
                 _trackProgressStopwatch.Restart();
-                _progressTimer?.Stop();
-                _progressTimer = new Timer(500);
-                _progressTimer.Elapsed += ProgressTimerOnElapsed;
                 _progressTimer.Start();
             }
             else
             {
                 TrackPaused?.Invoke(this, EventArgs.Empty);
-                _progressTimer?.Stop();
+                _progressTimer.Stop();
             }
 
             return (artist, trackName, isPlaying);
@@ -151,7 +153,7 @@ namespace SpotifyAudioSource
         private void ProgressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             var elapsed = _trackProgressStopwatch.Elapsed;
-            TrackProgressChanged?.Invoke(this, _initialTrackProgress + elapsed);
+            TrackProgressChanged?.Invoke(this, _baseTrackProgress + elapsed);
         }
 
         private async Task<Image> GetAlbumArt(Uri albumArtUrl)
@@ -180,22 +182,24 @@ namespace SpotifyAudioSource
         {
             try
             {
-                var spotifyWindowTitle = _spotifyControls.GetSpotifyWindowTitle();
-                if (spotifyWindowTitle == _currentSpotifyWindowTitle)
+                var currentSpotifyWindowTitle = _spotifyControls.GetSpotifyWindowTitle();
+                if (currentSpotifyWindowTitle == _lastSpotifyWindowTitle)
                 {
                     return;
                 }
 
-                // Something has changed, refresh status
-                var trackInfo = await UpdateStatusFromSpotify();
+                // Spotify window title has changed, so either the track changed or its changed from playing to pause and vice versa
+                var (currentArtist, currentTrackName, spotifyIsPlaying) = await UpdateStatusFromSpotify();
 
-                // Sometimes the web api is not up to date quickly so we should double check against the the last title so see it its changed, only when playing
-                if (_currentSpotifyWindowTitle != $"{trackInfo.Artist} - {trackInfo.TrackName}" && trackInfo.IsPlaying)
+                // Sometimes the web api is not up to date quickly so we should double check what the api returns against the window title.
+                // If the title is different, then we don't update the current spotify window title and the next check should call the api again
+                var matches = spotifyIsPlaying
+                    ? currentSpotifyWindowTitle == $"{currentArtist} - {currentTrackName}" 
+                    : currentSpotifyWindowTitle == SpotifyPausedWindowTitle;
+                if (matches)
                 {
-                    // if its not the case, then it was updated succesfully. otherwise the next timer tick should check again
-                    _currentSpotifyWindowTitle = spotifyWindowTitle;
+                    _lastSpotifyWindowTitle = currentSpotifyWindowTitle;
                 }
-
             }
             catch (Exception e)
             {
@@ -209,11 +213,12 @@ namespace SpotifyAudioSource
 
         public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_checkSpotifyTimer != null)
-            {
-                _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
-                _checkSpotifyTimer.Dispose();
-            }
+            _checkSpotifyTimer.Stop();
+            _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
+            _progressTimer.Stop();
+            _progressTimer.Elapsed -= ProgressTimerOnElapsed;
+
+            _spotifyApi = null;
 
             SetBlankState();
             return Task.CompletedTask;
