@@ -58,7 +58,7 @@ namespace SpotifyAudioSource
         private SpotifyWebAPI _spotifyApi;
         private bool _isAuthorizing;
         private TimeSpan _baseTrackProgress;
-
+        private TimeSpan _currentTrackLength;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -114,22 +114,28 @@ namespace SpotifyAudioSource
         private async Task<(string Artist, string TrackName, bool IsPlaying)> UpdateStatusFromSpotify()
         {
             var playback = await _spotifyApi.GetPlaybackAsync();
+            if (playback == null)
+            {
+                Logger.Debug("No playback");
+                return (null, null, false);
+            }
+
             var item = playback.Item;
 
             var albumArtImage = await GetAlbumArt(new Uri(item.Album.Images[0].Url));
             var trackName = item.Name;
             var artist = item.Artists[0].Name;
-            var trackLength = TimeSpan.FromMilliseconds(item.DurationMs);
+            _currentTrackLength = TimeSpan.FromMilliseconds(item.DurationMs);
             var trackInfo = new TrackInfoChangedEventArgs
             {
                 Artist = artist,
                 TrackName = trackName,
                 AlbumArt = albumArtImage,
-                TrackLength = trackLength
+                TrackLength = _currentTrackLength
             };
             TrackInfoChanged?.Invoke(this, trackInfo);
 
-            _baseTrackProgress = TimeSpan.FromMilliseconds(item.DurationMs);
+            _baseTrackProgress = TimeSpan.FromMilliseconds(playback.ProgressMs);
             TrackProgressChanged?.Invoke(this, _baseTrackProgress);
 
             var isPlaying = playback.IsPlaying;
@@ -152,8 +158,13 @@ namespace SpotifyAudioSource
 
         private void ProgressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            var elapsed = _trackProgressStopwatch.Elapsed;
-            TrackProgressChanged?.Invoke(this, _baseTrackProgress + elapsed);
+            var total = _baseTrackProgress + _trackProgressStopwatch.Elapsed;
+            if (total > _currentTrackLength)
+            {
+                total = _currentTrackLength;
+            }
+
+            TrackProgressChanged?.Invoke(this, total);
         }
 
         private async Task<Image> GetAlbumArt(Uri albumArtUrl)
