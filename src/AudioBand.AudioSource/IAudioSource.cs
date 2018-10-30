@@ -17,6 +17,11 @@ namespace AudioBand.AudioSource
         string Name { get; }
 
         /// <summary>
+        /// Audio source logger that will be injected
+        /// </summary>
+        IAudioSourceLogger Logger { get; set; }
+
+        /// <summary>
         /// Track information has changed
         /// </summary>
         event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
@@ -39,7 +44,7 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// This audio source has been selected
         /// </summary>
-        Task ActivateAsync(IAudioSourceContext context, CancellationToken cancellationToken = default(CancellationToken));
+        Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// The audio source is no longer active
@@ -65,13 +70,5 @@ namespace AudioBand.AudioSource
         /// User requested the next track
         /// </summary>
         Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// The setting is being changed to a new value.
-        /// </summary>
-        /// <param name="settingName">The name of the setting being changed.</param>
-        /// <param name="newValue">The value that the setting is being changed to.</param>
-        /// <returns>True if the new value is valid. False if the new value is invalid.</returns>
-        bool ValidateSettingChange(string settingName, object newValue);
     }
 }

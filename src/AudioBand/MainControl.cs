@@ -218,7 +218,7 @@ namespace AudioBand
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
             _audioSourceTokenSource = new CancellationTokenSource();
-            await source.ActivateAsync(new AudioSourceContext(source.Name));
+            await source.ActivateAsync();
 
             _settingsManager.AudioSource = source.Name;
         }

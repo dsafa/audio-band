@@ -30,6 +30,7 @@ namespace AudioBand.AudioSource
 
             foreach (var audioSource in AudioSources)
             {
+                audioSource.Logger = new AudioSourceLogger(audioSource.Name);
                 _logger.Debug($"Audio source loaded: `{audioSource.Name}`");
             }
         }
