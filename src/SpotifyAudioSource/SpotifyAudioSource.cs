@@ -18,6 +18,7 @@ namespace SpotifyAudioSource
     public class SpotifyAudioSource : IAudioSource
     {
         public string Name { get; } = "Spotify";
+        public IAudioSourceLogger Logger { get; set; }
 
         [AudioSourceSetting("Spotify Client ID")]
         public string ClientId
@@ -53,15 +54,12 @@ namespace SpotifyAudioSource
         private SpotifyWebAPI _spotifyApi;
         private Timer _checkSpotifyTimer;
         private Timer _progressTimer;
-        private IAudioSourceLogger _logger;
         private bool _isAuthorizing;
         private TimeSpan _initialTrackProgress;
         private Stopwatch _trackProgressStopwatch = new Stopwatch();
 
-        public Task ActivateAsync(IAudioSourceContext context, CancellationToken cancellationToken = default(CancellationToken))
+        public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger = context.Logger;
-
             return Task.CompletedTask;
         }
 
@@ -87,10 +85,10 @@ namespace SpotifyAudioSource
             auth.Stop();
             _isAuthorizing = false;
 
-            _logger.Debug("Authorization recieved");
+            Logger.Debug("Authorization recieved");
             if (payload.Error != null)
             {
-                _logger.Warn($"Error with authorization: {payload.Error}");
+                Logger.Warn($"Error with authorization: {payload.Error}");
                 return;
             }
 
@@ -169,14 +167,9 @@ namespace SpotifyAudioSource
                     }
                 }
             }
-            catch (WebException e)
-            {
-                _logger.Error($"{e} {e.InnerException?.Message}");
-                return null;
-            }
             catch (Exception e)
             {
-                _logger.Error(e.Message);
+                Logger.Error(e);
                 return null;
             }
         }
@@ -206,7 +199,7 @@ namespace SpotifyAudioSource
             }
             catch (Exception e)
             {
-                _logger.Error(e.Message);
+                Logger.Error(e);
             }
             finally
             {
@@ -250,25 +243,11 @@ namespace SpotifyAudioSource
             return Task.CompletedTask;
         }
 
-        public bool ValidateSettingChange(string settingName, object newValue)
-        {
-            return true;
-        }
-
         private void SetBlankState()
         {
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs());
             TrackPaused?.Invoke(this, EventArgs.Empty);
             TrackProgressChanged?.Invoke(this, new TimeSpan());
-        }
-
-        ~SpotifyAudioSource()
-        {
-            if (_checkSpotifyTimer != null)
-            {
-                _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
-                _checkSpotifyTimer.Dispose();
-            }
         }
     }
 }

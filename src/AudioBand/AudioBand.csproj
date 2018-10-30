@@ -96,7 +96,6 @@
     <Compile Include="AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AudioSourceContext.cs" />
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettingsCollection.cs" />
