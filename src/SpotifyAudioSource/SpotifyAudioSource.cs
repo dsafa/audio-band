@@ -1,7 +1,6 @@
 ﻿using AudioBand.AudioSource;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -62,7 +61,9 @@ namespace SpotifyAudioSource
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            _checkSpotifyTimer.AutoReset = false;
             _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
+            _progressTimer.AutoReset = false;
             _progressTimer.Elapsed += ProgressTimerOnElapsed;
 
             UpdateSecrets();
@@ -113,8 +114,8 @@ namespace SpotifyAudioSource
 
         private async Task<(string Artist, string TrackName, bool IsPlaying)> UpdateStatusFromSpotify()
         {
-            var playback = await _spotifyApi.GetPlaybackAsync();
-            if (playback == null)
+            var playback = await _spotifyApi.GetPlayingTrackAsync();
+            if (playback?.Item == null)
             {
                 Logger.Debug("No playback");
                 return (null, null, false);
@@ -165,6 +166,7 @@ namespace SpotifyAudioSource
             }
 
             TrackProgressChanged?.Invoke(this, total);
+            _progressTimer.Enabled = true;
         }
 
         private async Task<Image> GetAlbumArt(Uri albumArtUrl)
