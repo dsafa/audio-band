@@ -6,11 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
-using System.Net;
+using System.Net.Http;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
-using SpotifyAPI.Web.Models;
 using Image = System.Drawing.Image;
 
 namespace SpotifyAudioSource
@@ -59,6 +58,7 @@ namespace SpotifyAudioSource
         private bool _isAuthorizing;
         private TimeSpan _baseTrackProgress;
         private TimeSpan _currentTrackLength;
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -171,14 +171,14 @@ namespace SpotifyAudioSource
         {
             try
             {
-                using (var webClient = new WebClient())
+                var response = await _httpClient.GetAsync(albumArtUrl);
+                if (!response.IsSuccessStatusCode)
                 {
-                    var rawData = await webClient.DownloadDataTaskAsync(albumArtUrl);
-                    using (var stream = new MemoryStream(rawData))
-                    {
-                        return Image.FromStream(stream);
-                    }
+                    Logger.Warn("Response was not successful when getting album art: " + response);
                 }
+
+                var stream = await response.Content.ReadAsStreamAsync();
+                return Image.FromStream(stream);
             }
             catch (Exception e)
             {
