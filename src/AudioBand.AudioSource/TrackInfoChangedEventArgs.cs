@@ -19,5 +19,15 @@ namespace AudioBand.AudioSource
         /// Album art image. If null, a placeholder will be used
         /// </summary>
         public Image AlbumArt { get; set; }
+
+        /// <summary>
+        /// Album name
+        /// </summary>
+        public string Album { get; set; }
+
+        /// <summary>
+        /// Length of the track
+        /// </summary>
+        public TimeSpan TrackLength { get; set; }
     }
 }

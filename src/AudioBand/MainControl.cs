@@ -1,27 +1,21 @@
 ﻿using AudioBand.AudioSource;
 using AudioBand.Settings;
+using AudioBand.ViewModels;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
 using CSDeskBand.Win;
 using NLog;
 using NLog.Config;
-using Svg;
+using NLog.Targets;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Forms.Integration;
-using AudioBand.ViewModels;
-using NLog.Targets;
 using Appearance = AudioBand.ViewModels.Appearance;
 using Size = System.Drawing.Size;
 
@@ -66,6 +60,8 @@ namespace AudioBand
             config.LoggingRules.Add(fileRule);
 
             LogManager.Configuration = config;
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) => LogManager.GetCurrentClassLogger().Error((Exception) args.ExceptionObject);
         }
 
         public MainControl()
@@ -74,6 +70,10 @@ namespace AudioBand
 
             try
             {
+                _audioSourceManager = new AudioSourceManager();
+                _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
+                Options.ContextMenuItems = BuildContextMenu();
+
                 _settingsManager = new SettingsManager();
                 _appearance = _settingsManager.Appearance;
                 CreateSettingsWindow();
@@ -98,6 +98,7 @@ namespace AudioBand
                 audioProgress.DataBindings.Add(nameof(audioProgress.ForeColor), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.ForegroundColor));
                 audioProgress.DataBindings.Add(nameof(audioProgress.BackColor), _appearance.ProgressBarAppearance, nameof(ProgressBarAppearance.BackgroundColor));
                 audioProgress.DataBindings.Add(nameof(audioProgress.Progress), _audioSourceStatus, nameof(AudioSourceStatus.SongProgress));
+                audioProgress.DataBindings.Add(nameof(audioProgress.Total), _audioSourceStatus, nameof(AudioSourceStatus.SongLength));
 
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Visible), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.IsVisible));
                 playPauseButton.DataBindings.Add(nameof(playPauseButton.Width), _appearance.PlayPauseButtonAppearance, nameof(PlayPauseButtonAppearance.Width));
@@ -125,11 +126,6 @@ namespace AudioBand
                 DataBindings.Add(nameof(AlbumArtPopupY), _appearance.AlbumArtPopupAppearance, nameof(AlbumArtPopup.Margin));
 
                 LoadLabelsFromSettings();
-
-                _audioSourceManager = new AudioSourceManager();
-                _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
-                Options.ContextMenuItems = BuildContextMenu();
-
                 SelectAudioSourceFromSettings();
                 ResetState();
             }
@@ -223,7 +219,7 @@ namespace AudioBand
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
             _audioSourceTokenSource = new CancellationTokenSource();
-            await source.ActivateAsync(new AudioSourceContext(source.Name));
+            await source.ActivateAsync();
 
             _settingsManager.AudioSource = source.Name;
         }
@@ -246,9 +242,9 @@ namespace AudioBand
             _settingsManager.AudioSource = null;
         }
 
-        private void AudioSourceOnTrackProgressChanged(object o, double progress)
+        private void AudioSourceOnTrackProgressChanged(object o, TimeSpan progress)
         {
-            //BeginInvoke(new Action(() => { _audioSourceStatus.SongProgress = progress;}));
+            BeginInvoke(new Action(() => { _audioSourceStatus.SongProgress = progress;}));
         }
 
         private void AudioSourceOnTrackPaused(object o, EventArgs args)
@@ -296,6 +292,8 @@ namespace AudioBand
 
                 _audioSourceStatus.Artist = trackInfoChangedEventArgs.Artist;
                 _audioSourceStatus.SongName = trackInfoChangedEventArgs.TrackName;
+                _audioSourceStatus.SongLength = trackInfoChangedEventArgs.TrackLength;
+                _audioSourceStatus.AlbumName = trackInfoChangedEventArgs.Album;
             }));
         }
 
@@ -365,12 +363,13 @@ namespace AudioBand
 
         private void SettingsWindowOnSaved(object sender, EventArgs eventArgs)
         {
+            _settingsManager.AudioSourceSettings = _settingsWindow.AudioSourceSettingsViewModel.ToModel();
             _settingsManager.Save();
         }
 
         private void CreateSettingsWindow()
         {
-            _settingsWindow = new SettingsWindow(_appearance);
+            _settingsWindow = new SettingsWindow(_appearance, _audioSourceManager.AudioSources.ToList(), _settingsManager.AudioSourceSettings);
             _settingsWindow.Saved += SettingsWindowOnSaved;
             _settingsWindow.NewLabelCreated += SettingsWindowOnNewLabelCreated;
             _settingsWindow.LabelDeleted += SettingsWindowOnLabelDeleted;

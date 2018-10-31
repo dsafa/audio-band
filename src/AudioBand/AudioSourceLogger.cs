@@ -17,9 +17,19 @@ namespace AudioBand
             _logger.Debug(message);
         }
 
+        public void Debug(object value)
+        {
+            _logger.Debug(value);
+        }
+
         public void Info(string message)
         {
             _logger.Info(message);
+        }
+
+        public void Info(object value)
+        {
+            _logger.Info(value);
         }
 
         public void Warn(string message)
@@ -27,9 +37,19 @@ namespace AudioBand
             _logger.Warn(message);
         }
 
+        public void Warn(object value)
+        {
+            _logger.Warn(value);
+        }
+
         public void Error(string message)
         {
             _logger.Error(message);
+        }
+
+        public void Error(object value)
+        {
+            _logger.Error(value);
         }
     }
 }

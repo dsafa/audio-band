@@ -8,6 +8,7 @@
             xmlns:viewModels="clr-namespace:AudioBand.ViewModels"
             xmlns:converters="clr-namespace:AudioBand.Settings.ValueConverters"
             xmlns:audioBand="clr-namespace:AudioBand.Settings"
+            xmlns:system="clr-namespace:System;assembly=mscorlib"
             x:Class="AudioBand.Settings.SettingsWindow" 
             mc:Ignorable="d" 
             x:Name="Window"
@@ -511,6 +512,39 @@
                     </Expander>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="Audio Source Settings">
+                <StackPanel Style="{StaticResource TabStackPanel}" DataContext="{Binding ElementName=Window, Path=AudioSourceSettingsViewModel}">
+                    <Label Style="{StaticResource SettingsLabel}" Content="Audio Source"/>
+                    <ComboBox ItemsSource="{Binding Settings}" SelectedValue="{Binding SelectedSettings}"
+                              DisplayMemberPath="Key" SelectedValuePath="Value" IsSynchronizedWithCurrentItem="True"/>
+                    <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding SelectedSettings}" Margin="0, 6, 0, 0">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid DataContext="{Binding Value}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Style="{StaticResource SettingsLabel}" Content="{Binding Name}"/>
+                                    <ContentControl Grid.Column="1" Content="{Binding Value}">
+                                        <ContentControl.Resources>
+                                            <DataTemplate DataType="{x:Type system:String}">
+                                                <TextBox Style="{StaticResource SettingsTextBox}"
+                                                        Text="{Binding Path=DataContext.Value, RelativeSource={RelativeSource AncestorType=ContentControl},
+                                                               Mode=TwoWay, ValidatesOnExceptions=True}">
+                                                </TextBox>
+                                            </DataTemplate>
+                                        </ContentControl.Resources>
+                                    </ContentControl>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </TabItem>
         </TabControl>
     </DockPanel>
     <metro:MetroWindow.Flyouts>
@@ -533,6 +567,10 @@
         </metro:FlyoutsControl>
     </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>
+
+
+
+
 
 
 

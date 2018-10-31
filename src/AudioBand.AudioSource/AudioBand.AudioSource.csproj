@@ -38,8 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAudioSource.cs" />
-    <Compile Include="IAudioSourceContext.cs" />
     <Compile Include="IAudioSourceLogger.cs" />
+    <Compile Include="AudioSourceSettingAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrackInfoChangedEventArgs.cs" />
   </ItemGroup>

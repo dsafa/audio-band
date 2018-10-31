@@ -17,6 +17,11 @@ namespace AudioBand.AudioSource
         string Name { get; }
 
         /// <summary>
+        /// Audio source logger that will be injected
+        /// </summary>
+        IAudioSourceLogger Logger { get; set; }
+
+        /// <summary>
         /// Track information has changed
         /// </summary>
         event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
@@ -32,14 +37,14 @@ namespace AudioBand.AudioSource
         event EventHandler TrackPaused;
 
         /// <summary>
-        /// Track progress has changed. Track progress is from [0 - 100]
+        /// Track progress has changed to the current song duration
         /// </summary>
-        event EventHandler<double> TrackProgressChanged;
+        event EventHandler<TimeSpan> TrackProgressChanged;
 
         /// <summary>
         /// This audio source has been selected
         /// </summary>
-        Task ActivateAsync(IAudioSourceContext context, CancellationToken cancellationToken = default(CancellationToken));
+        Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// The audio source is no longer active

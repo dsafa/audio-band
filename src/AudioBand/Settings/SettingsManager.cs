@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using AudioBand.AudioSource;
+using AudioBand.Models;
 using AudioBand.ViewModels;
 
 namespace AudioBand.Settings
@@ -14,6 +16,12 @@ namespace AudioBand.Settings
         public static string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
 
         public Appearance Appearance => _settings.ToModel();
+        public List<AudioSourceSettingsCollection> AudioSourceSettings
+        {
+            get => _settings.AudioSourceSettings;
+            set => _settings.AudioSourceSettings = value;
+        }
+
         public string Version => _settings.Version;
         public string AudioSource
         {
@@ -32,11 +40,6 @@ namespace AudioBand.Settings
                 cfg.ConfigureType<Color>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(ColorTranslator.ToHtml)
                     .FromToml(tomlInt => ColorTranslator.FromHtml(tomlInt.Value))));
-
-                cfg.ConfigureType<Font>(type => type.WithConversionFor<TomlString>(convert => convert
-                    .ToToml(Converters.FontToString)
-                    .FromToml(tomlString => Converters.StringToFont(tomlString.Value))));
-
                 cfg.ConfigureType<PlayPauseButtonAppearance>(t =>
                 {
                     t.IgnoreProperty(o => o.PlayImage);
@@ -45,7 +48,6 @@ namespace AudioBand.Settings
                     t.IgnoreProperty(o => o.Location);
                     t.IgnoreProperty(o => o.IsPlaying);
                 });
-
                 cfg.ConfigureType<NextSongButtonAppearance>(t =>
                 {
                     t.IgnoreProperty(o => o.Location);

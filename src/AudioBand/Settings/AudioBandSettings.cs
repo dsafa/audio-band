@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using AudioBand.ViewModels;
+﻿using AudioBand.ViewModels;
+using System.Collections.Generic;
+using AudioBand.Models;
 
 namespace AudioBand.Settings
 {
@@ -16,5 +16,6 @@ namespace AudioBand.Settings
         public ProgressBarAppearance ProgressBarAppearance { get; set; } = new ProgressBarAppearance();
         public AlbumArtDisplay AlbumArtAppearance { get; set; } = new AlbumArtDisplay();
         public AlbumArtPopup AlbumArtPopupAppearance { get; set; } = new AlbumArtPopup();
+        public List<AudioSourceSettingsCollection> AudioSourceSettings { get; set; } = new List<AudioSourceSettingsCollection>();
     }
 }
