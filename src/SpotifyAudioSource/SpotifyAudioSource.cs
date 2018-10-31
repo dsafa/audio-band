@@ -25,6 +25,11 @@ namespace SpotifyAudioSource
             get => _clientId;
             set
             {
+                if (value == _clientId)
+                {
+                    return;
+                }
+
                 _clientId = value;
                 UpdateSecrets();
             }
@@ -36,6 +41,11 @@ namespace SpotifyAudioSource
             get => _clientSecret;
             set
             {
+                if (value == _clientSecret)
+                {
+                    return;
+                }
+
                 _clientSecret = value;
                 UpdateSecrets();
             }
