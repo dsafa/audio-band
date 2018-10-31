@@ -9,6 +9,7 @@ using System.Net.Http;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
+using SpotifyAPI.Web.Models;
 using Image = System.Drawing.Image;
 
 namespace SpotifyAudioSource
@@ -50,14 +51,16 @@ namespace SpotifyAudioSource
         private readonly Stopwatch _trackProgressStopwatch = new Stopwatch();
         private readonly Timer _checkSpotifyTimer = new Timer(200);
         private readonly Timer _progressTimer = new Timer(500);
-        private string _lastSpotifyWindowTitle;
+        private readonly HttpClient _httpClient = new HttpClient();
+        private string _lastSpotifyWindowTitle = "";
         private string _clientSecret = "";
         private string _clientId = "";
         private SpotifyWebAPI _spotifyApi;
         private bool _isAuthorizing;
         private TimeSpan _baseTrackProgress;
         private TimeSpan _currentTrackLength;
-        private readonly HttpClient _httpClient = new HttpClient();
+        private AuthorizationCodeAuth _auth;
+        private string _refreshToken;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -73,7 +76,7 @@ namespace SpotifyAudioSource
         private void UpdateSecrets()
         { 
             // Try to prevent multiple popups for authorization
-            if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret) || _isAuthorizing || _spotifyApi != null)
+            if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret) || _isAuthorizing)
             {
                 return;
             }
@@ -88,8 +91,8 @@ namespace SpotifyAudioSource
 
         private async void OnAuthReceived(object sender, AuthorizationCode payload)
         {
-            var auth = (AuthorizationCodeAuth)sender;
-            auth.Stop();
+            _auth = (AuthorizationCodeAuth)sender;
+            _auth.Stop();
             _isAuthorizing = false;
 
             Logger.Debug("Authorization recieved");
@@ -99,7 +102,8 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            var token = await auth.ExchangeCode(payload.Code);
+            var token = await _auth.ExchangeCode(payload.Code);
+            _refreshToken = token.RefreshToken;
 
             _spotifyApi = new SpotifyWebAPI
             {
@@ -112,13 +116,13 @@ namespace SpotifyAudioSource
             _checkSpotifyTimer.Start();
         }
 
-        private async Task<(string Artist, string TrackName, bool IsPlaying)> UpdateStatusFromSpotify()
+        private async Task<(FullTrack track, bool IsPlaying)> UpdateStatusFromSpotify()
         {
-            var playback = await _spotifyApi.GetPlayingTrackAsync();
+            var playback = await GetPlayback();
             if (playback?.Item == null)
             {
-                Logger.Debug("No playback");
-                return (null, null, false);
+                // Playback can be null if there are no devices playing
+                return (null, false);
             }
 
             var item = playback.Item;
@@ -127,6 +131,7 @@ namespace SpotifyAudioSource
             var trackName = item.Name;
             var artist = item.Artists[0].Name;
             _currentTrackLength = TimeSpan.FromMilliseconds(item.DurationMs);
+
             var trackInfo = new TrackInfoChangedEventArgs
             {
                 Artist = artist,
@@ -154,7 +159,20 @@ namespace SpotifyAudioSource
                 _progressTimer.Stop();
             }
 
-            return (artist, trackName, isPlaying);
+            return (item, isPlaying);
+        }
+
+        private async Task<PlaybackContext> GetPlayback()
+        {
+            try
+            {
+                return await _spotifyApi.GetPlaybackAsync();
+            }
+            catch (Exception)
+            {
+                _spotifyApi.AccessToken = (await _auth.RefreshToken(_refreshToken)).AccessToken;
+                return null;
+            }
         }
 
         private void ProgressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -196,20 +214,39 @@ namespace SpotifyAudioSource
             try
             {
                 var currentSpotifyWindowTitle = _spotifyControls.GetSpotifyWindowTitle();
+                if (string.IsNullOrEmpty(currentSpotifyWindowTitle))
+                {
+                    if (!string.IsNullOrEmpty(_lastSpotifyWindowTitle))
+                    {
+                        // Spotify was opened now its closed to clear everything
+                        ClearPlayback();
+                        _lastSpotifyWindowTitle = "";
+                    }
+
+                    _progressTimer.Stop();
+                    return;
+                }
+
                 if (currentSpotifyWindowTitle == _lastSpotifyWindowTitle)
                 {
                     return;
                 }
 
                 // Spotify window title has changed, so either the track changed or its changed from playing to pause and vice versa
-                var (currentArtist, currentTrackName, spotifyIsPlaying) = await UpdateStatusFromSpotify();
+                var (currentTrack, spotifyIsPlaying) = await UpdateStatusFromSpotify();
+                if (currentTrack == null)
+                {
+                    // No playback so wait add a delay to prevent overloading the rate limit
+                    await Task.Delay(1000);
+                    return;
+                }
 
                 // Sometimes the web api is not up to date quickly so we should double check what the api returns against the window title.
                 // If the title is different, then we don't update the current spotify window title and the next check should call the api again
                 var matches = spotifyIsPlaying
-                    ? currentSpotifyWindowTitle == $"{currentArtist} - {currentTrackName}" 
+                    ? currentSpotifyWindowTitle == $"{currentTrack.Artists[0].Name} - {currentTrack.Name}" 
                     : currentSpotifyWindowTitle == SpotifyPausedWindowTitle;
-                if (matches)
+                if (matches && !string.IsNullOrEmpty(currentTrack.Name))
                 {
                     _lastSpotifyWindowTitle = currentSpotifyWindowTitle;
                 }
@@ -233,7 +270,7 @@ namespace SpotifyAudioSource
 
             _spotifyApi = null;
 
-            SetBlankState();
+            ClearPlayback();
             return Task.CompletedTask;
         }
 
@@ -261,7 +298,7 @@ namespace SpotifyAudioSource
             return Task.CompletedTask;
         }
 
-        private void SetBlankState()
+        private void ClearPlayback()
         {
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs());
             TrackPaused?.Invoke(this, EventArgs.Empty);
