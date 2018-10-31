@@ -13,7 +13,9 @@ Audio Band allows you to display song information in the taskbar.
 
 ## Screenshots
 ![](./screenshots/screenshot.png)
+
 ![](screenshots/custom-1.png)
+
 ![](screenshots/custom-2.png)
 
 ## Installation
