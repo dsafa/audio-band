@@ -21,6 +21,11 @@ namespace AudioBand.AudioSource
         public Image AlbumArt { get; set; }
 
         /// <summary>
+        /// Album name
+        /// </summary>
+        public string Album { get; set; }
+
+        /// <summary>
         /// Length of the track
         /// </summary>
         public TimeSpan TrackLength { get; set; }

@@ -137,6 +137,7 @@ namespace SpotifyAudioSource
                 Artist = artist,
                 TrackName = trackName,
                 AlbumArt = albumArtImage,
+                Album = item.Album.Name,
                 TrackLength = _currentTrackLength
             };
             TrackInfoChanged?.Invoke(this, trackInfo);

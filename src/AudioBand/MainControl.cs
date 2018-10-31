@@ -293,6 +293,7 @@ namespace AudioBand
                 _audioSourceStatus.Artist = trackInfoChangedEventArgs.Artist;
                 _audioSourceStatus.SongName = trackInfoChangedEventArgs.TrackName;
                 _audioSourceStatus.SongLength = trackInfoChangedEventArgs.TrackLength;
+                _audioSourceStatus.AlbumName = trackInfoChangedEventArgs.Album;
             }));
         }
 
