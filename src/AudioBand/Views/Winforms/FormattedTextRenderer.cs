@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using AudioBand.Settings;
 using AudioBand.ViewModels;
-using NLog;
 
-namespace AudioBand
+namespace AudioBand.Views.Winforms
 {
     public class FormattedTextRenderer
     {

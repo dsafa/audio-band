@@ -3,10 +3,9 @@ using System.Drawing.Drawing2D;
 using System.Reflection;
 using System.Windows.Forms;
 using CSDeskBand;
-using NLog;
 using Size = System.Drawing.Size;
 
-namespace AudioBand
+namespace AudioBand.Views.Winforms
 {
     public class AlbumArtTooltip : ToolTip
     {

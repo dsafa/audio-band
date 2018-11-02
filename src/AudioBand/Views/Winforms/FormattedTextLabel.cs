@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using System.Windows.Forms;
 using AudioBand.ViewModels;
 using Timer = System.Windows.Forms.Timer;
 
-namespace AudioBand
+namespace AudioBand.Views.Winforms
 {
     /// <summary>
     /// A text label that supports formatting with placeholders

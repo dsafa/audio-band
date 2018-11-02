@@ -16,7 +16,11 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
+using AudioBand.Views;
+using AudioBand.Views.Winforms;
+using AudioBand.Views.Wpf;
 using Appearance = AudioBand.ViewModels.Appearance;
+using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
 namespace AudioBand

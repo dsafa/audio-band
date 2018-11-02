@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:audioBand="clr-namespace:AudioBand.Settings">
+                    xmlns:audioBand="clr-namespace:AudioBand.Settings"
+                    xmlns:wpf="clr-namespace:AudioBand.Views.Wpf">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -58,16 +59,16 @@
             <Style TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource SettingsNumericInput}">
                 <Setter Property="Margin" Value="2"/>
                 <Style.Triggers>
-                    <Trigger Property="audioBand:AttachedProperties.NumericInputType" Value="Size">
+                    <Trigger Property="wpf:AttachedProperties.NumericInputType" Value="Size">
                         <Setter Property="NumericInputMode" Value="Numbers"/>
                         <Setter Property="Minimum" Value="1"/>
                         <Setter Property="Interval" Value="1"/>
                     </Trigger>
-                    <Trigger Property="audioBand:AttachedProperties.NumericInputType" Value="Position">
+                    <Trigger Property="wpf:AttachedProperties.NumericInputType" Value="Position">
                         <Setter Property="NumericInputMode" Value="Numbers"/>
                         <Setter Property="Interval" Value="1"/>
                     </Trigger>
-                    <Trigger Property="audioBand:AttachedProperties.NumericInputType" Value="FontSize">
+                    <Trigger Property="wpf:AttachedProperties.NumericInputType" Value="FontSize">
                             <Setter Property="NumericInputMode" Value="Decimal"/>
                         <Setter Property="Minimum" Value="0.5"/>
                         <Setter Property="Interval" Value="0.5"/>

@@ -93,28 +93,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlbumArtTooltip.cs">
+    <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettingsCollection.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FormattedTextRenderer.cs" />
-    <Compile Include="IResettableObject.cs" />
+    <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
+    <Compile Include="ViewModels\IResettableObject.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Settings\ImagePicker.xaml.cs">
+    <Compile Include="Views\Wpf\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\AttachedProperties.cs" />
-    <Compile Include="Settings\ResetButton.xaml.cs">
+    <Compile Include="Views\Wpf\AttachedProperties.cs" />
+    <Compile Include="Views\Wpf\ResetButton.xaml.cs">
       <DependentUpon>ResetButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\SettingsCommands.cs" />
-    <Compile Include="Settings\SettingsWindow.xaml.cs">
+    <Compile Include="Views\Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\ValueConverters\WinColorToWpfColorConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\WinColorToWpfColorConverter.cs" />
     <Compile Include="ViewModels\AlbumArtAppearance.cs" />
     <Compile Include="ViewModels\Appearance.cs" />
     <Compile Include="DirectoryHelper.cs" />
@@ -128,10 +128,10 @@
     <Compile Include="ViewModels\AudioSourceSettingsCollectionViewModel.cs" />
     <Compile Include="ViewModels\AudioSourceStatus.cs" />
     <Compile Include="ViewModels\PlaybackControlsAppearance.cs" />
-    <Compile Include="EnhancedProgressBar.cs">
+    <Compile Include="Views\Winforms\EnhancedProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FormattedTextLabel.cs">
+    <Compile Include="Views\Winforms\FormattedTextLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AudioSource\AudioSourceManager.cs" />
@@ -177,22 +177,25 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Settings\ImagePicker.xaml">
+    <Page Include="Views\Wpf\ImagePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\ResetButton.xaml">
+    <Page Include="Views\Wpf\ResetButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\SettingsWindow.xaml">
+    <Page Include="Views\Wpf\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Style.xaml">
+    <Page Include="Views\Wpf\Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Settings\ValueConverters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
