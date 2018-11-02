@@ -93,6 +93,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -110,7 +111,7 @@
     <Compile Include="Views\Wpf\ResetButton.xaml.cs">
       <DependentUpon>ResetButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\SettingsCommands.cs" />
+    <Compile Include="Commands\SettingsCommands.cs" />
     <Compile Include="Views\Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -194,8 +195,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Settings\ValueConverters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
