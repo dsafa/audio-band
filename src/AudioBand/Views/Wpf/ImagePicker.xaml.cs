@@ -1,11 +1,11 @@
-﻿using Microsoft.Win32;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.Win32;
 
-namespace AudioBand.Settings
+namespace AudioBand.Views.Wpf
 {
     /// <summary>
     /// Interaction logic for ImagePicker.xaml

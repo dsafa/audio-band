@@ -1,7 +1,4 @@
-﻿using AudioBand.AudioSource;
-using AudioBand.ViewModels;
-using MahApps.Metro.Controls.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,10 +11,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using AudioBand.AudioSource;
 using AudioBand.Models;
+using AudioBand.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
 using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
-namespace AudioBand.Settings
+namespace AudioBand.Views.Wpf
 {
     internal partial class SettingsWindow
     {

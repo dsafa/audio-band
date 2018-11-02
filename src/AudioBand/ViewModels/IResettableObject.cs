@@ -1,4 +1,4 @@
-﻿namespace AudioBand
+﻿namespace AudioBand.ViewModels
 {
     /// <summary>
     /// Object that can be reset to a default state

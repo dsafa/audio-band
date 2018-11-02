@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AudioBand;
 using System.Drawing;
 using AudioBand.ViewModels;
+using AudioBand.Views.Winforms;
 
 namespace AudioBand.Test
 {

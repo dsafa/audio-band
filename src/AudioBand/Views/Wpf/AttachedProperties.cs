@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using MahApps.Metro.Controls;
 
-namespace AudioBand.Settings
+namespace AudioBand.Views.Wpf
 {
     public static class AttachedProperties
     {

@@ -1,4 +1,6 @@
-﻿namespace AudioBand
+﻿using AudioBand.Views.Winforms;
+
+namespace AudioBand
 {
     partial class MainControl
     {
@@ -32,7 +34,7 @@
             this.previousButton = new System.Windows.Forms.Button();
             this.playPauseButton = new System.Windows.Forms.Button();
             this.nextButton = new System.Windows.Forms.Button();
-            this.audioProgress = new AudioBand.EnhancedProgressBar();
+            this.audioProgress = new EnhancedProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.albumArt)).BeginInit();
             this.SuspendLayout();
             // 
@@ -128,6 +130,6 @@
         private System.Windows.Forms.Button previousButton;
         private System.Windows.Forms.Button playPauseButton;
         private System.Windows.Forms.Button nextButton;
-        private AudioBand.EnhancedProgressBar audioProgress;
+        private EnhancedProgressBar audioProgress;
     }
 }

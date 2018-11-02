@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace AudioBand.Settings.ValueConverters
+namespace AudioBand.Views.Wpf.ValueConverters
 {
     internal class WinColorToWpfColorConverter : IValueConverter
     {

@@ -6,10 +6,11 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:viewModels="clr-namespace:AudioBand.ViewModels"
-            xmlns:converters="clr-namespace:AudioBand.Settings.ValueConverters"
-            xmlns:audioBand="clr-namespace:AudioBand.Settings"
+    xmlns:audioBand="clr-namespace:AudioBand.Settings"
             xmlns:system="clr-namespace:System;assembly=mscorlib"
-            x:Class="AudioBand.Settings.SettingsWindow" 
+            xmlns:wpf="clr-namespace:AudioBand.Views.Wpf"
+            xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
+            x:Class="AudioBand.Views.Wpf.SettingsWindow" 
             mc:Ignorable="d" 
             x:Name="Window"
             d:DesignHeight="800" d:DesignWidth="700"
@@ -23,7 +24,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:WinColorToWpfColorConverter x:Key="WinColorToWpfColorConverter"/>
+            <valueConverters:WinColorToWpfColorConverter x:Key="WinColorToWpfColorConverter"/>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <metro:MetroWindow.DataContext>
@@ -64,15 +65,15 @@
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="0" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size" 
+                                                 wpf:AttachedProperties.NumericInputType="Size" 
                                                  Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size" 
+                                                 wpf:AttachedProperties.NumericInputType="Size" 
                                                  Value="{Binding Height, Mode=TwoWay}"/>
 
-                            <audioBand:ResetButton Grid.Row="2" Grid.Column="0" Margin="2"/>
+                            <wpf:ResetButton Grid.Row="2" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -102,33 +103,33 @@
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Size" 
+                                                 wpf:AttachedProperties.NumericInputType="Size" 
                                                  Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size" 
+                                                 wpf:AttachedProperties.NumericInputType="Size" 
                                                  Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Position" 
+                                                 wpf:AttachedProperties.NumericInputType="Position" 
                                                  Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Position" 
+                                                 wpf:AttachedProperties.NumericInputType="Position" 
                                                  Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Play Button Image" />
-                            <audioBand:ImagePicker Grid.Row="5" Grid.Column="1"
+                            <wpf:ImagePicker Grid.Row="5" Grid.Column="1"
                                                    ImagePath="{Binding PlayImagePath, Mode=TwoWay}" />
 
                             <Label Grid.Row="6" Grid.Column="0" Content="Pause Button Image" />
-                            <audioBand:ImagePicker Grid.Row="6" Grid.Column="1" 
+                            <wpf:ImagePicker Grid.Row="6" Grid.Column="1" 
                                                    ImagePath="{Binding PauseImagePath, Mode=TwoWay}" />
 
-                            <audioBand:ResetButton Grid.Row="7" Grid.Column="0" Margin="2"/>
+                            <wpf:ResetButton Grid.Row="7" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Next Song Button" IsExpanded="True">
@@ -154,29 +155,29 @@
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Size"
+                                                 wpf:AttachedProperties.NumericInputType="Size"
                                                  Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size"
+                                                 wpf:AttachedProperties.NumericInputType="Size"
                                                  Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Position"
+                                                 wpf:AttachedProperties.NumericInputType="Position"
                                                  Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Position" 
+                                                 wpf:AttachedProperties.NumericInputType="Position" 
                                                  Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" />
-                            <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" 
+                            <wpf:ImagePicker Grid.Row="5" Grid.Column="1" 
                                                    ImagePath="{Binding ImagePath, Mode=TwoWay}"/>
 
-                            <audioBand:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
+                            <wpf:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Previous Song Button" IsExpanded="True">
@@ -202,29 +203,29 @@
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size"
+                                                 wpf:AttachedProperties.NumericInputType="Size"
                                                  Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size"
+                                                 wpf:AttachedProperties.NumericInputType="Size"
                                                  Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Position"
+                                                 wpf:AttachedProperties.NumericInputType="Position"
                                                  Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Position" 
+                                                 wpf:AttachedProperties.NumericInputType="Position" 
                                                  Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Button Image" />
-                            <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" 
+                            <wpf:ImagePicker Grid.Row="5" Grid.Column="1" 
                                                    ImagePath="{Binding ImagePath, Mode=TwoWay}"/>
 
-                            <audioBand:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
+                            <wpf:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -280,22 +281,22 @@
 
                                         <Label Grid.Row="2" Grid.Column="0" Content="Width" />
                                         <metro:NumericUpDown Grid.Row="2" Grid.Column="1" 
-                                                             audioBand:AttachedProperties.NumericInputType="Size" 
+                                                             wpf:AttachedProperties.NumericInputType="Size" 
                                                              Value="{Binding Width, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="3" Grid.Column="0" Content="Height" />
                                         <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                                                             audioBand:AttachedProperties.NumericInputType="Size" 
+                                                             wpf:AttachedProperties.NumericInputType="Size" 
                                                              Value="{Binding Height, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="4" Grid.Column="0" Content="X Position" />
                                         <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                                             audioBand:AttachedProperties.NumericInputType="Position" 
+                                                             wpf:AttachedProperties.NumericInputType="Position" 
                                                              Value="{Binding XPosition, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="5" Grid.Column="0" Content="Y Position" />
                                         <metro:NumericUpDown Grid.Row="5" Grid.Column="1" 
-                                                             audioBand:AttachedProperties.NumericInputType="Position"
+                                                             wpf:AttachedProperties.NumericInputType="Position"
                                                              Value="{Binding YPosition, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="6" Grid.Column="0" Content="Font Family" />
@@ -305,7 +306,7 @@
 
                                         <Label Grid.Row="7" Grid.Column="0" Content="Font Size" />
                                         <metro:NumericUpDown Grid.Row="7" Grid.Column="1" 
-                                                             audioBand:AttachedProperties.NumericInputType="FontSize"
+                                                             wpf:AttachedProperties.NumericInputType="FontSize"
                                                              Value="{Binding FontSize, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="8" Grid.Column="0" Content="Alignment" />
@@ -319,7 +320,7 @@
 
                                         <Label Grid.Row="10" Grid.Column="0" Content="Scrolling Speed" />
                                         <metro:NumericUpDown Grid.Row="10" Grid.Column="1" 
-                                                             audioBand:AttachedProperties.NumericInputType="Size"
+                                                             wpf:AttachedProperties.NumericInputType="Size"
                                                              Value="{Binding ScrollSpeed, Mode=TwoWay}"/>
 
                                         <Label Grid.Row="11" Grid.Column="0" Content="Format"  ToolTipService.ShowDuration="60000">
@@ -352,7 +353,7 @@
                                                  Text="{Binding FormatString, Mode=TwoWay}"/>
 
                                         <StackPanel Grid.Row="12" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <audioBand:ResetButton Margin="2"/>
+                                            <wpf:ResetButton Margin="2"/>
                                             <Button Margin="2"
                                                     Content="Delete" Style="{StaticResource SettingsButton}"
                                                     Command="audioBand:SettingsCommands.DeleteLabel"
@@ -390,22 +391,22 @@
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size"
+                                                 wpf:AttachedProperties.NumericInputType="Size"
                                                  Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size"
+                                                 wpf:AttachedProperties.NumericInputType="Size"
                                                  Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Position"
+                                                 wpf:AttachedProperties.NumericInputType="Position"
                                                  Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Position"
+                                                 wpf:AttachedProperties.NumericInputType="Position"
                                                  Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Background Colour" />
@@ -416,7 +417,7 @@
                             <xctk:ColorPicker Grid.Row="6" Grid.Column="1" 
                                               SelectedColor="{Binding ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
-                            <audioBand:ResetButton Grid.Row="7" Grid.Column="0" Margin="2"/>
+                            <wpf:ResetButton Grid.Row="7" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
@@ -445,29 +446,29 @@
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width" />
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Size" 
+                                                 wpf:AttachedProperties.NumericInputType="Size" 
                                                  Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height" />
                             <metro:NumericUpDown Grid.Row="2" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Size" 
+                                                 wpf:AttachedProperties.NumericInputType="Size" 
                                                  Value="{Binding Height, Mode=TwoWay}"/>
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Position"
+                                                 wpf:AttachedProperties.NumericInputType="Position"
                                                  Value="{Binding XPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                                 audioBand:AttachedProperties.NumericInputType="Position" 
+                                                 wpf:AttachedProperties.NumericInputType="Position" 
                                                  Value="{Binding YPosition, Mode=TwoWay}"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Placeholder Image" />
-                            <audioBand:ImagePicker Grid.Row="5" Grid.Column="1" 
+                            <wpf:ImagePicker Grid.Row="5" Grid.Column="1" 
                                                    ImagePath="{Binding PlaceholderPath, Mode=TwoWay}"/>
 
-                            <audioBand:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
+                            <wpf:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Album Art Popup" IsExpanded="True">
@@ -491,7 +492,7 @@
 
                             <Label Grid.Row="1" Grid.Column="0" Content="Width"/>
                             <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Size" 
+                                                 wpf:AttachedProperties.NumericInputType="Size" 
                                                  Value="{Binding Width, Mode=TwoWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0" Content="Height"/>
@@ -500,14 +501,14 @@
 
                             <Label Grid.Row="3" Grid.Column="0" Content="X Position"/>
                             <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                                                 audioBand:AttachedProperties.NumericInputType="Position" 
+                                                 wpf:AttachedProperties.NumericInputType="Position" 
                                                  Value="{Binding XOffset, Mode=TwoWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Content="Margin"/>
                             <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
                                                  Value="{Binding Margin, Mode=TwoWay}"/>
 
-                            <audioBand:ResetButton Grid.Row="5" Grid.Column="0" Margin="2"/>
+                            <wpf:ResetButton Grid.Row="5" Grid.Column="0" Margin="2"/>
                         </Grid>
                     </Expander>
                 </StackPanel>
