@@ -10,6 +10,7 @@
             xmlns:system="clr-namespace:System;assembly=mscorlib"
             xmlns:wpf="clr-namespace:AudioBand.Views.Wpf"
             xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
+            xmlns:commands="clr-namespace:AudioBand.Commands"
             x:Class="AudioBand.Views.Wpf.SettingsWindow" 
             mc:Ignorable="d" 
             x:Name="Window"
@@ -31,17 +32,17 @@
         <viewModels:Appearance/>
     </metro:MetroWindow.DataContext>
     <metro:MetroWindow.CommandBindings>
-        <CommandBinding Command="audioBand:SettingsCommands.AddLabel" Executed="NewLabelOnExecute" CanExecute="NewLabelCanExecute"/>
-        <CommandBinding Command="audioBand:SettingsCommands.DeleteLabel" Executed="DeleteLabelOnExecute" CanExecute="AlwaysCanExecute"/>
-        <CommandBinding Command="audioBand:SettingsCommands.ShowAbout" Executed="ShowAboutOnExecuted" CanExecute="AlwaysCanExecute"/>
-        <CommandBinding Command="audioBand:SettingsCommands.ResetSetting" Executed="ResetSettingOnExecuted" CanExecute="AlwaysCanExecute"/>
+        <CommandBinding Command="commands:SettingsCommands.AddLabel" Executed="NewLabelOnExecute" CanExecute="NewLabelCanExecute"/>
+        <CommandBinding Command="commands:SettingsCommands.DeleteLabel" Executed="DeleteLabelOnExecute" CanExecute="AlwaysCanExecute"/>
+        <CommandBinding Command="commands:SettingsCommands.ShowAbout" Executed="ShowAboutOnExecuted" CanExecute="AlwaysCanExecute"/>
+        <CommandBinding Command="commands:SettingsCommands.ResetSetting" Executed="ResetSettingOnExecuted" CanExecute="AlwaysCanExecute"/>
     </metro:MetroWindow.CommandBindings>
     <metro:MetroWindow.InputBindings>
-        <KeyBinding Command="audioBand:SettingsCommands.AddLabel" Key="N" Modifiers="Control"/>
+        <KeyBinding Command="commands:SettingsCommands.AddLabel" Key="N" Modifiers="Control"/>
     </metro:MetroWindow.InputBindings>
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
-            <Button Content="About" Command="audioBand:SettingsCommands.ShowAbout"/>
+            <Button Content="About" Command="commands:SettingsCommands.ShowAbout"/>
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
@@ -237,7 +238,7 @@
                             Margin="2"
                             Content="Add New label" 
                             Style="{StaticResource SettingsButton}"
-                            Command="audioBand:SettingsCommands.AddLabel"/>
+                            Command="commands:SettingsCommands.AddLabel"/>
                     <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding ElementName=Window, Path=TextAppearancesCollection}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
@@ -356,7 +357,7 @@
                                             <wpf:ResetButton Margin="2"/>
                                             <Button Margin="2"
                                                     Content="Delete" Style="{StaticResource SettingsButton}"
-                                                    Command="audioBand:SettingsCommands.DeleteLabel"
+                                                    Command="commands:SettingsCommands.DeleteLabel"
                                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
                                         </StackPanel>
                                     </Grid>

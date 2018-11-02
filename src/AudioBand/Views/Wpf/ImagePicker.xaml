@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AudioBand.Settings"
+             xmlns:commands="clr-namespace:AudioBand.Commands"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="500">
     <UserControl.Resources>
@@ -14,16 +15,16 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.CommandBindings>
-        <CommandBinding Command="local:SettingsCommands.ResetImagePath" Executed="ResetImagePathOnExecuted" CanExecute="ResetImagePathCanExecute"/>
-        <CommandBinding Command="local:SettingsCommands.ChooseImage" Executed="ChooseImageOnExecuted" CanExecute="ChooseImageCanExecute"/>
+        <CommandBinding Command="commands:SettingsCommands.ResetImagePath" Executed="ResetImagePathOnExecuted" CanExecute="ResetImagePathCanExecute"/>
+        <CommandBinding Command="commands:SettingsCommands.ChooseImage" Executed="ChooseImageOnExecuted" CanExecute="ChooseImageCanExecute"/>
     </UserControl.CommandBindings>
     <DockPanel x:Name="Root">
-        <Button DockPanel.Dock="Right" Margin="2" Content="Default" Style="{StaticResource SettingsButton}" Command="local:SettingsCommands.ResetImagePath">
+        <Button DockPanel.Dock="Right" Margin="2" Content="Default" Style="{StaticResource SettingsButton}" Command="commands:SettingsCommands.ResetImagePath">
             <Button.ToolTip>
                 <TextBlock Text="Reset image to its default." />
             </Button.ToolTip>
         </Button>
-        <Button DockPanel.Dock="Right" Margin="2" Content="Browse" Style="{StaticResource SettingsButton}" Command="local:SettingsCommands.ChooseImage" >
+        <Button DockPanel.Dock="Right" Margin="2" Content="Browse" Style="{StaticResource SettingsButton}" Command="commands:SettingsCommands.ChooseImage" >
             <Button.ToolTip>
                 <TextBlock Text="Browse the system for an image to use."/>
             </Button.ToolTip>

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace AudioBand.Settings
+namespace AudioBand.Commands
 {
     public static class SettingsCommands
     {
