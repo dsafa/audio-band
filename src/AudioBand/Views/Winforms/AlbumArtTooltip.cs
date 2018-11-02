@@ -2,6 +2,7 @@
 using System.Drawing.Drawing2D;
 using System.Reflection;
 using System.Windows.Forms;
+using AudioBand.Extensions;
 using CSDeskBand;
 using Size = System.Drawing.Size;
 
