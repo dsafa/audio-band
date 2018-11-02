@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
 using AudioBand.Annotations;
+using AudioBand.Extensions;
 using NLog;
 using Svg;
 

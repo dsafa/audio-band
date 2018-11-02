@@ -3,10 +3,6 @@ using System.Windows.Input;
 
 namespace AudioBand.Commands
 {
-    /// <summary>
-    /// Relay command that can bind to an action and a predicate
-    /// </summary>
-    /// <typeparam name="T">Command parameter</typeparam>
     /// <inheritdoc cref="ICommand"/>
     public class RelayCommand<T> : ICommand
     {
