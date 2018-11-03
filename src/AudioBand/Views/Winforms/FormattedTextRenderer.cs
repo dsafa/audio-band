@@ -6,7 +6,7 @@ using System.Drawing.Text;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using AudioBand.ViewModels;
+using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
 namespace AudioBand.Views.Winforms
 {

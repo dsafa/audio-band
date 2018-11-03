@@ -1,22 +1,19 @@
-﻿using AudioBand.Annotations;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Models;
 using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace AudioBand.ViewModels
 {
     // TODO move logic away from view models
-    internal class AudioSourceSettingsCollectionViewModel : INotifyPropertyChanged
+    internal class AudioSourceSettingsCollectionVM : INotifyPropertyChanged
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private Dictionary<string, AudioSourceSettingViewModel> _selectedSettings = new Dictionary<string, AudioSourceSettingViewModel>();
@@ -42,7 +39,7 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AudioSourceSettingsCollectionViewModel(List<IAudioSource> audioSources, List<AudioSourceSettingsCollection> audioSourceSettings)
+        public AudioSourceSettingsCollectionVM(List<IAudioSource> audioSources, List<AudioSourceSettingsCollection> audioSourceSettings)
         {
             CreateSettings(audioSources, audioSourceSettings);
         }
@@ -51,7 +48,7 @@ namespace AudioBand.ViewModels
         {
             return Settings.Select(s => new AudioSourceSettingsCollection
                 {
-                    Name = s.Key,
+                    AudioSourceName = s.Key,
                     Settings = s.Value.Values.Select(x => x.ToModel()).ToList()
                 }).ToList();
         }
@@ -75,7 +72,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         private Dictionary<string, AudioSourceSettingViewModel> GetExportedSettings(IAudioSource audioSource, List<AudioSourceSettingsCollection> savedSettings)
         {
-            var saved = savedSettings.ToDictionary(s => s.Name, s => s.Settings.ToDictionary(s1 => s1.Name, s1 => s1));
+            var saved = savedSettings.ToDictionary(s => s.AudioSourceName, s => s.Settings.ToDictionary(s1 => s1.Name, s1 => s1));
 
             return audioSource.GetType().GetProperties()
                 .Select(property => new {Property = property, Attributes = property.GetCustomAttributes(typeof(AudioSourceSettingAttribute), true)})
@@ -104,7 +101,6 @@ namespace AudioBand.ViewModels
                 .ToDictionary(s => s.Name, s => s);
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -233,7 +229,6 @@ namespace AudioBand.ViewModels
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(nameof(Value)));
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

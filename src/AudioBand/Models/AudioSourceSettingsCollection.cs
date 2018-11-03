@@ -10,7 +10,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Name of the audio source
         /// </summary>
-        public string Name { get; set; }
+        public string AudioSourceName { get; set; }
 
         /// <summary>
         /// List of settings that the audio source exposes
