@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props" Condition="Exists('..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props')" />
+  <Import Project="..\packages\Costura.Fody.3.1.6\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.1.6\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,6 +12,8 @@
     <AssemblyName>AudioBand</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,6 +37,9 @@
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
+    <Reference Include="Costura, Version=3.1.6.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.3.1.6\lib\net46\Costura.dll</HintPath>
+    </Reference>
     <Reference Include="CSDeskBand, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66d19cfc65a1cc19, processorArchitecture=MSIL">
       <HintPath>..\packages\CSDeskBand.2.0.1\lib\net461\CSDeskBand.dll</HintPath>
     </Reference>
@@ -42,14 +49,17 @@
     <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Nett, Version=0.9.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nett.0.9.2\lib\Net40\Nett.dll</HintPath>
+    <Reference Include="Nett, Version=0.10.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nett.0.10.0\lib\Net40\Nett.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.9\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PropertyChanged, Version=2.5.13.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyChanged.Fody.2.5.13\lib\net452\PropertyChanged.dll</HintPath>
+    </Reference>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>..\packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
     </Reference>
@@ -97,6 +107,31 @@
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\SvgExtensions.cs" />
+    <Compile Include="Models\AlbumArt.cs" />
+    <Compile Include="Models\AlbumArtPopup.cs" />
+    <Compile Include="Models\AudioBand.cs" />
+    <Compile Include="Models\CustomLabelsCollection.cs" />
+    <Compile Include="Models\NextButton.cs" />
+    <Compile Include="Models\PlayPauseButton.cs" />
+    <Compile Include="Models\PreviousButton.cs" />
+    <Compile Include="Models\ProgressBar.cs" />
+    <Compile Include="Models\CustomLabel.cs" />
+    <Compile Include="Models\Track.cs" />
+    <Compile Include="Settings\Models\v2\AlbumArtPopupSettings.cs" />
+    <Compile Include="Settings\Models\v2\AlbumArtSettings.cs" />
+    <Compile Include="Settings\Models\v2\AudioBandSettings.cs" />
+    <Compile Include="Settings\Models\v2\AudioSourceSetting.cs" />
+    <Compile Include="Settings\Models\v2\AudioSourceSettingsCollection.cs" />
+    <Compile Include="Settings\Models\v2\CustomLabelSettings.cs" />
+    <Compile Include="Settings\Models\v2\NextButtonSettings.cs" />
+    <Compile Include="Settings\Models\v2\PlayPauseButtonSettings.cs" />
+    <Compile Include="Settings\Models\v2\PreviousButtonSettings.cs" />
+    <Compile Include="Settings\Models\v2\ProgressBarSettings.cs" />
+    <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
+    <Compile Include="ViewModels\CustomLabelsCollectionVM.cs" />
+    <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
+    <Compile Include="ViewModels\PreviousButtonVM.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -105,7 +140,6 @@
     <Compile Include="Models\AudioSourceSettingsCollection.cs" />
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Views\Wpf\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
@@ -118,8 +152,7 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Wpf\ValueConverters\WinColorToWpfColorConverter.cs" />
-    <Compile Include="ViewModels\AlbumArtAppearance.cs" />
-    <Compile Include="ViewModels\Appearance.cs" />
+    <Compile Include="ViewModels\AlbumArtVM.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>
@@ -127,10 +160,9 @@
     <Compile Include="MainControl.Designer.cs">
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\AudioBandAppearance.cs" />
-    <Compile Include="ViewModels\AudioSourceSettingsCollectionViewModel.cs" />
-    <Compile Include="ViewModels\AudioSourceStatus.cs" />
-    <Compile Include="ViewModels\PlaybackControlsAppearance.cs" />
+    <Compile Include="ViewModels\AudioBandVM.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingsCollectionVM.cs" />
+    <Compile Include="ViewModels\NextButtonVM.cs" />
     <Compile Include="Views\Winforms\EnhancedProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -144,11 +176,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings\AudioBandSettings.cs" />
-    <Compile Include="Settings\Converters.cs" />
+    <Compile Include="Settings\Models\v2\Settings.cs" />
+    <Compile Include="Settings\SerializationConversions.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="ViewModels\ProgressBarAppearance.cs" />
-    <Compile Include="ViewModels\TextAppearance.cs" />
+    <Compile Include="ViewModels\ProgressBarVM.cs" />
+    <Compile Include="ViewModels\CustomLabelVM.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +200,7 @@
     <EmbeddedResource Include="Resources\play.svg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
     <Content Include="Resources\next.svg" />
     <Content Include="Resources\pause.svg" />
     <Content Include="Resources\placeholder-album.svg" />
@@ -199,4 +232,13 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.3.2.12\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.12\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.3.2.12\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.2.12\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.1.6\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.1.6\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props'))" />
+  </Target>
 </Project>

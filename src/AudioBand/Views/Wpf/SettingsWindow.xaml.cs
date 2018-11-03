@@ -15,7 +15,6 @@ using AudioBand.AudioSource;
 using AudioBand.Models;
 using AudioBand.ViewModels;
 using MahApps.Metro.Controls.Dialogs;
-using TextAlignment = AudioBand.ViewModels.TextAlignment;
 
 namespace AudioBand.Views.Wpf
 {
@@ -26,27 +25,19 @@ namespace AudioBand.Views.Wpf
         internal event EventHandler<TextLabelChangedEventArgs> LabelDeleted;
 
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
-        public ObservableCollection<TextAppearance> TextAppearancesCollection { get; set; }
+        public ObservableCollection<CustomLabelVM> TextAppearancesCollection { get; set; }
         public About About { get; } = new About();
-        public AudioSourceSettingsCollectionViewModel AudioSourceSettingsViewModel { get; }
+        public AudioSourceSettingsCollectionVM AudioSourceSettingsViewModel { get; }
 
-        private List<TextAppearance> _deletedTextAppearances;
-        private List<TextAppearance> _addedTextAppearances;
+        private List<CustomLabelVM> _deletedTextAppearances;
+        private List<CustomLabelVM> _addedTextAppearances;
         private bool _cancelEdit = true;
-        private Appearance Appearance { get; set; }
 
-        internal SettingsWindow(Appearance appearance,List<IAudioSource> audioSources, List<AudioSourceSettingsCollection> audioSourceSettings)
+        internal SettingsWindow()
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
-            Appearance = appearance;
-            TextAppearancesCollection = new ObservableCollection<TextAppearance>(appearance.TextAppearances);
-            AudioSourceSettingsViewModel = new AudioSourceSettingsCollectionViewModel(audioSources, audioSourceSettings);
-
             InitializeComponent();
-            DataContext = appearance;
-
-            StartEdit();
         }
 
         // Problem loading xceed.wpf.toolkit assembly normally
@@ -72,7 +63,7 @@ namespace AudioBand.Views.Wpf
             // if closed by x button
             if (_cancelEdit)
             {
-                CancelEdit();
+
             }
             else
             {
@@ -90,83 +81,6 @@ namespace AudioBand.Views.Wpf
         {
             _cancelEdit = true;
             Close();
-        }
-
-        private void NewLabelOnExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            var appearance = new TextAppearance { Name = "New label" };
-            CreateLabel(appearance);
-
-            _addedTextAppearances.Add(appearance);
-            appearance.BeginEdit();
-        }
-
-        private void NewLabelCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = (TabControl.SelectedItem as TabItem)?.Name == "Labels";
-        }
-
-        private async void DeleteLabelOnExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            var res = await ShowConfirmationDialog("Delete label", "Are you sure you want to delete this label?");
-            if (res != MessageDialogResult.Affirmative)
-            {
-                return;
-            }
-
-            var appearance = e.Parameter as TextAppearance;
-
-            DeleteLabel(appearance);
-
-            // check if we are deleting a new label
-            var newAppearance = _addedTextAppearances.FirstOrDefault(a => a.Tag == appearance.Tag);
-            if (newAppearance != null)
-            {
-                // it was a new appearance
-                _addedTextAppearances.Remove(newAppearance);
-            }
-            else
-            {
-                _deletedTextAppearances.Add(appearance);
-            }
-        }
-
-        private void StartEdit()
-        {
-            Appearance.BeginEdit();
-            _addedTextAppearances = new List<TextAppearance>();
-            _deletedTextAppearances = new List<TextAppearance>();
-        }
-
-        private void CancelEdit()
-        {
-            Appearance.CancelEdit();
-
-            foreach (var addedTextAppearance in _addedTextAppearances)
-            {
-                DeleteLabel(addedTextAppearance);
-            }
-
-            foreach (var deletedTextAppearance in _deletedTextAppearances)
-            {
-                CreateLabel(deletedTextAppearance);
-            }
-        }
-
-        private void CreateLabel(TextAppearance appearance)
-        {
-            Appearance.TextAppearances.Add(appearance);
-            TextAppearancesCollection.Add(appearance);
-
-            NewLabelCreated?.Invoke(this, new TextLabelChangedEventArgs(appearance));
-        }
-
-        private void DeleteLabel(TextAppearance appearance)
-        {
-            TextAppearancesCollection.Remove(TextAppearancesCollection.Single(t => t.Tag == appearance.Tag));
-            Appearance.TextAppearances.Remove(Appearance.TextAppearances.Single(t => t.Tag == appearance.Tag));
-
-            LabelDeleted?.Invoke(this, new TextLabelChangedEventArgs(appearance));
         }
 
         private void ShowAboutOnExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -212,11 +126,11 @@ namespace AudioBand.Views.Wpf
 
     internal class TextLabelChangedEventArgs : EventArgs
     {
-        public TextAppearance Appearance { get; }
+        public CustomLabelVM LabelVm { get; }
 
-        public TextLabelChangedEventArgs(TextAppearance appearance)
+        public TextLabelChangedEventArgs(CustomLabelVM labelVm)
         {
-            Appearance = appearance;
+            LabelVm = labelVm;
         }
     }
 

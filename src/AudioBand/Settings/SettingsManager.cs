@@ -1,26 +1,19 @@
 ﻿using Nett;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using AudioBand.AudioSource;
 using AudioBand.Models;
-using AudioBand.ViewModels;
 
 namespace AudioBand.Settings
 {
     internal class SettingsManager
     {
-        public static string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
-        public static string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
-
-        public Appearance Appearance => _settings.ToModel();
-        public List<AudioSourceSettingsCollection> AudioSourceSettings
-        {
-            get => _settings.AudioSourceSettings;
-            set => _settings.AudioSourceSettings = value;
-        }
+        private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
+        private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        private readonly TomlSettings _tomlSettings;
+        private readonly Models.v2.Settings _settings;
 
         public string Version => _settings.Version;
         public string AudioSource
@@ -29,50 +22,15 @@ namespace AudioBand.Settings
             set => _settings.AudioSource = value;
         }
 
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-        private readonly TomlSettings _tomlSettings;
-        private readonly AudioBandSettings _settings;
-
         public SettingsManager()
         {
             _tomlSettings = TomlSettings.Create(cfg =>
             {
                 cfg.ConfigureType<Color>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(ColorTranslator.ToHtml)
-                    .FromToml(tomlInt => ColorTranslator.FromHtml(tomlInt.Value))));
-                cfg.ConfigureType<PlayPauseButtonAppearance>(t =>
-                {
-                    t.IgnoreProperty(o => o.PlayImage);
-                    t.IgnoreProperty(o => o.PauseImage);
-                    t.IgnoreProperty(o => o.Image);
-                    t.IgnoreProperty(o => o.Location);
-                    t.IgnoreProperty(o => o.IsPlaying);
-                });
-                cfg.ConfigureType<NextSongButtonAppearance>(t =>
-                {
-                    t.IgnoreProperty(o => o.Location);
-                    t.IgnoreProperty(o => o.Image);
-                });
-                cfg.ConfigureType<PreviousSongButtonAppearance>(t =>
-                {
-                    t.IgnoreProperty(o => o.Location);
-                    t.IgnoreProperty(o => o.Image);
-                });
-                cfg.ConfigureType<AlbumArtDisplay>(t =>
-                {
-                    t.IgnoreProperty(o => o.Location);
-                    t.IgnoreProperty(o => o.Placeholder);
-                    t.IgnoreProperty(o => o.CurrentAlbumArt);
-                });
-                cfg.ConfigureType<AlbumArtPopup>(t => t.IgnoreProperty(o => o.CurrentAlbumArt));
-                cfg.ConfigureType<ProgressBarAppearance>(t => t.IgnoreProperty(o => o.Location));
-                cfg.ConfigureType<TextAppearance>(t =>
-                {
-                    t.IgnoreProperty(o => o.Tag);
-                    t.IgnoreProperty(o => o.Location);
-                });
+                    .FromToml(tomlString => ColorTranslator.FromHtml(tomlString.Value))));
             });
-
+               
             if (!Directory.Exists(SettingsDirectory))
             {
                 Directory.CreateDirectory(SettingsDirectory);
@@ -80,13 +38,13 @@ namespace AudioBand.Settings
 
             if (!File.Exists(SettingsFilePath))
             {
-                _settings = new AudioBandSettings();
+                _settings = new Models.v2.Settings();
 
-                Toml.WriteFile<AudioBandSettings>(_settings, SettingsFilePath, _tomlSettings);
+                Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
             }
             else
             {
-                _settings = Toml.ReadFile<AudioBandSettings>(SettingsFilePath, _tomlSettings);
+                _settings = Toml.ReadFile<Models.v2.Settings>(SettingsFilePath, _tomlSettings);
             }
         }
 
@@ -94,7 +52,7 @@ namespace AudioBand.Settings
         {
             try
             {
-                Toml.WriteFile<AudioBandSettings>(_settings, SettingsFilePath, _tomlSettings);
+                Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
             }
             catch (Exception e)
             {

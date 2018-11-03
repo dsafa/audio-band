@@ -370,7 +370,7 @@
             <TabItem Header="Progress Bar">
                 <StackPanel Style="{StaticResource TabStackPanel}">
                     <Expander Header="Progress Bar" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding ProgressBarAppearance}">
+                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding ProgressBarVm}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto" />

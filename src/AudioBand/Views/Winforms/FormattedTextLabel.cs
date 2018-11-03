@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using AudioBand.ViewModels;
+using AudioBand.Models;
+using TextAlignment= AudioBand.Models.CustomLabel.TextAlignment;
 using Timer = System.Windows.Forms.Timer;
 
 namespace AudioBand.Views.Winforms
