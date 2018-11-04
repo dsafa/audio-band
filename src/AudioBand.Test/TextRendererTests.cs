@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AudioBand;
 using System.Drawing;
+using AudioBand.Models;
 using AudioBand.ViewModels;
 using AudioBand.Views.Winforms;
 
@@ -15,7 +16,7 @@ namespace AudioBand.Test
         public void ParseNormal()
         {
             var format = "hello";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left);
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
             Assert.AreEqual(1, r.Chunks.Count);
             Assert.AreEqual("hello", r.Chunks[0].Text);
@@ -26,7 +27,7 @@ namespace AudioBand.Test
         public void ParseEmpty()
         {
             var format = "";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left);
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
             Assert.AreEqual(0, r.Chunks.Count);
         }
@@ -36,7 +37,7 @@ namespace AudioBand.Test
         {
             var format = "{artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };
@@ -51,7 +52,7 @@ namespace AudioBand.Test
         {
             var format = "{artist} song";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };
@@ -70,7 +71,7 @@ namespace AudioBand.Test
         {
             var format = "by {artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };
@@ -88,7 +89,7 @@ namespace AudioBand.Test
         public void ParseUnclosed()
         {
             var format = "{artist";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left);
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
             Assert.AreEqual(1, r.Chunks.Count);
             Assert.AreEqual("{artist", r.Chunks[0].Text);
@@ -99,7 +100,7 @@ namespace AudioBand.Test
         public void ParseOnlyClosing()
         {
             var format = "}";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left);
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
             Assert.AreEqual(1, r.Chunks.Count);
             Assert.AreEqual("}", r.Chunks[0].Text);
@@ -111,7 +112,7 @@ namespace AudioBand.Test
         {
             var format = "this is {artist} and ";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };
@@ -132,7 +133,7 @@ namespace AudioBand.Test
         public void ParseInvalidFormat()
         {
             var format = "{something}";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left);
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
             Assert.AreEqual(1, r.Chunks.Count);
 
@@ -145,7 +146,7 @@ namespace AudioBand.Test
         {
             var format = "{artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };
@@ -160,7 +161,7 @@ namespace AudioBand.Test
         {
             var format = "{song}";
             var song = "the song";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 SongName = song
             };
@@ -175,7 +176,7 @@ namespace AudioBand.Test
         {
             var format = "{album}";
             var album = "the album";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 AlbumName = album
             };
@@ -190,7 +191,7 @@ namespace AudioBand.Test
         {
             var format = "{time}";
             var time = TimeSpan.FromSeconds(40);
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 SongProgress = time,
             };
@@ -205,7 +206,7 @@ namespace AudioBand.Test
         {
             var format = "{length}";
             var time = TimeSpan.FromSeconds(80);
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 SongLength = time,
             };
@@ -220,7 +221,7 @@ namespace AudioBand.Test
         {
             var format = "{*artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };
@@ -236,7 +237,7 @@ namespace AudioBand.Test
         {
             var format = "{&artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };
@@ -252,7 +253,7 @@ namespace AudioBand.Test
         {
             var format = "{_artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };
@@ -268,7 +269,7 @@ namespace AudioBand.Test
         {
             var format = "{_artist:#ff00ff}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", TextAlignment.Left)
+            var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left)
             {
                 Artist = artist
             };

@@ -21,13 +21,13 @@ namespace AudioBand.ViewModels
         public int Width
         {
             get => Model.Width;
-            set => SetModelProperty(nameof(Model.Width), value, alsoNotify: nameof(AlbumArt));
+            set => SetModelProperty(nameof(Model.Width), value, alsoNotify: new []{nameof(AlbumArt), nameof(Size)});
         }
 
         public int Height
         {
             get => Model.Height;
-            set => SetModelProperty(nameof(Model.Height), value, alsoNotify: nameof(AlbumArt));
+            set => SetModelProperty(nameof(Model.Height), value, alsoNotify: new[]{nameof(AlbumArt), nameof(Size)});
         }
 
         public int XPosition
@@ -55,6 +55,8 @@ namespace AudioBand.ViewModels
         public Image AlbumArt => (_track.AlbumArt ?? _track.PlaceholderImage).Resize(Width, Height);
 
         public Point Location => new Point(Model.XPosition, Model.YPosition);
+
+        public Size Size => new Size(Width, Height);
 
         public AlbumArtVM(AlbumArt model, Track track) : base(model)
         {
