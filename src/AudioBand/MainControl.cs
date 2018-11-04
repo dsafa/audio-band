@@ -11,6 +11,8 @@ using NLog.Config;
 using NLog.Targets;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -31,14 +33,14 @@ namespace AudioBand
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AudioSourceManager _audioSourceManager = new AudioSourceManager();
         private readonly SettingsManager _settingsManager = new SettingsManager();
-        private readonly AlbumArtTooltip _albumArtTooltip = new AlbumArtTooltip { Size = new Size(100, 100) };
+
         private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
         private int _nextTag = 0;
 
-        #region View Models
+        #region Models
 
         private AlbumArt _albumArtModel;
         private AlbumArtPopup _albumArtPopupModel;
@@ -54,11 +56,15 @@ namespace AudioBand
         #endregion
 
         #region Album art tooltip bindings
+
+        // Tooltip will use bindings from this control
         public bool AlbumArtPopupIsVisible { get; set; }
         public int AlbumArtPopupWidth { get; set; }
         public int AlbumArtPopupHeight { get; set; }
         public int AlbumArtPopupX { get; set; }
         public int AlbumArtPopupY { get; set; }
+        public Image AlbumArtPopupImage { get; set; }
+
         #endregion
 
         static MainControl()
@@ -117,12 +123,12 @@ namespace AudioBand
 
         private void AlbumArtOnMouseLeave(object o, EventArgs args)
         {
-            _albumArtTooltip.Hide(this);
+            AlbumArtPopup.Hide(this);
         }
 
         private void AlbumArtOnMouseHover(object o, EventArgs args)
         {
-            _albumArtTooltip.ShowWithoutRequireFocus("Album Art", this, TaskbarInfo);
+            AlbumArtPopup.ShowWithoutRequireFocus("Album Art", this, TaskbarInfo);
         }
 
         private void AudioSourceManagerOnAudioSourcesChanged(object sender, EventArgs eventArgs)

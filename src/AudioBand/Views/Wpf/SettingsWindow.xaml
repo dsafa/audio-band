@@ -28,15 +28,6 @@
             <valueConverters:WinColorToWpfColorConverter x:Key="WinColorToWpfColorConverter"/>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
-    <metro:MetroWindow.DataContext>
-        <viewModels:Appearance/>
-    </metro:MetroWindow.DataContext>
-    <metro:MetroWindow.CommandBindings>
-        <CommandBinding Command="commands:SettingsCommands.AddLabel" Executed="NewLabelOnExecute" CanExecute="NewLabelCanExecute"/>
-        <CommandBinding Command="commands:SettingsCommands.DeleteLabel" Executed="DeleteLabelOnExecute" CanExecute="AlwaysCanExecute"/>
-        <CommandBinding Command="commands:SettingsCommands.ShowAbout" Executed="ShowAboutOnExecuted" CanExecute="AlwaysCanExecute"/>
-        <CommandBinding Command="commands:SettingsCommands.ResetSetting" Executed="ResetSettingOnExecuted" CanExecute="AlwaysCanExecute"/>
-    </metro:MetroWindow.CommandBindings>
     <metro:MetroWindow.InputBindings>
         <KeyBinding Command="commands:SettingsCommands.AddLabel" Key="N" Modifiers="Control"/>
     </metro:MetroWindow.InputBindings>

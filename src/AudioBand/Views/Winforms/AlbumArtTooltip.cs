@@ -10,20 +10,10 @@ namespace AudioBand.Views.Winforms
 {
     public class AlbumArtTooltip : ToolTip
     {
-        private Image _albumArt;
         private readonly MethodInfo _setToolMethod = typeof(ToolTip).GetMethod("SetTool", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        public Image AlbumArt
-        {
-            get => _albumArt;
-            set
-            {
-                _albumArt = value;
-                Active = value != null;
-            }
-        }
-
-        public Size Size { get; set; } = new Size(200, 200);
+        private Image _albumArt;
+        private Size _size;
 
         public AlbumArtTooltip()
         {
@@ -36,15 +26,16 @@ namespace AudioBand.Views.Winforms
             Draw += OnDraw;
         }
 
-        public void ShowWithoutRequireFocus(string name, Control control, TaskbarInfo taskbarInfo)
+        public void ShowWithoutRequireFocus(string name, MainControl control, TaskbarInfo taskbarInfo)
         {
-            if (AlbumArt == null || !control.DataBindings[nameof(MainControl.AlbumArtPopupIsVisible)].As<bool>())
+            if (!control.DataBindings[nameof(MainControl.AlbumArtPopupIsVisible)].As<bool>())
             {
                 return;
             }
 
             // since tooltips dont support binding, we will bind to the main control and just read the properties here
-            Size = new Size(control.DataBindings[nameof(MainControl.AlbumArtPopupWidth)].As<int>(), control.DataBindings[nameof(MainControl.AlbumArtPopupHeight)].As<int>());
+            _albumArt = control.DataBindings[nameof(MainControl.AlbumArtPopupImage)].As<Image>();
+            _size = new Size(control.DataBindings[nameof(MainControl.AlbumArtPopupWidth)].As<int>(), control.DataBindings[nameof(MainControl.AlbumArtPopupHeight)].As<int>());
 
             var margin = control.DataBindings[nameof(MainControl.AlbumArtPopupY)].As<int>();
             var xOffSet = control.DataBindings[nameof(MainControl.AlbumArtPopupX)].As<int>();
@@ -56,7 +47,7 @@ namespace AudioBand.Views.Winforms
             }
             else
             {
-                yOffset = -Size.Height - margin;
+                yOffset = -_size.Height - margin;
             }
 
             const int AbsolutePos = 2;
@@ -66,12 +57,12 @@ namespace AudioBand.Views.Winforms
 
         private void OnPopup(object sender, PopupEventArgs popupEventArgs)
         {
-            popupEventArgs.ToolTipSize = Size;
+            popupEventArgs.ToolTipSize = _size;
         }
 
         private void OnDraw(object sender, DrawToolTipEventArgs drawToolTipEventArgs)
         {
-            if (AlbumArt == null)
+            if (_albumArt == null)
             {
                 return;
             }
@@ -84,7 +75,7 @@ namespace AudioBand.Views.Winforms
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
             var bounds = drawToolTipEventArgs.Bounds;
-            graphics.DrawImage(AlbumArt, bounds);
+            graphics.DrawImage(_albumArt, bounds);
         }
     }
 }

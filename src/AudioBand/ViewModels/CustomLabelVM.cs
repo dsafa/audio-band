@@ -50,13 +50,13 @@ namespace AudioBand.ViewModels
         public int Width
         {
             get => Model.Width;
-            set => SetModelProperty(nameof(Model.Width), value);
+            set => SetModelProperty(nameof(Model.Width), value, alsoNotify: nameof(Size));
         }
 
         public int Height
         {
             get => Model.Height;
-            set => SetModelProperty(nameof(Model.Height), value);
+            set => SetModelProperty(nameof(Model.Height), value, alsoNotify: nameof(Size));
         }
 
         public int XPosition
@@ -78,6 +78,8 @@ namespace AudioBand.ViewModels
         }
 
         public Point Location => new Point(XPosition, YPosition);
+
+        public Size Size => new Size(Width, Height);
 
         public CustomLabelVM(CustomLabel model) : base(model) {}
     }

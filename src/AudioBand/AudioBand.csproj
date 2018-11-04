@@ -107,6 +107,10 @@
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\SvgExtensions.cs" />
+    <Compile Include="MainControl.CustomBindings.cs">
+      <SubType>UserControl</SubType>
+	  <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\AlbumArt.cs" />
     <Compile Include="Models\AlbumArtPopup.cs" />
     <Compile Include="Models\AudioBand.cs" />
@@ -195,6 +199,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtPopupVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.AudioBandVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.CustomLabelVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.NextButtonVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.PlayPauseButtonVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.PreviousButtonVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.ProgressBarVM.datasource" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\play.svg" />

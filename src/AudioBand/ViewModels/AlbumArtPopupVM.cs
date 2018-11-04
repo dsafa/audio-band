@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using AudioBand.Extensions;
+﻿using AudioBand.Extensions;
 using AudioBand.Models;
+using System.ComponentModel;
 using System.Drawing;
 
 namespace AudioBand.ViewModels

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -10,6 +11,8 @@ namespace AudioBand.Views.Winforms
         private TimeSpan _progress;
         private TimeSpan _total;
 
+        [Browsable(true)]
+        [Bindable(BindableSupport.Yes)]
         public TimeSpan Progress
         {
             get => _progress;
@@ -20,6 +23,8 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        [Browsable(true)]
+        [Bindable(BindableSupport.Yes)]
         public TimeSpan Total
         {
             get => _total;
