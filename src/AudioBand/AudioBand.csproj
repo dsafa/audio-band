@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props" Condition="Exists('..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props')" />
-  <Import Project="..\packages\Costura.Fody.3.1.6\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.1.6\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,9 +35,6 @@
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="Costura, Version=3.1.6.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Costura.Fody.3.1.6\lib\net46\Costura.dll</HintPath>
-    </Reference>
     <Reference Include="CSDeskBand, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66d19cfc65a1cc19, processorArchitecture=MSIL">
       <HintPath>..\packages\CSDeskBand.2.0.1\lib\net461\CSDeskBand.dll</HintPath>
     </Reference>
@@ -57,9 +52,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="PropertyChanged, Version=2.5.13.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyChanged.Fody.2.5.13\lib\net452\PropertyChanged.dll</HintPath>
-    </Reference>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>..\packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
     </Reference>
@@ -107,7 +99,7 @@
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\SvgExtensions.cs" />
-    <Compile Include="MainControl.CustomBindings.cs">
+    <Compile Include="MainControl.Bindings.cs">
       <SubType>UserControl</SubType>
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
@@ -115,6 +107,7 @@
     <Compile Include="Models\AlbumArtPopup.cs" />
     <Compile Include="Models\AudioBand.cs" />
     <Compile Include="Models\CustomLabelsCollection.cs" />
+    <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NextButton.cs" />
     <Compile Include="Models\PlayPauseButton.cs" />
     <Compile Include="Models\PreviousButton.cs" />
@@ -200,7 +193,7 @@
     <None Include="App.config" />
     <Compile Include="MainControl.EventHandlers.cs">
       <SubType>UserControl</SubType>
-	  <DependentUpon>MainControl.cs</DependentUpon>
+      <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtPopupVM.datasource" />
@@ -216,7 +209,6 @@
     <EmbeddedResource Include="Resources\play.svg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
     <Content Include="Resources\next.svg" />
     <Content Include="Resources\pause.svg" />
     <Content Include="Resources\placeholder-album.svg" />
@@ -248,13 +240,4 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Fody.3.2.12\build\Fody.targets" Condition="Exists('..\packages\Fody.3.2.12\build\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.3.2.12\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.2.12\build\Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Costura.Fody.3.1.6\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.1.6\build\Costura.Fody.props'))" />
-    <Error Condition="!Exists('..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PropertyChanged.Fody.2.5.13\build\PropertyChanged.Fody.props'))" />
-  </Target>
 </Project>

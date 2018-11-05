@@ -10,7 +10,7 @@ namespace AudioBand.Views.Winforms
     /// <summary>
     /// A text label that supports formatting with placeholders
     /// </summary>
-    public class FormattedTextLabel : Control
+    internal class FormattedTextLabel : Control
     {
         public string Format
         {

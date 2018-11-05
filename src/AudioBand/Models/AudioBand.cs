@@ -1,8 +1,20 @@
 ﻿namespace AudioBand.Models
 {
-    internal class AudioBand
+    internal class AudioBand : ModelBase
     {
-        public int Width { get; set; } = 250;
-        public int Height { get; set; } = 30;
+        private int _width = 250;
+        private int _height = 30;
+
+        public int Width
+        {
+            get => _width;
+            set => SetProperty(ref _width, value);
+        }
+
+        public int Height
+        {
+            get => _height;
+            set => SetProperty(ref _height, value);
+        }
     }
 }

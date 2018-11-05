@@ -167,11 +167,9 @@ namespace AudioBand
             // AlbumArtPopup
             // 
             this.AlbumArtPopup.Active = false;
-            this.AlbumArtPopup.AlbumArt = null;
             this.AlbumArtPopup.AutomaticDelay = 200;
             this.AlbumArtPopup.OwnerDraw = true;
             this.AlbumArtPopup.ShowAlways = true;
-            this.AlbumArtPopup.Size = new System.Drawing.Size(200, 200);
             // 
             // AudioBandVMBindingSource
             // 

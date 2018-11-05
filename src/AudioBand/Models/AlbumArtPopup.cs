@@ -1,11 +1,41 @@
 ﻿namespace AudioBand.Models
 {
-    internal class AlbumArtPopup
+    internal class AlbumArtPopup : ModelBase
     {
-        public bool IsVisible { get; set; } = true;
-        public int Width { get; set; } = 250;
-        public int Height { get; set; } = 250;
-        public int XPosition { get; set; } = 0;
-        public int Margin { get; set; } = 4;
+        private bool _isVisible = true;
+        private int _width = 250;
+        private int _height = 250;
+        private int _xPosition = 0;
+        private int _margin = 4;
+
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set => SetProperty(ref _isVisible, value);
+        }
+
+        public int Width
+        {
+            get => _width;
+            set => SetProperty(ref _width, value);
+        }
+
+        public int Height
+        {
+            get => _height;
+            set => SetProperty(ref _height, value);
+        }
+
+        public int XPosition
+        {
+            get => _xPosition;
+            set => SetProperty(ref _xPosition, value);
+        }
+
+        public int Margin
+        {
+            get => _margin;
+            set => SetProperty(ref _margin, value);
+        }
     }
 }
