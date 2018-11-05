@@ -89,10 +89,8 @@ namespace AudioBand
             try
             {
                 Options.ContextMenuItems = BuildContextMenu();
-                ResizeDeskband();
 
                 SelectAudioSourceFromSettings();
-                ResetState();
             }
             catch (ReflectionTypeLoadException e)
             {
@@ -164,15 +162,12 @@ namespace AudioBand
             _currentAudioSource = null;
         }
 
-        private void ResizeDeskband()
+        protected override void OnResize(EventArgs eventArgs)
         {
             var audioBandSize = new Size(_audioBandModel.Width, _audioBandModel.Height);
             Options.MinHorizontalSize = audioBandSize;
             Options.HorizontalSize = audioBandSize;
             Options.MaxHorizontalHeight = audioBandSize.Height;
-
-            MinimumSize = audioBandSize;
-            Size = audioBandSize;
         }
 
         protected override void OnClose()
@@ -186,13 +181,6 @@ namespace AudioBand
             var window = new SettingsWindow();
             ElementHost.EnableModelessKeyboardInterop(window);
             window.Show();
-        }
-
-        private void ResetState()
-        {
-            _trackModel.Artist = "";
-            _trackModel.TrackName = "";
-            _trackModel.IsPlaying = false;
         }
 
         private void SelectAudioSourceFromSettings()
