@@ -25,9 +25,16 @@ namespace AudioBand
             ((ISupportInitialize)AlbumArtPopupVMBindingSource).EndInit();
         }
 
-        private void InitializeBindingSource()
+        private void InitializeBindingSources(AlbumArtPopupVM albumArtPopupVm, AlbumArtVM albumartVm, AudioBandVM audioBandVm, NextButtonVM nextButtonVm,
+            PlayPauseButtonVM playPauseButtonVm, PreviousButtonVM previousButtonVm, ProgressBarVM progressBarVm)
         {
-
+            AlbumArtPopupVMBindingSource.DataSource = albumArtPopupVm;
+            AlbumArtVMBindingSource.DataSource = albumartVm;
+            AudioBandVMBindingSource.DataSource = audioBandVm;
+            NextButtonVMBindingSource.DataSource = nextButtonVm;
+            PlayPauseButtonVMBindingSource.DataSource = playPauseButtonVm;
+            PreviousButtonVMBindingSource.DataSource = previousButtonVm;
+            ProgressBarVMBindingSource.DataSource = progressBarVm;
         }
     }
 }

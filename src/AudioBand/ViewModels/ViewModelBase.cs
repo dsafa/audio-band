@@ -10,10 +10,14 @@ using NLog;
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// Base class for a viewmodel.
+    /// </summary>
+    /// <typeparam name="TModel"></typeparam>
     internal abstract class ViewModelBase<TModel> : INotifyPropertyChanged, IEditableObject, IResettableObject
     where TModel: ModelBase
     {
-        private readonly Dictionary<string, string[]> _alsoNotifyCache = new Dictionary<string, string[]>();
+        private readonly Dictionary<string, string[]> _alsoNotifyCache = new Dictionary<string, string[]>(); // View model property name -> other vm property names
         private readonly Dictionary<(object model, string modelPropName), string> _modelToPropertyName = new Dictionary<(object model, string modelPropName), string>();
 
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
@@ -28,26 +32,27 @@ namespace AudioBand.ViewModels
         {
             Model = model;
             SetupModelBindings(Model);
+            SetupAlsoNotify();
         }
 
         public void BeginEdit()
         {
-            throw new System.NotImplementedException();
+
         }
 
         public void EndEdit()
         {
-            throw new System.NotImplementedException();
+
         }
 
         public void CancelEdit()
         {
-            throw new System.NotImplementedException();
+
         }
 
         public void Reset()
         {
-            throw new System.NotImplementedException();
+
         }
 
         /// <summary>
@@ -69,12 +74,6 @@ namespace AudioBand.ViewModels
         /// <returns>Returns true if new value was set</returns>
         protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
         {
-            var currentValue = (TValue)GetType().GetProperty(propertyName).GetValue(this);
-            if (EqualityComparer<TValue>.Default.Equals(currentValue, newValue))
-            {
-                return false;
-            }
-
             Model.GetType().GetProperty(propertyName).SetValue(Model, newValue);
             RaisePropertyChanged(propertyName);
             return true;
@@ -110,23 +109,34 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Setup to recieve change notifications from model
+        /// Setup to recieve change notifications from model.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">Model to subscribe to for <see cref="INotifyPropertyChanged.PropertyChanged"/>.</param>
         protected void SetupModelBindings<T>(T model) where T : ModelBase
         {
-            var properties = GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(PropertyChangeBindingAttribute)));
-            foreach (var propertyInfo in properties)
+            var bindingProperties = GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(PropertyChangeBindingAttribute)));
+            foreach (var propertyInfo in bindingProperties)
             {
-                var attr = propertyInfo.GetCustomAttribute<PropertyChangeBindingAttribute>();
-                _modelToPropertyName.Add((model, attr.PropertyName), propertyInfo.Name);
+                var bindingAttr = propertyInfo.GetCustomAttribute<PropertyChangeBindingAttribute>();
+                _modelToPropertyName.Add((model, bindingAttr.PropertyName), propertyInfo.Name);
             }
 
             model.PropertyChanged += ModelOnPropertyChanged;
         }
 
+        private void SetupAlsoNotify()
+        {
+            var alsoNotifyProperties = GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(AlsoNotifyAttribute)));
+            foreach (var propertyInfo in alsoNotifyProperties)
+            {
+                var attr = propertyInfo.GetCustomAttribute<AlsoNotifyAttribute>();
+                _alsoNotifyCache.Add(propertyInfo.Name, attr.AlsoNotify);
+            }
+        }
+
         /// <summary>
-        /// When a models property changes, notify for the bound property and any others.
+        /// When a model property changes, raise <see cref="PropertyChanged"/> for the corresponding property marked with <see cref="PropertyChangeBindingAttribute"/> 
+        /// and also properties in <see cref="AlsoNotifyAttribute"/>.
         /// </summary>
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
