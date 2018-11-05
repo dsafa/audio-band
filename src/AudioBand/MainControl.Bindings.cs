@@ -24,5 +24,10 @@ namespace AudioBand
 
             ((ISupportInitialize)AlbumArtPopupVMBindingSource).EndInit();
         }
+
+        private void InitializeBindingSource()
+        {
+
+        }
     }
 }

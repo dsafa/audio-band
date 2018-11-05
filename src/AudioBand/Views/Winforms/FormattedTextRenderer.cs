@@ -10,7 +10,7 @@ using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
 namespace AudioBand.Views.Winforms
 {
-    public class FormattedTextRenderer
+    internal class FormattedTextRenderer
     {
         private const char PlaceholderStartToken = '{';
         private const char PlaceholderEndToken = '}';
