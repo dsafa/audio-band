@@ -8,7 +8,7 @@ namespace AudioBand
     {
         private BindingSource AlbumArtPopupVMBindingSource;
 
-        private void CustomInitializeComponents()
+        private void CustomInitializeComponent()
         {
             AlbumArtPopupVMBindingSource = new BindingSource(components);
             ((ISupportInitialize)AlbumArtPopupVMBindingSource).BeginInit();

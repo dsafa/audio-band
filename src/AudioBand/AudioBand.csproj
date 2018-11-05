@@ -109,7 +109,7 @@
     <Compile Include="Extensions\SvgExtensions.cs" />
     <Compile Include="MainControl.CustomBindings.cs">
       <SubType>UserControl</SubType>
-	  <DependentUpon>MainControl.cs</DependentUpon>
+      <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AlbumArt.cs" />
     <Compile Include="Models\AlbumArtPopup.cs" />
@@ -198,6 +198,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="MainControl.EventHandlers.cs">
+      <SubType>UserControl</SubType>
+	  <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtPopupVM.datasource" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtVM.datasource" />
