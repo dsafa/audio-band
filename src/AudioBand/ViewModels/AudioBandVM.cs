@@ -4,16 +4,20 @@ namespace AudioBand.ViewModels
 {
     internal class AudioBandVM : ViewModelBase<Models.AudioBand>
     {
+        [PropertyChangeBinding(nameof(Models.AudioBand.Width))]
+        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
-            set => SetModelProperty(nameof(Model.Width), value, alsoNotify: nameof(Size));
+            set => SetProperty(nameof(Model.Width), value);
         }
 
+        [PropertyChangeBinding(nameof(Models.AudioBand.Height))]
+        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
-            set => SetModelProperty(nameof(Model.Height), value, alsoNotify: nameof(Size));
+            set => SetProperty(nameof(Model.Height), value);
         }
 
         public Size Size => new Size(Width, Height);

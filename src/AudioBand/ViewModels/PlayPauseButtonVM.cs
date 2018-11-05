@@ -1,7 +1,6 @@
 ﻿using AudioBand.Extensions;
 using AudioBand.Models;
 using Svg;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 
@@ -15,72 +14,86 @@ namespace AudioBand.ViewModels
         private Image _playImage;
         private Image _pauseImage;
 
+        [AlsoNotify(nameof(Image))]
         public Image PlayImage
         {
             get => _playImage;
-            set => SetProperty(ref _playImage, value, alsoNotify: nameof(Image));
+            set => SetProperty(ref _playImage, value);
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonImagePath))]
         public string PlayImagePath
         {
             get => Model.PlayButtonImagePath;
             set
             {
-                if (SetModelProperty(nameof(Model.PlayButtonImagePath), value))
+                if (SetProperty(nameof(Model.PlayButtonImagePath), value))
                 {
                     PlayImage = LoadImage(value, DefaultPlayButtonSvg.ToBitmap());
                 }
             }
         }
 
+        [AlsoNotify(nameof(Image))]
         public Image PauseImage
         {
             get => _pauseImage;
-            set => SetProperty(ref _pauseImage, value, alsoNotify: nameof(Image));
+            set => SetProperty(ref _pauseImage, value);
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonImagePath))]
         public string PauseImagePath
         {
             get => Model.PauseButtonImagePath;
             set
             {
-                if (SetModelProperty(nameof(Model.PauseButtonImagePath), value))
+                if (SetProperty(nameof(Model.PauseButtonImagePath), value))
                 {
                     PauseImage = LoadImage(value, DefaultPauseButtonSvg.ToBitmap());
                 }
             }
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.IsVisible))]
         public bool IsVisible
         {
             get => Model.IsVisible;
-            set => SetModelProperty(nameof(Model.IsVisible), value);
+            set => SetProperty(nameof(Model.IsVisible), value);
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.Width))]
+        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
-            set => SetModelProperty(nameof(Model.Width), value, alsoNotify: new []{nameof(Image), nameof(Size)});
+            set => SetProperty(nameof(Model.Width), value);
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.Height))]
+        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
-            set => SetModelProperty(nameof(Model.Height), value, alsoNotify: new[] { nameof(Image), nameof(Size) });
+            set => SetProperty(nameof(Model.Height), value);
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.XPosition))]
+        [AlsoNotify(nameof(Location))]
         public int XPosition
         {
             get => Model.XPosition;
-            set => SetModelProperty(nameof(Model.XPosition), value, alsoNotify: nameof(Location));
+            set => SetProperty(nameof(Model.XPosition), value);
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.YPosition))]
+        [AlsoNotify(nameof(Location))]
         public int YPosition
         {
             get => Model.YPosition;
-            set => SetModelProperty(nameof(Model.YPosition), value, alsoNotify: nameof(Location));
+            set => SetProperty(nameof(Model.YPosition), value);
         }
 
+        [PropertyChangeBinding(nameof(Track.IsPlaying))]
         public Image Image
         {
             get
@@ -97,15 +110,7 @@ namespace AudioBand.ViewModels
         public PlayPauseButtonVM(PlayPauseButton model, Track track) : base(model)
         {
             _track = track;
-            _track.PropertyChanged += TrackOnPropertyChanged;
-        }
-
-        private void TrackOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            if (propertyChangedEventArgs.PropertyName == nameof(_track.IsPlaying))
-            {
-                RaisePropertyChanged(nameof(Image));
-            }
+            SetupModelBindings(_track);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AudioBand.Extensions;
 using AudioBand.Models;
-using System.ComponentModel;
 using System.Drawing;
 
 namespace AudioBand.ViewModels
@@ -9,50 +8,48 @@ namespace AudioBand.ViewModels
     {
         private readonly Track _track;
 
+        [PropertyChangeBinding(nameof(AlbumArtPopup.IsVisible))]
         public bool IsVisible
         {
             get => Model.IsVisible;
-            set => SetModelProperty(nameof(Model.IsVisible), value);
+            set => SetProperty(nameof(Model.IsVisible), value);
         }
 
+        [PropertyChangeBinding(nameof(AlbumArtPopup.Width))]
         public int Width
         {
             get => Model.Width;
-            set => SetModelProperty(nameof(Model.Width), value);
+            set => SetProperty(nameof(Model.Width), value);
         }
 
+        [PropertyChangeBinding(nameof(AlbumArtPopup.Height))]
         public int Height
         {
             get => Model.Height;
-            set => SetModelProperty(nameof(Model.Height), value);
+            set => SetProperty(nameof(Model.Height), value);
         }
 
+        [PropertyChangeBinding(nameof(AlbumArtPopup.XPosition))]
         public int XPosition
         {
             get => Model.XPosition;
-            set => SetModelProperty(nameof(Model.XPosition), value);
+            set => SetProperty(nameof(Model.XPosition), value);
         }
 
+        [PropertyChangeBinding(nameof(AlbumArtPopup.Margin))]
         public int Margin
         {
             get => Model.Margin;
-            set => SetModelProperty(nameof(Model.Margin), value);
+            set => SetProperty(nameof(Model.Margin), value);
         }
 
+        [PropertyChangeBinding(nameof(Track.AlbumArt))]
         public Image AlbumArt => (_track.AlbumArt ?? _track.PlaceholderImage).Resize(Width, Height);
 
         public AlbumArtPopupVM(AlbumArtPopup model, Track track) : base(model)
         {
             _track = track;
-            _track.PropertyChanged += TrackOnPropertyChanged;
-        }
-
-        private void TrackOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            if (propertyChangedEventArgs.PropertyName == nameof(_track.AlbumArt))
-            {
-                RaisePropertyChanged(nameof(AlbumArt));
-            }
+            SetupModelBindings(_track);
         }
     }
 }

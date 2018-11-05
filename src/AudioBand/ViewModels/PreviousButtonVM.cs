@@ -17,46 +17,56 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _image, value);
         }
 
+        [PropertyChangeBinding(nameof(PreviousButton.ImagePath))]
         public string ImagePath
         {
             get => Model.ImagePath;
             set
             {
-                if (SetModelProperty(nameof(Model.ImagePath), value))
+                if (SetProperty(nameof(Model.ImagePath), value))
                 {
                     Image = LoadImage(value, DefaultPreviousButtonSvg.ToBitmap());
                 }
             }
         }
 
+        [PropertyChangeBinding(nameof(PreviousButton.IsVisible))]
         public bool IsVisible
         {
             get => Model.IsVisible;
-            set => SetModelProperty(nameof(Model.IsVisible), value);
+            set => SetProperty(nameof(Model.IsVisible), value);
         }
 
+        [PropertyChangeBinding(nameof(PreviousButton.Width))]
+        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
-            set => SetModelProperty(nameof(Model.Width), value, alsoNotify: new []{nameof(Image), nameof(Size)});
+            set => SetProperty(nameof(Model.Width), value);
         }
 
+        [PropertyChangeBinding(nameof(PreviousButton.Height))]
+        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
-            set => SetModelProperty(nameof(Model.Height), value, alsoNotify: new []{nameof(Image), nameof(Size)});
+            set => SetProperty(nameof(Model.Height), value);
         }
 
+        [PropertyChangeBinding(nameof(PreviousButton.XPosition))]
+        [AlsoNotify(nameof(Location))]
         public int XPosition
         {
-            get => XPosition;
-            set => SetModelProperty(nameof(Model.XPosition), value, alsoNotify: nameof(Location));
+            get => Model.XPosition;
+            set => SetProperty(nameof(Model.XPosition), value);
         }
 
+        [PropertyChangeBinding(nameof(PreviousButton.YPosition))]
+        [AlsoNotify(nameof(Location))]
         public int YPosition
         {
             get => Model.YPosition;
-            set => SetModelProperty(nameof(Model.YPosition), value, alsoNotify: nameof(Location));
+            set => SetProperty(nameof(Model.YPosition), value);
         }
 
         public Point Location => new Point(Model.XPosition, Model.YPosition);

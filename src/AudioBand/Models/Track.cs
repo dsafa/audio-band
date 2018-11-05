@@ -1,13 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Drawing;
 
 namespace AudioBand.Models
 {
-    internal class Track : INotifyPropertyChanged
+    internal class Track : ModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public bool IsPlaying { get; set; }
         public TimeSpan TrackProgress { get; set; }
         public TimeSpan TrackLength { get; set; }
