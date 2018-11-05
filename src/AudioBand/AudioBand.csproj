@@ -178,7 +178,7 @@
     </Compile>
     <Compile Include="Settings\Models\v2\Settings.cs" />
     <Compile Include="Settings\SerializationConversions.cs" />
-    <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\AppSettings.cs" />
     <Compile Include="ViewModels\ProgressBarVM.cs" />
     <Compile Include="ViewModels\CustomLabelVM.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />

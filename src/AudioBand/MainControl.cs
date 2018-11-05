@@ -1,6 +1,7 @@
 ﻿using AudioBand.AudioSource;
 using AudioBand.Models;
 using AudioBand.Settings;
+using AudioBand.ViewModels;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
 using CSDeskBand.Win;
@@ -11,11 +12,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
+using ProgressBar = AudioBand.Models.ProgressBar;
 using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
@@ -28,8 +29,8 @@ namespace AudioBand
     {
         private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
         private readonly AudioSourceManager _audioSourceManager = new AudioSourceManager();
-        private readonly SettingsManager _settingsManager = new SettingsManager();
-
+        private readonly AppSettings _appSettings = new AppSettings();
+        private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
@@ -83,30 +84,50 @@ namespace AudioBand
 
         public MainControl()
         {
-            InitializeComponent();
-            CustomInitializeComponent();
-
             try
             {
+                InitializeComponent();
+                CustomInitializeComponent();
                 Options.ContextMenuItems = BuildContextMenu();
 
+                InitializeModels();
+                SetupViewModels();
                 SelectAudioSourceFromSettings();
-            }
-            catch (ReflectionTypeLoadException e)
-            {
-                _logger.Error(e);
-                foreach (var loaderException in e.LoaderExceptions)
-                {
-                    _logger.Error(loaderException);
-                }
-
-                throw;
             }
             catch (Exception e)
             {
                 _logger.Error(e);
                 throw;
             }
+        }
+
+        private void InitializeModels()
+        {
+            _albumArtModel = _appSettings.AlbumArt;
+            _albumArtPopupModel = _appSettings.AlbumArtPopup;
+            _audioBandModel = _appSettings.AudioBand;
+            _customLabelsModel = _appSettings.CustomLabels;
+            _nextButtonModel = _appSettings.NextButton;
+            _playPauseButtonModel = _appSettings.PlayPauseButton;
+            _previousButtonModel = _appSettings.PreviousButton;
+            _progressBarModel = _appSettings.ProgressBar;
+            _trackModel = new Track();   
+        }
+
+        private void SetupViewModels()
+        {
+            var albumArt = new AlbumArtVM(_albumArtModel, _trackModel);
+            var albumArtPopup = new AlbumArtPopupVM(_albumArtPopupModel, _trackModel);
+            var audioBand = new AudioBandVM(_audioBandModel);
+            var customLabels = new CustomLabelsCollectionVM(_customLabelsModel, this);
+            var nextButton = new NextButtonVM(_nextButtonModel);
+            var playPauseButton = new PlayPauseButtonVM(_playPauseButtonModel, _trackModel);
+            var prevButton = new PreviousButtonVM(_previousButtonModel);
+            var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
+
+            InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar);
+            _settingsWindow = new SettingsWindow();
+            ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
         }
 
         private List<DeskBandMenuItem> BuildContextMenu()
@@ -140,7 +161,7 @@ namespace AudioBand
             _audioSourceTokenSource = new CancellationTokenSource();
             await source.ActivateAsync();
 
-            _settingsManager.AudioSource = source.Name;
+            _appSettings.AudioSource = source.Name;
         }
 
         private async Task UnsubscribeToAudioSource(IAudioSource source)
@@ -158,12 +179,17 @@ namespace AudioBand
             _audioSourceTokenSource.Cancel();
             await source.DeactivateAsync();
 
-            _settingsManager.AudioSource = null;
+            _appSettings.AudioSource = null;
             _currentAudioSource = null;
         }
 
         protected override void OnResize(EventArgs eventArgs)
         {
+            if (_audioBandModel == null)
+            {
+                return;
+            }
+
             var audioBandSize = new Size(_audioBandModel.Width, _audioBandModel.Height);
             Options.MinHorizontalSize = audioBandSize;
             Options.HorizontalSize = audioBandSize;
@@ -173,19 +199,17 @@ namespace AudioBand
         protected override void OnClose()
         {
             base.OnClose();
-            _settingsManager.Save();
+            _appSettings.Save();
         }
 
         private void OpenSettingsWindow()
         {
-            var window = new SettingsWindow();
-            ElementHost.EnableModelessKeyboardInterop(window);
-            window.Show();
+            _settingsWindow.Show();
         }
 
         private void SelectAudioSourceFromSettings()
         {
-            var audioSource = _settingsManager.AudioSource;
+            var audioSource = _appSettings.AudioSource;
             if (String.IsNullOrEmpty(audioSource))
             {
                 return;
