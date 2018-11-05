@@ -5,76 +5,85 @@ namespace AudioBand.ViewModels
 {
     internal class CustomLabelVM : ViewModelBase<CustomLabel>
     {
+        [PropertyChangeBinding(nameof(CustomLabel.Name))]
         public string Name
         {
             get => Model.Name;
-            set => SetModelProperty(nameof(Model.Name), value);
+            set => SetProperty(nameof(Model.Name), value);
         }
 
-        public bool IsVisible
-        {
-            get => Model.IsVisible;
-            set => SetModelProperty(nameof(Model.IsVisible), value);
-        }
-
+        [PropertyChangeBinding(nameof(CustomLabel.FontFamily))]
         public string FontFamily
         {
             get => Model.FontFamily;
-            set => SetModelProperty(nameof(Model.FontFamily), value);
+            set => SetProperty(nameof(Model.FontFamily), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.FontSize))]
         public float FontSize
         {
             get => Model.FontSize;
-            set => SetModelProperty(nameof(Model.FontSize), value);
+            set => SetProperty(nameof(Model.FontSize), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.Color))]
         public Color Color
         {
             get => Model.Color;
-            set => SetModelProperty(nameof(Model.Color), value);
+            set => SetProperty(nameof(Model.Color), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.FormatString))]
         public string FormatString
         {
             get => Model.FormatString;
-            set => SetModelProperty(nameof(Model.FormatString), value);
+            set => SetProperty(nameof(Model.FormatString), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.Alignment))]
         public CustomLabel.TextAlignment TextAlignment
         {
             get => Model.Alignment;
-            set => SetModelProperty(nameof(Model.Alignment), value);
+            set => SetProperty(nameof(Model.Alignment), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.IsVisible))]
+        public bool IsVisible
+        {
+            get => Model.IsVisible;
+            set => SetProperty(nameof(Model.IsVisible), value);
+        }
+
+        [PropertyChangeBinding(nameof(CustomLabel.Width))]
+        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
-            set => SetModelProperty(nameof(Model.Width), value, alsoNotify: nameof(Size));
+            set => SetProperty(nameof(Model.Width), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.Height))]
+        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
-            set => SetModelProperty(nameof(Model.Height), value, alsoNotify: nameof(Size));
+            set => SetProperty(nameof(Model.Height), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.XPosition))]
+        [AlsoNotify(nameof(Location))]
         public int XPosition
         {
             get => Model.XPosition;
-            set => SetModelProperty(nameof(Model.XPosition), value, alsoNotify: nameof(Location));
+            set => SetProperty(nameof(Model.XPosition), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.YPosition))]
+        [AlsoNotify(nameof(Location))]
         public int YPosition
         {
             get => Model.YPosition;
-            set => SetModelProperty(nameof(Model.YPosition), value, alsoNotify: nameof(Location));
-        }
-
-        public int ScrollSpeed
-        {
-            get => Model.ScrollSpeed;
-            set => SetModelProperty(nameof(Model.ScrollSpeed), value);
+            set => SetProperty(nameof(Model.YPosition), value);
         }
 
         public Point Location => new Point(XPosition, YPosition);
