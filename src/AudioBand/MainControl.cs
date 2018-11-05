@@ -1,8 +1,6 @@
 ﻿using AudioBand.AudioSource;
+using AudioBand.Models;
 using AudioBand.Settings;
-using AudioBand.ViewModels;
-using AudioBand.Views.Winforms;
-using AudioBand.Views.Wpf;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
 using CSDeskBand.Win;
@@ -11,7 +9,6 @@ using NLog.Config;
 using NLog.Targets;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -19,7 +16,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
-using AudioBand.Models;
 using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
@@ -34,11 +30,9 @@ namespace AudioBand
         private readonly AudioSourceManager _audioSourceManager = new AudioSourceManager();
         private readonly SettingsManager _settingsManager = new SettingsManager();
 
-        private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
-        private int _nextTag = 0;
 
         #region Models
 
@@ -90,17 +84,13 @@ namespace AudioBand
         public MainControl()
         {
             InitializeComponent();
+            CustomInitializeComponent();
 
             try
             {
-                _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
                 Options.ContextMenuItems = BuildContextMenu();
-                CreateSettingsWindow();
+                ResizeDeskband();
 
-                Options.HeightIncrement = 0;
-                UpdateSize();
-
-                LoadLabelsFromSettings();
                 SelectAudioSourceFromSettings();
                 ResetState();
             }
@@ -121,21 +111,6 @@ namespace AudioBand
             }
         }
 
-        private void AlbumArtOnMouseLeave(object o, EventArgs args)
-        {
-            AlbumArtPopup.Hide(this);
-        }
-
-        private void AlbumArtOnMouseHover(object o, EventArgs args)
-        {
-            AlbumArtPopup.ShowWithoutRequireFocus("Album Art", this, TaskbarInfo);
-        }
-
-        private void AudioSourceManagerOnAudioSourcesChanged(object sender, EventArgs eventArgs)
-        {
-            BeginInvoke(new Action(() => { Options.ContextMenuItems = BuildContextMenu(); }));
-        }
-
         private List<DeskBandMenuItem> BuildContextMenu()
         {
             var pluginList = _audioSourceManager.AudioSources.Select(audioSource =>
@@ -150,35 +125,6 @@ namespace AudioBand
             settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
 
             return new List<DeskBandMenuItem>{ settingsMenuItem, _pluginSubMenu };
-        }
-
-        private void SettingsMenuItemOnClicked(object sender, EventArgs eventArgs)
-        {
-            _settingsWindow.Show();
-        }
-
-        private async void AudioSourceMenuItemOnClicked(object sender, EventArgs eventArgs)
-        {
-            var item = (DeskBandMenuAction)sender;
-            if (item.Checked)
-            {
-                item.Checked = false;
-                await UnsubscribeToAudioSource(_currentAudioSource);
-                _currentAudioSource = null;
-                return;
-            }
-            // Uncheck old item and unsubscribe from the current source
-            var lastItemChecked = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.Name);
-            if (lastItemChecked != null)
-            {
-                lastItemChecked.Checked = false;
-            }
-
-            await UnsubscribeToAudioSource(_currentAudioSource);
-
-            item.Checked = true;
-            _currentAudioSource = _audioSourceManager.AudioSources.First(c => c.Name == item.Text);
-            await SubscribeToAudioSource(_currentAudioSource);
         }
 
         private async Task SubscribeToAudioSource(IAudioSource source)
@@ -215,60 +161,10 @@ namespace AudioBand
             await source.DeactivateAsync();
 
             _settingsManager.AudioSource = null;
+            _currentAudioSource = null;
         }
 
-        private void AudioSourceOnTrackProgressChanged(object o, TimeSpan progress)
-        {
-            BeginInvoke(new Action(() => { _trackModel.TrackProgress = progress;}));
-        }
-
-        private void AudioSourceOnTrackPaused(object o, EventArgs args)
-        {
-            _logger.Debug("State set to paused");
-
-            BeginInvoke(new Action(() =>_trackModel.IsPlaying = false));
-        }
-
-        private void AudioSourceOnTrackPlaying(object o, EventArgs args)
-        {
-            _logger.Debug("State set to playing");
-
-            BeginInvoke(new Action(() => _trackModel.IsPlaying = true));
-        }
-
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
-        {
-            if (trackInfoChangedEventArgs == null)
-            {
-                _logger.Error("TrackInforChanged event arg is empty");
-                return;
-            }
-
-            if (trackInfoChangedEventArgs.TrackName == null)
-            {
-                trackInfoChangedEventArgs.TrackName = "";
-                _logger.Warn("Track name is null");
-            }
-
-            if (trackInfoChangedEventArgs.Artist == null)
-            {
-                trackInfoChangedEventArgs.Artist = "";
-                _logger.Warn("Artist is null");
-            }
-
-            _logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
-
-            BeginInvoke(new Action(() =>
-            {
-                _trackModel.AlbumArt = trackInfoChangedEventArgs.AlbumArt;
-                _trackModel.Artist = trackInfoChangedEventArgs.Artist;
-                _trackModel.TrackName = trackInfoChangedEventArgs.TrackName;
-                _trackModel.TrackLength = trackInfoChangedEventArgs.TrackLength;
-                _trackModel.AlbumName = trackInfoChangedEventArgs.Album;
-            }));
-        }
-
-        private void UpdateSize()
+        private void ResizeDeskband()
         {
             var audioBandSize = new Size(_audioBandModel.Width, _audioBandModel.Height);
             Options.MinHorizontalSize = audioBandSize;
@@ -279,44 +175,17 @@ namespace AudioBand
             Size = audioBandSize;
         }
 
-        private async void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
-        {
-            if (_trackModel.IsPlaying)
-            {
-                await (_currentAudioSource?.PauseTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
-            }
-            else
-            {
-                await (_currentAudioSource?.PlayTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
-            }
-        }
-
-        private async void PreviousButtonOnClick(object sender, EventArgs eventArgs)
-        {
-            await (_currentAudioSource?.PreviousTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
-        }
-
-        private async void NextButtonOnClick(object sender, EventArgs eventArgs)
-        {
-            await (_currentAudioSource?.NextTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
-        }
-
         protected override void OnClose()
         {
             base.OnClose();
             _settingsManager.Save();
         }
 
-
-        private void CreateSettingsWindow()
+        private void OpenSettingsWindow()
         {
-            _settingsWindow = new SettingsWindow();
-            ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
-        }
-
-        private void SettingsWindowOnClosed(object sender, EventArgs eventArgs)
-        {
-            CreateSettingsWindow();
+            var window = new SettingsWindow();
+            ElementHost.EnableModelessKeyboardInterop(window);
+            window.Show();
         }
 
         private void ResetState()
@@ -339,10 +208,6 @@ namespace AudioBand
             {
                 AudioSourceMenuItemOnClicked(menuItem, EventArgs.Empty);
             }
-        }
-
-        private void LoadLabelsFromSettings()
-        {
         }
     }
 }
