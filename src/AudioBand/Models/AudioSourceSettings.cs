@@ -5,7 +5,7 @@ namespace AudioBand.Models
     /// <summary>
     /// Collection of settings for a specific audio source
     /// </summary>
-    internal class AudioSourceSettingsCollection
+    internal class AudioSourceSettings
     {
         /// <summary>
         /// Name of the audio source

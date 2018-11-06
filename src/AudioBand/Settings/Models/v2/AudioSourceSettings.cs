@@ -2,7 +2,7 @@
 
 namespace AudioBand.Settings.Models.v2
 {
-    internal class AudioSourceSettingsCollection
+    internal class AudioSourceSettings
     {
         public string AudioSourceName { get; set; }
         public List<AudioSourceSetting> Settings { get; set; }

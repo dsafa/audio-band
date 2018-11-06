@@ -39,21 +39,21 @@ namespace AudioBand.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public AudioSourceSettingsCollectionVM(List<IAudioSource> audioSources, List<AudioSourceSettingsCollection> audioSourceSettings)
+        public AudioSourceSettingsCollectionVM(List<IAudioSource> audioSources, List<AudioSourceSettings> audioSourceSettings)
         {
             CreateSettings(audioSources, audioSourceSettings);
         }
 
-        public List<AudioSourceSettingsCollection> ToModel()
+        public List<AudioSourceSettings> ToModel()
         {
-            return Settings.Select(s => new AudioSourceSettingsCollection
+            return Settings.Select(s => new AudioSourceSettings
                 {
                     AudioSourceName = s.Key,
                     Settings = s.Value.Values.Select(x => x.ToModel()).ToList()
                 }).ToList();
         }
 
-        private void CreateSettings(List<IAudioSource> audioSources, List<AudioSourceSettingsCollection> savedSettings)
+        private void CreateSettings(List<IAudioSource> audioSources, List<AudioSourceSettings> savedSettings)
         {
             foreach (var audioSource in audioSources)
             {
@@ -70,7 +70,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Look for properties marked with the setting attribute
         /// </summary>
-        private Dictionary<string, AudioSourceSettingViewModel> GetExportedSettings(IAudioSource audioSource, List<AudioSourceSettingsCollection> savedSettings)
+        private Dictionary<string, AudioSourceSettingViewModel> GetExportedSettings(IAudioSource audioSource, List<AudioSourceSettings> savedSettings)
         {
             var saved = savedSettings.ToDictionary(s => s.AudioSourceName, s => s.Settings.ToDictionary(s1 => s1.Name, s1 => s1));
 

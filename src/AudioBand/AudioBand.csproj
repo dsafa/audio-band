@@ -32,6 +32,9 @@
     <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
@@ -117,11 +120,26 @@
     <Compile Include="Models\ProgressBar.cs" />
     <Compile Include="Models\CustomLabel.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
+    <Compile Include="Settings\Migrations\Migration.cs" />
+    <Compile Include="Settings\Migrations\V1ToV2.cs" />
+    <Compile Include="Settings\Models\ISettings.cs" />
+    <Compile Include="Settings\Models\v1\AlbumArtAppearance.cs" />
+    <Compile Include="Settings\Models\v1\AlbumArtPopupAppearance.cs" />
+    <Compile Include="Settings\Models\v1\AudioBandAppearance.cs" />
+    <Compile Include="Settings\Models\v1\AudioBandSettings.cs" />
+    <Compile Include="Settings\Models\v1\AudioSourceSetting.cs" />
+    <Compile Include="Settings\Models\v1\AudioSourceSettingsCollection.cs" />
+    <Compile Include="Settings\Models\v1\NextSongButtonAppearance.cs" />
+    <Compile Include="Settings\Models\v1\PlayPauseButtonAppearance.cs" />
+    <Compile Include="Settings\Models\v1\PreviousSongButtonAppearance.cs" />
+    <Compile Include="Settings\Models\v1\ProgressBarAppearance.cs" />
+    <Compile Include="Settings\Models\v1\TextAppearance.cs" />
     <Compile Include="Settings\Models\v2\AlbumArtPopupSettings.cs" />
     <Compile Include="Settings\Models\v2\AlbumArtSettings.cs" />
     <Compile Include="Settings\Models\v2\AudioBandSettings.cs" />
     <Compile Include="Settings\Models\v2\AudioSourceSetting.cs" />
-    <Compile Include="Settings\Models\v2\AudioSourceSettingsCollection.cs" />
+    <Compile Include="Settings\Models\v2\AudioSourceSettings.cs" />
     <Compile Include="Settings\Models\v2\CustomLabelSettings.cs" />
     <Compile Include="Settings\Models\v2\NextButtonSettings.cs" />
     <Compile Include="Settings\Models\v2\PlayPauseButtonSettings.cs" />
@@ -137,7 +155,7 @@
     </Compile>
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
-    <Compile Include="Models\AudioSourceSettingsCollection.cs" />
+    <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
     <Compile Include="Views\Wpf\ImagePicker.xaml.cs">
