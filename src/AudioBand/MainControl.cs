@@ -40,7 +40,7 @@ namespace AudioBand
         private AlbumArt _albumArtModel;
         private AlbumArtPopup _albumArtPopupModel;
         private Models.AudioBand _audioBandModel;
-        private AudioSourceSettingsCollection _audioSourceSettingsModel;
+        private AudioSourceSettings _audioSourceSettingsModel;
         private CustomLabelsCollection _customLabelsModel;
         private NextButton _nextButtonModel;
         private PlayPauseButton _playPauseButtonModel;

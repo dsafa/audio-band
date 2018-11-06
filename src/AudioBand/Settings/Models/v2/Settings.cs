@@ -2,7 +2,7 @@
 
 namespace AudioBand.Settings.Models.v2
 {
-    internal class Settings
+    internal class Settings : ISettings
     {
         public string Version { get; set; } = "2";
         public string AudioSource { get; set; }
@@ -14,6 +14,6 @@ namespace AudioBand.Settings.Models.v2
         public AlbumArtSettings AlbumArtSettings { get; set; }
         public AlbumArtPopupSettings AlbumArtPopupSettings { get; set; }
         public List<CustomLabelSettings> CustomLabelSettings { get; set; }
-        public List<AudioSourceSettingsCollection> AudioSourceSettings { get; set; }
+        public List<AudioSourceSettings> AudioSourceSettings { get; set; }
     }
 }
