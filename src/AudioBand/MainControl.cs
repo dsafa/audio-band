@@ -49,18 +49,6 @@ namespace AudioBand
 
         #endregion
 
-        #region Album art tooltip bindings
-
-        // Tooltip will use bindings from this control
-        public bool AlbumArtPopupIsVisible { get; set; }
-        public int AlbumArtPopupWidth { get; set; }
-        public int AlbumArtPopupHeight { get; set; }
-        public int AlbumArtPopupX { get; set; }
-        public int AlbumArtPopupY { get; set; }
-        public Image AlbumArtPopupImage { get; set; }
-
-        #endregion
-
         static MainControl()
         {
             var fileTarget = new FileTarget
@@ -87,8 +75,6 @@ namespace AudioBand
             try
             {
                 InitializeComponent();
-                CustomInitializeComponent();
-
                 Options.ContextMenuItems = BuildContextMenu();
 
                 InitializeModels();
