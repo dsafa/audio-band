@@ -8,15 +8,21 @@ namespace AudioBand.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, newValue))
             {
-                return;
+                return false;
             }
 
             field = newValue;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            RaisePropertyChanged(propertyName);
+            return true;
         }
     }
 }

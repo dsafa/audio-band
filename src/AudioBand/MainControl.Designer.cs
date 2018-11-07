@@ -166,7 +166,6 @@ namespace AudioBand
             // 
             // AlbumArtPopup
             // 
-            this.AlbumArtPopup.Active = false;
             this.AlbumArtPopup.AutomaticDelay = 200;
             this.AlbumArtPopup.OwnerDraw = true;
             this.AlbumArtPopup.ShowAlways = true;

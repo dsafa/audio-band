@@ -64,7 +64,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public Image AlbumArt => (_track.AlbumArt ?? _track.PlaceholderImage).Resize(Width, Height);
+        public Image AlbumArt => _track.AlbumArt?.Resize(Width, Height);
 
         public Point Location => new Point(Model.XPosition, Model.YPosition);
 
@@ -74,11 +74,12 @@ namespace AudioBand.ViewModels
         {
             _track = track;
             SetupModelBindings(_track);
+            LoadPlaceholder();
         }
 
         private void LoadPlaceholder()
         {
-            _track.PlaceholderImage = LoadImage(Model.PlaceholderPath, DefaultAlbumArtPlaceholderSvg.ToBitmap());
+            _track.UpdatePlaceholder(LoadImage(Model.PlaceholderPath, DefaultAlbumArtPlaceholderSvg.ToBitmap()));
         }
     }
 }
