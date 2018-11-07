@@ -44,7 +44,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public Image AlbumArt => (_track.AlbumArt ?? _track.PlaceholderImage).Resize(Width, Height);
+        public Image AlbumArt => _track.AlbumArt?.Resize(Width, Height);
 
         public AlbumArtPopupVM(AlbumArtPopup model, Track track) : base(model)
         {

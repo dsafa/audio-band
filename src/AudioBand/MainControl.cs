@@ -16,7 +16,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
-using ProgressBar = AudioBand.Models.ProgressBar;
 using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
@@ -66,7 +65,8 @@ namespace AudioBand
         {
             var fileTarget = new FileTarget
             {
-                DeleteOldFileOnStartup = true,
+                MaxArchiveFiles = 3,
+                ArchiveOldFileOnStartup = true,
                 FileName = "${environment:variable=TEMP}/AudioBand.log",
                 ConcurrentWrites = true
             };
@@ -88,6 +88,7 @@ namespace AudioBand
             {
                 InitializeComponent();
                 CustomInitializeComponent();
+
                 Options.ContextMenuItems = BuildContextMenu();
 
                 InitializeModels();
@@ -100,7 +101,7 @@ namespace AudioBand
                 throw;
             }
         }
-
+    
         private void InitializeModels()
         {
             _albumArtModel = _appSettings.AlbumArt;
@@ -126,6 +127,7 @@ namespace AudioBand
             var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
 
             InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar);
+
             _settingsWindow = new SettingsWindow();
             ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
         }

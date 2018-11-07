@@ -17,11 +17,6 @@ namespace AudioBand.Views.Winforms
 
         public AlbumArtTooltip()
         {
-            OwnerDraw = true;
-            IsBalloon = false;
-            ShowAlways = true;
-            AutomaticDelay = 200;
-
             Popup += OnPopup;
             Draw += OnDraw;
         }
@@ -35,6 +30,10 @@ namespace AudioBand.Views.Winforms
 
             // since tooltips dont support binding, we will bind to the main control and just read the properties here
             _albumArt = control.DataBindings[nameof(MainControl.AlbumArtPopupImage)].As<Image>();
+            if (_albumArt == null)
+            {
+                return;
+            }
             _size = new Size(control.DataBindings[nameof(MainControl.AlbumArtPopupWidth)].As<int>(), control.DataBindings[nameof(MainControl.AlbumArtPopupHeight)].As<int>());
 
             var margin = control.DataBindings[nameof(MainControl.AlbumArtPopupY)].As<int>();
