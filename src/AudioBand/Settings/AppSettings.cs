@@ -1,14 +1,11 @@
-﻿using Nett;
+﻿using AudioBand.Models;
+using AudioBand.Settings.Migrations;
+using Nett;
 using NLog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using AudioBand.Models;
-using AudioBand.Settings.Migrations;
-using AudioBand.Settings.Models;
-using AudioBand.Settings.Models.v1;
-using AlbumArtPopup = AudioBand.Models.AlbumArtPopup;
 
 namespace AudioBand.Settings
 {
@@ -27,20 +24,28 @@ namespace AudioBand.Settings
         private Models.v2.Settings _settings;
 
         public string Version => _settings.Version;
+
         public string AudioSource
         {
             get => _settings.AudioSource;
             set => _settings.AudioSource = value;
         }
 
-        public AlbumArtPopup AlbumArtPopup { get; } = new AlbumArtPopup();
-        public AlbumArt AlbumArt { get; } = new AlbumArt();
-        public AudioBand.Models.AudioBand AudioBand { get; } = new AudioBand.Models.AudioBand();
-        public CustomLabelsCollection CustomLabels { get; } = new CustomLabelsCollection();
-        public NextButton NextButton { get; } = new NextButton();
-        public PreviousButton PreviousButton { get; } = new PreviousButton();
-        public PlayPauseButton PlayPauseButton { get; } = new PlayPauseButton();
-        public ProgressBar ProgressBar { get; } = new ProgressBar();
+        public AlbumArtPopup AlbumArtPopup { get; private set; }
+
+        public AlbumArt AlbumArt { get; private set; }
+
+        public AudioBand.Models.AudioBand AudioBand { get; private set; }
+
+        public List<CustomLabel> CustomLabels { get; private set; }
+
+        public NextButton NextButton { get; private set; }
+
+        public PreviousButton PreviousButton { get; private set; }
+
+        public PlayPauseButton PlayPauseButton { get; private set; }
+
+        public ProgressBar ProgressBar { get; private set; }
 
         public AppSettings()
         {
@@ -86,10 +91,32 @@ namespace AudioBand.Settings
                 var file = Toml.ReadFile(SettingsFilePath, _tomlSettings);
                 var version = file["Version"].Get<string>();
                 _settings = Migration.MigrateSettings<Settings.Models.v2.Settings>(file.Get(SettingsTable[version]), version, CurrentVersion);
+
+                AlbumArtPopup = ToModel<AlbumArtPopup>(_settings.AlbumArtPopupSettings);
+                AlbumArt = ToModel<AlbumArt>(_settings.AlbumArtSettings);
+                AudioBand = ToModel<AudioBand.Models.AudioBand>(_settings.AudioBandSettings);
+                CustomLabels = ToModel<List<CustomLabel>>(_settings.CustomLabelSettings);
+                NextButton = ToModel<NextButton>(_settings.NextButtonSettings);
+                PreviousButton = ToModel<PreviousButton>(_settings.PreviousButtonSettings);
+                PlayPauseButton = ToModel<PlayPauseButton>(_settings.PlayPauseButtonSettings);
+                ProgressBar = ToModel<ProgressBar>(_settings.ProgressBarSettings);
             }
             catch (Exception e)
             {
                 _logger.Error("Error loading settings: " + e);
+                throw;
+            }
+        }
+
+        private TModel ToModel<TModel>(object setting)
+        {
+            try
+            {
+                return SettingsMapper.ToModel<TModel>(setting);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Cannot convert setting {setting} to model {typeof(TModel)}");
                 throw;
             }
         }

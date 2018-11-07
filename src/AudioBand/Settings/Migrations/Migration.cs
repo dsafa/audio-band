@@ -19,7 +19,6 @@ namespace AudioBand.Settings.Migrations
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public static TNew MigrateSettings<TNew>(object oldSettings, string oldVersion, string newVersion)
-            where TNew : ISettings
         {
             if (oldVersion == newVersion)
             {

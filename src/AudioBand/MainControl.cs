@@ -41,7 +41,7 @@ namespace AudioBand
         private AlbumArtPopup _albumArtPopupModel;
         private Models.AudioBand _audioBandModel;
         private AudioSourceSettings _audioSourceSettingsModel;
-        private CustomLabelsCollection _customLabelsModel;
+        private List<CustomLabel> _customLabelsModel;
         private NextButton _nextButtonModel;
         private PlayPauseButton _playPauseButtonModel;
         private PreviousButton _previousButtonModel;
@@ -119,7 +119,7 @@ namespace AudioBand
             var albumArt = new AlbumArtVM(_albumArtModel, _trackModel);
             var albumArtPopup = new AlbumArtPopupVM(_albumArtPopupModel, _trackModel);
             var audioBand = new AudioBandVM(_audioBandModel);
-            var customLabels = new CustomLabelsCollectionVM(_customLabelsModel, this);
+            var customLabels = new CustomLabelsVM(_customLabelsModel, this);
             var nextButton = new NextButtonVM(_nextButtonModel);
             var playPauseButton = new PlayPauseButtonVM(_playPauseButtonModel, _trackModel);
             var prevButton = new PreviousButtonVM(_previousButtonModel);

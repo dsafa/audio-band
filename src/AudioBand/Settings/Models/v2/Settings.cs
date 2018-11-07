@@ -2,7 +2,7 @@
 
 namespace AudioBand.Settings.Models.v2
 {
-    internal class Settings : ISettings
+    internal class Settings
     {
         public string Version { get; set; } = "2";
         public string AudioSource { get; set; }
