@@ -86,6 +86,13 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.YPosition), value);
         }
 
+        [PropertyChangeBinding(nameof(CustomLabel.ScrollSpeed))]
+        public int ScrollSpeed
+        {
+            get => Model.ScrollSpeed;
+            set => SetProperty(nameof(Model.ScrollSpeed), value);
+        }
+
         public Point Location => new Point(XPosition, YPosition);
 
         public Size Size => new Size(Width, Height);
