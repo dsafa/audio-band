@@ -43,6 +43,7 @@ namespace AudioBand
             this.ProgressBarVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.AlbumArtPopup = new AudioBand.Views.Winforms.AlbumArtTooltip();
             this.AudioBandVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.AlbumArtPopupVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreviousButtonVMBindingSource)).BeginInit();
@@ -50,6 +51,7 @@ namespace AudioBand
             ((System.ComponentModel.ISupportInitialize)(this.NextButtonVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ProgressBarVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AudioBandVMBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AlbumArtPopupVMBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // AlbumArtControl
@@ -166,13 +168,26 @@ namespace AudioBand
             // 
             // AlbumArtPopup
             // 
+            this.AlbumArtPopup.AlbumArt = null;
             this.AlbumArtPopup.AutomaticDelay = 200;
+            this.AlbumArtPopup.DataBindings.Add(new System.Windows.Forms.Binding("Active", this.AlbumArtPopupVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AlbumArtPopup.DataBindings.Add(new System.Windows.Forms.Binding("AlbumArt", this.AlbumArtPopupVMBindingSource, "AlbumArt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AlbumArtPopup.DataBindings.Add(new System.Windows.Forms.Binding("Margin", this.AlbumArtPopupVMBindingSource, "Margin", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AlbumArtPopup.DataBindings.Add(new System.Windows.Forms.Binding("Size", this.AlbumArtPopupVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AlbumArtPopup.DataBindings.Add(new System.Windows.Forms.Binding("XPosition", this.AlbumArtPopupVMBindingSource, "XPosition", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AlbumArtPopup.Margin = 0;
             this.AlbumArtPopup.OwnerDraw = true;
             this.AlbumArtPopup.ShowAlways = true;
+            this.AlbumArtPopup.Size = new System.Drawing.Size(0, 0);
+            this.AlbumArtPopup.XPosition = 0;
             // 
             // AudioBandVMBindingSource
             // 
             this.AudioBandVMBindingSource.DataSource = typeof(AudioBand.ViewModels.AudioBandVM);
+            // 
+            // AlbumArtPopupVMBindingSource
+            // 
+            this.AlbumArtPopupVMBindingSource.DataSource = typeof(AudioBand.ViewModels.AlbumArtPopupVM);
             // 
             // MainControl
             // 
@@ -198,6 +213,7 @@ namespace AudioBand
             ((System.ComponentModel.ISupportInitialize)(this.NextButtonVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ProgressBarVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AudioBandVMBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AlbumArtPopupVMBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -215,5 +231,6 @@ namespace AudioBand
         private System.Windows.Forms.BindingSource NextButtonVMBindingSource;
         private System.Windows.Forms.BindingSource PlayPauseButtonVMBindingSource;
         private System.Windows.Forms.BindingSource PreviousButtonVMBindingSource;
+        private System.Windows.Forms.BindingSource AlbumArtPopupVMBindingSource;
     }
 }

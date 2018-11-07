@@ -16,6 +16,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.Width))]
+        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
@@ -23,6 +24,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.Height))]
+        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
@@ -45,6 +47,8 @@ namespace AudioBand.ViewModels
 
         [PropertyChangeBinding(nameof(Track.AlbumArt))]
         public Image AlbumArt => _track.AlbumArt?.Resize(Width, Height);
+
+        public Size Size => new Size(Width, Height);
 
         public AlbumArtPopupVM(AlbumArtPopup model, Track track) : base(model)
         {
