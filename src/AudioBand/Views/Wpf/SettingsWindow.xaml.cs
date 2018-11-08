@@ -24,7 +24,6 @@ namespace AudioBand.Views.Wpf
 
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
         public ObservableCollection<CustomLabelVM> TextAppearancesCollection { get; set; }
-        public About About { get; } = new About();
         public AudioSourceSettingsCollectionVM AudioSourceSettingsViewModel { get; }
 
         private List<CustomLabelVM> _deletedTextAppearances;
@@ -81,16 +80,6 @@ namespace AudioBand.Views.Wpf
             Close();
         }
 
-        private void ShowAboutOnExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            AboutDialog.IsOpen = true;
-        }
-
-        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(e.Uri.AbsoluteUri);
-        }
-
         private async void ResetSettingOnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var res = await ShowConfirmationDialog("Reset Setting", "Are you sure you want to reset this setting to the default values?");
@@ -115,11 +104,5 @@ namespace AudioBand.Views.Wpf
 
             return await this.ShowMessageAsync(title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
         }
-    }
-
-    internal class About
-    {
-        public string Version { get; } = "AudioBand " + typeof(SettingsWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-        public string ProjectLink { get; } = @"https://github.com/dsafa/audio-band";
     }
 }
