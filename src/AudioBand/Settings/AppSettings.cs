@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using AudioBand.Settings.Models;
 
 namespace AudioBand.Settings
 {
@@ -22,7 +21,7 @@ namespace AudioBand.Settings
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly TomlSettings _tomlSettings;
-        private ISettings _settings;
+        private Models.v2.Settings _settings;
 
         public string Version => _settings.Version;
 
@@ -64,7 +63,6 @@ namespace AudioBand.Settings
 
             if (!File.Exists(SettingsFilePath))
             {
-                throw new NotImplementedException("Create default settings");
                 _settings = new Models.v2.Settings();
                 Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
             }
@@ -94,18 +92,31 @@ namespace AudioBand.Settings
                 var version = file["Version"].Get<string>();
                 _settings = Migration.MigrateSettings<Settings.Models.v2.Settings>(file.Get(SettingsTable[version]), version, CurrentVersion);
 
-                AlbumArtPopup = _settings.GetModel<AlbumArtPopup>();
-                AlbumArt = _settings.GetModel<AlbumArt>();
-                AudioBand = _settings.GetModel<AudioBand.Models.AudioBand>();
-                CustomLabels = _settings.GetModel<List<CustomLabel>>();
-                NextButton = _settings.GetModel<NextButton>();
-                PreviousButton = _settings.GetModel<PreviousButton>();
-                PlayPauseButton = _settings.GetModel<PlayPauseButton>();
-                ProgressBar = _settings.GetModel<ProgressBar>();
+                AlbumArtPopup = ToModel<AlbumArtPopup>(_settings.AlbumArtPopupSettings);
+                AlbumArt = ToModel<AlbumArt>(_settings.AlbumArtSettings);
+                AudioBand = ToModel<AudioBand.Models.AudioBand>(_settings.AudioBandSettings);
+                CustomLabels = ToModel<List<CustomLabel>>(_settings.CustomLabelSettings);
+                NextButton = ToModel<NextButton>(_settings.NextButtonSettings);
+                PreviousButton = ToModel<PreviousButton>(_settings.PreviousButtonSettings);
+                PlayPauseButton = ToModel<PlayPauseButton>(_settings.PlayPauseButtonSettings);
+                ProgressBar = ToModel<ProgressBar>(_settings.ProgressBarSettings);
             }
             catch (Exception e)
             {
                 _logger.Error("Error loading settings: " + e);
+                throw;
+            }
+        }
+
+        private TModel ToModel<TModel>(object setting)
+        {
+            try
+            {
+                return SettingsMapper.ToModel<TModel>(setting);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Cannot convert setting {setting} to model {typeof(TModel)}");
                 throw;
             }
         }
