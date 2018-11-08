@@ -3,7 +3,7 @@
     /// <summary>
     /// A key / value pair that represents a single setting for an audio source
     /// </summary>
-    internal class AudioSourceSetting
+    internal class AudioSourceSetting : ModelBase
     {
         /// <summary>
         /// Name of the setting

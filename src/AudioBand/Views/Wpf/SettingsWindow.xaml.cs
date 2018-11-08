@@ -21,8 +21,6 @@ namespace AudioBand.Views.Wpf
     internal partial class SettingsWindow
     {
         internal event EventHandler Saved;
-        internal event EventHandler<TextLabelChangedEventArgs> NewLabelCreated;
-        internal event EventHandler<TextLabelChangedEventArgs> LabelDeleted;
 
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
         public ObservableCollection<CustomLabelVM> TextAppearancesCollection { get; set; }
@@ -105,11 +103,6 @@ namespace AudioBand.Views.Wpf
             resettableObj.Reset();
         }
 
-        private void AlwaysCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
         private async Task<MessageDialogResult> ShowConfirmationDialog(string title, string message)
         {
             var dialogSettings = new MetroDialogSettings
@@ -121,16 +114,6 @@ namespace AudioBand.Views.Wpf
             };
 
             return await this.ShowMessageAsync(title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
-        }
-    }
-
-    internal class TextLabelChangedEventArgs : EventArgs
-    {
-        public CustomLabelVM LabelVm { get; }
-
-        public TextLabelChangedEventArgs(CustomLabelVM labelVm)
-        {
-            LabelVm = labelVm;
         }
     }
 
