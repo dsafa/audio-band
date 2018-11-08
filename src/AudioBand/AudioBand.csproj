@@ -122,6 +122,7 @@
     <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
     <Compile Include="Settings\Migrations\Migration.cs" />
     <Compile Include="Settings\Migrations\V1ToV2.cs" />
+    <Compile Include="Settings\Models\ISettings.cs" />
     <Compile Include="Settings\Models\v1\AlbumArtAppearance.cs" />
     <Compile Include="Settings\Models\v1\AlbumArtPopupAppearance.cs" />
     <Compile Include="Settings\Models\v1\AudioBandAppearance.cs" />
@@ -143,7 +144,6 @@
     <Compile Include="Settings\Models\v2\PlayPauseButtonSettings.cs" />
     <Compile Include="Settings\Models\v2\PreviousButtonSettings.cs" />
     <Compile Include="Settings\Models\v2\ProgressBarSettings.cs" />
-    <Compile Include="Settings\SettingsMapper.cs" />
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
