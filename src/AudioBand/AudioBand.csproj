@@ -146,6 +146,7 @@
     <Compile Include="Settings\Models\v2\ProgressBarSettings.cs" />
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
+    <Compile Include="ViewModels\HelpVM.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
     <Compile Include="ViewModels\PreviousButtonVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -157,6 +158,9 @@
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
+    <Compile Include="Views\Wpf\HelpFlyout.xaml.cs">
+      <DependentUpon>HelpFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Wpf\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
@@ -241,6 +245,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Wpf\HelpFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Wpf\ImagePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

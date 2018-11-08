@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using AudioBand.Models;
 using AutoMapper;
-using Nett;
 
 namespace AudioBand.Settings.Models.v2
 {
@@ -46,7 +45,7 @@ namespace AudioBand.Settings.Models.v2
 
             if (type == typeof(AlbumArt)) source = AlbumArtSettings;
             else if (type == typeof(AlbumArtPopup)) source = AlbumArtPopupSettings;
-            else if (type == typeof(AudioBandSettings)) source = AudioBandSettings;
+            else if (type == typeof(AudioBand.Models.AudioBand)) source = AudioBandSettings;
             else if (type == typeof(AudioBand.Models.AudioSourceSettings)) source = AudioSourceSettings;
             else if (type == typeof(CustomLabel)) source = CustomLabelSettings;
             else if (type == typeof(NextButton)) source = NextButtonSettings;
