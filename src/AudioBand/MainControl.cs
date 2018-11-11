@@ -114,7 +114,19 @@ namespace AudioBand
 
             InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar);
 
-            _settingsWindow = new SettingsWindow();
+            var vm = new SettingsWindowVM
+            {
+                AlbumArtPopupVM = albumArtPopup,
+                ProgressBarVM = progressBar,
+                PreviousButtonVM = prevButton,
+                PlayPauseButtonVM = playPauseButton,
+                NextButtonVM = nextButton,
+                AudioBandVM = audioBand,
+                HelpVM = new HelpVM(),
+                AlbumArtVM = albumArt,
+                CustomLabelsVM = customLabels,
+            };
+            _settingsWindow = new SettingsWindow(vm);
             ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
         }
 

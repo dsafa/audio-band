@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="AudioBand.Views.Wpf.AudioSourceSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
+             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance viewmodels:AudioSourceSettingViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="{Binding Name}"/>
+        <ContentControl Grid.Column="1" Content="{Binding Value}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type system:String}">
+                    <TextBox
+                        Text="{Binding Path=DataContext.Value, 
+                                RelativeSource={RelativeSource AncestorType=ContentControl},
+                                Mode=TwoWay, ValidatesOnExceptions=True}">
+                    </TextBox>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </Grid>
+</UserControl>

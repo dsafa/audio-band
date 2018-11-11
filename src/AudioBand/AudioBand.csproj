@@ -5,6 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B69832AD-8373-47AC-A52A-183238903896}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>AudioBand</RootNamespace>
     <AssemblyName>AudioBand</AssemblyName>
@@ -149,6 +150,7 @@
     <Compile Include="ViewModels\HelpVM.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
     <Compile Include="ViewModels\PreviousButtonVM.cs" />
+    <Compile Include="ViewModels\SettingsWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
@@ -158,17 +160,39 @@
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
+    <Compile Include="Views\Wpf\AlbumArtSettingsView.xaml.cs">
+      <DependentUpon>AlbumArtSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\AlbumPopupSettingsView.xaml.cs">
+      <DependentUpon>AlbumPopupSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\AudioSourceSettingsView.xaml.cs">
+      <DependentUpon>AudioSourceSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\Behaviours\TreeSelectedTagBehaviour.cs" />
+    <Compile Include="Views\Wpf\CustomLabelSettingsView.xaml.cs">
+      <DependentUpon>CustomLabelSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\GeneralSettingsView.xaml.cs">
+      <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Wpf\HelpFlyout.xaml.cs">
       <DependentUpon>HelpFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Wpf\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Wpf\AttachedProperties.cs" />
-    <Compile Include="Views\Wpf\ResetButton.xaml.cs">
-      <DependentUpon>ResetButton.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Views\Wpf\Behaviours\NumericInput.cs" />
     <Compile Include="Commands\SettingsCommands.cs" />
+    <Compile Include="Views\Wpf\PlaybackButtonSettingsView.xaml.cs">
+      <DependentUpon>PlaybackButtonSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\PlayPauseButtonSettingsView.xaml.cs">
+      <DependentUpon>PlayPauseButtonSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\ProgressBarSettingsView.xaml.cs">
+      <DependentUpon>ProgressBarSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -245,6 +269,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Wpf\AlbumArtSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\AlbumPopupSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\AudioSourceSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\CustomLabelSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\GeneralSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Wpf\HelpFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -253,7 +297,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Wpf\ResetButton.xaml">
+    <Page Include="Views\Wpf\PlaybackButtonSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\PlayPauseButtonSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\ProgressBarSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\Resources\Strings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -261,7 +317,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Wpf\Style.xaml">
+    <Page Include="Views\Wpf\Resources\Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
