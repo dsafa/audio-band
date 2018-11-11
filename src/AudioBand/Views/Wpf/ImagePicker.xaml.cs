@@ -24,7 +24,7 @@ namespace AudioBand.Views.Wpf
         public ImagePicker()
         {
             InitializeComponent();
-            Root.DataContext = this;
+            DataContext = this;
         }
 
         private string SelectImage()

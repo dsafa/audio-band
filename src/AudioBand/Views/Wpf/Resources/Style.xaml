@@ -2,8 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:audioBand="clr-namespace:AudioBand.Settings"
-                    xmlns:wpf="clr-namespace:AudioBand.Views.Wpf">
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:wpf="clr-namespace:AudioBand.Views.Wpf"
+                    xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -14,61 +15,57 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.ToggleSwitch.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Buttons.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Style x:Key="TabStackPanel" TargetType="{x:Type StackPanel}">
-        <Setter Property="Margin" Value="20, 0, 0, 0"/>
-        <Setter Property="Orientation" Value="Vertical"/>
-    </Style>
-    <Style x:Key="TabDockPanel" TargetType="{x:Type DockPanel}">
-        <Setter Property="Margin" Value="20, 0, 0, 0"/>
-    </Style>
-    <Style x:Key="TabListView" TargetType="{x:Type ListView}" BasedOn="{StaticResource {x:Type ListView}}">
-        <Setter Property="BorderThickness" Value="0"/>
-    </Style>
-    <Style x:Key="SettingsNumericInput" TargetType="{x:Type metro:NumericUpDown}">
-        <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"/>
-    </Style>
-    <Style x:Key="SettingsButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SquareButtonStyle}">
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}">
         <Setter Property="metro:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
+        <Setter Property="Margin" Value="-2"/>
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
     </Style>
-    <Style x:Key="SettingsTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-        <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"/>
+    <Style x:Key="AccentButton" TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}">
+        <Setter Property="metro:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
+        <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
     </Style>
-    <Style x:Key="SettingsLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-        <Setter Property="FontSize" Value="{DynamicResource NormalFontSize}"/>
+    <Style x:Key="TreeViewNavigation" TargetType="{x:Type TreeView}" BasedOn="{StaticResource {x:Type TreeView}}">
+        <Setter Property="FontSize" Value="24"/>
     </Style>
-    <Style x:Key="SettingsGrid">
+    <Style TargetType="{x:Type Grid}">
         <Style.Resources>
+            <Thickness x:Key="GridMargin" Left="0" Top="2" Right="0" Bottom="0" />
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
             </Style>
-            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource SettingsTextBox}">
-                <Setter Property="Margin" Value="2"/>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
             </Style>
             <Style TargetType="{x:Type xctk:ColorPicker}">
-                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
-            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource SettingsButton}">
-                <Setter Property="Margin" Value="2"/>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
             <Style TargetType="{x:Type metro:ToggleSwitch}" BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
-                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
             </Style>
-            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource SettingsLabel}">
-                <Setter Property="Margin" Value="2"/>
+            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                <Setter Property="Margin" Value="2, 2, 8, 0"/>
+                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
             </Style>
-            <Style TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource SettingsNumericInput}">
-                <Setter Property="Margin" Value="2"/>
+            <Style TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource {x:Type metro:NumericUpDown}}">
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
                 <Style.Triggers>
-                    <Trigger Property="wpf:AttachedProperties.NumericInputType" Value="Size">
+                    <Trigger Property="behaviours:NumericInput.Type" Value="Size">
                         <Setter Property="NumericInputMode" Value="Numbers"/>
                         <Setter Property="Minimum" Value="1"/>
                         <Setter Property="Interval" Value="1"/>
                     </Trigger>
-                    <Trigger Property="wpf:AttachedProperties.NumericInputType" Value="Position">
+                    <Trigger Property="behaviours:NumericInput.Type" Value="Position">
                         <Setter Property="NumericInputMode" Value="Numbers"/>
                         <Setter Property="Interval" Value="1"/>
                     </Trigger>
-                    <Trigger Property="wpf:AttachedProperties.NumericInputType" Value="FontSize">
+                    <Trigger Property="behaviours:NumericInput.Type" Value="FontSize">
                             <Setter Property="NumericInputMode" Value="Decimal"/>
                         <Setter Property="Minimum" Value="0.5"/>
                         <Setter Property="Interval" Value="0.5"/>

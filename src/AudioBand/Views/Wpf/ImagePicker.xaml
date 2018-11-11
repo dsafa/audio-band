@@ -3,33 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AudioBand.Settings"
              xmlns:commands="clr-namespace:AudioBand.Commands"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Style.xaml"/>
+                <ResourceDictionary Source="Resources/Style.xaml"/>
+                <ResourceDictionary Source="Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <UserControl.CommandBindings>
-        <CommandBinding Command="commands:SettingsCommands.ResetImagePath" Executed="ResetImagePathOnExecuted" CanExecute="ResetImagePathCanExecute"/>
-        <CommandBinding Command="commands:SettingsCommands.ChooseImage" Executed="ChooseImageOnExecuted" CanExecute="ChooseImageCanExecute"/>
-    </UserControl.CommandBindings>
-    <DockPanel x:Name="Root">
-        <Button DockPanel.Dock="Right" Margin="2" Content="Default" Style="{StaticResource SettingsButton}" Command="commands:SettingsCommands.ResetImagePath">
+    <DockPanel>
+        <Button DockPanel.Dock="Right" Margin="2" Content="{StaticResource DefaultButtonText}">
             <Button.ToolTip>
-                <TextBlock Text="Reset image to its default." />
+                <TextBlock Text="{StaticResource DefaultImageHelpText}" />
             </Button.ToolTip>
         </Button>
-        <Button DockPanel.Dock="Right" Margin="2" Content="Browse" Style="{StaticResource SettingsButton}" Command="commands:SettingsCommands.ChooseImage" >
+        <Button DockPanel.Dock="Right" Margin="2" Content="{StaticResource BrowseButtonText}">
             <Button.ToolTip>
-                <TextBlock Text="Browse the system for an image to use."/>
+                <TextBlock Text="{StaticResource BrowseImageHelpText}"/>
             </Button.ToolTip>
         </Button>
-        <Label x:Name="ImagePathLabel" Margin="2" Content="{Binding ImagePath, Mode=TwoWay}" Style="{StaticResource SettingsLabel}">
+        <Label x:Name="ImagePathLabel" Margin="2" Content="{Binding ImagePath, Mode=TwoWay}">
             <Label.ToolTip>
                 <TextBlock Text="{Binding ImagePath}"/>
             </Label.ToolTip>

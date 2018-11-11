@@ -1,40 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using AudioBand.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
+using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Navigation;
-using AudioBand.AudioSource;
-using AudioBand.Models;
-using AudioBand.ViewModels;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace AudioBand.Views.Wpf
 {
     internal partial class SettingsWindow
     {
-        internal event EventHandler Saved;
-
-        public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
-        public ObservableCollection<CustomLabelVM> TextAppearancesCollection { get; set; }
-        public AudioSourceSettingsCollectionVM AudioSourceSettingsViewModel { get; }
-
-        private List<CustomLabelVM> _deletedTextAppearances;
-        private List<CustomLabelVM> _addedTextAppearances;
-        private bool _cancelEdit = true;
-
-        internal SettingsWindow()
+        internal SettingsWindow(SettingsWindowVM vm)
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
             InitializeComponent();
+            DataContext = vm;
         }
 
         // Problem loading xceed.wpf.toolkit assembly normally
@@ -55,29 +38,8 @@ namespace AudioBand.Views.Wpf
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            base.OnClosing(e);
-
-            // if closed by x button
-            if (_cancelEdit)
-            {
-
-            }
-            else
-            {
-                Saved?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        private void Save_OnClick(object sender, RoutedEventArgs e)
-        {
-            _cancelEdit = false;
-            Close();
-        }
-
-        private void Cancel_OnClick(object sender, RoutedEventArgs e)
-        {
-            _cancelEdit = true;
-            Close();
+            e.Cancel = true;
+            Hide();
         }
 
         private async void ResetSettingOnExecuted(object sender, ExecutedRoutedEventArgs e)

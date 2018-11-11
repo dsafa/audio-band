@@ -1,31 +1,30 @@
 ﻿<metro:MetroWindow
-            xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
             xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-            xmlns:viewModels="clr-namespace:AudioBand.ViewModels"
             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
-            xmlns:system="clr-namespace:System;assembly=mscorlib"
-            xmlns:wpf="clr-namespace:AudioBand.Views.Wpf"
-            xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
+            xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
             xmlns:commands="clr-namespace:AudioBand.Commands"
-            x:Class="AudioBand.Views.Wpf.SettingsWindow" 
+            xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
+            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+            x:Class="AudioBand.Views.Wpf.SettingsWindow"
             mc:Ignorable="d" 
             x:Name="Window"
-            d:DesignHeight="800" d:DesignWidth="700"
+            d:DesignHeight="600" d:DesignWidth="400"
+            d:DataContext="{d:DesignInstance viewmodels:SettingsWindowVM}"
             Title="Audio Band Settings"
-            Height="950"
+            Height="400"
             Width="800"
             GlowBrush="{DynamicResource AccentColorBrush}"
             WindowStartupLocation="CenterScreen" x:ClassModifier="internal">
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Style.xaml"/>
+                <ResourceDictionary Source="Resources/Style.xaml"/>
+                <ResourceDictionary Source="Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <valueConverters:WinColorToWpfColorConverter x:Key="WinColorToWpfColorConverter"/>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     <metro:MetroWindow.InputBindings>
@@ -38,511 +37,70 @@
     </metro:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-            <Button x:Name="Cancel" Margin="4" Width="70" Content="Cancel" Style="{DynamicResource SquareButtonStyle}" Click="Cancel_OnClick" metro:ControlsHelper.ContentCharacterCasing="Normal"/>
-            <Button x:Name="Save" Margin="4" Width="70" Content="Save" Style="{StaticResource AccentedSquareButtonStyle}" Click="Save_OnClick" metro:ControlsHelper.ContentCharacterCasing="Normal"/>
+            <Button Margin="4" Content="{StaticResource CancelButtonText}"/>
+            <Button Margin="4" Content="{StaticResource SaveButtonText}" Style="{StaticResource AccentButton}"/>
         </StackPanel>
-        <TabControl x:Name="TabControl" Margin="10" TabStripPlacement="Left">
-            <TabItem  Header="General">
-                <StackPanel Style="{StaticResource TabStackPanel}">
-                    <Expander Header="AudioBand Size" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding AudioBandAppearance}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="Width" />
-                            <metro:NumericUpDown Grid.Row="0" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding Width, Mode=TwoWay}"/>
+        <TreeView x:Name="NavigationTree" DockPanel.Dock="Left" 
+                  Style="{StaticResource TreeViewNavigation}" Margin="0, 0, 10, 0">
+            <i:Interaction.Behaviors>
+                <behaviours:TreeSelectedTagBehaviour SelectedTag="{Binding SelectedVM, Mode=TwoWay}"/>
+            </i:Interaction.Behaviors>
+            <TreeViewItem Header="{StaticResource GeneralSettingsTab}"
+                          Tag="{Binding ElementName=Window, Path=DataContext.AudioBandVM}"/>
+            <TreeViewItem Header="{StaticResource PlaybackControlsTab}" IsExpanded="True">
+                <TreeViewItem Header="{StaticResource PlayPauseButtonTab}"
+                              Tag="{Binding ElementName=Window, Path=DataContext.PlayPauseButtonVM}"/>                
+                <TreeViewItem Header="{StaticResource NextButtonTab}"
+                              Tag="{Binding ElementName=Window, Path=DataContext.NextButtonVM}"/>                
+                <TreeViewItem Header="{StaticResource PrevButtonTab}"
+                              Tag="{Binding ElementName=Window, Path=DataContext.PreviousButtonVM}"/>
+            </TreeViewItem>
+            <TreeViewItem Header="{StaticResource CustomLabelsTab}"/>
+            <TreeViewItem Header="{StaticResource ProgressBarTab}"
+                          Tag="{Binding ElementName=Window, Path=DataContext.ProgressBarVM}"/>
+            <TreeViewItem Header="{StaticResource AlbumArtTab}" IsExpanded="True"
+                          Tag="{Binding ElementName=Window, Path=DataContext.AlbumArtVM}">
+                <TreeViewItem Header="{StaticResource AlbumArtPopupTab}"
+                              Tag="{Binding ElementName=Window, Path=DataContext.AlbumArtPopupVM}"/>
+            </TreeViewItem>
+            <TreeViewItem Header="{StaticResource AudioSourceSettingsTab}">
 
-                            <Label Grid.Row="1" Grid.Column="0" Content="Height" />
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding Height, Mode=TwoWay}"/>
-
-                            <wpf:ResetButton Grid.Row="2" Grid.Column="0" Margin="2"/>
-                        </Grid>
-                    </Expander>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Playback Controls">
-                <StackPanel Style="{StaticResource TabStackPanel}">
-                    <Expander Header="Play / Pause Button" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding PlayPauseButtonAppearance}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
-                                                OnLabel="Visible" OffLabel="Hidden" 
-                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="1" Grid.Column="0" Content="Width" />
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding Width, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="2" Grid.Column="0" Content="Height" />
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding Height, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="5" Grid.Column="0" Content="Play Button Image" />
-                            <wpf:ImagePicker Grid.Row="5" Grid.Column="1"
-                                                   ImagePath="{Binding PlayImagePath, Mode=TwoWay}" />
-
-                            <Label Grid.Row="6" Grid.Column="0" Content="Pause Button Image" />
-                            <wpf:ImagePicker Grid.Row="6" Grid.Column="1" 
-                                                   ImagePath="{Binding PauseImagePath, Mode=TwoWay}" />
-
-                            <wpf:ResetButton Grid.Row="7" Grid.Column="0" Margin="2"/>
-                        </Grid>
-                    </Expander>
-                    <Expander Header="Next Song Button" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding NextSongButtonAppearance}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1"
-                                                OnLabel="Visible" OffLabel="Hidden"
-                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="1" Grid.Column="0" Content="Width" />
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding Width, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="2" Grid.Column="0" Content="Height" />
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding Height, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="5" Grid.Column="0" Content="Button Image" />
-                            <wpf:ImagePicker Grid.Row="5" Grid.Column="1" 
-                                                   ImagePath="{Binding ImagePath, Mode=TwoWay}"/>
-
-                            <wpf:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
-                        </Grid>
-                    </Expander>
-                    <Expander Header="Previous Song Button" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding PreviousSongButtonAppearance}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
-                                                OnLabel="Visible" OffLabel="Hidden"
-                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="1" Grid.Column="0" Content="Width" />
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding Width, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="2" Grid.Column="0" Content="Height" />
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding Height, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="5" Grid.Column="0" Content="Button Image" />
-                            <wpf:ImagePicker Grid.Row="5" Grid.Column="1" 
-                                                   ImagePath="{Binding ImagePath, Mode=TwoWay}"/>
-
-                            <wpf:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
-                        </Grid>
-                    </Expander>
-                </StackPanel>
-            </TabItem>
-            <TabItem x:Name="Labels"  Header="Text Labels">
-                <DockPanel Style="{StaticResource TabDockPanel}">
-                    <Button DockPanel.Dock="Top" 
-                            HorizontalAlignment="Left"
-                            Margin="2"
-                            Content="Add New label" 
-                            Style="{StaticResource SettingsButton}"
-                            Command="commands:SettingsCommands.AddLabel"/>
-                    <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding ElementName=Window, Path=TextAppearancesCollection}">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
-                                <Setter Property="Focusable" Value="true"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Expander Header="{Binding Name}" IsExpanded="True">
-                                    <Grid Style="{StaticResource SettingsGrid}">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="200" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Row="0" Grid.Column="0" Content="Label Name" />
-                                        <TextBox Grid.Row="0" Grid.Column="1" 
-                                                 metro:TextBoxHelper.ClearTextButton="True"
-                                                 Text="{Binding Name, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="1" Grid.Column="0" Content="Visibility" />
-                                        <metro:ToggleSwitch Grid.Row="1" Grid.Column="1"
-                                                            OnLabel="Visible" OffLabel="Hidden"
-                                                            IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="2" Grid.Column="0" Content="Width" />
-                                        <metro:NumericUpDown Grid.Row="2" Grid.Column="1" 
-                                                             wpf:AttachedProperties.NumericInputType="Size" 
-                                                             Value="{Binding Width, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="3" Grid.Column="0" Content="Height" />
-                                        <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                                                             wpf:AttachedProperties.NumericInputType="Size" 
-                                                             Value="{Binding Height, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="4" Grid.Column="0" Content="X Position" />
-                                        <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                                             wpf:AttachedProperties.NumericInputType="Position" 
-                                                             Value="{Binding XPosition, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="5" Grid.Column="0" Content="Y Position" />
-                                        <metro:NumericUpDown Grid.Row="5" Grid.Column="1" 
-                                                             wpf:AttachedProperties.NumericInputType="Position"
-                                                             Value="{Binding YPosition, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="6" Grid.Column="0" Content="Font Family" />
-                                        <TextBox Grid.Row="6" Grid.Column="1"
-                                                 metro:TextBoxHelper.ClearTextButton="True"
-                                                 Text="{Binding FontFamily, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="7" Grid.Column="0" Content="Font Size" />
-                                        <metro:NumericUpDown Grid.Row="7" Grid.Column="1" 
-                                                             wpf:AttachedProperties.NumericInputType="FontSize"
-                                                             Value="{Binding FontSize, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="8" Grid.Column="0" Content="Alignment" />
-                                        <ComboBox Grid.Row="8" Grid.Column="1" 
-                                                  ItemsSource="{Binding ElementName=Window, Path=TextAlignValues}"
-                                                  SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="9" Grid.Column="0" Content="Text Color" />
-                                        <xctk:ColorPicker Grid.Row="9" Grid.Column="1" 
-                                                          SelectedColor="{Binding Color, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
-
-                                        <Label Grid.Row="10" Grid.Column="0" Content="Scrolling Speed" />
-                                        <metro:NumericUpDown Grid.Row="10" Grid.Column="1" 
-                                                             wpf:AttachedProperties.NumericInputType="Size"
-                                                             Value="{Binding ScrollSpeed, Mode=TwoWay}"/>
-
-                                        <Label Grid.Row="11" Grid.Column="0" Content="Format"  ToolTipService.ShowDuration="60000">
-                                            <Label.ToolTip>
-                                                <TextBlock>
-                                                    Format for the text that is displayed which can include placeholders. <LineBreak/>
-                                                    Placeholders will be substituted with their corresponding values. Placeholders are in the format {[style]&lt;tag&gt;:[color]}. <LineBreak/>
-                                                    <Bold>Tags</Bold> <LineBreak/>
-                                                    &#8226; artist - Artist for the current song <LineBreak/>
-                                                    &#8226; song - The title of the current song <LineBreak/>
-                                                    &#8226; album - Album name for the current song <LineBreak/>
-                                                    &#8226; time - Current playback time for the current song <LineBreak/>
-                                                    &#8226; length - Total length of the current song <LineBreak/>
-                                                    <Bold>Styles</Bold> <LineBreak/>
-                                                    &#8226; * - Bolds the placeholder <LineBreak/>
-                                                    &#8226; &amp; - Italicizes the placeholder <LineBreak/>
-                                                    &#8226; _ - Underlines the placeholder <LineBreak/>
-                                                    <Bold>Colors</Bold> <LineBreak/>
-                                                    Use an html color code in the format #RRGGBB <LineBreak/>
-                                                    <Bold>Example formats</Bold> <LineBreak/>
-                                                    Normal label showing the song and artist : {song} by {artist} <LineBreak/>
-                                                    Showing the album name in bold : {*album} <LineBreak/>
-                                                    Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9} <LineBreak/>
-                                                    Using style and color : {*artist:#a9a9a9} <LineBreak/>
-                                                </TextBlock>
-                                            </Label.ToolTip>
-                                        </Label>
-                                        <TextBox Grid.Row="11" Grid.Column="1" 
-                                                 metro:TextBoxHelper.ClearTextButton="True"
-                                                 Text="{Binding FormatString, Mode=TwoWay}"/>
-
-                                        <StackPanel Grid.Row="12" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                                            <wpf:ResetButton Margin="2"/>
-                                            <Button Margin="2"
-                                                    Content="Delete" Style="{StaticResource SettingsButton}"
-                                                    Command="commands:SettingsCommands.DeleteLabel"
-                                                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </Expander>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </DockPanel>
-            </TabItem>
-            <TabItem Header="Progress Bar">
-                <StackPanel Style="{StaticResource TabStackPanel}">
-                    <Expander Header="Progress Bar" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding ProgressBarVm}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1"
-                                                OnLabel="Visible" OffLabel="Hidden"
-                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="1" Grid.Column="0" Content="Width" />
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding Width, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="2" Grid.Column="0" Content="Height" />
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size"
-                                                 Value="{Binding Height, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="5" Grid.Column="0" Content="Background Colour" />
-                            <xctk:ColorPicker Grid.Row="5" Grid.Column="1"
-                                              SelectedColor="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
-
-                            <Label Grid.Row="6" Grid.Column="0" Content="Foreground Color" />
-                            <xctk:ColorPicker Grid.Row="6" Grid.Column="1" 
-                                              SelectedColor="{Binding ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
-
-                            <wpf:ResetButton Grid.Row="7" Grid.Column="0" Margin="2"/>
-                        </Grid>
-                    </Expander>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Album Art">
-                <StackPanel Style="{StaticResource TabStackPanel}">
-                    <Expander Header="Album Art" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding AlbumArtAppearance}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Content="Visibility" />
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
-                                                OnLabel="Visible" OffLabel="Hidden" 
-                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="1" Grid.Column="0" Content="Width" />
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding Width, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="2" Grid.Column="0" Content="Height" />
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding Height, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="3" Grid.Column="0" Content="X Position" />
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Position"
-                                                 Value="{Binding XPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="4" Grid.Column="0" Content="Y Position" />
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                                 wpf:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding YPosition, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="5" Grid.Column="0" Content="Placeholder Image" />
-                            <wpf:ImagePicker Grid.Row="5" Grid.Column="1" 
-                                                   ImagePath="{Binding PlaceholderPath, Mode=TwoWay}"/>
-
-                            <wpf:ResetButton Grid.Row="6" Grid.Column="0" Margin="2"/>
-                        </Grid>
-                    </Expander>
-                    <Expander Header="Album Art Popup" IsExpanded="True">
-                        <Grid Style="{StaticResource SettingsGrid}" DataContext="{Binding AlbumArtPopupAppearance}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Content="Visibility"/>
-                            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
-                                                OnLabel="Visible" OffLabel="Hidden"
-                                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="1" Grid.Column="0" Content="Width"/>
-                            <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Size" 
-                                                 Value="{Binding Width, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="2" Grid.Column="0" Content="Height"/>
-                            <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                                 Value="{Binding Height, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="3" Grid.Column="0" Content="X Position"/>
-                            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                                                 wpf:AttachedProperties.NumericInputType="Position" 
-                                                 Value="{Binding XOffset, Mode=TwoWay}"/>
-
-                            <Label Grid.Row="4" Grid.Column="0" Content="Margin"/>
-                            <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                                 Value="{Binding Margin, Mode=TwoWay}"/>
-
-                            <wpf:ResetButton Grid.Row="5" Grid.Column="0" Margin="2"/>
-                        </Grid>
-                    </Expander>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Audio Source Settings">
-                <StackPanel Style="{StaticResource TabStackPanel}" DataContext="{Binding ElementName=Window, Path=AudioSourceSettingsViewModel}">
-                    <Label Style="{StaticResource SettingsLabel}" Content="Audio Source"/>
-                    <ComboBox ItemsSource="{Binding Settings}" SelectedValue="{Binding SelectedSettings}"
-                              DisplayMemberPath="Key" SelectedValuePath="Value" IsSynchronizedWithCurrentItem="True"/>
-                    <ListView Style="{StaticResource TabListView}" ItemsSource="{Binding SelectedSettings}" Margin="0, 6, 0, 0">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid DataContext="{Binding Value}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="200"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Style="{StaticResource SettingsLabel}" Content="{Binding Name}"/>
-                                    <ContentControl Grid.Column="1" Content="{Binding Value}">
-                                        <ContentControl.Resources>
-                                            <DataTemplate DataType="{x:Type system:String}">
-                                                <TextBox Style="{StaticResource SettingsTextBox}"
-                                                        Text="{Binding Path=DataContext.Value, RelativeSource={RelativeSource AncestorType=ContentControl},
-                                                               Mode=TwoWay, ValidatesOnExceptions=True}">
-                                                </TextBox>
-                                            </DataTemplate>
-                                        </ContentControl.Resources>
-                                    </ContentControl>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
+            </TreeViewItem>
+        </TreeView>
+        <ScrollViewer>
+            <ContentControl Content="{Binding SelectedVM}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type viewmodels:AudioBandVM}">
+                        <local:GeneralSettingsView DataContext="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:PlayPauseButtonVM}">
+                        <local:PlayPauseButtonSettingsView DataContext="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:PreviousButtonVM}">
+                        <local:PlaybackButtonSettingsView DataContext="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:NextButtonVM}">
+                        <local:PlaybackButtonSettingsView DataContext="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
+                        <local:CustomLabelSettingsView DataContext="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:ProgressBarVM}">
+                        <local:ProgressBarSettingsView DataContext="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AlbumArtVM}">
+                        <local:AlbumArtSettingsView DataContext="{Binding}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AlbumArtPopupVM}">
+                        <local:AlbumPopupSettingsView DataContext="{Binding}"/>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+        </ScrollViewer>
     </DockPanel>
     <metro:MetroWindow.Flyouts>
         <metro:FlyoutsControl>
-            <local:HelpFlyout/>
+            <local:HelpFlyout DataContext="{Binding HelpVM}"/>
         </metro:FlyoutsControl>
     </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>

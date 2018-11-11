@@ -1,5 +1,11 @@
-﻿using AudioBand.Models;
+﻿using System;
+using System.Collections.Generic;
+using AudioBand.Models;
 using System.Drawing;
+using System.Linq;
+using System.Windows;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace AudioBand.ViewModels
 {
@@ -96,6 +102,8 @@ namespace AudioBand.ViewModels
         public Point Location => new Point(XPosition, YPosition);
 
         public Size Size => new Size(Width, Height);
+
+        public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
 
         public CustomLabelVM(CustomLabel model) : base(model) {}
     }

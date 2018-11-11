@@ -17,7 +17,7 @@
     <metro:Flyout.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Style.xaml"/>
+                <ResourceDictionary Source="Resources/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </metro:Flyout.Resources>
