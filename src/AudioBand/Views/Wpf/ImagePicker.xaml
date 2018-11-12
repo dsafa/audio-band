@@ -7,7 +7,7 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="500"
-             d:DataContext="{d:DesignInstance local:ImagePicker}">
+             x:Name="ImagePickerControl">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,7 +16,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <DockPanel>
+    <DockPanel DataContext="{Binding ElementName=ImagePickerControl}">
         <Button DockPanel.Dock="Left"
                 Content="{iconPacks:Modern Kind=Reset}"
                 Command="{Binding ResetImageCommand}">
@@ -31,9 +31,9 @@
                 <TextBlock Text="{StaticResource BrowseImageHelpText}"/>
             </Button.ToolTip>
         </Button>
-        <Label Content="{Binding ImagePath}">
+        <Label Content="{Binding ImagePath, Mode=TwoWay}">
             <Label.ToolTip>
-                <TextBlock Text="{Binding ImagePath}"/>
+                <TextBlock Text="{Binding ImagePath, Mode=OneWay}"/>
             </Label.ToolTip>
         </Label>
     </DockPanel>
