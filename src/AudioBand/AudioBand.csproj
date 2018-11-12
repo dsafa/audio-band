@@ -48,6 +48,9 @@
     <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="MahApps.Metro.IconPacks.Modern, Version=2.3.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.IconPacks.Modern.2.3.0\lib\net46\MahApps.Metro.IconPacks.Modern.dll</HintPath>
+    </Reference>
     <Reference Include="Nett, Version=0.10.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b, processorArchitecture=MSIL">
       <HintPath>..\packages\Nett.0.10.0\lib\Net40\Nett.dll</HintPath>
     </Reference>
@@ -169,7 +172,7 @@
     <Compile Include="Views\Wpf\AudioSourceSettingsView.xaml.cs">
       <DependentUpon>AudioSourceSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Wpf\Behaviours\TreeSelectedTagBehaviour.cs" />
+    <Compile Include="Views\Wpf\Behaviours\TreeSelectedVMBehaviour.cs" />
     <Compile Include="Views\Wpf\CustomLabelSettingsView.xaml.cs">
       <DependentUpon>CustomLabelSettingsView.xaml</DependentUpon>
     </Compile>
@@ -183,7 +186,6 @@
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Wpf\Behaviours\NumericInput.cs" />
-    <Compile Include="Commands\SettingsCommands.cs" />
     <Compile Include="Views\Wpf\PlaybackButtonSettingsView.xaml.cs">
       <DependentUpon>PlaybackButtonSettingsView.xaml</DependentUpon>
     </Compile>

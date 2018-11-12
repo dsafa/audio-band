@@ -10,7 +10,7 @@ namespace AudioBand.ViewModels
     {
         private readonly MainControl _control;
 
-        public ObservableCollection<CustomLabelVM> CustomLabels { get; set; }
+        public ObservableCollection<CustomLabelVM> CustomLabels { get; }
         public RelayCommand AddLabelCommand { get; }
         public RelayCommand<CustomLabelVM> RemoveLabelCommand { get; }
 

@@ -21,7 +21,7 @@ namespace AudioBand.ViewModels
 
         private void Execute(IHelpView helpView)
         {
-            helpView.Show();
+            helpView?.Show();
         }
 
         private void OpenProjectLinkOnExecute(object o)

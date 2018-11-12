@@ -1,9 +1,6 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace AudioBand.ViewModels
+﻿namespace AudioBand.ViewModels
 {
-    internal class SettingsWindowVM : INotifyPropertyChanged
+    internal class SettingsWindowVM : ViewModelBase
     {
         public AudioBandVM AudioBandVM { get; set; }
         public AlbumArtPopupVM AlbumArtPopupVM { get; set; }
@@ -30,12 +27,6 @@ namespace AudioBand.ViewModels
                 _selectedVM = value;
                 RaisePropertyChanged();
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

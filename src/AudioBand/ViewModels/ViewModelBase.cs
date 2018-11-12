@@ -10,18 +10,30 @@ using NLog;
 
 namespace AudioBand.ViewModels
 {
+    internal abstract class ViewModelBase : INotifyPropertyChanged
+    {
+        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Notifies subsribers to a property change.
+        /// </summary>
+        /// <param name="propertyName">Name of the property that changed.</param>
+        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
     /// <summary>
-    /// Base class for a viewmodel.
+    /// Base class for a viewmodel with a model.
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
-    internal abstract class ViewModelBase<TModel> : INotifyPropertyChanged, IEditableObject, IResettableObject
+    internal abstract class ViewModelBase<TModel> :  ViewModelBase, IEditableObject, IResettableObject
     where TModel: ModelBase
     {
         private readonly Dictionary<string, string[]> _alsoNotifyCache = new Dictionary<string, string[]>(); // View model property name -> other vm property names
         private readonly Dictionary<(object model, string modelPropName), string> _modelToPropertyName = new Dictionary<(object model, string modelPropName), string>();
-
-        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Model associated with this view model.
@@ -53,15 +65,6 @@ namespace AudioBand.ViewModels
         public void Reset()
         {
 
-        }
-
-        /// <summary>
-        /// Notifies subsribers to a property change.
-        /// </summary>
-        /// <param name="propertyName">Name of the property that changed.</param>
-        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
