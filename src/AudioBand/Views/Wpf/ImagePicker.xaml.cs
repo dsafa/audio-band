@@ -20,19 +20,18 @@ namespace AudioBand.Views.Wpf
         }
 
         public static readonly DependencyProperty ImagePathProperty = 
-            DependencyProperty.Register(nameof(ImagePath), typeof(string), typeof(ImagePicker), new PropertyMetadata());
+            DependencyProperty.Register(nameof(ImagePath), typeof(string), typeof(ImagePicker), new PropertyMetadata(null));
 
         public RelayCommand ResetImageCommand { get; }
         public RelayCommand BrowseForImageCommand { get; }
 
         public ImagePicker()
         {
-            InitializeComponent();
 
             ResetImageCommand = new RelayCommand(ResetImagePathOnExecuted, ResetImagePathCanExecute);
             BrowseForImageCommand = new RelayCommand(BrowseForImageOnExecuted);
 
-            DataContext = this;
+            InitializeComponent();
         }
 
         private static string SelectImage()
