@@ -2,8 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:wpf="clr-namespace:AudioBand.Views.Wpf"
                     xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
@@ -17,7 +15,6 @@
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}">
         <Setter Property="metro:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
-        <Setter Property="Margin" Value="-2"/>
         <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
     </Style>
     <Style x:Key="AccentButton" TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}">
@@ -68,12 +65,15 @@
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
             <Style TargetType="{x:Type metro:ToggleSwitch}" BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="Margin" Value="0, 6, 0, 0"/>
                 <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
             </Style>
             <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                 <Setter Property="Margin" Value="2, 2, 8, 0"/>
                 <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
+            </Style>
+            <Style TargetType="{x:Type DockPanel}">
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
             <Style TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource {x:Type metro:NumericUpDown}}">
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>

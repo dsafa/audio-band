@@ -5,9 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AudioBand.Views.Wpf"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400">
+             d:DesignHeight="450" d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance viewmodels:NextButtonVM}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

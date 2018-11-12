@@ -10,6 +10,9 @@ using NLog;
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// Base class for view models.
+    /// </summary>
     internal abstract class ViewModelBase : INotifyPropertyChanged
     {
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
@@ -32,8 +35,11 @@ namespace AudioBand.ViewModels
     internal abstract class ViewModelBase<TModel> :  ViewModelBase, IEditableObject, IResettableObject
     where TModel: ModelBase
     {
-        private readonly Dictionary<string, string[]> _alsoNotifyCache = new Dictionary<string, string[]>(); // View model property name -> other vm property names
+        // View model property name -> other vm property names
+        private readonly Dictionary<string, string[]> _alsoNotifyCache = new Dictionary<string, string[]>();
+        // Mapping from a model and model property to the viewmodel property name
         private readonly Dictionary<(object model, string modelPropName), string> _modelToPropertyName = new Dictionary<(object model, string modelPropName), string>();
+        private readonly Dictionary<(object model, string property), PropertyInfo> _modelPropCache = new Dictionary<(object model, string property), PropertyInfo>();
 
         /// <summary>
         /// Model associated with this view model.
@@ -77,9 +83,10 @@ namespace AudioBand.ViewModels
         /// <returns>Returns true if new value was set</returns>
         protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
         {
-            Model.GetType().GetProperty(propertyName).SetValue(Model, newValue);
-            RaisePropertyChanged(propertyName);
-            return true;
+            var prop = _modelPropCache[(Model, modelPropertyName)];
+            prop.SetValue(Model, newValue);
+            var currentValue = (TValue)prop.GetValue(Model);
+            return EqualityComparer<TValue>.Default.Equals(currentValue, newValue);
         }
 
         /// <summary>
@@ -122,6 +129,9 @@ namespace AudioBand.ViewModels
             {
                 var bindingAttr = propertyInfo.GetCustomAttribute<PropertyChangeBindingAttribute>();
                 _modelToPropertyName.Add((model, bindingAttr.PropertyName), propertyInfo.Name);
+
+                var modelProp = model.GetType().GetProperty(bindingAttr.PropertyName);
+                _modelPropCache.Add((model, bindingAttr.PropertyName), modelProp);
             }
 
             model.PropertyChanged += ModelOnPropertyChanged;
@@ -153,6 +163,12 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Try to load image from path or default image if invalid file.
+        /// </summary>
+        /// <param name="path">Path to load image from.</param>
+        /// <param name="defaultImage">Default image to use if unable to laod file.</param>
+        /// <returns>The loaded image or default image.</returns>
         protected Image LoadImage(string path, Image defaultImage)
         {
             try

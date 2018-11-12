@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using AudioBand.Commands;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Microsoft.Win32;
 
 namespace AudioBand.Views.Wpf
 {
@@ -21,13 +22,20 @@ namespace AudioBand.Views.Wpf
         public static readonly DependencyProperty ImagePathProperty = 
             DependencyProperty.Register(nameof(ImagePath), typeof(string), typeof(ImagePicker), new PropertyMetadata());
 
+        public RelayCommand ResetImageCommand { get; }
+        public RelayCommand BrowseForImageCommand { get; }
+
         public ImagePicker()
         {
             InitializeComponent();
+
+            ResetImageCommand = new RelayCommand(ResetImagePathOnExecuted, ResetImagePathCanExecute);
+            BrowseForImageCommand = new RelayCommand(BrowseForImageOnExecuted);
+
             DataContext = this;
         }
 
-        private string SelectImage()
+        private static string SelectImage()
         {
             var dlg = new OpenFileDialog();
 
@@ -54,17 +62,17 @@ namespace AudioBand.Views.Wpf
             return null;
         }
 
-        private void ResetImagePathOnExecuted(object sender, ExecutedRoutedEventArgs e)
+        private void ResetImagePathOnExecuted(object parameter)
         {
-            ImagePathLabel.Content = "";
+            ImagePath = "";
         }
 
-        private void ResetImagePathCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private bool ResetImagePathCanExecute(object parameter)
         {
-            e.CanExecute = true;
+            return !String.IsNullOrEmpty(ImagePath);
         }
 
-        private void ChooseImageOnExecuted(object sender, ExecutedRoutedEventArgs e)
+        private void BrowseForImageOnExecuted(object parameter)
         {
             var path = SelectImage();
             if (path == null)
@@ -72,12 +80,7 @@ namespace AudioBand.Views.Wpf
                 return;
             }
 
-            ImagePathLabel.Content = path;
-        }
-
-        private void ChooseImageCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
+            ImagePath = path;
         }
     }
 }

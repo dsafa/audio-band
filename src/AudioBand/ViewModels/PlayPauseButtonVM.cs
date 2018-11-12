@@ -111,6 +111,9 @@ namespace AudioBand.ViewModels
         {
             _track = track;
             SetupModelBindings(_track);
+
+            PlayImage = LoadImage(PlayImagePath, DefaultPlayButtonSvg.ToBitmap());
+            PauseImage = LoadImage(PauseImagePath, DefaultPauseButtonSvg.ToBitmap());
         }
     }
 }
