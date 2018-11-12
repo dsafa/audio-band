@@ -20,10 +20,10 @@ namespace AudioBand.Views.Wpf
             DataContext = vm;
         }
 
-        // Problem loading xceed.wpf.toolkit assembly normally
+        // Problem loading some dlls
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            if (!args.Name.StartsWith("Xceed.Wpf.Toolkit"))
+            if (!args.Name.StartsWith("Xceed.Wpf.Toolkit") && !args.Name.StartsWith("MahApps.Metro.IconPacks.Modern"))
             {
                 return null;
             }

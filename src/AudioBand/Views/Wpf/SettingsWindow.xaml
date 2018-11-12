@@ -6,16 +6,16 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-            xmlns:commands="clr-namespace:AudioBand.Commands"
             xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+            xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
             x:Class="AudioBand.Views.Wpf.SettingsWindow"
             mc:Ignorable="d" 
             x:Name="Window"
             d:DesignHeight="600" d:DesignWidth="400"
             d:DataContext="{d:DesignInstance viewmodels:SettingsWindowVM}"
             Title="Audio Band Settings"
-            Height="400"
+            Height="600"
             Width="800"
             GlowBrush="{DynamicResource AccentColorBrush}"
             WindowStartupLocation="CenterScreen" x:ClassModifier="internal">
@@ -27,12 +27,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
-    <metro:MetroWindow.InputBindings>
-        <KeyBinding Command="commands:SettingsCommands.AddLabel" Key="N" Modifiers="Control"/>
-    </metro:MetroWindow.InputBindings>
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
-            <Button Content="About" Command="commands:SettingsCommands.ShowAbout"/>
+            <Button Content="Help" Command="{Binding HelpVM.ShowHelp}" CommandParameter="{Binding ElementName=HelpFlyout}"/>
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
@@ -41,9 +38,9 @@
             <Button Margin="4" Content="{StaticResource SaveButtonText}" Style="{StaticResource AccentButton}"/>
         </StackPanel>
         <TreeView x:Name="NavigationTree" DockPanel.Dock="Left" 
-                  Style="{StaticResource TreeViewNavigation}" Margin="0, 0, 10, 0">
+                  Style="{StaticResource TreeViewNavigation}" Padding="0, 0, 20, 0">
             <i:Interaction.Behaviors>
-                <behaviours:TreeSelectedTagBehaviour SelectedTag="{Binding SelectedVM, Mode=TwoWay}"/>
+                <behaviours:TreeSelectedVMBehaviour SelectedVM="{Binding SelectedVM, Mode=TwoWay}"/>
             </i:Interaction.Behaviors>
             <TreeViewItem Header="{StaticResource GeneralSettingsTab}"
                           Tag="{Binding ElementName=Window, Path=DataContext.AudioBandVM}"/>
@@ -55,7 +52,33 @@
                 <TreeViewItem Header="{StaticResource PrevButtonTab}"
                               Tag="{Binding ElementName=Window, Path=DataContext.PreviousButtonVM}"/>
             </TreeViewItem>
-            <TreeViewItem Header="{StaticResource CustomLabelsTab}"/>
+            <TreeViewItem Header="{StaticResource CustomLabelsTab}" IsExpanded="True"
+                          ItemsSource="{Binding CustomLabelsVM.CustomLabels}"
+                          Tag="{Binding CustomLabelsVM}">
+                <TreeViewItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <HeaderedContentControl Header="{StaticResource CustomLabelsTab}" Margin="0, 0, 10, 0"/>
+                            <Button Style="{StaticResource TreeviewButtonPositive}"
+                                    Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.AddLabelCommand}"
+                                    Content="{iconPacks:Modern Kind=Add}">
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </TreeViewItem.HeaderTemplate>
+                <TreeViewItem.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource TreeviewButtonNegative}"
+                                    Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.RemoveLabelCommand}"
+                                    CommandParameter="{Binding}"
+                                    Content="{iconPacks:Modern Kind=Delete}">
+                            </Button>
+                            <HeaderedContentControl Header="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TreeViewItem.ItemTemplate>
+            </TreeViewItem>
             <TreeViewItem Header="{StaticResource ProgressBarTab}"
                           Tag="{Binding ElementName=Window, Path=DataContext.ProgressBarVM}"/>
             <TreeViewItem Header="{StaticResource AlbumArtTab}" IsExpanded="True"
@@ -64,7 +87,6 @@
                               Tag="{Binding ElementName=Window, Path=DataContext.AlbumArtPopupVM}"/>
             </TreeViewItem>
             <TreeViewItem Header="{StaticResource AudioSourceSettingsTab}">
-
             </TreeViewItem>
         </TreeView>
         <ScrollViewer>
@@ -94,13 +116,20 @@
                     <DataTemplate DataType="{x:Type viewmodels:AlbumArtPopupVM}">
                         <local:AlbumPopupSettingsView DataContext="{Binding}"/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:CustomLabelsVM}">
+                        <DockPanel>
+                            <Button Content="{StaticResource NewLabelButtonText}" 
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.AddLabelCommand}"/>
+                        </DockPanel>
+                    </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>
         </ScrollViewer>
     </DockPanel>
     <metro:MetroWindow.Flyouts>
         <metro:FlyoutsControl>
-            <local:HelpFlyout DataContext="{Binding HelpVM}"/>
+            <local:HelpFlyout x:Name="HelpFlyout" DataContext="{Binding HelpVM}"/>
         </metro:FlyoutsControl>
     </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>

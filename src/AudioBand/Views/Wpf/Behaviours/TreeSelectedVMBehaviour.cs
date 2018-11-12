@@ -1,30 +1,25 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
+using AudioBand.ViewModels;
 
 namespace AudioBand.Views.Wpf.Behaviours
 {
     /// <summary>
-    /// Behaviour to bind the selected item's tag
+    /// Behaviour to expose a binding to a <see cref="ViewModelBase"/> if selected in a tree.
     /// </summary>
-    internal class TreeSelectedTagBehaviour : Behavior<TreeView>
+    internal class TreeSelectedVMBehaviour : Behavior<TreeView>
     {
-        public object SelectedTag
+        /// <summary>
+        /// The current selected view model in the tree.
+        /// </summary>
+        public object SelectedVM
         {
-            get => GetValue(SelectedTagProperty);
-            set => SetValue(SelectedTagProperty, value);
+            get => GetValue(SelectedVMProperty);
+            set => SetValue(SelectedVMProperty, value);
         }
 
-        public static readonly DependencyProperty SelectedTagProperty =
-            DependencyProperty.Register("SelectedTag", typeof(object), typeof(TreeSelectedTagBehaviour), new UIPropertyMetadata(null, OnSelectedTagChanged));
-
-        private static void OnSelectedTagChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue is TreeViewItem item)
-            {
-                item.SetValue(TreeViewItem.IsSelectedProperty, true);
-            }
-        }
+        public static readonly DependencyProperty SelectedVMProperty = DependencyProperty.Register(nameof(SelectedVM), typeof(object), typeof(TreeSelectedVMBehaviour));
 
         protected override void OnAttached()
         {
@@ -47,7 +42,11 @@ namespace AudioBand.Views.Wpf.Behaviours
         {
             if (e.NewValue is TreeViewItem item)
             {
-                SelectedTag = item.Tag;
+                SelectedVM = item.Tag;
+            } 
+            else if (e.NewValue is ViewModelBase vm)
+            {
+                SelectedVM = vm;
             }
         }
     }

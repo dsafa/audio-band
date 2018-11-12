@@ -27,6 +27,29 @@
     <Style x:Key="TreeViewNavigation" TargetType="{x:Type TreeView}" BasedOn="{StaticResource {x:Type TreeView}}">
         <Setter Property="FontSize" Value="24"/>
     </Style>
+    <Style x:Key="TreeviewButtonPositive" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Margin" Value="0, 4, 0, 0"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource GrayBrush2}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource AccentBaseColorBrush}"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource AccentSelectedColorBrush}"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="TreeviewButtonNegative" TargetType="{x:Type Button}" BasedOn="{StaticResource TreeviewButtonPositive}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="Red"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
     <Style TargetType="{x:Type Grid}">
         <Style.Resources>
             <Thickness x:Key="GridMargin" Left="0" Top="2" Right="0" Bottom="0" />
