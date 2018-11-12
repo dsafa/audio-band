@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
@@ -90,7 +89,7 @@
 
         <Label Grid.Row="9" Grid.Column="0" Content="Alignment" />
         <ComboBox Grid.Row="9" Grid.Column="1" 
-                  ItemsSource="{Binding ElementName=Window, Path=TextAlignValues}"
+                  ItemsSource="{Binding TextAlignValues}"
                   SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
 
         <Label Grid.Row="10" Grid.Column="0" Content="{StaticResource ScrollSpeedLabelText}" />

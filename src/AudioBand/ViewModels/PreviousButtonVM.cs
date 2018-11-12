@@ -73,6 +73,9 @@ namespace AudioBand.ViewModels
 
         public Size Size => new Size(Width, Height);
 
-        public PreviousButtonVM(PreviousButton model) : base(model) {}
+        public PreviousButtonVM(PreviousButton model) : base(model)
+        {
+            Image = LoadImage(ImagePath, DefaultPreviousButtonSvg.ToBitmap());
+        }
     }
 }

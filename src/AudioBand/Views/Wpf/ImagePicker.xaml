@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:commands="clr-namespace:AudioBand.Commands"
+             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="500">
+             d:DesignHeight="40" d:DesignWidth="500"
+             d:DataContext="{d:DesignInstance local:ImagePicker}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,17 +17,21 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
-        <Button DockPanel.Dock="Right" Margin="2" Content="{StaticResource DefaultButtonText}">
+        <Button DockPanel.Dock="Left"
+                Content="{iconPacks:Modern Kind=Reset}"
+                Command="{Binding ResetImageCommand}">
             <Button.ToolTip>
                 <TextBlock Text="{StaticResource DefaultImageHelpText}" />
             </Button.ToolTip>
         </Button>
-        <Button DockPanel.Dock="Right" Margin="2" Content="{StaticResource BrowseButtonText}">
+        <Button DockPanel.Dock="Left" Margin="4, 0, 4, 0"
+                Content="{iconPacks:Modern Kind=FolderEllipsis}"
+                Command="{Binding BrowseForImageCommand}">
             <Button.ToolTip>
                 <TextBlock Text="{StaticResource BrowseImageHelpText}"/>
             </Button.ToolTip>
         </Button>
-        <Label x:Name="ImagePathLabel" Margin="2" Content="{Binding ImagePath, Mode=TwoWay}">
+        <Label Content="{Binding ImagePath}">
             <Label.ToolTip>
                 <TextBlock Text="{Binding ImagePath}"/>
             </Label.ToolTip>

@@ -62,6 +62,9 @@
                             <Button Style="{StaticResource TreeviewButtonPositive}"
                                     Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.AddLabelCommand}"
                                     Content="{iconPacks:Modern Kind=Add}">
+                                <Button.ToolTip>
+                                    <TextBlock Text="{StaticResource AddNewLabelHelpText}"/>
+                                </Button.ToolTip>
                             </Button>
                         </StackPanel>
                     </DataTemplate>
@@ -73,6 +76,9 @@
                                     Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.RemoveLabelCommand}"
                                     CommandParameter="{Binding}"
                                     Content="{iconPacks:Modern Kind=Delete}">
+                                <Button.ToolTip>
+                                    <TextBlock Text="{StaticResource DeleteLabelHelpText}"/>
+                                </Button.ToolTip>
                             </Button>
                             <HeaderedContentControl Header="{Binding Name}"/>
                         </StackPanel>
