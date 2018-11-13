@@ -9,6 +9,9 @@ namespace AudioBand.Views.Wpf
 {
     internal partial class SettingsWindow
     {
+        private bool _shouldSave;
+        private SettingsWindowVM _vm;
+
         public RelayCommand CancelCloseCommand { get; }
         public RelayCommand SaveCloseCommand { get; }
 
@@ -20,7 +23,7 @@ namespace AudioBand.Views.Wpf
             SaveCloseCommand =  new RelayCommand(SaveCloseCommandOnExecute);
 
             InitializeComponent();
-            DataContext = vm;
+            DataContext = _vm = vm;
             vm.CustomLabelsVM.DialogService = new DialogService(this);
         }
 
@@ -42,20 +45,31 @@ namespace AudioBand.Views.Wpf
 
         private void SaveCloseCommandOnExecute(object o)
         {
-            ((SettingsWindowVM)DataContext).EndEdit();
+            _shouldSave = true;
             Close();
         }
 
         private void CancelCloseCommandOnExecute(object o)
         {
-            ((SettingsWindowVM)DataContext).CancelEdit();
+            _shouldSave = false;
             Close();
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
-            ((SettingsWindowVM)DataContext).BeginEdit();
+
+            if (_shouldSave)
+            {
+                _vm.EndEdit();
+            }
+            else
+            {
+                _vm.CancelEdit();
+            }
+
+            _shouldSave = false;
+            _vm.BeginEdit();
             Hide();
         }
     }

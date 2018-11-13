@@ -32,11 +32,6 @@
             <Button Content="Help" Command="{Binding HelpVM.ShowHelp}" CommandParameter="{Binding ElementName=HelpFlyout}"/>
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <DockPanel LastChildFill="True">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
             <Button Margin="4" Content="{StaticResource CancelButtonText}" 
