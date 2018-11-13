@@ -6,7 +6,7 @@ namespace AudioBand
 {
     partial class MainControl
     {
-        private const string CustomLabelName = "CustomLabel";
+        private const string CustomLabelControlsKey = "CustomLabel";
 
         private void InitializeBindingSources(AlbumArtPopupVM albumArtPopupVm, AlbumArtVM albumartVm, AudioBandVM audioBandVm, NextButtonVM nextButtonVm,
             PlayPauseButtonVM playPauseButtonVm, PreviousButtonVM previousButtonVm, ProgressBarVM progressBarVm)
@@ -41,12 +41,13 @@ namespace AudioBand
             label.DataBindings.Add(nameof(label.SongProgress), _trackModel, nameof(_trackModel.TrackProgress));
 
             label.Tag = customLabel;
+            label.Name = CustomLabelControlsKey;
             Controls.Add(label);
         }
 
         internal void RemoveCustomTextLabel(CustomLabelVM customLabel)
         {
-            var control = Controls.Find(CustomLabelName, true)
+            var control = Controls.Find(CustomLabelControlsKey, true)
                 .Cast<FormattedTextLabel>()
                 .FirstOrDefault(l => l.Tag == customLabel);
 
