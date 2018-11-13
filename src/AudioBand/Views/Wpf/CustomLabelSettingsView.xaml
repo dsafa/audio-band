@@ -8,6 +8,7 @@
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
              xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance viewmodels:CustomLabelVM}">
@@ -97,21 +98,26 @@
                              behaviours:NumericInput.Type="Size"
                              Value="{Binding ScrollSpeed, Mode=TwoWay}"/>
 
-        <Label Grid.Row="11" Grid.Column="0" Content="Format" ToolTipService.ShowDuration="60000">
-            <Label.ToolTip>
+        <StackPanel Grid.Row="11" Grid.Column="0" Orientation="Horizontal"
+                    ToolTipService.ShowDuration="60000" ToolTipService.InitialShowDelay="500"
+                    Background="#01FFFFFF">
+            <Label Content="{StaticResource TextFormatLabelText}"/>
+            <iconPacks:PackIconModern Kind="Question" Width="10" Height="10" Margin="-10, 4, 0, 0"/>
+            <StackPanel.ToolTip>
                 <TextBlock>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpText}"/>
+                    <TextBlock Text="{StaticResource CustomLabelFormatHelpText}"/><LineBreak/>
                     <Bold>Tags</Bold> <LineBreak/>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextTags}"/>
+                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextTags}"/><LineBreak/>
                     <Bold>Styles</Bold> <LineBreak/>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextStyles}"/>
+                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextStyles}"/><LineBreak/>
                     <Bold>Colors</Bold> <LineBreak/>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextColors}"/>
+                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextColors}"/><LineBreak/>
                     <Bold>Example formats</Bold> <LineBreak/>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextExamples}"/>
+                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextExamples}"/><LineBreak/>
                 </TextBlock>
-            </Label.ToolTip>
-        </Label>
+            </StackPanel.ToolTip>
+        </StackPanel>
+
         <TextBox Grid.Row="11" Grid.Column="1" 
                  metro:TextBoxHelper.ClearTextButton="True"
                  Text="{Binding FormatString, Mode=TwoWay}"/>
