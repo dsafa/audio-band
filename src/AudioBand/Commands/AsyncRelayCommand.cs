@@ -48,5 +48,15 @@ namespace AudioBand.Commands
         {
             await _execute((T)parameter);
         }
+
+        /// <summary>
+        /// Execute the command asynchronously.
+        /// </summary>
+        /// <param name="parameter">Command paramerter.</param>
+        /// <returns>Task</returns>
+        public async Task ExecuteAsync(object parameter)
+        {
+            await _execute((T)parameter);
+        }
     }
 }

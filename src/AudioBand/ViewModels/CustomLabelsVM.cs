@@ -10,7 +10,7 @@ namespace AudioBand.ViewModels
 {
     internal class CustomLabelsVM : ViewModelBase
     {
-        private readonly MainControl _control;
+        private readonly ICustomLabelHost _labelHost;
         private readonly HashSet<CustomLabelVM> _added = new HashSet<CustomLabelVM>();
         private readonly HashSet<CustomLabelVM> _removed = new HashSet<CustomLabelVM>();
 
@@ -19,14 +19,14 @@ namespace AudioBand.ViewModels
         public AsyncRelayCommand<CustomLabelVM> RemoveLabelCommand { get; }
         public IDialogService DialogService { get; set; }
 
-        public CustomLabelsVM(List<CustomLabel> customLabels, MainControl control)
+        public CustomLabelsVM(List<CustomLabel> customLabels, ICustomLabelHost labelHost)
         {
             CustomLabels = new ObservableCollection<CustomLabelVM>(customLabels.Select(customLabel => new CustomLabelVM(customLabel)));
-            _control = control;
+            _labelHost = labelHost;
 
             foreach (var customLabelVm in CustomLabels)
             {
-                _control.AddCustomTextLabel(customLabelVm);
+                _labelHost.AddCustomTextLabel(customLabelVm);
             }
 
             AddLabelCommand = new RelayCommand(AddLabelCommandOnExecute);
@@ -37,7 +37,7 @@ namespace AudioBand.ViewModels
         {
             var newLabel = new CustomLabelVM(new CustomLabel()) {Name = "New Label"};
             CustomLabels.Add(newLabel);
-            _control.AddCustomTextLabel(newLabel);
+            _labelHost.AddCustomTextLabel(newLabel);
 
             _added.Add(newLabel);
         }
@@ -50,7 +50,7 @@ namespace AudioBand.ViewModels
             }
 
             CustomLabels.Remove(labelVm);
-            _control.RemoveCustomTextLabel(labelVm);
+            _labelHost.RemoveCustomTextLabel(labelVm);
 
             // Only add to removed if not a new label
             if (!_added.Remove(labelVm))
@@ -76,13 +76,13 @@ namespace AudioBand.ViewModels
             foreach (var label in _added)
             {
                 CustomLabels.Remove(label);
-                _control.RemoveCustomTextLabel(label);
+                _labelHost.RemoveCustomTextLabel(label);
             }
 
             foreach (var label in _removed)
             {
                 CustomLabels.Add(label);
-                _control.AddCustomTextLabel(label);
+                _labelHost.AddCustomTextLabel(label);
             }
 
             _added.Clear();
@@ -93,5 +93,11 @@ namespace AudioBand.ViewModels
                 customLabelVm.CancelEdit();
             }
         }
+    }
+
+    internal interface ICustomLabelHost
+    {
+        void AddCustomTextLabel(CustomLabelVM label);
+        void RemoveCustomTextLabel(CustomLabelVM label);
     }
 }
