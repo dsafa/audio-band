@@ -48,7 +48,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(CustomLabel.Alignment))]
-        public CustomLabel.TextAlignment TextAlignment
+        public TextAlignment TextAlignment
         {
             get => Model.Alignment;
             set => SetProperty(nameof(Model.Alignment), value);
