@@ -43,30 +43,21 @@
 
     <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
     <sys:String x:Key="DefaultImageHelpText">Reset image to its default.</sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpText">Format for the text that is displayed which can include placeholders.
-        Placeholders will be substituted with their corresponding values. Placeholders are in the format {[style]&lt;tag&gt;:[color]}.
-    </sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpTextTags">
-        &#8226; artist - Artist for the current song
-        &#8226; song - The title of the current song
-        &#8226; album - Album name for the current song
-        &#8226; time - Current playback time for the current song
-        &#8226; length - Total length of the current song
-    </sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpTextStyles">
-        &#8226; * - Bolds the placeholder
-        &#8226; &amp; - Italicizes the placeholder
-        &#8226; _ - Underlines the placeholder
-    </sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpTextColors">
-        Use an html color code in the format #RRGGBB
-    </sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpTextExamples">
-        Normal label showing the song and artist : {song} by {artist}
-        Showing the album name in bold : {*album}
-        Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9}
-        Using style and color : {*artist:#a9a9a9}
-    </sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpText" xml:space="preserve">Format for the text that is displayed which can include placeholders.
+Placeholders will be substituted with their corresponding values. Placeholders are in the format {[style]&lt;tag&gt;:[color]}.</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpTextTags" xml:space="preserve">&#8226; artist - Artist for the current song
+&#8226; song - The title of the current song
+&#8226; album - Album name for the current song
+&#8226; time - Current playback time for the current song
+&#8226; length - Total length of the current song</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpTextStyles" xml:space="preserve">&#8226; * - Bolds the placeholder
+&#8226; &amp; - Italicizes the placeholder
+&#8226; _ - Underlines the placeholder</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpTextColors" xml:space="preserve">Use an html color code in the format #RRGGBB</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpTextExamples" xml:space="preserve">Normal label showing the song and artist : {song} by {artist}
+Showing the album name in bold : {*album}
+Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9}
+Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="AddNewLabelHelpText">Add a new label</sys:String>
     <sys:String x:Key="DeleteLabelHelpText">Delete this label</sys:String>
 </ResourceDictionary>
