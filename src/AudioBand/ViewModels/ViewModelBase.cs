@@ -5,18 +5,71 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using AudioBand.Commands;
 using AudioBand.Models;
 using NLog;
+using AutoMapper;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// Base class for view models.
     /// </summary>
-    internal abstract class ViewModelBase : INotifyPropertyChanged
+    internal abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Command to start editing.
+        /// </summary>
+        public RelayCommand BeginEditCommand { get; }
+
+        /// <summary>
+        /// Command to end editing.
+        /// </summary>
+        public RelayCommand EndEditCommand { get; }
+
+        /// <summary>
+        /// Command to cancel edit.
+        /// </summary>
+        public RelayCommand CancelEditCommand { get; }
+
+        /// <summary>
+        /// Command to reset the state to default.
+        /// </summary>
+        public RelayCommand ResetCommand { get; }
+
+        /// <inheritdoc cref="IEditableObject.BeginEdit"/>
+        public void BeginEdit()
+        {
+            OnBeginEdit();
+        }
+
+        /// <inheritdoc cref="IEditableObject.EndEdit"/>
+        public void EndEdit()
+        {
+            OnEndEdit();
+        }
+        /// <inheritdoc cref="IEditableObject.CancelEdit"/>
+        public void CancelEdit()
+        {
+            OnCancelEdit();
+        }
+
+        /// <inheritdoc cref="IResettableObject.Reset"/>
+        public void Reset()
+        {
+            OnReset();
+        }
+
+        protected ViewModelBase()
+        {
+            BeginEditCommand = new RelayCommand(o => BeginEdit());
+            EndEditCommand = new RelayCommand(o => EndEdit());
+            CancelEditCommand = new RelayCommand(o => CancelEdit());
+            ResetCommand = new RelayCommand(o => Reset());
+        }
 
         /// <summary>
         /// Notifies subsribers to a property change.
@@ -26,20 +79,52 @@ namespace AudioBand.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        /// <summary>
+        /// Resets an object to its default state.
+        /// </summary>
+        /// <typeparam name="T">Object type.</typeparam>
+        /// <param name="obj">Object to reset.</param>
+        protected void ResetObject<T>(T obj) where T: new()
+        {
+            Mapper.Map<T, T>(new T(), obj);
+        }
+
+        /// <summary>
+        /// Called when <see cref="Reset"/> is called.
+        /// </summary>
+        protected virtual void OnReset() { }
+
+        /// <summary>
+        /// Called when <see cref="CancelEdit"/> is called.
+        /// </summary>
+        protected virtual void OnCancelEdit() { }
+
+        /// <summary>
+        /// Called when <see cref="EndEdit"/> is called.
+        /// </summary>
+        protected virtual void OnEndEdit() { }
+
+        /// <summary>
+        /// Called when <see cref="BeginEdit"/> is called.
+        /// </summary>
+        protected virtual void OnBeginEdit() { }
     }
 
     /// <summary>
     /// Base class for a viewmodel with a model.
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
-    internal abstract class ViewModelBase<TModel> :  ViewModelBase, IEditableObject, IResettableObject
-    where TModel: ModelBase
+    internal abstract class ViewModelBase<TModel> :  ViewModelBase
+    where TModel: ModelBase, new()
     {
         // View model property name -> other vm property names
         private readonly Dictionary<string, string[]> _alsoNotifyCache = new Dictionary<string, string[]>();
         // Mapping from a model and model property to the viewmodel property name
         private readonly Dictionary<(object model, string modelPropName), string> _modelToPropertyName = new Dictionary<(object model, string modelPropName), string>();
         private readonly Dictionary<(object model, string property), PropertyInfo> _modelPropCache = new Dictionary<(object model, string property), PropertyInfo>();
+        private TModel _backup;
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Model associated with this view model.
@@ -51,26 +136,6 @@ namespace AudioBand.ViewModels
             Model = model;
             SetupModelBindings(Model);
             SetupAlsoNotify();
-        }
-
-        public void BeginEdit()
-        {
-
-        }
-
-        public void EndEdit()
-        {
-
-        }
-
-        public void CancelEdit()
-        {
-
-        }
-
-        public void Reset()
-        {
-
         }
 
         /// <summary>
@@ -145,6 +210,39 @@ namespace AudioBand.ViewModels
                 var attr = propertyInfo.GetCustomAttribute<AlsoNotifyAttribute>();
                 _alsoNotifyCache.Add(propertyInfo.Name, attr.AlsoNotify);
             }
+        }
+
+        protected override void OnReset()
+        {
+            base.OnReset();
+
+            ResetObject(Model);
+        }
+
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+
+            if (_backup == null)
+            {
+                _logger.Warn("Backup is null. Begin edit wasn't called.");
+            }
+
+            Mapper.Map(_backup, Model);
+            _backup = null;
+        }
+
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            _backup = null;
+        }
+
+        protected override void OnBeginEdit()
+        {
+            base.OnBeginEdit();
+
+            _backup = new TModel();
         }
 
         /// <summary>

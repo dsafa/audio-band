@@ -1,12 +1,8 @@
 ﻿using AudioBand.ViewModels;
-using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 
 namespace AudioBand.Views.Wpf
 {
@@ -18,6 +14,7 @@ namespace AudioBand.Views.Wpf
 
             InitializeComponent();
             DataContext = vm;
+            vm.CustomLabelsVM.DialogService = new DialogService(this);
         }
 
         // Problem loading some dlls
@@ -40,31 +37,6 @@ namespace AudioBand.Views.Wpf
         {
             e.Cancel = true;
             Hide();
-        }
-
-        private async void ResetSettingOnExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            var res = await ShowConfirmationDialog("Reset Setting", "Are you sure you want to reset this setting to the default values?");
-            if (res != MessageDialogResult.Affirmative)
-            {
-                return;
-            }
-
-            var resettableObj = e.Parameter as IResettableObject;
-            resettableObj.Reset();
-        }
-
-        private async Task<MessageDialogResult> ShowConfirmationDialog(string title, string message)
-        {
-            var dialogSettings = new MetroDialogSettings
-            {
-                AffirmativeButtonText = "Yes",
-                NegativeButtonText = "No",
-                AnimateHide = false,
-                AnimateShow = false
-            };
-
-            return await this.ShowMessageAsync(title, message, MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
         }
     }
 }
