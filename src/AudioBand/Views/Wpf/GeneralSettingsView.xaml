@@ -38,8 +38,8 @@
             behaviours:NumericInput.Type="Size" 
             Value="{Binding Height, Mode=TwoWay}"/>
 
-        <Button Grid.Row="2" Grid.Column="0"
-                HorizontalAlignment="Left" 
-                Content="{StaticResource ResetButtonText}"/>
+        <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" 
+                Content="{StaticResource ResetButtonText}"
+                Command="{Binding ResetCommand}"/>
     </Grid>
 </UserControl>

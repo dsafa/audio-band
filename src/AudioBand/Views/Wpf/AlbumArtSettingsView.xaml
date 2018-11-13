@@ -62,6 +62,8 @@
         <local:ImagePicker Grid.Row="5" Grid.Column="1" 
                            ImagePath="{Binding PlaceholderPath, Mode=TwoWay}"/>
 
-        <Button Grid.Row="6" Grid.Column="0" HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}"/>
+        <Button Grid.Row="6" Grid.Column="0" HorizontalAlignment="Left" 
+                Content="{StaticResource ResetButtonText}"
+                Command="{Binding ResetCommand}"/>
     </Grid>
 </UserControl>

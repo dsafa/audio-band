@@ -17,16 +17,49 @@
         public object SelectedVM
         {
             get => _selectedVM;
-            set
-            {
-                if (Equals(value, _selectedVM))
-                {
-                    return;
-                }
+            set => SetProperty(ref _selectedVM, value);
+        }
 
-                _selectedVM = value;
-                RaisePropertyChanged();
-            }
+        protected override void OnBeginEdit()
+        {
+            base.OnBeginEdit();
+
+            AudioBandVM.BeginEdit();
+            AlbumArtPopupVM.BeginEdit();
+            AlbumArtVM.BeginEdit();
+            CustomLabelsVM.BeginEdit();
+            NextButtonVM.BeginEdit();
+            PlayPauseButtonVM.BeginEdit();
+            PreviousButtonVM.BeginEdit();
+            ProgressBarVM.BeginEdit();
+        }
+
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+
+            AudioBandVM.CancelEdit();
+            AlbumArtPopupVM.CancelEdit();
+            AlbumArtVM.CancelEdit();
+            CustomLabelsVM.CancelEdit();
+            NextButtonVM.CancelEdit();
+            PlayPauseButtonVM.CancelEdit();
+            PreviousButtonVM.CancelEdit();
+            ProgressBarVM.CancelEdit();
+        }
+
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+
+            AudioBandVM.EndEdit();
+            AlbumArtPopupVM.EndEdit();
+            AlbumArtVM.EndEdit();
+            CustomLabelsVM.EndEdit();
+            NextButtonVM.EndEdit();
+            PlayPauseButtonVM.EndEdit();
+            PreviousButtonVM.EndEdit();
+            ProgressBarVM.EndEdit();
         }
     }
 }

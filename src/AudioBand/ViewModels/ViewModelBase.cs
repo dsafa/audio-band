@@ -13,10 +13,16 @@ using AutoMapper;
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// Base class for view models.
+    /// Base class for view models. With automatic support for 
+    /// <see cref="INotifyPropertyChanged"/>, <see cref="IEditableObject"/>, <see cref="IResettableObject"/> and commands.
     /// </summary>
     internal abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject
     {
+        // View model property name -> other vm property names
+        protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
+
+        protected Logger Logger { get; }
+
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -69,6 +75,8 @@ namespace AudioBand.ViewModels
             EndEditCommand = new RelayCommand(o => EndEdit());
             CancelEditCommand = new RelayCommand(o => CancelEdit());
             ResetCommand = new RelayCommand(o => Reset());
+            SetupAlsoNotify();
+            Logger = LogManager.GetLogger(GetType().FullName);
         }
 
         /// <summary>
@@ -87,7 +95,8 @@ namespace AudioBand.ViewModels
         /// <param name="obj">Object to reset.</param>
         protected void ResetObject<T>(T obj) where T: new()
         {
-            Mapper.Map<T, T>(new T(), obj);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
+            mapper.Map<T, T>(new T(), obj);
         }
 
         /// <summary>
@@ -109,50 +118,6 @@ namespace AudioBand.ViewModels
         /// Called when <see cref="BeginEdit"/> is called.
         /// </summary>
         protected virtual void OnBeginEdit() { }
-    }
-
-    /// <summary>
-    /// Base class for a viewmodel with a model.
-    /// </summary>
-    /// <typeparam name="TModel"></typeparam>
-    internal abstract class ViewModelBase<TModel> :  ViewModelBase
-    where TModel: ModelBase, new()
-    {
-        // View model property name -> other vm property names
-        private readonly Dictionary<string, string[]> _alsoNotifyCache = new Dictionary<string, string[]>();
-        // Mapping from a model and model property to the viewmodel property name
-        private readonly Dictionary<(object model, string modelPropName), string> _modelToPropertyName = new Dictionary<(object model, string modelPropName), string>();
-        private readonly Dictionary<(object model, string property), PropertyInfo> _modelPropCache = new Dictionary<(object model, string property), PropertyInfo>();
-        private TModel _backup;
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// Model associated with this view model.
-        /// </summary>
-        public TModel Model { get; }
-
-        protected ViewModelBase(TModel model)
-        {
-            Model = model;
-            SetupModelBindings(Model);
-            SetupAlsoNotify();
-        }
-
-        /// <summary>
-        /// Sets the property in the <see cref="Model"/>.
-        /// </summary>
-        /// <typeparam name="TValue">Type of the property to set.</typeparam>
-        /// <param name="modelPropertyName">Name of the property to set.</param>
-        /// <param name="newValue">New value to set.</param>
-        /// <param name="propertyName">Name of the property to notify with.</param>
-        /// <returns>Returns true if new value was set</returns>
-        protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
-        {
-            var prop = _modelPropCache[(Model, modelPropertyName)];
-            prop.SetValue(Model, newValue);
-            var currentValue = (TValue)prop.GetValue(Model);
-            return EqualityComparer<TValue>.Default.Equals(currentValue, newValue);
-        }
 
         /// <summary>
         /// Sets the <paramref name="field"/> and calls property changed for it and any others given with a <see cref="AlsoNotifyAttribute"/>.
@@ -172,7 +137,7 @@ namespace AudioBand.ViewModels
             field = newValue;
             RaisePropertyChanged(propertyName);
 
-            if (_alsoNotifyCache.TryGetValue(propertyName, out var alsoNotify))
+            if (AlsoNotifyMap.TryGetValue(propertyName, out var alsoNotify))
             {
                 foreach (var propName in alsoNotify)
                 {
@@ -181,6 +146,57 @@ namespace AudioBand.ViewModels
             }
 
             return true;
+        }
+
+        private void SetupAlsoNotify()
+        {
+            var alsoNotifyProperties = GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(AlsoNotifyAttribute)));
+            foreach (var propertyInfo in alsoNotifyProperties)
+            {
+                var attr = propertyInfo.GetCustomAttribute<AlsoNotifyAttribute>();
+                AlsoNotifyMap.Add(propertyInfo.Name, attr.AlsoNotify);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Base class for a viewmodel with a model.
+    /// </summary>
+    /// <typeparam name="TModel"></typeparam>
+    internal abstract class ViewModelBase<TModel> : ViewModelBase
+    where TModel: ModelBase, new()
+    {
+        // Mapping from a model and model property to the viewmodel property name
+        private readonly Dictionary<(object model, string modelPropName), string> _modelToPropertyName = new Dictionary<(object model, string modelPropName), string>();
+        private readonly Dictionary<(object model, string property), PropertyInfo> _modelPropCache = new Dictionary<(object model, string property), PropertyInfo>();
+        private TModel _backup;
+        private readonly MapperConfiguration _mapperConfiguration = new MapperConfiguration(cfg => cfg.CreateMap<TModel, TModel>());
+
+        /// <summary>
+        /// Model associated with this view model.
+        /// </summary>
+        public TModel Model { get; }
+
+        protected ViewModelBase(TModel model)
+        {
+            Model = model;
+            SetupModelBindings(Model);
+        }
+
+        /// <summary>
+        /// Sets the property in the <see cref="Model"/>.
+        /// </summary>
+        /// <typeparam name="TValue">Type of the property to set.</typeparam>
+        /// <param name="modelPropertyName">Name of the property to set.</param>
+        /// <param name="newValue">New value to set.</param>
+        /// <param name="propertyName">Name of the property to notify with.</param>
+        /// <returns>Returns true if new value was set</returns>
+        protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
+        {
+            var prop = _modelPropCache[(Model, modelPropertyName)];
+            prop.SetValue(Model, newValue);
+            var currentValue = (TValue)prop.GetValue(Model);
+            return EqualityComparer<TValue>.Default.Equals(currentValue, newValue);
         }
 
         /// <summary>
@@ -202,16 +218,6 @@ namespace AudioBand.ViewModels
             model.PropertyChanged += ModelOnPropertyChanged;
         }
 
-        private void SetupAlsoNotify()
-        {
-            var alsoNotifyProperties = GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(AlsoNotifyAttribute)));
-            foreach (var propertyInfo in alsoNotifyProperties)
-            {
-                var attr = propertyInfo.GetCustomAttribute<AlsoNotifyAttribute>();
-                _alsoNotifyCache.Add(propertyInfo.Name, attr.AlsoNotify);
-            }
-        }
-
         protected override void OnReset()
         {
             base.OnReset();
@@ -225,10 +231,10 @@ namespace AudioBand.ViewModels
 
             if (_backup == null)
             {
-                _logger.Warn("Backup is null. Begin edit wasn't called.");
+                Logger.Warn("Backup is null. Begin edit wasn't called.");
             }
 
-            Mapper.Map(_backup, Model);
+            _mapperConfiguration.CreateMapper().Map(_backup, Model);
             _backup = null;
         }
 
@@ -241,8 +247,8 @@ namespace AudioBand.ViewModels
         protected override void OnBeginEdit()
         {
             base.OnBeginEdit();
-
             _backup = new TModel();
+            _mapperConfiguration.CreateMapper().Map(Model, _backup);
         }
 
         /// <summary>
@@ -254,7 +260,7 @@ namespace AudioBand.ViewModels
             if (!_modelToPropertyName.TryGetValue((sender, propertyChangedEventArgs.PropertyName), out var propertyName)) return;
             RaisePropertyChanged(propertyName);
 
-            if (!_alsoNotifyCache.TryGetValue(nameof(propertyName), out var alsoNotfify)) return;
+            if (!AlsoNotifyMap.TryGetValue(nameof(propertyName), out var alsoNotfify)) return;
             foreach (var name in alsoNotfify)
             {
                 RaisePropertyChanged(name);

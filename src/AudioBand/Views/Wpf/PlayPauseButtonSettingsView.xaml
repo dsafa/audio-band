@@ -66,6 +66,8 @@
         <Label Grid.Row="6" Grid.Column="0" Content="{StaticResource PauseButtonImageLabelText}" />
         <local:ImagePicker Grid.Row="6" Grid.Column="1" ImagePath="{Binding PauseImagePath, Mode=TwoWay}" />
 
-        <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}"/>
+        <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" 
+                Content="{StaticResource ResetButtonText}"
+                Command="{Binding ResetCommand}"/>
     </Grid>
 </UserControl>

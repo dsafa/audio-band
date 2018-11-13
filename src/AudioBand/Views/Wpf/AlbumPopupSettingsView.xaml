@@ -55,6 +55,8 @@
         <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
                              Value="{Binding Margin, Mode=TwoWay}"/>
 
-        <Button Grid.Row="5" Grid.Column="0" Content="Reset"/>
+        <Button Grid.Row="5" Grid.Column="0" HorizontalAlignment="Left"
+                Content="{StaticResource ResetButtonText}"
+                Command="{Binding ResetCommand}"/>
     </Grid>
 </UserControl>

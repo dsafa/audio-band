@@ -3,14 +3,21 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using AudioBand.Commands;
 
 namespace AudioBand.Views.Wpf
 {
     internal partial class SettingsWindow
     {
+        public RelayCommand CancelCloseCommand { get; }
+        public RelayCommand SaveCloseCommand { get; }
+
         internal SettingsWindow(SettingsWindowVM vm)
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
+            CancelCloseCommand = new RelayCommand(CancelCloseCommandOnExecute);
+            SaveCloseCommand =  new RelayCommand(SaveCloseCommandOnExecute);
 
             InitializeComponent();
             DataContext = vm;
@@ -33,9 +40,22 @@ namespace AudioBand.Views.Wpf
             return !File.Exists(filename) ? null : Assembly.LoadFrom(filename);
         }
 
+        private void SaveCloseCommandOnExecute(object o)
+        {
+            ((SettingsWindowVM)DataContext).EndEdit();
+            Close();
+        }
+
+        private void CancelCloseCommandOnExecute(object o)
+        {
+            ((SettingsWindowVM)DataContext).CancelEdit();
+            Close();
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
+            ((SettingsWindowVM)DataContext).BeginEdit();
             Hide();
         }
     }
