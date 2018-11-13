@@ -4,7 +4,7 @@ using AudioBand.Views.Winforms;
 
 namespace AudioBand
 {
-    partial class MainControl
+    partial class MainControl : ICustomLabelHost
     {
         private const string CustomLabelControlsKey = "CustomLabel";
 
@@ -20,7 +20,7 @@ namespace AudioBand
             ProgressBarVMBindingSource.DataSource = progressBarVm;
         }
 
-        internal void AddCustomTextLabel(CustomLabelVM customLabel)
+        void ICustomLabelHost.AddCustomTextLabel(CustomLabelVM customLabel)
         {
             var label = new FormattedTextLabel(customLabel.FormatString, customLabel.Color, customLabel.FontSize, customLabel.FontFamily, customLabel.TextAlignment);
             label.DataBindings.Add(nameof(label.Format), customLabel, nameof(customLabel.FormatString));
@@ -45,7 +45,7 @@ namespace AudioBand
             Controls.Add(label);
         }
 
-        internal void RemoveCustomTextLabel(CustomLabelVM customLabel)
+        void ICustomLabelHost.RemoveCustomTextLabel(CustomLabelVM customLabel)
         {
             var control = Controls.Find(CustomLabelControlsKey, true)
                 .Cast<FormattedTextLabel>()

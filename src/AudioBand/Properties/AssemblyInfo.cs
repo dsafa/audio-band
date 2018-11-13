@@ -42,3 +42,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("$version$")]
 
 [assembly: InternalsVisibleTo("AudioBand.Test")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
