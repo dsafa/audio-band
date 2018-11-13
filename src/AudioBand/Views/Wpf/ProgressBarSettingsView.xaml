@@ -71,6 +71,8 @@
         <xctk:ColorPicker Grid.Row="6" Grid.Column="1" 
                           SelectedColor="{Binding ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
-        <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}"/>
+        <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" 
+                Content="{StaticResource ResetButtonText}"
+                Command="{Binding ResetCommand}"/>
     </Grid>
 </UserControl>

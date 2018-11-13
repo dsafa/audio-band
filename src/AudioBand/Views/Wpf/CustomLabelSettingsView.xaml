@@ -116,6 +116,8 @@
                  metro:TextBoxHelper.ClearTextButton="True"
                  Text="{Binding FormatString, Mode=TwoWay}"/>
 
-        <Button Grid.Row="12" Grid.Column="0" HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}"/>
+        <Button Grid.Row="12" Grid.Column="0" HorizontalAlignment="Left" 
+                Content="{StaticResource ResetButtonText}"
+                Command="{Binding ResetCommand}"/>
     </Grid>
 </UserControl>

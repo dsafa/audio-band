@@ -32,10 +32,17 @@
             <Button Content="Help" Command="{Binding HelpVM.ShowHelp}" CommandParameter="{Binding ElementName=HelpFlyout}"/>
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <DockPanel LastChildFill="True">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-            <Button Margin="4" Content="{StaticResource CancelButtonText}"/>
-            <Button Margin="4" Content="{StaticResource SaveButtonText}" Style="{StaticResource AccentButton}"/>
+            <Button Margin="4" Content="{StaticResource CancelButtonText}" 
+                    Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
+            <Button Margin="4" Content="{StaticResource SaveButtonText}" Style="{StaticResource AccentButton}"
+                    Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
         </StackPanel>
         <TreeView x:Name="NavigationTree" DockPanel.Dock="Left" 
                   Style="{StaticResource TreeViewNavigation}" Padding="0, 0, 20, 0">

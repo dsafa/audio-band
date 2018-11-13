@@ -64,6 +64,11 @@ namespace AudioBand.ViewModels
             base.OnBeginEdit();
             _added.Clear();
             _removed.Clear();
+
+            foreach (var customLabelVm in CustomLabels)
+            {
+                customLabelVm.BeginEdit();
+            }
         }
 
         protected override void OnCancelEdit()
@@ -82,6 +87,11 @@ namespace AudioBand.ViewModels
 
             _added.Clear();
             _removed.Clear();
+
+            foreach (var customLabelVm in CustomLabels)
+            {
+                customLabelVm.CancelEdit();
+            }
         }
     }
 }
