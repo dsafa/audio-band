@@ -18,7 +18,8 @@ namespace AudioBand.Settings
                 cfg.CreateMap<AlbumArtSettings, AlbumArt>();
                 cfg.CreateMap<AlbumArtPopupSettings, AlbumArtPopup>();
                 cfg.CreateMap<AudioBandSettings, AudioBand.Models.AudioBand>();
-                cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSetting, AudioBand.Models.AudioSourceSetting>();
+                cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSetting, AudioBand.Models.AudioSourceSetting>()
+                    .ForMember(m => m.Value, c => c.MapFrom(s => s.Value));
                 cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSettings, AudioBand.Models.AudioSourceSettings>();
                 cfg.CreateMap<CustomLabelSettings, CustomLabel>();
                 cfg.CreateMap<NextButtonSettings, NextButton>();

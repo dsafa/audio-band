@@ -94,7 +94,13 @@
                 <TreeViewItem Header="{StaticResource AlbumArtPopupTab}"
                               Tag="{Binding ElementName=Window, Path=DataContext.AlbumArtPopupVM}"/>
             </TreeViewItem>
-            <TreeViewItem Header="{StaticResource AudioSourceSettingsTab}">
+            <TreeViewItem Header="{StaticResource AudioSourceSettingsTab}" IsExpanded="True"
+                          ItemsSource="{Binding AudioSourceSettingsVM}">
+                <TreeViewItem.ItemTemplate>
+                    <DataTemplate>
+                        <HeaderedContentControl Header="{Binding AudioSourceName}"/>
+                    </DataTemplate>
+                </TreeViewItem.ItemTemplate>
             </TreeViewItem>
         </TreeView>
         <ScrollViewer>
@@ -130,6 +136,9 @@
                                     HorizontalAlignment="Center" VerticalAlignment="Center"
                                     Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.AddLabelCommand}"/>
                         </DockPanel>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:AudioSourceSettingsVM}">
+                        <local:AudioSourceSettingsView DataContext="{Binding}"/>
                     </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>

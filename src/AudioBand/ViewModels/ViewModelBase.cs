@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -14,14 +15,28 @@ namespace AudioBand.ViewModels
 {
     /// <summary>
     /// Base class for view models. With automatic support for 
-    /// <see cref="INotifyPropertyChanged"/>, <see cref="IEditableObject"/>, <see cref="IResettableObject"/> and commands.
+    /// <see cref="INotifyPropertyChanged"/>, <see cref="IEditableObject"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and commands.
     /// </summary>
-    internal abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject
+    internal abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject, INotifyDataErrorInfo
     {
-        // View model property name -> other vm property names
-        protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
+        private Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
 
-        protected Logger Logger { get; }
+        /// <inheritdoc cref="INotifyDataErrorInfo.GetErrors"/>
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (_propertyErrors.TryGetValue(propertyName, out var errors) && errors.Any())
+            {
+                return _propertyErrors[propertyName];
+            }
+
+            return null;
+        }
+
+        ///<inheritdoc cref="INotifyDataErrorInfo.HasErrors"/>
+        public bool HasErrors => _propertyErrors.Any(entry => entry.Value?.Any() ?? false);
+
+        /// <inheritdoc cref="INotifyDataErrorInfo.ErrorsChanged"/>
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
@@ -68,6 +83,13 @@ namespace AudioBand.ViewModels
         {
             OnReset();
         }
+
+        /// <summary>
+        /// Map from [model property name] to [other vm property names]
+        /// </summary>
+        protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
+
+        protected Logger Logger { get; }
 
         protected ViewModelBase()
         {
@@ -146,6 +168,38 @@ namespace AudioBand.ViewModels
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Raises a <see cref="ErrorsChanged"/> event.
+        /// </summary>
+        /// <param name="errors">Errors that occured during validation.</param>
+        /// <param name="propertyName">Property that failed validation.</param>
+        protected void RaiseValidationError(IEnumerable<string> errors, [CallerMemberName] string propertyName = null)
+        {
+            _propertyErrors.Clear();
+            _propertyErrors[propertyName] = errors;
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Raises a <see cref="ErrorsChanged"/> event.
+        /// </summary>
+        /// <param name="error">Error that occured during validation.</param>
+        /// <param name="propertyName">Property that failed validation.</param>
+        protected void RaiseValidationError(string error, [CallerMemberName] string propertyName = null)
+        {
+            RaiseValidationError(new[] {error}, propertyName);
+        }
+
+        /// <summary>
+        /// Raises a <see cref="ErrorsChanged"/> event.
+        /// </summary>
+        /// <param name="e">Exception that occured during validation.</param>
+        /// <param name="propertyName">Property that failed validation.</param>
+        protected void RaiseValidationError(Exception e, [CallerMemberName] string propertyName = null)
+        {
+            RaiseValidationError(e.ToString(), propertyName);
         }
 
         private void SetupAlsoNotify()

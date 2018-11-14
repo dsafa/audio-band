@@ -30,6 +30,13 @@ namespace AudioBand.AudioSource
             Name = name;
         }
 
+        /// <summary>
+        /// Validates the setting before setting it.
+        /// </summary>
+        /// <param name="instance">Instance of the audio source.</param>
+        /// <param name="value">Value to evaluate</param>
+        /// <param name="propertyName">Name of the property that the value applies to.</param>
+        /// <returns>A <see cref="SettingValidationResult"/> representing the result of validation.</returns>
         internal SettingValidationResult Validate(object instance, object value, string propertyName)
         {
             if (ValidatorName == null)
@@ -62,5 +69,8 @@ namespace AudioBand.AudioSource
             IsValid = isValid;
             ErrorMessage = errorMessage;
         }
+
+        public static SettingValidationResult Fail => new SettingValidationResult(false);
+        public static SettingValidationResult Success => new SettingValidationResult(true);
     }
 }

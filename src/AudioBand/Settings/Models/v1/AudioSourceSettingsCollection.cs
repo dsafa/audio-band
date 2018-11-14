@@ -8,7 +8,7 @@ namespace AudioBand.Settings.Models.v1
 {
     internal class AudioSourceSettingsCollection
     {
-        public string AudioSourceName { get; set; }
+        public string Name { get; set; }
         public List<AudioSourceSetting> Settings { get; set; } = new List<AudioSourceSetting>();
     }
 }

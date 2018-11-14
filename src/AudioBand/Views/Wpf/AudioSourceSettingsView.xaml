@@ -3,31 +3,44 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400"
-             d:DataContext="{d:DesignInstance viewmodels:AudioSourceSettingViewModel}">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" Content="{Binding Name}"/>
-        <ContentControl Grid.Column="1" Content="{Binding Value}">
-            <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type system:String}">
-                    <TextBox
-                        Text="{Binding Path=DataContext.Value, 
-                                RelativeSource={RelativeSource AncestorType=ContentControl},
-                                Mode=TwoWay, ValidatesOnExceptions=True}">
-                    </TextBox>
-                </DataTemplate>
-            </ContentControl.Resources>
-        </ContentControl>
-    </Grid>
+             d:DataContext="{d:DesignInstance viewmodels:AudioSourceSettingsVM}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Style.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ListView ItemsSource="{Binding Settings}" BorderThickness="0">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" MaxWidth="200" TextWrapping="Wrap" Text="{Binding Name}"/>
+                    <ContentControl Grid.Column="1" Content="{Binding Value}">
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type system:String}">
+                                <TextBox TextWrapping="Wrap"
+                                    Text="{Binding Path=DataContext.Value, 
+                                                   RelativeSource={RelativeSource AncestorType=ContentControl},
+                                                   Mode=TwoWay, 
+                                                   ValidatesOnExceptions=True}">
+                                </TextBox>
+                            </DataTemplate>
+                        </ContentControl.Resources>
+                    </ContentControl>
+                </Grid>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </UserControl>

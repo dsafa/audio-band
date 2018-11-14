@@ -134,13 +134,13 @@ namespace AudioBand.Test
         {
             var setting1 = new AudioSourceSettingsCollection
             {
-                AudioSourceName = "test",
+                Name = "test",
                 Settings = new List<AudioSourceSetting> {new AudioSourceSetting {Name = "key1", Value = "val1"}}
             };
 
             var setting2 = new AudioSourceSettingsCollection
             {
-                AudioSourceName = "test2",
+                Name = "test2",
                 Settings = new List<AudioSourceSetting> { new AudioSourceSetting { Name = "key2", Value = "val2" } }
             };
 
@@ -153,12 +153,12 @@ namespace AudioBand.Test
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.AreEqual(v2.AudioSourceSettings.Count, settings.Count);
-            Assert.AreEqual(v2.AudioSourceSettings[0].AudioSourceName, setting1.AudioSourceName);
+            Assert.AreEqual(v2.AudioSourceSettings[0].AudioSourceName, setting1.Name);
             Assert.AreEqual(v2.AudioSourceSettings[0].Settings.Count, setting1.Settings.Count);
             Assert.AreEqual(v2.AudioSourceSettings[0].Settings[0].Name, setting1.Settings[0].Name);
             Assert.AreEqual(v2.AudioSourceSettings[0].Settings[0].Value, setting1.Settings[0].Value);
 
-            Assert.AreEqual(v2.AudioSourceSettings[1].AudioSourceName, setting2.AudioSourceName);
+            Assert.AreEqual(v2.AudioSourceSettings[1].AudioSourceName, setting2.Name);
             Assert.AreEqual(v2.AudioSourceSettings[1].Settings.Count, setting2.Settings.Count);
             Assert.AreEqual(v2.AudioSourceSettings[1].Settings[0].Name, setting2.Settings[0].Name);
             Assert.AreEqual(v2.AudioSourceSettings[1].Settings[0].Value, setting2.Settings[0].Value);

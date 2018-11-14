@@ -17,7 +17,9 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.XPosition,
                                opts => opts.MapFrom(source => source.XOffset));
                 c.CreateMap<Models.v1.TextAppearance, Models.v2.CustomLabelSettings>();
-                c.CreateMap<Models.v1.AudioSourceSettingsCollection, Models.v2.AudioSourceSettings>();
+                c.CreateMap<Models.v1.AudioSourceSettingsCollection, Models.v2.AudioSourceSettings>()
+                    .ForMember(dest => dest.AudioSourceName,
+                        opts => opts.MapFrom(source => source.Name));
                 c.CreateMap<V1Settings, V2Settings>()
                     .ForMember(dest => dest.AlbumArtPopupSettings,
                                opts => opts.MapFrom(source => source.AlbumArtPopupAppearance))
