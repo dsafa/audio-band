@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AudioBand.Models;
 using System.Drawing;
 using System.Linq;
-using System.Windows;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;

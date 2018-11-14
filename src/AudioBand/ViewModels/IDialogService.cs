@@ -4,6 +4,6 @@ namespace AudioBand.ViewModels
 {
     internal interface IDialogService
     {
-       Task<bool> ShowConfirmationDialogAsync(string title, string message);
+        Task<bool> ShowConfirmationDialogAsync(string title, string message);
     }
 }
