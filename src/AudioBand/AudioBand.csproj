@@ -144,7 +144,7 @@
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
     <Compile Include="ViewModels\AudioSourceSettingVM.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
-    <Compile Include="ViewModels\HelpVM.cs" />
+    <Compile Include="ViewModels\AboutVM.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
     <Compile Include="ViewModels\PreviousButtonVM.cs" />
@@ -181,8 +181,8 @@
     <Compile Include="Views\Wpf\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Wpf\HelpFlyout.xaml.cs">
-      <DependentUpon>HelpFlyout.xaml</DependentUpon>
+    <Compile Include="Views\Wpf\AboutFlyout.xaml.cs">
+      <DependentUpon>AboutFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Wpf\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
@@ -305,7 +305,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Wpf\HelpFlyout.xaml">
+    <Page Include="Views\Wpf\AboutFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

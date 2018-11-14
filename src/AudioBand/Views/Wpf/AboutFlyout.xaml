@@ -1,4 +1,4 @@
-﻿<metro:Flyout x:Class="AudioBand.Views.Wpf.HelpFlyout"
+﻿<metro:Flyout x:Class="AudioBand.Views.Wpf.AboutFlyout"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,15 +9,16 @@
              d:DesignHeight="450" d:DesignWidth="800"
     Theme="Adapt"
     Position="Left"
-    Header="AudioBand Help" 
+    Header="About AudioBand" 
     x:ClassModifier="internal">
     <metro:Flyout.DataContext>
-        <viewmodels:HelpVM/>
+        <viewmodels:AboutVM/>
     </metro:Flyout.DataContext>
     <metro:Flyout.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Style.xaml"/>
+                <ResourceDictionary Source="Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </metro:Flyout.Resources>
@@ -26,7 +27,7 @@
         <Label Content="{Binding Version, Mode=OneTime}" FontSize="20"/>
         <Label Content="Project Link" FontWeight="Bold" FontSize="20" Margin="0, 10, 0, 0"/>
         <Label FontSize="20">
-            <Hyperlink NavigateUri="{Binding ProjectLink, Mode=OneTime}" Command="{Binding OpenFlyout}">
+            <Hyperlink NavigateUri="{Binding ProjectLink, Mode=OneTime}" Command="{Binding OpenProjectLink}">
                 <Run Text="{Binding ProjectLink, Mode=OneTime}"/>
             </Hyperlink>
         </Label>

@@ -8,7 +8,7 @@ namespace AudioBand.ViewModels
         public AlbumArtPopupVM AlbumArtPopupVM { get; set; }
         public AlbumArtVM AlbumArtVM { get; set; }
         public CustomLabelsVM CustomLabelsVM { get; set; }
-        public HelpVM HelpVM { get; set; }
+        public AboutVM AboutVm { get; set; }
         public NextButtonVM NextButtonVM { get; set; }
         public PlayPauseButtonVM PlayPauseButtonVM { get; set; }
         public PreviousButtonVM PreviousButtonVM { get; set; }

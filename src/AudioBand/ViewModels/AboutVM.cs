@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace AudioBand.ViewModels
 {
-    internal class HelpVM
+    internal class AboutVM
     {
         public string Version { get; } = "AudioBand " + typeof(SettingsWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         public string ProjectLink { get; } = @"https://github.com/dsafa/audio-band";
@@ -13,7 +13,7 @@ namespace AudioBand.ViewModels
         public RelayCommand<IHelpView> ShowHelp { get; }
         public RelayCommand OpenProjectLink { get; }
 
-        public HelpVM()
+        public AboutVM()
         {
             OpenProjectLink = new RelayCommand(OpenProjectLinkOnExecute);
             ShowHelp = new RelayCommand<IHelpView>(Execute);
