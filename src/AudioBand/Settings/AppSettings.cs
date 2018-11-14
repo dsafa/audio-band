@@ -77,6 +77,8 @@ namespace AudioBand.Settings
             {
                 LoadSettings();
             }
+
+            GetModels();
         }
 
         public void Save()
@@ -100,6 +102,19 @@ namespace AudioBand.Settings
             }
         }
 
+        private void GetModels()
+        {
+            AlbumArtPopup = ToModel<AlbumArtPopup>(_settings.AlbumArtPopupSettings);
+            AlbumArt = ToModel<AlbumArt>(_settings.AlbumArtSettings);
+            AudioBand = ToModel<AudioBand.Models.AudioBand>(_settings.AudioBandSettings);
+            CustomLabels = ToModel<List<CustomLabel>>(_settings.CustomLabelSettings);
+            NextButton = ToModel<NextButton>(_settings.NextButtonSettings);
+            PreviousButton = ToModel<PreviousButton>(_settings.PreviousButtonSettings);
+            PlayPauseButton = ToModel<PlayPauseButton>(_settings.PlayPauseButtonSettings);
+            ProgressBar = ToModel<ProgressBar>(_settings.ProgressBarSettings);
+            AudioSourceSettings = ToModel<List<AudioSourceSettings>>(_settings.AudioSourceSettings);
+        }
+
         private void LoadSettings()
         {
             try
@@ -111,16 +126,6 @@ namespace AudioBand.Settings
                     Toml.WriteFile(file, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
                 }
                 _settings = Migration.MigrateSettings<Settings.Models.v2.Settings>(file.Get(SettingsTable[version]), version, CurrentVersion);
-
-                AlbumArtPopup = ToModel<AlbumArtPopup>(_settings.AlbumArtPopupSettings);
-                AlbumArt = ToModel<AlbumArt>(_settings.AlbumArtSettings);
-                AudioBand = ToModel<AudioBand.Models.AudioBand>(_settings.AudioBandSettings);
-                CustomLabels = ToModel<List<CustomLabel>>(_settings.CustomLabelSettings);
-                NextButton = ToModel<NextButton>(_settings.NextButtonSettings);
-                PreviousButton = ToModel<PreviousButton>(_settings.PreviousButtonSettings);
-                PlayPauseButton = ToModel<PlayPauseButton>(_settings.PlayPauseButtonSettings);
-                ProgressBar = ToModel<ProgressBar>(_settings.ProgressBarSettings);
-                AudioSourceSettings = ToModel<List<AudioSourceSettings>>(_settings.AudioSourceSettings);
             }
             catch (Exception e)
             {
