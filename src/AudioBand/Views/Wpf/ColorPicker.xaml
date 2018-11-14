@@ -14,6 +14,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Style.xaml"/>
+                <ResourceDictionary Source="Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <valueConverters:ReverseConverter x:Key="ColorToStringConverter">
                 <valueConverters:StringToColorConverter/>
@@ -35,6 +36,10 @@
         <Button Grid.Column="2" Click="ChangeColorOnClick" 
                 MinWidth="20" VerticalAlignment="Stretch"
                 Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"
-                Content="{iconPacks:Modern Kind=DrawPaintbrush}"/>
+                Content="{iconPacks:Material Kind=Palette}">
+            <Button.ToolTip>
+                <TextBlock Text="{StaticResource ChooseColorHelpText}"/>
+            </Button.ToolTip>
+        </Button>
     </Grid>
 </UserControl>
