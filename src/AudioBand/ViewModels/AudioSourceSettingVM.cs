@@ -40,9 +40,8 @@ namespace AudioBand.ViewModels
             _settingInfo = settingInfo;
         }
 
-        protected override void OnEndEdit()
+        public void UpdateAudioSource()
         {
-            base.OnEndEdit();
             try
             {
                 Model.UpdateAudioSource(_settingInfo, Value);
@@ -51,6 +50,12 @@ namespace AudioBand.ViewModels
             {
                 RaiseValidationError(e);
             }
+        }
+
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            UpdateAudioSource();
         }
     }
 }

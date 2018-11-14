@@ -58,6 +58,9 @@ namespace AudioBand.Settings
                 cfg.ConfigureType<Color>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(ColorTranslator.ToHtml)
                     .FromToml(tomlString => ColorTranslator.FromHtml(tomlString.Value))));
+                cfg.ConfigureType<CustomLabel.TextAlignment>(type => type.WithConversionFor<TomlString>(convert => convert
+                    .ToToml(SerializationConversions.EnumToString)
+                    .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
             });
 
             if (!Directory.Exists(SettingsDirectory))
