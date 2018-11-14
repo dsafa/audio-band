@@ -58,7 +58,7 @@ namespace AudioBand
 
             if (control == null)
             {
-                _logger.Warn("Tried removing label but the control was not found");
+                Logger.Warn("Tried removing label but the control was not found");
                 return;
             }
 

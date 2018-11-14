@@ -25,7 +25,7 @@ namespace AudioBand
     [CSDeskBandRegistration(Name = "Audio Band")]
     public partial class MainControl : CSDeskBandWin
     {
-        private readonly ILogger _logger = LogManager.GetLogger("Audio Band");
+        private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
         private readonly AudioSourceManager _audioSourceManager = new AudioSourceManager();
         private readonly AppSettings _appSettings = new AppSettings();
         private SettingsWindow _settingsWindow;
@@ -58,10 +58,15 @@ namespace AudioBand
                 ConcurrentWrites = true
             };
 
+            var nullTarget = new NullTarget();
+
+            var filter = new LoggingRule("CSDeskBand.*", LogLevel.Trace, nullTarget) {Final = true};
             var fileRule = new LoggingRule("*", LogLevel.Debug, fileTarget);
 
             var config = new LoggingConfiguration();
             config.AddTarget("logfile", fileTarget);
+            config.AddTarget("null", nullTarget);
+            config.LoggingRules.Add(filter);
             config.LoggingRules.Add(fileRule);
 
             LogManager.Configuration = config;
@@ -82,7 +87,7 @@ namespace AudioBand
             }
             catch (Exception e)
             {
-                _logger.Error(e);
+                Logger.Error(e);
                 throw;
             }
         }

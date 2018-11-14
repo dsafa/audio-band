@@ -20,7 +20,7 @@ namespace AudioBand.AudioSource
         private CompositionContainer _container;
         private List<DirectoryCatalog> _directoryCatalogs;
         private FileSystemWatcher _fileSystemWatcher;
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public AudioSourceManager()
         {
@@ -31,7 +31,7 @@ namespace AudioBand.AudioSource
             foreach (var audioSource in AudioSources)
             {
                 audioSource.Logger = new AudioSourceLogger(audioSource.Name);
-                _logger.Debug($"Audio source loaded: `{audioSource.Name}`");
+                Logger.Debug($"Audio source loaded: `{audioSource.Name}`");
             }
         }
 
@@ -39,7 +39,7 @@ namespace AudioBand.AudioSource
         {
             var basePath = DirectoryHelper.BaseDirectory;
             var pluginFolderPath = Path.Combine(basePath, PluginFolderName);
-            _logger.Debug($"Searching for audio sources in path `{pluginFolderPath}`");
+            Logger.Debug($"Searching for audio sources in path `{pluginFolderPath}`");
 
             if (!Directory.Exists(pluginFolderPath))
             {
@@ -49,7 +49,7 @@ namespace AudioBand.AudioSource
             _directoryCatalogs = Directory.EnumerateDirectories(pluginFolderPath, "*", SearchOption.TopDirectoryOnly)
                 .Select(d => new DirectoryCatalog(d))
                 .ToList();
-            _directoryCatalogs.ForEach(d => _logger.Debug($"Found subfolder {d.Path}"));
+            _directoryCatalogs.ForEach(d => Logger.Debug($"Found subfolder {d.Path}"));
 
             _catalog = new AggregateCatalog(_directoryCatalogs);
 
@@ -64,7 +64,7 @@ namespace AudioBand.AudioSource
 
         private void FileSystemWatcherOnCreated(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            _logger.Debug($"Detected new audio source folder `{fileSystemEventArgs.FullPath}");
+            Logger.Debug($"Detected new audio source folder `{fileSystemEventArgs.FullPath}");
             foreach (var directoryCatalog in _directoryCatalogs)
             {
                 directoryCatalog.Refresh();

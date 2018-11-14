@@ -85,14 +85,14 @@ namespace AudioBand
 
         private void AudioSourceOnTrackPaused(object o, EventArgs args)
         {
-            _logger.Debug("State set to paused");
+            Logger.Debug("State set to paused");
 
             BeginInvoke(new Action(() => _trackModel.IsPlaying = false));
         }
 
         private void AudioSourceOnTrackPlaying(object o, EventArgs args)
         {
-            _logger.Debug("State set to playing");
+            Logger.Debug("State set to playing");
 
             BeginInvoke(new Action(() => _trackModel.IsPlaying = true));
         }
@@ -101,23 +101,23 @@ namespace AudioBand
         {
             if (trackInfoChangedEventArgs == null)
             {
-                _logger.Error("TrackInforChanged event arg is empty");
+                Logger.Error("TrackInforChanged event arg is empty");
                 return;
             }
 
             if (trackInfoChangedEventArgs.TrackName == null)
             {
                 trackInfoChangedEventArgs.TrackName = "";
-                _logger.Warn("Track name is null");
+                Logger.Warn("Track name is null");
             }
 
             if (trackInfoChangedEventArgs.Artist == null)
             {
                 trackInfoChangedEventArgs.Artist = "";
-                _logger.Warn("Artist is null");
+                Logger.Warn("Artist is null");
             }
 
-            _logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
+            Logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
 
             BeginInvoke(new Action(() =>
             {
