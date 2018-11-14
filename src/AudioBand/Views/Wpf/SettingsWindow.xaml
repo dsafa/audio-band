@@ -29,7 +29,9 @@
     </metro:MetroWindow.Resources>
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
-            <Button Content="Help" Command="{Binding HelpVM.ShowHelp}" CommandParameter="{Binding ElementName=HelpFlyout}"/>
+            <Button Content="{StaticResource AboutButtonText}" 
+                    Command="{Binding AboutVm.ShowHelp}" 
+                    CommandParameter="{Binding ElementName=HelpFlyout}"/>
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
@@ -146,7 +148,7 @@
     </DockPanel>
     <metro:MetroWindow.Flyouts>
         <metro:FlyoutsControl>
-            <local:HelpFlyout x:Name="HelpFlyout" DataContext="{Binding HelpVM}"/>
+            <local:AboutFlyout x:Name="HelpFlyout" DataContext="{Binding AboutVm}"/>
         </metro:FlyoutsControl>
     </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>

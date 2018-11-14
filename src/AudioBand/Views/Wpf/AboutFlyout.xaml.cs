@@ -5,16 +5,16 @@ namespace AudioBand.Views.Wpf
     /// <summary>
     /// Interaction logic for AboutFlyout.xaml
     /// </summary>
-    internal partial class HelpFlyout : IHelpView
+    internal partial class AboutFlyout : IHelpView
     {
-        public HelpVM VM { get; }
+        public AboutVM VM { get; }
 
-        public HelpFlyout()
+        public AboutFlyout()
         {
             InitializeComponent();
         }
 
-        public HelpFlyout(HelpVM vm) : this()
+        public AboutFlyout(AboutVM vm) : this()
         {
             DataContext = VM = vm;
         }

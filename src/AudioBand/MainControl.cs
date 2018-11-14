@@ -143,7 +143,7 @@ namespace AudioBand
                 PlayPauseButtonVM = playPauseButton,
                 NextButtonVM = nextButton,
                 AudioBandVM = audioBand,
-                HelpVM = new HelpVM(),
+                AboutVm = new AboutVM(),
                 AlbumArtVM = albumArt,
                 CustomLabelsVM = customLabels,
                 AudioSourceSettingsVM = allAudioSourceSettings
