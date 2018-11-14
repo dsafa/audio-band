@@ -17,6 +17,10 @@ namespace AudioBand.ViewModels
         public AudioSourceSettingsVM(AudioSourceSettings settings, IAudioSource audioSource) : base(settings)
         {
             Settings = CreateSettingViewModels(Model, audioSource);
+            foreach (var audioSourceSettingVm in Settings)
+            {
+                audioSourceSettingVm.UpdateAudioSource();
+            }
         }
 
         private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IAudioSource source)
