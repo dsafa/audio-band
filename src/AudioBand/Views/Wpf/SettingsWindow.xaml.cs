@@ -11,10 +11,12 @@ namespace AudioBand.Views.Wpf
     internal partial class SettingsWindow
     {
         private bool _shouldSave;
-        private SettingsWindowVM _vm;
+        private readonly SettingsWindowVM _vm;
 
         public RelayCommand CancelCloseCommand { get; }
         public RelayCommand SaveCloseCommand { get; }
+
+        public EventHandler Saved;
 
         internal SettingsWindow(SettingsWindowVM vm)
         {
@@ -26,6 +28,7 @@ namespace AudioBand.Views.Wpf
             InitializeComponent();
             DataContext = _vm = vm;
             vm.CustomLabelsVM.DialogService = new DialogService(this);
+            vm.BeginEdit();
         }
 
 
@@ -76,6 +79,8 @@ namespace AudioBand.Views.Wpf
             _shouldSave = false;
             _vm.BeginEdit();
             Hide();
+
+            Saved?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using AudioBand.Settings.Models.v2;
+using AudioSourceSettings = AudioBand.Models.AudioSourceSettings;
 
 namespace AudioBand.Settings
 {
@@ -14,7 +16,7 @@ namespace AudioBand.Settings
         private static readonly Dictionary<string, Type> SettingsTable = new Dictionary<string, Type>()
         {
             {"0.1", typeof(Settings.Models.v1.AudioBandSettings)},
-            {"0.2", typeof(Settings.Models.v2.Settings)}
+            {"2", typeof(Settings.Models.v2.Settings)}
         };
         private static string CurrentVersion = "2";
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
@@ -65,7 +67,7 @@ namespace AudioBand.Settings
 
             if (!File.Exists(SettingsFilePath))
             {
-                _settings = new Models.v2.Settings();
+                CreateDefault();
                 Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
             }
             else
@@ -78,7 +80,16 @@ namespace AudioBand.Settings
         {
             try
             {
-                //Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
+                _settings.AlbumArtPopupSettings = ToSetting<AlbumArtPopupSettings>(AlbumArtPopup);
+                _settings.AlbumArtSettings = ToSetting<AlbumArtSettings>(AlbumArt);
+                _settings.AudioBandSettings = ToSetting<AudioBandSettings>(AudioBand);
+                _settings.CustomLabelSettings = ToSetting<List<CustomLabelSettings>>(CustomLabels);
+                _settings.NextButtonSettings = ToSetting<NextButtonSettings>(NextButton);
+                _settings.PreviousButtonSettings = ToSetting<PreviousButtonSettings>(PreviousButton);
+                _settings.PlayPauseButtonSettings = ToSetting<PlayPauseButtonSettings>(PlayPauseButton);
+                _settings.ProgressBarSettings = ToSetting<ProgressBarSettings>(ProgressBar);
+                _settings.AudioSourceSettings = ToSetting<List<Models.v2.AudioSourceSettings>>(AudioSourceSettings);
+                Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
             }
             catch (Exception e)
             {
@@ -92,6 +103,10 @@ namespace AudioBand.Settings
             {
                 var file = Toml.ReadFile(SettingsFilePath, _tomlSettings);
                 var version = file["Version"].Get<string>();
+                if (version != CurrentVersion)
+                {
+                    Toml.WriteFile(file, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
+                }
                 _settings = Migration.MigrateSettings<Settings.Models.v2.Settings>(file.Get(SettingsTable[version]), version, CurrentVersion);
 
                 AlbumArtPopup = ToModel<AlbumArtPopup>(_settings.AlbumArtPopupSettings);
@@ -122,6 +137,36 @@ namespace AudioBand.Settings
                 _logger.Error($"Cannot convert setting {setting} to model {typeof(TModel)}");
                 throw;
             }
+        }
+
+        private T ToSetting<T>(object model)
+        {
+            try
+            {
+                return SettingsMapper.ToModel<T>(model);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Cannot model to settings {model} target: {typeof(T)}");
+                throw;
+            }
+        }
+
+        private void CreateDefault()
+        {
+            _settings = new Models.v2.Settings
+            {
+                AudioSourceSettings = new List<Models.v2.AudioSourceSettings>(),
+                AudioBandSettings = ToSetting<Models.v2.AudioBandSettings>(new AudioBand.Models.AudioBand()),
+                AlbumArtSettings = ToSetting<AlbumArtSettings>(new AlbumArt()),
+                AudioSource = null,
+                AlbumArtPopupSettings = ToSetting<AlbumArtPopupSettings>(new AlbumArtPopup()),
+                PlayPauseButtonSettings = ToSetting<PlayPauseButtonSettings>(new PlayPauseButton()),
+                NextButtonSettings = ToSetting<NextButtonSettings>(new NextButton()),
+                PreviousButtonSettings = ToSetting<PreviousButtonSettings>(new PreviousButton()),
+                ProgressBarSettings = ToSetting<ProgressBarSettings>(new ProgressBar()),
+                CustomLabelSettings = new List<CustomLabelSettings> {ToSetting<CustomLabelSettings>(new CustomLabel())}
+            };
         }
     }
 }

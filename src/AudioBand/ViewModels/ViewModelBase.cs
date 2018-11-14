@@ -19,7 +19,7 @@ namespace AudioBand.ViewModels
     /// </summary>
     internal abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject, INotifyDataErrorInfo
     {
-        private Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
+        private readonly Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
 
         /// <inheritdoc cref="INotifyDataErrorInfo.GetErrors"/>
         public IEnumerable GetErrors(string propertyName)
@@ -105,7 +105,7 @@ namespace AudioBand.ViewModels
         /// Notifies subsribers to a property change.
         /// </summary>
         /// <param name="propertyName">Name of the property that changed.</param>
-        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -216,7 +216,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// Base class for a viewmodel with a model.
     /// </summary>
-    /// <typeparam name="TModel"></typeparam>
+    /// <typeparam name="TModel">Type of the model</typeparam>
     internal abstract class ViewModelBase<TModel> : ViewModelBase
     where TModel: ModelBase, new()
     {
@@ -227,9 +227,18 @@ namespace AudioBand.ViewModels
         private readonly MapperConfiguration _mapperConfiguration = new MapperConfiguration(cfg => cfg.CreateMap<TModel, TModel>());
 
         /// <summary>
+        /// Get the model representation of this viewmodel. By default it returns <see cref="Model"/>.
+        /// </summary>
+        /// <returns>A model representation</returns>
+        public virtual TModel GetModel()
+        {
+            return Model;
+        }
+
+        /// <summary>
         /// Model associated with this view model.
         /// </summary>
-        public TModel Model { get; }
+        protected TModel Model { get; set; }
 
         protected ViewModelBase(TModel model)
         {

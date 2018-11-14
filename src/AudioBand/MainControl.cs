@@ -10,7 +10,6 @@ using NLog.Config;
 using NLog.Targets;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -78,7 +77,7 @@ namespace AudioBand
                 Options.ContextMenuItems = BuildContextMenu();
 
                 InitializeModels();
-                SetupViewModels();
+                SetupViewModelsAndWindow();
                 SelectAudioSourceFromSettings();
             }
             catch (Exception e)
@@ -102,7 +101,7 @@ namespace AudioBand
             _trackModel = new Track();   
         }
 
-        private void SetupViewModels()
+        private void SetupViewModelsAndWindow()
         {
             var albumArt = new AlbumArtVM(_albumArtModel, _trackModel);
             var albumArtPopup = new AlbumArtPopupVM(_albumArtPopupModel, _trackModel);
@@ -123,7 +122,9 @@ namespace AudioBand
                 }
                 else
                 {
-                    allAudioSourceSettings.Add(new AudioSourceSettingsVM(new AudioSourceSettings {AudioSourceName = audioSource.Name}, audioSource));
+                    var newSettings = new AudioSourceSettings {AudioSourceName = audioSource.Name};
+                    _audioSourceSettingsModel.Add(newSettings);
+                    allAudioSourceSettings.Add(new AudioSourceSettingsVM(newSettings, audioSource));
                 }
             }
 
@@ -143,7 +144,13 @@ namespace AudioBand
                 AudioSourceSettingsVM = allAudioSourceSettings
             };
             _settingsWindow = new SettingsWindow(vm);
+            _settingsWindow.Saved += Saved;
             ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
+        }
+
+        private void Saved(object o, EventArgs eventArgs)
+        {
+            _appSettings.Save();
         }
 
         private List<DeskBandMenuItem> BuildContextMenu()
