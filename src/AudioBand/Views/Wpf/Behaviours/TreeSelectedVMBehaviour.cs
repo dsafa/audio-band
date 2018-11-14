@@ -43,10 +43,10 @@ namespace AudioBand.Views.Wpf.Behaviours
             if (e.NewValue is TreeViewItem item)
             {
                 SelectedVM = item.Tag;
-            } 
-            else if (e.NewValue is ViewModelBase vm)
+            }
+            else
             {
-                SelectedVM = vm;
+                SelectedVM = e.NewValue;
             }
         }
     }

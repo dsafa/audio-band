@@ -1,4 +1,6 @@
-﻿namespace AudioBand.ViewModels
+﻿using System.Collections.Generic;
+
+namespace AudioBand.ViewModels
 {
     internal class SettingsWindowVM : ViewModelBase
     {
@@ -11,7 +13,7 @@
         public PlayPauseButtonVM PlayPauseButtonVM { get; set; }
         public PreviousButtonVM PreviousButtonVM { get; set; }
         public ProgressBarVM ProgressBarVM { get; set; }
-        public AudioSourceSettingsCollectionVM AudioSourceSettingsVM { get; set; }
+        public List<AudioSourceSettingsVM> AudioSourceSettingsVM { get; set; }
 
         private object _selectedVM;
         public object SelectedVM
@@ -32,6 +34,10 @@
             PlayPauseButtonVM.BeginEdit();
             PreviousButtonVM.BeginEdit();
             ProgressBarVM.BeginEdit();
+            foreach (var audioSourceSettingsVm in AudioSourceSettingsVM)
+            {
+                audioSourceSettingsVm.BeginEdit();
+            }
         }
 
         protected override void OnCancelEdit()
@@ -46,6 +52,10 @@
             PlayPauseButtonVM.CancelEdit();
             PreviousButtonVM.CancelEdit();
             ProgressBarVM.CancelEdit();
+            foreach (var audioSourceSettingsVm in AudioSourceSettingsVM)
+            {
+                audioSourceSettingsVm.CancelEdit();
+            }
         }
 
         protected override void OnEndEdit()
@@ -60,6 +70,10 @@
             PlayPauseButtonVM.EndEdit();
             PreviousButtonVM.EndEdit();
             ProgressBarVM.EndEdit();
+            foreach (var audioSourceSettingsVm in AudioSourceSettingsVM)
+            {
+                audioSourceSettingsVm.EndEdit();
+            }
         }
     }
 }

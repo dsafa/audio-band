@@ -39,7 +39,7 @@ namespace AudioBand
         private AlbumArt _albumArtModel;
         private AlbumArtPopup _albumArtPopupModel;
         private Models.AudioBand _audioBandModel;
-        private AudioSourceSettings _audioSourceSettingsModel;
+        private List<AudioSourceSettings> _audioSourceSettingsModel;
         private List<CustomLabel> _customLabelsModel;
         private NextButton _nextButtonModel;
         private PlayPauseButton _playPauseButtonModel;
@@ -98,6 +98,7 @@ namespace AudioBand
             _playPauseButtonModel = _appSettings.PlayPauseButton;
             _previousButtonModel = _appSettings.PreviousButton;
             _progressBarModel = _appSettings.ProgressBar;
+            _audioSourceSettingsModel = _appSettings.AudioSourceSettings;
             _trackModel = new Track();   
         }
 
@@ -111,6 +112,20 @@ namespace AudioBand
             var playPauseButton = new PlayPauseButtonVM(_playPauseButtonModel, _trackModel);
             var prevButton = new PreviousButtonVM(_previousButtonModel);
             var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
+            var allAudioSourceSettings = new List<AudioSourceSettingsVM>();
+
+            foreach (var audioSource in _audioSourceManager.AudioSources)
+            {
+                var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
+                if (matchingSetting != null)
+                {
+                    allAudioSourceSettings.Add(new AudioSourceSettingsVM(matchingSetting, audioSource));
+                }
+                else
+                {
+                    allAudioSourceSettings.Add(new AudioSourceSettingsVM(new AudioSourceSettings {AudioSourceName = audioSource.Name}, audioSource));
+                }
+            }
 
             InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar);
 
@@ -125,6 +140,7 @@ namespace AudioBand
                 HelpVM = new HelpVM(),
                 AlbumArtVM = albumArt,
                 CustomLabelsVM = customLabels,
+                AudioSourceSettingsVM = allAudioSourceSettings
             };
             _settingsWindow = new SettingsWindow(vm);
             ElementHost.EnableModelessKeyboardInterop(_settingsWindow);

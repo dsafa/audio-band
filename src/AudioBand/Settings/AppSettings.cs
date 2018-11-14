@@ -31,21 +31,23 @@ namespace AudioBand.Settings
             set => _settings.AudioSource = value;
         }
 
-        public AlbumArtPopup AlbumArtPopup { get; private set; }
+        public AlbumArtPopup AlbumArtPopup { get; set; }
 
-        public AlbumArt AlbumArt { get; private set; }
+        public AlbumArt AlbumArt { get; set; }
 
-        public AudioBand.Models.AudioBand AudioBand { get; private set; }
+        public AudioBand.Models.AudioBand AudioBand { get;set; }
 
-        public List<CustomLabel> CustomLabels { get; private set; }
+        public List<CustomLabel> CustomLabels { get; set; }
 
-        public NextButton NextButton { get; private set; }
+        public NextButton NextButton { get; set; }
 
-        public PreviousButton PreviousButton { get; private set; }
+        public PreviousButton PreviousButton { get; set; }
 
-        public PlayPauseButton PlayPauseButton { get; private set; }
+        public PlayPauseButton PlayPauseButton { get; set; }
 
-        public ProgressBar ProgressBar { get; private set; }
+        public ProgressBar ProgressBar { get; set; }
+
+        public List<AudioSourceSettings> AudioSourceSettings { get; set; }
 
         public AppSettings()
         {
@@ -100,6 +102,7 @@ namespace AudioBand.Settings
                 PreviousButton = ToModel<PreviousButton>(_settings.PreviousButtonSettings);
                 PlayPauseButton = ToModel<PlayPauseButton>(_settings.PlayPauseButtonSettings);
                 ProgressBar = ToModel<ProgressBar>(_settings.ProgressBarSettings);
+                AudioSourceSettings = ToModel<List<AudioSourceSettings>>(_settings.AudioSourceSettings);
             }
             catch (Exception e)
             {

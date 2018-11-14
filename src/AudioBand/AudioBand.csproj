@@ -106,8 +106,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioSource\AudioSourceSettingInfo.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Extensions\AudioSourceExtenstions.cs" />
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\SvgExtensions.cs" />
@@ -151,6 +153,7 @@
     <Compile Include="Settings\Models\v2\ProgressBarSettings.cs" />
     <Compile Include="Settings\SettingsMapper.cs" />
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingVM.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\HelpVM.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
@@ -212,7 +215,7 @@
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AudioBandVM.cs" />
-    <Compile Include="ViewModels\AudioSourceSettingsCollectionVM.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingsVM.cs" />
     <Compile Include="ViewModels\NextButtonVM.cs" />
     <Compile Include="Views\Winforms\EnhancedProgressBar.cs">
       <SubType>Component</SubType>
