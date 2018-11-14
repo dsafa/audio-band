@@ -104,7 +104,7 @@
                     ToolTipService.ShowDuration="60000" ToolTipService.InitialShowDelay="500"
                     Background="#01FFFFFF">
             <Label Content="{StaticResource TextFormatLabelText}"/>
-            <iconPacks:PackIconModern Kind="Question" Width="10" Height="10" Margin="-10, 4, 0, 0"/>
+            <iconPacks:PackIconMaterial Kind="HelpCircleOutline" Width="10" Height="10" Margin="-10, 4, 0, 0"/>
             <StackPanel.ToolTip>
                 <TextBlock>
                     <TextBlock Text="{StaticResource CustomLabelFormatHelpText}"/><LineBreak/>

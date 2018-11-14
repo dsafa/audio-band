@@ -18,14 +18,14 @@
     </UserControl.Resources>
     <DockPanel DataContext="{Binding ElementName=ImagePickerControl}">
         <Button DockPanel.Dock="Left"
-                Content="{iconPacks:Modern Kind=Reset}"
+                Content="{iconPacks:Material Kind=Restart}"
                 Command="{Binding ResetImageCommand}">
             <Button.ToolTip>
                 <TextBlock Text="{StaticResource DefaultImageHelpText}" />
             </Button.ToolTip>
         </Button>
         <Button DockPanel.Dock="Left" Margin="4, 0, 4, 0"
-                Content="{iconPacks:Modern Kind=FolderEllipsis}"
+                Content="{iconPacks:Material Kind=FolderImage}"
                 Command="{Binding BrowseForImageCommand}">
             <Button.ToolTip>
                 <TextBlock Text="{StaticResource BrowseImageHelpText}"/>

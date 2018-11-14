@@ -34,7 +34,7 @@ namespace AudioBand.Views.Wpf
 
         private static readonly HashSet<string> _externalAssemblies = new HashSet<string>
         {
-            "MahApps.Metro.IconPacks.Modern",
+            "MahApps.Metro.IconPacks.Material",
             "ColorPickerWPF"
         };
         // Problem loading some dlls from the code base
