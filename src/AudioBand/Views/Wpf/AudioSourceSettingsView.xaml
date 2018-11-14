@@ -15,10 +15,13 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ListView ItemsSource="{Binding Settings}" BorderThickness="0">
-        <ListView.ItemTemplate>
+    <ItemsControl ItemsSource="{Binding Settings}">
+        <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Grid>
+                    <Grid.Style>
+                        <Style TargetType="{x:Type Grid}" BasedOn="{StaticResource {x:Type Grid}}"/>
+                    </Grid.Style>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -41,6 +44,6 @@
                     </ContentControl>
                 </Grid>
             </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </UserControl>

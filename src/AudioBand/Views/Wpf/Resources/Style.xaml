@@ -9,7 +9,6 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.ToggleSwitch.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Buttons.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -47,6 +46,12 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
+        <Setter Property="IsMoveToPointEnabled" Value="True"/>
+    </Style>
+    <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource {x:Type ListView}}">
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
     <Style TargetType="{x:Type Grid}">
         <Style.Resources>
             <Thickness x:Key="GridMargin" Left="0" Top="2" Right="0" Bottom="0" />
@@ -57,9 +62,6 @@
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
                 <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
-            </Style>
-            <Style TargetType="{x:Type xctk:ColorPicker}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
@@ -72,7 +74,14 @@
                 <Setter Property="Margin" Value="2, 2, 8, 0"/>
                 <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
             </Style>
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
+            </Style>
             <Style TargetType="{x:Type DockPanel}">
+                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+            </Style>
+            <Style TargetType="{x:Type Rectangle}">
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
             <Style TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource {x:Type metro:NumericUpDown}}">

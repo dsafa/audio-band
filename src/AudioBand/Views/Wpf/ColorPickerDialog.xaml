@@ -1,0 +1,35 @@
+﻿<metro:MetroWindow x:Class="AudioBand.Views.Wpf.ColorPickerDialog"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                xmlns:local="clr-namespace:AudioBand.Views.Wpf"
+                xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                xmlns:picker="clr-namespace:ColorPickerWPF;assembly=ColorPickerWPF"
+                xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                xmlns:mah="http://metro.mahapps.com/winfx/xaml/shared"
+                mc:Ignorable="d" 
+                d:DesignHeight="450" d:DesignWidth="450" d:DataContext="{d:DesignInstance local:ColorPickerDialog}"
+                x:Name="ColorPickerWindow"
+                SizeToContent="WidthAndHeight" ShowTitleBar="False"
+                WindowStartupLocation="CenterOwner" WindowTransitionsEnabled="False"
+                ShowCloseButton="False" ShowMinButton="False" ShowMaxRestoreButton="False">
+    <i:Interaction.Behaviors>
+        <mah:BorderlessWindowBehavior/>
+    </i:Interaction.Behaviors>
+    <metro:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Style.xaml"/>
+                <ResourceDictionary Source="Resources/Strings.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </metro:MetroWindow.Resources>
+    <DockPanel LastChildFill="True" Margin="4">
+        <StackPanel HorizontalAlignment="Right" DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <Button Content="{StaticResource CancelButtonText}" Click="CancelButtonOnClick"/>
+            <Button Margin="4, 0, 0, 0" Content="{StaticResource OkButtonText}" Click="OkButtonOnClick"/>
+        </StackPanel>
+        <picker:ColorPickerControl x:Name="Picker" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+    </DockPanel>
+</metro:MetroWindow>

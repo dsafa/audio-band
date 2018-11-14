@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
              xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
@@ -19,6 +20,7 @@
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <valueConverters:WinColorToWpfColorConverter x:Key="WinColorToWpfColorConverter"/>
+            <valueConverters:StringToFontFamilyConverter x:Key="StringToFontFamilyConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -75,9 +77,9 @@
                              Value="{Binding YPosition, Mode=TwoWay}"/>
 
         <Label Grid.Row="6" Grid.Column="0" Content="{StaticResource FontFamilyLabelText}" />
-        <TextBox Grid.Row="6" Grid.Column="1"
-                metro:TextBoxHelper.ClearTextButton="True"
-                Text="{Binding FontFamily, Mode=TwoWay}"/>
+        <ComboBox Grid.Row="6" Grid.Column="1" IsEditable="True"
+                  ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}"
+                  SelectedItem="{Binding FontFamily, Mode=TwoWay, Converter={StaticResource StringToFontFamilyConverter}}"/>
 
         <Label Grid.Row="7" Grid.Column="0" Content="{StaticResource FontSizeLabelText}" />
         <metro:NumericUpDown Grid.Row="7" Grid.Column="1" 
@@ -85,8 +87,8 @@
                             Value="{Binding FontSize, Mode=TwoWay}"/>
 
         <Label Grid.Row="8" Grid.Column="0" Content="{StaticResource FontColorLabelText}" />
-        <xctk:ColorPicker Grid.Row="8" Grid.Column="1" 
-                          SelectedColor="{Binding Color, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+        <local:ColorPicker Grid.Row="8" Grid.Column="1" 
+                           Color="{Binding Color, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
         <Label Grid.Row="9" Grid.Column="0" Content="Alignment" />
         <ComboBox Grid.Row="9" Grid.Column="1" 

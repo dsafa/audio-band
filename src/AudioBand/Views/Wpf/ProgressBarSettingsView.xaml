@@ -64,12 +64,12 @@
                              Value="{Binding YPosition, Mode=TwoWay}"/>
 
         <Label Grid.Row="5" Grid.Column="0" Content="{StaticResource BackgroundColorLabelText}" />
-        <xctk:ColorPicker Grid.Row="5" Grid.Column="1"
-                          SelectedColor="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+        <local:ColorPicker Grid.Row="5" Grid.Column="1"
+                        Color="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
         <Label Grid.Row="6" Grid.Column="0" Content="{StaticResource ForegroundColorLabelText}" />
-        <xctk:ColorPicker Grid.Row="6" Grid.Column="1" 
-                          SelectedColor="{Binding ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+        <local:ColorPicker Grid.Row="6" Grid.Column="1" 
+                        Color="{Binding ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
         <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" 
                 Content="{StaticResource ResetButtonText}"

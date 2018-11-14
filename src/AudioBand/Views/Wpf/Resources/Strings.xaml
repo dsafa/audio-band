@@ -39,6 +39,7 @@
     <sys:String x:Key="DefaultButtonText">Default</sys:String>
     <sys:String x:Key="SaveButtonText">Save</sys:String>
     <sys:String x:Key="CancelButtonText">Cancel</sys:String>
+    <sys:String x:Key="OkButtonText">Ok</sys:String>
     <sys:String x:Key="NewLabelButtonText">Add New Label</sys:String>
 
     <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
