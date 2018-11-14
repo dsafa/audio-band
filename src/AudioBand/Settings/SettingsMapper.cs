@@ -16,16 +16,36 @@ namespace AudioBand.Settings
             MapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<AlbumArtSettings, AlbumArt>();
+                cfg.CreateMap<AlbumArt, AlbumArtSettings>();
+
                 cfg.CreateMap<AlbumArtPopupSettings, AlbumArtPopup>();
+                cfg.CreateMap<AlbumArtPopup, AlbumArtSettings>();
+
                 cfg.CreateMap<AudioBandSettings, AudioBand.Models.AudioBand>();
+                cfg.CreateMap<AudioBand.Models.AudioBand, AudioBandSettings>();
+
                 cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSetting, AudioBand.Models.AudioSourceSetting>()
                     .ForMember(m => m.Value, c => c.MapFrom(s => s.Value));
+                cfg.CreateMap<AudioBand.Models.AudioSourceSetting, AudioBand.Settings.Models.v2.AudioSourceSetting>()
+                    .ForMember(m => m.Value, c => c.MapFrom(s => s.Value.ToString()));
+
                 cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSettings, AudioBand.Models.AudioSourceSettings>();
+                cfg.CreateMap<AudioBand.Models.AudioSourceSettings, AudioBand.Settings.Models.v2.AudioSourceSetting>();
+
                 cfg.CreateMap<CustomLabelSettings, CustomLabel>();
+                cfg.CreateMap<CustomLabel, CustomLabelSettings>();
+
                 cfg.CreateMap<NextButtonSettings, NextButton>();
+                cfg.CreateMap<NextButton, NextButtonSettings>();
+
                 cfg.CreateMap<PlayPauseButtonSettings, PlayPauseButton>();
+                cfg.CreateMap<PlayPauseButton, PlayPauseButtonSettings>();
+
                 cfg.CreateMap<PreviousButtonSettings, PreviousButton>();
+                cfg.CreateMap<PreviousButton, PreviousButtonSettings>();
+
                 cfg.CreateMap<ProgressBarSettings, ProgressBar>();
+                cfg.CreateMap<ProgressBar, ProgressBarSettings>();
             });
         }
 
@@ -38,6 +58,11 @@ namespace AudioBand.Settings
         public static TModel ToModel<TModel>(object source)
         {
             return MapperConfig.CreateMapper().Map<TModel>(source);
+        }
+
+        public static T ToSettings<T>(object source)
+        {
+            return MapperConfig.CreateMapper().Map<T>(source);
         }
     }
 }

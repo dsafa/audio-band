@@ -9,28 +9,24 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for all audio source settings
     /// </summary>
-    internal class AudioSourceSettingsVM : ViewModelBase
+    internal class AudioSourceSettingsVM : ViewModelBase<AudioSourceSettings>
     {
-        private readonly AudioSourceSettings _settings;
-        private readonly IAudioSource _audioSource;
-
-        public string AudioSourceName => _audioSource.Name;
+        public string AudioSourceName => Model.AudioSourceName;
         public List<AudioSourceSettingVM> Settings { get; }
 
-        public AudioSourceSettingsVM(AudioSourceSettings settings, IAudioSource audioSource)
+        public AudioSourceSettingsVM(AudioSourceSettings settings, IAudioSource audioSource) : base(settings)
         {
-            _settings = settings;
-            _audioSource = audioSource;
-            Settings = CreateSettingViewModels(_settings, _audioSource);
+            Settings = CreateSettingViewModels(Model, audioSource);
         }
 
-        private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings audioSourceSettings, IAudioSource source)
+        private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IAudioSource source)
         {
             var viewmodels = new List<AudioSourceSettingVM>();
             var audioSourceSettingInfos = source.GetSettings();
+
             foreach (var audioSourceSettingInfo in audioSourceSettingInfos)
             {
-                var matchingSetting = audioSourceSettings.Settings.FirstOrDefault(s => s.Name == audioSourceSettingInfo.Attribute.Name);
+                var matchingSetting = existingSettings.Settings.FirstOrDefault(s => s.Name == audioSourceSettingInfo.Attribute.Name);
                 if (matchingSetting != null)
                 {
                     viewmodels.Add(new AudioSourceSettingVM(matchingSetting, audioSourceSettingInfo));
@@ -38,8 +34,10 @@ namespace AudioBand.ViewModels
                 else
                 {
                     var name = audioSourceSettingInfo.Attribute.Name;
-                    var defaultValue = audioSourceSettingInfo.Property.GetMethod.Invoke(source, null);
-                    viewmodels.Add(new AudioSourceSettingVM(new AudioSourceSetting { Name = name, Value = defaultValue }, audioSourceSettingInfo));
+                    var defaultValue = audioSourceSettingInfo.Property.GetValue(source);
+                    var newSetting = new AudioSourceSetting {Name = name, Value = defaultValue};
+                    Model.Settings.Add(newSetting);
+                    viewmodels.Add(new AudioSourceSettingVM(newSetting, audioSourceSettingInfo));
                 }
             }
 
