@@ -37,7 +37,7 @@ namespace AudioBand.Views.Wpf
         public ColorPickerDialog(Color color)
         {
             InitializeComponent();
-            Picker.Color = color;
+            Picker.SetColor(color);
             Picker.OnPickColor += PickerOnOnPickColor;
         }
 
