@@ -48,6 +48,9 @@ There is currently no installer available, however there are prereleases in the 
 - The song progress will be out of sync if you change the song's progress. This is due to current limitations making the song progress being tracked locally. This can be fixed if you pause and play again or go to a different song.
 - The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying.
 
+## Customization
+Right click audio band and select `Audio Band Settings` and a new window will appear where you can do your customization. A description of the options can be found [here](https://github.com/dsafa/audio-band/wiki/Audio-Band-settings). *In app help coming soon*
+
 ## Building
 This project uses C# 7 features so a compatible compiler is required.
 
