@@ -22,7 +22,7 @@ namespace AudioBand
 {
     [Guid("957D8782-5B07-4126-9B24-1E917BAAAD64")]
     [ComVisible(true)]
-    [CSDeskBandRegistration(Name = "Audio Band")]
+    [CSDeskBandRegistration(Name = "Audio Band", ShowDeskBand = true)]
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
