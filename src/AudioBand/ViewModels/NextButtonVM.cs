@@ -75,7 +75,24 @@ namespace AudioBand.ViewModels
 
         public NextButtonVM(NextButton model) : base(model)
         {
+            LoadImage();
+        }
+
+        private void LoadImage()
+        {
             Image = LoadImage(ImagePath, DefaultNextButtonSvg.ToBitmap());
+        }
+
+        protected override void OnReset()
+        {
+            base.OnReset();
+            LoadImage();
+        }
+
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+            LoadImage();
         }
     }
 }
