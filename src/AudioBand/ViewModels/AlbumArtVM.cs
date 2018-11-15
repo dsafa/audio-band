@@ -81,5 +81,17 @@ namespace AudioBand.ViewModels
         {
             _track.UpdatePlaceholder(LoadImage(Model.PlaceholderPath, DefaultAlbumArtPlaceholderSvg.ToBitmap()));
         }
+
+        protected override void OnReset()
+        {
+            base.OnReset();
+            LoadPlaceholder();
+        }
+
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+            LoadPlaceholder();
+        }
     }
 }

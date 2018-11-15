@@ -132,11 +132,13 @@ namespace AudioBand.ViewModels
             if (!_modelToPropertyName.TryGetValue((sender, propertyChangedEventArgs.PropertyName), out var propertyName)) return;
             RaisePropertyChanged(propertyName);
 
-            if (!AlsoNotifyMap.TryGetValue(nameof(propertyName), out var alsoNotfify)) return;
+            if (!AlsoNotifyMap.TryGetValue(propertyName, out var alsoNotfify)) return;
             foreach (var name in alsoNotfify)
             {
                 RaisePropertyChanged(name);
             }
+
+            OnModelPropertyChanged(propertyName);
         }
 
         /// <summary>
@@ -157,5 +159,11 @@ namespace AudioBand.ViewModels
                 return defaultImage;
             }
         }
+
+        /// <summary>
+        /// Called when a model property changes.
+        /// </summary>
+        /// <param name="propertyName">Name of the property that changed</param>
+        protected virtual void OnModelPropertyChanged(string propertyName) {}
     }
 }
