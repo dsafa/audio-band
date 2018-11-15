@@ -114,9 +114,10 @@ namespace AudioBand.ViewModels
             base.OnBeginEdit();
             if (_backup != null)
             {
-                Logger.Warn("Edit has already started");
                 return;
             }
+
+            Logger.Debug("Starting edit");
 
             _backup = new TModel();
             _mapperConfiguration.CreateMapper().Map(Model, _backup);

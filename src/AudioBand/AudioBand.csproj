@@ -151,10 +151,12 @@
     <Compile Include="ViewModels\PreviousButtonVM.cs" />
     <Compile Include="ViewModels\SettingsWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\ViewModelBaseAttributes.cs" />
+    <Compile Include="ViewModels\ViewModelBase{T}.cs" />
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AudioSourceLogger.cs" />
+    <Compile Include="AudioSource\AudioSourceLogger.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />

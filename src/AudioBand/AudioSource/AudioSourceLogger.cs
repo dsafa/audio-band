@@ -1,7 +1,6 @@
-﻿using AudioBand.AudioSource;
-using NLog;
+﻿using NLog;
 
-namespace AudioBand
+namespace AudioBand.AudioSource
 {
     internal class AudioSourceLogger : IAudioSourceLogger
     {
