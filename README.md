@@ -22,7 +22,7 @@ Audio Band allows you to display song information in the taskbar.
 There is currently no installer available, however there are prereleases in the [Release](https://github.com/dsafa/audio-band/releases) page that come with a script to install manually.
 
 ## Usage
-1. Right click on the taskbar and select `Audio Band` from the toolbars submenu.
+1. If nothing appears on your toolbar after installation, right click on the taskbar and select `Audio Band` from the toolbars submenu.
 2. Right click on the Audio Band toolbar and select an audio source (ex. Spotify)
 
 ![](./screenshots/hover-over.png)
