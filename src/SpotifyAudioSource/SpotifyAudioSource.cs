@@ -71,6 +71,7 @@ namespace SpotifyAudioSource
         private TimeSpan _currentTrackLength;
         private AuthorizationCodeAuth _auth;
         private string _refreshToken;
+        private bool _isActive;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -79,14 +80,30 @@ namespace SpotifyAudioSource
             _progressTimer.AutoReset = false;
             _progressTimer.Elapsed += ProgressTimerOnElapsed;
 
+            _isActive = true;
+
             UpdateSecrets();
+            return Task.CompletedTask;
+        }
+
+        public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _checkSpotifyTimer.Stop();
+            _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
+            _progressTimer.Stop();
+            _progressTimer.Elapsed -= ProgressTimerOnElapsed;
+
+            _spotifyApi = null;
+
+            ClearPlayback();
+            _isActive = false;
             return Task.CompletedTask;
         }
 
         private void UpdateSecrets()
         { 
             // Try to prevent multiple popups for authorization
-            if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret) || _isAuthorizing)
+            if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret) || _isAuthorizing || !_isActive)
             {
                 return;
             }
@@ -270,19 +287,6 @@ namespace SpotifyAudioSource
             {
                 _checkSpotifyTimer.Enabled = true;
             }
-        }
-
-        public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            _checkSpotifyTimer.Stop();
-            _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
-            _progressTimer.Stop();
-            _progressTimer.Elapsed -= ProgressTimerOnElapsed;
-
-            _spotifyApi = null;
-
-            ClearPlayback();
-            return Task.CompletedTask;
         }
 
         public Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
