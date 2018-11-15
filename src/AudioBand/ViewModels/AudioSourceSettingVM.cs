@@ -1,6 +1,7 @@
 ﻿using AudioBand.AudioSource;
 using AudioBand.Models;
 using System;
+using AudioBand.Extensions;
 
 namespace AudioBand.ViewModels
 {
@@ -23,7 +24,7 @@ namespace AudioBand.ViewModels
             get => Model.Value;
             set
             {
-                var res = Model.Validate(_settingInfo, value);
+                var res = _settingInfo.ValidateSetting(value);
                 if (res.IsValid)
                 {
                     SetProperty(nameof(Model.Value), value);
@@ -44,11 +45,11 @@ namespace AudioBand.ViewModels
         {
             try
             {
-                Model.UpdateAudioSource(_settingInfo, Value);
+                _settingInfo.UpdateAudioSource(Value);
             }
             catch (Exception e)
             {
-                RaiseValidationError(e);
+                RaiseValidationError("An unexpected error occured. Check the log for more details.");
             }
         }
 
