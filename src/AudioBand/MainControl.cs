@@ -84,6 +84,8 @@ namespace AudioBand
                 InitializeModels();
                 SetupViewModelsAndWindow();
                 SelectAudioSourceFromSettings();
+
+                Logger.Debug("Initialization complete");
             }
             catch (Exception e)
             {
@@ -187,9 +189,11 @@ namespace AudioBand
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
             _audioSourceTokenSource = new CancellationTokenSource();
-            await source.ActivateAsync();
+            await source.ActivateAsync(_audioSourceTokenSource.Token);
 
             _appSettings.AudioSource = source.Name;
+
+            Logger.Debug($"Audio source selected: {source.Name}");
         }
 
         private async Task UnsubscribeToAudioSource(IAudioSource source)
@@ -209,6 +213,8 @@ namespace AudioBand
 
             _appSettings.AudioSource = null;
             _currentAudioSource = null;
+
+            Logger.Debug("Audio source deactivated");
         }
 
         protected override void OnResize(EventArgs eventArgs)
