@@ -70,6 +70,7 @@ namespace AudioBand.Views.Wpf
             if (_shouldSave)
             {
                 _vm.EndEdit();
+                Saved?.Invoke(this, EventArgs.Empty);
             }
             else
             {
@@ -79,8 +80,6 @@ namespace AudioBand.Views.Wpf
             _shouldSave = false;
             _vm.BeginEdit();
             Hide();
-
-            Saved?.Invoke(this, EventArgs.Empty);
         }
     }
 }
