@@ -152,6 +152,7 @@ namespace SpotifyAudioSource
             _progressTimer.Elapsed += ProgressTimerOnElapsed;
             _refreshTimer.AutoReset = true;
             _refreshTimer.Elapsed += RefreshTimerOnElapsed;
+            _refreshTimer.Start();
 
             _isActive = true;
 
