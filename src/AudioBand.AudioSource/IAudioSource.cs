@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace AudioBand.AudioSource
     /// Provides information from an audio source and exposes controls
     /// </summary>
     [InheritedExport(typeof(IAudioSource))]
-    public interface IAudioSource
+    public interface IAudioSource : INotifyPropertyChanged
     {
         /// <summary>
         /// Name of the audio source which is displayed

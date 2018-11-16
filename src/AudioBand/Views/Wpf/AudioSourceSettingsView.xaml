@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance viewmodels:AudioSourceSettingsVM}">
@@ -13,12 +14,14 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <ItemsControl ItemsSource="{Binding Settings}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Grid>
+                <Grid Visibility="{Binding Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Grid.Style>
                         <Style TargetType="{x:Type Grid}" BasedOn="{StaticResource {x:Type Grid}}"/>
                     </Grid.Style>
@@ -29,15 +32,20 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" MaxWidth="200" TextWrapping="Wrap" Text="{Binding Name}"/>
+                    <TextBlock Grid.Column="0" MaxWidth="200" TextWrapping="Wrap" 
+                               ToolTipService.IsEnabled="{Binding Description, Converter={StaticResource StringToBoolConverter}}"
+                               Text="{Binding Name}">
+                        <TextBlock.ToolTip>
+                            <TextBlock Text="{Binding Description}"/>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
                     <ContentControl Grid.Column="1" Content="{Binding Value}">
                         <ContentControl.Resources>
                             <DataTemplate DataType="{x:Type system:String}">
-                                <TextBox TextWrapping="Wrap"
-                                    Text="{Binding Path=DataContext.Value, 
-                                                   RelativeSource={RelativeSource AncestorType=ContentControl},
-                                                   Mode=TwoWay, 
-                                                   ValidatesOnExceptions=True}">
+                                <TextBox DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                        TextWrapping="Wrap"
+                                        IsReadOnly="{Binding ReadOnly}"
+                                        Text="{Binding Value, Mode=TwoWay, ValidatesOnExceptions=True}">
                                 </TextBox>
                             </DataTemplate>
                         </ContentControl.Resources>

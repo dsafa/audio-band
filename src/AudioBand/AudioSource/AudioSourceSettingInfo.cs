@@ -83,6 +83,15 @@ namespace AudioBand.AudioSource
         }
 
         /// <summary>
+        /// Gets the current setting value from the audio source.
+        /// </summary>
+        /// <returns></returns>
+        public object GetValue()
+        {
+            return Property.GetValue(Source);
+        }
+
+        /// <summary>
         /// Convert the value to the type of the setting.
         /// </summary>
         /// <param name="value"></param>
