@@ -112,7 +112,7 @@ namespace AudioBand.Settings
             PreviousButton = ToModel<PreviousButton>(_settings.PreviousButtonSettings);
             PlayPauseButton = ToModel<PlayPauseButton>(_settings.PlayPauseButtonSettings);
             ProgressBar = ToModel<ProgressBar>(_settings.ProgressBarSettings);
-            AudioSourceSettings = ToModel<List<AudioSourceSettings>>(_settings.AudioSourceSettings);
+            AudioSourceSettings = ToModel<List<AudioSourceSettings>>(_settings.AudioSourceSettings) ?? new List<AudioSourceSettings>();
         }
 
         private void LoadSettings()
