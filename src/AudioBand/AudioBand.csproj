@@ -203,6 +203,7 @@
     <Compile Include="Views\Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Wpf\TemplateSelectors\AudioSourceSettingSelectorcs.cs" />
     <Compile Include="Views\Wpf\ValueConverters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\ColorToBrushConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToBoolConverter.cs" />

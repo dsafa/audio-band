@@ -8,6 +8,7 @@ using System.Timers;
 using Timer = System.Timers.Timer;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using SpotifyAPI;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
@@ -65,6 +66,61 @@ namespace SpotifyAudioSource
             }
         }
 
+        [AudioSourceSetting("Use Proxy")]
+        public bool UseProxy
+        {
+            get => _useProxy;
+            set
+            {
+                if (value == _useProxy) return;
+                _useProxy = value;
+            }
+        }
+
+        [AudioSourceSetting("Proxy Host")]
+        public string ProxyHost
+        {
+            get => _proxyHost;
+            set
+            {
+                if (value == _proxyHost) return;
+                _proxyHost = value;
+            }
+        }
+
+        [AudioSourceSetting("Proxy Port")]
+        public int ProxyPort
+        {
+            get => _proxyPort;
+            set
+            {
+                if (value == _proxyPort) return;
+                _proxyPort = value;
+            }
+        }
+
+        [AudioSourceSetting("Proxy Username")]
+        public string ProxyUserName
+        {
+            get => _proxyUserName;
+            set
+            {
+                if (value == _proxyUserName) return;
+                _proxyUserName = value;
+            }
+        }
+
+        [AudioSourceSetting("Proxy Password", Options = SettingOptions.Sensitive)]
+        public string ProxyPassword
+        {
+            get => _proxyPassword;
+            set
+            {
+                if (value == _proxyPassword) return;
+                _proxyPassword = value;
+            }
+        }
+
         private const string SpotifyPausedWindowTitle = "Spotify";
         private readonly SpotifyControls _spotifyControls = new SpotifyControls();
         private readonly Stopwatch _trackProgressStopwatch = new Stopwatch();
@@ -82,6 +138,11 @@ namespace SpotifyAudioSource
         private TimeSpan _currentTrackLength;
         private AuthorizationCodeAuth _auth;
         private bool _isActive;
+        private string _proxyHost;
+        private int _proxyPort = 8080;
+        private string _proxyUserName;
+        private string _proxyPassword;
+        private bool _useProxy;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -138,6 +199,17 @@ namespace SpotifyAudioSource
             }
         }
 
+        private ProxyConfig GetProxyConfig()
+        {
+            return new ProxyConfig
+            {
+                Host = ProxyHost,
+                Port = ProxyPort,
+                Username = ProxyUserName,
+                Password = ProxyPassword
+            };
+        }
+
         private async void ReuseRefreshToken()
         {
             Logger.Debug("Reusing old refresh token");
@@ -172,10 +244,12 @@ namespace SpotifyAudioSource
 
         private async Task StartSpotifyApi(string access, string tokenType)
         {
+
+
             _spotifyApi = new SpotifyWebAPI
             {
                 AccessToken = access,
-                TokenType = tokenType
+                TokenType = tokenType,
             };
 
             await UpdateStatusFromSpotify();
@@ -185,6 +259,8 @@ namespace SpotifyAudioSource
 
         private async Task<(FullTrack track, bool IsPlaying)> UpdateStatusFromSpotify()
         {
+            Logger.Debug("Fetching playback status from spotify");
+
             var playback = await GetPlayback();
             if (playback?.Item == null)
             {
@@ -193,6 +269,7 @@ namespace SpotifyAudioSource
             }
 
             var item = playback.Item;
+            Logger.Debug($"Received playback: {item.Name}");
 
             var albumArtImage = await GetAlbumArt(new Uri(item.Album.Images[0].Url));
             var trackName = item.Name;
@@ -368,6 +445,8 @@ namespace SpotifyAudioSource
         private async void RefreshTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             if (_auth == null || _spotifyApi == null) return;
+
+            Logger.Debug("Refreshing access token");
 
             var token = await _auth.RefreshToken(RefreshToken);
             _spotifyApi.AccessToken = token.AccessToken;

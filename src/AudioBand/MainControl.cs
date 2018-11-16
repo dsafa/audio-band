@@ -241,18 +241,25 @@ namespace AudioBand
             _settingsWindow.Show();
         }
 
-        private void SelectAudioSourceFromSettings()
+        private async void SelectAudioSourceFromSettings()
         {
-            var audioSource = _appSettings.AudioSource;
-            if (String.IsNullOrEmpty(audioSource))
+            try
             {
-                return;
-            }
+                var audioSource = _appSettings.AudioSource;
+                if (String.IsNullOrEmpty(audioSource))
+                {
+                    return;
+                }
 
-            var menuItem = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == audioSource);
-            if (menuItem != null)
+                var menuItem = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == audioSource);
+                if (menuItem != null)
+                {
+                    await Task.Run(() => AudioSourceMenuItemOnClicked(menuItem, EventArgs.Empty));
+                }
+            }
+            catch (Exception e)
             {
-                AudioSourceMenuItemOnClicked(menuItem, EventArgs.Empty);
+                Logger.Error(e);
             }
         }
     }

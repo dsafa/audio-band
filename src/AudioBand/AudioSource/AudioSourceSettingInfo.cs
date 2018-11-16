@@ -72,7 +72,7 @@ namespace AudioBand.AudioSource
         {
             try
             {
-                var newValue = GetSettingType(value);
+                var newValue = ConvertToSettingType(value);
                 Property.SetValue(Source, newValue);
             }
             catch (Exception e)
@@ -94,9 +94,9 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Convert the value to the type of the setting.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private object GetSettingType(object value)
+        /// <param name="value">Value to convert</param>
+        /// <returns>The value converted to the type of the setting.</returns>
+        private object ConvertToSettingType(object value)
         {
             if (value != null && value.GetType() != PropertyType)
             {
@@ -106,11 +106,31 @@ namespace AudioBand.AudioSource
                     return converter.ConvertTo(value, PropertyType);
                 }
 
-                Logger.Warn($"Trying to set invalid type for setting {value} {value.GetType()}");
+                if (TryChangeType(value, out var converted))
+                {
+                    return converted;
+                }
+
+                Logger.Error($"Unable to convert value to the setting's type. setting: `{Attribute.Name}` using value `{value}`. Setting type: `{PropertyType}`, value type: `{value.GetType()}`");
                 throw new ArgumentException();
             }
 
             return value;
+        }
+
+        private bool TryChangeType(object value, out object converted)
+        {
+            try
+            {
+                converted = Convert.ChangeType(value, PropertyType);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                converted = null;
+                return false;
+            }
         }
     }
 }
