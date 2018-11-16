@@ -36,12 +36,20 @@ namespace AudioBand.ViewModels
             }
         }
 
+        public bool ReadOnly => _settingInfo.Attribute.Options.HasFlag(SettingOptions.ReadOnly);
+        public bool Visible => !_settingInfo.Attribute.Options.HasFlag(SettingOptions.Hidden);
+        public string PropertyName => _settingInfo.Property.Name;
+        public string Description => null;
+
         public AudioSourceSettingVM(AudioSourceSetting model, AudioSourceSettingInfo settingInfo) : base(model)
         {
             _settingInfo = settingInfo;
         }
 
-        public void UpdateAudioSource()
+        /// <summary>
+        /// Applies the value to the audio source
+        /// </summary>
+        public void ApplyChanges()
         {
             try
             {
@@ -56,7 +64,13 @@ namespace AudioBand.ViewModels
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            UpdateAudioSource();
+            if (ReadOnly) return;
+            ApplyChanges();
+        }
+
+        public void UpdateValue()
+        {
+            Model.Value = _settingInfo.GetValue();
         }
     }
 }

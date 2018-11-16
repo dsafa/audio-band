@@ -1,11 +1,13 @@
 ﻿using AudioBand.AudioSource;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
@@ -18,6 +20,11 @@ namespace SpotifyAudioSource
     {
         public string Name { get; } = "Spotify";
         public IAudioSourceLogger Logger { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
+        public event EventHandler TrackPlaying;
+        public event EventHandler TrackPaused;
+        public event EventHandler<TimeSpan> TrackProgressChanged;
 
         [AudioSourceSetting("Spotify Client ID")]
         public string ClientId
@@ -25,13 +32,10 @@ namespace SpotifyAudioSource
             get => _clientId;
             set
             {
-                if (value == _clientId)
-                {
-                    return;
-                }
+                if (value == _clientId) return;
 
                 _clientId = value;
-                UpdateSecrets();
+                Authorize();
             }
         }
 
@@ -41,20 +45,25 @@ namespace SpotifyAudioSource
             get => _clientSecret;
             set
             {
-                if (value == _clientSecret)
-                {
-                    return;
-                }
+                if (value == _clientSecret) return;
 
                 _clientSecret = value;
-                UpdateSecrets();
+                Authorize();
             }
         }
 
-        public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
-        public event EventHandler TrackPlaying;
-        public event EventHandler TrackPaused;
-        public event EventHandler<TimeSpan> TrackProgressChanged;
+        [AudioSourceSetting("Spotify Refresh Token", Options = SettingOptions.ReadOnly | SettingOptions.Hidden)]
+        public string RefreshToken
+        {
+            get => _refreshToken;
+            set
+            {
+                if (value == _refreshToken) return;
+
+                _refreshToken = value;
+                OnPropertyChanged();
+            }
+        }
 
         private const string SpotifyPausedWindowTitle = "Spotify";
         private readonly SpotifyControls _spotifyControls = new SpotifyControls();
@@ -65,12 +74,12 @@ namespace SpotifyAudioSource
         private string _lastSpotifyWindowTitle = "";
         private string _clientSecret = "";
         private string _clientId = "";
+        private string _refreshToken = "";
         private SpotifyWebAPI _spotifyApi;
         private bool _isAuthorizing;
         private TimeSpan _baseTrackProgress;
         private TimeSpan _currentTrackLength;
         private AuthorizationCodeAuth _auth;
-        private string _refreshToken;
         private bool _isActive;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -82,7 +91,7 @@ namespace SpotifyAudioSource
 
             _isActive = true;
 
-            UpdateSecrets();
+            Authorize();
             return Task.CompletedTask;
         }
 
@@ -100,7 +109,7 @@ namespace SpotifyAudioSource
             return Task.CompletedTask;
         }
 
-        private void UpdateSecrets()
+        private void Authorize()
         { 
             // Try to prevent multiple popups for authorization
             if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret) || _isAuthorizing || !_isActive)
@@ -108,34 +117,60 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            _isAuthorizing = true;
-            var auth = new AuthorizationCodeAuth(ClientId, ClientSecret, "http://localhost", "http://localhost", 
+            _auth = new AuthorizationCodeAuth(ClientId, ClientSecret, "http://localhost", "http://localhost",
                 Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying);
-            auth.AuthReceived += OnAuthReceived;
-            auth.Start();
-            auth.OpenBrowser();
+            _auth.AuthReceived += OnAuthReceived;
+            _auth.Start();
+
+            if (string.IsNullOrEmpty(RefreshToken))
+            {
+                _isAuthorizing = true;
+                _auth.OpenBrowser();
+            }
+            else
+            {
+                ReuseRefreshToken();
+            }
+        }
+
+        private async void ReuseRefreshToken()
+        {
+            Logger.Debug("Reusing old refresh token");
+            try
+            {
+                var token = await _auth.RefreshToken(RefreshToken);
+                await StartSpotifyApi(token.AccessToken, token.TokenType);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
         }
 
         private async void OnAuthReceived(object sender, AuthorizationCode payload)
         {
-            _auth = (AuthorizationCodeAuth)sender;
             _auth.Stop();
             _isAuthorizing = false;
-
-            Logger.Debug("Authorization recieved");
             if (payload.Error != null)
             {
                 Logger.Warn($"Error with authorization: {payload.Error}");
                 return;
             }
 
-            var token = await _auth.ExchangeCode(payload.Code);
-            _refreshToken = token.RefreshToken;
+            Logger.Debug("Authorization recieved");
 
+            var token = await _auth.ExchangeCode(payload.Code);
+            RefreshToken = token.RefreshToken;
+
+            await StartSpotifyApi(token.AccessToken, token.TokenType);
+        }
+
+        private async Task StartSpotifyApi(string access, string tokenType)
+        {
             _spotifyApi = new SpotifyWebAPI
             {
-                AccessToken = token.AccessToken,
-                TokenType = token.TokenType
+                AccessToken = access,
+                TokenType = tokenType
             };
 
             await UpdateStatusFromSpotify();
@@ -318,6 +353,11 @@ namespace SpotifyAudioSource
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs());
             TrackPaused?.Invoke(this, EventArgs.Empty);
             TrackProgressChanged?.Invoke(this, new TimeSpan());
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -17,22 +17,39 @@ namespace AudioBand.AudioSource
         public string ValidatorName { get; set; }
 
         /// <summary>
-        /// Name that will be seen by user.
+        /// Name of the setting.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets whether or not the setting is visible to the user.
+        /// Gets or Sets the <see cref="SettingOptions"/> for the setting.
         /// </summary>
-        public bool IsVisible { get; set; } = true;
+        public SettingOptions Options { get; set; }
 
         /// <summary>
         /// Expose this property as a setting with a given name
         /// </summary>
-        /// <param name="name">Name of setting that will be shown</param>
+        /// <param name="name">Name of the setting.</param>
         public AudioSourceSettingAttribute(string name)
         {
             Name = name;
         }
+    }
+
+    /// <summary>
+    /// Flags for audio source settings.
+    /// </summary>
+    [Flags]
+    public enum SettingOptions
+    {
+        /// <summary>
+        /// Setting is invisible to the user.
+        /// </summary>
+        Hidden = 1 << 0,
+        
+        /// <summary>
+        /// Setting cannot be modified by the user.
+        /// </summary>
+        ReadOnly = 1 << 1,
     }
 }

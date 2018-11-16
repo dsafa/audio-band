@@ -1,7 +1,9 @@
-﻿using AudioBand.AudioSource;
+﻿using System;
+using AudioBand.AudioSource;
 using AudioBand.Extensions;
 using AudioBand.Models;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace AudioBand.ViewModels
@@ -19,8 +21,15 @@ namespace AudioBand.ViewModels
             Settings = CreateSettingViewModels(Model, audioSource);
             foreach (var audioSourceSettingVm in Settings)
             {
-                audioSourceSettingVm.UpdateAudioSource();
+                audioSourceSettingVm.ApplyChanges();
             }
+
+            audioSource.PropertyChanged += AudioSourceOnPropertyChanged;
+        }
+
+        private void AudioSourceOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            Settings.FirstOrDefault(s => s.PropertyName == propertyChangedEventArgs.PropertyName)?.UpdateValue();
         }
 
         private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IAudioSource source)
@@ -38,7 +47,7 @@ namespace AudioBand.ViewModels
                 else
                 {
                     var name = audioSourceSettingInfo.Attribute.Name;
-                    var defaultValue = audioSourceSettingInfo.Property.GetValue(source);
+                    var defaultValue = audioSourceSettingInfo.GetValue();
                     var newSetting = new AudioSourceSetting {Name = name, Value = defaultValue};
                     Model.Settings.Add(newSetting);
                     viewmodels.Add(new AudioSourceSettingVM(newSetting, audioSourceSettingInfo));
