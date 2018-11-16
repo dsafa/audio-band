@@ -44,7 +44,6 @@ There is currently no installer available, however there are prereleases in the 
 ![](./screenshots/spotify-dashboard.png)
 
 #### Spotify Issues
-- The browser will show up everytime audioband starts asking you to log into Spotify. Even if you select remember me, a browser window still opens. This will be fixed in a later version.
 - The song progress will be out of sync if you change the song's progress. This is due to current limitations making the song progress being tracked locally. This can be fixed if you pause and play again or go to a different song.
 - The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying.
 
