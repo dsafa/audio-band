@@ -70,6 +70,7 @@ namespace SpotifyAudioSource
         private readonly Stopwatch _trackProgressStopwatch = new Stopwatch();
         private readonly Timer _checkSpotifyTimer = new Timer(200);
         private readonly Timer _progressTimer = new Timer(500);
+        private readonly Timer _refreshTimer = new Timer(30 * 60 * 1000);
         private readonly HttpClient _httpClient = new HttpClient();
         private string _lastSpotifyWindowTitle = "";
         private string _clientSecret = "";
@@ -88,6 +89,8 @@ namespace SpotifyAudioSource
             _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
             _progressTimer.AutoReset = false;
             _progressTimer.Elapsed += ProgressTimerOnElapsed;
+            _refreshTimer.AutoReset = true;
+            _refreshTimer.Elapsed += RefreshTimerOnElapsed;
 
             _isActive = true;
 
@@ -101,6 +104,8 @@ namespace SpotifyAudioSource
             _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
             _progressTimer.Stop();
             _progressTimer.Elapsed -= ProgressTimerOnElapsed;
+            _refreshTimer.Stop();
+            _refreshTimer.Elapsed -= RefreshTimerOnElapsed;
 
             _spotifyApi = null;
 
@@ -358,6 +363,14 @@ namespace SpotifyAudioSource
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private async void RefreshTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            if (_auth == null || _spotifyApi == null) return;
+
+            var token = await _auth.RefreshToken(RefreshToken);
+            _spotifyApi.AccessToken = token.AccessToken;
         }
     }
 }
