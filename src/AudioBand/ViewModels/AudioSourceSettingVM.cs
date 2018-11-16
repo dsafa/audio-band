@@ -39,6 +39,7 @@ namespace AudioBand.ViewModels
         public bool ReadOnly => _settingInfo.Attribute.Options.HasFlag(SettingOptions.ReadOnly);
         public bool Visible => !_settingInfo.Attribute.Options.HasFlag(SettingOptions.Hidden);
         public string PropertyName => _settingInfo.Property.Name;
+        public Type SettingType => _settingInfo.PropertyType;
         public string Description => null;
 
         public AudioSourceSettingVM(AudioSourceSetting model, AudioSourceSettingInfo settingInfo) : base(model)

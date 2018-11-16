@@ -51,5 +51,10 @@ namespace AudioBand.AudioSource
         /// Setting cannot be modified by the user.
         /// </summary>
         ReadOnly = 1 << 1,
+
+        /// <summary>
+        /// Indicates a sensitive setting such as a password, causing a warning to be given.
+        /// </summary>
+        Sensitive = 1 << 2,
     }
 }

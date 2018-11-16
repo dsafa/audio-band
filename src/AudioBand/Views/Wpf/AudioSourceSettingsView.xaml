@@ -5,7 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:selectors="clr-namespace:AudioBand.Views.Wpf.TemplateSelectors"
              xmlns:converters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
+             xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance viewmodels:AudioSourceSettingsVM}">
@@ -32,6 +35,28 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <DataTemplate x:Key="String">
+                            <TextBox DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
+                                     TextWrapping="Wrap"
+                                     IsReadOnly="{Binding ReadOnly}"
+                                     Text="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"/>
+                        </DataTemplate>
+                        <DataTemplate x:Key="Int">
+                            <metro:NumericUpDown DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
+                                                 Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                                                 behaviours:NumericInput.Type="Positive"/>
+                        </DataTemplate>
+                        <DataTemplate x:Key="Bool">
+                            <metro:ToggleSwitch DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
+                                                IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                                                OnLabel="" OffLabel=""/>
+                        </DataTemplate>
+                        <selectors:AudioSourceSettingSelectorcs x:Key="Selector"
+                                    StringTemplate="{StaticResource String}"
+                                    BoolTemplate="{StaticResource Bool}"
+                                    IntTemplate="{StaticResource Int}"/>
+                    </Grid.Resources>
                     <TextBlock Grid.Column="0" MaxWidth="200" TextWrapping="Wrap" 
                                ToolTipService.IsEnabled="{Binding Description, Converter={StaticResource StringToBoolConverter}}"
                                Text="{Binding Name}">
@@ -39,16 +64,8 @@
                             <TextBlock Text="{Binding Description}"/>
                         </TextBlock.ToolTip>
                     </TextBlock>
-                    <ContentControl Grid.Column="1" Content="{Binding Value}">
-                        <ContentControl.Resources>
-                            <DataTemplate DataType="{x:Type system:String}">
-                                <TextBox DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                                        TextWrapping="Wrap"
-                                        IsReadOnly="{Binding ReadOnly}"
-                                        Text="{Binding Value, Mode=TwoWay, ValidatesOnExceptions=True}">
-                                </TextBox>
-                            </DataTemplate>
-                        </ContentControl.Resources>
+                    <ContentControl Grid.Column="1" Content="{Binding SettingType}" 
+                                    ContentTemplateSelector="{StaticResource Selector}">
                     </ContentControl>
                 </Grid>
             </DataTemplate>
