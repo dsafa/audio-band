@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
+using System.Windows.Threading;
 using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
@@ -26,8 +27,8 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
-        private readonly AudioSourceManager _audioSourceManager = new AudioSourceManager();
-        private readonly AppSettings _appSettings = new AppSettings();
+        private AudioSourceManager _audioSourceManager;
+        private AppSettings _appSettings;
         private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
@@ -76,24 +77,38 @@ namespace AudioBand
 
         public MainControl()
         {
+
+            InitializeComponent();
+#if DEBUG
+            System.Diagnostics.Debugger.Launch();
+#endif
+            InitializeAsync();
+        }
+
+        private async void InitializeAsync()
+        {
             try
             {
-                InitializeComponent();
+                _audioSourceManager = new AudioSourceManager();
+                _appSettings = new AppSettings();
+
                 Options.ContextMenuItems = BuildContextMenu();
 
-                InitializeModels();
-                SetupViewModelsAndWindow();
-                SelectAudioSourceFromSettings();
+                await Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+                {
+                    InitializeModels();
+                    SetupViewModelsAndWindow();
+                });
 
+                await SelectAudioSourceFromSettings();
                 Logger.Debug("Initialization complete");
             }
             catch (Exception e)
             {
                 Logger.Error(e);
-                throw;
             }
         }
-    
+
         private void InitializeModels()
         {
             _albumArtModel = _appSettings.AlbumArt;
@@ -241,7 +256,7 @@ namespace AudioBand
             _settingsWindow.Show();
         }
 
-        private async void SelectAudioSourceFromSettings()
+        private async Task SelectAudioSourceFromSettings()
         {
             try
             {
