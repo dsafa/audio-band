@@ -74,50 +74,55 @@ namespace SpotifyAudioSource
             {
                 if (value == _useProxy) return;
                 _useProxy = value;
+                ReconfigureSpotifyApiProxy();
             }
         }
 
         [AudioSourceSetting("Proxy Host")]
         public string ProxyHost
         {
-            get => _proxyHost;
+            get => _proxyConfig.Host;
             set
             {
-                if (value == _proxyHost) return;
-                _proxyHost = value;
+                if (value == _proxyConfig.Host) return;
+                _proxyConfig.Host = value;
+                ReconfigureSpotifyApiProxy();
             }
         }
 
         [AudioSourceSetting("Proxy Port")]
         public int ProxyPort
         {
-            get => _proxyPort;
+            get => _proxyConfig.Port;
             set
             {
-                if (value == _proxyPort) return;
-                _proxyPort = value;
+                if (value == _proxyConfig.Port) return;
+                _proxyConfig.Port = value;
+                ReconfigureSpotifyApiProxy();
             }
         }
 
         [AudioSourceSetting("Proxy Username")]
         public string ProxyUserName
         {
-            get => _proxyUserName;
+            get => _proxyConfig.Username;
             set
             {
-                if (value == _proxyUserName) return;
-                _proxyUserName = value;
+                if (value == _proxyConfig.Username) return;
+                _proxyConfig.Username = value;
+                ReconfigureSpotifyApiProxy();
             }
         }
 
         [AudioSourceSetting("Proxy Password", Options = SettingOptions.Sensitive)]
         public string ProxyPassword
         {
-            get => _proxyPassword;
+            get => _proxyConfig.Password;
             set
             {
-                if (value == _proxyPassword) return;
-                _proxyPassword = value;
+                if (value == _proxyConfig.Password) return;
+                _proxyConfig.Password = value;
+                ReconfigureSpotifyApiProxy();
             }
         }
 
@@ -127,27 +132,25 @@ namespace SpotifyAudioSource
         private readonly Timer _checkSpotifyTimer = new Timer(200);
         private readonly Timer _progressTimer = new Timer(500);
         private readonly Timer _refreshTimer = new Timer(30 * 60 * 1000);
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly ProxyConfig _proxyConfig = new ProxyConfig();
+        private HttpClient _httpClient = new HttpClient();
+        private SpotifyWebAPI _spotifyApi = new SpotifyWebAPI();
         private string _lastSpotifyWindowTitle = "";
         private string _clientSecret = "";
         private string _clientId = "";
         private string _refreshToken = "";
-        private SpotifyWebAPI _spotifyApi;
         private bool _isAuthorizing;
         private TimeSpan _baseTrackProgress;
         private TimeSpan _currentTrackLength;
         private AuthorizationCodeAuth _auth;
         private bool _isActive;
-        private string _proxyHost;
-        private int _proxyPort = 8080;
-        private string _proxyUserName;
-        private string _proxyPassword;
         private bool _useProxy;
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             _checkSpotifyTimer.AutoReset = false;
             _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
+            _checkSpotifyTimer.Start();
             _progressTimer.AutoReset = false;
             _progressTimer.Elapsed += ProgressTimerOnElapsed;
             _refreshTimer.AutoReset = true;
@@ -168,8 +171,6 @@ namespace SpotifyAudioSource
             _progressTimer.Elapsed -= ProgressTimerOnElapsed;
             _refreshTimer.Stop();
             _refreshTimer.Elapsed -= RefreshTimerOnElapsed;
-
-            _spotifyApi = null;
 
             ClearPlayback();
             _isActive = false;
@@ -200,24 +201,14 @@ namespace SpotifyAudioSource
             }
         }
 
-        private ProxyConfig GetProxyConfig()
-        {
-            return new ProxyConfig
-            {
-                Host = ProxyHost,
-                Port = ProxyPort,
-                Username = ProxyUserName,
-                Password = ProxyPassword
-            };
-        }
-
         private async void ReuseRefreshToken()
         {
             Logger.Debug("Reusing old refresh token");
             try
             {
                 var token = await _auth.RefreshToken(RefreshToken);
-                await StartSpotifyApi(token.AccessToken, token.TokenType);
+                _spotifyApi.AccessToken = token.AccessToken;
+                _spotifyApi.TokenType = token.TokenType;
             }
             catch (Exception e)
             {
@@ -240,22 +231,22 @@ namespace SpotifyAudioSource
             var token = await _auth.ExchangeCode(payload.Code);
             RefreshToken = token.RefreshToken;
 
-            await StartSpotifyApi(token.AccessToken, token.TokenType);
+            _spotifyApi.TokenType = token.TokenType;
+            _spotifyApi.AccessToken = token.AccessToken;
         }
 
-        private async Task StartSpotifyApi(string access, string tokenType)
+        private void ReconfigureSpotifyApiProxy()
         {
+            if (!UseProxy) return;
 
-
-            _spotifyApi = new SpotifyWebAPI
+            Logger.Debug("Updating proxy configuration");
+            _spotifyApi = new SpotifyWebAPI(_proxyConfig)
             {
-                AccessToken = access,
-                TokenType = tokenType,
+                AccessToken = _spotifyApi.AccessToken,
+                TokenType = _spotifyApi.TokenType,
             };
 
-            await UpdateStatusFromSpotify();
-
-            _checkSpotifyTimer.Start();
+            _httpClient = new HttpClient(new HttpClientHandler{ Proxy = _proxyConfig.CreateWebProxy(), UseProxy = true});
         }
 
         private async Task<(FullTrack track, bool IsPlaying)> UpdateStatusFromSpotify()
@@ -357,6 +348,8 @@ namespace SpotifyAudioSource
         // The spotify window title is a fixed value when it is paused and the artist - song when playing
         private async void CheckSpotifyTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
+            if (!_isActive) return;
+
             try
             {
                 var currentSpotifyWindowTitle = _spotifyControls.GetSpotifyWindowTitle();
