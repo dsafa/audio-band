@@ -38,6 +38,7 @@ namespace AudioBand.ViewModels
 
         public bool ReadOnly => _settingInfo.Attribute.Options.HasFlag(SettingOptions.ReadOnly);
         public bool Visible => !_settingInfo.Attribute.Options.HasFlag(SettingOptions.Hidden);
+        public bool Sensitive => _settingInfo.Attribute.Options.HasFlag(SettingOptions.Sensitive);
         public string PropertyName => _settingInfo.Property.Name;
         public Type SettingType => _settingInfo.PropertyType;
         public string Description => null;
