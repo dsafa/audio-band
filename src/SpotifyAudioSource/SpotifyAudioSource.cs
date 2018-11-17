@@ -126,7 +126,6 @@ namespace SpotifyAudioSource
             }
         }
 
-        private const string SpotifyPausedWindowTitle = "Spotify";
         private readonly SpotifyControls _spotifyControls = new SpotifyControls();
         private readonly Stopwatch _trackProgressStopwatch = new Stopwatch();
         private readonly Timer _checkSpotifyTimer = new Timer(200);
@@ -136,9 +135,9 @@ namespace SpotifyAudioSource
         private HttpClient _httpClient = new HttpClient();
         private SpotifyWebAPI _spotifyApi = new SpotifyWebAPI();
         private string _lastSpotifyWindowTitle = "";
-        private string _clientSecret = "";
-        private string _clientId = "";
-        private string _refreshToken = "";
+        private string _clientSecret;
+        private string _clientId;
+        private string _refreshToken;
         private bool _isAuthorizing;
         private TimeSpan _baseTrackProgress;
         private TimeSpan _currentTrackLength;
@@ -165,6 +164,8 @@ namespace SpotifyAudioSource
 
         public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            _isActive = false;
+
             _checkSpotifyTimer.Stop();
             _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
             _progressTimer.Stop();
@@ -173,26 +174,24 @@ namespace SpotifyAudioSource
             _refreshTimer.Elapsed -= RefreshTimerOnElapsed;
 
             ClearPlayback();
-            _isActive = false;
             return Task.CompletedTask;
         }
 
         private void Authorize()
         { 
-            // Try to prevent multiple popups for authorization
-            if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret) || _isAuthorizing || !_isActive)
+            if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret) || !_isActive)
             {
                 return;
             }
 
+            Logger.Debug("Connecting to spotify");
             _auth = new AuthorizationCodeAuth(ClientId, ClientSecret, "http://localhost", "http://localhost",
                 Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying);
-            _auth.AuthReceived += OnAuthReceived;
             _auth.Start();
 
             if (string.IsNullOrEmpty(RefreshToken))
             {
-                _isAuthorizing = true;
+                _auth.AuthReceived += OnAuthReceived;
                 _auth.OpenBrowser();
             }
             else
@@ -207,6 +206,13 @@ namespace SpotifyAudioSource
             try
             {
                 var token = await _auth.RefreshToken(RefreshToken);
+                if (token.HasError() || token.IsExpired())
+                {
+                    RefreshToken = null;
+                    Authorize();
+                    return;
+                }
+
                 _spotifyApi.AccessToken = token.AccessToken;
                 _spotifyApi.TokenType = token.TokenType;
             }
@@ -384,7 +390,7 @@ namespace SpotifyAudioSource
                 // If the title is different, then we don't update the current spotify window title and the next check should call the api again
                 var matches = spotifyIsPlaying
                     ? currentSpotifyWindowTitle == $"{currentTrack.Artists[0].Name} - {currentTrack.Name}" 
-                    : currentSpotifyWindowTitle == SpotifyPausedWindowTitle;
+                    : _spotifyControls.IsPaused();
                 if (matches && !string.IsNullOrEmpty(currentTrack.Name))
                 {
                     _lastSpotifyWindowTitle = currentSpotifyWindowTitle;
