@@ -1,4 +1,5 @@
-﻿using AudioBand.Models;
+﻿using System.Linq;
+using AudioBand.Models;
 using AudioBand.Settings.Models.v2;
 using AutoMapper;
 
@@ -27,10 +28,11 @@ namespace AudioBand.Settings
                 cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSetting, AudioBand.Models.AudioSourceSetting>()
                     .ForMember(m => m.Value, c => c.MapFrom(s => s.Value));
                 cfg.CreateMap<AudioBand.Models.AudioSourceSetting, AudioBand.Settings.Models.v2.AudioSourceSetting>()
-                    .ForMember(m => m.Value, c => c.MapFrom(s => s.Value.ToString()));
+                    .ForMember(m => m.Value, c => c.MapFrom(s => s.Remember ? s.Value.ToString() : null));
 
                 cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSettings, AudioBand.Models.AudioSourceSettings>();
-                cfg.CreateMap<AudioBand.Models.AudioSourceSettings, AudioBand.Settings.Models.v2.AudioSourceSetting>();
+                cfg.CreateMap<AudioBand.Models.AudioSourceSettings, AudioBand.Settings.Models.v2.AudioSourceSettings>()
+                    .ForMember(m => m.Settings, c => c.MapFrom(s => s.Settings.Where(se => se.Remember)));
 
                 cfg.CreateMap<CustomLabelSettings, CustomLabel>();
                 cfg.CreateMap<CustomLabel, CustomLabelSettings>();

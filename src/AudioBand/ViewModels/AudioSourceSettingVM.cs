@@ -36,6 +36,16 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Whether or not to save the data
+        /// </summary>
+        [PropertyChangeBinding(nameof(AudioSourceSetting.Remember))]
+        public bool Remember
+        {
+            get => Model.Remember;
+            set => SetProperty(nameof(Model.Remember), value);
+        }
+
         public bool ReadOnly => _settingInfo.Attribute.Options.HasFlag(SettingOptions.ReadOnly);
         public bool Visible => !_settingInfo.Attribute.Options.HasFlag(SettingOptions.Hidden);
         public bool Sensitive => _settingInfo.Attribute.Options.HasFlag(SettingOptions.Sensitive);
@@ -43,9 +53,15 @@ namespace AudioBand.ViewModels
         public Type SettingType => _settingInfo.PropertyType;
         public string Description => null;
 
-        public AudioSourceSettingVM(AudioSourceSetting model, AudioSourceSettingInfo settingInfo) : base(model)
+        public AudioSourceSettingVM(AudioSourceSetting model, AudioSourceSettingInfo settingInfo, bool saved = true ) : base(model)
         {
             _settingInfo = settingInfo;
+
+            // If sensitive data and was not saved from before, don't automatically remember it
+            if (Sensitive && !saved)
+            {
+                Remember = false;
+            }
         }
 
         /// <summary>
