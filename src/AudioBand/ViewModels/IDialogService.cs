@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace AudioBand.ViewModels
 {

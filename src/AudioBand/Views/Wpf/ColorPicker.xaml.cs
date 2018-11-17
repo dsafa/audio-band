@@ -2,17 +2,17 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using AudioBand.ViewModels;
+using MahApps.Metro.Controls;
 
 namespace AudioBand.Views.Wpf
 {
     /// <summary>
     /// Interaction logic for ColorPicker.xaml
     /// </summary>
-    public partial class ColorPicker : UserControl
+    internal partial class ColorPicker : UserControl
     {
-        public static DependencyProperty ColorProperty = DependencyProperty.Register(nameof(Color), typeof(Color), typeof(ColorPicker));
-        private readonly RelayCommand<Color> _colorPickedCommand;
-        private readonly RelayCommand _dialogCanceledCommaned;
+        public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(nameof(Color), typeof(Color), typeof(ColorPicker));
 
         public Color Color
         {
@@ -23,26 +23,15 @@ namespace AudioBand.Views.Wpf
         public ColorPicker()
         {
             InitializeComponent();
-
-            _colorPickedCommand = new RelayCommand<Color>(ColorPickedCommandOnExecute);
-            _dialogCanceledCommaned = new RelayCommand(o => { });
         }
 
         private void ChangeColorOnClick(object sender, RoutedEventArgs e)
         {
-            var dialog = new ColorPickerDialog(Color)
+            var res = DialogService.ShowColorPickerDialog(Window.GetWindow(this), Color);
+            if (res.HasValue)
             {
-                SuccessCommand = _colorPickedCommand,
-                CancelCommand = _dialogCanceledCommaned,
-                Owner = Window.GetWindow(this)
-            };
-
-            dialog.ShowDialog();
-        }
-
-        private void ColorPickedCommandOnExecute(Color color)
-        {
-            Color = color;
+                Color = res.Value;
+            }
         }
     }
 }

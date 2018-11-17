@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              x:Name="ColorPickerControl"
              d:DesignHeight="50" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance local:ColorPicker}">
+             d:DataContext="{d:DesignInstance local:ColorPicker}" x:ClassModifier="internal">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
