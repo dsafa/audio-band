@@ -22,8 +22,8 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
-            <system:Double x:Key="KeyColumnWidth">150</system:Double>
-            <GridLength x:Key="KeyColumnLength">150</GridLength>
+            <system:Double x:Key="KeyColumnWidth">180</system:Double>
+            <GridLength x:Key="KeyColumnLength">180</GridLength>
         </ResourceDictionary>
     </UserControl.Resources>
     <ItemsControl ItemsSource="{Binding Settings}">
