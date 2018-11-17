@@ -64,4 +64,5 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="AddNewLabelHelpText">Add a new label</sys:String>
     <sys:String x:Key="DeleteLabelHelpText">Delete this label</sys:String>
     <sys:String x:Key="ChooseColorHelpText">Choose a color</sys:String>
+    <sys:String x:Key="MarginHelpText">Sets the distance between the popup and the toolbar</sys:String>
 </ResourceDictionary>

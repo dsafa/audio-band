@@ -67,7 +67,7 @@
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
             <Style TargetType="{x:Type metro:ToggleSwitch}" BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
-                <Setter Property="Margin" Value="0, 6, 0, 0"/>
+                <Setter Property="Margin" Value="0, 4, 0, 2"/>
                 <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
             </Style>
             <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
@@ -87,6 +87,7 @@
             <Style TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource {x:Type metro:NumericUpDown}}">
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
                 <Setter Property="FontSize" Value="{StaticResource NormalFontSize}"/>
+                <Setter Property="TextAlignment" Value="Left"/>
                 <Style.Triggers>
                     <Trigger Property="behaviours:NumericInput.Type" Value="Size">
                         <Setter Property="NumericInputMode" Value="Numbers"/>

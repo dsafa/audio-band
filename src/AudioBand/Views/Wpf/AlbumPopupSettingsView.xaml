@@ -51,7 +51,11 @@
                              behaviours:NumericInput.Type="Position"
                              Value="{Binding XPosition, Mode=TwoWay}"/>
 
-        <Label Grid.Row="4" Grid.Column="0" Content="{StaticResource YOffsetLabelText}"/>
+        <Label Grid.Row="4" Grid.Column="0" Content="{StaticResource YOffsetLabelText}">
+            <Label.ToolTip>
+                <TextBlock Text="{StaticResource MarginHelpText}"/>
+            </Label.ToolTip>
+        </Label>
         <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
                              Value="{Binding Margin, Mode=TwoWay}"/>
 
