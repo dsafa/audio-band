@@ -27,8 +27,10 @@
     </metro:MetroWindow.Resources>
     <DockPanel LastChildFill="True" Margin="4">
         <StackPanel HorizontalAlignment="Right" DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <Button Content="{StaticResource CancelButtonText}" Click="CancelButtonOnClick"/>
-            <Button Margin="4, 0, 0, 0" Content="{StaticResource OkButtonText}" Click="OkButtonOnClick"/>
+            <Button Content="{StaticResource CancelButtonText}" 
+                    Click="CancelButtonOnClick"/>
+            <Button Margin="4, 0, 0, 0" Content="{StaticResource OkButtonText}" Style="{StaticResource AccentButton}" 
+                    Click="OkButtonOnClick"/>
         </StackPanel>
         <picker:ColorPickerControl x:Name="Picker" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
     </DockPanel>
