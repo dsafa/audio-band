@@ -21,7 +21,7 @@ namespace SpotifyAudioSource
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, IntPtr lParam);
 
         private const int WM_APPCOMMAND = 0x0319;
-
+        private const string SpotifyPausedWindowTitle = "Spotify";
         private const string SpotifyWindowClassName = "Chrome_WidgetWin_0"; // Last checked spotify version 1.0.88.353
         private IntPtr _spotifyHwnd;
 
@@ -100,6 +100,11 @@ namespace SpotifyAudioSource
             }
 
             SendMessage(_spotifyHwnd, WM_APPCOMMAND, 0, new IntPtr((int)AppCommand.Next));
+        }
+
+        public bool IsPaused()
+        {
+            return GetSpotifyWindowTitle() == SpotifyPausedWindowTitle;
         }
 
         private enum AppCommand
