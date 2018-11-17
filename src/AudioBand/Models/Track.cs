@@ -56,7 +56,7 @@ namespace AudioBand.Models
 
         public Image AlbumArt
         {
-            get => IsPlaying ? _albumArt : _placeholderImage;
+            get => _albumArt ?? _placeholderImage;
             set => SetProperty(ref _albumArt, value);
         }
 
