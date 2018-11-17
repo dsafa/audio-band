@@ -22,6 +22,8 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
+            <system:Double x:Key="KeyColumnWidth">150</system:Double>
+            <GridLength x:Key="KeyColumnLength">150</GridLength>
         </ResourceDictionary>
     </UserControl.Resources>
     <ItemsControl ItemsSource="{Binding Settings}">
@@ -37,7 +39,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="{StaticResource KeyColumnLength}"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.Resources>
@@ -59,14 +61,22 @@
                                                 OnLabel="" OffLabel=""/>
                         </DataTemplate>
                         <DataTemplate x:Key="Sensitive">
-                            <PasswordBox DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}">
-                                <i:Interaction.Behaviors>
-                                    <behaviours:PasswordBehaviour Password="{Binding Value, Mode=TwoWay}"/>
-                                </i:Interaction.Behaviors>
-                            </PasswordBox>
+                            <DockPanel LastChildFill="True">
+                                <Label DockPanel.Dock="Right" Content="{StaticResource RememberSettingLabelText}" Margin="-2, 0, 0, 0" VerticalAlignment="Center">
+                                    <Label.ToolTip>
+                                        <TextBlock Text="{StaticResource RememberHelpText}"/>
+                                    </Label.ToolTip>
+                                </Label>
+                                <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Remember}" Margin="4, 0, 0, 0"/>
+                                <PasswordBox DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}">
+                                    <i:Interaction.Behaviors>
+                                        <behaviours:PasswordBehaviour Password="{Binding Value, Mode=TwoWay}"/>
+                                    </i:Interaction.Behaviors>
+                                </PasswordBox>
+                            </DockPanel>
                         </DataTemplate>
                         <DataTemplate x:Key="NormalLabel">
-                            <Label MaxWidth="200" ToolTipService.IsEnabled="{Binding Description, Converter={StaticResource StringToBoolConverter}}">
+                            <Label MaxWidth="{StaticResource KeyColumnWidth}" ToolTipService.IsEnabled="{Binding Description, Converter={StaticResource StringToBoolConverter}}">
                                 <Label.ToolTip>
                                     <TextBlock Text="{Binding Description}"/>
                                 </Label.ToolTip>
@@ -82,7 +92,7 @@
                                         <TextBlock Text="{StaticResource SensitiveSettingsWarning}"/>
                                     </iconPacks:PackIconMaterial.ToolTip>
                                 </iconPacks:PackIconMaterial>
-                                <Label MaxWidth="200" ToolTipService.IsEnabled="{Binding Description, Converter={StaticResource StringToBoolConverter}}">
+                                <Label MaxWidth="{StaticResource KeyColumnWidth}" ToolTipService.IsEnabled="{Binding Description, Converter={StaticResource StringToBoolConverter}}">
                                     <Label.ToolTip>
                                         <TextBlock Text="{Binding Description}"/>
                                     </Label.ToolTip>

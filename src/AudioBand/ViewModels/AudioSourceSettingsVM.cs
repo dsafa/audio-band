@@ -50,7 +50,7 @@ namespace AudioBand.ViewModels
                     var defaultValue = audioSourceSettingInfo.GetValue();
                     var newSetting = new AudioSourceSetting {Name = name, Value = defaultValue};
                     Model.Settings.Add(newSetting);
-                    viewmodels.Add(new AudioSourceSettingVM(newSetting, audioSourceSettingInfo));
+                    viewmodels.Add(new AudioSourceSettingVM(newSetting, audioSourceSettingInfo, false));
                 }
             }
 

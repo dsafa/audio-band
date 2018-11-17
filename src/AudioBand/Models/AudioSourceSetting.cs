@@ -11,6 +11,7 @@ namespace AudioBand.Models
     {
         private string _name;
         private object _value;
+        private bool _remember = true;
 
         /// <summary>
         /// Name of the setting
@@ -28,6 +29,15 @@ namespace AudioBand.Models
         {
             get => _value;
             set => SetProperty(ref _value, value);
+        }
+
+        /// <summary>
+        /// Whether or not to save this setting
+        /// </summary>
+        public bool Remember
+        {
+            get => _remember;
+            set => SetProperty(ref _remember, value);
         }
     }
 }
