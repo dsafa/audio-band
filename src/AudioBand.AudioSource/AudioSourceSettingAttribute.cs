@@ -27,6 +27,16 @@ namespace AudioBand.AudioSource
         public SettingOptions Options { get; set; }
 
         /// <summary>
+        /// Priority when changing more that one setting. Higher is higher priority
+        /// </summary>
+        public int Priority { get; set; }
+
+        /// <summary>
+        /// Description of the setting.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Expose this property as a setting with a given name
         /// </summary>
         /// <param name="name">Name of the setting.</param>
