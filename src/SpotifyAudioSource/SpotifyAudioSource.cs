@@ -55,6 +55,17 @@ namespace SpotifyAudioSource
             }
         }
 
+        [AudioSourceSetting("Callback Port", Priority = 10)]
+        public int LocalPort
+        {
+            get => _localPort;
+            set
+            {
+                if (value == _localPort) return;
+                _localPort = value;
+            }
+        }
+
         [AudioSourceSetting("Spotify Refresh Token", Options = SettingOptions.ReadOnly | SettingOptions.Hidden)]
         public string RefreshToken
         {
@@ -140,6 +151,7 @@ namespace SpotifyAudioSource
         private string _clientSecret;
         private string _clientId;
         private string _refreshToken;
+        private int _localPort= 80;
         private TimeSpan _baseTrackProgress;
         private TimeSpan _currentTrackLength;
         private AuthorizationCodeAuth _auth;
@@ -186,7 +198,9 @@ namespace SpotifyAudioSource
             }
 
             Logger.Debug("Connecting to spotify");
-            _auth = new AuthorizationCodeAuth(ClientId, ClientSecret, "http://localhost", "http://localhost",
+            var url = "http://localhost:" + LocalPort;
+            _auth?.Stop();
+            _auth = new AuthorizationCodeAuth(ClientId, ClientSecret, url, url,
                 Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying);
 
             if (string.IsNullOrEmpty(RefreshToken))
@@ -344,10 +358,10 @@ namespace SpotifyAudioSource
         // The spotify window title is a fixed value when it is paused and the artist - song when playing
         private async void CheckSpotifyTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            if (!_isActive || string.IsNullOrEmpty(_spotifyApi.AccessToken)) return;
-
             try
             {
+                if (!_isActive || string.IsNullOrEmpty(_spotifyApi.AccessToken)) return;
+
                 var currentSpotifyWindowTitle = _spotifyControls.GetSpotifyWindowTitle();
                 if (string.IsNullOrEmpty(currentSpotifyWindowTitle))
                 {

@@ -69,7 +69,7 @@ namespace AudioBand.ViewModels
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            foreach (var audioSourceSettingVm in Settings)
+            foreach (var audioSourceSettingVm in Settings.OrderByDescending(s => s.Priority))
             {
                 audioSourceSettingVm.EndEdit();
             }

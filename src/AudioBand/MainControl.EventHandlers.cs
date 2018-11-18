@@ -53,25 +53,33 @@ namespace AudioBand
 
         private async void AudioSourceMenuItemOnClicked(object sender, EventArgs eventArgs)
         {
-            var item = (DeskBandMenuAction)sender;
-            if (item.Checked)
+            try
             {
-                item.Checked = false;
+                var item = (DeskBandMenuAction) sender;
+                if (item.Checked)
+                {
+                    item.Checked = false;
+                    await UnsubscribeToAudioSource(_currentAudioSource);
+                    return;
+                }
+
+                // Uncheck old item and unsubscribe from the current source
+                var lastItemChecked = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.Name);
+                if (lastItemChecked != null)
+                {
+                    lastItemChecked.Checked = false;
+                }
+
                 await UnsubscribeToAudioSource(_currentAudioSource);
-                return;
+
+                item.Checked = true;
+                _currentAudioSource = _audioSourceManager.AudioSources.First(c => c.Name == item.Text);
+                await SubscribeToAudioSource(_currentAudioSource);
             }
-            // Uncheck old item and unsubscribe from the current source
-            var lastItemChecked = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.Name);
-            if (lastItemChecked != null)
+            catch (Exception e)
             {
-                lastItemChecked.Checked = false;
+                Logger.Debug("Error activating audio source");
             }
-
-            await UnsubscribeToAudioSource(_currentAudioSource);
-
-            item.Checked = true;
-            _currentAudioSource = _audioSourceManager.AudioSources.First(c => c.Name == item.Text);
-            await SubscribeToAudioSource(_currentAudioSource);
         }
 
         #endregion

@@ -51,7 +51,8 @@ namespace AudioBand.ViewModels
         public bool Sensitive => _settingInfo.Attribute.Options.HasFlag(SettingOptions.Sensitive);
         public string PropertyName => _settingInfo.Property.Name;
         public Type SettingType => _settingInfo.PropertyType;
-        public string Description => null;
+        public string Description => _settingInfo.Attribute.Description;
+        public int Priority => _settingInfo.Attribute.Priority;
 
         public AudioSourceSettingVM(AudioSourceSetting model, AudioSourceSettingInfo settingInfo, bool saved = true ) : base(model)
         {
