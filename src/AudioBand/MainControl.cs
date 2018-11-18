@@ -249,6 +249,7 @@ namespace AudioBand
         {
             base.OnClose();
             _appSettings.Save();
+            _currentAudioSource.DeactivateAsync();
         }
 
         private void OpenSettingsWindow()
