@@ -1,0 +1,1 @@
+dir -Path $PSScriptRoot -r | Unblock-File
