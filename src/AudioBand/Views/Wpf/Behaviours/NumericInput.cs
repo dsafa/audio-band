@@ -24,6 +24,7 @@ namespace AudioBand.Views.Wpf.Behaviours
         Size,
         Position,
         FontSize,
-        Positive
+        Positive,
+        Integer,
     }
 }

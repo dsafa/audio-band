@@ -11,6 +11,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
         public DataTemplate StringTemplate { get; set; }
         public DataTemplate BoolTemplate { get; set; }
         public DataTemplate IntTemplate { get; set; }
+        public DataTemplate UIntTemplate { get; set; }
         public DataTemplate SensitiveTemplate { get; set; }
 
         public DataTemplate NormalLabelTemplate { get; set; }
@@ -39,6 +40,11 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
             if (type == typeof(int))
             {
                 return IntTemplate;
+            }
+
+            if (type == typeof(uint))
+            {
+                return UIntTemplate;
             }
 
             throw new ArgumentException($"No matching value template for `{type}`");

@@ -22,6 +22,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
+            <converters:NumberToNumericUpDownConverter x:Key="NumericUpDownConverter"/>
             <system:Double x:Key="KeyColumnWidth">180</system:Double>
             <GridLength x:Key="KeyColumnLength">180</GridLength>
         </ResourceDictionary>
@@ -53,11 +54,16 @@
                         <DataTemplate x:Key="Int">
                             <metro:NumericUpDown DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
                                                  Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                                                 behaviours:NumericInput.Type="Integer"/>
+                        </DataTemplate>                        
+                        <DataTemplate x:Key="UInt">
+                            <metro:NumericUpDown DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
+                                                 Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={StaticResource NumericUpDownConverter}}"
                                                  behaviours:NumericInput.Type="Positive"/>
                         </DataTemplate>
                         <DataTemplate x:Key="Bool">
                             <metro:ToggleSwitch DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
-                                                IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                                                IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={StaticResource NumericUpDownConverter}}"
                                                 OnLabel="" OffLabel=""/>
                         </DataTemplate>
                         <DataTemplate x:Key="Sensitive">
@@ -105,6 +111,7 @@
                                     StringTemplate="{StaticResource String}"
                                     BoolTemplate="{StaticResource Bool}"
                                     IntTemplate="{StaticResource Int}"
+                                    UIntTemplate="{StaticResource UInt}"
                                     SensitiveTemplate="{StaticResource Sensitive}"/>
                         <selectors:AudioSourceSettingSelector x:Key="KeyTemplateSelector"
                                     TemplateType="Key"

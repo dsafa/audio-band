@@ -207,6 +207,7 @@
     <Compile Include="Views\Wpf\TemplateSelectors\AudioSourceSettingSelector.cs" />
     <Compile Include="Views\Wpf\ValueConverters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\ColorToBrushConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\NumberToNumericUpDownConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToBoolConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\ReverseConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToColorConverter.cs" />

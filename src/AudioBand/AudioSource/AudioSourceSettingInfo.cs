@@ -96,7 +96,7 @@ namespace AudioBand.AudioSource
         /// </summary>
         /// <param name="value">Value to convert</param>
         /// <returns>The value converted to the type of the setting.</returns>
-        private object ConvertToSettingType(object value)
+        public object ConvertToSettingType(object value)
         {
             if (value != null && value.GetType() != PropertyType)
             {
