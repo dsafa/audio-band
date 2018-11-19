@@ -2,14 +2,12 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using SpotifyAPI;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
@@ -56,7 +54,7 @@ namespace SpotifyAudioSource
         }
 
         [AudioSourceSetting("Callback Port", Priority = 10)]
-        public int LocalPort
+        public uint LocalPort
         {
             get => _localPort;
             set
@@ -104,13 +102,13 @@ namespace SpotifyAudioSource
         }
 
         [AudioSourceSetting("Proxy Port")]
-        public int ProxyPort
+        public uint ProxyPort
         {
-            get => _proxyConfig.Port;
+            get => (uint)_proxyConfig.Port;
             set
             {
                 if (value == _proxyConfig.Port) return;
-                _proxyConfig.Port = value;
+                _proxyConfig.Port = (int)value; // may overflow
                 ConfigureProxy();
             }
         }
@@ -151,7 +149,7 @@ namespace SpotifyAudioSource
         private string _clientSecret;
         private string _clientId;
         private string _refreshToken;
-        private int _localPort= 80;
+        private uint _localPort= 80;
         private TimeSpan _baseTrackProgress;
         private TimeSpan _currentTrackLength;
         private AuthorizationCodeAuth _auth;

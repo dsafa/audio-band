@@ -46,6 +46,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Remember), value);
         }
 
+        /// <summary>
+        /// If the user shouldn't modify it
+        /// </summary>
         public bool ReadOnly => _settingInfo.Attribute.Options.HasFlag(SettingOptions.ReadOnly);
         public bool Visible => !_settingInfo.Attribute.Options.HasFlag(SettingOptions.Hidden);
         public bool Sensitive => _settingInfo.Attribute.Options.HasFlag(SettingOptions.Sensitive);
@@ -57,6 +60,7 @@ namespace AudioBand.ViewModels
         public AudioSourceSettingVM(AudioSourceSetting model, AudioSourceSettingInfo settingInfo, bool saved = true ) : base(model)
         {
             _settingInfo = settingInfo;
+            model.Value = settingInfo.ConvertToSettingType(Model.Value);
 
             // If sensitive data and was not saved from before, don't automatically remember it
             if (Sensitive && !saved)
@@ -74,7 +78,7 @@ namespace AudioBand.ViewModels
             {
                 _settingInfo.UpdateAudioSource(Value);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 RaiseValidationError("An unexpected error occured. Check the log for more details.");
             }
