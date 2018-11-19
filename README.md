@@ -36,16 +36,20 @@ There is currently no installer available, however there are prereleases in the 
 
 ### Spotify Setup
 1. Login to the [Spotify dashboard](https://developer.spotify.com/dashboard/login) and create a new App. Fill in the details, you can name it whatever you want. This app will be just for AudioBand.
-2. Go to the app you created and click `Edit Settings`. Add `http://localhost` as a callback url.
+2. Go to the app you created and click `Edit Settings`. Add `http://localhost:80` as a callback url.
+    1. You can use a different port for the local webserver (see next step)
 3. Right click anywhere in the toolbar > Audio Band Settings > Audio Source Settings and fill in the fields `Spotify Client Id` and `Spotify Client Secret`. You can find them in the same dashboard page for the Spotify app you created.
+    1. You can also change the `Callback Port` if needed.
 4. Your browser should open asking you to login and allow your spotify app to access your currently playing songs.
 5. Sign-in and accept and it should now display song information (make sure spotify is selected as the audio source).
 
 ![](./screenshots/spotify-dashboard.png)
+![](./screenshots/spotify-app-settings-callback.png)
 
 #### Spotify Issues
 - The song progress will be out of sync if you change the song's progress. This is due to current limitations making the song progress being tracked locally. This can be fixed if you pause and play again or go to a different song.
 - The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying.
+- It may randomly stop updating song information. You can deselect and reselect Spotify as the audio source to fix it.
 
 ## Customization
 Right click audio band and select `Audio Band Settings` and a new window will appear where you can do your customization. A description of the options can be found [here](https://github.com/dsafa/audio-band/wiki/Audio-Band-settings). *In app help coming soon*
@@ -54,7 +58,7 @@ Right click audio band and select `Audio Band Settings` and a new window will ap
 This project uses C# 7 features so a compatible compiler is required.
 
 ## Contributing
-Help is appreciated, but the code base is messy right now.
+Help is appreciated
 - Ask questions, report bugs, suggest features in issues
 - Send pull requests
 
