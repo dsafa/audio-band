@@ -5,11 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B69832AD-8373-47AC-A52A-183238903896}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>AudioBand</RootNamespace>
     <AssemblyName>AudioBand</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,23 +33,32 @@
     <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="ColorPickerWPF, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ColorPickerWPF.1.0.9\lib\net461\ColorPickerWPF.dll</HintPath>
+    </Reference>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
     <Reference Include="CSDeskBand, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66d19cfc65a1cc19, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSDeskBand.2.0.1\lib\net461\CSDeskBand.dll</HintPath>
+      <HintPath>..\packages\CSDeskBand.2.1.0\lib\net461\CSDeskBand.dll</HintPath>
     </Reference>
     <Reference Include="CSDeskBand.Win, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66d19cfc65a1cc19, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSDeskBand.Win.2.0.1\lib\net461\CSDeskBand.Win.dll</HintPath>
+      <HintPath>..\packages\CSDeskBand.Win.2.1.0\lib\net461\CSDeskBand.Win.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Nett, Version=0.9.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nett.0.9.2\lib\Net40\Nett.dll</HintPath>
+    <Reference Include="MahApps.Metro.IconPacks.Material, Version=2.3.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.IconPacks.Material.2.3.0\lib\net46\MahApps.Metro.IconPacks.Material.dll</HintPath>
+    </Reference>
+    <Reference Include="Nett, Version=0.10.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nett.0.10.0\lib\Net40\Nett.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.9\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -65,6 +77,10 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -73,50 +89,131 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.DataGrid, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="WriteableBitmapEx.Wpf, Version=1.5.0.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
+      <HintPath>..\packages\WriteableBitmapEx.1.5.1.0\lib\net40\WriteableBitmapEx.Wpf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlbumArtTooltip.cs">
+    <Compile Include="AudioSource\AudioSourceSettingInfo.cs" />
+    <Compile Include="Commands\AsyncRelayCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Extensions\AudioSourceExtenstions.cs" />
+    <Compile Include="Extensions\BindingExtensions.cs" />
+    <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\ImageExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\SvgExtensions.cs" />
+    <Compile Include="MainControl.Bindings.cs">
+      <SubType>UserControl</SubType>
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AlbumArt.cs" />
+    <Compile Include="Models\AlbumArtPopup.cs" />
+    <Compile Include="Models\AudioBand.cs" />
+    <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\NextButton.cs" />
+    <Compile Include="Models\PlayPauseButton.cs" />
+    <Compile Include="Models\PreviousButton.cs" />
+    <Compile Include="Models\ProgressBar.cs" />
+    <Compile Include="Models\CustomLabel.cs" />
+    <Compile Include="Models\Track.cs" />
+    <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
+    <Compile Include="Settings\Migrations\Migration.cs" />
+    <Compile Include="Settings\Migrations\V1ToV2.cs" />
+    <Compile Include="Settings\Models\v1\AlbumArtAppearance.cs" />
+    <Compile Include="Settings\Models\v1\AlbumArtPopupAppearance.cs" />
+    <Compile Include="Settings\Models\v1\AudioBandAppearance.cs" />
+    <Compile Include="Settings\Models\v1\AudioBandSettings.cs" />
+    <Compile Include="Settings\Models\v1\AudioSourceSetting.cs" />
+    <Compile Include="Settings\Models\v1\AudioSourceSettingsCollection.cs" />
+    <Compile Include="Settings\Models\v1\NextSongButtonAppearance.cs" />
+    <Compile Include="Settings\Models\v1\PlayPauseButtonAppearance.cs" />
+    <Compile Include="Settings\Models\v1\PreviousSongButtonAppearance.cs" />
+    <Compile Include="Settings\Models\v1\ProgressBarAppearance.cs" />
+    <Compile Include="Settings\Models\v1\TextAppearance.cs" />
+    <Compile Include="Settings\Models\v2\AlbumArtPopupSettings.cs" />
+    <Compile Include="Settings\Models\v2\AlbumArtSettings.cs" />
+    <Compile Include="Settings\Models\v2\AudioBandSettings.cs" />
+    <Compile Include="Settings\Models\v2\AudioSourceSetting.cs" />
+    <Compile Include="Settings\Models\v2\AudioSourceSettings.cs" />
+    <Compile Include="Settings\Models\v2\CustomLabelSettings.cs" />
+    <Compile Include="Settings\Models\v2\NextButtonSettings.cs" />
+    <Compile Include="Settings\Models\v2\PlayPauseButtonSettings.cs" />
+    <Compile Include="Settings\Models\v2\PreviousButtonSettings.cs" />
+    <Compile Include="Settings\Models\v2\ProgressBarSettings.cs" />
+    <Compile Include="Settings\SettingsMapper.cs" />
+    <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingVM.cs" />
+    <Compile Include="ViewModels\CustomLabelsVM.cs" />
+    <Compile Include="ViewModels\AboutVM.cs" />
+    <Compile Include="ViewModels\IDialogService.cs" />
+    <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
+    <Compile Include="ViewModels\PreviousButtonVM.cs" />
+    <Compile Include="ViewModels\SettingsWindowVM.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\ViewModelBaseAttributes.cs" />
+    <Compile Include="ViewModels\ViewModelBase{T}.cs" />
+    <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AudioSourceLogger.cs" />
+    <Compile Include="AudioSource\AudioSourceLogger.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
-    <Compile Include="Models\AudioSourceSettingsCollection.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FormattedTextRenderer.cs" />
-    <Compile Include="IResettableObject.cs" />
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Settings\ImagePicker.xaml.cs">
+    <Compile Include="Models\AudioSourceSettings.cs" />
+    <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
+    <Compile Include="ViewModels\IResettableObject.cs" />
+    <Compile Include="Views\Wpf\AlbumArtSettingsView.xaml.cs">
+      <DependentUpon>AlbumArtSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\AlbumPopupSettingsView.xaml.cs">
+      <DependentUpon>AlbumPopupSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\AudioSourceSettingsView.xaml.cs">
+      <DependentUpon>AudioSourceSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\Behaviours\PasswordBehaviour.cs" />
+    <Compile Include="Views\Wpf\Behaviours\TreeSelectedVMBehaviour.cs" />
+    <Compile Include="Views\Wpf\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\ColorPickerDialog.xaml.cs">
+      <DependentUpon>ColorPickerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\CustomLabelSettingsView.xaml.cs">
+      <DependentUpon>CustomLabelSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\DialogService.cs" />
+    <Compile Include="Views\Wpf\GeneralSettingsView.xaml.cs">
+      <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\AboutFlyout.xaml.cs">
+      <DependentUpon>AboutFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\ImagePicker.xaml.cs">
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\AttachedProperties.cs" />
-    <Compile Include="Settings\ResetButton.xaml.cs">
-      <DependentUpon>ResetButton.xaml</DependentUpon>
+    <Compile Include="Views\Wpf\Behaviours\NumericInput.cs" />
+    <Compile Include="Views\Wpf\PlaybackButtonSettingsView.xaml.cs">
+      <DependentUpon>PlaybackButtonSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\SettingsCommands.cs" />
-    <Compile Include="Settings\SettingsWindow.xaml.cs">
+    <Compile Include="Views\Wpf\PlayPauseButtonSettingsView.xaml.cs">
+      <DependentUpon>PlayPauseButtonSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\ProgressBarSettingsView.xaml.cs">
+      <DependentUpon>ProgressBarSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\ValueConverters\WinColorToWpfColorConverter.cs" />
-    <Compile Include="ViewModels\AlbumArtAppearance.cs" />
-    <Compile Include="ViewModels\Appearance.cs" />
+    <Compile Include="Views\Wpf\TemplateSelectors\AudioSourceSettingSelector.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\ColorToBrushConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\NumberToNumericUpDownConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\StringToBoolConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\ReverseConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\StringToColorConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\StringToFontFamilyConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\WinColorToWpfColorConverter.cs" />
+    <Compile Include="ViewModels\AlbumArtVM.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>
@@ -124,14 +221,13 @@
     <Compile Include="MainControl.Designer.cs">
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\AudioBandAppearance.cs" />
-    <Compile Include="ViewModels\AudioSourceSettingsCollectionViewModel.cs" />
-    <Compile Include="ViewModels\AudioSourceStatus.cs" />
-    <Compile Include="ViewModels\PlaybackControlsAppearance.cs" />
-    <Compile Include="EnhancedProgressBar.cs">
+    <Compile Include="ViewModels\AudioBandVM.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingsVM.cs" />
+    <Compile Include="ViewModels\NextButtonVM.cs" />
+    <Compile Include="Views\Winforms\EnhancedProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FormattedTextLabel.cs">
+    <Compile Include="Views\Winforms\FormattedTextLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AudioSource\AudioSourceManager.cs" />
@@ -141,11 +237,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings\AudioBandSettings.cs" />
-    <Compile Include="Settings\Converters.cs" />
-    <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="ViewModels\ProgressBarAppearance.cs" />
-    <Compile Include="ViewModels\TextAppearance.cs" />
+    <Compile Include="Settings\Models\v2\Settings.cs" />
+    <Compile Include="Settings\SerializationConversions.cs" />
+    <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="ViewModels\ProgressBarVM.cs" />
+    <Compile Include="ViewModels\CustomLabelVM.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +255,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="MainControl.EventHandlers.cs">
+      <SubType>UserControl</SubType>
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtPopupVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.AudioBandVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.CustomLabelVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.NextButtonVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.PlayPauseButtonVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.PreviousButtonVM.datasource" />
+    <None Include="Properties\DataSources\AudioBand.ViewModels.ProgressBarVM.datasource" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\play.svg" />
@@ -177,22 +285,79 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Settings\ImagePicker.xaml">
+    <Page Include="Views\Wpf\AlbumArtSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\ResetButton.xaml">
+    <Page Include="Views\Wpf\AlbumPopupSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\SettingsWindow.xaml">
+    <Page Include="Views\Wpf\AudioSourceSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Style.xaml">
+    <Page Include="Views\Wpf\ColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\ColorPickerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\CustomLabelSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\GeneralSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\AboutFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\ImagePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\PlaybackButtonSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\PlayPauseButtonSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\ProgressBarSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\Resources\Strings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\Resources\Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if "$(ConfigurationName)" == "Debug" (
+  taskkill /f /im explorer.exe 2&gt;nul &amp;set errorlevel=0
+  Exit 0
+)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Debug" (
+  powershell start-process %25windir%25\explorer.exe
+  Exit 0
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

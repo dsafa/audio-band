@@ -17,50 +17,54 @@ namespace AudioBand.AudioSource
         public string ValidatorName { get; set; }
 
         /// <summary>
-        /// Name that will be seen by user.
+        /// Name of the setting.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or Sets the <see cref="SettingOptions"/> for the setting.
+        /// </summary>
+        public SettingOptions Options { get; set; }
+
+        /// <summary>
+        /// Priority when changing more that one setting. Higher is higher priority
+        /// </summary>
+        public int Priority { get; set; }
+
+        /// <summary>
+        /// Description of the setting.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Expose this property as a setting with a given name
         /// </summary>
-        /// <param name="name">Name of setting that will be shown</param>
+        /// <param name="name">Name of the setting.</param>
         public AudioSourceSettingAttribute(string name)
         {
             Name = name;
         }
-
-        internal SettingValidationResult Validate(object instance, object value, string propertyName)
-        {
-            if (ValidatorName == null)
-            {
-                return new SettingValidationResult(true);
-            }
-
-            var method = instance.GetType().GetMethod(ValidatorName);
-            return (SettingValidationResult) method.Invoke(instance, new[] {value, propertyName});
-        }
     }
 
     /// <summary>
-    /// Class that represents the results of validation
+    /// Flags for audio source settings.
     /// </summary>
-    public class SettingValidationResult
+    [Flags]
+    public enum SettingOptions
     {
         /// <summary>
-        /// The value is valid
+        /// Setting is invisible to the user.
         /// </summary>
-        public bool IsValid { get; }
+        Hidden = 1 << 0,
+        
+        /// <summary>
+        /// Setting cannot be modified by the user.
+        /// </summary>
+        ReadOnly = 1 << 1,
 
         /// <summary>
-        /// Associated error message if the value was not valid
+        /// Indicates a sensitive setting such as a password, causing a warning to be given.
         /// </summary>
-        public string ErrorMessage { get; }
-
-        public SettingValidationResult(bool isValid, string errorMessage = null)
-        {
-            IsValid = isValid;
-            ErrorMessage = errorMessage;
-        }
+        Sensitive = 1 << 2,
     }
 }

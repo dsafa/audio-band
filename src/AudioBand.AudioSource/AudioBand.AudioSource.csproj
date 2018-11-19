@@ -37,10 +37,11 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioSourceSettingAttribute.cs" />
     <Compile Include="IAudioSource.cs" />
     <Compile Include="IAudioSourceLogger.cs" />
-    <Compile Include="AudioSourceSettingAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingValidationResult.cs" />
     <Compile Include="TrackInfoChangedEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

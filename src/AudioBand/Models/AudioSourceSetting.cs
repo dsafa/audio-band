@@ -1,26 +1,43 @@
-﻿namespace AudioBand.Models
+﻿using System;
+using System.ComponentModel;
+using AudioBand.AudioSource;
+
+namespace AudioBand.Models
 {
     /// <summary>
     /// A key / value pair that represents a single setting for an audio source
     /// </summary>
-    internal class AudioSourceSetting
+    internal class AudioSourceSetting : ModelBase
     {
+        private string _name;
+        private object _value;
+        private bool _remember = true;
+
         /// <summary>
         /// Name of the setting
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
 
         /// <summary>
         /// Value of the setting serialized as a string
         /// </summary>
-        public string Value { get; set; }
-
-        public AudioSourceSetting(){}
-
-        public AudioSourceSetting(string name, string value)
+        public object Value
         {
-            Name = name;
-            Value = value;
+            get => _value;
+            set => SetProperty(ref _value, value);
+        }
+
+        /// <summary>
+        /// Whether or not to save this setting
+        /// </summary>
+        public bool Remember
+        {
+            get => _remember;
+            set => SetProperty(ref _remember, value);
         }
     }
 }

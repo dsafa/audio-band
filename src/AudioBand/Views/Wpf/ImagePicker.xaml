@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="AudioBand.Views.Wpf.ImagePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="500"
+             x:Name="ImagePickerControl">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Style.xaml"/>
+                <ResourceDictionary Source="Resources/Strings.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <DockPanel DataContext="{Binding ElementName=ImagePickerControl}">
+        <Button DockPanel.Dock="Left"
+                Content="{iconPacks:Material Kind=Restart}"
+                Command="{Binding ResetImageCommand}">
+            <Button.ToolTip>
+                <TextBlock Text="{StaticResource DefaultImageHelpText}" />
+            </Button.ToolTip>
+        </Button>
+        <Button DockPanel.Dock="Left" Margin="4, 0, 4, 0"
+                Content="{iconPacks:Material Kind=FolderImage}"
+                Command="{Binding BrowseForImageCommand}">
+            <Button.ToolTip>
+                <TextBlock Text="{StaticResource BrowseImageHelpText}"/>
+            </Button.ToolTip>
+        </Button>
+        <Label Content="{Binding ImagePath, Mode=TwoWay}">
+            <Label.ToolTip>
+                <TextBlock Text="{Binding ImagePath, Mode=OneWay}"/>
+            </Label.ToolTip>
+        </Label>
+    </DockPanel>
+</UserControl>
