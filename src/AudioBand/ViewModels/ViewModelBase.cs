@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using AudioBand.Commands;
 using NLog;
 using AutoMapper;
+using FastMember;
 
 namespace AudioBand.ViewModels
 {
@@ -87,16 +88,27 @@ namespace AudioBand.ViewModels
         /// </summary>
         protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
 
+        /// <summary>
+        /// Logger for the view model
+        /// </summary>
         protected Logger Logger { get; }
+
+        /// <summary>
+        /// Type accessor for the current object.
+        /// </summary>
+        protected TypeAccessor Accessor { get; }
 
         protected ViewModelBase()
         {
+            Logger = LogManager.GetLogger(GetType().FullName);
+            Accessor = TypeAccessor.Create(GetType());
+
             BeginEditCommand = new RelayCommand(o => BeginEdit());
             EndEditCommand = new RelayCommand(o => EndEdit());
             CancelEditCommand = new RelayCommand(o => CancelEdit());
             ResetCommand = new RelayCommand(o => Reset());
+
             SetupAlsoNotify();
-            Logger = LogManager.GetLogger(GetType().FullName);
         }
 
         /// <summary>
@@ -202,10 +214,10 @@ namespace AudioBand.ViewModels
 
         private void SetupAlsoNotify()
         {
-            var alsoNotifyProperties = GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(AlsoNotifyAttribute)));
+            var alsoNotifyProperties = Accessor.GetMembers().Where(m => m.IsDefined(typeof(AlsoNotifyAttribute)));
             foreach (var propertyInfo in alsoNotifyProperties)
             {
-                var attr = propertyInfo.GetCustomAttribute<AlsoNotifyAttribute>();
+                var attr = (AlsoNotifyAttribute) propertyInfo.GetAttribute(typeof(AlsoNotifyAttribute), true);
                 AlsoNotifyMap.Add(propertyInfo.Name, attr.AlsoNotify);
             }
         }
