@@ -72,10 +72,13 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="AudioSource.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>(robocopy "$(TargetDir)\" "$(SolutionDir)AudioBand\$(OutDir)AudioSources\spotify\\" "*.dll" /xf AudioBand.AudioSource.dll)  ^&amp; IF %25ERRORLEVEL%25 LEQ 1 exit 0</PostBuildEvent>
+    <PostBuildEvent>(robocopy "$(TargetDir)\" "$(SolutionDir)AudioBand\$(OutDir)AudioSources\spotify\\" /xf AudioBand.AudioSource.dll)  ^&amp; IF %25ERRORLEVEL%25 LEQ 1 exit 0</PostBuildEvent>
   </PropertyGroup>
 </Project>
