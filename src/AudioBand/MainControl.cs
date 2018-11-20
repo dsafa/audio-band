@@ -27,8 +27,8 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
-        private AudioSourceManager _audioSourceManager;
-        private AppSettings _appSettings;
+        private readonly AudioSourceLoader _audioSourceLoader = new AudioSourceLoader();
+        private readonly AppSettings _appSettings = new AppSettings();
         private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
@@ -56,7 +56,9 @@ namespace AudioBand
                 MaxArchiveFiles = 3,
                 ArchiveOldFileOnStartup = true,
                 FileName = "${environment:variable=TEMP}/AudioBand.log",
-                ConcurrentWrites = true
+                KeepFileOpen = true,
+                OpenFileCacheTimeout = 30,
+                Layout = NLog.Layouts.Layout.FromString("${longdate}|${level:uppercase=true}|${logger}|${message} ${exception:format=tostring}")
             };
 
             var nullTarget = new NullTarget();
@@ -85,20 +87,18 @@ namespace AudioBand
             InitializeAsync();
         }
 
-        private async void InitializeAsync()
+        private async Task InitializeAsync()
         {
             try
             {
-                _audioSourceManager = new AudioSourceManager();
-                _appSettings = new AppSettings();
-
-                Options.ContextMenuItems = BuildContextMenu();
-
-                await Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+                await Task.Run(() =>
                 {
+                    _audioSourceLoader.LoadAudioSources();
+                    Options.ContextMenuItems = BuildContextMenu();
                     InitializeModels();
-                    SetupViewModelsAndWindow();
-                });
+                }).ConfigureAwait(false);
+
+                BeginInvoke((Action)SetupViewModelsAndWindow);
 
                 await SelectAudioSourceFromSettings();
                 Logger.Debug("Initialization complete");
@@ -135,7 +135,7 @@ namespace AudioBand
             var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
             var allAudioSourceSettings = new List<AudioSourceSettingsVM>();
 
-            foreach (var audioSource in _audioSourceManager.AudioSources)
+            foreach (var audioSource in _audioSourceLoader.AudioSources)
             {
                 var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
                 if (matchingSetting != null)
@@ -177,7 +177,7 @@ namespace AudioBand
 
         private List<DeskBandMenuItem> BuildContextMenu()
         {
-            var pluginList = _audioSourceManager.AudioSources.Select(audioSource =>
+            var pluginList = _audioSourceLoader.AudioSources.Select(audioSource =>
             {
                 var item = new DeskBandMenuAction(audioSource.Name);
                 item.Clicked += AudioSourceMenuItemOnClicked;

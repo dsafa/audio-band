@@ -230,7 +230,7 @@
     <Compile Include="Views\Winforms\FormattedTextLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AudioSource\AudioSourceManager.cs" />
+    <Compile Include="AudioSource\AudioSourceLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

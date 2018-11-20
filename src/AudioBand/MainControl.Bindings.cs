@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using AudioBand.ViewModels;
 using AudioBand.Views.Winforms;
 
@@ -22,6 +24,18 @@ namespace AudioBand
         }
 
         void ICustomLabelHost.AddCustomTextLabel(CustomLabelVM customLabel)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke((Action) (() => AddCustomLabelText(customLabel)));
+            }
+            else
+            {
+                AddCustomLabelText(customLabel);
+            }
+        }
+
+        private void AddCustomLabelText(CustomLabelVM customLabel)
         {
             var label = new FormattedTextLabel(customLabel.FormatString, customLabel.Color, customLabel.FontSize, customLabel.FontFamily, customLabel.TextAlignment);
             var labelBindingSource = new BindingSource(components);
@@ -51,6 +65,18 @@ namespace AudioBand
         }
 
         void ICustomLabelHost.RemoveCustomTextLabel(CustomLabelVM customLabel)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke((Action) (() => RemoveCustomTextLabel(customLabel)));
+            }
+            else
+            {
+                RemoveCustomTextLabel(customLabel);
+            }
+        }
+
+        void RemoveCustomTextLabel(CustomLabelVM customLabel)
         {
             var control = Controls.Find(CustomLabelControlsKey, true)
                 .Cast<FormattedTextLabel>()
