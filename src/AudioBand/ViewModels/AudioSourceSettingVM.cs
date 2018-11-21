@@ -67,6 +67,8 @@ namespace AudioBand.ViewModels
             {
                 Remember = false;
             }
+
+            ApplyChanges();
         }
 
         /// <summary>
