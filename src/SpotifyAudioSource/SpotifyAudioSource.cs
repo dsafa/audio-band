@@ -270,7 +270,8 @@ namespace SpotifyAudioSource
             {
                 Logger.Error(e);
 
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                //https://github.com/JohnnyCrazy/SpotifyAPI-NET/issues/303
+                await Task.Delay(TimeSpan.FromSeconds(30));
                 return null;
             }
         }
