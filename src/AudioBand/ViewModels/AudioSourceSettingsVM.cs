@@ -19,11 +19,6 @@ namespace AudioBand.ViewModels
         public AudioSourceSettingsVM(AudioSourceSettings settings, IAudioSource audioSource) : base(settings)
         {
             Settings = CreateSettingViewModels(Model, audioSource);
-            foreach (var audioSourceSettingVm in Settings)
-            {
-                audioSourceSettingVm.ApplyChanges();
-            }
-
             audioSource.PropertyChanged += AudioSourceOnPropertyChanged;
         }
 
@@ -37,7 +32,7 @@ namespace AudioBand.ViewModels
             var viewmodels = new List<AudioSourceSettingVM>();
             var audioSourceSettingInfos = source.GetSettings();
 
-            foreach (var audioSourceSettingInfo in audioSourceSettingInfos)
+            foreach (var audioSourceSettingInfo in audioSourceSettingInfos.OrderByDescending(s => s.Attribute.Priority))
             {
                 var matchingSetting = existingSettings.Settings.FirstOrDefault(s => s.Name == audioSourceSettingInfo.Attribute.Name);
                 if (matchingSetting != null)
