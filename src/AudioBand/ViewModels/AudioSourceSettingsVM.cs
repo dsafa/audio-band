@@ -24,7 +24,7 @@ namespace AudioBand.ViewModels
 
         private void AudioSourceOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            Settings.FirstOrDefault(s => s.PropertyName == propertyChangedEventArgs.PropertyName)?.UpdateValue();
+            Settings.FirstOrDefault(s => s.PropertyName == propertyChangedEventArgs.PropertyName)?.ValueChanged();
         }
 
         private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IAudioSource source)

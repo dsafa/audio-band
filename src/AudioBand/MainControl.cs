@@ -29,10 +29,12 @@ namespace AudioBand
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
         private readonly AudioSourceLoader _audioSourceLoader = new AudioSourceLoader();
         private readonly AppSettings _appSettings = new AppSettings();
+        private readonly Dispatcher _uiDispatcher;
         private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
+        private SettingsWindowVM _settingsWindowVm;
 
         #region Models
 
@@ -84,6 +86,7 @@ namespace AudioBand
 #if DEBUG
             System.Diagnostics.Debugger.Launch();
 #endif
+            _uiDispatcher = Dispatcher.CurrentDispatcher;
             InitializeAsync();
         }
 
@@ -98,9 +101,16 @@ namespace AudioBand
                     InitializeModels();
                 }).ConfigureAwait(false);
 
-                BeginInvoke((Action)SetupViewModelsAndWindow);
+                _settingsWindowVm = await SetupViewModels().ConfigureAwait(false);
 
-                await SelectAudioSourceFromSettings();
+                await _uiDispatcher.InvokeAsync(() =>
+                {
+                    _settingsWindow = new SettingsWindow(_settingsWindowVm);
+                    _settingsWindow.Saved += Saved;
+                    ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
+                });
+
+                await SelectAudioSourceFromSettings().ConfigureAwait(false);
                 Logger.Debug("Initialization complete");
             }
             catch (Exception e)
@@ -123,7 +133,7 @@ namespace AudioBand
             _trackModel = new Track();   
         }
 
-        private void SetupViewModelsAndWindow()
+        private async Task<SettingsWindowVM> SetupViewModels()
         {
             var albumArt = new AlbumArtVM(_albumArtModel, _trackModel);
             var albumArtPopup = new AlbumArtPopupVM(_albumArtPopupModel, _trackModel);
@@ -150,7 +160,7 @@ namespace AudioBand
                 }
             }
 
-            InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar);
+            await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar));
 
             var vm = new SettingsWindowVM
             {
@@ -165,9 +175,10 @@ namespace AudioBand
                 CustomLabelsVM = customLabels,
                 AudioSourceSettingsVM = allAudioSourceSettings
             };
-            _settingsWindow = new SettingsWindow(vm);
-            _settingsWindow.Saved += Saved;
-            ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
+
+            vm.BeginEdit();
+
+            return vm;
         }
 
         private void Saved(object o, EventArgs eventArgs)
