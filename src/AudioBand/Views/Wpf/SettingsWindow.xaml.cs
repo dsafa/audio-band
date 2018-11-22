@@ -28,7 +28,6 @@ namespace AudioBand.Views.Wpf
             InitializeComponent();
             DataContext = _vm = vm;
             vm.CustomLabelsVM.DialogService = new DialogService(this);
-            vm.BeginEdit();
         }
 
 
