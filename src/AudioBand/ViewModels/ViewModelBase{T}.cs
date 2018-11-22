@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using AudioBand.Models;
 using AutoMapper;
+using FastMember;
 using NLog;
 
 namespace AudioBand.ViewModels
@@ -20,7 +20,7 @@ namespace AudioBand.ViewModels
     {
         // Mapping from a model and model property to the viewmodel property name
         private readonly Dictionary<(object model, string modelPropName), string> _modelToPropertyName = new Dictionary<(object model, string modelPropName), string>();
-        private readonly Dictionary<(object model, string property), PropertyInfo> _modelPropCache = new Dictionary<(object model, string property), PropertyInfo>();
+        private readonly Dictionary<object, ObjectAccessor> _modelToAccessor = new Dictionary<object, ObjectAccessor>();
         private TModel _backup;
         private readonly MapperConfiguration _mapperConfiguration = new MapperConfiguration(cfg => cfg.CreateMap<TModel, TModel>());
 
@@ -38,6 +38,10 @@ namespace AudioBand.ViewModels
         /// </summary>
         protected TModel Model { get; set; }
 
+        /// <summary>
+        /// Create and instance of a viewmodel and hook up change notifications.
+        /// </summary>
+        /// <param name="model"></param>
         protected ViewModelBase(TModel model)
         {
             Model = model;
@@ -54,9 +58,11 @@ namespace AudioBand.ViewModels
         /// <returns>Returns true if new value was set</returns>
         protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
         {
-            var prop = _modelPropCache[(Model, modelPropertyName)];
-            prop.SetValue(Model, newValue);
-            var currentValue = (TValue)prop.GetValue(Model);
+            // Try and set the new value
+            _modelToAccessor[Model][modelPropertyName] = newValue;
+
+            // See if the value has changed
+            var currentValue = (TValue) _modelToAccessor[Model][modelPropertyName];
             return EqualityComparer<TValue>.Default.Equals(currentValue, newValue);
         }
 
@@ -66,14 +72,13 @@ namespace AudioBand.ViewModels
         /// <param name="model">Model to subscribe to for <see cref="INotifyPropertyChanged.PropertyChanged"/>.</param>
         protected void SetupModelBindings<T>(T model) where T : ModelBase
         {
-            var bindingProperties = GetType().GetProperties().Where(prop => Attribute.IsDefined((MemberInfo) prop, typeof(PropertyChangeBindingAttribute)));
-            foreach (var propertyInfo in bindingProperties)
-            {
-                var bindingAttr = propertyInfo.GetCustomAttribute<PropertyChangeBindingAttribute>();
-                _modelToPropertyName.Add((model, bindingAttr.PropertyName), propertyInfo.Name);
+            _modelToAccessor.Add(model, ObjectAccessor.Create(model));
 
-                var modelProp = model.GetType().GetProperty(bindingAttr.PropertyName);
-                _modelPropCache.Add((model, bindingAttr.PropertyName), modelProp);
+            var members = Accessor.GetMembers().Where(m => m.IsDefined(typeof(PropertyChangeBindingAttribute)));
+            foreach (var member in members)
+            {
+                var bindingAttr = (PropertyChangeBindingAttribute) member.GetAttribute(typeof(PropertyChangeBindingAttribute), true);
+                _modelToPropertyName.Add((model, bindingAttr.PropertyName), member.Name);
             }
 
             model.PropertyChanged += ModelOnPropertyChanged;

@@ -67,6 +67,8 @@ namespace AudioBand.ViewModels
             {
                 Remember = false;
             }
+
+            ApplyChanges();
         }
 
         /// <summary>
@@ -91,7 +93,7 @@ namespace AudioBand.ViewModels
             ApplyChanges();
         }
 
-        public void UpdateValue()
+        public void ValueChanged()
         {
             Model.Value = _settingInfo.GetValue();
         }

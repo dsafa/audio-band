@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -64,7 +65,8 @@ namespace SpotifyAudioSource
             }
         }
 
-        [AudioSourceSetting("Spotify Refresh Token", Options = SettingOptions.ReadOnly | SettingOptions.Hidden)]
+        [AudioSourceSetting("Spotify Refresh Token", Options = SettingOptions.ReadOnly | SettingOptions.Hidden,
+            Priority = 9)]
         public string RefreshToken
         {
             get => _refreshToken;
@@ -85,7 +87,7 @@ namespace SpotifyAudioSource
             {
                 if (value == _useProxy) return;
                 _useProxy = value;
-                ConfigureProxy();
+                UpdateProxy();
             }
         }
 
@@ -97,7 +99,7 @@ namespace SpotifyAudioSource
             {
                 if (value == _proxyConfig.Host) return;
                 _proxyConfig.Host = value;
-                ConfigureProxy();
+                UpdateProxy();
             }
         }
 
@@ -109,7 +111,7 @@ namespace SpotifyAudioSource
             {
                 if (value == _proxyConfig.Port) return;
                 _proxyConfig.Port = (int)value; // may overflow
-                ConfigureProxy();
+                UpdateProxy();
             }
         }
 
@@ -121,7 +123,7 @@ namespace SpotifyAudioSource
             {
                 if (value == _proxyConfig.Username) return;
                 _proxyConfig.Username = value;
-                ConfigureProxy();
+                UpdateProxy();
             }
         }
 
@@ -133,7 +135,7 @@ namespace SpotifyAudioSource
             {
                 if (value == _proxyConfig.Password) return;
                 _proxyConfig.Password = value;
-                ConfigureProxy();
+                UpdateProxy();
             }
         }
 
@@ -143,9 +145,11 @@ namespace SpotifyAudioSource
         private readonly Timer _progressTimer = new Timer(500);
         private readonly Timer _refreshTimer = new Timer(50 * 60 * 1000);
         private readonly ProxyConfig _proxyConfig = new ProxyConfig();
+        private readonly SemaphoreSlim  _spotifyLock = new SemaphoreSlim(1, 1);
         private HttpClient _httpClient = new HttpClient();
         private SpotifyWebAPI _spotifyApi = new SpotifyWebAPI();
         private string _lastSpotifyWindowTitle = "";
+        private string _currentTrackId;
         private string _clientSecret;
         private string _clientId;
         private string _refreshToken;
@@ -156,19 +160,22 @@ namespace SpotifyAudioSource
         private bool _isActive;
         private bool _useProxy;
 
-        public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public SpotifyAudioSource()
         {
             _checkSpotifyTimer.AutoReset = false;
             _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
-            _checkSpotifyTimer.Start();
             _progressTimer.AutoReset = false;
             _progressTimer.Elapsed += ProgressTimerOnElapsed;
             _refreshTimer.AutoReset = true;
             _refreshTimer.Elapsed += RefreshTimerOnElapsed;
+        }
+
+        public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _checkSpotifyTimer.Start();
             _refreshTimer.Start();
 
             _isActive = true;
-
             Authorize();
             return Task.CompletedTask;
         }
@@ -178,13 +185,9 @@ namespace SpotifyAudioSource
             _isActive = false;
 
             _checkSpotifyTimer.Stop();
-            _checkSpotifyTimer.Elapsed -= CheckSpotifyTimerOnElapsed;
             _progressTimer.Stop();
-            _progressTimer.Elapsed -= ProgressTimerOnElapsed;
             _refreshTimer.Stop();
-            _refreshTimer.Elapsed -= RefreshTimerOnElapsed;
 
-            ClearPlayback();
             return Task.CompletedTask;
         }
 
@@ -227,40 +230,69 @@ namespace SpotifyAudioSource
 
             var token = await _auth.ExchangeCode(payload.Code);
             RefreshToken = token.RefreshToken;
-
-            Logger.Debug($"Received access token. Expires in: {TimeSpan.FromSeconds(token.ExpiresIn)}");
-
-            _spotifyApi.TokenType = token.TokenType;
-            _spotifyApi.AccessToken = token.AccessToken;
+            UpdateAccessToken(token);
         }
 
-        private void ConfigureProxy()
+        private void UpdateProxy()
         {
             if (!UseProxy) return;
 
             Logger.Debug("Updating proxy configuration");
-            _spotifyApi = new SpotifyWebAPI(_proxyConfig)
+
+            try
             {
-                AccessToken = _spotifyApi.AccessToken,
-                TokenType = _spotifyApi.TokenType,
-            };
+                _spotifyLock.Wait();
+                _spotifyApi = new SpotifyWebAPI(_proxyConfig)
+                {
+                    AccessToken = _spotifyApi.AccessToken,
+                    TokenType = _spotifyApi.TokenType,
+                };
+            }
+            finally
+            {
+                _spotifyLock.Release();
+            }
 
             _httpClient = new HttpClient(new HttpClientHandler{ Proxy = _proxyConfig.CreateWebProxy(), UseProxy = true});
         }
 
-        private async Task<(FullTrack track, bool IsPlaying)> UpdateStatusFromSpotify()
+        private async Task<PlaybackContext> GetPlayback()
         {
-            Logger.Debug("Fetching playback status from spotify");
-
-            var playback = await GetPlayback();
-            if (playback?.Item == null)
+            try
             {
-                // Playback can be null if there are no devices playing
-                return (null, false);
-            }
+                await _spotifyLock.WaitAsync();
 
-            var track = playback.Item;
-            Logger.Debug($"Received playback: {track.Name}");
+                var playback = await _spotifyApi.GetPlaybackAsync();
+                if (playback.HasError())
+                {
+                    Logger.Warn($"Error while trying to get playback. Code: {playback.Error.Status}. Message: {playback.Error.Message}");
+                    if (playback.Error.Status == (int) HttpStatusCode.Unauthorized)
+                    {
+                        Logger.Debug($"Access token: {_spotifyApi.AccessToken.Substring(0, 20)}...");
+                    }
+                }
+
+                return playback;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+
+                //https://github.com/JohnnyCrazy/SpotifyAPI-NET/issues/303
+                await Task.Delay(TimeSpan.FromSeconds(30));
+                return null;
+            }
+            finally
+            {
+                _spotifyLock.Release();
+            }
+        }
+
+        private async Task NotifyTrackUpdate(FullTrack track)
+        {
+            if (track.Id == _currentTrackId) return;
+
+            _currentTrackId = track.Id;
 
             var albumArtImage = await GetAlbumArt(new Uri(track.Album.Images[0].Url));
             var trackName = track.Name;
@@ -275,48 +307,8 @@ namespace SpotifyAudioSource
                 Album = track.Album.Name,
                 TrackLength = _currentTrackLength
             };
+
             TrackInfoChanged?.Invoke(this, trackUpdateInfo);
-
-            _baseTrackProgress = TimeSpan.FromMilliseconds(playback.ProgressMs);
-            TrackProgressChanged?.Invoke(this, _baseTrackProgress);
-
-            var isPlaying = playback.IsPlaying;
-            if (isPlaying)
-            {
-                TrackPlaying?.Invoke(this, EventArgs.Empty);
-
-                // If the track is playing then we use a timer to estimate the track progress instead of hitting the api every second. might be changed.
-                _trackProgressStopwatch.Restart();
-                _progressTimer.Start();
-            }
-            else
-            {
-                TrackPaused?.Invoke(this, EventArgs.Empty);
-                _progressTimer.Stop();
-            }
-
-            return (track, isPlaying);
-        }
-
-        private async Task<PlaybackContext> GetPlayback()
-        {
-            try
-            {
-                var playback = await _spotifyApi.GetPlaybackAsync();
-                if (playback.HasError())
-                {
-                    Logger.Warn($"Error while trying to get playback. Code: {playback.Error.Status}. Message: {playback.Error.Message}");
-                }
-
-                return playback;
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                return null;
-            }
         }
 
         private void ProgressTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -363,13 +355,7 @@ namespace SpotifyAudioSource
                 var currentSpotifyWindowTitle = _spotifyControls.GetSpotifyWindowTitle();
                 if (string.IsNullOrEmpty(currentSpotifyWindowTitle))
                 {
-                    if (!string.IsNullOrEmpty(_lastSpotifyWindowTitle))
-                    {
-                        // Spotify was opened now its closed so clear everything
-                        ClearPlayback();
-                        _lastSpotifyWindowTitle = "";
-                    }
-
+                    _lastSpotifyWindowTitle = "";
                     _progressTimer.Stop();
                     return;
                 }
@@ -377,20 +363,42 @@ namespace SpotifyAudioSource
                 if (currentSpotifyWindowTitle == _lastSpotifyWindowTitle) return;
 
                 // Spotify window title has changed, so either the track changed or its changed from playing to pause and vice versa
-                var (currentTrack, spotifyIsPlaying) = await UpdateStatusFromSpotify();
-                if (currentTrack == null)
+                var playback = await GetPlayback();
+                if (playback?.Item == null)
                 {
-                    // No playback so wait add a delay to prevent overloading the rate limit
+                    // Playback can be null if there are no devices playing
                     await Task.Delay(TimeSpan.FromSeconds(1));
+                    _lastSpotifyWindowTitle = currentSpotifyWindowTitle;
                     return;
+                }
+                Logger.Debug("Received playback");
+
+                var track = playback.Item;
+                await NotifyTrackUpdate(track);
+
+                _baseTrackProgress = TimeSpan.FromMilliseconds(playback.ProgressMs);
+                TrackProgressChanged?.Invoke(this, _baseTrackProgress);
+
+                var isPlaying = playback.IsPlaying;
+                if (isPlaying)
+                {
+                    TrackPlaying?.Invoke(this, EventArgs.Empty);
+
+                    // If the track is playing then we use a timer to estimate the track progress instead of hitting the api every second. might be changed.
+                    _trackProgressStopwatch.Restart();
+                    _progressTimer.Start();
+                }
+                else
+                {
+                    TrackPaused?.Invoke(this, EventArgs.Empty);
+                    _progressTimer.Stop();
                 }
 
                 // Sometimes the web api is not up to date quickly so we should double check what the api returns against the window title.
                 // If the title is different, then we don't update the current spotify window title and the next check should call the api again
-                var matches = spotifyIsPlaying
-                    ? currentSpotifyWindowTitle == $"{currentTrack.Artists[0].Name} - {currentTrack.Name}" 
-                    : _spotifyControls.IsPaused();
-                if (matches && !string.IsNullOrEmpty(currentTrack.Name))
+                var titleMatches = isPlaying && currentSpotifyWindowTitle == $"{track.Artists[0].Name} - {track.Name}";
+                var statusMatches = !isPlaying && _spotifyControls.IsPaused();
+                if (titleMatches || statusMatches)
                 {
                     _lastSpotifyWindowTitle = currentSpotifyWindowTitle;
                 }
@@ -429,13 +437,6 @@ namespace SpotifyAudioSource
             return Task.CompletedTask;
         }
 
-        private void ClearPlayback()
-        {
-            TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs());
-            TrackPaused?.Invoke(this, EventArgs.Empty);
-            TrackProgressChanged?.Invoke(this, new TimeSpan());
-        }
-
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -456,11 +457,7 @@ namespace SpotifyAudioSource
                     return;
                 }
 
-                var expiresIn = TimeSpan.FromSeconds(token.ExpiresIn);
-                Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn})");
-
-                _spotifyApi.AccessToken = token.AccessToken;
-                _spotifyApi.TokenType = token.TokenType;
+                UpdateAccessToken(token);
             }
             catch (Exception e)
             {
@@ -474,6 +471,26 @@ namespace SpotifyAudioSource
 
             Logger.Debug("Access token about to expire.");
             await RefreshAccessToken();
+        }
+
+        private void UpdateAccessToken(Token token)
+        {
+            try
+            {
+                _spotifyLock.Wait();
+                if (_spotifyApi == null) return;
+
+                _spotifyApi.AccessToken = token.AccessToken;
+                _spotifyApi.TokenType = token.TokenType;
+
+                var expiresIn = TimeSpan.FromSeconds(token.ExpiresIn);
+                Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn}). Token: {token.AccessToken.Substring(0, 20)}...");
+            }
+            finally
+            {
+                _spotifyLock.Release();
+            }
+
         }
     }
 }

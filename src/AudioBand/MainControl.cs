@@ -27,12 +27,14 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
-        private AudioSourceManager _audioSourceManager;
-        private AppSettings _appSettings;
+        private readonly AudioSourceLoader _audioSourceLoader = new AudioSourceLoader();
+        private readonly AppSettings _appSettings = new AppSettings();
+        private readonly Dispatcher _uiDispatcher;
         private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu; 
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
+        private SettingsWindowVM _settingsWindowVm;
 
         #region Models
 
@@ -56,7 +58,9 @@ namespace AudioBand
                 MaxArchiveFiles = 3,
                 ArchiveOldFileOnStartup = true,
                 FileName = "${environment:variable=TEMP}/AudioBand.log",
-                ConcurrentWrites = true
+                KeepFileOpen = true,
+                OpenFileCacheTimeout = 30,
+                Layout = NLog.Layouts.Layout.FromString("${longdate}|${level:uppercase=true}|${logger}|${message} ${exception:format=tostring}")
             };
 
             var nullTarget = new NullTarget();
@@ -82,25 +86,31 @@ namespace AudioBand
 #if DEBUG
             System.Diagnostics.Debugger.Launch();
 #endif
+            _uiDispatcher = Dispatcher.CurrentDispatcher;
             InitializeAsync();
         }
 
-        private async void InitializeAsync()
+        private async Task InitializeAsync()
         {
             try
             {
-                _audioSourceManager = new AudioSourceManager();
-                _appSettings = new AppSettings();
-
-                Options.ContextMenuItems = BuildContextMenu();
-
-                await Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+                await Task.Run(() =>
                 {
+                    _audioSourceLoader.LoadAudioSources();
+                    Options.ContextMenuItems = BuildContextMenu();
                     InitializeModels();
-                    SetupViewModelsAndWindow();
+                }).ConfigureAwait(false);
+
+                _settingsWindowVm = await SetupViewModels().ConfigureAwait(false);
+
+                await _uiDispatcher.InvokeAsync(() =>
+                {
+                    _settingsWindow = new SettingsWindow(_settingsWindowVm);
+                    _settingsWindow.Saved += Saved;
+                    ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
                 });
 
-                await SelectAudioSourceFromSettings();
+                await SelectAudioSourceFromSettings().ConfigureAwait(false);
                 Logger.Debug("Initialization complete");
             }
             catch (Exception e)
@@ -123,7 +133,7 @@ namespace AudioBand
             _trackModel = new Track();   
         }
 
-        private void SetupViewModelsAndWindow()
+        private async Task<SettingsWindowVM> SetupViewModels()
         {
             var albumArt = new AlbumArtVM(_albumArtModel, _trackModel);
             var albumArtPopup = new AlbumArtPopupVM(_albumArtPopupModel, _trackModel);
@@ -135,7 +145,7 @@ namespace AudioBand
             var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
             var allAudioSourceSettings = new List<AudioSourceSettingsVM>();
 
-            foreach (var audioSource in _audioSourceManager.AudioSources)
+            foreach (var audioSource in _audioSourceLoader.AudioSources)
             {
                 var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
                 if (matchingSetting != null)
@@ -150,7 +160,7 @@ namespace AudioBand
                 }
             }
 
-            InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar);
+            await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar));
 
             var vm = new SettingsWindowVM
             {
@@ -165,9 +175,10 @@ namespace AudioBand
                 CustomLabelsVM = customLabels,
                 AudioSourceSettingsVM = allAudioSourceSettings
             };
-            _settingsWindow = new SettingsWindow(vm);
-            _settingsWindow.Saved += Saved;
-            ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
+
+            vm.BeginEdit();
+
+            return vm;
         }
 
         private void Saved(object o, EventArgs eventArgs)
@@ -177,7 +188,7 @@ namespace AudioBand
 
         private List<DeskBandMenuItem> BuildContextMenu()
         {
-            var pluginList = _audioSourceManager.AudioSources.Select(audioSource =>
+            var pluginList = _audioSourceLoader.AudioSources.Select(audioSource =>
             {
                 var item = new DeskBandMenuAction(audioSource.Name);
                 item.Clicked += AudioSourceMenuItemOnClicked;
