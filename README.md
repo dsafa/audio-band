@@ -29,7 +29,7 @@ There is currently no installer available, however there are prereleases in the 
 
 ![](./screenshots/click-audiosource.png)
 
-**IMPORTANT** If nothing happens after selecting `Audio Band` from the toolbars menu or if there are no options in the `Audio Source` menu, some files are being blocked by windows. To fix it, right click the files -> properties and click unblock. If there are still problems, feel free to post an issue.
+**IMPORTANT** If nothing happens after selecting `Audio Band` from the toolbars menu or if there are no options in the `Audio Source` menu, some files are being blocked by windows. To fix it, run `unblock.ps1` with powershell. If that doesn't work you can manually fix it by right clicking the files -> properties and clicking unblock. If there are still problems, feel free to post an issue.
 
 ### Current Supported Audio Sources
 - Spotify (see below for setup instructions and issues)
