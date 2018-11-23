@@ -20,8 +20,8 @@ namespace SpotifyAudioSource
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, IntPtr lParam);
 
+        public const string SpotifyPausedWindowTitle = "Spotify";
         private const int WM_APPCOMMAND = 0x0319;
-        private const string SpotifyPausedWindowTitle = "Spotify";
         private const string SpotifyWindowClassName = "Chrome_WidgetWin_0"; // Last checked spotify version 1.0.88.353
         private IntPtr _spotifyHwnd;
 
