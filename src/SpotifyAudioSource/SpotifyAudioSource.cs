@@ -263,7 +263,12 @@ namespace SpotifyAudioSource
                 Logger.Error(e);
 
                 //https://github.com/JohnnyCrazy/SpotifyAPI-NET/issues/303
-                await Task.Delay(TimeSpan.FromSeconds(30));
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                _spotifyApi = new SpotifyWebAPI(UseProxy ? _proxyConfig : null)
+                {
+                    AccessToken = _spotifyApi.AccessToken,
+                    TokenType = _spotifyApi.TokenType
+                };
                 return null;
             }
         }
