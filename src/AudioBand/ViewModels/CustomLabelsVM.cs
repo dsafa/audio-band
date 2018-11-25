@@ -10,6 +10,7 @@ namespace AudioBand.ViewModels
 {
     internal class CustomLabelsVM : ViewModelBase
     {
+        private List<CustomLabel> _customLabels;
         private readonly ICustomLabelHost _labelHost;
         private readonly HashSet<CustomLabelVM> _added = new HashSet<CustomLabelVM>();
         private readonly HashSet<CustomLabelVM> _removed = new HashSet<CustomLabelVM>();
@@ -21,6 +22,7 @@ namespace AudioBand.ViewModels
 
         public CustomLabelsVM(List<CustomLabel> customLabels, ICustomLabelHost labelHost)
         {
+            _customLabels = customLabels;
             CustomLabels = new ObservableCollection<CustomLabelVM>(customLabels.Select(customLabel => new CustomLabelVM(customLabel)));
             _labelHost = labelHost;
 
@@ -98,9 +100,12 @@ namespace AudioBand.ViewModels
             _added.Clear();
             _removed.Clear();
 
+            _customLabels.Clear();
+
             foreach (var customLabelVm in CustomLabels)
             {
                 customLabelVm.EndEdit();
+                _customLabels.Add(customLabelVm.GetModel());
             }
         }
     }
