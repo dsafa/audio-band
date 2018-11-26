@@ -11,7 +11,7 @@ namespace iTunesAudioSource
 {
     class ITunesControls
     {
-        private iTunesApp _itunesApp = new iTunesApp();
+        private iTunesApp _itunesApp;
         private Timer _checkProcessTimer;
         private bool _itunesOpened;
 
@@ -31,6 +31,7 @@ namespace iTunesAudioSource
 
         public void Start()
         {
+            _itunesApp = new iTunesApp();
             _checkProcessTimer.Start();
         }
 
