@@ -209,6 +209,8 @@ namespace AudioBand
                 return;
             }
 
+            ResetTrack();
+
             source.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
             source.TrackPlaying += AudioSourceOnTrackPlaying;
             source.TrackPaused += AudioSourceOnTrackPaused;
@@ -239,6 +241,8 @@ namespace AudioBand
 
             _appSettings.AudioSource = null;
             _currentAudioSource = null;
+
+            ResetTrack();
 
             Logger.Debug("Audio source deactivated");
         }
@@ -288,6 +292,17 @@ namespace AudioBand
             {
                 Logger.Error(e);
             }
+        }
+
+        private void ResetTrack()
+        {
+            _trackModel.AlbumArt = null;
+            _trackModel.AlbumName = null;
+            _trackModel.Artist = null;
+            _trackModel.TrackName = null;
+            _trackModel.IsPlaying = false;
+            _trackModel.TrackLength = TimeSpan.Zero;
+            _trackModel.TrackProgress = TimeSpan.Zero;
         }
     }
 }
