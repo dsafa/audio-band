@@ -11,12 +11,12 @@ namespace AudioBand.Views.Wpf
     internal partial class SettingsWindow
     {
         private bool _shouldSave;
-        private readonly SettingsWindowVM _vm;
 
         public RelayCommand CancelCloseCommand { get; }
         public RelayCommand SaveCloseCommand { get; }
 
         public EventHandler Saved;
+        public EventHandler Canceled;
 
         internal SettingsWindow(SettingsWindowVM vm)
         {
@@ -26,22 +26,22 @@ namespace AudioBand.Views.Wpf
             SaveCloseCommand =  new RelayCommand(SaveCloseCommandOnExecute);
 
             InitializeComponent();
-            DataContext = _vm = vm;
+            DataContext = vm;
             vm.CustomLabelsVM.DialogService = new DialogService(this);
         }
 
-
-        private static readonly HashSet<string> _externalAssemblies = new HashSet<string>
+        private static readonly HashSet<string> _bindingHelpAssemblies = new HashSet<string>
         {
             "MahApps.Metro.IconPacks.Material",
             "ColorPickerWPF"
         };
-        // Problem loading some dlls from the code base
+
+        // Problem with late binding? Fuslogvw shows its not probing the original location.
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             // name is in this format Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4
             var asmName = args.Name.Substring(0, args.Name.IndexOf(','));
-            if (!_externalAssemblies.Contains(asmName))
+            if (!_bindingHelpAssemblies.Contains(asmName))
             {
                 return null;
             }
@@ -68,16 +68,14 @@ namespace AudioBand.Views.Wpf
 
             if (_shouldSave)
             {
-                _vm.EndEdit();
                 Saved?.Invoke(this, EventArgs.Empty);
             }
             else
             {
-                _vm.CancelEdit();
+                Canceled?.Invoke(this, EventArgs.Empty);
             }
 
             _shouldSave = false;
-            _vm.BeginEdit();
             Hide();
         }
     }
