@@ -179,8 +179,14 @@ namespace SpotifyAudioSource
         {
             _isActive = false;
 
+            _trackProgressStopwatch.Stop();
             _checkSpotifyTimer.Stop();
             _progressTimer.Stop();
+
+            _lastSpotifyWindowTitle = "";
+            _currentTrackId = null;
+            _baseTrackProgress = TimeSpan.Zero;
+            _currentTrackLength = TimeSpan.Zero;
 
             return Task.CompletedTask;
         }
