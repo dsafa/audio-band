@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioBand.Test", "AudioBand
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTunesAudioSource", "iTunesAudioSource\iTunesAudioSource.csproj", "{6D881B7B-3F3F-4613-A83F-75E31EEA5252}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicBeeAudioSource", "MusicBeeAudioSource\MusicBeeAudioSource.csproj", "{741DB79C-921D-4D91-85F1-CD10C746F46E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{6D881B7B-3F3F-4613-A83F-75E31EEA5252}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D881B7B-3F3F-4613-A83F-75E31EEA5252}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D881B7B-3F3F-4613-A83F-75E31EEA5252}.Release|Any CPU.Build.0 = Release|Any CPU
+		{741DB79C-921D-4D91-85F1-CD10C746F46E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{741DB79C-921D-4D91-85F1-CD10C746F46E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{741DB79C-921D-4D91-85F1-CD10C746F46E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{741DB79C-921D-4D91-85F1-CD10C746F46E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
