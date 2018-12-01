@@ -75,7 +75,6 @@ namespace iTunesAudioSource
             return Task.CompletedTask;
         }
 
-
         private void NotifyTrackChange(Track track)
         {
             var trackInfo = new TrackInfoChangedEventArgs
@@ -133,16 +132,12 @@ namespace iTunesAudioSource
                 }
 
                 NotifyPlayerState();
-                var isNewTrack = IsNewTrack(track);
-                if (isNewTrack)
+                if (IsNewTrack(track))
                 {
                     NotifyTrackChange(track);
                 }
 
-                if (_isPlaying || isNewTrack)
-                {
-                    TrackProgressChanged?.Invoke(this, _itunesControls.Progress);
-                }
+                TrackProgressChanged?.Invoke(this, _itunesControls.Progress);
             }
             catch(Exception e)
             {
