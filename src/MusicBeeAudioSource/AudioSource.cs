@@ -1,6 +1,5 @@
 ﻿using AudioBand.AudioSource;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -25,7 +24,7 @@ namespace MusicBeeAudioSource
         public event EventHandler TrackPlaying;
         public event EventHandler TrackPaused;
         public event EventHandler<TimeSpan> TrackProgressChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
         public AudioSource()
         {

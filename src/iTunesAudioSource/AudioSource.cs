@@ -1,6 +1,5 @@
 ﻿using AudioBand.AudioSource;
 using System;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -21,7 +20,7 @@ namespace iTunesAudioSource
         public event EventHandler TrackPlaying;
         public event EventHandler TrackPaused;
         public event EventHandler<TimeSpan> TrackProgressChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
         public AudioSource()
         {
