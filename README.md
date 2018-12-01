@@ -31,8 +31,10 @@ There is currently no installer available, however there are prereleases in the 
 
 **IMPORTANT** If nothing happens after selecting `Audio Band` from the toolbars menu or if there are no options in the `Audio Source` menu, some files are being blocked by windows. To fix it, run `unblock.ps1` with powershell. If that doesn't work you can manually fix it by right clicking the files -> properties and clicking unblock. If there are still problems, feel free to post an issue.
 
-### Current Supported Audio Sources
-- Spotify (see below for setup instructions and issues)
+## Current Supported Audio Sources (see below for setup instructions and issues)
+- Spotify
+- iTunes
+- MusicBee
 
 ### Spotify Setup
 1. Login to the [Spotify dashboard](https://developer.spotify.com/dashboard/login) and create a new App. Fill in the details, you can name it whatever you want. This app will be just for AudioBand.
@@ -49,7 +51,12 @@ There is currently no installer available, however there are prereleases in the 
 #### Spotify Issues
 - The song progress will be out of sync if you change the song's progress. This is due to current limitations making the song progress being tracked locally. This can be fixed if you pause and play again or go to a different song.
 - The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying.
-- It may randomly stop updating song information. You can deselect and reselect Spotify as the audio source to fix it.
+
+### iTunes
+- iTunes will open when the audio source is selected, and cannot be changed (as far as I know).
+
+### MusicBee
+- Make sure that the [Musicbee IPC plugin](https://getmusicbee.com/addons/plugins/138/musicbeeipc/) is installed for MusicBee. Use this [link](https://getmusicbee.com/forum/index.php?topic=11492.0) if that link doesn't work.
 
 ## Customization
 Right click audio band and select `Audio Band Settings` and a new window will appear where you can do your customization. A description of the options can be found [here](https://github.com/dsafa/audio-band/wiki/Audio-Band-settings). *In app help coming soon*
