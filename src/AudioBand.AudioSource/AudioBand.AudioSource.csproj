@@ -42,6 +42,7 @@
     <Compile Include="IAudioSource.cs" />
     <Compile Include="IAudioSourceLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingChangedEventArgs.cs" />
     <Compile Include="SettingValidationResult.cs" />
     <Compile Include="TrackInfoChangedEventArgs.cs" />
   </ItemGroup>

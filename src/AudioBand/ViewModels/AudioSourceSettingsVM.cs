@@ -1,9 +1,7 @@
-﻿using System;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Extensions;
 using AudioBand.Models;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 namespace AudioBand.ViewModels
@@ -19,12 +17,12 @@ namespace AudioBand.ViewModels
         public AudioSourceSettingsVM(AudioSourceSettings settings, IAudioSource audioSource) : base(settings)
         {
             Settings = CreateSettingViewModels(Model, audioSource);
-            audioSource.PropertyChanged += AudioSourceOnPropertyChanged;
+            audioSource.SettingChanged += AudioSourceOnSettingChanged;
         }
 
-        private void AudioSourceOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
         {
-            Settings.FirstOrDefault(s => s.PropertyName == propertyChangedEventArgs.PropertyName)?.ValueChanged();
+            Settings.FirstOrDefault(s => s.PropertyName == e.PropertyName)?.ValueChanged();
         }
 
         private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IAudioSource source)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace AudioBand.AudioSource
     /// Provides information from an audio source and exposes controls
     /// </summary>
     [InheritedExport(typeof(IAudioSource))]
-    public interface IAudioSource : INotifyPropertyChanged
+    public interface IAudioSource
     {
         /// <summary>
         /// Name of the audio source which is displayed
@@ -21,6 +20,11 @@ namespace AudioBand.AudioSource
         /// Audio source logger that will be injected
         /// </summary>
         IAudioSourceLogger Logger { get; set; }
+
+        /// <summary>
+        /// Occurs when a setting has changed internally.
+        /// </summary>
+        event EventHandler<SettingChangedEventArgs> SettingChanged;
 
         /// <summary>
         /// Track information has changed
