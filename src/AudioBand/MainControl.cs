@@ -107,6 +107,7 @@ namespace AudioBand
                 {
                     _settingsWindow = new SettingsWindow(_settingsWindowVm);
                     _settingsWindow.Saved += Saved;
+                    _settingsWindow.Canceled += Canceled;
                     ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
                 });
 
@@ -162,7 +163,7 @@ namespace AudioBand
 
             await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar));
 
-            var vm = new SettingsWindowVM
+            return new SettingsWindowVM
             {
                 AlbumArtPopupVM = albumArtPopup,
                 ProgressBarVM = progressBar,
@@ -175,15 +176,23 @@ namespace AudioBand
                 CustomLabelsVM = customLabels,
                 AudioSourceSettingsVM = allAudioSourceSettings
             };
-
-            vm.BeginEdit();
-
-            return vm;
         }
 
         private void Saved(object o, EventArgs eventArgs)
         {
+            _settingsWindowVm.EndEdit();
             _appSettings.Save();
+        }
+
+        private void Canceled(object sender, EventArgs e)
+        {
+            _settingsWindowVm.CancelEdit();
+        }
+
+        private void OpenSettingsWindow()
+        {
+            _settingsWindowVm.BeginEdit();
+            _settingsWindow.Show();
         }
 
         private List<DeskBandMenuItem> BuildContextMenu()
@@ -208,6 +217,8 @@ namespace AudioBand
             {
                 return;
             }
+
+            ResetTrack();
 
             source.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
             source.TrackPlaying += AudioSourceOnTrackPlaying;
@@ -240,6 +251,8 @@ namespace AudioBand
             _appSettings.AudioSource = null;
             _currentAudioSource = null;
 
+            ResetTrack();
+
             Logger.Debug("Audio source deactivated");
         }
 
@@ -263,11 +276,6 @@ namespace AudioBand
             _currentAudioSource.DeactivateAsync();
         }
 
-        private void OpenSettingsWindow()
-        {
-            _settingsWindow.Show();
-        }
-
         private async Task SelectAudioSourceFromSettings()
         {
             try
@@ -288,6 +296,17 @@ namespace AudioBand
             {
                 Logger.Error(e);
             }
+        }
+
+        private void ResetTrack()
+        {
+            _trackModel.AlbumArt = null;
+            _trackModel.AlbumName = null;
+            _trackModel.Artist = null;
+            _trackModel.TrackName = null;
+            _trackModel.IsPlaying = false;
+            _trackModel.TrackLength = TimeSpan.Zero;
+            _trackModel.TrackProgress = TimeSpan.Zero;
         }
     }
 }

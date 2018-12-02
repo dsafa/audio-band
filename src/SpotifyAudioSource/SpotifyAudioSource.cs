@@ -1,6 +1,5 @@
 ﻿using AudioBand.AudioSource;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -22,11 +21,11 @@ namespace SpotifyAudioSource
     {
         public string Name { get; } = "Spotify";
         public IAudioSourceLogger Logger { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
         public event EventHandler TrackPlaying;
         public event EventHandler TrackPaused;
         public event EventHandler<TimeSpan> TrackProgressChanged;
+        public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
         [AudioSourceSetting("Spotify Client ID")]
         public string ClientId
@@ -75,7 +74,7 @@ namespace SpotifyAudioSource
                 if (value == _refreshToken) return;
 
                 _refreshToken = value;
-                OnPropertyChanged();
+                OnSettingChanged();
             }
         }
 
@@ -179,8 +178,14 @@ namespace SpotifyAudioSource
         {
             _isActive = false;
 
+            _trackProgressStopwatch.Stop();
             _checkSpotifyTimer.Stop();
             _progressTimer.Stop();
+
+            _lastSpotifyWindowTitle = "";
+            _currentTrackId = null;
+            _baseTrackProgress = TimeSpan.Zero;
+            _currentTrackLength = TimeSpan.Zero;
 
             return Task.CompletedTask;
         }
@@ -429,9 +434,9 @@ namespace SpotifyAudioSource
             return Task.CompletedTask;
         }
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnSettingChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            SettingChanged?.Invoke(this, new SettingChangedEventArgs(propertyName));
         }
 
         private async Task RefreshAccessToken()

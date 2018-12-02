@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{30F2BFEA-788A-494D-88E7-F2070528EBEA}</ProjectGuid>
+    <ProjectGuid>{741DB79C-921D-4D91-85F1-CD10C746F46E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AudioBand.AudioSource</RootNamespace>
-    <AssemblyName>AudioBand.AudioSource</AssemblyName>
+    <RootNamespace>MusicBeeAudioSource</RootNamespace>
+    <AssemblyName>MusicBeeAudioSource</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\AudioBand.AudioSource.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,22 +29,46 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioSourceSettingAttribute.cs" />
-    <Compile Include="IAudioSource.cs" />
-    <Compile Include="IAudioSourceLogger.cs" />
+    <Compile Include="AudioSource.cs" />
+    <Compile Include="MusicBeeIPC\Enums.cs" />
+    <Compile Include="MusicBeeIPC\MusicBeeIPC.cs" />
+    <Compile Include="MusicBeeIPC\Pack.cs" />
+    <Compile Include="MusicBeeIPC\Structs.cs" />
+    <Compile Include="MusicBeeIPC\Unpack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingChangedEventArgs.cs" />
-    <Compile Include="SettingValidationResult.cs" />
-    <Compile Include="TrackInfoChangedEventArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MusicBeeIPC\LICENSE_MusicBeeIPCSDK.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AudioBand.AudioSource\AudioBand.AudioSource.csproj">
+      <Project>{30f2bfea-788a-494d-88e7-f2070528ebea}</Project>
+      <Name>AudioBand.AudioSource</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AudioSource.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>(robocopy "$(TargetDir)\" "$(SolutionDir)AudioBand\$(OutDir)AudioSources\MusicBee\\" /xf AudioBand.AudioSource.dll)  ^&amp; IF %25ERRORLEVEL%25 LEQ 1 exit 0</PostBuildEvent>
+  </PropertyGroup>
 </Project>
