@@ -11,4 +11,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1502:Element must not be on a single line", Justification = "None", Scope = "member", Target = "~M:AudioBand.Commands.RelayCommand`1.#ctor(System.Action{`0})")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1502:Element must not be on a single line", Justification = "None", Scope = "member", Target = "~M:AudioBand.Commands.RelayCommand.#ctor(System.Action{System.Object})")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1502:Element must not be on a single line", Justification = "None", Scope = "member", Target = "~M:AudioBand.Commands.RelayCommand.#ctor(System.Action{System.Object},System.Predicate{System.Object})")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:Closing parenthesis must be spaced correctly", Justification = "Tuple issues", Scope = "type", Target = "~T:AudioBand.Extensions.ColorExtensions")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1008:Opening parenthesis must be spaced correctly", Justification = "Tuple issues", Scope = "member", Target = "~M:AudioBand.Extensions.ColorExtensions.#cctor")]
 

@@ -3,6 +3,9 @@ using System.Drawing.Drawing2D;
 
 namespace AudioBand.Extensions
 {
+    /// <summary>
+    /// Extension for <see cref="Image"/>.
+    /// </summary>
     internal static class ImageExtensions
     {
         /// <summary>
@@ -11,7 +14,7 @@ namespace AudioBand.Extensions
         /// <param name="image">Image to resize.</param>
         /// <param name="width">Width of the new image.</param>
         /// <param name="height">Height of the new image.</param>
-        /// <returns></returns>
+        /// <returns>The resized image.</returns>
         public static Image Resize(this Image image, int width, int height)
         {
             // Padding issues
@@ -36,7 +39,7 @@ namespace AudioBand.Extensions
         /// <param name="image">Image to scale.</param>
         /// <param name="targetWidth">Target width to scale to.</param>
         /// <param name="targetHeight">Target height to scale to.</param>
-        /// <returns></returns>
+        /// <returns>The scaled image.</returns>
         public static Image Scale(this Image image, int targetWidth, int targetHeight)
         {
             var ratiow = (float)image.Width / targetWidth;

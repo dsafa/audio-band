@@ -1,8 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace AudioBand.Extensions
 {
+    /// <summary>
+    /// Extensions for <see cref="Binding"/>.
+    /// </summary>
     internal static class BindingExtensions
     {
         /// <summary>
@@ -18,8 +22,8 @@ namespace AudioBand.Extensions
                 throw new ArgumentNullException(nameof(binding));
             }
 
-            var manager = binding.BindingManagerBase;
-            var itemProperty = manager.GetItemProperties().Find(binding.BindingMemberInfo.BindingField, true);
+            BindingManagerBase manager = binding.BindingManagerBase;
+            PropertyDescriptor itemProperty = manager.GetItemProperties().Find(binding.BindingMemberInfo.BindingField, true);
 
             return (T)itemProperty.GetValue(manager.Current);
         }

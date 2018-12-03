@@ -1,9 +1,12 @@
-﻿using Svg;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
+using Svg;
 
 namespace AudioBand.Extensions
 {
+    /// <summary>
+    /// Extensions for <see cref="SvgDocument"/>.
+    /// </summary>
     internal static class SvgExtensions
     {
         /// <summary>

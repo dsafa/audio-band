@@ -105,6 +105,7 @@
     <Compile Include="AudioSource\AudioSourceSettingInfo.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Commands\RelayCommand{T}.cs" />
     <Compile Include="Extensions\AudioSourceExtenstions.cs" />
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
