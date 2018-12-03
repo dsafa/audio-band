@@ -271,6 +271,7 @@
     <None Include="Properties\DataSources\AudioBand.ViewModels.PlayPauseButtonVM.datasource" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.PreviousButtonVM.datasource" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.ProgressBarVM.datasource" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\play.svg" />
@@ -349,7 +350,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if "$(ConfigurationName)" == "Debug" (
