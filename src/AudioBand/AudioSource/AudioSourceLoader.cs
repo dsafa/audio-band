@@ -14,7 +14,9 @@ namespace AudioBand.AudioSource
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable <IAudioSource> AudioSources { get; private set; } = new List<IAudioSource>();
 
+#pragma warning disable CS0067 // The event 'AudioSourceLoader.AudioSourcesChanged' is never used
         public event EventHandler AudioSourcesChanged;
+#pragma warning restore CS0067 // The event 'AudioSourceLoader.AudioSourcesChanged' is never used
 
         private const string PluginFolderName = "AudioSources";
         private const string ManifestFileName = "AudioSource.manifest";
