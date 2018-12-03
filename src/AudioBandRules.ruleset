@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Rules for AudioBand" Description="Ruleset for AudioBand" ToolsVersion="15.0">
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA1101" Action="None" />
+    <Rule Id="SA1122" Action="None" />
+    <Rule Id="SA1124" Action="None" />
+    <Rule Id="SA1309" Action="None" />
     <Rule Id="SA1633" Action="None" />
     <Rule Id="SA1634" Action="None" />
     <Rule Id="SA1635" Action="None" />
@@ -9,5 +13,7 @@
     <Rule Id="SA1638" Action="None" />
     <Rule Id="SA1640" Action="None" />
     <Rule Id="SA1641" Action="None" />
+    <Rule Id="SX1101" Action="Warning" />
+    <Rule Id="SX1309" Action="Warning" />
   </Rules>
 </RuleSet>
