@@ -9,20 +9,32 @@ using NLog;
 
 namespace AudioBand.AudioSource
 {
+    /// <summary>
+    /// Detects and loads audio sources.
+    /// </summary>
     internal class AudioSourceLoader
     {
-        [ImportMany(AllowRecomposition = true)]
-        public IEnumerable <IAudioSource> AudioSources { get; private set; } = new List<IAudioSource>();
-
-#pragma warning disable CS0067 // The event 'AudioSourceLoader.AudioSourcesChanged' is never used
-        public event EventHandler AudioSourcesChanged;
-#pragma warning restore CS0067 // The event 'AudioSourceLoader.AudioSourcesChanged' is never used
-
         private const string PluginFolderName = "AudioSources";
         private const string ManifestFileName = "AudioSource.manifest";
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
+#pragma warning disable CS0067 // The event 'AudioSourceLoader.AudioSourcesChanged' is never used
+        /// <summary>
+        /// Occurs when the detected audio sources have changed.
+        /// </summary>
+        public event EventHandler AudioSourcesChanged;
+#pragma warning restore CS0067 // The event 'AudioSourceLoader.AudioSourcesChanged' is never used
+
+        /// <summary>
+        /// Gets the list of audio sources available.
+        /// </summary>
+        [ImportMany(AllowRecomposition = true)]
+        public IEnumerable<IAudioSource> AudioSources { get; private set; } = new List<IAudioSource>();
+
+        /// <summary>
+        /// Load all audio sources.
+        /// </summary>
         public void LoadAudioSources()
         {
             Logger.Debug($"Searching for audio sources in path `{PluginFolderPath}`");
@@ -41,7 +53,7 @@ namespace AudioBand.AudioSource
                 }
 
                 var manifestData = Toml.ReadFile<Manifest>(manifest);
-                Logger.Debug($"Reading {manifest}. Audio sources: [{string.Join("," , manifestData.AudioSources)}]");
+                Logger.Debug($"Reading {manifest}. Audio sources: [{string.Join(",", manifestData.AudioSources)}]");
 
                 foreach (var audioSourceFileName in manifestData.AudioSources)
                 {
@@ -55,6 +67,7 @@ namespace AudioBand.AudioSource
 
             foreach (var audioSource in AudioSources)
             {
+                Logger.Debug($"Loaded audio source `{audioSource.Name}`");
                 audioSource.Logger = new AudioSourceLogger(audioSource.Name);
             }
         }
