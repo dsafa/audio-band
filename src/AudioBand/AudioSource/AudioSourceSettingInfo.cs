@@ -1,44 +1,55 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Reflection;
+using FastMember;
 using NLog;
 
 namespace AudioBand.AudioSource
 {
     /// <summary>
-    /// Contains information for an audio source setting
+    /// Contains information for an audio source setting.
     /// </summary>
     internal class AudioSourceSettingInfo
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ObjectAccessor _accessor;
 
         /// <summary>
-        /// Audio source that this setting belongs to
+        /// Initializes a new instance of the <see cref="AudioSourceSettingInfo"/> class
+        /// with the source and setting attributes.
+        /// </summary>
+        /// <param name="source">The audio source.</param>
+        /// <param name="accessor">The accessor for the property.</param>
+        /// <param name="propertyType">Type of the property.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="attribute">The setting attribute.</param>
+        public AudioSourceSettingInfo(IAudioSource source, ObjectAccessor accessor, Type propertyType, string propertyName, AudioSourceSettingAttribute attribute)
+        {
+            _accessor = accessor;
+            PropertyName = propertyName;
+            Source = source;
+            Attribute = attribute;
+            PropertyType = propertyType;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IAudioSource"/> that this setting belongs to.
         /// </summary>
         public IAudioSource Source { get; }
 
         /// <summary>
-        /// Property that the <see cref="Attribute"/> is applied to.
+        /// Gets the name of the property associated with the setting.
         /// </summary>
-        public PropertyInfo Property { get; }
+        public string PropertyName { get; }
 
         /// <summary>
-        /// <see cref="AudioSourceSettingAttribute"/> attached to the property.
+        /// Gets the <see cref="AudioSourceSettingAttribute"/> attached to the property.
         /// </summary>
         public AudioSourceSettingAttribute Attribute { get; }
 
         /// <summary>
-        /// Type of the property.
+        /// Gets the type of the property.
         /// </summary>
         public Type PropertyType { get; }
-
-        public AudioSourceSettingInfo(IAudioSource source, PropertyInfo property, AudioSourceSettingAttribute attribute)
-        {
-            Source = source;
-            Property = property;
-            Attribute = attribute;
-            PropertyType = property.PropertyType;
-        }
 
         /// <summary>
         /// Validate a value for this setting.
@@ -60,9 +71,8 @@ namespace AudioBand.AudioSource
                 return new SettingValidationResult(false, "Error with validation. See log for more details.");
             }
 
-            return (SettingValidationResult)method.Invoke(Source, new[] { value, Property.Name });
+            return (SettingValidationResult)method.Invoke(Source, new[] { value, PropertyName });
         }
-
 
         /// <summary>
         /// Updates the audio source with the new value.
@@ -73,7 +83,7 @@ namespace AudioBand.AudioSource
             try
             {
                 var newValue = ConvertToSettingType(value);
-                Property.SetValue(Source, newValue);
+                _accessor[PropertyName] = newValue;
             }
             catch (Exception e)
             {
@@ -85,16 +95,16 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Gets the current setting value from the audio source.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The value of the setting.</returns>
         public object GetValue()
         {
-            return Property.GetValue(Source);
+            return _accessor[PropertyName];
         }
 
         /// <summary>
         /// Convert the value to the type of the setting.
         /// </summary>
-        /// <param name="value">Value to convert</param>
+        /// <param name="value">Value to convert.</param>
         /// <returns>The value converted to the type of the setting.</returns>
         public object ConvertToSettingType(object value)
         {

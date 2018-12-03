@@ -1,11 +1,13 @@
-﻿using AudioBand.AudioSource;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using AudioBand.AudioSource;
+using FastMember;
 
 namespace AudioBand.Extensions
 {
+    /// <summary>
+    /// Extenstions for <see cref="IAudioSource"/>.
+    /// </summary>
     internal static class AudioSourceExtenstions
     {
         /// <summary>
@@ -15,9 +17,12 @@ namespace AudioBand.Extensions
         /// <returns>A list of settings.</returns>
         public static List<AudioSourceSettingInfo> GetSettings(this IAudioSource audiosource)
         {
-            return audiosource.GetType().GetProperties()
-                .Where(prop => Attribute.IsDefined(prop, typeof(AudioSourceSettingAttribute)))
-                .Select(prop => new AudioSourceSettingInfo(audiosource, prop, prop.GetCustomAttribute<AudioSourceSettingAttribute>()))
+            var typeAccessor = TypeAccessor.Create(audiosource.GetType());
+            var objectAccessor = ObjectAccessor.Create(audiosource);
+
+            return typeAccessor.GetMembers()
+                .Where(m => m.IsDefined(typeof(AudioSourceSettingAttribute)))
+                .Select(m => new AudioSourceSettingInfo(audiosource, objectAccessor, m.Type, m.Name, (AudioSourceSettingAttribute)m.GetAttribute(typeof(AudioSourceSettingAttribute), true)))
                 .ToList();
         }
     }
