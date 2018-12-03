@@ -140,7 +140,9 @@ namespace AudioBand.Settings
             {
                 return SettingsMapper.ToModel<TModel>(setting);
             }
+#pragma warning disable CS0168 // The variable 'e' is declared but never used
             catch (Exception e)
+#pragma warning restore CS0168 // The variable 'e' is declared but never used
             {
                 Logger.Error($"Cannot convert setting {setting} to model {typeof(TModel)}");
                 throw;
@@ -153,7 +155,9 @@ namespace AudioBand.Settings
             {
                 return SettingsMapper.ToModel<T>(model);
             }
+#pragma warning disable CS0168 // The variable 'e' is declared but never used
             catch (Exception e)
+#pragma warning restore CS0168 // The variable 'e' is declared but never used
             {
                 Logger.Error($"Cannot model to settings {model} target: {typeof(T)}");
                 throw;

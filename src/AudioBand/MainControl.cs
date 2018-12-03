@@ -87,7 +87,9 @@ namespace AudioBand
             System.Diagnostics.Debugger.Launch();
 #endif
             _uiDispatcher = Dispatcher.CurrentDispatcher;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             InitializeAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
         }
 
         private async Task InitializeAsync()
