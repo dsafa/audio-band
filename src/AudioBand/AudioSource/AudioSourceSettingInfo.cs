@@ -87,7 +87,7 @@ namespace AudioBand.AudioSource
             }
             catch (Exception e)
             {
-                Logger.Error($"Error occured while change audio source settings. value: {value}, Exception: {e}");
+                Logger.Error(e, $"Error occured while changing audio source settings. property: `{PropertyName}`, value: {value}");
                 throw;
             }
         }
