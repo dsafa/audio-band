@@ -1,8 +1,8 @@
-﻿using AudioBand.AudioSource;
-using CSDeskBand.ContextMenu;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AudioBand.AudioSource;
+using CSDeskBand.ContextMenu;
 
 namespace AudioBand
 {
@@ -55,7 +55,7 @@ namespace AudioBand
         {
             try
             {
-                var item = (DeskBandMenuAction) sender;
+                var item = (DeskBandMenuAction)sender;
                 if (item.Checked)
                 {
                     item.Checked = false;
@@ -78,7 +78,7 @@ namespace AudioBand
             }
             catch (Exception e)
             {
-                Logger.Debug(e, "Error activating audio source");
+                Logger.Debug(e, $"Error activating audio source `{_currentAudioSource.Name}`");
             }
         }
 
@@ -109,7 +109,7 @@ namespace AudioBand
         {
             if (trackInfoChangedEventArgs == null)
             {
-                Logger.Error("TrackInforChanged event arg is empty");
+                Logger.Error("TrackInfoChanged event arg is empty");
                 return;
             }
 
@@ -138,5 +138,16 @@ namespace AudioBand
         }
 
         #endregion
+
+        private void Saved(object o, EventArgs eventArgs)
+        {
+            _settingsWindowVm.EndEdit();
+            _appSettings.Save();
+        }
+
+        private void Canceled(object sender, EventArgs e)
+        {
+            _settingsWindowVm.CancelEdit();
+        }
     }
 }
