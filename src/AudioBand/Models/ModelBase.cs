@@ -10,6 +10,14 @@ namespace AudioBand.Models
     /// </summary>
     internal class ModelBase : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModelBase"/> class.
+        /// </summary>
+        public ModelBase()
+        {
+            Logger = LogManager.GetLogger(GetType().FullName);
+        }
+
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -42,11 +50,6 @@ namespace AudioBand.Models
             field = newValue;
             RaisePropertyChanged(propertyName);
             return true;
-        }
-
-        public ModelBase()
-        {
-            Logger = LogManager.GetLogger(GetType().FullName);
         }
     }
 }
