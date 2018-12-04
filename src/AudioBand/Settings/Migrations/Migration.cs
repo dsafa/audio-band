@@ -1,8 +1,7 @@
-﻿using AudioBand.Settings.Models;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 
 namespace AudioBand.Settings.Migrations
 {
@@ -13,16 +12,24 @@ namespace AudioBand.Settings.Migrations
     {
         private static readonly Dictionary<(string From, string To), ISettingsMigrator> SupportedMigrations = new Dictionary<(string From, string To), ISettingsMigrator>()
         {
-            {("0.1", "2"), new V1ToV2()}
+            { ("0.1", "2"), new V1ToV2() }
         };
 
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// Migrate settings to new version.
+        /// </summary>
+        /// <typeparam name="TNew">Type of the new settings.</typeparam>
+        /// <param name="oldSettings">The old settings.</param>
+        /// <param name="oldVersion">The version of the old settings.</param>
+        /// <param name="newVersion">The version of the new settings.</param>
+        /// <returns>New settings.</returns>
         public static TNew MigrateSettings<TNew>(object oldSettings, string oldVersion, string newVersion)
         {
             if (oldVersion == newVersion)
             {
-                return (TNew) oldSettings;
+                return (TNew)oldSettings;
             }
 
             var plan = FindPlan(oldVersion, newVersion);
@@ -31,10 +38,10 @@ namespace AudioBand.Settings.Migrations
                 throw new ArgumentException($"No migration plan from {oldVersion} to {newVersion}");
             }
 
-            Logger.Debug($"Found old settings v{oldVersion}. Migrating settings using {String.Join("->", plan)}");
+            Logger.Debug($"Found old settings v{oldVersion}. Migrating settings using {string.Join("->", plan)}");
 
             object settings = plan.Aggregate(oldSettings, (current, settingsMigrator) => settingsMigrator.MigrateSetting(current));
-            return (TNew) settings;
+            return (TNew)settings;
         }
 
         private static List<ISettingsMigrator> FindPlan(string from, string to)
