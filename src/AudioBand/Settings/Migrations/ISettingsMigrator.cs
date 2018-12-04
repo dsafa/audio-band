@@ -5,6 +5,11 @@
     /// </summary>
     internal interface ISettingsMigrator
     {
+        /// <summary>
+        /// Migrate settings to new version.
+        /// </summary>
+        /// <param name="oldSetting">Old settings to migrate.</param>
+        /// <returns>The new settings.</returns>
         object MigrateSetting(object oldSetting);
     }
 }

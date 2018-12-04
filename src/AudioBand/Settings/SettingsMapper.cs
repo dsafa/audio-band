@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using AudioBand.Models;
-using AudioBand.Settings.Models.v2;
+using AudioBand.Settings.Models.V2;
 using AutoMapper;
 
 namespace AudioBand.Settings
@@ -25,13 +25,13 @@ namespace AudioBand.Settings
                 cfg.CreateMap<AudioBandSettings, AudioBand.Models.AudioBand>();
                 cfg.CreateMap<AudioBand.Models.AudioBand, AudioBandSettings>();
 
-                cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSetting, AudioBand.Models.AudioSourceSetting>()
+                cfg.CreateMap<AudioBand.Settings.Models.V2.AudioSourceSetting, AudioBand.Models.AudioSourceSetting>()
                     .ForMember(m => m.Value, c => c.MapFrom(s => s.Value));
-                cfg.CreateMap<AudioBand.Models.AudioSourceSetting, AudioBand.Settings.Models.v2.AudioSourceSetting>()
+                cfg.CreateMap<AudioBand.Models.AudioSourceSetting, AudioBand.Settings.Models.V2.AudioSourceSetting>()
                     .ForMember(m => m.Value, c => c.MapFrom(s => s.Remember ? s.Value.ToString() : null));
 
-                cfg.CreateMap<AudioBand.Settings.Models.v2.AudioSourceSettings, AudioBand.Models.AudioSourceSettings>();
-                cfg.CreateMap<AudioBand.Models.AudioSourceSettings, AudioBand.Settings.Models.v2.AudioSourceSettings>()
+                cfg.CreateMap<AudioBand.Settings.Models.V2.AudioSourceSettings, AudioBand.Models.AudioSourceSettings>();
+                cfg.CreateMap<AudioBand.Models.AudioSourceSettings, AudioBand.Settings.Models.V2.AudioSourceSettings>()
                     .ForMember(m => m.Settings, c => c.MapFrom(s => s.Settings.Where(se => se.Remember)));
 
                 cfg.CreateMap<CustomLabelSettings, CustomLabel>();
@@ -62,6 +62,12 @@ namespace AudioBand.Settings
             return MapperConfig.CreateMapper().Map<TModel>(source);
         }
 
+        /// <summary>
+        /// Convert model to setting.
+        /// </summary>
+        /// <typeparam name="T">Type of model.</typeparam>
+        /// <param name="source">Model to convert.</param>
+        /// <returns>The setting representation of the model.</returns>
         public static T ToSettings<T>(object source)
         {
             return MapperConfig.CreateMapper().Map<T>(source);
