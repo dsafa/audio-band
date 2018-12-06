@@ -5,7 +5,7 @@ namespace AudioBand.Views.Wpf
     /// <summary>
     /// Interaction logic for AboutFlyout.xaml
     /// </summary>
-    internal partial class AboutFlyout : IHelpView
+    internal partial class AboutFlyout : AboutVM.IAboutView
     {
         public AboutVM VM { get; }
 

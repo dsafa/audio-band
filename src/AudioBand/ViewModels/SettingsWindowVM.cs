@@ -2,26 +2,43 @@
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// View model for the settings window.
+    /// </summary>
     internal class SettingsWindowVM : ViewModelBase
     {
+        private object _selectedVM;
+
         public AudioBandVM AudioBandVM { get; set; }
+
         public AlbumArtPopupVM AlbumArtPopupVM { get; set; }
+
         public AlbumArtVM AlbumArtVM { get; set; }
+
         public CustomLabelsVM CustomLabelsVM { get; set; }
+
         public AboutVM AboutVm { get; set; }
+
         public NextButtonVM NextButtonVM { get; set; }
+
         public PlayPauseButtonVM PlayPauseButtonVM { get; set; }
+
         public PreviousButtonVM PreviousButtonVM { get; set; }
+
         public ProgressBarVM ProgressBarVM { get; set; }
+
         public List<AudioSourceSettingsVM> AudioSourceSettingsVM { get; set; }
 
-        private object _selectedVM;
+        /// <summary>
+        /// Gets or sets the currently selected view model.
+        /// </summary>
         public object SelectedVM
         {
             get => _selectedVM;
             set => SetProperty(ref _selectedVM, value);
         }
 
+        /// <inheritdoc/>
         protected override void OnBeginEdit()
         {
             base.OnBeginEdit();
@@ -40,6 +57,7 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <inheritdoc/>
         protected override void OnCancelEdit()
         {
             base.OnCancelEdit();
@@ -58,6 +76,7 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <inheritdoc/>
         protected override void OnEndEdit()
         {
             base.OnEndEdit();

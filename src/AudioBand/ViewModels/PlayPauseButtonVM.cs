@@ -1,11 +1,14 @@
-﻿using AudioBand.Extensions;
+﻿using System.Drawing;
+using System.IO;
+using AudioBand.Extensions;
 using AudioBand.Models;
 using Svg;
-using System.Drawing;
-using System.IO;
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// View model for the play/pause button.
+    /// </summary>
     internal class PlayPauseButtonVM : ViewModelBase<PlayPauseButton>
     {
         private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
@@ -13,6 +16,14 @@ namespace AudioBand.ViewModels
         private readonly Track _track;
         private Image _playImage;
         private Image _pauseImage;
+
+        public PlayPauseButtonVM(PlayPauseButton model, Track track)
+            : base(model)
+        {
+            _track = track;
+            SetupModelBindings(_track);
+            LoadImages();
+        }
 
         [AlsoNotify(nameof(Image))]
         public Image PlayImage
@@ -99,18 +110,35 @@ namespace AudioBand.ViewModels
             get
             {
                 var image = _track.IsPlaying ? PauseImage : PlayImage;
-                return image.Scale(Width - 1, Height - 1); // To fit image in button
+
+                // Need padding so the image can fit properly in a button.
+                return image.Scale(Width - 1, Height - 1);
             }
         }
 
+        /// <summary>
+        /// Gets the location of the button.
+        /// </summary>
+        /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Point Location => new Point(Model.XPosition, Model.YPosition);
 
+        /// <summary>
+        /// Gets the size of the button.
+        /// </summary>
+        /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Size Size => new Size(Width, Height);
 
-        public PlayPauseButtonVM(PlayPauseButton model, Track track) : base(model)
+        /// <inheritdoc/>
+        protected override void OnReset()
         {
-            _track = track;
-            SetupModelBindings(_track);
+            base.OnReset();
+            LoadImages();
+        }
+
+        /// <inheritdoc/>
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
             LoadImages();
         }
 
@@ -118,18 +146,6 @@ namespace AudioBand.ViewModels
         {
             PlayImage = LoadImage(PlayImagePath, DefaultPlayButtonSvg.ToBitmap());
             PauseImage = LoadImage(PauseImagePath, DefaultPauseButtonSvg.ToBitmap());
-        }
-
-        protected override void OnReset()
-        {
-            base.OnReset();
-            LoadImages();
-        }
-
-        protected override void OnCancelEdit()
-        {
-            base.OnCancelEdit();
-            LoadImages();
         }
     }
 }

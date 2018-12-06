@@ -1,12 +1,22 @@
 ﻿using System;
-using AudioBand.Models;
 using System.Drawing;
+using AudioBand.Models;
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// View model for the progress bar.
+    /// </summary>
     internal class ProgressBarVM : ViewModelBase<ProgressBar>
     {
         private readonly Track _track;
+
+        public ProgressBarVM(ProgressBar model, Track track)
+            : base(model)
+        {
+            _track = track;
+            SetupModelBindings(_track);
+        }
 
         [PropertyChangeBinding(nameof(ProgressBar.ForegroundColor))]
         public Color ForegroundColor
@@ -67,14 +77,16 @@ namespace AudioBand.ViewModels
         [PropertyChangeBinding(nameof(Track.TrackLength))]
         public TimeSpan TrackLength => _track.TrackLength;
 
+        /// <summary>
+        /// Gets the location of the progress bar.
+        /// </summary>
+        /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Point Location => new Point(Model.XPosition, Model.YPosition);
 
+        /// <summary>
+        /// Gets the size of the progress bar.
+        /// </summary>
+        /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Size Size => new Size(Width, Height);
-
-        public ProgressBarVM(ProgressBar model, Track track) : base(model)
-        {
-            _track = track;
-            SetupModelBindings(_track);
-        }
     }
 }

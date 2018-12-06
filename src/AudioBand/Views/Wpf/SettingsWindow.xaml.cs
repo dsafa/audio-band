@@ -27,7 +27,6 @@ namespace AudioBand.Views.Wpf
 
             InitializeComponent();
             DataContext = vm;
-            vm.CustomLabelsVM.DialogService = new DialogService(this);
         }
 
         private static readonly HashSet<string> _bindingHelpAssemblies = new HashSet<string>

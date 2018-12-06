@@ -1,18 +1,28 @@
-﻿using AudioBand.Extensions;
+﻿using System.Drawing;
+using System.IO;
+using AudioBand.Extensions;
 using AudioBand.Models;
 using Svg;
-using System.Drawing;
-using System.IO;
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// View model for the previous button.
+    /// </summary>
     internal class PreviousButtonVM : ViewModelBase<PreviousButton>
     {
         private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
         private Image _image;
 
+        public PreviousButtonVM(PreviousButton model)
+            : base(model)
+        {
+            LoadImage();
+        }
+
         public Image Image
         {
+            // Need padding to fit image in a button.
             get => _image.Scale(Width - 1, Height - 1);
             set => SetProperty(ref _image, value);
         }
@@ -69,30 +79,33 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.YPosition), value);
         }
 
+        /// <summary>
+        /// Gets the location of the button.
+        /// </summary>
         public Point Location => new Point(Model.XPosition, Model.YPosition);
 
+        /// <summary>
+        /// Gets the size of the button.
+        /// </summary>
         public Size Size => new Size(Width, Height);
 
-        public PreviousButtonVM(PreviousButton model) : base(model)
-        {
-            LoadImage();
-        }
-
-        private void LoadImage()
-        {
-            Image = LoadImage(ImagePath, DefaultPreviousButtonSvg.ToBitmap());
-        }
-
+        /// <inheritdoc/>
         protected override void OnReset()
         {
             base.OnReset();
             LoadImage();
         }
 
+        /// <inheritdoc/>
         protected override void OnCancelEdit()
         {
             base.OnCancelEdit();
             LoadImage();
+        }
+
+        private void LoadImage()
+        {
+            Image = LoadImage(ImagePath, DefaultPreviousButtonSvg.ToBitmap());
         }
     }
 }

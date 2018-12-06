@@ -1,25 +1,28 @@
-﻿using System;
-using AudioBand.Commands;
-using AudioBand.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using AudioBand.Commands;
+using AudioBand.Models;
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// Viewmodel for all the custom labels.
+    /// </summary>
     internal class CustomLabelsVM : ViewModelBase
     {
-        private List<CustomLabel> _customLabels;
         private readonly ICustomLabelHost _labelHost;
         private readonly HashSet<CustomLabelVM> _added = new HashSet<CustomLabelVM>();
         private readonly HashSet<CustomLabelVM> _removed = new HashSet<CustomLabelVM>();
+        private List<CustomLabel> _customLabels;
 
-        public ObservableCollection<CustomLabelVM> CustomLabels { get; }
-        public RelayCommand AddLabelCommand { get; }
-        public AsyncRelayCommand<CustomLabelVM> RemoveLabelCommand { get; }
-        public IDialogService DialogService { get; set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomLabelsVM"/> class
+        /// with the list of custom labels and a label host.
+        /// </summary>
+        /// <param name="customLabels">The custom labels.</param>
+        /// <param name="labelHost">The host for the labels.</param>
         public CustomLabelsVM(List<CustomLabel> customLabels, ICustomLabelHost labelHost)
         {
             _customLabels = customLabels;
@@ -35,32 +38,28 @@ namespace AudioBand.ViewModels
             RemoveLabelCommand = new AsyncRelayCommand<CustomLabelVM>(RemoveLabelCommandOnExecute);
         }
 
-        private void AddLabelCommandOnExecute(object o)
-        {
-            var newLabel = new CustomLabelVM(new CustomLabel()) {Name = "New Label"};
-            CustomLabels.Add(newLabel);
-            _labelHost.AddCustomTextLabel(newLabel);
+        /// <summary>
+        /// Gets the collection of custom label viewmodels.
+        /// </summary>
+        public ObservableCollection<CustomLabelVM> CustomLabels { get; }
 
-            _added.Add(newLabel);
-        }
+        /// <summary>
+        /// Gets the command to add a new label.
+        /// </summary>
+        public RelayCommand AddLabelCommand { get; }
 
-        private async Task RemoveLabelCommandOnExecute(CustomLabelVM labelVm)
-        {
-            if (!await DialogService.ShowConfirmationDialogAsync("Delete Label", $"Are you sure you want to delete the label '{labelVm.Name}'?"))
-            {
-                return;
-            }
+        /// <summary>
+        /// Gets the command to remove a label.
+        /// </summary>
+        /// <remarks>Async so its easier to show a dialog.</remarks>
+        public AsyncRelayCommand<CustomLabelVM> RemoveLabelCommand { get; }
 
-            CustomLabels.Remove(labelVm);
-            _labelHost.RemoveCustomTextLabel(labelVm);
+        /// <summary>
+        /// Gets or sets the dialog service used to show a dialog.
+        /// </summary>
+        public IDialogService DialogService { get; set; }
 
-            // Only add to removed if not a new label
-            if (!_added.Remove(labelVm))
-            {
-                _removed.Add(labelVm);
-            }
-        }
-
+        /// <inheritdoc/>
         protected override void OnBeginEdit()
         {
             _added.Clear();
@@ -72,6 +71,7 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <inheritdoc/>
         protected override void OnCancelEdit()
         {
             foreach (var label in _added)
@@ -95,6 +95,7 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <inheritdoc/>
         protected override void OnEndEdit()
         {
             _added.Clear();
@@ -108,11 +109,31 @@ namespace AudioBand.ViewModels
                 _customLabels.Add(customLabelVm.GetModel());
             }
         }
-    }
 
-    internal interface ICustomLabelHost
-    {
-        void AddCustomTextLabel(CustomLabelVM label);
-        void RemoveCustomTextLabel(CustomLabelVM label);
+        private void AddLabelCommandOnExecute(object o)
+        {
+            var newLabel = new CustomLabelVM(new CustomLabel()) { Name = "New Label" };
+            CustomLabels.Add(newLabel);
+            _labelHost.AddCustomTextLabel(newLabel);
+
+            _added.Add(newLabel);
+        }
+
+        private async Task RemoveLabelCommandOnExecute(CustomLabelVM labelVm)
+        {
+            if (!await DialogService.ShowConfirmationDialogAsync("Delete Label", $"Are you sure you want to delete the label '{labelVm.Name}'?"))
+            {
+                return;
+            }
+
+            CustomLabels.Remove(labelVm);
+            _labelHost.RemoveCustomTextLabel(labelVm);
+
+            // Only add to removed if not a new label
+            if (!_added.Remove(labelVm))
+            {
+                _removed.Add(labelVm);
+            }
+        }
     }
 }
