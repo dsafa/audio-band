@@ -11,7 +11,12 @@ namespace AudioBand.Views.Wpf.Behaviours
     internal class TreeSelectedVMBehaviour : Behavior<TreeView>
     {
         /// <summary>
-        /// The current selected view model in the tree.
+        /// Dependency property for <see cref="SelectedVM"/>.
+        /// </summary>
+        public static readonly DependencyProperty SelectedVMProperty = DependencyProperty.Register(nameof(SelectedVM), typeof(object), typeof(TreeSelectedVMBehaviour));
+
+        /// <summary>
+        /// Gets or sets the current selected view model in the tree.
         /// </summary>
         public object SelectedVM
         {
@@ -19,8 +24,7 @@ namespace AudioBand.Views.Wpf.Behaviours
             set => SetValue(SelectedVMProperty, value);
         }
 
-        public static readonly DependencyProperty SelectedVMProperty = DependencyProperty.Register(nameof(SelectedVM), typeof(object), typeof(TreeSelectedVMBehaviour));
-
+        /// <inheritdoc/>
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -28,6 +32,7 @@ namespace AudioBand.Views.Wpf.Behaviours
             AssociatedObject.SelectedItemChanged += OnTreeViewSelectedItemChanged;
         }
 
+        /// <inheritdoc/>
         protected override void OnDetaching()
         {
             base.OnDetaching();

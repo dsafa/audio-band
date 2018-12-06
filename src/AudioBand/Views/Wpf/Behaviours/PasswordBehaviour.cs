@@ -1,20 +1,29 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 
 namespace AudioBand.Views.Wpf.Behaviours
 {
+    /// <summary>
+    /// Behaviour for a password box.
+    /// </summary>
     internal class PasswordBehaviour : Behavior<PasswordBox>
     {
+        /// <summary>
+        /// Dependency property for the password.
+        /// </summary>
+        public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register(nameof(Password), typeof(string), typeof(PasswordBehaviour));
+
+        /// <summary>
+        /// Gets or sets the current password.
+        /// </summary>
         public string Password
         {
-            get => (string) GetValue(PasswordProperty);
+            get => (string)GetValue(PasswordProperty);
             set => SetValue(PasswordProperty, value);
         }
 
-        public static DependencyProperty PasswordProperty = DependencyProperty.Register(nameof(Password), typeof(string), typeof(PasswordBehaviour));
-
+        /// <inheritdoc/>
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -22,7 +31,7 @@ namespace AudioBand.Views.Wpf.Behaviours
             AssociatedObject.PasswordChanged += PasswordChanged;
         }
 
-
+        /// <inheritdoc/>
         protected override void OnDetaching()
         {
             base.OnDetaching();
@@ -37,6 +46,5 @@ namespace AudioBand.Views.Wpf.Behaviours
         {
             Password = AssociatedObject.Password;
         }
-
     }
 }

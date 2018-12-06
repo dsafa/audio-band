@@ -182,6 +182,7 @@
     <Compile Include="Views\Wpf\AudioSourceSettingsView.xaml.cs">
       <DependentUpon>AudioSourceSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Wpf\Behaviours\NumericInputType.cs" />
     <Compile Include="Views\Wpf\Behaviours\PasswordBehaviour.cs" />
     <Compile Include="Views\Wpf\Behaviours\TreeSelectedVMBehaviour.cs" />
     <Compile Include="Views\Wpf\ColorPicker.xaml.cs">
@@ -219,8 +220,8 @@
     <Compile Include="Views\Wpf\TemplateSelectors\AudioSourceSettingSelector.cs" />
     <Compile Include="Views\Wpf\ValueConverters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\ColorToBrushConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\EmptyStringToBoolConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\NumberToNumericUpDownConverter.cs" />
-    <Compile Include="Views\Wpf\ValueConverters\StringToBoolConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\ReverseConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToColorConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToFontFamilyConverter.cs" />

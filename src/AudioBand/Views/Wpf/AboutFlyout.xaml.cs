@@ -7,18 +7,32 @@ namespace AudioBand.Views.Wpf
     /// </summary>
     internal partial class AboutFlyout : AboutVM.IAboutView
     {
-        public AboutVM VM { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AboutFlyout"/> class.
+        /// </summary>
         public AboutFlyout()
         {
             InitializeComponent();
         }
 
-        public AboutFlyout(AboutVM vm) : this()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AboutFlyout"/> class.
+        /// </summary>
+        /// <param name="vm">The aboutvm.</param>
+        public AboutFlyout(AboutVM vm)
+            : this()
         {
             DataContext = VM = vm;
         }
 
+        /// <summary>
+        /// Gets the about viewmodel.
+        /// </summary>
+        public AboutVM VM { get; }
+
+        /// <summary>
+        /// Show the flyout.
+        /// </summary>
         public void Show()
         {
             IsOpen = true;

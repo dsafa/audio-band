@@ -21,7 +21,7 @@
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            <converters:StringToBoolConverter x:Key="StringToBoolConverter"/>
+            <converters:EmptyStringToBoolConverter x:Key="StringToBoolConverter"/>
             <converters:NumberToNumericUpDownConverter x:Key="NumericUpDownConverter"/>
             <system:Double x:Key="KeyColumnWidth">180</system:Double>
             <GridLength x:Key="KeyColumnLength">180</GridLength>

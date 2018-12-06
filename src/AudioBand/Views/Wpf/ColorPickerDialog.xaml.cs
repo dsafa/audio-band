@@ -8,15 +8,21 @@ namespace AudioBand.Views.Wpf
     /// </summary>
     public partial class ColorPickerDialog
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColorPickerDialog"/> class.
+        /// </summary>
+        public ColorPickerDialog()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// Gets or sets the color of the picker.
+        /// </summary>
         public Color Color
         {
             get => Picker.Color;
             set => Picker.SetColor(value);
-        }
-
-        public ColorPickerDialog()
-        {
-            InitializeComponent();
         }
 
         private void OkButtonOnClick(object sender, RoutedEventArgs e)
