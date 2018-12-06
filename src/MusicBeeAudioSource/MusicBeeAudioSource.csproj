@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioSource.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MusicBeeIPC\Enums.cs" />
     <Compile Include="MusicBeeIPC\MusicBeeIPC.cs" />
     <Compile Include="MusicBeeIPC\Pack.cs" />
