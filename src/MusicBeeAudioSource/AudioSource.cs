@@ -1,30 +1,22 @@
-﻿using AudioBand.AudioSource;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using AudioBand.AudioSource;
 using Timer = System.Timers.Timer;
 
 namespace MusicBeeAudioSource
 {
     public class AudioSource : IAudioSource
     {
+        private static readonly string[] TimeFormats = new string[] { @"m\:s", @"h\:m\:s" };
         private MusicBeeIPC _ipc;
         private Timer _checkMusicBeeTimer;
         private bool _isPlaying;
         private string _currentId;
-        private static readonly string[] TimeFormats = new string[] { @"m\:s", @"h\:m\:s" };
-
-        public string Name => "Music Bee";
-        public IAudioSourceLogger Logger { get; set; }
-        public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
-        public event EventHandler TrackPlaying;
-        public event EventHandler TrackPaused;
-        public event EventHandler<TimeSpan> TrackProgressChanged;
-        public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
         public AudioSource()
         {
@@ -34,8 +26,25 @@ namespace MusicBeeAudioSource
                 AutoReset = false,
                 Enabled = false
             };
+
             _checkMusicBeeTimer.Elapsed += CheckMusicBee;
         }
+
+        public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
+
+        public event EventHandler TrackPlaying;
+
+        public event EventHandler TrackPaused;
+
+        public event EventHandler<TimeSpan> TrackProgressChanged;
+
+#pragma warning disable 00067 // The event is never used
+        public event EventHandler<SettingChangedEventArgs> SettingChanged;
+#pragma warning restore 00067 // The event is never used
+
+        public string Name => "Music Bee";
+
+        public IAudioSourceLogger Logger { get; set; }
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
