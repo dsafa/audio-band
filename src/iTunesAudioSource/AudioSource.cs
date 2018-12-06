@@ -1,8 +1,8 @@
-﻿using AudioBand.AudioSource;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using AudioBand.AudioSource;
 using Timer = System.Timers.Timer;
 
 namespace iTunesAudioSource
@@ -14,14 +14,6 @@ namespace iTunesAudioSource
         private bool _isPlaying;
         private ITunesControls _itunesControls = new ITunesControls();
 
-        public string Name => "iTunes";
-        public IAudioSourceLogger Logger { get; set; }
-        public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
-        public event EventHandler TrackPlaying;
-        public event EventHandler TrackPaused;
-        public event EventHandler<TimeSpan> TrackProgressChanged;
-        public event EventHandler<SettingChangedEventArgs> SettingChanged;
-
         public AudioSource()
         {
             _checkiTunesTimer = new Timer(100)
@@ -29,8 +21,25 @@ namespace iTunesAudioSource
                 Enabled = false,
                 AutoReset = false
             };
+
             _checkiTunesTimer.Elapsed += CheckItunes;
         }
+
+        public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
+
+        public event EventHandler TrackPlaying;
+
+        public event EventHandler TrackPaused;
+
+        public event EventHandler<TimeSpan> TrackProgressChanged;
+
+#pragma warning disable 00067 // Event is not used
+        public event EventHandler<SettingChangedEventArgs> SettingChanged;
+#pragma warning restore 00067 // Event is not used
+
+        public string Name => "iTunes";
+
+        public IAudioSourceLogger Logger { get; set; }
 
         public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -138,7 +147,7 @@ namespace iTunesAudioSource
 
                 TrackProgressChanged?.Invoke(this, _itunesControls.Progress);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.Debug(e);
             }
