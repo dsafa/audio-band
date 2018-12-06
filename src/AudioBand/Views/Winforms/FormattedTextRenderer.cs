@@ -10,6 +10,9 @@ using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
 namespace AudioBand.Views.Winforms
 {
+    /// <summary>
+    /// Renders formatted text.
+    /// </summary>
     internal class FormattedTextRenderer
     {
         private const char PlaceholderStartToken = '{';
@@ -23,8 +26,103 @@ namespace AudioBand.Views.Winforms
         private const string ItalicsStyle = "&";
         private const string UnderlineStyle = "_";
 
+        private const string TimeFormat = @"m\:ss";
+        private const string Styles = BoldStyle + ItalicsStyle + UnderlineStyle;
+        private const string Tags = ArtistPlaceholder + "|" + SongNamePlaceholder + "|" + AlbumNamePlaceholder + "|" + CurrentTimePlaceholder + "|" + SongLengthPlaceholder;
+        private static readonly Regex PlaceholderPattern = new Regex($@"(?<style>[{Styles}])?(?<tag>({Tags}))(:(?<color>#[A-Fa-f0-9]{{6}}))?", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+
+        private string _format;
+        private string _artist;
+        private string _songName;
+        private string _albumName;
+        private TimeSpan _songProgress;
+        private TimeSpan _songLength;
+        private Color _defaultColor;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormattedTextRenderer"/> class.
+        /// </summary>
+        /// <param name="format">The text format.</param>
+        /// <param name="defaultColor">The default color.</param>
+        /// <param name="fontSize">The font size.</param>
+        /// <param name="fontFamily">The font family.</param>
+        /// <param name="alignment">The text alignment.</param>
+        public FormattedTextRenderer(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
+        {
+            Format = format;
+            DefaultColor = defaultColor;
+            FontSize = fontSize;
+            FontFamily = fontFamily;
+            Alignment = alignment;
+
+            Parse();
+        }
+
+        /// <summary>
+        /// Flags for what the text contains.
+        /// </summary>
+        [Flags]
+        public enum TextFormat
+        {
+            /// <summary>
+            /// Normal text
+            /// </summary>
+            Normal = 0,
+
+            /// <summary>
+            /// Displays the artist
+            /// </summary>
+            Artist = 1,
+
+            /// <summary>
+            /// Displays the song.
+            /// </summary>
+            Song = 2,
+
+            /// <summary>
+            /// Displays the album
+            /// </summary>
+            Album = 4,
+
+            /// <summary>
+            /// Displays the current time.
+            /// </summary>
+            CurrentTime = 8,
+
+            /// <summary>
+            /// Displays the song length.
+            /// </summary>
+            SongLength = 16,
+
+            /// <summary>
+            /// Text is colored.
+            /// </summary>
+            Colored = 32,
+
+            /// <summary>
+            /// Text is bolded.
+            /// </summary>
+            Bold = 64,
+
+            /// <summary>
+            /// Text is italicised.
+            /// </summary>
+            Italic = 128,
+
+            /// <summary>
+            /// Text is underlined.
+            /// </summary>
+            Underline = 256
+        }
+
+        /// <summary>
+        /// Gets or sets the list of text chunks.
+        /// </summary>
         public List<TextChunk> Chunks { get; set; }
 
+        /// <summary>
+        /// Gets or sets the text format.
+        /// </summary>
         public string Format
         {
             get => _format;
@@ -35,6 +133,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the artist.
+        /// </summary>
         public string Artist
         {
             get => _artist;
@@ -45,6 +146,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the song name.
+        /// </summary>
         public string SongName
         {
             get => _songName;
@@ -55,6 +159,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the album name.
+        /// </summary>
         public string AlbumName
         {
             get => _albumName;
@@ -65,6 +172,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the song progress.
+        /// </summary>
         public TimeSpan SongProgress
         {
             get => _songProgress;
@@ -75,6 +185,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the song length.
+        /// </summary>
         public TimeSpan SongLength
         {
             get => _songLength;
@@ -85,6 +198,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the default color.
+        /// </summary>
         public Color DefaultColor
         {
             get => _defaultColor;
@@ -101,36 +217,55 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the font size.
+        /// </summary>
         public float FontSize { get; set; }
 
+        /// <summary>
+        /// Gets or sets the font family.
+        /// </summary>
         public string FontFamily { get; set; }
 
+        /// <summary>
+        /// Gets or sets the text alignment.
+        /// </summary>
         public TextAlignment Alignment { get; set; }
 
+        /// <summary>
+        /// Gets the format flags.
+        /// </summary>
         public TextFormat Formats { get; private set; }
 
-        private string _format;
-        private string _artist;
-        private string _songName;
-        private string _albumName;
-        private TimeSpan _songProgress;
-        private TimeSpan _songLength;
-        private Color _defaultColor;
-        private const string TimeFormat = @"m\:ss";
-
-        private const string Styles = BoldStyle + ItalicsStyle + UnderlineStyle;
-        private const string Tags = ArtistPlaceholder + "|" + SongNamePlaceholder + "|" + AlbumNamePlaceholder + "|" + CurrentTimePlaceholder + "|" + SongLengthPlaceholder;
-        private static readonly Regex PlaceholderPattern = new Regex($@"(?<style>[{Styles}])?(?<tag>({Tags}))(:(?<color>#[A-Fa-f0-9]{{6}}))?", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-
-        public FormattedTextRenderer(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
+        /// <summary>
+        /// Draws the formatted text with the current values.
+        /// </summary>
+        /// <returns>A bitmap of the rendered text.</returns>
+        public Bitmap Draw()
         {
-            Format = format;
-            DefaultColor = defaultColor;
-            FontSize = fontSize;
-            FontFamily = fontFamily;
-            Alignment = alignment;
+            var size = Measure();
+            if (size.Width < 1 || size.Height < 1)
+            {
+                return new Bitmap(100, 20);
+            }
 
-            Parse();
+            var bitmap = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
+            using (var graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+                Draw(graphics, false);
+            }
+
+            return bitmap;
+        }
+
+        /// <summary>
+        /// Measures the size that the text would be.
+        /// </summary>
+        /// <returns>The bounds of the text.</returns>
+        public Size Measure()
+        {
+            return Draw(null, true);
         }
 
         private void Parse()
@@ -278,53 +413,18 @@ namespace AudioBand.Views.Winforms
             }
         }
 
-        public Bitmap Draw()
-        {
-            var size = Measure();
-            if (size.Width < 1 || size.Height < 1)
-            {
-                return new Bitmap(100, 20);
-            }
-
-            var bitmap = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
-            using (var graphics = Graphics.FromImage(bitmap))
-            {
-                graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-                Draw(graphics, false);
-            }
-
-            return bitmap;
-        }
-
-        public Size Measure()
-        {
-            return Draw(null, true);
-        }
-
         private Size Draw(Graphics graphics, bool measure)
         {
-            var totalTextSize = new Size();
+            var totalTextSize = default(Size);
             var x = 0;
 
-            AddChunk(new StringBuilder(" ", 1), false); // Padding because the last character is being cut off
+            // Padding because the last character is being cut off
+            AddChunk(new StringBuilder(" ", 1), false);
             foreach (var textChunk in Chunks)
             {
-                var font = new Font(FontFamily, FontSize, FontStyle.Regular, GraphicsUnit.Point);
-                if (textChunk.Type.HasFlag(TextFormat.Bold))
-                {
-                    font = new Font(FontFamily, FontSize, FontStyle.Bold, GraphicsUnit.Point);
-                }
-                else if (textChunk.Type.HasFlag(TextFormat.Italic))
-                {
-                    font = new Font(FontFamily, FontSize, FontStyle.Italic, GraphicsUnit.Point);
-                }
-                else if (textChunk.Type.HasFlag(TextFormat.Underline))
-                {
-                    font = new Font(FontFamily, FontSize, FontStyle.Underline, GraphicsUnit.Point);
-                }
-
+                var font = new Font(FontFamily, FontSize, GetFontStyle(textChunk.Type), GraphicsUnit.Point);
                 var textSize = TextRenderer.MeasureText(textChunk.Text, font, new Size(1000, 1000), TextFormatFlags.NoPrefix);
-                if (textSize.Width > 0 )
+                if (textSize.Width > 0)
                 {
                     // keep padding in last item
                     textSize.Width -= MeasurePadding(font);
@@ -345,10 +445,31 @@ namespace AudioBand.Views.Winforms
             return totalTextSize;
         }
 
+        private FontStyle GetFontStyle(TextFormat textFormat)
+        {
+            var fontStyle = FontStyle.Regular;
+            if (textFormat.HasFlag(TextFormat.Bold))
+            {
+                fontStyle |= FontStyle.Bold;
+            }
+
+            if (textFormat.HasFlag(TextFormat.Italic))
+            {
+                fontStyle |= FontStyle.Italic;
+            }
+
+            if (textFormat.HasFlag(TextFormat.Underline))
+            {
+                fontStyle |= FontStyle.Underline;
+            }
+
+            return fontStyle;
+        }
+
         private int MeasurePadding(Font font)
         {
             // Get the extra padding added by TextRenderer.MeasureText https://stackoverflow.com/a/12171682
-            // Let width of character = x 
+            // Let width of character = x
             // Let width of padding = y
             // measuring 2 characters -> 2x + y
             // measuring 1 character -> x + y
@@ -372,14 +493,18 @@ namespace AudioBand.Views.Winforms
             }
         }
 
-        // A chunk of text that has its own custom rendering
+        /// <summary>
+        /// A chunk of text that has its own custom rendering.
+        /// </summary>
         public class TextChunk
         {
-            public string Text { get; set; }
-            public TextFormat Type { get; }
-            public Color Color { get; set; }
-
-
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TextChunk"/> class
+            /// with text, color and type.
+            /// </summary>
+            /// <param name="text">The text.</param>
+            /// <param name="type">The text type.</param>
+            /// <param name="color">The text color.</param>
             public TextChunk(string text, TextFormat type, Color color)
             {
                 Text = text;
@@ -387,25 +512,32 @@ namespace AudioBand.Views.Winforms
                 Color = color;
             }
 
+            /// <summary>
+            /// Gets or sets the text.
+            /// </summary>
+            public string Text { get; set; }
+
+            /// <summary>
+            /// Gets the text type.
+            /// </summary>
+            public TextFormat Type { get; }
+
+            /// <summary>
+            /// Gets or sets the chunk color.
+            /// </summary>
+            public Color Color { get; set; }
+
+            /// <summary>
+            /// Draws the chunk onto the graphics.
+            /// </summary>
+            /// <param name="g">The graphics to draw on.</param>
+            /// <param name="font">The font.</param>
+            /// <param name="x">The x position of the text.</param>
+            /// <param name="y">The y position of the text.</param>
             public void Draw(Graphics g, Font font, int x, int y)
             {
                 TextRenderer.DrawText(g, Text, font, new Point(x, y), Color, TextFormatFlags.NoPrefix);
             }
-        }
-
-        [Flags]
-        public enum TextFormat
-        {
-            Normal = 0,
-            Artist = 1,
-            Song = 2,
-            Album = 4,
-            CurrentTime = 8,
-            SongLength = 16,
-            Colored = 32,
-            Bold = 64,
-            Italic = 128,
-            Underline = 256
         }
     }
 }

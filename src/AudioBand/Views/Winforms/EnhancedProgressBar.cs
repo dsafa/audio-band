@@ -5,12 +5,25 @@ using System.Windows.Forms;
 
 namespace AudioBand.Views.Winforms
 {
-    // So we can draw with our own color
+    /// <summary>
+    /// A enhanced progress bar supporting custom colors.
+    /// </summary>
     public class EnhancedProgressBar : ProgressBar
     {
         private TimeSpan _progress;
         private TimeSpan _total;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnhancedProgressBar"/> class.
+        /// </summary>
+        public EnhancedProgressBar()
+        {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+        }
+
+        /// <summary>
+        /// Gets or sets the current progress.
+        /// </summary>
         [Browsable(true)]
         [Bindable(BindableSupport.Yes)]
         public TimeSpan Progress
@@ -23,6 +36,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the total time of the progress bar.
+        /// </summary>
         [Browsable(true)]
         [Bindable(BindableSupport.Yes)]
         public TimeSpan Total
@@ -35,11 +51,7 @@ namespace AudioBand.Views.Winforms
             }
         }
 
-        public EnhancedProgressBar()
-        {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-        }
-
+        /// <inheritdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
             var rect = e.ClipRectangle;
