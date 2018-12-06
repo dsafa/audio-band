@@ -8,17 +8,18 @@ namespace AudioBand.AudioSource
     public class SettingChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Name of the setting's property that changed.
-        /// </summary>
-        public string PropertyName { get; set; }
-
-        /// <summary>
-        /// Creates a new instance of a <see cref="SettingChangedEventArgs"/> with the setting name.
+        /// Initializes a new instance of the <see cref="SettingChangedEventArgs"/> class
+        /// with the setting's property name.
         /// </summary>
         /// <param name="propertyName">Name of the setting's property that changed.</param>
         public SettingChangedEventArgs(string propertyName)
         {
             PropertyName = propertyName;
         }
+
+        /// <summary>
+        /// Gets or sets the name of the setting's property that changed.
+        /// </summary>
+        public string PropertyName { get; set; }
     }
 }

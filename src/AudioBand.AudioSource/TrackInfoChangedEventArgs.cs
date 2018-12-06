@@ -3,30 +3,33 @@ using System.Drawing;
 
 namespace AudioBand.AudioSource
 {
+    /// <summary>
+    /// Event arguments for the <see cref="IAudioSource.TrackInfoChanged"/> event.
+    /// </summary>
     public class TrackInfoChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Track Name
+        /// Gets or sets the track Name
         /// </summary>
         public string TrackName { get; set; }
 
         /// <summary>
-        /// Artist
+        /// Gets or sets the artist.
         /// </summary>
         public string Artist { get; set; }
 
         /// <summary>
-        /// Album art image. If null, a placeholder will be used
+        /// Gets or sets the album art image. If <see langword="null"/>, a placeholder will be used.
         /// </summary>
         public Image AlbumArt { get; set; }
 
         /// <summary>
-        /// Album name
+        /// Gets or sets the album name.
         /// </summary>
         public string Album { get; set; }
 
         /// <summary>
-        /// Length of the track
+        /// Gets or sets the length of the track
         /// </summary>
         public TimeSpan TrackLength { get; set; }
     }
