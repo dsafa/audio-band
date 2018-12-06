@@ -1,8 +1,8 @@
-﻿using AudioBand.AudioSource;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AudioBand.AudioSource;
 using AudioBand.Extensions;
 using AudioBand.Models;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AudioBand.ViewModels
 {
@@ -11,13 +11,57 @@ namespace AudioBand.ViewModels
     /// </summary>
     internal class AudioSourceSettingsVM : ViewModelBase<AudioSourceSettings>
     {
-        public string AudioSourceName => Model.AudioSourceName;
-        public List<AudioSourceSettingVM> Settings { get; }
-
-        public AudioSourceSettingsVM(AudioSourceSettings settings, IAudioSource audioSource) : base(settings)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioSourceSettingsVM"/> class
+        /// with the settings and the audio source.
+        /// </summary>
+        /// <param name="settings">Settings for the audio source.</param>
+        /// <param name="audioSource">The audio source.</param>
+        public AudioSourceSettingsVM(AudioSourceSettings settings, IAudioSource audioSource)
+            : base(settings)
         {
             Settings = CreateSettingViewModels(Model, audioSource);
             audioSource.SettingChanged += AudioSourceOnSettingChanged;
+        }
+
+        /// <summary>
+        /// Gets the name of the audio source.
+        /// </summary>
+        public string AudioSourceName => Model.AudioSourceName;
+
+        /// <summary>
+        /// Gets a <see cref="List{T}"/> of <see cref="AudioSourceSettingVM"/> belonging to this audio source.
+        /// </summary>
+        public List<AudioSourceSettingVM> Settings { get; }
+
+        /// <inheritdoc/>
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+            foreach (var audioSourceSettingVm in Settings)
+            {
+                audioSourceSettingVm.CancelEdit();
+            }
+        }
+
+        /// <inheritdoc/>
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            foreach (var audioSourceSettingVm in Settings.OrderByDescending(s => s.Priority))
+            {
+                audioSourceSettingVm.EndEdit();
+            }
+        }
+
+        /// <inheritdoc/>
+        protected override void OnBeginEdit()
+        {
+            base.OnBeginEdit();
+            foreach (var audioSourceSettingVm in Settings)
+            {
+                audioSourceSettingVm.BeginEdit();
+            }
         }
 
         private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
@@ -41,40 +85,13 @@ namespace AudioBand.ViewModels
                 {
                     var name = audioSourceSettingInfo.Attribute.Name;
                     var defaultValue = audioSourceSettingInfo.GetValue();
-                    var newSetting = new AudioSourceSetting {Name = name, Value = defaultValue};
+                    var newSetting = new AudioSourceSetting { Name = name, Value = defaultValue };
                     Model.Settings.Add(newSetting);
                     viewmodels.Add(new AudioSourceSettingVM(newSetting, audioSourceSettingInfo, false));
                 }
             }
 
             return viewmodels;
-        }
-
-        protected override void OnCancelEdit()
-        {
-            base.OnCancelEdit();
-            foreach (var audioSourceSettingVm in Settings)
-            {
-                audioSourceSettingVm.CancelEdit();
-            }
-        }
-
-        protected override void OnEndEdit()
-        {
-            base.OnEndEdit();
-            foreach (var audioSourceSettingVm in Settings.OrderByDescending(s => s.Priority))
-            {
-                audioSourceSettingVm.EndEdit();
-            }
-        }
-
-        protected override void OnBeginEdit()
-        {
-            base.OnBeginEdit();
-            foreach (var audioSourceSettingVm in Settings)
-            {
-                audioSourceSettingVm.BeginEdit();
-            }
         }
     }
 }

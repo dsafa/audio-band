@@ -3,22 +3,81 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using AudioBand.Commands;
-using NLog;
 using AutoMapper;
 using FastMember;
+using NLog;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// Base class for view models. With automatic support for 
+    /// Base class for view models with automatic support for
     /// <see cref="INotifyPropertyChanged"/>, <see cref="IEditableObject"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and commands.
     /// </summary>
     internal abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject, INotifyDataErrorInfo
     {
         private readonly Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+        /// </summary>
+        protected ViewModelBase()
+        {
+            Logger = LogManager.GetLogger(GetType().FullName);
+            Accessor = TypeAccessor.Create(GetType());
+
+            BeginEditCommand = new RelayCommand(o => BeginEdit());
+            EndEditCommand = new RelayCommand(o => EndEdit());
+            CancelEditCommand = new RelayCommand(o => CancelEdit());
+            ResetCommand = new RelayCommand(o => Reset());
+
+            SetupAlsoNotify();
+        }
+
+        /// <inheritdoc cref="INotifyDataErrorInfo.ErrorsChanged"/>
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <inheritdoc cref="INotifyDataErrorInfo.HasErrors"/>
+        public bool HasErrors => _propertyErrors.Any(entry => entry.Value?.Any() ?? false);
+
+        /// <summary>
+        /// Gets the command to start editing.
+        /// </summary>
+        public RelayCommand BeginEditCommand { get; }
+
+        /// <summary>
+        /// Gets the command to end editing.
+        /// </summary>
+        public RelayCommand EndEditCommand { get; }
+
+        /// <summary>
+        /// Gets the command to cancel edit.
+        /// </summary>
+        public RelayCommand CancelEditCommand { get; }
+
+        /// <summary>
+        /// Gets the command to reset the state.
+        /// </summary>
+        public RelayCommand ResetCommand { get; }
+
+        /// <summary>
+        /// Gets the map from [model property name] to [other vm property names]
+        /// </summary>
+        protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
+
+        /// <summary>
+        /// Gets the logger for the view model
+        /// </summary>
+        protected Logger Logger { get; }
+
+        /// <summary>
+        /// Gets the type accessor for this object.
+        /// </summary>
+        protected TypeAccessor Accessor { get; }
 
         /// <inheritdoc cref="INotifyDataErrorInfo.GetErrors"/>
         public IEnumerable GetErrors(string propertyName)
@@ -31,35 +90,6 @@ namespace AudioBand.ViewModels
             return null;
         }
 
-        ///<inheritdoc cref="INotifyDataErrorInfo.HasErrors"/>
-        public bool HasErrors => _propertyErrors.Any(entry => entry.Value?.Any() ?? false);
-
-        /// <inheritdoc cref="INotifyDataErrorInfo.ErrorsChanged"/>
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Command to start editing.
-        /// </summary>
-        public RelayCommand BeginEditCommand { get; }
-
-        /// <summary>
-        /// Command to end editing.
-        /// </summary>
-        public RelayCommand EndEditCommand { get; }
-
-        /// <summary>
-        /// Command to cancel edit.
-        /// </summary>
-        public RelayCommand CancelEditCommand { get; }
-
-        /// <summary>
-        /// Command to reset the state to default.
-        /// </summary>
-        public RelayCommand ResetCommand { get; }
-
         /// <inheritdoc cref="IEditableObject.BeginEdit"/>
         public void BeginEdit()
         {
@@ -71,6 +101,7 @@ namespace AudioBand.ViewModels
         {
             OnEndEdit();
         }
+
         /// <inheritdoc cref="IEditableObject.CancelEdit"/>
         public void CancelEdit()
         {
@@ -81,34 +112,6 @@ namespace AudioBand.ViewModels
         public void Reset()
         {
             OnReset();
-        }
-
-        /// <summary>
-        /// Map from [model property name] to [other vm property names]
-        /// </summary>
-        protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
-
-        /// <summary>
-        /// Logger for the view model
-        /// </summary>
-        protected Logger Logger { get; }
-
-        /// <summary>
-        /// Type accessor for the current object.
-        /// </summary>
-        protected TypeAccessor Accessor { get; }
-
-        protected ViewModelBase()
-        {
-            Logger = LogManager.GetLogger(GetType().FullName);
-            Accessor = TypeAccessor.Create(GetType());
-
-            BeginEditCommand = new RelayCommand(o => BeginEdit());
-            EndEditCommand = new RelayCommand(o => EndEdit());
-            CancelEditCommand = new RelayCommand(o => CancelEdit());
-            ResetCommand = new RelayCommand(o => Reset());
-
-            SetupAlsoNotify();
         }
 
         /// <summary>
@@ -125,7 +128,8 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <typeparam name="T">Object type.</typeparam>
         /// <param name="obj">Object to reset.</param>
-        protected void ResetObject<T>(T obj) where T: new()
+        protected void ResetObject<T>(T obj)
+            where T : new()
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
             mapper.Map<T, T>(new T(), obj);
@@ -199,7 +203,7 @@ namespace AudioBand.ViewModels
         /// <param name="propertyName">Property that failed validation.</param>
         protected void RaiseValidationError(string error, [CallerMemberName] string propertyName = null)
         {
-            RaiseValidationError(new[] {error}, propertyName);
+            RaiseValidationError(new[] { error }, propertyName);
         }
 
         /// <summary>
@@ -217,7 +221,7 @@ namespace AudioBand.ViewModels
             var alsoNotifyProperties = Accessor.GetMembers().Where(m => m.IsDefined(typeof(AlsoNotifyAttribute)));
             foreach (var propertyInfo in alsoNotifyProperties)
             {
-                var attr = (AlsoNotifyAttribute) propertyInfo.GetAttribute(typeof(AlsoNotifyAttribute), true);
+                var attr = (AlsoNotifyAttribute)propertyInfo.GetAttribute(typeof(AlsoNotifyAttribute), true);
                 AlsoNotifyMap.Add(propertyInfo.Name, attr.AlsoNotify);
             }
         }

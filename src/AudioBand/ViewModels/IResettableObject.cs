@@ -1,12 +1,12 @@
 ﻿namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// Object that can be reset to a default state
+    /// Provides functionality to reset back to the initial state.
     /// </summary>
-    interface IResettableObject
+    internal interface IResettableObject
     {
         /// <summary>
-        /// Reset to default state
+        /// Reset to the initial state.
         /// </summary>
         void Reset();
     }

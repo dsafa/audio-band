@@ -1,18 +1,28 @@
-﻿using AudioBand.Extensions;
+﻿using System.Drawing;
+using System.IO;
+using AudioBand.Extensions;
 using AudioBand.Models;
 using Svg;
-using System.Drawing;
-using System.IO;
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// View model for the next button.
+    /// </summary>
     internal class NextButtonVM : ViewModelBase<NextButton>
     {
         private static readonly SvgDocument DefaultNextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
         private Image _image;
 
+        public NextButtonVM(NextButton model)
+            : base(model)
+        {
+            LoadImage();
+        }
+
         public Image Image
         {
+            // Need padding to fit image in a button.
             get => _image.Scale(Width - 1, Height - 1);
             set => SetProperty(ref _image, value);
         }
@@ -69,30 +79,35 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.YPosition), value);
         }
 
+        /// <summary>
+        /// Gets the location of the next button.
+        /// </summary>
+        /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Point Location => new Point(Model.XPosition, Model.YPosition);
 
+        /// <summary>
+        /// Gets the size of the next button.
+        /// </summary>
+        /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Size Size => new Size(Width, Height);
 
-        public NextButtonVM(NextButton model) : base(model)
-        {
-            LoadImage();
-        }
-
-        private void LoadImage()
-        {
-            Image = LoadImage(ImagePath, DefaultNextButtonSvg.ToBitmap());
-        }
-
+        /// <inheritdoc/>
         protected override void OnReset()
         {
             base.OnReset();
             LoadImage();
         }
 
+        /// <inheritdoc/>
         protected override void OnCancelEdit()
         {
             base.OnCancelEdit();
             LoadImage();
+        }
+
+        private void LoadImage()
+        {
+            Image = LoadImage(ImagePath, DefaultNextButtonSvg.ToBitmap());
         }
     }
 }

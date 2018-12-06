@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using AudioBand.Models;
 using System.Drawing;
 using System.Linq;
+using AudioBand.Models;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// The view model for a custom label.
+    /// </summary>
     internal class CustomLabelVM : ViewModelBase<CustomLabel>
     {
+        public CustomLabelVM(CustomLabel model)
+            : base(model) { }
+
         [PropertyChangeBinding(nameof(CustomLabel.Name))]
         public string Name
         {
@@ -99,12 +105,21 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.ScrollSpeed), value);
         }
 
+        /// <summary>
+        /// Gets the location of the custom label.
+        /// </summary>
+        /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Point Location => new Point(XPosition, YPosition);
 
+        /// <summary>
+        /// Gets the size of the custom label.
+        /// </summary>
+        /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Size Size => new Size(Width, Height);
 
+        /// <summary>
+        /// Gets the values of <see cref="CustomLabel.TextAlignment"/>.
+        /// </summary>
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
-
-        public CustomLabelVM(CustomLabel model) : base(model) {}
     }
 }
