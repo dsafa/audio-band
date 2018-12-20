@@ -49,7 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="NativeMethods.cs" />
     <Compile Include="TrackInfo.cs" />
     <Compile Include="AudioSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

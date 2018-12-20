@@ -21,7 +21,9 @@ namespace SonosAudioSource
 		private HttpClient _httpClient = new HttpClient();
 		private TimeSpan _trackProgress;
 		private TimeSpan _lastTrackProgress;
+		private TrackInfo _currentTrackInfo;
 		private bool _isActive;
+		private bool _isPlaying;
 		private string _clientIp;
 		private string _clientPort;
 		private string _defaultClientPort = "1400";
@@ -163,35 +165,47 @@ namespace SonosAudioSource
 					return;
 				}
 
-				TrackInfo currentTrack = GetCurrentTrackInfo();
-				if (currentTrack == null)
+				TrackInfo newTrackInfo = GetCurrentTrackInfo();
+				if (newTrackInfo == null)
 				{
+					TrackPaused?.Invoke(this, EventArgs.Empty);
+					_isPlaying = false;
+
 					return;
 				}
 
-				var albumArtImage = await GetAlbumArt(new Uri(currentTrack.AlbumArtUri));
-				var trackUpdateInfo = new TrackInfoChangedEventArgs
-				{
-					Artist = currentTrack.Artist,
-					TrackName = currentTrack.Title,
-					Album = currentTrack.Album,
-					TrackLength = currentTrack.TrackLength,
-					AlbumArt = albumArtImage
-				};
 				_lastTrackProgress = _trackProgress;
-				_trackProgress = currentTrack.TrackProgress;
+				_trackProgress = newTrackInfo.TrackProgress;
+				TrackProgressChanged?.Invoke(this, _trackProgress);
 
-				if (_lastTrackProgress == _trackProgress)
+				if (_isPlaying && _lastTrackProgress == _trackProgress)
 				{
 					TrackPaused?.Invoke(this, EventArgs.Empty);
+					_isPlaying = false;
+
+					return;
 				}
-				else
+				else if (!_isPlaying && _lastTrackProgress != _trackProgress)
 				{
 					TrackPlaying?.Invoke(this, EventArgs.Empty);
+					_isPlaying = true;
 				}
 
-				TrackInfoChanged?.Invoke(this, trackUpdateInfo);
-				TrackProgressChanged?.Invoke(this, _trackProgress);
+				if (newTrackInfo != _currentTrackInfo)
+				{
+					var albumArtImage = await GetAlbumArt(new Uri(newTrackInfo.AlbumArtUri));
+					var trackUpdateInfo = new TrackInfoChangedEventArgs
+					{
+						Artist = newTrackInfo.Artist,
+						TrackName = newTrackInfo.Title,
+						Album = newTrackInfo.Album,
+						TrackLength = newTrackInfo.TrackLength,
+						AlbumArt = albumArtImage
+					};
+
+					TrackInfoChanged?.Invoke(this, trackUpdateInfo);
+					_currentTrackInfo = newTrackInfo;
+				}
 			}
 			catch (Exception e)
 			{
