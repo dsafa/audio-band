@@ -27,9 +27,9 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
-        private readonly AudioSourceManager _audioSourceManager = new AudioSourceManager();
         private readonly AppSettings _appSettings = new AppSettings();
         private readonly Dispatcher _uiDispatcher;
+        private AudioSourceManager _audioSourceManager;
         private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
         private DeskBandMenu _pluginSubMenu;
@@ -128,6 +128,7 @@ namespace AudioBand
             {
                 await Task.Run(() =>
                 {
+                    _audioSourceManager = new AudioSourceManager();
                     _audioSourceManager.LoadAudioSources();
                     Options.ContextMenuItems = BuildContextMenu();
                     InitializeModels();

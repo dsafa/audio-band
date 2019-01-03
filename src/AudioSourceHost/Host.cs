@@ -1,23 +1,21 @@
-﻿using AudioBand.AudioSource;
+﻿using System;
+using System.ServiceModel;
+using AudioBand.AudioSource;
+using ServiceContracts;
 
 namespace AudioSourceHost
 {
     internal class Host
     {
-        private readonly string _directory;
         private IAudioSource _audioSource;
-        private AudioSourceHostService _service;
+        private AudioSourceHostService _hostService;
 
-        public Host(string audioSourceDirectory)
+        public void Initialize(string audioSourceDirectory, string hostEndpoint)
         {
-            _directory = audioSourceDirectory;
-        }
-
-        public void Initialize()
-        {
-            _audioSource = AudioSourceLoader.LoadFromDirectory(_directory);
+            _audioSource = AudioSourceLoader.LoadFromDirectory(audioSourceDirectory);
             _audioSource.Logger = new AudioSourceLogger(_audioSource.Name);
-            _service = new AudioSourceHostService(_audioSource);
+
+            _hostService = new AudioSourceHostService(_audioSource, hostEndpoint);
         }
     }
 }

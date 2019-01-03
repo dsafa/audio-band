@@ -5,23 +5,18 @@ using ServiceContracts;
 
 namespace AudioSourceHost
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class AudioSourceHostService : IAudioSourceHost
     {
         private readonly IAudioSource _audioSource;
-        private readonly IAudioSourceListener _listener;
-        private readonly IAudioSourceServer _audioSourceServer;
+        private IAudioSourceListener _listener;
         private bool _isActive;
-        private ServiceHost _serviceHost;
 
-        public AudioSourceHostService(IAudioSource audioSource)
+        public AudioSourceHostService(IAudioSource audioSource, string hostEndpoint)
         {
-            _serviceHost = new ServiceHost(this);
-            _serviceHost.AddServiceEndpoint(typeof(IAudioSourceHost), new NetNamedPipeBinding(), ServiceHelper.GetAudioSourceHostEndpoint(audioSource.Name));
-
-            _audioSourceServer = new ChannelFactory<IAudioSourceServer>(new NetNamedPipeBinding(), new EndpointAddress(ServiceHelper.AudioSourceServerEndpoint)).CreateChannel();
-
-            var listenerEndpoint = _audioSourceServer.RegisterAudioSource(audioSource.Name, ServiceHelper.GetAudioSourceHostEndpoint(audioSource.Name));
-            _listener = new ChannelFactory<IAudioSourceListener>(new NetNamedPipeBinding(), new EndpointAddress(listenerEndpoint)).CreateChannel();
+            var instanceContext = new InstanceContext(this);
+            var channelFactory = new DuplexChannelFactory<IAudioSourceListener>(instanceContext, new NetNamedPipeBinding(), hostEndpoint);
+            _listener = channelFactory.CreateChannel();
 
             _audioSource = audioSource;
             _audioSource.SettingChanged += AudioSourceOnSettingChanged;
