@@ -13,7 +13,7 @@ namespace AudioSourceHost
         public void Initialize(string audioSourceDirectory, string hostEndpoint)
         {
             _audioSource = AudioSourceLoader.LoadFromDirectory(audioSourceDirectory);
-            _audioSource.Logger = new AudioSourceLogger(_audioSource.Name);
+            _audioSource.Logger = LogManager.GetAudioSourceLogger(_audioSource.Name);
 
             _hostService = new AudioSourceHostService(_audioSource, hostEndpoint);
         }

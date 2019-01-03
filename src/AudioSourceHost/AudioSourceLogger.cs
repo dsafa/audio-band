@@ -9,10 +9,10 @@ namespace AudioSourceHost
         private readonly string _name;
         private readonly ILoggerService _loggerService;
 
-        public AudioSourceLogger(string audiosourceName)
+        public AudioSourceLogger(string audiosourceName, ILoggerService loggerService)
         {
             _name = "AudioSource:" + audiosourceName;
-            _loggerService = new ChannelFactory<ILoggerService>(new NetNamedPipeBinding(), new EndpointAddress(ServiceHelper.LoggerEndpoint)).CreateChannel();
+            _loggerService = loggerService;
         }
 
         public void Debug(string message)

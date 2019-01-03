@@ -14,11 +14,18 @@ namespace AudioSourceHost
             var directory = args[0];
             var endpointAddress = args[1];
 
-            var host = new Host();
-            host.Initialize(directory, endpointAddress);
+            try
+            {
+                var host = new Host();
+                host.Initialize(directory, endpointAddress);
 
-            // Keep program alive
-            System.Windows.Forms.Application.Run();
+                // Keep program alive
+                System.Windows.Forms.Application.Run();
+            }
+            catch (Exception e)
+            {
+                LogManager.GetHostLogger().Error($"Error with initialization, directory:{directory}, endpoint:{endpointAddress}, Error: {e}");
+            }
         }
     }
 }
