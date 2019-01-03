@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace ServiceContracts
 {
     [ServiceContract(SessionMode = SessionMode.Required)]
-    interface IAudioSourceHost
+    public interface IAudioSourceHost
     {
         [OperationContract]
         Task ActivateAsync();
