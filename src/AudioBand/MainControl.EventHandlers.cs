@@ -73,7 +73,7 @@ namespace AudioBand
                 await UnsubscribeToAudioSource(_currentAudioSource);
 
                 item.Checked = true;
-                _currentAudioSource = _audioSourceLoader.AudioSources.First(c => c.Name == item.Text);
+                _currentAudioSource = _audioSourceManager.AudioSources.First(c => c.Name == item.Text);
                 await SubscribeToAudioSource(_currentAudioSource);
             }
             catch (Exception e)

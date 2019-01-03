@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAudioSourceHost.cs" />
+    <Compile Include="IAudioSourceListener.cs" />
     <Compile Include="IAudioSourceServer.cs" />
     <Compile Include="IloggerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
