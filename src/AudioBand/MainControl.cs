@@ -27,6 +27,7 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
+        private static readonly object _audiosourceListLock = new object();
         private readonly AppSettings _appSettings = new AppSettings();
         private readonly Dispatcher _uiDispatcher;
         private AudioSourceManager _audioSourceManager;
@@ -130,6 +131,7 @@ namespace AudioBand
                 await Task.Run(() =>
                 {
                     _audioSourceManager = new AudioSourceManager();
+                    _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
                     _audioSourceManager.LoadAudioSources();
                     Options.ContextMenuItems = BuildContextMenu();
                     InitializeModels();
@@ -152,6 +154,11 @@ namespace AudioBand
             {
                 Logger.Error(e);
             }
+        }
+
+        private void AudioSourceManagerOnAudioSourcesChanged(object sender, EventArgs e)
+        {
+            Options.ContextMenuItems = BuildContextMenu();
         }
 
         private void InitializeModels()
@@ -220,12 +227,17 @@ namespace AudioBand
 
         private List<DeskBandMenuItem> BuildContextMenu()
         {
-            var pluginList = _audioSourceManager.AudioSources.Select(audioSource =>
+            List<DeskBandMenuAction> pluginList;
+
+            lock (_audiosourceListLock)
             {
-                var item = new DeskBandMenuAction(audioSource.Name);
-                item.Clicked += AudioSourceMenuItemOnClicked;
-                return item;
-            });
+                pluginList = _audioSourceManager.AudioSources.Select(audioSource =>
+                {
+                    var item = new DeskBandMenuAction(audioSource.Name);
+                    item.Clicked += AudioSourceMenuItemOnClicked;
+                    return item;
+                }).ToList();
+            }
 
             _pluginSubMenu = new DeskBandMenu("Audio Source", pluginList);
             var settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");

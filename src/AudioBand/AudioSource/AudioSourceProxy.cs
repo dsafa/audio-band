@@ -2,27 +2,22 @@
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 using ServiceContracts;
 
 namespace AudioBand.AudioSource
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     internal class AudioSourceProxy : IAudioSource, IAudioSourceListener
     {
-        private ServiceHost _serviceHost;
+        private ILogger _logger;
+        private IAudioSourceHost _host;
 
         public AudioSourceProxy(Uri listenerUri)
         {
-            _serviceHost = new ServiceHost(this);
-            _serviceHost.AddServiceEndpoint(typeof(IAudioSourceListener), new NetNamedPipeBinding(), listenerUri);
-            _serviceHost.Open();
-
-            _serviceHost.Opened += (o_, e) => OnReady();
-            _serviceHost.Closed += (o, e) => OnFaulted();
-            _serviceHost.Faulted += (o, e) => OnFaulted();
+            _logger = LogManager.GetLogger($"AudioSourceProxy@{listenerUri}");
+            Uri = listenerUri;
         }
-
-        public event EventHandler Faulted;
 
         public event EventHandler Ready;
 
@@ -36,45 +31,47 @@ namespace AudioBand.AudioSource
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
-        public string Name => Host.GetName();
+        public Uri Uri { get; private set; }
+
+        public string Name => _host.GetName();
 
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        private IAudioSourceHost Host => OperationContext.Current.GetCallbackChannel<IAudioSourceHost>();
-
-        public void Close()
+        public void OpenSession()
         {
-            _serviceHost.Close();
+            _logger.Debug("Audiosource host connected");
+            _host = OperationContext.Current.GetCallbackChannel<IAudioSourceHost>();
+            Ready?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await Host.ActivateAsync();
+            await _host.ActivateAsync();
         }
 
         public async Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await Host.DeactivateAsync();
+            await _host.DeactivateAsync();
         }
 
         public async Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await Host.NextTrackAsync();
+            await _host.NextTrackAsync();
         }
 
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await Host.PauseTrackAsync();
+            await _host.PauseTrackAsync();
         }
 
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await Host.PlayTrackAsync();
+            await _host.PlayTrackAsync();
         }
 
         public async Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await Host.PreviousTrackAsync();
+            await _host.PreviousTrackAsync();
         }
 
         void IAudioSourceListener.SettingChanged(SettingChangedEventArgs args)
@@ -100,16 +97,6 @@ namespace AudioBand.AudioSource
         void IAudioSourceListener.TrackProgressChanged(TimeSpan progress)
         {
             TrackProgressChanged?.Invoke(this, progress);
-        }
-
-        private void OnReady()
-        {
-            Ready?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnFaulted()
-        {
-            Faulted?.Invoke(this, EventArgs.Empty);
         }
     }
 }
