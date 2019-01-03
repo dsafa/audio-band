@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace ServiceContracts
 {
+    /// <summary>
+    /// The Contract for the audiosource host which will act as the server
+    /// </summary>
     [ServiceContract(SessionMode = SessionMode.Required)]
     public interface IAudioSourceHost
     {

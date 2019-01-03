@@ -6,15 +6,16 @@ namespace AudioSourceHost
     {
         public static void Main(string[] args)
         {
-            if (args.Length < 1)
+            if (args.Length < 2)
             {
-                Console.Error.WriteLine("Missing directory name");
                 return;
             }
 
             var directory = args[0];
-            var host = new Host(directory);
-            host.Initialize();
+            var endpointAddress = args[1];
+
+            var host = new Host();
+            host.Initialize(directory, endpointAddress);
 
             // Keep program alive
             System.Windows.Forms.Application.Run();

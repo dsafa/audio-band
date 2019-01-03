@@ -93,5 +93,10 @@ namespace AudioBand.AudioSource
         {
             TrackProgressChanged?.Invoke(this, progress);
         }
+
+        public void BeginSession()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
