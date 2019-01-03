@@ -11,18 +11,16 @@ using System.Threading.Tasks;
 
 namespace AudioBand.AudioSource
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     internal class AudioSourceProxy : IAudioSource, IAudioSourceListener
     {
-        private IAudioSourceHost _host;
         private ServiceHost _serviceHost;
 
-        public AudioSourceProxy(Uri listenerUri, Uri hostUri)
+        public AudioSourceProxy(Uri listenerUri)
         {
             _serviceHost = new ServiceHost(this);
             _serviceHost.AddServiceEndpoint(typeof(IAudioSourceListener), new NetNamedPipeBinding(), listenerUri);
             _serviceHost.Open();
-
-            _host = new ChannelFactory<IAudioSourceHost>(new NetNamedPipeBinding(), new EndpointAddress(hostUri)).CreateChannel();
         }
 
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
@@ -35,38 +33,40 @@ namespace AudioBand.AudioSource
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
-        public string Name => _host.GetName();
+        private IAudioSourceHost Host => OperationContext.Current.GetCallbackChannel<IAudioSourceHost>();
+
+        public string Name => Host.GetName();
 
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.ActivateAsync();
+            await Host.ActivateAsync();
         }
 
         public async Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.DeactivateAsync();
+            await Host.DeactivateAsync();
         }
 
         public async Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.NextTrackAsync();
+            await Host.NextTrackAsync();
         }
 
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.PauseTrackAsync();
+            await Host.PauseTrackAsync();
         }
 
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.PlayTrackAsync();
+            await Host.PlayTrackAsync();
         }
 
         public async Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.PreviousTrackAsync();
+            await Host.PreviousTrackAsync();
         }
 
         void IAudioSourceListener.SettingChanged(SettingChangedEventArgs args)
@@ -92,11 +92,6 @@ namespace AudioBand.AudioSource
         void IAudioSourceListener.TrackProgressChanged(TimeSpan progress)
         {
             TrackProgressChanged?.Invoke(this, progress);
-        }
-
-        public void BeginSession()
-        {
-            throw new NotImplementedException();
         }
     }
 }

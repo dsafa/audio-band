@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace AudioBand.AudioSource
 {
     /// <summary>
     /// Provides data for a <see cref="IAudioSource.SettingChanged"/> event.
     /// </summary>
+    [DataContract]
     public class SettingChangedEventArgs : EventArgs
     {
         /// <summary>
@@ -17,9 +19,15 @@ namespace AudioBand.AudioSource
             PropertyName = propertyName;
         }
 
+        // For serialization
+        private SettingChangedEventArgs()
+        {
+        }
+
         /// <summary>
         /// Gets or sets the name of the setting's property that changed.
         /// </summary>
+        [DataMember]
         public string PropertyName { get; set; }
     }
 }

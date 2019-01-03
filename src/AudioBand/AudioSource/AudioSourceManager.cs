@@ -13,21 +13,24 @@ namespace AudioBand.AudioSource
     /// <summary>
     /// Detects and loads audio sources.
     /// </summary>
-    internal class AudioSourceManager : IAudioSourceServer
+    internal class AudioSourceManager
     {
         private const string PluginFolderName = "AudioSources";
         private const string ManifestFileName = "AudioSource.manifest";
         private static readonly string HostExePath = Path.Combine(DirectoryHelper.BaseDirectory, "AudioSourceHost.exe");
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        private Dictionary<string, AudioSourceProxy> _audioSources = new Dictionary<string, AudioSourceProxy>();
-        private ServiceHost _serviceHost;
+        private List<IAudioSource> _audioSources = new List<IAudioSource>();
+        private ServiceHost _loggerServiceHost;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioSourceManager"/> class.
+        /// </summary>
         public AudioSourceManager()
         {
-            _serviceHost = new ServiceHost(this);
-            _serviceHost.AddServiceEndpoint(typeof(IAudioSourceServer), new NetNamedPipeBinding(), ServiceHelper.AudioSourceServerEndpoint);
-            _serviceHost.Open();
+            _loggerServiceHost = new ServiceHost(typeof(AudioSourceLoggerService));
+            _loggerServiceHost.AddServiceEndpoint(typeof(ILoggerService), new NetNamedPipeBinding(), ServiceHelper.LoggerEndpoint);
+            _loggerServiceHost.Open();
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Gets the list of audio sources available.
         /// </summary>
-        public IEnumerable<IAudioSource> AudioSources => _audioSources.Values;
+        public IEnumerable<IAudioSource> AudioSources => _audioSources;
 
         /// <summary>
         /// Load all audio sources.
@@ -55,24 +58,14 @@ namespace AudioBand.AudioSource
 
         private void StartHost(string directory)
         {
+            var listenerEndpoint = ServiceHelper.GetAudioSourceListenerEndpoint(directory);
+            _audioSources.Add(new AudioSourceProxy(listenerEndpoint));
+
             Process.Start(new ProcessStartInfo()
             {
                 FileName = HostExePath,
-                Arguments = directory
+                Arguments = $"{directory} {listenerEndpoint}"
             });
-        }
-
-        public Uri RegisterAudioSource(string name, Uri hostUri)
-        {
-            var listenerUri = ServiceHelper.GetAudioSourceListenerEndpoint(name);
-            if (_audioSources.ContainsKey(name))
-            {
-                return listenerUri;
-            }
-
-            _audioSources[name] = new AudioSourceProxy(listenerUri, hostUri);
-            AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
-            return listenerUri;
         }
     }
 }

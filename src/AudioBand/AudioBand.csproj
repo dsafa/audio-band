@@ -168,7 +168,7 @@
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AudioSource\AudioSourceLogger.cs" />
+    <Compile Include="AudioSource\AudioSourceLoggerService.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />

@@ -5,14 +5,11 @@ using AudioBand.AudioSource;
 namespace ServiceContracts
 {
     /// <summary>
-    /// This is a callback for the <see cref="IAudioSourceHost"/>.
+    /// Service contract for the audio source listner which is the server.
     /// </summary>
     [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IAudioSourceHost))]
     public interface IAudioSourceListener
     {
-        [OperationContract]
-        void BeginSession();
-
         [OperationContract]
         void SettingChanged(SettingChangedEventArgs args);
 
