@@ -4,7 +4,7 @@ namespace ServiceContracts
 {
     public static class ServiceHelper
     {
-        public static Uri BaseEndpoint => new Uri("net.pipe://localhost/audioband");
+        public static Uri BaseEndpoint => new Uri("net.pipe://localhost/audioband/");
         public static Uri LoggerEndpoint => new Uri(BaseEndpoint, "logging");
         public static Uri AudioSourceServerEndpoint => new Uri(BaseEndpoint, "audiosource-server");
         
