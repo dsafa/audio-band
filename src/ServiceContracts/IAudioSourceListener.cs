@@ -10,19 +10,22 @@ namespace ServiceContracts
     [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IAudioSourceHost))]
     public interface IAudioSourceListener
     {
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
+        void OpenSession();
+
+        [OperationContract(IsOneWay = true)]
         void SettingChanged(SettingChangedEventArgs args);
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void TrackInfoChanged(TrackInfoChangedEventArgs args);
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void TrackPlaying();
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void TrackPaused();
 
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void TrackProgressChanged(TimeSpan progress);
     }
 }

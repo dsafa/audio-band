@@ -20,8 +20,9 @@ namespace AudioBand.AudioSource
         private static readonly string HostExePath = Path.Combine(DirectoryHelper.BaseDirectory, "AudioSourceHost.exe");
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly object _audioSourcesLock = new object();
         private List<AudioSourceProxy> _audioSources = new List<AudioSourceProxy>();
-        private List<AudioSourceProxy> _waitingAudioSources = new List<AudioSourceProxy>();
+        private List<(AudioSourceProxy proxy, ServiceHost host, Process process)> _audioSourceInfos = new List<(AudioSourceProxy, ServiceHost, Process)>();
         private ServiceHost _loggerServiceHost;
 
         /// <summary>
@@ -42,7 +43,16 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Gets the list of audio sources available.
         /// </summary>
-        public IEnumerable<IAudioSource> AudioSources => _audioSources;
+        public IEnumerable<IAudioSource> AudioSources
+        {
+            get
+            {
+                lock (_audioSourcesLock)
+                {
+                    return new List<IAudioSource>(_audioSources);
+                }
+            }
+        }
 
         /// <summary>
         /// Load all audio sources.
@@ -63,14 +73,10 @@ namespace AudioBand.AudioSource
         public void Close()
         {
             _loggerServiceHost.Close();
-            foreach (var source in _audioSources)
+            foreach (var info in _audioSourceInfos)
             {
-                source.Close();
-            }
-
-            foreach (var source in _waitingAudioSources)
-            {
-                source.Close();
+                info.host.Abort();
+                info.process.Close();
             }
         }
 
@@ -79,41 +85,47 @@ namespace AudioBand.AudioSource
             var listenerEndpoint = ServiceHelper.GetAudioSourceListenerEndpoint(new DirectoryInfo(directory).Name);
             var proxy = new AudioSourceProxy(listenerEndpoint);
             proxy.Ready += OnAudioSourceReady;
-            proxy.Faulted += OnAudioSourceFaulted;
-            _waitingAudioSources.Add(proxy);
 
-            Process.Start(new ProcessStartInfo()
+            var serviceHost = new ServiceHost(proxy);
+            serviceHost.AddServiceEndpoint(typeof(IAudioSourceListener), new NetNamedPipeBinding(), listenerEndpoint);
+            serviceHost.Open();
+            serviceHost.Faulted += ServiceHostOnFaulted;
+
+            Logger.Debug($"Starting audiosource host at {directory}, listening on {listenerEndpoint}");
+
+            var process = Process.Start(new ProcessStartInfo()
             {
                 FileName = HostExePath,
                 Arguments = $"{directory} {listenerEndpoint}"
             });
+
+            _audioSourceInfos.Add((proxy, serviceHost, process));
         }
 
-        private void OnAudioSourceFaulted(object sender, EventArgs e)
+        private void ServiceHostOnFaulted(object sender, EventArgs e)
         {
-            var proxy = _audioSources.Find(s => s == sender);
-            if (proxy == null)
-            {
-                Logger.Warn("Faulted audio source not found");
-                return;
-            }
+            var serviceHost = sender as ServiceHost;
+            var proxy = serviceHost.SingletonInstance as AudioSourceProxy;
+
+            Logger.Error($"Audiosource host faulted. Host: {proxy.Uri}");
+
+            var info = _audioSourceInfos.Find(x => x.host == serviceHost);
+            _audioSourceInfos.Remove(info);
+
+            info.process.Close();
+            info.host.Abort();
 
             _audioSources.Remove(proxy);
             AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
-            // TODO recreate
         }
 
         private void OnAudioSourceReady(object sender, EventArgs e)
         {
-            var proxy = _waitingAudioSources.Find(audioSource => audioSource == sender);
-            if (proxy == null)
+            lock (_audioSourcesLock)
             {
-                Logger.Warn("Audio source ready but not found in waiting list");
-                return;
+                _audioSources.Add((AudioSourceProxy)sender);
             }
 
-            _waitingAudioSources.Remove(proxy);
-            _audioSources.Add(proxy);
             AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
         }
     }
