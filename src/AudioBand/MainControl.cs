@@ -27,7 +27,7 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
-        private readonly AudioSourceLoader _audioSourceLoader = new AudioSourceLoader();
+        private readonly AudioSourceManager _audioSourceManager = new AudioSourceManager();
         private readonly AppSettings _appSettings = new AppSettings();
         private readonly Dispatcher _uiDispatcher;
         private SettingsWindow _settingsWindow;
@@ -128,7 +128,7 @@ namespace AudioBand
             {
                 await Task.Run(() =>
                 {
-                    _audioSourceLoader.LoadAudioSources();
+                    _audioSourceManager.LoadAudioSources();
                     Options.ContextMenuItems = BuildContextMenu();
                     InitializeModels();
                 }).ConfigureAwait(false);
@@ -178,7 +178,7 @@ namespace AudioBand
             var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
             var allAudioSourceSettings = new List<AudioSourceSettingsVM>();
 
-            foreach (var audioSource in _audioSourceLoader.AudioSources)
+            foreach (var audioSource in _audioSourceManager.AudioSources)
             {
                 var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
                 if (matchingSetting != null)
@@ -218,7 +218,7 @@ namespace AudioBand
 
         private List<DeskBandMenuItem> BuildContextMenu()
         {
-            var pluginList = _audioSourceLoader.AudioSources.Select(audioSource =>
+            var pluginList = _audioSourceManager.AudioSources.Select(audioSource =>
             {
                 var item = new DeskBandMenuAction(audioSource.Name);
                 item.Clicked += AudioSourceMenuItemOnClicked;

@@ -7,6 +7,9 @@ namespace ServiceContracts
     public interface IAudioSourceHost
     {
         [OperationContract]
+        string GetName();
+
+        [OperationContract]
         Task ActivateAsync();
 
         [OperationContract]
