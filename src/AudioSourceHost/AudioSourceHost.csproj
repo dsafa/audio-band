@@ -83,6 +83,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>(robocopy "$(TargetPath)" "$(SolutionDir)AudioBand\$(OutDir)\" /xf)  ^&amp; IF %25ERRORLEVEL%25 LEQ 1 exit 0</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetFileName)" $(SolutionDir)AudioBand\$(OutDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
