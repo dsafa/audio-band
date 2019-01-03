@@ -3,7 +3,7 @@
 namespace ServiceContracts
 {
     [ServiceContract]
-    public interface ILoggingContract
+    public interface ILoggerService
     {
         [OperationContract]
         void Debug(string name, string message);

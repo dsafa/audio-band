@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicBeeAudioSource", "Musi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceContracts", "ServiceContracts\ServiceContracts.csproj", "{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioSourceHost", "AudioSourceHost\AudioSourceHost.csproj", "{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
