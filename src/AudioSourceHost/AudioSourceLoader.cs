@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
@@ -22,13 +23,18 @@ namespace AudioSourceHost
         /// <returns>A list of audiosources found in the directory.</returns>
         public static IAudioSource LoadFromDirectory(string directory)
         {
-            var manifest = Directory.GetFiles(directory, ManifestFileName, SearchOption.TopDirectoryOnly).FirstOrDefault();
-            if (manifest == null)
+            var manifestPath = Directory.GetFiles(directory, ManifestFileName, SearchOption.TopDirectoryOnly).FirstOrDefault();
+            if (manifestPath == null)
             {
-                return null;
+                throw new ApplicationException($"No manifest found in {directory}");
             }
 
-            var manifestData = Toml.ReadFile<Manifest>(manifest);
+            var manifestData = Toml.ReadFile<Manifest>(manifestPath);
+            if (manifestData?.AudioSource == null)
+            {
+                throw new ApplicationException("Invalid manifest format");
+            }
+
             var audioSourcePath = Path.Combine(directory, manifestData.AudioSource);
 
             var container = new CompositionContainer(new AssemblyCatalog(audioSourcePath));
