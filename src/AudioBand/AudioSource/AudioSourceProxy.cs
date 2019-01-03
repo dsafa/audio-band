@@ -42,6 +42,11 @@ namespace AudioBand.AudioSource
 
         private IAudioSourceHost Host => OperationContext.Current.GetCallbackChannel<IAudioSourceHost>();
 
+        public void Close()
+        {
+            _serviceHost.Close();
+        }
+
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             await Host.ActivateAsync();
