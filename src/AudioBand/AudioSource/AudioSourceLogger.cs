@@ -1,69 +1,37 @@
 ﻿using NLog;
+using ServiceContracts;
 
 namespace AudioBand.AudioSource
 {
     /// <summary>
-    /// Logger injected into <see cref="IAudioSource.Logger"/>.
+    /// Implementation of the logger service
     /// </summary>
-    internal class AudioSourceLogger : IAudioSourceLogger
+    internal class AudioSourceLogger : ILoggerService
     {
-        private readonly ILogger _logger;
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AudioSourceLogger"/> class with a name.
-        /// </summary>
-        /// <param name="name">Name of the audio source.</param>
-        public AudioSourceLogger(string name)
+        /// <inheritdoc/>
+        public void Debug(string name, string message)
         {
-            _logger = LogManager.GetLogger("AudioSource:" + name);
+            Logger.Debug($"{name} - {message}");
         }
 
         /// <inheritdoc/>
-        public void Debug(string message)
+        public void Error(string name, string message)
         {
-            _logger.Debug(message);
+            Logger.Error($"{name} - {message}");
         }
 
         /// <inheritdoc/>
-        public void Debug(object value)
+        public void Info(string name, string message)
         {
-            _logger.Debug(value);
+            Logger.Info($"{name} - {message}");
         }
 
         /// <inheritdoc/>
-        public void Info(string message)
+        public void Warn(string name, string message)
         {
-            _logger.Info(message);
-        }
-
-        /// <inheritdoc/>
-        public void Info(object value)
-        {
-            _logger.Info(value);
-        }
-
-        /// <inheritdoc/>
-        public void Warn(string message)
-        {
-            _logger.Warn(message);
-        }
-
-        /// <inheritdoc/>
-        public void Warn(object value)
-        {
-            _logger.Warn(value);
-        }
-
-        /// <inheritdoc/>
-        public void Error(string message)
-        {
-            _logger.Error(message);
-        }
-
-        /// <inheritdoc/>
-        public void Error(object value)
-        {
-            _logger.Error(value);
+            Logger.Warn($"{name} - {message}");
         }
     }
 }
