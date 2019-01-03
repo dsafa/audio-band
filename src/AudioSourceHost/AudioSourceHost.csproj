@@ -57,6 +57,8 @@
     <Compile Include="AudioSourceLoader.cs" />
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="Host.cs" />
+    <Compile Include="HostLogger.cs" />
+    <Compile Include="LogManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

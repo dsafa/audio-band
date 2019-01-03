@@ -76,7 +76,7 @@ namespace AudioBand.AudioSource
 
         private void StartHost(string directory)
         {
-            var listenerEndpoint = ServiceHelper.GetAudioSourceListenerEndpoint(directory);
+            var listenerEndpoint = ServiceHelper.GetAudioSourceListenerEndpoint(new DirectoryInfo(directory).Name);
             var proxy = new AudioSourceProxy(listenerEndpoint);
             proxy.Ready += OnAudioSourceReady;
             proxy.Faulted += OnAudioSourceFaulted;
