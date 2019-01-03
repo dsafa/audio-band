@@ -1,13 +1,8 @@
-﻿using ServiceContracts;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System;
 using System.ServiceModel;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ServiceContracts;
 
 namespace AudioBand.AudioSource
 {
@@ -21,7 +16,15 @@ namespace AudioBand.AudioSource
             _serviceHost = new ServiceHost(this);
             _serviceHost.AddServiceEndpoint(typeof(IAudioSourceListener), new NetNamedPipeBinding(), listenerUri);
             _serviceHost.Open();
+
+            _serviceHost.Opened += (o_, e) => OnReady();
+            _serviceHost.Closed += (o, e) => OnFaulted();
+            _serviceHost.Faulted += (o, e) => OnFaulted();
         }
+
+        public event EventHandler Faulted;
+
+        public event EventHandler Ready;
 
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
@@ -33,11 +36,11 @@ namespace AudioBand.AudioSource
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
-        private IAudioSourceHost Host => OperationContext.Current.GetCallbackChannel<IAudioSourceHost>();
-
         public string Name => Host.GetName();
 
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        private IAudioSourceHost Host => OperationContext.Current.GetCallbackChannel<IAudioSourceHost>();
 
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -92,6 +95,16 @@ namespace AudioBand.AudioSource
         void IAudioSourceListener.TrackProgressChanged(TimeSpan progress)
         {
             TrackProgressChanged?.Invoke(this, progress);
+        }
+
+        private void OnReady()
+        {
+            Ready?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnFaulted()
+        {
+            Faulted?.Invoke(this, EventArgs.Empty);
         }
     }
 }
