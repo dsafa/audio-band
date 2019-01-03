@@ -6,7 +6,7 @@ namespace AudioBand.AudioSource
     /// <summary>
     /// Implementation of the logger service
     /// </summary>
-    internal class AudioSourceLogger : ILoggerService
+    internal class AudioSourceLoggerService : ILoggerService
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
