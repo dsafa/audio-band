@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 using NLog;
@@ -6,7 +7,7 @@ using ServiceContracts;
 
 namespace AudioSourceHost
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant, IncludeExceptionDetailInFaults = true)]
     public class AudioSourceHostService : IAudioSourceHost
     {
         private readonly IAudioSource _audioSource;
@@ -63,6 +64,8 @@ namespace AudioSourceHost
 
             _isActive = true;
             await _audioSource.ActivateAsync().ConfigureAwait(false);
+
+            _logger.ConditionalDebug("Activated");
         }
 
         public async Task DeactivateAsync()
