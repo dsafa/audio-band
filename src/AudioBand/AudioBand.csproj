@@ -101,6 +101,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioSource\AudioSourceHostCallback.cs" />
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
     <Compile Include="AudioSource\AudioSourceSettingInfo.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
@@ -168,7 +169,6 @@
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AudioSource\AudioSourceLoggerService.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using AudioBand.AudioSource;
 using Nett;
+using NLog;
 
 namespace AudioSourceHost
 {
@@ -15,6 +14,7 @@ namespace AudioSourceHost
     internal class AudioSourceLoader
     {
         private const string ManifestFileName = "AudioSource.manifest";
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Load audio source from a directory.
@@ -26,13 +26,15 @@ namespace AudioSourceHost
             var manifestPath = Directory.GetFiles(directory, ManifestFileName, SearchOption.TopDirectoryOnly).FirstOrDefault();
             if (manifestPath == null)
             {
-                throw new ApplicationException($"No manifest found in {directory}");
+                Logger.Error($"No manifest found in {directory}");
+                Program.Exit();
             }
 
             var manifestData = Toml.ReadFile<Manifest>(manifestPath);
             if (manifestData?.AudioSource == null)
             {
-                throw new ApplicationException("Invalid manifest format");
+                Logger.Error("Invalid manifest format");
+                Program.Exit();
             }
 
             var audioSourcePath = Path.Combine(directory, manifestData.AudioSource);

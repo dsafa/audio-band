@@ -3,10 +3,7 @@ using System.Threading.Tasks;
 
 namespace ServiceContracts
 {
-    /// <summary>
-    /// The Contract for the audiosource host which will is a callback for <see cref="IAudioSourceListener"/>.
-    /// </summary>
-    [ServiceContract(SessionMode = SessionMode.Required)]
+    [ServiceContract(CallbackContract = typeof(IAudioSourceHostCallback))]
     public interface IAudioSourceHost
     {
         [OperationContract]

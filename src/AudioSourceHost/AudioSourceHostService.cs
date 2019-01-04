@@ -6,21 +6,17 @@ using ServiceContracts;
 
 namespace AudioSourceHost
 {
-    public class AudioSourceHostService
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    public class AudioSourceHostService : IAudioSourceHost
     {
         private readonly IAudioSource _audioSource;
-        private readonly ILogger _logger;
-        private IAudioSourceListener _listener;
+        private readonly Logger _logger;
+        private bool _isActive;
+        private IAudioSourceHostCallback _callback;
 
-        public AudioSourceHostService(IAudioSource audioSource, string hostEndpoint)
+        public AudioSourceHostService(IAudioSource audioSource)
         {
             _logger = LogManager.GetLogger($"AudioSourceHostService({audioSource.Name})");
-
-            var instanceContext = new InstanceContext(new Host(audioSource));
-            var channelFactory = new DuplexChannelFactory<IAudioSourceListener>(instanceContext, new NetNamedPipeBinding(), hostEndpoint);
-            _listener = channelFactory.CreateChannel();
-
-            _logger.Debug("Channel created");
 
             _audioSource = audioSource;
             _audioSource.SettingChanged += AudioSourceOnSettingChanged;
@@ -28,112 +24,126 @@ namespace AudioSourceHost
             _audioSource.TrackPaused += AudioSourceOnTrackPaused;
             _audioSource.TrackPlaying += AudioSourceOnTrackPlaying;
             _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
-
-            _listener.OpenSession();
-            _logger.Debug("Session opened");
         }
 
         private void AudioSourceOnTrackProgressChanged(object sender, System.TimeSpan e)
         {
-            _listener.TrackProgressChanged(e);
+            _callback.TrackProgressChanged(e);
         }
 
         private void AudioSourceOnTrackPlaying(object sender, System.EventArgs e)
         {
-            _listener.TrackPlaying();
+            _callback.TrackPlaying();
         }
 
         private void AudioSourceOnTrackPaused(object sender, System.EventArgs e)
         {
-            _listener.TrackPaused();
+            _callback.TrackPaused();
         }
 
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
         {
-            _listener.TrackInfoChanged(e);
+            _callback.TrackInfoChanged(e);
         }
 
         private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
         {
-            _listener.SettingChanged(e);
+            _callback.SettingChanged(e);
         }
 
-        [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-        private class Host : IAudioSourceHost
+        public async Task ActivateAsync()
         {
-            private readonly IAudioSource _audioSource;
-            private bool _isActive;
+            EnsureContext();
+            _logger.ConditionalDebug("Activate called");
 
-            public Host(IAudioSource audioSource)
+            if (_isActive)
             {
-                _audioSource = audioSource;
+                return;
             }
 
-            public async Task ActivateAsync()
-            {
-                if (_isActive)
-                {
-                    return;
-                }
+            _isActive = true;
+            await _audioSource.ActivateAsync().ConfigureAwait(false);
+        }
 
-                _isActive = true;
-                await _audioSource.ActivateAsync();
+        public async Task DeactivateAsync()
+        {
+            EnsureContext();
+            _logger.ConditionalDebug("Deactivate called");
+
+            if (!_isActive)
+            {
+                return;
             }
 
-            public async Task DeactivateAsync()
-            {
-                if (!_isActive)
-                {
-                    return;
-                }
+            _isActive = false;
+            await _audioSource.DeactivateAsync().ConfigureAwait(false);
+        }
 
-                _isActive = false;
-                await _audioSource.DeactivateAsync();
+        public async Task NextTrackAsync()
+        {
+            EnsureContext();
+            _logger.ConditionalDebug("Next track called");
+
+            if (!_isActive)
+            {
+                return;
             }
 
-            public async Task NextTrackAsync()
-            {
-                if (!_isActive)
-                {
-                    return;
-                }
+            await _audioSource.NextTrackAsync().ConfigureAwait(false);
+        }
 
-                await _audioSource.NextTrackAsync();
+        public async Task PauseTrackAsync()
+        {
+            EnsureContext();
+            _logger.ConditionalDebug("Pause Track called");
+
+            if (!_isActive)
+            {
+                return;
             }
 
-            public async Task PauseTrackAsync()
-            {
-                if (!_isActive)
-                {
-                    return;
-                }
+            await _audioSource.PauseTrackAsync().ConfigureAwait(false);
+        }
 
-                await _audioSource.PauseTrackAsync();
+        public async Task PlayTrackAsync()
+        {
+            EnsureContext();
+            _logger.ConditionalDebug("Play Track called");
+
+            if (!_isActive)
+            {
+                return;
             }
 
-            public async Task PlayTrackAsync()
-            {
-                if (!_isActive)
-                {
-                    return;
-                }
+            await _audioSource.PlayTrackAsync().ConfigureAwait(false);
+        }
 
-                await _audioSource.PlayTrackAsync();
+        public async Task PreviousTrackAsync()
+        {
+            EnsureContext();
+            _logger.ConditionalDebug("Previous Track called");
+
+            if (!_isActive)
+            {
+                return;
             }
 
-            public async Task PreviousTrackAsync()
-            {
-                if (!_isActive)
-                {
-                    return;
-                }
+            await _audioSource.PreviousTrackAsync().ConfigureAwait(false);
+        }
 
-                await _audioSource.PreviousTrackAsync();
-            }
+        public string GetName()
+        {
+            EnsureContext();
+            _logger.ConditionalDebug("Get Name called");
 
-            public string GetName()
+            return _audioSource.Name;
+        }
+
+        private void EnsureContext()
+        {
+            if (_callback == null)
             {
-                return _audioSource.Name;
+                _callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();
             }
         }
     }
