@@ -13,7 +13,8 @@ namespace AudioBand.AudioSource
     /// <summary>
     /// Detects and loads audio sources.
     /// </summary>
-    internal class AudioSourceManager
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, InstanceContextMode = InstanceContextMode.Single)]
+    internal class AudioSourceManager : IAudioSourceServer
     {
         private const string PluginFolderName = "AudioSources";
         private const string ManifestFileName = "AudioSource.manifest";
@@ -21,18 +22,18 @@ namespace AudioBand.AudioSource
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private static readonly object _audioSourcesLock = new object();
-        private List<AudioSourceProxy> _audioSources = new List<AudioSourceProxy>();
-        private List<(AudioSourceProxy proxy, ServiceHost host, Process process)> _audioSourceInfos = new List<(AudioSourceProxy, ServiceHost, Process)>();
-        private ServiceHost _loggerServiceHost;
+        private Dictionary<Uri, AudioSourceProxy> _audioSources = new Dictionary<Uri, AudioSourceProxy>();
+        private List<Process> _hostProcesses = new List<Process>();
+        private ServiceHost _audioSourceServer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceManager"/> class.
         /// </summary>
         public AudioSourceManager()
         {
-            _loggerServiceHost = new ServiceHost(typeof(AudioSourceLoggerService));
-            _loggerServiceHost.AddServiceEndpoint(typeof(ILoggerService), new NetNamedPipeBinding(), ServiceHelper.LoggerEndpoint);
-            _loggerServiceHost.Open();
+            _audioSourceServer = new ServiceHost(this);
+            _audioSourceServer.AddServiceEndpoint(typeof(IAudioSourceServer), new NetNamedPipeBinding(), ServiceHelper.AudioSourceServerEndpoint);
+            _audioSourceServer.Open();
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace AudioBand.AudioSource
             {
                 lock (_audioSourcesLock)
                 {
-                    return new List<IAudioSource>(_audioSources);
+                    return new List<IAudioSource>(_audioSources.Values);
                 }
             }
         }
@@ -72,68 +73,53 @@ namespace AudioBand.AudioSource
         /// </summary>
         public void Close()
         {
-            _loggerServiceHost.Close();
-            foreach (var info in _audioSourceInfos)
+            foreach (var process in _hostProcesses)
             {
-                info.host.Abort();
-                info.process.Close();
+                process.Close();
+            }
+
+            foreach (var audioSourceProxy in _audioSources.Values)
+            {
+                audioSourceProxy.Close();
             }
         }
 
         private void StartHost(string directory)
         {
-            var listenerEndpoint = ServiceHelper.GetAudioSourceListenerEndpoint(new DirectoryInfo(directory).Name);
-            var proxy = new AudioSourceProxy(listenerEndpoint);
-            proxy.Ready += OnAudioSourceReady;
-
-            var serviceHost = new ServiceHost(proxy);
-            var binding = new NetNamedPipeBinding
-            {
-                CloseTimeout = TimeSpan.FromSeconds(5),
-                SendTimeout = TimeSpan.FromSeconds(10),
-                ReceiveTimeout = TimeSpan.FromSeconds(10),
-            };
-
-            serviceHost.AddServiceEndpoint(typeof(IAudioSourceListener), binding, listenerEndpoint);
-            serviceHost.Open();
-            serviceHost.Faulted += ServiceHostOnFaulted;
-
-            Logger.Debug($"Starting audiosource host at {directory}, listening on {listenerEndpoint}");
+            Logger.Debug($"Starting audiosource host at {directory}");
 
             var process = Process.Start(new ProcessStartInfo()
             {
                 FileName = HostExePath,
-                Arguments = $"{directory} {listenerEndpoint}"
+                Arguments = directory
             });
-
-            _audioSourceInfos.Add((proxy, serviceHost, process));
         }
 
-        private void ServiceHostOnFaulted(object sender, EventArgs e)
-        {
-            var serviceHost = sender as ServiceHost;
-            var proxy = serviceHost.SingletonInstance as AudioSourceProxy;
-
-            Logger.Error($"Audiosource host faulted. Host: {proxy.Uri}");
-
-            var info = _audioSourceInfos.Find(x => x.host == serviceHost);
-            _audioSourceInfos.Remove(info);
-
-            info.process.Close();
-            info.host.Abort();
-
-            _audioSources.Remove(proxy);
-            AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnAudioSourceReady(object sender, EventArgs e)
+        public bool RegisterHost(Uri hostServiceUri)
         {
             lock (_audioSourcesLock)
             {
-                _audioSources.Add((AudioSourceProxy)sender);
+                if (_audioSources.ContainsKey(hostServiceUri))
+                {
+                    Logger.Warn($"Trying to register host at {hostServiceUri} but already exists");
+                    return false;
+                }
+
+                var proxy = new AudioSourceProxy(hostServiceUri);
+                proxy.Errored += ProxyOnErrored;
+                _audioSources[hostServiceUri] = proxy;
+
+                Logger.Debug($"Created new audio source proxy for host at {hostServiceUri}");
             }
 
             AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        private void ProxyOnErrored(object sender, EventArgs e)
+        {
+            var proxy = sender as AudioSourceProxy;
+            _audioSources.Remove(proxy.Uri);
         }
     }
 }

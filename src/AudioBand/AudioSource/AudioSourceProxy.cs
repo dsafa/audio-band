@@ -7,19 +7,36 @@ using ServiceContracts;
 
 namespace AudioBand.AudioSource
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = true)]
-    internal class AudioSourceProxy : IAudioSource, IAudioSourceListener
+    internal class AudioSourceProxy : IAudioSource
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
         private IAudioSourceHost _host;
+        private DuplexChannelFactory<IAudioSourceHost> _channelFactory;
 
-        public AudioSourceProxy(Uri listenerUri)
+        public AudioSourceProxy(Uri hostUri)
         {
-            _logger = LogManager.GetLogger($"AudioSourceProxy@{listenerUri}");
-            Uri = listenerUri;
+            _logger = LogManager.GetLogger($"AudioSourceProxy@{hostUri}");
+
+            var callback = new AudioSourceHostCallback();
+            callback.SettingChanged += (o, e) => SettingChanged?.Invoke(this, e);
+            callback.TrackInfoChanged += (o, e) => TrackInfoChanged?.Invoke(this, e);
+            callback.TrackPlaying += (o, e) => TrackPlaying?.Invoke(this, e);
+            callback.TrackPaused += (o, e) => TrackPaused?.Invoke(this, e);
+            callback.TrackProgressChanged += (o, e) => TrackProgressChanged?.Invoke(this, e);
+
+            var callbackInstance = new InstanceContext(callback);
+            _channelFactory = new DuplexChannelFactory<IAudioSourceHost>(callbackInstance, new NetNamedPipeBinding(), new EndpointAddress(hostUri));
+            _channelFactory.Faulted += ChannelFactoryFaulted;
+            _host = _channelFactory.CreateChannel();
         }
 
-        public event EventHandler Ready;
+        private void ChannelFactoryFaulted(object sender, EventArgs e)
+        {
+            _logger.Error("Communication faulted");
+            Errored?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler Errored;
 
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
@@ -31,72 +48,67 @@ namespace AudioBand.AudioSource
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
-        public Uri Uri { get; private set; }
+        public Uri Uri { get; set; }
 
-        public string Name => _host.GetName();
+        public string Name
+        {
+            get
+            {
+                CheckChannel();
+                return _host.GetName();
+            }
+        }
 
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public void OpenSession()
+        public void Close()
         {
-            _logger.Debug("Audiosource host connected");
-            _host = OperationContext.Current.GetCallbackChannel<IAudioSourceHost>();
-            Ready?.Invoke(this, EventArgs.Empty);
+            _channelFactory.Close();
         }
 
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.ActivateAsync();
+            CheckChannel();
+            await _host.ActivateAsync().ConfigureAwait(false);
         }
 
         public async Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.DeactivateAsync();
+            CheckChannel();
+            await _host.DeactivateAsync().ConfigureAwait(false);
         }
 
         public async Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.NextTrackAsync();
+            CheckChannel();
+            await _host.NextTrackAsync().ConfigureAwait(false);
         }
 
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.PauseTrackAsync();
+            CheckChannel();
+            await _host.PauseTrackAsync().ConfigureAwait(false);
         }
 
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.PlayTrackAsync();
+            CheckChannel();
+            await _host.PlayTrackAsync().ConfigureAwait(false);
         }
 
         public async Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _host.PreviousTrackAsync();
+            CheckChannel();
+            await _host.PreviousTrackAsync().ConfigureAwait(false);
         }
 
-        void IAudioSourceListener.SettingChanged(SettingChangedEventArgs args)
+        private void CheckChannel()
         {
-            SettingChanged?.Invoke(this, args);
-        }
-
-        void IAudioSourceListener.TrackInfoChanged(TrackInfoChangedEventArgs args)
-        {
-            TrackInfoChanged?.Invoke(this, args);
-        }
-
-        void IAudioSourceListener.TrackPaused()
-        {
-            TrackPaused?.Invoke(this, EventArgs.Empty);
-        }
-
-        void IAudioSourceListener.TrackPlaying()
-        {
-            TrackPlaying?.Invoke(this, EventArgs.Empty);
-        }
-
-        void IAudioSourceListener.TrackProgressChanged(TimeSpan progress)
-        {
-            TrackProgressChanged?.Invoke(this, progress);
+            if (_channelFactory.State == CommunicationState.Faulted)
+            {
+                _logger.Warn("Channel in faulted state. creating new channel");
+                _host = _channelFactory.CreateChannel();
+            }
         }
     }
 }

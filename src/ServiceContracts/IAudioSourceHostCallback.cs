@@ -4,15 +4,8 @@ using AudioBand.AudioSource;
 
 namespace ServiceContracts
 {
-    /// <summary>
-    /// Service contract for the audio source listner which is the server.
-    /// </summary>
-    [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IAudioSourceHost))]
-    public interface IAudioSourceListener
+    public interface IAudioSourceHostCallback
     {
-        [OperationContract(IsOneWay = true)]
-        void OpenSession();
-
         [OperationContract(IsOneWay = true)]
         void SettingChanged(SettingChangedEventArgs args);
 

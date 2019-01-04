@@ -13,7 +13,7 @@ namespace AudioSourceHost
 
         public static void Main(string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length < 1)
             {
                 return;
             }
@@ -22,19 +22,20 @@ namespace AudioSourceHost
             var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(basePath, "nlog.config"));
 
+            AppDomain.CurrentDomain.UnhandledException += (o, e) => LogManager.GetCurrentClassLogger().Error(e.ExceptionObject as Exception, "Unhandled exception");
+
             var directory = args[0];
-            var endpointAddress = args[1];
 
             try
             {
                 var host = new Host();
-                host.Initialize(directory, endpointAddress);
+                host.Initialize(directory);
 
                 QuitEvent.WaitOne();
             }
             catch (Exception e)
             {
-                LogManager.GetCurrentClassLogger().Error(e, $"Error with initialization, directory:{directory}, endpoint:{endpointAddress}");
+                LogManager.GetCurrentClassLogger().Error(e, $"Error with initialization, directory:{directory}");
             }
         }
 
