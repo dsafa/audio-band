@@ -156,7 +156,7 @@ namespace AudioBand.AudioSource
 
         private void HandleException(Exception e, [CallerMemberName] string caller = "")
         {
-            _logger.Error(e, $"Error occured when calling {caller}");
+            _logger.Error(e, $"Error occured with function `{caller}`");
             Errored?.Invoke(this, EventArgs.Empty);
         }
 
