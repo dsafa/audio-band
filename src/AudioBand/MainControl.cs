@@ -99,7 +99,6 @@ namespace AudioBand
         {
             base.OnClose();
             _appSettings.Save();
-            _currentAudioSource.DeactivateAsync();
             _audioSourceManager.Close();
         }
 

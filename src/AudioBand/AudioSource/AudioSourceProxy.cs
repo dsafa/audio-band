@@ -13,6 +13,7 @@ namespace AudioBand.AudioSource
         private readonly ILogger _logger;
         private IAudioSourceHost _host;
         private DuplexChannelFactory<IAudioSourceHost> _channelFactory;
+        private bool _isClosed;
 
         public AudioSourceProxy(Uri hostUri)
         {
@@ -56,6 +57,11 @@ namespace AudioBand.AudioSource
         {
             get
             {
+                if (_isClosed)
+                {
+                    return null;
+                }
+
                 try
                 {
                     CheckChannel();
@@ -63,7 +69,7 @@ namespace AudioBand.AudioSource
                 }
                 catch (Exception e)
                 {
-                    HandleException(e);
+                    HandleError(e);
                     return null;
                 }
             }
@@ -73,11 +79,28 @@ namespace AudioBand.AudioSource
 
         public void Close()
         {
-            _channelFactory.Close();
+            try
+            {
+                _logger.Debug("Closing channel");
+                _channelFactory.Close();
+            }
+            catch (Exception)
+            {
+                _channelFactory.Abort();
+            }
+            finally
+            {
+                _isClosed = true;
+            }
         }
 
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (_isClosed)
+            {
+                return;
+            }
+
             try
             {
                 CheckChannel();
@@ -85,12 +108,17 @@ namespace AudioBand.AudioSource
             }
             catch (Exception e)
             {
-                HandleException(e);
+                HandleError(e);
             }
         }
 
         public async Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (_isClosed)
+            {
+                return;
+            }
+
             try
             {
                 CheckChannel();
@@ -98,12 +126,17 @@ namespace AudioBand.AudioSource
             }
             catch (Exception e)
             {
-                HandleException(e);
+                HandleError(e);
             }
         }
 
         public async Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (_isClosed)
+            {
+                return;
+            }
+
             try
             {
                 CheckChannel();
@@ -111,12 +144,17 @@ namespace AudioBand.AudioSource
             }
             catch (Exception e)
             {
-                HandleException(e);
+                HandleError(e);
             }
         }
 
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (_isClosed)
+            {
+                return;
+            }
+
             try
             {
                 CheckChannel();
@@ -124,12 +162,17 @@ namespace AudioBand.AudioSource
             }
             catch (Exception e)
             {
-                HandleException(e);
+                HandleError(e);
             }
         }
 
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (_isClosed)
+            {
+                return;
+            }
+
             try
             {
                 CheckChannel();
@@ -137,12 +180,17 @@ namespace AudioBand.AudioSource
             }
             catch (Exception e)
             {
-                HandleException(e);
+                HandleError(e);
             }
         }
 
         public async Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (_isClosed)
+            {
+                return;
+            }
+
             try
             {
                 CheckChannel();
@@ -150,11 +198,11 @@ namespace AudioBand.AudioSource
             }
             catch (Exception e)
             {
-                HandleException(e);
+                HandleError(e);
             }
         }
 
-        private void HandleException(Exception e, [CallerMemberName] string caller = "")
+        private void HandleError(Exception e, [CallerMemberName] string caller = "")
         {
             _logger.Error(e, $"Error occured with function `{caller}`");
             Errored?.Invoke(this, EventArgs.Empty);
@@ -164,8 +212,7 @@ namespace AudioBand.AudioSource
         {
             if (_channelFactory.State == CommunicationState.Faulted)
             {
-                _logger.Warn("Channel in faulted state. creating new channel");
-                _host = _channelFactory.CreateChannel();
+                HandleError(new Exception("Channel is faulted"));
             }
         }
     }
