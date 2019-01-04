@@ -60,6 +60,14 @@ namespace AudioBand.AudioSource
         /// </summary>
         public void LoadAudioSources()
         {
+            Logger.Debug("Searching for orphan processes");
+            var processes = Process.GetProcessesByName("AudioSourceHost");
+            foreach (var p in processes)
+            {
+                Logger.Debug("Found orphan process");
+                p.Kill();
+            }
+
             Logger.Debug("Loading audio sources");
             foreach (var directory in Directory.EnumerateDirectories(PluginFolderPath))
             {
@@ -73,14 +81,23 @@ namespace AudioBand.AudioSource
         /// </summary>
         public void Close()
         {
-            foreach (var process in _hostProcesses)
-            {
-                process.Close();
-            }
-
             foreach (var audioSourceProxy in _audioSources.Values)
             {
                 audioSourceProxy.Close();
+            }
+
+            foreach (var process in _hostProcesses)
+            {
+                process.Kill();
+            }
+
+            try
+            {
+                _audioSourceServer.Close();
+            }
+            catch (Exception)
+            {
+                _audioSourceServer.Abort();
             }
         }
 
@@ -93,6 +110,8 @@ namespace AudioBand.AudioSource
                 FileName = HostExePath,
                 Arguments = directory
             });
+
+            _hostProcesses.Add(process);
         }
 
         public bool RegisterHost(Uri hostServiceUri)
@@ -119,7 +138,12 @@ namespace AudioBand.AudioSource
         private void ProxyOnErrored(object sender, EventArgs e)
         {
             var proxy = sender as AudioSourceProxy;
-            _audioSources.Remove(proxy.Uri);
+            if (_audioSources.Remove(proxy.Uri))
+            {
+                // maybe have be removed already
+                proxy.Close();
+            }
+
             AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
         }
     }
