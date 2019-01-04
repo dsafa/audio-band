@@ -7,7 +7,7 @@ using ServiceContracts;
 
 namespace AudioBand.AudioSource
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = true)]
     internal class AudioSourceProxy : IAudioSource, IAudioSourceListener
     {
         private ILogger _logger;

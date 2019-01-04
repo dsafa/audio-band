@@ -5,7 +5,6 @@ using ServiceContracts;
 
 namespace AudioSourceHost
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class AudioSourceHostService
     {
         private readonly IAudioSource _audioSource;
@@ -56,7 +55,7 @@ namespace AudioSourceHost
             _listener.SettingChanged(e);
         }
 
-        [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
+        [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
         private class Host : IAudioSourceHost
         {
             private readonly IAudioSource _audioSource;
