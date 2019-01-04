@@ -275,6 +275,9 @@
       <SubType>UserControl</SubType>
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
+    <None Include="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtPopupVM.datasource" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtVM.datasource" />

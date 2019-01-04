@@ -1,5 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Threading;
+using NLog;
+using NLog.Config;
 
 namespace AudioSourceHost
 {
@@ -14,6 +18,10 @@ namespace AudioSourceHost
                 return;
             }
 
+            LogManager.ThrowExceptions = true;
+            var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(basePath, "nlog.config"));
+
             var directory = args[0];
             var endpointAddress = args[1];
 
@@ -26,7 +34,7 @@ namespace AudioSourceHost
             }
             catch (Exception e)
             {
-                LogManager.GetHostLogger().Error($"Error with initialization, directory:{directory}, endpoint:{endpointAddress}, Error: {e}");
+                LogManager.GetCurrentClassLogger().Error(e, $"Error with initialization, directory:{directory}, endpoint:{endpointAddress}");
             }
         }
 
