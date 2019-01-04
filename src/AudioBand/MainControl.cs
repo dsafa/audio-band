@@ -54,7 +54,7 @@ namespace AudioBand
 
         static MainControl()
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) => LogManager.GetCurrentClassLogger().Error((Exception)args.ExceptionObject);
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) => LogManager.GetCurrentClassLogger().Error((Exception)args.ExceptionObject, "Unhandled Exception");
         }
 
         /// <summary>
