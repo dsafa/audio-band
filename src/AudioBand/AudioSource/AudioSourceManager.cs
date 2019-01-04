@@ -87,7 +87,14 @@ namespace AudioBand.AudioSource
             proxy.Ready += OnAudioSourceReady;
 
             var serviceHost = new ServiceHost(proxy);
-            serviceHost.AddServiceEndpoint(typeof(IAudioSourceListener), new NetNamedPipeBinding(), listenerEndpoint);
+            var binding = new NetNamedPipeBinding
+            {
+                CloseTimeout = TimeSpan.FromSeconds(5),
+                SendTimeout = TimeSpan.FromSeconds(10),
+                ReceiveTimeout = TimeSpan.FromSeconds(10),
+            };
+
+            serviceHost.AddServiceEndpoint(typeof(IAudioSourceListener), binding, listenerEndpoint);
             serviceHost.Open();
             serviceHost.Faulted += ServiceHostOnFaulted;
 

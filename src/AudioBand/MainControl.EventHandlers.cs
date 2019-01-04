@@ -72,13 +72,19 @@ namespace AudioBand
 
                 await UnsubscribeToAudioSource(_currentAudioSource);
 
-                item.Checked = true;
                 _currentAudioSource = _audioSourceManager.AudioSources.First(c => c.Name == item.Text);
+                if (_currentAudioSource == null)
+                {
+                    Logger.Warn($"Could not find matching audio source. Looking for {item.Text}.");
+                    return;
+                }
+
                 await SubscribeToAudioSource(_currentAudioSource);
+                item.Checked = true;
             }
             catch (Exception e)
             {
-                Logger.Debug(e, $"Error activating audio source `{_currentAudioSource.Name}`");
+                Logger.Debug(e, $"Error activating audio source `{_currentAudioSource?.Name}`");
             }
         }
 

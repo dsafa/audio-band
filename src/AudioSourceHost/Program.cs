@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Threading;
 
 namespace AudioSourceHost
 {
     internal class Program
     {
+        private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+
         public static void Main(string[] args)
         {
             if (args.Length < 2)
@@ -19,13 +22,17 @@ namespace AudioSourceHost
                 var host = new Host();
                 host.Initialize(directory, endpointAddress);
 
-                // Keep program alive
-                System.Windows.Forms.Application.Run();
+                QuitEvent.WaitOne();
             }
             catch (Exception e)
             {
                 LogManager.GetHostLogger().Error($"Error with initialization, directory:{directory}, endpoint:{endpointAddress}, Error: {e}");
             }
+        }
+
+        public static void Exit()
+        {
+            QuitEvent.Set();
         }
     }
 }
