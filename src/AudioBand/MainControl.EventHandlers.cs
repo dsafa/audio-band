@@ -85,6 +85,7 @@ namespace AudioBand
             catch (Exception e)
             {
                 Logger.Debug(e, $"Error activating audio source `{_currentAudioSource?.Name}`");
+                _currentAudioSource = null;
             }
         }
 

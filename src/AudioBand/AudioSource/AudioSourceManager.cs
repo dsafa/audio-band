@@ -120,6 +120,7 @@ namespace AudioBand.AudioSource
         {
             var proxy = sender as AudioSourceProxy;
             _audioSources.Remove(proxy.Uri);
+            AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
