@@ -1,58 +1,56 @@
-﻿using System.ServiceModel;
-using AudioBand.AudioSource;
-using ServiceContracts;
+﻿using AudioBand.AudioSource;
+using NLog;
 
 namespace AudioSourceHost
 {
     public class AudioSourceLogger : IAudioSourceLogger
     {
         private readonly string _name;
-        private readonly ILoggerService _loggerService;
+        private readonly ILogger _logger;
 
-        public AudioSourceLogger(string audiosourceName, ILoggerService loggerService)
+        public AudioSourceLogger(string audiosourceName)
         {
-            _name = "AudioSource:" + audiosourceName;
-            _loggerService = loggerService;
+            _logger = LogManager.GetLogger($"AudioSource({audiosourceName})");
         }
 
         public void Debug(string message)
         {
-            _loggerService.Debug(_name, message);
+            _logger.Debug(message);
         }
 
         public void Debug(object value)
         {
-            _loggerService.Debug(_name, value?.ToString());
+            _logger.Debug(value);
         }
 
         public void Error(string message)
         {
-            _loggerService.Error(_name, message);
+            _logger.Error(message);
         }
 
         public void Error(object value)
         {
-            _loggerService.Error(_name, value?.ToString());
+            _logger.Error(value);
         }
 
         public void Info(string message)
         {
-            _loggerService.Info(_name, message);
+            _logger.Info(message);
         }
 
         public void Info(object value)
         {
-            _loggerService.Info(_name, value?.ToString());
+            _logger.Info(value);
         }
 
         public void Warn(string message)
         {
-            _loggerService.Warn(_name, message);
+            _logger.Warn(message);
         }
 
         public void Warn(object value)
         {
-            _loggerService.Warn(_name, value?.ToString());
+            _logger.Warn(value);
         }
     }
 }

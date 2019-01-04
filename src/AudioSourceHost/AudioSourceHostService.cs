@@ -1,6 +1,7 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
+using NLog;
 using ServiceContracts;
 
 namespace AudioSourceHost
@@ -8,11 +9,13 @@ namespace AudioSourceHost
     public class AudioSourceHostService
     {
         private readonly IAudioSource _audioSource;
-        private readonly HostLogger _logger = LogManager.GetHostLogger();
+        private readonly ILogger _logger;
         private IAudioSourceListener _listener;
 
         public AudioSourceHostService(IAudioSource audioSource, string hostEndpoint)
         {
+            _logger = LogManager.GetLogger($"AudioSourceHostService({audioSource.Name})");
+
             var instanceContext = new InstanceContext(new Host(audioSource));
             var channelFactory = new DuplexChannelFactory<IAudioSourceListener>(instanceContext, new NetNamedPipeBinding(), hostEndpoint);
             _listener = channelFactory.CreateChannel();
