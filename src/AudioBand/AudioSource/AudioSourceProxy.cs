@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace AudioBand.AudioSource
 
         public AudioSourceProxy(Uri hostUri)
         {
+            Uri = hostUri;
             _logger = LogManager.GetLogger($"AudioSourceProxy@{hostUri}");
 
             var callback = new AudioSourceHostCallback();
@@ -54,8 +56,16 @@ namespace AudioBand.AudioSource
         {
             get
             {
-                CheckChannel();
-                return _host.GetName();
+                try
+                {
+                    CheckChannel();
+                    return _host.GetName();
+                }
+                catch (Exception e)
+                {
+                    HandleException(e);
+                    return null;
+                }
             }
         }
 
@@ -68,38 +78,86 @@ namespace AudioBand.AudioSource
 
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            CheckChannel();
-            await _host.ActivateAsync().ConfigureAwait(false);
+            try
+            {
+                CheckChannel();
+                await _host.ActivateAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            CheckChannel();
-            await _host.DeactivateAsync().ConfigureAwait(false);
+            try
+            {
+                CheckChannel();
+                await _host.DeactivateAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            CheckChannel();
-            await _host.NextTrackAsync().ConfigureAwait(false);
+            try
+            {
+                CheckChannel();
+                await _host.NextTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            CheckChannel();
-            await _host.PauseTrackAsync().ConfigureAwait(false);
+            try
+            {
+                CheckChannel();
+                await _host.PauseTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            CheckChannel();
-            await _host.PlayTrackAsync().ConfigureAwait(false);
+            try
+            {
+                CheckChannel();
+                await _host.PlayTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            CheckChannel();
-            await _host.PreviousTrackAsync().ConfigureAwait(false);
+            try
+            {
+                CheckChannel();
+                await _host.PreviousTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
+        }
+
+        private void HandleException(Exception e, [CallerMemberName] string caller = "")
+        {
+            _logger.Error(e, $"Error occured when calling {caller}");
+            Errored?.Invoke(this, EventArgs.Empty);
         }
 
         private void CheckChannel()
