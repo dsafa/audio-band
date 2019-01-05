@@ -10,12 +10,6 @@ namespace ServiceContracts
     public interface IAudioSourceServer
     {
         /// <summary>
-        /// Ping server to check if responsive.
-        /// </summary>
-        [OperationContract]
-        void IsAlive();
-
-        /// <summary>
         /// Register a new <see cref="IAudioSourceHost"/> server at the endpoint.
         /// </summary>
         /// <param name="hostServiceUri">Endpoint for the <see cref="IAudioSourceHost"/> service.</param>

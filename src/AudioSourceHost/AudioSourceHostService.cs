@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using System.Timers;
 using AudioBand.AudioSource;
 using NLog;
 using ServiceContracts;
@@ -12,6 +14,9 @@ namespace AudioSourceHost
     {
         private readonly IAudioSource _audioSource;
         private readonly Logger _logger;
+        private readonly Stopwatch _audioBandCheckStopwatch = new Stopwatch();
+        private readonly Timer _checkAudioBandTimer = new Timer(1000) { AutoReset = false };
+        private readonly TimeSpan PingKeepAliveTime = TimeSpan.FromSeconds(10);
         private bool _isActive;
         private IAudioSourceHostCallback _callback;
 
@@ -25,6 +30,10 @@ namespace AudioSourceHost
             _audioSource.TrackPaused += AudioSourceOnTrackPaused;
             _audioSource.TrackPlaying += AudioSourceOnTrackPlaying;
             _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
+
+            _checkAudioBandTimer.Elapsed += TimerOnElapsed;
+            _checkAudioBandTimer.Start();
+            _audioBandCheckStopwatch.Start();
         }
 
         public async Task ActivateAsync()
@@ -127,6 +136,7 @@ namespace AudioSourceHost
 
         public void IsAlive()
         {
+            _audioBandCheckStopwatch.Restart();
         }
 
         public async Task Close()
@@ -205,6 +215,16 @@ namespace AudioSourceHost
         {
             _logger.Error(e, "Error during call to callback");
             Program.Exit();
+        }
+
+        private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (_audioBandCheckStopwatch.Elapsed > PingKeepAliveTime)
+            {
+                _logger.Error($"Audioband has not pinged in the last {PingKeepAliveTime}. Closing host.");
+                await Close();
+                Program.Exit();
+            }
         }
     }
 }
