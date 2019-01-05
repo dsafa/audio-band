@@ -49,7 +49,7 @@ namespace AudioSourceHost
             _pingTimer.Start();
         }
 
-        private void PingTimerOnElapsed(object sender, ElapsedEventArgs e)
+        private async void PingTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
@@ -59,14 +59,16 @@ namespace AudioSourceHost
             catch (Exception)
             {
                 _logger.Error("Unable to ping main audio source server");
+                await _instance.Close();
                 Program.Exit();
             }
         }
 
-        private void ServiceHostOnClosed(object sender, System.EventArgs e)
+        private async void ServiceHostOnClosed(object sender, System.EventArgs e)
         {
             _logger.Debug("Client closed connection");
             _serviceHost.Close();
+            await _instance.Close();
             Program.Exit();
         }
     }
