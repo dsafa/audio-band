@@ -12,16 +12,14 @@ namespace ServiceContracts
         /// <summary>
         /// Contract method for <see cref="IAudioSource.SettingChanged"/>.
         /// </summary>
-        /// <param name="args"></param>
         [OperationContract(IsOneWay = true)]
-        void SettingChanged(SettingChangedEventArgs args);
+        void SettingChanged(SettingChangedInfo info);
 
         /// <summary>
         /// Contract method for <see cref="IAudioSource.TrackInfoChanged"/>.
         /// </summary>
-        /// <param name="args"></param>
         [OperationContract(IsOneWay = true)]
-        void TrackInfoChanged(TrackInfoChangedEventArgs args);
+        void TrackInfoChanged(TrackInfo info);
 
         /// <summary>
         /// Contract method for <see cref="IAudioSource.TrackPlaying"/>.
@@ -38,7 +36,6 @@ namespace ServiceContracts
         /// <summary>
         /// Contract method for <see cref="IAudioSource.TrackProgressChanged"/>.
         /// </summary>
-        /// <param name="progress"></param>
         [OperationContract(IsOneWay = true)]
         void TrackProgressChanged(TimeSpan progress);
     }

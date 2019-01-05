@@ -17,14 +17,14 @@ namespace AudioBand.AudioSource
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
-        void IAudioSourceHostCallback.SettingChanged(SettingChangedEventArgs args)
+        void IAudioSourceHostCallback.SettingChanged(SettingChangedInfo info)
         {
-            SettingChanged?.Invoke(this, args);
+            SettingChanged?.Invoke(this, (SettingChangedEventArgs)info);
         }
 
-        void IAudioSourceHostCallback.TrackInfoChanged(TrackInfoChangedEventArgs args)
+        void IAudioSourceHostCallback.TrackInfoChanged(TrackInfo info)
         {
-            TrackInfoChanged?.Invoke(this, args);
+            TrackInfoChanged?.Invoke(this, (TrackInfoChangedEventArgs)info);
         }
 
         void IAudioSourceHostCallback.TrackPaused()
