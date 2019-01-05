@@ -76,7 +76,7 @@ namespace AudioBand.AudioSource
 
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        private bool InvalidState => _isClosed || _channelFactory.State != CommunicationState.Opened;
+        private bool InvalidState => _isClosed || (_channelFactory.State != CommunicationState.Opened);
 
         public void Close()
         {
