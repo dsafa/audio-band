@@ -23,19 +23,18 @@ namespace AudioSourceHost
 
             var hostEndpoint = ServiceHelper.GetAudioSourceHostEndpoint(_audioSource.Name);
             _instance = new AudioSourceHostService(_audioSource);
+            var serverBinding = new NetNamedPipeBinding()
+            {
+                MaxBufferSize = int.MaxValue,
+                MaxReceivedMessageSize = int.MaxValue,
+            };
             _serviceHost = new ServiceHost(_instance);
-            _serviceHost.AddServiceEndpoint(typeof(IAudioSourceHost), new NetNamedPipeBinding(), hostEndpoint);
+            _serviceHost.AddServiceEndpoint(typeof(IAudioSourceHost), serverBinding, hostEndpoint);
             _serviceHost.Closed += ServiceHostOnClosed;
             _serviceHost.Open();
 
             _logger.Debug($"Connecting to audio source server to register {_audioSource.Name}");
-            var serverBinding = new NetNamedPipeBinding()
-            {
-                SendTimeout = TimeSpan.FromSeconds(10),
-                ReceiveTimeout = TimeSpan.FromSeconds(10),
-            };
-
-            _audioSourceServer = new ChannelFactory<IAudioSourceServer>(serverBinding, new EndpointAddress(ServiceHelper.AudioSourceServerEndpoint)).CreateChannel();
+            _audioSourceServer = new ChannelFactory<IAudioSourceServer>(new NetNamedPipeBinding(), new EndpointAddress(ServiceHelper.AudioSourceServerEndpoint)).CreateChannel();
             var success = _audioSourceServer.RegisterHost(hostEndpoint);
             if (!success)
             {
