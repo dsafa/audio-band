@@ -57,7 +57,7 @@ namespace AudioBand.AudioSource
         {
             get
             {
-                if (_isClosed)
+                if (InvalidState)
                 {
                     return null;
                 }
@@ -76,8 +76,12 @@ namespace AudioBand.AudioSource
 
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        private bool InvalidState => _isClosed || _channelFactory.State == CommunicationState.Faulted;
+
         public void Close()
         {
+            _isClosed = true;
+
             try
             {
                 _logger.Debug("Closing channel");
@@ -87,15 +91,11 @@ namespace AudioBand.AudioSource
             {
                 _channelFactory.Abort();
             }
-            finally
-            {
-                _isClosed = true;
-            }
         }
 
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_isClosed)
+            if (InvalidState)
             {
                 return;
             }
@@ -112,7 +112,7 @@ namespace AudioBand.AudioSource
 
         public async Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_isClosed)
+            if (InvalidState)
             {
                 return;
             }
@@ -129,7 +129,7 @@ namespace AudioBand.AudioSource
 
         public async Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_isClosed)
+            if (InvalidState)
             {
                 return;
             }
@@ -146,7 +146,7 @@ namespace AudioBand.AudioSource
 
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_isClosed)
+            if (InvalidState)
             {
                 return;
             }
@@ -163,7 +163,7 @@ namespace AudioBand.AudioSource
 
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_isClosed)
+            if (InvalidState)
             {
                 return;
             }
@@ -180,7 +180,7 @@ namespace AudioBand.AudioSource
 
         public async Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_isClosed)
+            if (InvalidState)
             {
                 return;
             }
