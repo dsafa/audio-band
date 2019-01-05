@@ -27,31 +27,6 @@ namespace AudioSourceHost
             _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
         }
 
-        private void AudioSourceOnTrackProgressChanged(object sender, System.TimeSpan e)
-        {
-            _callback.TrackProgressChanged(e);
-        }
-
-        private void AudioSourceOnTrackPlaying(object sender, System.EventArgs e)
-        {
-            _callback.TrackPlaying();
-        }
-
-        private void AudioSourceOnTrackPaused(object sender, System.EventArgs e)
-        {
-            _callback.TrackPaused();
-        }
-
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
-        {
-            _callback.TrackInfoChanged(e);
-        }
-
-        private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
-        {
-            _callback.SettingChanged(e);
-        }
-
         public async Task ActivateAsync()
         {
             EnsureContext();
@@ -152,6 +127,43 @@ namespace AudioSourceHost
 
         public void IsAlive()
         {
+        }
+
+        public async Task Close()
+        {
+            try
+            {
+                await DeactivateAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+            }
+        }
+
+        private void AudioSourceOnTrackProgressChanged(object sender, System.TimeSpan e)
+        {
+            _callback.TrackProgressChanged(e);
+        }
+
+        private void AudioSourceOnTrackPlaying(object sender, System.EventArgs e)
+        {
+            _callback.TrackPlaying();
+        }
+
+        private void AudioSourceOnTrackPaused(object sender, System.EventArgs e)
+        {
+            _callback.TrackPaused();
+        }
+
+        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
+        {
+            _callback.TrackInfoChanged(e);
+        }
+
+        private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
+        {
+            _callback.SettingChanged(e);
         }
     }
 }
