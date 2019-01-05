@@ -141,29 +141,70 @@ namespace AudioSourceHost
             }
         }
 
-        private void AudioSourceOnTrackProgressChanged(object sender, System.TimeSpan e)
+        private void AudioSourceOnTrackProgressChanged(object sender, TimeSpan e)
         {
-            _callback.TrackProgressChanged(e);
+            try
+            {
+                _callback.TrackProgressChanged(e);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         private void AudioSourceOnTrackPlaying(object sender, System.EventArgs e)
         {
-            _callback.TrackPlaying();
+            try
+            {
+                _callback.TrackPlaying();
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         private void AudioSourceOnTrackPaused(object sender, System.EventArgs e)
         {
-            _callback.TrackPaused();
+            try
+            {
+                _callback.TrackPaused();
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
         {
-            _callback.TrackInfoChanged(e);
+            try
+            {
+                _callback.TrackInfoChanged(e);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
         }
 
         private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
         {
-            _callback.SettingChanged(e);
+            try
+            {
+                _callback.SettingChanged(e);
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
+            }
+        }
+
+        private void HandleError(Exception e)
+        {
+            _logger.Error("Error during call to callback");
+            Program.Exit();
         }
     }
 }
