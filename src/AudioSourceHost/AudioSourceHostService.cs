@@ -225,6 +225,8 @@ namespace AudioSourceHost
                 await Close();
                 Program.Exit();
             }
+
+            _checkAudioBandTimer.Start();
         }
     }
 }
