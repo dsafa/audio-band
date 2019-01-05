@@ -30,7 +30,12 @@ namespace AudioBand.AudioSource
             callback.TrackProgressChanged += (o, e) => TrackProgressChanged?.Invoke(this, e);
 
             var callbackInstance = new InstanceContext(callback);
-            _channelFactory = new DuplexChannelFactory<IAudioSourceHost>(callbackInstance, new NetNamedPipeBinding(), new EndpointAddress(hostUri));
+            var channelBinding = new NetNamedPipeBinding()
+            {
+                MaxBufferSize = int.MaxValue,
+                MaxReceivedMessageSize = int.MaxValue,
+            };
+            _channelFactory = new DuplexChannelFactory<IAudioSourceHost>(callbackInstance, channelBinding, new EndpointAddress(hostUri));
             _host = _channelFactory.CreateChannel();
 
             _pingChannel = _channelFactory.CreateChannel();
