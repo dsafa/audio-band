@@ -33,17 +33,22 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioSourceSettingInfo.cs" />
     <Compile Include="IAudioSourceHost.cs" />
     <Compile Include="IAudioSourceHostCallback.cs" />
     <Compile Include="IAudioSourceServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceHelper.cs" />
+    <Compile Include="SettingChangedInfo.cs" />
+    <Compile Include="TrackInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AudioBand.AudioSource\AudioBand.AudioSource.csproj">

@@ -181,7 +181,7 @@ namespace AudioSourceHost
         {
             try
             {
-                _callback.TrackInfoChanged(e);
+                _callback.TrackInfoChanged((TrackInfo)e);
             }
             catch (Exception ex)
             {
@@ -193,7 +193,7 @@ namespace AudioSourceHost
         {
             try
             {
-                _callback.SettingChanged(e);
+                _callback.SettingChanged((SettingChangedInfo)e);
             }
             catch (Exception ex)
             {

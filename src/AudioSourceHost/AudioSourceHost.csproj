@@ -89,6 +89,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetFileName)" $(SolutionDir)AudioBand\$(OutDir)"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetFileName)*" $(SolutionDir)AudioBand\$(OutDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
