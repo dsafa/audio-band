@@ -149,5 +149,9 @@ namespace AudioSourceHost
                 _callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();
             }
         }
+
+        public void IsAlive()
+        {
+        }
     }
 }

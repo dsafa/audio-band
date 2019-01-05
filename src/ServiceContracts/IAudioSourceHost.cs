@@ -11,6 +11,12 @@ namespace ServiceContracts
     public interface IAudioSourceHost
     {
         /// <summary>
+        /// Ping to check if the server is still responding.
+        /// </summary>
+        [OperationContract]
+        void IsAlive();
+
+        /// <summary>
         /// Contract method for <see cref="IAudioSource.Name"/>.
         /// </summary>
         /// <returns></returns>
