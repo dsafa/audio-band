@@ -203,7 +203,7 @@ namespace AudioSourceHost
 
         private void HandleError(Exception e)
         {
-            _logger.Error("Error during call to callback");
+            _logger.Error(e, "Error during call to callback");
             Program.Exit();
         }
     }
