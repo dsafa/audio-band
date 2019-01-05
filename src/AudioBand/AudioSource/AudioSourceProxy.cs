@@ -11,7 +11,9 @@ namespace AudioBand.AudioSource
     internal class AudioSourceProxy : IAudioSource
     {
         private readonly ILogger _logger;
+        private readonly System.Timers.Timer _pingTimer = new System.Timers.Timer(1000) { AutoReset = false };
         private IAudioSourceHost _host;
+        private IAudioSourceHost _pingChannel;
         private DuplexChannelFactory<IAudioSourceHost> _channelFactory;
         private bool _isClosed;
 
@@ -29,14 +31,12 @@ namespace AudioBand.AudioSource
 
             var callbackInstance = new InstanceContext(callback);
             _channelFactory = new DuplexChannelFactory<IAudioSourceHost>(callbackInstance, new NetNamedPipeBinding(), new EndpointAddress(hostUri));
-            _channelFactory.Faulted += ChannelFactoryFaulted;
             _host = _channelFactory.CreateChannel();
-        }
 
-        private void ChannelFactoryFaulted(object sender, EventArgs e)
-        {
-            _logger.Error("Communication faulted");
-            Errored?.Invoke(this, EventArgs.Empty);
+            _pingChannel = _channelFactory.CreateChannel();
+            ((IClientChannel)_pingChannel).OperationTimeout = TimeSpan.FromSeconds(2);
+            _pingTimer.Elapsed += PingTimerOnElapsed;
+            _pingTimer.Start();
         }
 
         public event EventHandler Errored;
@@ -64,7 +64,6 @@ namespace AudioBand.AudioSource
 
                 try
                 {
-                    CheckChannel();
                     return _host.GetName();
                 }
                 catch (Exception e)
@@ -103,7 +102,6 @@ namespace AudioBand.AudioSource
 
             try
             {
-                CheckChannel();
                 await _host.ActivateAsync().ConfigureAwait(false);
             }
             catch (Exception e)
@@ -121,7 +119,6 @@ namespace AudioBand.AudioSource
 
             try
             {
-                CheckChannel();
                 await _host.DeactivateAsync().ConfigureAwait(false);
             }
             catch (Exception e)
@@ -139,7 +136,6 @@ namespace AudioBand.AudioSource
 
             try
             {
-                CheckChannel();
                 await _host.NextTrackAsync().ConfigureAwait(false);
             }
             catch (Exception e)
@@ -157,7 +153,6 @@ namespace AudioBand.AudioSource
 
             try
             {
-                CheckChannel();
                 await _host.PauseTrackAsync().ConfigureAwait(false);
             }
             catch (Exception e)
@@ -175,7 +170,6 @@ namespace AudioBand.AudioSource
 
             try
             {
-                CheckChannel();
                 await _host.PlayTrackAsync().ConfigureAwait(false);
             }
             catch (Exception e)
@@ -193,7 +187,6 @@ namespace AudioBand.AudioSource
 
             try
             {
-                CheckChannel();
                 await _host.PreviousTrackAsync().ConfigureAwait(false);
             }
             catch (Exception e)
@@ -202,17 +195,22 @@ namespace AudioBand.AudioSource
             }
         }
 
-        private void HandleError(Exception e, [CallerMemberName] string caller = "")
+        private void HandleError(Exception e)
         {
-            _logger.Error(e, $"Error occured with function `{caller}`");
+            _logger.Error(e, $"Error during call to host");
             Errored?.Invoke(this, EventArgs.Empty);
         }
 
-        private void CheckChannel()
+        private void PingTimerOnElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (_channelFactory.State == CommunicationState.Faulted)
+            try
             {
-                HandleError(new Exception("Channel is faulted"));
+                _pingChannel.IsAlive();
+                _pingTimer.Start();
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex);
             }
         }
     }

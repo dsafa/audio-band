@@ -1,4 +1,6 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
+using System.Timers;
 using AudioBand.AudioSource;
 using NLog;
 using ServiceContracts;
@@ -11,6 +13,8 @@ namespace AudioSourceHost
         private AudioSourceHostService _instance;
         private IAudioSource _audioSource;
         private ServiceHost _serviceHost;
+        private IAudioSourceServer _audioSourceServer;
+        private Timer _pingTimer = new Timer(1000) { AutoReset = false };
 
         public void Initialize(string audioSourceDirectory)
         {
@@ -27,12 +31,34 @@ namespace AudioSourceHost
             _serviceHost.Open();
 
             _logger.Debug($"Connecting to audio source server to register {_audioSource.Name}");
-            var server = new ChannelFactory<IAudioSourceServer>(new NetNamedPipeBinding(), new EndpointAddress(ServiceHelper.AudioSourceServerEndpoint))
-                .CreateChannel();
-            var success = server.RegisterHost(hostEndpoint);
+            var serverBinding = new NetNamedPipeBinding()
+            {
+                SendTimeout = TimeSpan.FromSeconds(2),
+                ReceiveTimeout = TimeSpan.FromSeconds(2),
+            };
+
+            _audioSourceServer = new ChannelFactory<IAudioSourceServer>(serverBinding, new EndpointAddress(ServiceHelper.AudioSourceServerEndpoint)).CreateChannel();
+            var success = _audioSourceServer.RegisterHost(hostEndpoint);
             if (!success)
             {
                 _logger.Warn($"Unable to regiester audio source {_audioSource.Name}");
+                Program.Exit();
+            }
+
+            _pingTimer.Elapsed += PingTimerOnElapsed;
+            _pingTimer.Start();
+        }
+
+        private void PingTimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                _audioSourceServer.IsAlive();
+                _pingTimer.Start();
+            }
+            catch (Exception)
+            {
+                _logger.Error("Unable to ping main audio source server");
                 Program.Exit();
             }
         }

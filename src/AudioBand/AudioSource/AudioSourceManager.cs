@@ -101,6 +101,9 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
+        public void IsAlive() { }
+
         private void StartHost(string directory)
         {
             Logger.Debug($"Starting audiosource host at {directory}");
