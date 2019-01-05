@@ -68,19 +68,23 @@ namespace ServiceContracts
 
         private static byte[] ImageToByteArray(Image image)
         {
-            using (var ms = new MemoryStream())
+            if (image == null)
             {
-                image.Save(ms, image.RawFormat);
-                return ms.ToArray();
+                return null;
             }
+
+            var copy = new Bitmap(image);
+            return new ImageConverter().ConvertTo(copy, typeof(byte[])) as byte[];
         }
 
         private static Image ByteArrayToImage(byte[] data)
         {
-            using (var ms = new MemoryStream(data))
+            if (data == null)
             {
-                return Image.FromStream(ms);
+                return null;
             }
+
+            return new ImageConverter().ConvertFrom(data) as Image;
         }
     }
 }
