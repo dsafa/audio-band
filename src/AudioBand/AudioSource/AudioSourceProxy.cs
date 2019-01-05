@@ -76,10 +76,15 @@ namespace AudioBand.AudioSource
 
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        private bool InvalidState => _isClosed || _channelFactory.State == CommunicationState.Faulted;
+        private bool InvalidState => _isClosed || _channelFactory.State != CommunicationState.Opened;
 
         public void Close()
         {
+            if (_isClosed)
+            {
+                return;
+            }
+
             _isClosed = true;
 
             try
@@ -205,6 +210,11 @@ namespace AudioBand.AudioSource
         {
             try
             {
+                if (InvalidState)
+                {
+                    return;
+                }
+
                 _pingChannel.IsAlive();
                 _pingTimer.Start();
             }

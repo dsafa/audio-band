@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ServiceModel;
-using System.Timers;
 using AudioBand.AudioSource;
 using NLog;
 using ServiceContracts;
@@ -14,7 +13,6 @@ namespace AudioSourceHost
         private IAudioSource _audioSource;
         private ServiceHost _serviceHost;
         private IAudioSourceServer _audioSourceServer;
-        private Timer _pingTimer = new Timer(1000) { AutoReset = false };
 
         public void Initialize(string audioSourceDirectory)
         {
@@ -42,24 +40,6 @@ namespace AudioSourceHost
             if (!success)
             {
                 _logger.Warn($"Unable to regiester audio source {_audioSource.Name}");
-                Program.Exit();
-            }
-
-            _pingTimer.Elapsed += PingTimerOnElapsed;
-            _pingTimer.Start();
-        }
-
-        private async void PingTimerOnElapsed(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                _audioSourceServer.IsAlive();
-                _pingTimer.Start();
-            }
-            catch (Exception)
-            {
-                _logger.Error("Unable to ping main audio source server");
-                await _instance.Close();
                 Program.Exit();
             }
         }
