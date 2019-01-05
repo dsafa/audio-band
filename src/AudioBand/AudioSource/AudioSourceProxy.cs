@@ -34,7 +34,7 @@ namespace AudioBand.AudioSource
             _host = _channelFactory.CreateChannel();
 
             _pingChannel = _channelFactory.CreateChannel();
-            ((IClientChannel)_pingChannel).OperationTimeout = TimeSpan.FromSeconds(2);
+            ((IClientChannel)_pingChannel).OperationTimeout = TimeSpan.FromSeconds(10);
             _pingTimer.Elapsed += PingTimerOnElapsed;
             _pingTimer.Start();
         }

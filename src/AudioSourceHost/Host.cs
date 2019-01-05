@@ -33,8 +33,8 @@ namespace AudioSourceHost
             _logger.Debug($"Connecting to audio source server to register {_audioSource.Name}");
             var serverBinding = new NetNamedPipeBinding()
             {
-                SendTimeout = TimeSpan.FromSeconds(2),
-                ReceiveTimeout = TimeSpan.FromSeconds(2),
+                SendTimeout = TimeSpan.FromSeconds(10),
+                ReceiveTimeout = TimeSpan.FromSeconds(10),
             };
 
             _audioSourceServer = new ChannelFactory<IAudioSourceServer>(serverBinding, new EndpointAddress(ServiceHelper.AudioSourceServerEndpoint)).CreateChannel();
