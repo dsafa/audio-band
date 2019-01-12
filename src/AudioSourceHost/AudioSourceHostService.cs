@@ -12,11 +12,11 @@ namespace AudioSourceHost
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant, IncludeExceptionDetailInFaults = true)]
     public class AudioSourceHostService : IAudioSourceHost
     {
+        private static readonly TimeSpan _pingKeepAliveTime = TimeSpan.FromSeconds(10);
         private readonly IAudioSource _audioSource;
         private readonly Logger _logger;
         private readonly Stopwatch _audioBandCheckStopwatch = new Stopwatch();
         private readonly Timer _checkAudioBandTimer = new Timer(1000) { AutoReset = false };
-        private readonly TimeSpan PingKeepAliveTime = TimeSpan.FromSeconds(10);
         private bool _isActive;
         private IAudioSourceHostCallback _callback;
 
@@ -38,8 +38,7 @@ namespace AudioSourceHost
 
         public async Task ActivateAsync()
         {
-            EnsureContext();
-            _logger.ConditionalDebug("Activate called");
+            CaptureContext();
 
             if (_isActive)
             {
@@ -48,14 +47,11 @@ namespace AudioSourceHost
 
             _isActive = true;
             await _audioSource.ActivateAsync().ConfigureAwait(false);
-
-            _logger.ConditionalDebug("Activated");
         }
 
         public async Task DeactivateAsync()
         {
-            EnsureContext();
-            _logger.ConditionalDebug("Deactivate called");
+            CaptureContext();
 
             if (!_isActive)
             {
@@ -68,8 +64,7 @@ namespace AudioSourceHost
 
         public async Task NextTrackAsync()
         {
-            EnsureContext();
-            _logger.ConditionalDebug("Next track called");
+            CaptureContext();
 
             if (!_isActive)
             {
@@ -81,8 +76,7 @@ namespace AudioSourceHost
 
         public async Task PauseTrackAsync()
         {
-            EnsureContext();
-            _logger.ConditionalDebug("Pause Track called");
+            CaptureContext();
 
             if (!_isActive)
             {
@@ -94,8 +88,7 @@ namespace AudioSourceHost
 
         public async Task PlayTrackAsync()
         {
-            EnsureContext();
-            _logger.ConditionalDebug("Play Track called");
+            CaptureContext();
 
             if (!_isActive)
             {
@@ -107,8 +100,7 @@ namespace AudioSourceHost
 
         public async Task PreviousTrackAsync()
         {
-            EnsureContext();
-            _logger.ConditionalDebug("Previous Track called");
+            CaptureContext();
 
             if (!_isActive)
             {
@@ -120,18 +112,9 @@ namespace AudioSourceHost
 
         public string GetName()
         {
-            EnsureContext();
-            _logger.ConditionalDebug("Get Name called");
+            CaptureContext();
 
             return _audioSource.Name;
-        }
-
-        private void EnsureContext()
-        {
-            if (_callback == null)
-            {
-                _callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();
-            }
         }
 
         public void IsAlive()
@@ -148,6 +131,14 @@ namespace AudioSourceHost
             catch (Exception e)
             {
                 _logger.Error(e);
+            }
+        }
+
+        private void CaptureContext()
+        {
+            if (_callback == null)
+            {
+                _callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();
             }
         }
 
@@ -219,9 +210,9 @@ namespace AudioSourceHost
 
         private async void TimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            if (_audioBandCheckStopwatch.Elapsed > PingKeepAliveTime)
+            if (_audioBandCheckStopwatch.Elapsed > _pingKeepAliveTime)
             {
-                _logger.Error($"Audioband has not pinged in the last {PingKeepAliveTime}. Closing host.");
+                _logger.Error($"Audioband has not pinged in the last {_pingKeepAliveTime}. Closing host.");
                 await Close();
                 Program.Exit();
             }

@@ -28,6 +28,7 @@ namespace AudioSourceHost
                 MaxBufferSize = int.MaxValue,
                 MaxReceivedMessageSize = int.MaxValue,
             };
+
             _serviceHost = new ServiceHost(_instance);
             _serviceHost.AddServiceEndpoint(typeof(IAudioSourceHost), serverBinding, hostEndpoint);
             _serviceHost.Closed += ServiceHostOnClosed;
