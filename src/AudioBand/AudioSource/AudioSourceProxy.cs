@@ -207,7 +207,15 @@ namespace AudioBand.AudioSource
 
         private void HandleError(Exception e)
         {
-            _logger.Error(e, $"Error during call to host");
+            if (e is CommunicationObjectFaultedException || e is CommunicationObjectAbortedException)
+            {
+                _logger.Debug("Communication already closed");
+            }
+            else
+            {
+                _logger.Error(e, $"Error during call to host");
+            }
+
             Errored?.Invoke(this, EventArgs.Empty);
         }
 
