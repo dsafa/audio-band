@@ -46,7 +46,15 @@ namespace AudioSourceHost
             }
 
             _isActive = true;
-            await _audioSource.ActivateAsync().ConfigureAwait(false);
+
+            try
+            {
+                await _audioSource.ActivateAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task DeactivateAsync()
@@ -59,7 +67,15 @@ namespace AudioSourceHost
             }
 
             _isActive = false;
-            await _audioSource.DeactivateAsync().ConfigureAwait(false);
+
+            try
+            {
+                await _audioSource.DeactivateAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task NextTrackAsync()
@@ -71,7 +87,14 @@ namespace AudioSourceHost
                 return;
             }
 
-            await _audioSource.NextTrackAsync().ConfigureAwait(false);
+            try
+            {
+                await _audioSource.NextTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task PauseTrackAsync()
@@ -83,7 +106,14 @@ namespace AudioSourceHost
                 return;
             }
 
-            await _audioSource.PauseTrackAsync().ConfigureAwait(false);
+            try
+            {
+                await _audioSource.PauseTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task PlayTrackAsync()
@@ -95,7 +125,14 @@ namespace AudioSourceHost
                 return;
             }
 
-            await _audioSource.PlayTrackAsync().ConfigureAwait(false);
+            try
+            {
+                await _audioSource.PlayTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public async Task PreviousTrackAsync()
@@ -107,7 +144,14 @@ namespace AudioSourceHost
                 return;
             }
 
-            await _audioSource.PreviousTrackAsync().ConfigureAwait(false);
+            try
+            {
+                await _audioSource.PreviousTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
         }
 
         public string GetName()
@@ -122,6 +166,10 @@ namespace AudioSourceHost
             _audioBandCheckStopwatch.Restart();
         }
 
+        /// <summary>
+        /// Try to gracefully close.
+        /// </summary>
+        /// <returns>Task</returns>
         public async Task Close()
         {
             try
@@ -150,7 +198,7 @@ namespace AudioSourceHost
             }
             catch (Exception ex)
             {
-                HandleError(ex);
+                HandleException(ex);
             }
         }
 
@@ -162,7 +210,7 @@ namespace AudioSourceHost
             }
             catch (Exception ex)
             {
-                HandleError(ex);
+                HandleException(ex);
             }
         }
 
@@ -174,7 +222,7 @@ namespace AudioSourceHost
             }
             catch (Exception ex)
             {
-                HandleError(ex);
+                HandleException(ex);
             }
         }
 
@@ -186,7 +234,7 @@ namespace AudioSourceHost
             }
             catch (Exception ex)
             {
-                HandleError(ex);
+                HandleException(ex);
             }
         }
 
@@ -198,13 +246,14 @@ namespace AudioSourceHost
             }
             catch (Exception ex)
             {
-                HandleError(ex);
+                HandleException(ex);
             }
         }
 
-        private void HandleError(Exception e)
+        private void HandleException(Exception e)
         {
-            _logger.Error(e, "Error with communication");
+            // Handle exceptions within wcf context by closing quickly so it can restart.
+            _logger.Error(e);
             Program.Exit();
         }
 
