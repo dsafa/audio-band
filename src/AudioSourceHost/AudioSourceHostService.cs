@@ -204,7 +204,7 @@ namespace AudioSourceHost
 
         private void HandleError(Exception e)
         {
-            _logger.Error(e, "Error during call to callback");
+            _logger.Error(e, "Error with communication");
             Program.Exit();
         }
 

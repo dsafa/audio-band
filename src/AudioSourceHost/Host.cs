@@ -36,7 +36,7 @@ namespace AudioSourceHost
 
             _logger.Debug($"Connecting to audio source server to register {_audioSource.Name}");
             _audioSourceServer = new ChannelFactory<IAudioSourceServer>(new NetNamedPipeBinding(), new EndpointAddress(ServiceHelper.AudioSourceServerEndpoint)).CreateChannel();
-            var success = _audioSourceServer.RegisterHost(hostEndpoint);
+            var success = _audioSourceServer.RegisterHost(hostEndpoint, audioSourceDirectory);
             if (!success)
             {
                 _logger.Warn($"Unable to regiester audio source {_audioSource.Name}");
