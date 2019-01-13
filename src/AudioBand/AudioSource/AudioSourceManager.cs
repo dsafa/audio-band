@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
-using Nett;
+using System.Threading.Tasks;
 using NLog;
 using ServiceContracts;
 
@@ -81,9 +81,9 @@ namespace AudioBand.AudioSource
         /// </summary>
         public void Close()
         {
-            foreach (var audioSourceProxy in _audioSources.Values)
+            foreach (var proxy in _audioSources.Values)
             {
-                audioSourceProxy.Close();
+                proxy.Close();
             }
 
             foreach (var process in _hostProcesses)
@@ -114,7 +114,7 @@ namespace AudioBand.AudioSource
             _hostProcesses.Add(process);
         }
 
-        public bool RegisterHost(Uri hostServiceUri)
+        public bool RegisterHost(Uri hostServiceUri, string audioSourceDirectory)
         {
             lock (_audioSourcesLock)
             {
@@ -124,7 +124,7 @@ namespace AudioBand.AudioSource
                     return false;
                 }
 
-                var proxy = new AudioSourceProxy(hostServiceUri);
+                var proxy = new AudioSourceProxy(hostServiceUri, audioSourceDirectory);
                 proxy.Errored += ProxyOnErrored;
                 _audioSources[hostServiceUri] = proxy;
 
@@ -135,16 +135,19 @@ namespace AudioBand.AudioSource
             return true;
         }
 
-        private void ProxyOnErrored(object sender, EventArgs e)
+        private async void ProxyOnErrored(object sender, EventArgs e)
         {
             var proxy = sender as AudioSourceProxy;
-            if (_audioSources.Remove(proxy.Uri))
-            {
-                // maybe have be removed already
-                proxy.Close();
-            }
+            _audioSources.Remove(proxy.Uri);
+            proxy.Close();
 
             AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
+
+            Logger.Debug($"Restarting host `{proxy.Uri}`");
+
+            // wait a bit before restarting
+            await Task.Delay(TimeSpan.FromSeconds(2));
+            StartHost(proxy.Directory);
         }
     }
 }

@@ -17,9 +17,10 @@ namespace AudioBand.AudioSource
         private DuplexChannelFactory<IAudioSourceHost> _channelFactory;
         private bool _isClosed;
 
-        public AudioSourceProxy(Uri hostUri)
+        public AudioSourceProxy(Uri hostUri, string directory)
         {
             Uri = hostUri;
+            Directory = directory;
             _logger = LogManager.GetLogger($"AudioSourceProxy@{hostUri}");
 
             var callback = new AudioSourceHostCallback();
@@ -56,7 +57,9 @@ namespace AudioBand.AudioSource
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
-        public Uri Uri { get; set; }
+        public Uri Uri { get; private set; }
+
+        public string Directory { get; private set; }
 
         public string Name
         {
@@ -213,7 +216,7 @@ namespace AudioBand.AudioSource
             }
             else
             {
-                _logger.Error(e, $"Error during call to host");
+                _logger.Error(e, $"Error in communication");
             }
 
             Errored?.Invoke(this, EventArgs.Empty);
