@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
@@ -8,6 +9,8 @@ namespace AudioBand
 {
     partial class MainControl
     {
+        private static readonly object _audiosourceListLock = new object();
+
         #region Winforms event handlers
 
         private void AlbumArtOnMouseLeave(object o, EventArgs args)
@@ -53,40 +56,7 @@ namespace AudioBand
 
         private async void AudioSourceMenuItemOnClicked(object sender, EventArgs eventArgs)
         {
-            try
-            {
-                var item = (DeskBandMenuAction)sender;
-                if (item.Checked)
-                {
-                    item.Checked = false;
-                    await UnsubscribeToAudioSource(_currentAudioSource);
-                    return;
-                }
-
-                // Uncheck old item and unsubscribe from the current source
-                var lastItemChecked = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == _currentAudioSource?.Name);
-                if (lastItemChecked != null)
-                {
-                    lastItemChecked.Checked = false;
-                }
-
-                await UnsubscribeToAudioSource(_currentAudioSource);
-
-                _currentAudioSource = _audioSourceManager.AudioSources.First(c => c.Name == item.Text);
-                if (_currentAudioSource == null)
-                {
-                    Logger.Warn($"Could not find matching audio source. Looking for {item.Text}.");
-                    return;
-                }
-
-                await SubscribeToAudioSource(_currentAudioSource);
-                item.Checked = true;
-            }
-            catch (Exception e)
-            {
-                Logger.Debug(e, $"Error activating audio source `{_currentAudioSource?.Name}`");
-                _currentAudioSource = null;
-            }
+            await HandleAudioSourceContextMenuItemClick(sender as DeskBandMenuAction).ConfigureAwait(false);
         }
 
         #endregion
@@ -155,6 +125,32 @@ namespace AudioBand
         private void Canceled(object sender, EventArgs e)
         {
             _settingsWindowVm.CancelEdit();
+        }
+
+        private async void AudioSourcesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                var audioSource = e.NewItems[0] as IAudioSource;
+
+                var menuItem = new DeskBandMenuAction(audioSource.Name);
+                menuItem.Clicked += AudioSourceMenuItemOnClicked;
+
+                lock (_audiosourceListLock)
+                {
+                    _audioSourceContextMenuItems.Add(menuItem);
+                    RefreshContextMenu();
+                }
+
+                // If user was using this audio source last, then automatically activate it
+                var savedAudioSourceName = _appSettings.AudioSource;
+                if (savedAudioSourceName == null || audioSource.Name != savedAudioSourceName)
+                {
+                    return;
+                }
+
+                await HandleAudioSourceContextMenuItemClick(menuItem).ConfigureAwait(false);
+            }
         }
     }
 }

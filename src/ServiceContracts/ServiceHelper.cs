@@ -15,7 +15,7 @@ namespace ServiceContracts
         /// <summary>
         /// Gets the endpoint for the audio source server.
         /// </summary>
-        public static Uri AudioSourceServerEndpoint => new Uri(BaseEndpoint, "audiosources/server");
+        public static Uri GetAudioSourceServerEndpoint(string name) => new Uri(BaseEndpoint, $"audiosource-server/{name}");
         
         /// <summary>
         /// Creates an endpoint for a <see cref="IAudioSourceHost"/> for the given name.

@@ -1,64 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using NLog;
-using ServiceContracts;
 
 namespace AudioBand.AudioSource
 {
     /// <summary>
     /// Detects and loads audio sources.
     /// </summary>
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, InstanceContextMode = InstanceContextMode.Single)]
-    internal class AudioSourceManager : IAudioSourceServer
+    internal class AudioSourceManager
     {
         private const string PluginFolderName = "AudioSources";
         private const string ManifestFileName = "AudioSource.manifest";
-        private static readonly string HostExePath = Path.Combine(DirectoryHelper.BaseDirectory, "AudioSourceHost.exe");
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private static readonly object _audioSourcesLock = new object();
-        private Dictionary<Uri, AudioSourceProxy> _audioSources = new Dictionary<Uri, AudioSourceProxy>();
-        private List<Process> _hostProcesses = new List<Process>();
-        private ServiceHost _audioSourceServer;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AudioSourceManager"/> class.
-        /// </summary>
-        public AudioSourceManager()
-        {
-            _audioSourceServer = new ServiceHost(this);
-            _audioSourceServer.AddServiceEndpoint(typeof(IAudioSourceServer), new NetNamedPipeBinding(), ServiceHelper.AudioSourceServerEndpoint);
-            _audioSourceServer.Open();
-        }
-
-        /// <summary>
-        /// Occurs when the detected audio sources have changed.
-        /// </summary>
-        public event EventHandler AudioSourcesChanged;
 
         /// <summary>
         /// Gets the list of audio sources available.
         /// </summary>
-        public IEnumerable<IAudioSource> AudioSources
-        {
-            get
-            {
-                lock (_audioSourcesLock)
-                {
-                    return new List<IAudioSource>(_audioSources.Values);
-                }
-            }
-        }
+        public ObservableCollection<IAudioSource> AudioSources { get; private set; } = new ObservableCollection<IAudioSource>();
 
         /// <summary>
         /// Load all audio sources.
         /// </summary>
-        public void LoadAudioSources()
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public async Task LoadAudioSources()
         {
             Logger.Debug("Searching for orphan processes");
             var processes = Process.GetProcessesByName("AudioSourceHost");
@@ -69,10 +38,12 @@ namespace AudioBand.AudioSource
             }
 
             Logger.Debug("Loading audio sources");
-            foreach (var directory in Directory.EnumerateDirectories(PluginFolderPath))
+            var tasks = Directory.EnumerateDirectories(PluginFolderPath).Select(dir => AudioSourceProxy.CreateProxy(dir)).ToArray();
+
+            var proxies = await Task.WhenAll(tasks).ConfigureAwait(false);
+            foreach (var proxy in proxies.Where(p => p != null))
             {
-                Logger.Debug($"Starting host at {directory}");
-                StartHost(directory);
+                AudioSources.Add(proxy);
             }
         }
 
@@ -81,73 +52,10 @@ namespace AudioBand.AudioSource
         /// </summary>
         public void Close()
         {
-            foreach (var proxy in _audioSources.Values)
+            foreach (var proxy in AudioSources.Cast<AudioSourceProxy>())
             {
                 proxy.Close();
             }
-
-            foreach (var process in _hostProcesses)
-            {
-                process.Kill();
-            }
-
-            try
-            {
-                _audioSourceServer.Close();
-            }
-            catch (Exception)
-            {
-                _audioSourceServer.Abort();
-            }
-        }
-
-        private void StartHost(string directory)
-        {
-            Logger.Debug($"Starting audiosource host at {directory}");
-
-            var process = Process.Start(new ProcessStartInfo()
-            {
-                FileName = HostExePath,
-                Arguments = directory
-            });
-
-            _hostProcesses.Add(process);
-        }
-
-        public bool RegisterHost(Uri hostServiceUri, string audioSourceDirectory)
-        {
-            lock (_audioSourcesLock)
-            {
-                if (_audioSources.ContainsKey(hostServiceUri))
-                {
-                    Logger.Warn($"Trying to register host at {hostServiceUri} but already exists");
-                    return false;
-                }
-
-                var proxy = new AudioSourceProxy(hostServiceUri, audioSourceDirectory);
-                proxy.Errored += ProxyOnErrored;
-                _audioSources[hostServiceUri] = proxy;
-
-                Logger.Debug($"Created new audio source proxy for host at {hostServiceUri}");
-            }
-
-            AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
-            return true;
-        }
-
-        private async void ProxyOnErrored(object sender, EventArgs e)
-        {
-            var proxy = sender as AudioSourceProxy;
-            _audioSources.Remove(proxy.Uri);
-            proxy.Close();
-
-            AudioSourcesChanged?.Invoke(this, EventArgs.Empty);
-
-            Logger.Debug($"Restarting host `{proxy.Uri}`");
-
-            // wait a bit before restarting
-            await Task.Delay(TimeSpan.FromSeconds(2));
-            StartHost(proxy.Directory);
         }
     }
 }
