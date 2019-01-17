@@ -11,10 +11,10 @@ namespace ServiceContracts
     public interface IAudioSourceHost
     {
         /// <summary>
-        /// Ping to check if the server is still responding.
+        /// Establishes the callback channel by saving the operation context from this call.
         /// </summary>
         [OperationContract]
-        void IsAlive();
+        void OpenCallbackChannel();
 
         /// <summary>
         /// Contract method for <see cref="IAudioSource.Name"/>.

@@ -27,13 +27,14 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
-        private static readonly object _audiosourceListLock = new object();
         private readonly AppSettings _appSettings = new AppSettings();
         private readonly Dispatcher _uiDispatcher;
         private AudioSourceManager _audioSourceManager;
         private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
+        private DeskBandMenuAction _settingsMenuItem;
         private DeskBandMenu _pluginSubMenu;
+        private List<DeskBandMenuAction> _audioSourceContextMenuItems;
         private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
         private SettingsWindowVM _settingsWindowVm;
 
@@ -108,10 +109,11 @@ namespace AudioBand
             {
                 await Task.Run(() =>
                 {
-                    _audioSourceManager = new AudioSourceManager();
-                    _audioSourceManager.AudioSourcesChanged += AudioSourceManagerOnAudioSourcesChanged;
-                    _audioSourceManager.LoadAudioSources();
-                    Options.ContextMenuItems = BuildContextMenu();
+                    _audioSourceContextMenuItems = new List<DeskBandMenuAction>();
+                    _settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
+                    _settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
+                    RefreshContextMenu();
+
                     InitializeModels();
                 }).ConfigureAwait(false);
 
@@ -125,18 +127,16 @@ namespace AudioBand
                     ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
                 });
 
-                await SelectAudioSourceFromSettings().ConfigureAwait(false);
+                _audioSourceManager = new AudioSourceManager();
+                _audioSourceManager.AudioSources.CollectionChanged += AudioSourcesCollectionChanged;
+                await _audioSourceManager.LoadAudioSources();
+
                 Logger.Debug("Initialization complete");
             }
             catch (Exception e)
             {
                 Logger.Error(e);
             }
-        }
-
-        private void AudioSourceManagerOnAudioSourcesChanged(object sender, EventArgs e)
-        {
-            Options.ContextMenuItems = BuildContextMenu();
         }
 
         private void InitializeModels()
@@ -165,20 +165,20 @@ namespace AudioBand
             var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
             var allAudioSourceSettings = new List<AudioSourceSettingsVM>();
 
-            foreach (var audioSource in _audioSourceManager.AudioSources)
-            {
-                var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
-                if (matchingSetting != null)
-                {
-                    allAudioSourceSettings.Add(new AudioSourceSettingsVM(matchingSetting, audioSource));
-                }
-                else
-                {
-                    var newSettings = new AudioSourceSettings { AudioSourceName = audioSource.Name };
-                    _audioSourceSettingsModel.Add(newSettings);
-                    allAudioSourceSettings.Add(new AudioSourceSettingsVM(newSettings, audioSource));
-                }
-            }
+            //foreach (var audioSource in _audioSourceManager.AudioSources)
+            //{
+            //    var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
+            //    if (matchingSetting != null)
+            //    {
+            //        allAudioSourceSettings.Add(new AudioSourceSettingsVM(matchingSetting, audioSource));
+            //    }
+            //    else
+            //    {
+            //        var newSettings = new AudioSourceSettings { AudioSourceName = audioSource.Name };
+            //        _audioSourceSettingsModel.Add(newSettings);
+            //        allAudioSourceSettings.Add(new AudioSourceSettingsVM(newSettings, audioSource));
+            //    }
+            //}
 
             await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar));
 
@@ -203,25 +203,10 @@ namespace AudioBand
             _settingsWindow.Show();
         }
 
-        private List<DeskBandMenuItem> BuildContextMenu()
+        private void RefreshContextMenu()
         {
-            List<DeskBandMenuAction> pluginList;
-
-            lock (_audiosourceListLock)
-            {
-                pluginList = _audioSourceManager.AudioSources.Select(audioSource =>
-                {
-                    var item = new DeskBandMenuAction(audioSource.Name);
-                    item.Clicked += AudioSourceMenuItemOnClicked;
-                    return item;
-                }).ToList();
-            }
-
-            _pluginSubMenu = new DeskBandMenu("Audio Source", pluginList);
-            var settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
-            settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
-
-            return new List<DeskBandMenuItem> { settingsMenuItem, _pluginSubMenu };
+            _pluginSubMenu = new DeskBandMenu("Audio Source", _audioSourceContextMenuItems);
+            Options.ContextMenuItems = new List<DeskBandMenuItem> { _settingsMenuItem, _pluginSubMenu };
         }
 
         private async Task SubscribeToAudioSource(IAudioSource source)
@@ -239,7 +224,7 @@ namespace AudioBand
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
             _audioSourceTokenSource = new CancellationTokenSource();
-            await source.ActivateAsync(_audioSourceTokenSource.Token);
+            await source.ActivateAsync(_audioSourceTokenSource.Token).ConfigureAwait(false);
 
             _appSettings.AudioSource = source.Name;
 
@@ -259,7 +244,7 @@ namespace AudioBand
             source.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
 
             _audioSourceTokenSource.Cancel();
-            await source.DeactivateAsync();
+            await source.DeactivateAsync().ConfigureAwait(false);
 
             _appSettings.AudioSource = null;
             _currentAudioSource = null;
@@ -269,25 +254,39 @@ namespace AudioBand
             Logger.Debug($"Audio source `{source.Name}` deactivated");
         }
 
-        private async Task SelectAudioSourceFromSettings()
+        private async Task HandleAudioSourceContextMenuItemClick(DeskBandMenuAction menuItem)
         {
             try
             {
-                var audioSource = _appSettings.AudioSource;
-                if (string.IsNullOrEmpty(audioSource))
+                if (menuItem.Checked)
                 {
+                    menuItem.Checked = false;
+                    await UnsubscribeToAudioSource(_currentAudioSource).ConfigureAwait(false);
                     return;
                 }
 
-                var menuItem = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == audioSource);
-                if (menuItem != null)
+                // Uncheck old items and unsubscribe from the current source
+                foreach (var otherMenuItem in _pluginSubMenu.Items.Cast<DeskBandMenuAction>().Where(i => i != null))
                 {
-                    await Task.Run(() => AudioSourceMenuItemOnClicked(menuItem, EventArgs.Empty));
+                    otherMenuItem.Checked = false;
                 }
+
+                await UnsubscribeToAudioSource(_currentAudioSource).ConfigureAwait(false);
+
+                _currentAudioSource = _audioSourceManager.AudioSources.FirstOrDefault(c => c.Name == menuItem.Text);
+                if (_currentAudioSource == null)
+                {
+                    Logger.Warn($"Could not find matching audio source. Looking for {menuItem.Text}.");
+                    return;
+                }
+
+                await SubscribeToAudioSource(_currentAudioSource).ConfigureAwait(false);
+                menuItem.Checked = true;
             }
             catch (Exception e)
             {
-                Logger.Error(e);
+                Logger.Debug(e, $"Error activating audio source `{_currentAudioSource?.Name}`");
+                _currentAudioSource = null;
             }
         }
 

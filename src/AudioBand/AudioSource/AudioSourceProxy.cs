@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.Threading;
@@ -8,71 +11,66 @@ using ServiceContracts;
 
 namespace AudioBand.AudioSource
 {
+    /// <summary>
+    /// Proxy class for an IAudioSource in another process.
+    /// </summary>
     internal class AudioSourceProxy : IAudioSource
     {
+        private static readonly string HostExePath = Path.Combine(DirectoryHelper.BaseDirectory, "AudioSourceHost.exe");
         private readonly ILogger _logger;
-        private readonly System.Timers.Timer _pingTimer = new System.Timers.Timer(1000) { AutoReset = false };
-        private IAudioSourceHost _host;
-        private IAudioSourceHost _pingChannel;
+        private readonly object _errorLock = new object();
+        private readonly object _isClosingLock = new object();
+        private readonly TaskCompletionSource<bool> _initializationCompletionSource;
+        private readonly Uri _audioSourceServerEndpoint;
+        private Dictionary<string, IAudioSourceHost> _channels = new Dictionary<string, IAudioSourceHost>();
         private DuplexChannelFactory<IAudioSourceHost> _channelFactory;
-        private bool _isClosed;
+        private ServiceHost _audioSourceServerHost;
+        private string _directory;
+        private Uri _hostUri;
+        private bool _firstTimeInitialized;
+        private bool _isErrored;
+        private bool _isClosing;
+        private Process _hostProcess;
 
-        public AudioSourceProxy(Uri hostUri, string directory)
+        private AudioSourceProxy(string directory, TaskCompletionSource<bool> completionSource)
         {
-            Uri = hostUri;
-            Directory = directory;
-            _logger = LogManager.GetLogger($"AudioSourceProxy@{hostUri}");
+            _initializationCompletionSource = completionSource;
+            _directory = directory;
+            _logger = LogManager.GetLogger($"AudioSourceProxy({new DirectoryInfo(directory).Name})");
 
-            var callback = new AudioSourceHostCallback();
-            callback.SettingChanged += (o, e) => SettingChanged?.Invoke(this, e);
-            callback.TrackInfoChanged += (o, e) => TrackInfoChanged?.Invoke(this, e);
-            callback.TrackPlaying += (o, e) => TrackPlaying?.Invoke(this, e);
-            callback.TrackPaused += (o, e) => TrackPaused?.Invoke(this, e);
-            callback.TrackProgressChanged += (o, e) => TrackProgressChanged?.Invoke(this, e);
+            var audioSourceServer = new AudioSourceServer();
+            audioSourceServer.HostRegistered += AudioSourceServerOnHostRegistered;
+            _audioSourceServerHost = new ServiceHost(audioSourceServer);
+            _audioSourceServerEndpoint = ServiceHelper.GetAudioSourceServerEndpoint(directory);
+            _audioSourceServerHost.AddServiceEndpoint(typeof(IAudioSourceServer), new NetNamedPipeBinding(), _audioSourceServerEndpoint);
+            _audioSourceServerHost.Open();
 
-            var callbackInstance = new InstanceContext(callback);
-            var channelBinding = new NetNamedPipeBinding()
-            {
-                MaxBufferSize = int.MaxValue,
-                MaxReceivedMessageSize = int.MaxValue,
-            };
-            _channelFactory = new DuplexChannelFactory<IAudioSourceHost>(callbackInstance, channelBinding, new EndpointAddress(hostUri));
-            _host = _channelFactory.CreateChannel();
-
-            _pingChannel = _channelFactory.CreateChannel();
-            ((IClientChannel)_pingChannel).OperationTimeout = TimeSpan.FromSeconds(10);
-            _pingTimer.Elapsed += PingTimerOnElapsed;
-            _pingTimer.Start();
+            StartHost(directory);
         }
 
-        public event EventHandler Errored;
-
+        /// <inheritdoc/>
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
+        /// <inheritdoc/>
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
+        /// <inheritdoc/>
         public event EventHandler TrackPlaying;
 
+        /// <inheritdoc/>
         public event EventHandler TrackPaused;
 
+        /// <inheritdoc/>
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
-        public Uri Uri { get; private set; }
-
-        public string Directory { get; private set; }
-
+        /// <inheritdoc/>
         public string Name
         {
             get
             {
-                if (InvalidState)
-                {
-                    return null;
-                }
-
                 try
                 {
-                    return _host.GetName();
+                    return GetHost().GetName();
                 }
                 catch (Exception e)
                 {
@@ -82,18 +80,73 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        private bool InvalidState => _isClosed || (_channelFactory.State != CommunicationState.Opened);
-
-        public void Close()
+        private bool HostIsRestarting
         {
-            if (_isClosed)
+            get
             {
-                return;
+                lock (_errorLock)
+                {
+                    return _isErrored;
+                }
             }
 
-            _isClosed = true;
+            set
+            {
+                lock (_errorLock)
+                {
+                    _isErrored = value;
+                }
+            }
+        }
+
+        private bool IsClosing
+        {
+            get
+            {
+                lock (_isClosingLock)
+                {
+                    return _isClosing;
+                }
+            }
+
+            set
+            {
+                lock (_isClosingLock)
+                {
+                    _isClosing = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="AudioSourceProxy"/> for the given directory.
+        /// </summary>
+        /// <param name="directory">Directory containing the audio source.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation that creates an <see cref="AudioSourceProxy"/>.</returns>
+        public static async Task<AudioSourceProxy> CreateProxy(string directory)
+        {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+            var proxy = new AudioSourceProxy(directory, taskCompletionSource);
+
+            if (await taskCompletionSource.Task)
+            {
+                return proxy;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Try to shut down gracefully.
+        /// </summary>
+        public void Close()
+        {
+            IsClosing = true;
 
             try
             {
@@ -106,16 +159,17 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
         public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (InvalidState)
+            if (IsClosing || HostIsRestarting)
             {
                 return;
             }
 
             try
             {
-                await _host.ActivateAsync().ConfigureAwait(false);
+                await GetHost().ActivateAsync().ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -123,16 +177,17 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
         public async Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (InvalidState)
+            if (IsClosing || HostIsRestarting)
             {
                 return;
             }
 
             try
             {
-                await _host.DeactivateAsync().ConfigureAwait(false);
+                await GetHost().DeactivateAsync().ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -140,16 +195,17 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
         public async Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (InvalidState)
+            if (IsClosing || HostIsRestarting)
             {
                 return;
             }
 
             try
             {
-                await _host.NextTrackAsync().ConfigureAwait(false);
+                await GetHost().NextTrackAsync().ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -157,16 +213,17 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
         public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (InvalidState)
+            if (IsClosing || HostIsRestarting)
             {
                 return;
             }
 
             try
             {
-                await _host.PauseTrackAsync().ConfigureAwait(false);
+                await GetHost().PauseTrackAsync().ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -174,16 +231,17 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
         public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (InvalidState)
+            if (IsClosing || HostIsRestarting)
             {
                 return;
             }
 
             try
             {
-                await _host.PlayTrackAsync().ConfigureAwait(false);
+                await GetHost().PlayTrackAsync().ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -191,16 +249,17 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
         public async Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (InvalidState)
+            if (IsClosing || HostIsRestarting)
             {
                 return;
             }
 
             try
             {
-                await _host.PreviousTrackAsync().ConfigureAwait(false);
+                await GetHost().PreviousTrackAsync().ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -216,28 +275,100 @@ namespace AudioBand.AudioSource
             }
             else
             {
-                _logger.Error(e, $"Error in communication");
+                _logger.Error(e);
             }
 
-            Errored?.Invoke(this, EventArgs.Empty);
+            // if this is the first time the host is registered, exit.
+            if (!_firstTimeInitialized)
+            {
+                _initializationCompletionSource.SetResult(false);
+                return;
+            }
+
+            if (HostIsRestarting)
+            {
+                return;
+            }
+
+            HostIsRestarting = true;
+            StartHost(_directory);
         }
 
-        private void PingTimerOnElapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void StartHost(string directory)
         {
-            try
+            _hostProcess = new Process
             {
-                if (InvalidState)
+                StartInfo = new ProcessStartInfo()
                 {
-                    return;
-                }
+                    FileName = HostExePath,
+                    Arguments = $"{directory} {_audioSourceServerEndpoint}",
+                },
+                EnableRaisingEvents = true
+            };
 
-                _pingChannel.IsAlive();
-                _pingTimer.Start();
-            }
-            catch (Exception ex)
+            _hostProcess.Exited += ProcessOnExited;
+            _hostProcess.Start();
+        }
+
+        private void ProcessOnExited(object sender, EventArgs e)
+        {
+            if (IsClosing)
             {
-                HandleError(ex);
+                return;
             }
+
+            HandleError(new Exception("Host process exited"));
+        }
+
+        private void AudioSourceServerOnHostRegistered(object sender, AudioSourceRegisteredEventArgs e)
+        {
+            CreateChannelFactory(e.HostServiceUri);
+
+            // if this is the first time that the host was registered, signal ready.
+            if (!_firstTimeInitialized)
+            {
+                _firstTimeInitialized = true;
+                _initializationCompletionSource.SetResult(true);
+            }
+
+            HostIsRestarting = false;
+        }
+
+        private void CreateChannelFactory(Uri hostUri)
+        {
+            _hostUri = hostUri;
+
+            var callback = new AudioSourceHostCallback();
+            callback.SettingChanged += (o, e) => SettingChanged?.Invoke(this, e);
+            callback.TrackInfoChanged += (o, e) => TrackInfoChanged?.Invoke(this, e);
+            callback.TrackPlaying += (o, e) => TrackPlaying?.Invoke(this, e);
+            callback.TrackPaused += (o, e) => TrackPaused?.Invoke(this, e);
+            callback.TrackProgressChanged += (o, e) => TrackProgressChanged?.Invoke(this, e);
+
+            var callbackInstance = new InstanceContext(callback);
+            var channelBinding = new NetNamedPipeBinding()
+            {
+                MaxBufferSize = int.MaxValue,
+                MaxReceivedMessageSize = int.MaxValue,
+                ReceiveTimeout = TimeSpan.FromSeconds(10),
+                SendTimeout = TimeSpan.FromSeconds(10),
+            };
+
+            _channelFactory = new DuplexChannelFactory<IAudioSourceHost>(callbackInstance, channelBinding, new EndpointAddress(hostUri));
+            _channels.Clear();
+            GetHost().OpenCallbackChannel();
+        }
+
+        // Use this because can't use caller member name inside property
+        private IAudioSourceHost GetHost([CallerMemberName] string caller = "")
+        {
+            if (!_channels.TryGetValue(caller, out IAudioSourceHost host))
+            {
+                host = _channelFactory.CreateChannel();
+                _channels[caller] = host;
+            }
+
+            return host;
         }
     }
 }
