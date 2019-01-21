@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
+using AudioBand.Extensions;
+using AudioBand.Models;
+using AudioBand.ViewModels;
 using CSDeskBand.ContextMenu;
 
 namespace AudioBand
@@ -131,26 +135,57 @@ namespace AudioBand
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                var audioSource = e.NewItems[0] as IAudioSource;
-
-                var menuItem = new DeskBandMenuAction(audioSource.Name);
-                menuItem.Clicked += AudioSourceMenuItemOnClicked;
-
-                lock (_audiosourceListLock)
+                foreach (IAudioSource audioSource in e.NewItems.Cast<IAudioSource>())
                 {
-                    _audioSourceContextMenuItems.Add(menuItem);
-                    RefreshContextMenu();
+                    await AddNewAudioSource(audioSource);
                 }
-
-                // If user was using this audio source last, then automatically activate it
-                var savedAudioSourceName = _appSettings.AudioSource;
-                if (savedAudioSourceName == null || audioSource.Name != savedAudioSourceName)
-                {
-                    return;
-                }
-
-                await HandleAudioSourceContextMenuItemClick(menuItem).ConfigureAwait(false);
             }
+            else
+            {
+                Logger.Warn($"Action {e.Action} not supported");
+            }
+        }
+
+        private async Task AddNewAudioSource(IAudioSource audioSource)
+        {
+            var menuItem = new DeskBandMenuAction(audioSource.Name);
+            menuItem.Clicked += AudioSourceMenuItemOnClicked;
+
+            lock (_audiosourceListLock)
+            {
+                _audioSourceContextMenuItems.Add(menuItem);
+                RefreshContextMenu();
+            }
+
+            var settings = audioSource.GetSettings();
+            if (settings.Count > 0)
+            {
+                // check if the settings were saved previously and reuse them
+                var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
+                if (matchingSetting != null)
+                {
+                    var viewModel = new AudioSourceSettingsVM(matchingSetting, audioSource);
+
+                    // the collection was created on the ui thread
+                    await _uiDispatcher.InvokeAsync(() => _settingsWindowVm.AudioSourceSettingsVM.Add(viewModel));
+                }
+                else
+                {
+                    var newSettingsModel = new AudioSourceSettings { AudioSourceName = audioSource.Name };
+                    _audioSourceSettingsModel.Add(newSettingsModel);
+                    var newViewModel = new AudioSourceSettingsVM(newSettingsModel, audioSource);
+                    await _uiDispatcher.InvokeAsync(() => _settingsWindowVm.AudioSourceSettingsVM.Add(newViewModel));
+                }
+            }
+
+            // If user was using this audio source last, then automatically activate it
+            var savedAudioSourceName = _appSettings.AudioSource;
+            if (savedAudioSourceName == null || audioSource.Name != savedAudioSourceName)
+            {
+                return;
+            }
+
+            await HandleAudioSourceContextMenuItemClick(menuItem).ConfigureAwait(false);
         }
     }
 }

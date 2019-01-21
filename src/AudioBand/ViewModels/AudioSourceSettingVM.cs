@@ -1,5 +1,6 @@
 ﻿using System;
 using AudioBand.AudioSource;
+using AudioBand.Extensions;
 using AudioBand.Models;
 
 namespace AudioBand.ViewModels
@@ -9,28 +10,28 @@ namespace AudioBand.ViewModels
     /// </summary>
     internal class AudioSourceSettingVM : ViewModelBase<AudioSourceSetting>
     {
-        private readonly AudioSourceSettingInfo _settingInfo;
+        private readonly AudioSourceSettingAttribute _settingAttribute;
+        private readonly IAudioSource _audioSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceSettingVM"/> class
         /// with the model, setting information and if it was saved,
         /// </summary>
+        /// <param name="audioSource">The associated <see cref="IAudioSource"/>.</param>
         /// <param name="model">The <see cref="AudioSource"/>.</param>
-        /// <param name="settingInfo">The <see cref="AudioSourceSettingInfo"/>.</param>
+        /// <param name="settingAttribute">The <see cref="AudioSourceSettingAttribute"/>.</param>
         /// <param name="saved">If this setting was saved.</param>
-        public AudioSourceSettingVM(AudioSourceSetting model, AudioSourceSettingInfo settingInfo, bool saved = true)
+        public AudioSourceSettingVM(IAudioSource audioSource, AudioSourceSetting model, AudioSourceSettingAttribute settingAttribute, bool saved = true)
             : base(model)
         {
-            _settingInfo = settingInfo;
-            model.Value = settingInfo.ConvertToSettingType(Model.Value);
+            _settingAttribute = settingAttribute;
+            _audioSource = audioSource;
 
             // If sensitive data and was not saved from before, don't automatically remember it
             if (Sensitive && !saved)
             {
                 Remember = false;
             }
-
-            ApplyChanges();
         }
 
         /// <summary>
@@ -46,18 +47,7 @@ namespace AudioBand.ViewModels
         public object Value
         {
             get => Model.Value;
-            set
-            {
-                var res = _settingInfo.ValidateSetting(value);
-                if (res.IsValid)
-                {
-                    SetProperty(nameof(Model.Value), value);
-                }
-                else
-                {
-                    RaiseValidationError(res.ErrorMessage);
-                }
-            }
+            set => SetProperty(nameof(Model.Value), value);
         }
 
         /// <summary>
@@ -73,37 +63,32 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets a value indicating whether the user shouldn't modify it.
         /// </summary>
-        public bool ReadOnly => _settingInfo.Attribute.Options.HasFlag(SettingOptions.ReadOnly);
+        public bool ReadOnly => _settingAttribute.Options.HasFlag(SettingOptions.ReadOnly);
 
         /// <summary>
         /// Gets a value indicating whether the setting is visible in the settings window.
         /// </summary>
-        public bool Visible => !_settingInfo.Attribute.Options.HasFlag(SettingOptions.Hidden);
+        public bool Visible => !_settingAttribute.Options.HasFlag(SettingOptions.Hidden);
 
         /// <summary>
         /// Gets a value indicating whether the setting is sensitive.
         /// </summary>
-        public bool Sensitive => _settingInfo.Attribute.Options.HasFlag(SettingOptions.Sensitive);
-
-        /// <summary>
-        /// Gets the name of the property that the setting is attached to.
-        /// </summary>
-        public string PropertyName => _settingInfo.PropertyName;
+        public bool Sensitive => _settingAttribute.Options.HasFlag(SettingOptions.Sensitive);
 
         /// <summary>
         /// Gets the type of the setting.
         /// </summary>
-        public Type SettingType => _settingInfo.PropertyType;
+        public Type SettingType => Model.Value.GetType();
 
         /// <summary>
         /// Gets the description of the setting.
         /// </summary>
-        public string Description => _settingInfo.Attribute.Description;
+        public string Description => _settingAttribute.Description;
 
         /// <summary>
         /// Gets the priority of the setting.
         /// </summary>
-        public int Priority => _settingInfo.Attribute.Priority;
+        public int Priority => _settingAttribute.Priority;
 
         /// <summary>
         /// Applies the value to the audio source
@@ -112,7 +97,7 @@ namespace AudioBand.ViewModels
         {
             try
             {
-                _settingInfo.UpdateAudioSource(Value);
+                _audioSource.UpdateSetting(Name, Value);
             }
             catch (Exception)
             {
@@ -125,7 +110,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         public void ValueChanged()
         {
-            Model.Value = _settingInfo.GetValue();
+            Model.Value = _audioSource.GetSettingValue(Name);
         }
 
         /// <inheritdoc/>

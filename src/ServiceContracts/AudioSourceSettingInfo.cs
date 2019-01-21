@@ -34,19 +34,7 @@ namespace ServiceContracts
         [DataMember]
         public string Description { get; set; }
 
-        /// <summary>
-        /// Value of the setting.
-        /// </summary>
-        [DataMember]
-        public object Value { get; set; }
-
-        /// <summary>
-        /// Type of the setting value.
-        /// </summary>
-        [DataMember]
-        public Type ValueType { get; set; }
-
-        public static AudioSourceSettingInfo From(AudioSourceSettingAttribute attribute, object value, Type valueType)
+        public static explicit operator AudioSourceSettingInfo(AudioSourceSettingAttribute attribute)
         {
             return new AudioSourceSettingInfo
             {
@@ -54,8 +42,16 @@ namespace ServiceContracts
                 Name = attribute.Name,
                 Options = attribute.Options,
                 Priority = attribute.Priority,
-                Value = value,
-                ValueType = valueType
+            };
+        }
+
+        public static explicit operator AudioSourceSettingAttribute(AudioSourceSettingInfo info)
+        {
+            return new AudioSourceSettingAttribute(info.Name)
+            {
+                Description = info.Description,
+                Options = info.Options,
+                Priority = info.Priority,
             };
         }
     }

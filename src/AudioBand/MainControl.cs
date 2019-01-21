@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -163,22 +164,6 @@ namespace AudioBand
             var playPauseButton = new PlayPauseButtonVM(_playPauseButtonModel, _trackModel);
             var prevButton = new PreviousButtonVM(_previousButtonModel);
             var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
-            var allAudioSourceSettings = new List<AudioSourceSettingsVM>();
-
-            //foreach (var audioSource in _audioSourceManager.AudioSources)
-            //{
-            //    var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
-            //    if (matchingSetting != null)
-            //    {
-            //        allAudioSourceSettings.Add(new AudioSourceSettingsVM(matchingSetting, audioSource));
-            //    }
-            //    else
-            //    {
-            //        var newSettings = new AudioSourceSettings { AudioSourceName = audioSource.Name };
-            //        _audioSourceSettingsModel.Add(newSettings);
-            //        allAudioSourceSettings.Add(new AudioSourceSettingsVM(newSettings, audioSource));
-            //    }
-            //}
 
             await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar));
 
@@ -193,7 +178,7 @@ namespace AudioBand
                 AboutVm = new AboutVM(),
                 AlbumArtVM = albumArt,
                 CustomLabelsVM = customLabels,
-                AudioSourceSettingsVM = allAudioSourceSettings
+                AudioSourceSettingsVM = new ObservableCollection<AudioSourceSettingsVM>()
             };
         }
 

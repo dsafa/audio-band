@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+using AudioBand.Models;
 using NLog;
 using ServiceContracts;
 
@@ -82,6 +84,54 @@ namespace AudioBand.AudioSource
 
         /// <inheritdoc/>
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Gets the settings that the audio source has.
+        /// </summary>
+        public List<AudioSourceSettingAttribute> AudioSourceSettings { get; private set; }
+
+        /// <summary>
+        /// Get or set a setting.
+        /// </summary>
+        /// <param name="settingName">Name of the setting</param>
+        /// <returns>The setting value.</returns>
+        public object this[string settingName]
+        {
+            get
+            {
+                if (IsClosing)
+                {
+                    return null;
+                }
+
+                try
+                {
+                    return GetHost().GetSettingValue(settingName);
+                }
+                catch (Exception e)
+                {
+                    HandleError(e);
+                    return null;
+                }
+            }
+
+            set
+            {
+                if (IsClosing)
+                {
+                    return;
+                }
+
+                try
+                {
+                    GetHost().UpdateSetting(settingName, value);
+                }
+                catch (Exception e)
+                {
+                    HandleError(e);
+                }
+            }
+        }
 
         private bool HostIsRestarting
         {
@@ -323,6 +373,7 @@ namespace AudioBand.AudioSource
         private void AudioSourceServerOnHostRegistered(object sender, AudioSourceRegisteredEventArgs e)
         {
             CreateChannelFactory(e.HostServiceUri);
+            AudioSourceSettings = GetSettings();
 
             // if this is the first time that the host was registered, signal ready.
             if (!_firstTimeInitialized)
@@ -369,6 +420,11 @@ namespace AudioBand.AudioSource
             }
 
             return host;
+        }
+
+        private List<AudioSourceSettingAttribute> GetSettings()
+        {
+            return GetHost().GetAudioSourceSettings().Select(s => (AudioSourceSettingAttribute)s).ToList();
         }
     }
 }
