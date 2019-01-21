@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
@@ -12,6 +14,8 @@ namespace AudioSourceHost
     {
         private readonly IAudioSource _audioSource;
         private readonly Logger _logger;
+        private readonly Dictionary<string, AudioSourceSetting> _audioSourceSettings = new Dictionary<string, AudioSourceSetting>();
+        private List<AudioSourceSetting> _audioSourceSettingsList; // so we can keep the order of the settings.
         private bool _isActive;
 
         public AudioSourceHostService(IAudioSource audioSource)
@@ -24,6 +28,12 @@ namespace AudioSourceHost
             _audioSource.TrackPaused += AudioSourceOnTrackPaused;
             _audioSource.TrackPlaying += AudioSourceOnTrackPlaying;
             _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
+
+            _audioSourceSettingsList = _audioSource.GetSettings();
+            foreach (AudioSourceSetting setting in _audioSourceSettingsList)
+            {
+                _audioSourceSettings.Add(setting.Attribute.Name, setting);
+            }
         }
 
         private IAudioSourceHostCallback Callback { get; set; }
@@ -144,6 +154,17 @@ namespace AudioSourceHost
             Callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();
         }
 
+        public Task<List<AudioSourceSettingInfo>> GetAudioSourceSettingsAsync()
+        {
+            return Task.FromResult(_audioSourceSettingsList.Select(s => AudioSourceSettingInfo.From(s.Attribute, s.SettingValue, s.SettingType)).ToList());
+        }
+
+        public Task UpdateSettingAsync(string settingName, object value)
+        {
+            _audioSourceSettings[settingName].SettingValue = value;
+            return Task.CompletedTask;
+        }
+
         /// <summary>
         /// Try to gracefully close.
         /// </summary>
@@ -172,7 +193,7 @@ namespace AudioSourceHost
             }
         }
 
-        private void AudioSourceOnTrackPlaying(object sender, System.EventArgs e)
+        private void AudioSourceOnTrackPlaying(object sender, EventArgs e)
         {
             try
             {
@@ -184,7 +205,7 @@ namespace AudioSourceHost
             }
         }
 
-        private void AudioSourceOnTrackPaused(object sender, System.EventArgs e)
+        private void AudioSourceOnTrackPaused(object sender, EventArgs e)
         {
             try
             {

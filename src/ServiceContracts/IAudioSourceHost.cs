@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 
@@ -64,5 +65,21 @@ namespace ServiceContracts
         /// <returns></returns>
         [OperationContract]
         Task NextTrackAsync();
+
+        /// <summary>
+        /// Gets the settings that the audio source has.
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        Task<List<AudioSourceSettingInfo>> GetAudioSourceSettingsAsync();
+
+        /// <summary>
+        ///  Update the audio source setting with a new value.
+        /// </summary>
+        /// <param name="settingName">Setting name.</param>
+        /// <param name="value">New value.</param>
+        /// <returns></returns>
+        [OperationContract]
+        Task UpdateSettingAsync(string settingName, object value);
     }
 }
