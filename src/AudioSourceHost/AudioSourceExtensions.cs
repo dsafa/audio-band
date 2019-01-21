@@ -22,7 +22,7 @@ namespace AudioSourceHost
 
             return typeAccessor.GetMembers()
                 .Where(m => m.IsDefined(typeof(AudioSourceSettingAttribute)))
-                .Select(m => new AudioSourceSetting(audiosource, objectAccessor, m.Type, m.Name, (AudioSourceSettingAttribute)m.GetAttribute(typeof(AudioSourceSettingAttribute), true)))
+                .Select(m => new AudioSourceSetting(objectAccessor, m.Type, m.Name, (AudioSourceSettingAttribute)m.GetAttribute(typeof(AudioSourceSettingAttribute), true)))
                 .ToList();
         }
     }

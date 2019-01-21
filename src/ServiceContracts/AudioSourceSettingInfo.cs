@@ -1,4 +1,5 @@
 ﻿using AudioBand.AudioSource;
+using System;
 using System.Runtime.Serialization;
 
 namespace ServiceContracts
@@ -33,24 +34,28 @@ namespace ServiceContracts
         [DataMember]
         public string Description { get; set; }
 
-        public static explicit operator AudioSourceSettingInfo(AudioSourceSettingAttribute attribute)
+        /// <summary>
+        /// Value of the setting.
+        /// </summary>
+        [DataMember]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// Type of the setting value.
+        /// </summary>
+        [DataMember]
+        public Type ValueType { get; set; }
+
+        public static AudioSourceSettingInfo From(AudioSourceSettingAttribute attribute, object value, Type valueType)
         {
             return new AudioSourceSettingInfo
             {
+                Description = attribute.Description,
                 Name = attribute.Name,
                 Options = attribute.Options,
                 Priority = attribute.Priority,
-                Description = attribute.Description
-            };
-        }
-
-        public static explicit operator AudioSourceSettingAttribute(AudioSourceSettingInfo info)
-        {
-            return new AudioSourceSettingAttribute(info.Name)
-            {
-                Options = info.Options,
-                Priority = info.Priority,
-                Description = info.Description
+                Value = value,
+                ValueType = valueType
             };
         }
     }
