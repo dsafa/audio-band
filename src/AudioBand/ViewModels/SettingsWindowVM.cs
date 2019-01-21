@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace AudioBand.ViewModels
 {
@@ -27,7 +28,7 @@ namespace AudioBand.ViewModels
 
         public ProgressBarVM ProgressBarVM { get; set; }
 
-        public List<AudioSourceSettingsVM> AudioSourceSettingsVM { get; set; }
+        public ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM { get; set; }
 
         /// <summary>
         /// Gets or sets the currently selected view model.

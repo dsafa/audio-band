@@ -66,29 +66,35 @@ namespace AudioBand.ViewModels
 
         private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
         {
-            Settings.FirstOrDefault(s => s.PropertyName == e.PropertyName)?.ValueChanged();
+            Settings.FirstOrDefault(s => s.Name == e.PropertyName)?.ValueChanged();
         }
 
         private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IAudioSource source)
         {
             var viewmodels = new List<AudioSourceSettingVM>();
-            var audioSourceSettingInfos = source.GetSettings();
+            var settingAttributes = source.GetSettings();
 
-            foreach (var audioSourceSettingInfo in audioSourceSettingInfos.OrderByDescending(s => s.Attribute.Priority))
+            foreach (var settingAttribute in settingAttributes)
             {
-                var matchingSetting = existingSettings.Settings.FirstOrDefault(s => s.Name == audioSourceSettingInfo.Attribute.Name);
+                var matchingSetting = existingSettings.Settings.FirstOrDefault(s => s.Name == settingAttribute.Name);
                 if (matchingSetting != null)
                 {
-                    viewmodels.Add(new AudioSourceSettingVM(matchingSetting, audioSourceSettingInfo));
+                    viewmodels.Add(new AudioSourceSettingVM(source, matchingSetting, settingAttribute));
                 }
                 else
                 {
-                    var name = audioSourceSettingInfo.Attribute.Name;
-                    var defaultValue = audioSourceSettingInfo.GetValue();
+                    var name = settingAttribute.Name;
+                    var defaultValue = source.GetSettingValue(name);
                     var newSetting = new AudioSourceSetting { Name = name, Value = defaultValue };
                     Model.Settings.Add(newSetting);
-                    viewmodels.Add(new AudioSourceSettingVM(newSetting, audioSourceSettingInfo, false));
+                    viewmodels.Add(new AudioSourceSettingVM(source, newSetting, settingAttribute, false));
                 }
+            }
+
+            // apply changes in priority
+            foreach (var viewModel in viewmodels.OrderByDescending(vm => vm.Priority))
+            {
+                viewModel.ApplyChanges();
             }
 
             return viewmodels;

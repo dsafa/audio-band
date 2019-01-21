@@ -71,15 +71,23 @@ namespace ServiceContracts
         /// </summary>
         /// <returns></returns>
         [OperationContract]
-        Task<List<AudioSourceSettingInfo>> GetAudioSourceSettingsAsync();
+        List<AudioSourceSettingInfo> GetAudioSourceSettings();
 
         /// <summary>
-        ///  Update the audio source setting with a new value.
+        /// Update the audio source setting with a new value.
         /// </summary>
         /// <param name="settingName">Setting name.</param>
         /// <param name="value">New value.</param>
         /// <returns></returns>
+        [OperationContract(IsOneWay = true)]
+        void UpdateSetting(string settingName, object value);
+
+        /// <summary>
+        /// Gets the value of a setting.
+        /// </summary>
+        /// <param name="settingName"></param>
+        /// <returns></returns>
         [OperationContract]
-        Task UpdateSettingAsync(string settingName, object value);
+        object GetSettingValue(string settingName);
     }
 }

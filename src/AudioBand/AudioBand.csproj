@@ -105,11 +105,10 @@
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
     <Compile Include="AudioSource\AudioSourceRegisteredEventArgs.cs" />
     <Compile Include="AudioSource\AudioSourceServer.cs" />
-    <Compile Include="AudioSource\AudioSourceSettingInfo.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommand{T}.cs" />
-    <Compile Include="Extensions\AudioSourceExtenstions.cs" />
+    <Compile Include="Extensions\AudioSourceExtensions.cs" />
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />

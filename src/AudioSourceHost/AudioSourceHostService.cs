@@ -154,15 +154,19 @@ namespace AudioSourceHost
             Callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();
         }
 
-        public Task<List<AudioSourceSettingInfo>> GetAudioSourceSettingsAsync()
+        public List<AudioSourceSettingInfo> GetAudioSourceSettings()
         {
-            return Task.FromResult(_audioSourceSettingsList.Select(s => AudioSourceSettingInfo.From(s.Attribute, s.SettingValue, s.SettingType)).ToList());
+            return _audioSourceSettingsList.Select(s => (AudioSourceSettingInfo)s.Attribute).ToList();
         }
 
-        public Task UpdateSettingAsync(string settingName, object value)
+        public void UpdateSetting(string settingName, object value)
         {
             _audioSourceSettings[settingName].SettingValue = value;
-            return Task.CompletedTask;
+        }
+
+        public object GetSettingValue(string settingName)
+        {
+            return _audioSourceSettings[settingName].SettingValue;
         }
 
         /// <summary>
