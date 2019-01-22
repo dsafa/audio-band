@@ -3,8 +3,8 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Timers;
 using AudioBand.AudioSource;
-using NLog;
 using AudioBand.ServiceContracts;
+using NLog;
 
 namespace AudioSourceHost
 {

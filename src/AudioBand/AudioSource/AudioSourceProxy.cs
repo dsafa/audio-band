@@ -7,15 +7,15 @@ using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog;
 using AudioBand.ServiceContracts;
+using NLog;
 
 namespace AudioBand.AudioSource
 {
     /// <summary>
     /// Proxy class for an IAudioSource in another process.
     /// </summary>
-    internal class AudioSourceProxy : IAudioSource
+    internal class AudioSourceProxy : IInternalAudioSource
     {
         private static readonly string HostExePath = Path.Combine(DirectoryHelper.BaseDirectory, "AudioSourceHost.exe");
         private readonly ILogger _logger;
@@ -97,7 +97,7 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Gets the settings that the audio source has.
         /// </summary>
-        public List<AudioSourceSettingAttribute> AudioSourceSettings { get; private set; }
+        public List<AudioSourceSettingAttribute> Settings { get; private set; }
 
         private bool HostIsRestarting
         {
@@ -450,7 +450,7 @@ namespace AudioBand.AudioSource
         {
             IAudioSourceHost host = GetHost();
             var settings = host.GetAudioSourceSettings().Select(s => (AudioSourceSettingAttribute)s).ToList();
-            AudioSourceSettings = settings;
+            Settings = settings;
 
             // apply the settings again, if host restarted, the cache should be populated
             foreach (var keyVal in _settingsCache)
