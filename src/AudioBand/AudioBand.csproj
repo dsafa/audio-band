@@ -102,9 +102,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioSource\AudioSourceHostCallback.cs" />
+    <Compile Include="AudioSource\AudioSourceHostService.cs" />
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
-    <Compile Include="AudioSource\AudioSourceRegisteredEventArgs.cs" />
     <Compile Include="AudioSource\AudioSourceServer.cs" />
+    <Compile Include="AudioSource\IAudioSourceHostService.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommand{T}.cs" />

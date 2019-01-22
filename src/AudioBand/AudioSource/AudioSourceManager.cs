@@ -40,7 +40,14 @@ namespace AudioBand.AudioSource
             }
 
             Logger.Debug("Loading audio sources");
-            var tasks = Directory.EnumerateDirectories(PluginFolderPath).Select(dir => AudioSourceProxy.CreateProxy(dir)).ToArray();
+            var tasks = Directory.EnumerateDirectories(PluginFolderPath)
+                .Select(dir =>
+                {
+                    var audioSourceServer = new AudioSourceServer(dir);
+                    var hostService = new AudioSourceHostService(dir, audioSourceServer);
+                    return AudioSourceProxy.CreateProxy(dir, hostService);
+                })
+                .ToArray();
 
             var proxies = await Task.WhenAll(tasks).ConfigureAwait(false);
             foreach (var proxy in proxies.Where(p => p != null))

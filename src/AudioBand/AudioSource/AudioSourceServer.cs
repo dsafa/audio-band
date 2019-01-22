@@ -12,11 +12,27 @@ namespace AudioBand.AudioSource
     internal class AudioSourceServer : IAudioSourceServer
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private ServiceHost _audioSourceServerHost;
 
         /// <summary>
-        /// Occurs when a AudioSourceHost registers to this server.
+        /// Initializes a new instance of the <see cref="AudioSourceServer"/> class
+        /// with the directory of the audio source.
         /// </summary>
-        public event EventHandler<AudioSourceRegisteredEventArgs> HostRegistered;
+        /// <param name="audioSourceDirectory">The directory of the audio source.</param>
+        public AudioSourceServer(string audioSourceDirectory)
+        {
+            Endpoint = ServiceHelper.GetAudioSourceServerEndpoint(audioSourceDirectory);
+
+            _audioSourceServerHost = new ServiceHost(this);
+            _audioSourceServerHost.AddServiceEndpoint(typeof(IAudioSourceServer), new NetNamedPipeBinding(), Endpoint);
+            _audioSourceServerHost.Open();
+        }
+
+        /// <inheritdoc/>
+        public event EventHandler<Uri> HostRegistered;
+
+        /// <inheritdoc/>
+        public Uri Endpoint { get; private set; }
 
         /// <inheritdoc/>
         public void IsAlive()
@@ -26,7 +42,7 @@ namespace AudioBand.AudioSource
         /// <inheritdoc/>
         public bool RegisterHost(Uri hostServiceUri)
         {
-            HostRegistered?.Invoke(this, new AudioSourceRegisteredEventArgs(hostServiceUri));
+            HostRegistered?.Invoke(this, hostServiceUri);
 
             Logger.Debug($"Audio source registered at {hostServiceUri}");
             return true;
