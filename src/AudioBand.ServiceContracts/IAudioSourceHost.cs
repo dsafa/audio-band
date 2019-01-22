@@ -3,7 +3,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 
-namespace ServiceContracts
+namespace AudioBand.ServiceContracts
 {
     /// <summary>
     /// Contract for the service that is hosting the audio sources.

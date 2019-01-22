@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTunesAudioSource", "iTunes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicBeeAudioSource", "MusicBeeAudioSource\MusicBeeAudioSource.csproj", "{741DB79C-921D-4D91-85F1-CD10C746F46E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceContracts", "ServiceContracts\ServiceContracts.csproj", "{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioBand.ServiceContracts", "AudioBand.ServiceContracts\AudioBand.ServiceContracts.csproj", "{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioSourceHost", "AudioSourceHost\AudioSourceHost.csproj", "{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}"
 EndProject

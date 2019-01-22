@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 using NLog;
-using ServiceContracts;
+using AudioBand.ServiceContracts;
 
 namespace AudioSourceHost
 {

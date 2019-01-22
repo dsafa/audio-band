@@ -7,8 +7,8 @@
     <ProjectGuid>{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ServiceContracts</RootNamespace>
-    <AssemblyName>ServiceContracts</AssemblyName>
+    <RootNamespace>AudioBand.ServiceContracts</RootNamespace>
+    <AssemblyName>AudioBand.ServiceContracts</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

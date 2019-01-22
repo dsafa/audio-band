@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 
-namespace ServiceContracts
+namespace AudioBand.ServiceContracts
 {
     /// <summary>
     /// Contract for a server where a host can use to initiate communication with.

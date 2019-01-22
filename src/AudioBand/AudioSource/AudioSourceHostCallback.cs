@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
-using ServiceContracts;
+using AudioBand.ServiceContracts;
 
 namespace AudioBand.AudioSource
 {

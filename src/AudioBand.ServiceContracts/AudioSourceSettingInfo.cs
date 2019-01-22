@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace ServiceContracts
+namespace AudioBand.ServiceContracts
 {
     /// <summary>
     /// Data contract for <see cref="AudioSourceSettingAttribute"/>.
