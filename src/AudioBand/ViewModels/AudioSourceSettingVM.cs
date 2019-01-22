@@ -106,7 +106,7 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Notify that the value of the setting was changed by the audio source.
+        /// Notify that the value of the setting was changed by the audio source so we have to update the model.
         /// </summary>
         public void ValueChanged()
         {

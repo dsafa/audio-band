@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace AudioBand.AudioSource
             {
                 Logger.Debug("Found orphan process");
                 p.Kill();
+                await Task.Delay(TimeSpan.FromSeconds(2));
             }
 
             Logger.Debug("Loading audio sources");
