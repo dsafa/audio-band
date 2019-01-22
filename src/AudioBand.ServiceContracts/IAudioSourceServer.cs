@@ -22,5 +22,9 @@ namespace AudioBand.ServiceContracts
         /// </summary>
         [OperationContract]
         void IsAlive();
+
+        event EventHandler<Uri> HostRegistered;
+
+        Uri Endpoint { get; }
     }
 }
