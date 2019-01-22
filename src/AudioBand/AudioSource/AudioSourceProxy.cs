@@ -26,8 +26,8 @@ namespace AudioBand.AudioSource
         private readonly Uri _audioSourceServerEndpoint;
         private readonly string _directory;
         private readonly AudioSourceHostCallback _callback = new AudioSourceHostCallback();
+        private readonly Dictionary<string, object> _settingsCache = new Dictionary<string, object>();
         private Dictionary<string, IAudioSourceHost> _channels = new Dictionary<string, IAudioSourceHost>();
-        private Dictionary<string, object> _settingsCache = new Dictionary<string, object>();
         private DuplexChannelFactory<IAudioSourceHost> _channelFactory;
         private ServiceHost _audioSourceServerHost;
         private Uri _hostUri;
@@ -99,6 +99,44 @@ namespace AudioBand.AudioSource
         /// </summary>
         public List<AudioSourceSettingAttribute> AudioSourceSettings { get; private set; }
 
+        private bool HostIsRestarting
+        {
+            get
+            {
+                lock (_errorLock)
+                {
+                    return _isErrored;
+                }
+            }
+
+            set
+            {
+                lock (_errorLock)
+                {
+                    _isErrored = value;
+                }
+            }
+        }
+
+        private bool IsClosing
+        {
+            get
+            {
+                lock (_isClosingLock)
+                {
+                    return _isClosing;
+                }
+            }
+
+            set
+            {
+                lock (_isClosingLock)
+                {
+                    _isClosing = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Get or set a setting.
         /// </summary>
@@ -141,44 +179,6 @@ namespace AudioBand.AudioSource
                 catch (Exception e)
                 {
                     HandleError(e);
-                }
-            }
-        }
-
-        private bool HostIsRestarting
-        {
-            get
-            {
-                lock (_errorLock)
-                {
-                    return _isErrored;
-                }
-            }
-
-            set
-            {
-                lock (_errorLock)
-                {
-                    _isErrored = value;
-                }
-            }
-        }
-
-        private bool IsClosing
-        {
-            get
-            {
-                lock (_isClosingLock)
-                {
-                    return _isClosing;
-                }
-            }
-
-            set
-            {
-                lock (_isClosingLock)
-                {
-                    _isClosing = value;
                 }
             }
         }

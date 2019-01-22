@@ -20,11 +20,23 @@ namespace AudioBand.Extensions
             return audioSource.ToProxy().AudioSourceSettings;
         }
 
+        /// <summary>
+        /// Updates the value of a setting.
+        /// </summary>
+        /// <param name="audioSource">The audio source to update.</param>
+        /// <param name="settingName">The name of the setting to update.</param>
+        /// <param name="value">The new value to set.</param>
         public static void UpdateSetting(this IAudioSource audioSource, string settingName, object value)
         {
             audioSource.ToProxy()[settingName] = value;
         }
 
+        /// <summary>
+        /// Gets the value of a setting.
+        /// </summary>
+        /// <param name="audioSource">The audio source.</param>
+        /// <param name="settingName">The name of the setting.</param>
+        /// <returns>The value of the setting.</returns>
         public static object GetSettingValue(this IAudioSource audioSource, string settingName)
         {
             return audioSource.ToProxy()[settingName];

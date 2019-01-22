@@ -5,7 +5,6 @@ namespace AudioSourceHost
 {
     public class AudioSourceLogger : IAudioSourceLogger
     {
-        private readonly string _name;
         private readonly ILogger _logger;
 
         public AudioSourceLogger(string audiosourceName)
