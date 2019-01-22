@@ -1,7 +1,7 @@
 ﻿using AudioBand.AudioSource;
 using System.Runtime.Serialization;
 
-namespace ServiceContracts
+namespace AudioBand.ServiceContracts
 {
     /// <summary>
     /// Data contract for <see cref="SettingChangedEventArgs"/>.

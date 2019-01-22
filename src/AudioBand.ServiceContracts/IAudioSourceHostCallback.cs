@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using AudioBand.AudioSource;
 
-namespace ServiceContracts
+namespace AudioBand.ServiceContracts
 {
     /// <summary>
     /// Call back for <see cref="IAudioSourceHost"/>.

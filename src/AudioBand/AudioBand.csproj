@@ -303,9 +303,9 @@
       <Project>{30f2bfea-788a-494d-88e7-f2070528ebea}</Project>
       <Name>AudioBand.AudioSource</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj">
+    <ProjectReference Include="..\AudioBand.ServiceContracts\AudioBand.ServiceContracts.csproj">
       <Project>{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}</Project>
-      <Name>ServiceContracts</Name>
+      <Name>AudioBand.ServiceContracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

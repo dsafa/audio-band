@@ -8,7 +8,7 @@ using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
-using ServiceContracts;
+using AudioBand.ServiceContracts;
 
 namespace AudioBand.AudioSource
 {

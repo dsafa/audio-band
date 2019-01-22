@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace ServiceContracts
+namespace AudioBand.ServiceContracts
 {
     /// <summary>
     /// Serializable class for <see cref="TrackInfoChangedEventArgs"/>.

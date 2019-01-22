@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ServiceContracts
+namespace AudioBand.ServiceContracts
 {
     /// <summary>
     /// Helper methods for services.

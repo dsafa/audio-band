@@ -87,9 +87,9 @@
       <Project>{30F2BFEA-788A-494D-88E7-F2070528EBEA}</Project>
       <Name>AudioBand.AudioSource</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj">
+    <ProjectReference Include="..\AudioBand.ServiceContracts\AudioBand.ServiceContracts.csproj">
       <Project>{4635735d-c08f-4fda-8baa-fa16ae58c1aa}</Project>
-      <Name>ServiceContracts</Name>
+      <Name>AudioBand.ServiceContracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
