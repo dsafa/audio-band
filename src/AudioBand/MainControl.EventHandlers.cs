@@ -131,7 +131,7 @@ namespace AudioBand
             _settingsWindowVm.CancelEdit();
         }
 
-        private async void AudioSourcesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private async void AudioSourcesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {

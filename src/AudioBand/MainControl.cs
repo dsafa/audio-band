@@ -129,7 +129,7 @@ namespace AudioBand
                 });
 
                 _audioSourceManager = new AudioSourceManager();
-                _audioSourceManager.AudioSources.CollectionChanged += AudioSourcesCollectionChanged;
+                _audioSourceManager.AudioSources.CollectionChanged += AudioSourcesOnCollectionChanged;
                 await _audioSourceManager.LoadAudioSources();
 
                 Logger.Debug("Initialization complete");
