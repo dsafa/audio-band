@@ -17,7 +17,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="settings">Settings for the audio source.</param>
         /// <param name="audioSource">The audio source.</param>
-        public AudioSourceSettingsVM(AudioSourceSettings settings, IAudioSource audioSource)
+        public AudioSourceSettingsVM(AudioSourceSettings settings, IInternalAudioSource audioSource)
             : base(settings)
         {
             Settings = CreateSettingViewModels(Model, audioSource);
@@ -69,10 +69,10 @@ namespace AudioBand.ViewModels
             Settings.FirstOrDefault(s => s.Name == e.PropertyName)?.ValueChanged();
         }
 
-        private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IAudioSource source)
+        private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IInternalAudioSource source)
         {
             var viewmodels = new List<AudioSourceSettingVM>();
-            var settingAttributes = source.GetSettings();
+            var settingAttributes = source.Settings;
 
             foreach (var settingAttribute in settingAttributes)
             {
@@ -84,7 +84,7 @@ namespace AudioBand.ViewModels
                 else
                 {
                     var name = settingAttribute.Name;
-                    var defaultValue = source.GetSettingValue(name);
+                    var defaultValue = source[name];
                     var newSetting = new AudioSourceSetting { Name = name, Value = defaultValue };
                     Model.Settings.Add(newSetting);
                     viewmodels.Add(new AudioSourceSettingVM(source, newSetting, settingAttribute, false));

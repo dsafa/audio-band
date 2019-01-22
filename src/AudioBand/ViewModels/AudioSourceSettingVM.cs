@@ -11,17 +11,17 @@ namespace AudioBand.ViewModels
     internal class AudioSourceSettingVM : ViewModelBase<AudioSourceSetting>
     {
         private readonly AudioSourceSettingAttribute _settingAttribute;
-        private readonly IAudioSource _audioSource;
+        private readonly IInternalAudioSource _audioSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceSettingVM"/> class
         /// with the model, setting information and if it was saved,
         /// </summary>
-        /// <param name="audioSource">The associated <see cref="IAudioSource"/>.</param>
+        /// <param name="audioSource">The associated <see cref="IInternalAudioSource"/>.</param>
         /// <param name="model">The <see cref="AudioSource"/>.</param>
         /// <param name="settingAttribute">The <see cref="AudioSourceSettingAttribute"/>.</param>
         /// <param name="saved">If this setting was saved.</param>
-        public AudioSourceSettingVM(IAudioSource audioSource, AudioSourceSetting model, AudioSourceSettingAttribute settingAttribute, bool saved = true)
+        public AudioSourceSettingVM(IInternalAudioSource audioSource, AudioSourceSetting model, AudioSourceSettingAttribute settingAttribute, bool saved = true)
             : base(model)
         {
             _settingAttribute = settingAttribute;
@@ -97,7 +97,7 @@ namespace AudioBand.ViewModels
         {
             try
             {
-                _audioSource.UpdateSetting(Name, Value);
+                _audioSource[Name] = Value;
             }
             catch (Exception)
             {
@@ -110,7 +110,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         public void ValueChanged()
         {
-            Model.Value = _audioSource.GetSettingValue(Name);
+            Model.Value = _audioSource[Name];
         }
 
         /// <inheritdoc/>

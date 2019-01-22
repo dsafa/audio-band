@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
-using NLog;
 using AudioBand.ServiceContracts;
+using NLog;
 
 namespace AudioBand.AudioSource
 {

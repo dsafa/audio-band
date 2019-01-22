@@ -22,7 +22,7 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Gets the list of audio sources available.
         /// </summary>
-        public ObservableCollection<IAudioSource> AudioSources { get; private set; } = new ObservableCollection<IAudioSource>();
+        public ObservableCollection<IInternalAudioSource> AudioSources { get; private set; } = new ObservableCollection<IInternalAudioSource>();
 
         /// <summary>
         /// Load all audio sources.

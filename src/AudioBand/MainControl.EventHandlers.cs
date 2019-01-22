@@ -135,7 +135,7 @@ namespace AudioBand
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                foreach (IAudioSource audioSource in e.NewItems.Cast<IAudioSource>())
+                foreach (var audioSource in e.NewItems.Cast<IInternalAudioSource>())
                 {
                     await AddNewAudioSource(audioSource);
                 }
@@ -146,7 +146,7 @@ namespace AudioBand
             }
         }
 
-        private async Task AddNewAudioSource(IAudioSource audioSource)
+        private async Task AddNewAudioSource(IInternalAudioSource audioSource)
         {
             var menuItem = new DeskBandMenuAction(audioSource.Name);
             menuItem.Clicked += AudioSourceMenuItemOnClicked;
@@ -157,7 +157,7 @@ namespace AudioBand
                 RefreshContextMenu();
             }
 
-            var settings = audioSource.GetSettings();
+            var settings = audioSource.Settings;
             if (settings.Count > 0)
             {
                 // check if the settings were saved previously and reuse them
