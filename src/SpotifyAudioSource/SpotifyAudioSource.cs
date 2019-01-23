@@ -119,7 +119,7 @@ namespace SpotifyAudioSource
                 }
 
                 _refreshToken = value;
-                OnSettingChanged();
+                OnSettingChanged("Spotify Refresh Token");
             }
         }
 
@@ -486,9 +486,9 @@ namespace SpotifyAudioSource
             }
         }
 
-        private void OnSettingChanged([CallerMemberName] string propertyName = null)
+        private void OnSettingChanged(string settingName)
         {
-            SettingChanged?.Invoke(this, new SettingChangedEventArgs(propertyName));
+            SettingChanged?.Invoke(this, new SettingChangedEventArgs(settingName));
         }
 
         private async Task RefreshAccessToken()

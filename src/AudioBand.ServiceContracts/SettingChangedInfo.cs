@@ -10,14 +10,14 @@ namespace AudioBand.ServiceContracts
     public class SettingChangedInfo
     {
         /// <summary>
-        /// Data member for <see cref="SettingChangedEventArgs.PropertyName"/>.
+        /// Data member for <see cref="SettingChangedEventArgs.SettingName"/>.
         /// </summary>
         [DataMember]
         public string PropertyName { get; set; }
 
         public static explicit operator SettingChangedInfo(SettingChangedEventArgs e)
         {
-            return new SettingChangedInfo { PropertyName = e.PropertyName };
+            return new SettingChangedInfo { PropertyName = e.SettingName };
         }
 
         public static explicit operator SettingChangedEventArgs(SettingChangedInfo info)

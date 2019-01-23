@@ -53,17 +53,6 @@ namespace AudioBand.AudioSource
             }
         }
 
-        private void ProxyOnReady(object sender, EventArgs e)
-        {
-            var proxy = sender as AudioSourceProxy;
-            _uninitializedProxies.Remove(proxy);
-
-            lock (_audioSourcesLock)
-            {
-                AudioSources.Add(proxy);
-            }
-        }
-
         /// <summary>
         /// Close all services.
         /// </summary>
@@ -72,6 +61,17 @@ namespace AudioBand.AudioSource
             foreach (var proxy in AudioSources.Cast<AudioSourceProxy>())
             {
                 proxy.Close();
+            }
+        }
+
+        private void ProxyOnReady(object sender, EventArgs e)
+        {
+            var proxy = sender as AudioSourceProxy;
+            _uninitializedProxies.Remove(proxy);
+
+            lock (_audioSourcesLock)
+            {
+                AudioSources.Add(proxy);
             }
         }
     }
