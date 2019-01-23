@@ -9,17 +9,17 @@ namespace AudioBand.AudioSource
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingChangedEventArgs"/> class
-        /// with the setting's property name.
+        /// with the setting's name.
         /// </summary>
-        /// <param name="propertyName">Name of the setting's property that changed.</param>
-        public SettingChangedEventArgs(string propertyName)
+        /// <param name="settingName">Name of the setting that changed.</param>
+        public SettingChangedEventArgs(string settingName)
         {
-            PropertyName = propertyName;
+            SettingName = settingName;
         }
 
         /// <summary>
         /// Gets or sets the name of the setting's property that changed.
         /// </summary>
-        public string PropertyName { get; set; }
+        public string SettingName { get; set; }
     }
 }

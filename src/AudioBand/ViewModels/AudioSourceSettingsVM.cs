@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AudioBand.AudioSource;
-using AudioBand.Extensions;
 using AudioBand.Models;
 
 namespace AudioBand.ViewModels
@@ -66,7 +65,7 @@ namespace AudioBand.ViewModels
 
         private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
         {
-            Settings.FirstOrDefault(s => s.Name == e.PropertyName)?.ValueChanged();
+            Settings.FirstOrDefault(s => s.Name == e.SettingName)?.ValueChanged();
         }
 
         private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IInternalAudioSource source)
