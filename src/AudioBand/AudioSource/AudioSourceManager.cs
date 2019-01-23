@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -18,6 +19,7 @@ namespace AudioBand.AudioSource
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private static readonly object _audioSourcesLock = new object();
+        private readonly List<AudioSourceProxy> _uninitializedProxies = new List<AudioSourceProxy>();
 
         /// <summary>
         /// Gets the list of audio sources available.
@@ -40,17 +42,23 @@ namespace AudioBand.AudioSource
             }
 
             Logger.Debug("Loading audio sources");
-            var tasks = Directory.EnumerateDirectories(PluginFolderPath)
-                .Select(dir =>
-                {
-                    var audioSourceServer = new AudioSourceServer(dir);
-                    var hostService = new AudioSourceHostService(dir, audioSourceServer);
-                    return AudioSourceProxy.CreateProxy(dir, hostService);
-                })
-                .ToArray();
+            foreach (var dir in Directory.EnumerateDirectories(PluginFolderPath))
+            {
+                var audioSourceServer = new AudioSourceServer(dir);
+                var hostService = new AudioSourceHostService(dir, audioSourceServer);
+                var proxy = new AudioSourceProxy(dir, hostService);
+                proxy.Ready += ProxyOnReady;
 
-            var proxies = await Task.WhenAll(tasks).ConfigureAwait(false);
-            foreach (var proxy in proxies.Where(p => p != null))
+                _uninitializedProxies.Add(proxy);
+            }
+        }
+
+        private void ProxyOnReady(object sender, EventArgs e)
+        {
+            var proxy = sender as AudioSourceProxy;
+            _uninitializedProxies.Remove(proxy);
+
+            lock (_audioSourcesLock)
             {
                 AudioSources.Add(proxy);
             }
