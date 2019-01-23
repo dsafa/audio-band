@@ -106,6 +106,7 @@
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
     <Compile Include="AudioSource\AudioSourceServer.cs" />
     <Compile Include="AudioSource\IAudioSourceHostService.cs" />
+    <Compile Include="AudioSource\IInternalAudioSource.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommand{T}.cs" />

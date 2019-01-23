@@ -45,7 +45,6 @@
     <Compile Include="AudioSourceSettingAttribute.cs" />
     <Compile Include="IAudioSource.cs" />
     <Compile Include="IAudioSourceLogger.cs" />
-    <Compile Include="IInternalAudioSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingChangedEventArgs.cs" />
     <Compile Include="SettingOptions.cs" />
