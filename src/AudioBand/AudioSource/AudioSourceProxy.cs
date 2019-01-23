@@ -17,20 +17,20 @@ namespace AudioBand.AudioSource
     {
         private readonly ILogger _logger;
         private readonly object _isClosingLock = new object();
-        private readonly TaskCompletionSource<bool> _initializationCompletionSource;
-        private readonly string _directory;
-
         private readonly Dictionary<string, object> _settingsCache = new Dictionary<string, object>();
         private IAudioSourceHostService _hostService;
         private bool _hasInitializedOnce;
-
         private bool _isClosing;
         private bool _isActivated;
 
-        private AudioSourceProxy(string directory, TaskCompletionSource<bool> initializationCompletionSource, IAudioSourceHostService hostService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioSourceProxy"/> class
+        /// with the directory and the host service.
+        /// </summary>
+        /// <param name="directory">The audio source directory.</param>
+        /// <param name="hostService">The host service.</param>
+        public AudioSourceProxy(string directory, IAudioSourceHostService hostService)
         {
-            _initializationCompletionSource = initializationCompletionSource;
-            _directory = directory;
             _logger = LogManager.GetLogger($"AudioSourceProxy({new DirectoryInfo(directory).Name})");
 
             _hostService = hostService;
@@ -41,6 +41,11 @@ namespace AudioBand.AudioSource
             hostService.HostCallback.TrackProgressChanged += (o, e) => TrackProgressChanged?.Invoke(this, e);
             hostService.Restarted += HostServiceRestarted;
         }
+
+        /// <summary>
+        /// Occurs when the proxy is initialized and ready.
+        /// </summary>
+        public event EventHandler Ready;
 
         /// <inheritdoc/>
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
@@ -144,27 +149,6 @@ namespace AudioBand.AudioSource
                 {
                     HandleError(e);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="AudioSourceProxy"/> for the given directory.
-        /// </summary>
-        /// <param name="directory">Directory containing the audio source.</param>
-        /// <param name="hostService">The host service used to access a host.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation that creates an <see cref="AudioSourceProxy"/>.</returns>
-        public static async Task<AudioSourceProxy> CreateProxy(string directory, IAudioSourceHostService hostService)
-        {
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            var proxy = new AudioSourceProxy(directory, taskCompletionSource, hostService);
-
-            if (await taskCompletionSource.Task)
-            {
-                return proxy;
-            }
-            else
-            {
-                return null;
             }
         }
 
@@ -297,12 +281,6 @@ namespace AudioBand.AudioSource
                 _logger.Error(e);
             }
 
-            // if this is the first time the host is registered, send exit signal.
-            if (!_hasInitializedOnce)
-            {
-                _initializationCompletionSource.SetResult(false);
-            }
-
             _hostService.Restart();
         }
 
@@ -314,7 +292,7 @@ namespace AudioBand.AudioSource
             if (!_hasInitializedOnce)
             {
                 _hasInitializedOnce = true;
-                _initializationCompletionSource.SetResult(true);
+                Ready?.Invoke(this, EventArgs.Empty);
             }
 
             // re-activate if the host was restarted
