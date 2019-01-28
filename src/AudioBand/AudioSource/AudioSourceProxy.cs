@@ -158,6 +158,7 @@ namespace AudioBand.AudioSource
         public void Close()
         {
             IsClosing = true;
+            _hostService.Close();
         }
 
         /// <inheritdoc/>
