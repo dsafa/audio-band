@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AudioBand.AudioSource
@@ -51,43 +50,37 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Called when the audio source becomes active.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The completed task.</returns>
-        Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>A <see cref="Task"/> representing the asynchronous activate operation.</returns>
+        Task ActivateAsync();
 
         /// <summary>
         /// Called when the audio source is no longer active.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The completed task.</returns>
-        Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>A <see cref="Task"/> representing the asynchronous deactivate operation.</returns>
+        Task DeactivateAsync();
 
         /// <summary>
         /// Called when there is a request to start playback.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The completed task.</returns>
-        Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>A <see cref="Task"/> representing the asynchronous play operation.</returns>
+        Task PlayTrackAsync();
 
         /// <summary>
         /// Called when there is a request to stop playback.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The completed task.</returns>
-        Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>A <see cref="Task"/> representing the asynchronous pause operation.</returns>
+        Task PauseTrackAsync();
 
         /// <summary>
         /// Called when there is a request to skip to the previous track.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The completed task.</returns>
-        Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>A <see cref="Task"/> representing the asynchronous skip to previous track operation.</returns>
+        Task PreviousTrackAsync();
 
         /// <summary>
         /// Called when there is a request to skip to the next track.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The completed task.</returns>
-        Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken));
+        /// <returns>A <see cref="Task"/> representing the asynchronous skip to next track operation.</returns>
+        Task NextTrackAsync();
     }
 }

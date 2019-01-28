@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using AudioBand.AudioSource;
@@ -203,7 +201,7 @@ namespace SpotifyAudioSource
             }
         }
 
-        public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task ActivateAsync()
         {
             _checkSpotifyTimer.Start();
 
@@ -212,7 +210,7 @@ namespace SpotifyAudioSource
             return Task.CompletedTask;
         }
 
-        public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task DeactivateAsync()
         {
             _isActive = false;
 
@@ -228,25 +226,25 @@ namespace SpotifyAudioSource
             return Task.CompletedTask;
         }
 
-        public Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PlayTrackAsync()
         {
             _spotifyControls.Play();
             return Task.CompletedTask;
         }
 
-        public Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PauseTrackAsync()
         {
             _spotifyControls.Pause();
             return Task.CompletedTask;
         }
 
-        public Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PreviousTrackAsync()
         {
             _spotifyControls.Previous();
             return Task.CompletedTask;
         }
 
-        public Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task NextTrackAsync()
         {
             _spotifyControls.Next();
             return Task.CompletedTask;

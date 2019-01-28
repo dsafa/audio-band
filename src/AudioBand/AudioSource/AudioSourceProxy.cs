@@ -162,7 +162,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
-        public async Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task ActivateAsync()
         {
             if (IsClosing)
             {
@@ -181,7 +181,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
-        public async Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task DeactivateAsync()
         {
             if (IsClosing)
             {
@@ -200,7 +200,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
-        public async Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task NextTrackAsync()
         {
             if (IsClosing)
             {
@@ -218,7 +218,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
-        public async Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task PauseTrackAsync()
         {
             if (IsClosing)
             {
@@ -236,7 +236,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
-        public async Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task PlayTrackAsync()
         {
             if (IsClosing)
             {
@@ -254,7 +254,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
-        public async Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task PreviousTrackAsync()
         {
             if (IsClosing)
             {
