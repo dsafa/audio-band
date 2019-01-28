@@ -30,5 +30,10 @@ namespace AudioBand.AudioSource
         /// Restart the service.
         /// </summary>
         void Restart();
+
+        /// <summary>
+        /// Close the service.
+        /// </summary>
+        void Close();
     }
 }

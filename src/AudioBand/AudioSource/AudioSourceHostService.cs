@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using AudioBand.ServiceContracts;
 using NLog;
 
@@ -86,7 +87,31 @@ namespace AudioBand.AudioSource
         /// <inheritdoc/>
         public void Restart()
         {
+            try
+            {
+                _hostProcess?.Kill();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+
             StartHost();
+        }
+
+        /// <inheritdoc/>
+        public void Close()
+        {
+            try
+            {
+                _channelFactory?.Close();
+                _hostProcess.Exited -= ProcessOnExited;
+                _hostProcess?.Kill();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         private void CreateChannelFactory()
@@ -130,7 +155,7 @@ namespace AudioBand.AudioSource
 
             if (_hostProcess != null && !_hostProcess.HasExited)
             {
-                Logger.Debug("Cannot start host, previous process is still alive");
+                Logger.Error("Cannot start host, previous process is still alive");
                 return;
             }
 
@@ -152,9 +177,11 @@ namespace AudioBand.AudioSource
             HostIsStarting = true;
         }
 
-        private void ProcessOnExited(object sender, EventArgs e)
+        private async void ProcessOnExited(object sender, EventArgs e)
         {
             Logger.Debug($"Host process at {_hostUri} exited.");
+
+            await Task.Delay(TimeSpan.FromSeconds(2));
 
             StartHost();
         }
