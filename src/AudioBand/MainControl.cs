@@ -36,7 +36,6 @@ namespace AudioBand
         private DeskBandMenuAction _settingsMenuItem;
         private DeskBandMenu _pluginSubMenu;
         private List<DeskBandMenuAction> _audioSourceContextMenuItems;
-        private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
         private SettingsWindowVM _settingsWindowVm;
 
         #region Models
@@ -208,8 +207,7 @@ namespace AudioBand
             source.TrackPaused += AudioSourceOnTrackPaused;
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
-            _audioSourceTokenSource = new CancellationTokenSource();
-            await source.ActivateAsync(_audioSourceTokenSource.Token).ConfigureAwait(false);
+            await source.ActivateAsync().ConfigureAwait(false);
 
             _appSettings.AudioSource = source.Name;
 
@@ -228,7 +226,6 @@ namespace AudioBand
             source.TrackPaused -= AudioSourceOnTrackPaused;
             source.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
 
-            _audioSourceTokenSource.Cancel();
             await source.DeactivateAsync().ConfigureAwait(false);
 
             _appSettings.AudioSource = null;

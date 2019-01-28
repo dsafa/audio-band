@@ -41,14 +41,14 @@ namespace iTunesAudioSource
 
         public IAudioSourceLogger Logger { get; set; }
 
-        public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task ActivateAsync()
         {
             _itunesControls.Start();
             _checkiTunesTimer.Start();
             return Task.CompletedTask;
         }
 
-        public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task DeactivateAsync()
         {
             _checkiTunesTimer.Stop();
             _itunesControls.Stop();
@@ -59,25 +59,25 @@ namespace iTunesAudioSource
             return Task.CompletedTask;
         }
 
-        public Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task NextTrackAsync()
         {
             _itunesControls.Next();
             return Task.CompletedTask;
         }
 
-        public Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PauseTrackAsync()
         {
             _itunesControls.Pause();
             return Task.CompletedTask;
         }
 
-        public Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PlayTrackAsync()
         {
             _itunesControls.Play();
             return Task.CompletedTask;
         }
 
-        public Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PreviousTrackAsync()
         {
             _itunesControls.Previous();
             return Task.CompletedTask;

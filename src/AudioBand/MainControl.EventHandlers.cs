@@ -31,22 +31,22 @@ namespace AudioBand
         {
             if (_trackModel.IsPlaying)
             {
-                await (_currentAudioSource?.PauseTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
+                await (_currentAudioSource?.PauseTrackAsync() ?? Task.CompletedTask);
             }
             else
             {
-                await (_currentAudioSource?.PlayTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
+                await (_currentAudioSource?.PlayTrackAsync() ?? Task.CompletedTask);
             }
         }
 
         private async void PreviousButtonOnClick(object sender, EventArgs eventArgs)
         {
-            await (_currentAudioSource?.PreviousTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
+            await (_currentAudioSource?.PreviousTrackAsync() ?? Task.CompletedTask);
         }
 
         private async void NextButtonOnClick(object sender, EventArgs eventArgs)
         {
-            await (_currentAudioSource?.NextTrackAsync(_audioSourceTokenSource.Token) ?? Task.CompletedTask);
+            await (_currentAudioSource?.NextTrackAsync() ?? Task.CompletedTask);
         }
 
         #endregion

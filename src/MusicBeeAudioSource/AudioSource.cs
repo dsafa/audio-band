@@ -46,37 +46,37 @@ namespace MusicBeeAudioSource
 
         public IAudioSourceLogger Logger { get; set; }
 
-        public Task ActivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task ActivateAsync()
         {
             _checkMusicBeeTimer.Start();
             return Task.CompletedTask;
         }
 
-        public Task DeactivateAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task DeactivateAsync()
         {
             _checkMusicBeeTimer.Stop();
             return Task.CompletedTask;
         }
 
-        public Task NextTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task NextTrackAsync()
         {
             _ipc.NextTrack();
             return Task.CompletedTask;
         }
 
-        public Task PauseTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PauseTrackAsync()
         {
             _ipc.Pause();
             return Task.CompletedTask;
         }
 
-        public Task PlayTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PlayTrackAsync()
         {
             _ipc.Play();
             return Task.CompletedTask;
         }
 
-        public Task PreviousTrackAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task PreviousTrackAsync()
         {
             _ipc.PreviousTrack();
             return Task.CompletedTask;
