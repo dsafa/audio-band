@@ -122,8 +122,8 @@ namespace AudioBand
                 await _uiDispatcher.InvokeAsync(() =>
                 {
                     _settingsWindow = new SettingsWindow(_settingsWindowVm);
-                    _settingsWindow.Saved += Saved;
-                    _settingsWindow.Canceled += Canceled;
+                    _settingsWindow.Saved += SettingsWindowOnSaved;
+                    _settingsWindow.Canceled += SettingsWindowOnCanceled;
                     ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
                 });
 
