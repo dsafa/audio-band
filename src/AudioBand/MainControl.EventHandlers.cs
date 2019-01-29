@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
-using AudioBand.Extensions;
 using AudioBand.Models;
 using AudioBand.ViewModels;
 using CSDeskBand.ContextMenu;
@@ -67,30 +65,28 @@ namespace AudioBand
 
         #region Audio source event handlers
 
-        private void AudioSourceOnTrackProgressChanged(object o, TimeSpan progress)
+        private async void AudioSourceOnTrackProgressChanged(object o, TimeSpan progress)
         {
-            BeginInvoke(new Action(() => { _trackModel.TrackProgress = progress; }));
+            await _uiDispatcher.InvokeAsync(() => { _trackModel.TrackProgress = progress; });
         }
 
-        private void AudioSourceOnTrackPaused(object o, EventArgs args)
+        private async void AudioSourceOnTrackPaused(object o, EventArgs args)
         {
             Logger.Debug("State set to paused");
-
-            BeginInvoke(new Action(() => _trackModel.IsPlaying = false));
+            await _uiDispatcher.InvokeAsync(() => _trackModel.IsPlaying = false);
         }
 
-        private void AudioSourceOnTrackPlaying(object o, EventArgs args)
+        private async void AudioSourceOnTrackPlaying(object o, EventArgs args)
         {
             Logger.Debug("State set to playing");
-
-            BeginInvoke(new Action(() => _trackModel.IsPlaying = true));
+            await _uiDispatcher.InvokeAsync(() => _trackModel.IsPlaying = true);
         }
 
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
         {
             if (trackInfoChangedEventArgs == null)
             {
-                Logger.Error("TrackInfoChanged event arg is empty");
+                Logger.Error("TrackInfoChanged event arg is null");
                 return;
             }
 
@@ -108,25 +104,25 @@ namespace AudioBand
 
             Logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
 
-            BeginInvoke(new Action(() =>
+            _uiDispatcher.InvokeAsync(() =>
             {
                 _trackModel.AlbumArt = trackInfoChangedEventArgs.AlbumArt;
                 _trackModel.Artist = trackInfoChangedEventArgs.Artist;
                 _trackModel.TrackName = trackInfoChangedEventArgs.TrackName;
                 _trackModel.TrackLength = trackInfoChangedEventArgs.TrackLength;
                 _trackModel.AlbumName = trackInfoChangedEventArgs.Album;
-            }));
+            });
         }
 
         #endregion
 
-        private void Saved(object o, EventArgs eventArgs)
+        private void SettingsWindowOnSaved(object o, EventArgs eventArgs)
         {
             _settingsWindowVm.EndEdit();
             _appSettings.Save();
         }
 
-        private void Canceled(object sender, EventArgs e)
+        private void SettingsWindowOnCanceled(object sender, EventArgs e)
         {
             _settingsWindowVm.CancelEdit();
         }
