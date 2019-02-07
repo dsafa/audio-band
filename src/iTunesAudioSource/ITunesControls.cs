@@ -31,6 +31,22 @@ namespace iTunesAudioSource
 
         public TimeSpan Progress => TimeSpan.FromMilliseconds(_itunesApp.PlayerPositionMS);
 
+        /// <summary>
+        /// Gets or sets the volume from [0, 100]
+        /// </summary>
+        public int Volume
+        {
+            get
+            {
+                return _itunesApp.SoundVolume;
+            }
+
+            set
+            {
+                _itunesApp.SoundVolume = value;
+            }
+        }
+
         public void Start()
         {
             _itunesApp = new iTunesApp();

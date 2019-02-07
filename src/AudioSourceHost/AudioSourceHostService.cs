@@ -28,6 +28,7 @@ namespace AudioSourceHost
             _audioSource.TrackPaused += AudioSourceOnTrackPaused;
             _audioSource.TrackPlaying += AudioSourceOnTrackPlaying;
             _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
+            _audioSource.VolumeChanged += AudioSourceOnVolumeChanged;
 
             _audioSourceSettingsList = _audioSource.GetSettings();
             foreach (AudioSourceSetting setting in _audioSourceSettingsList)
@@ -149,6 +150,11 @@ namespace AudioSourceHost
             return _audioSource.Name;
         }
 
+        public async Task SetVolume(float volume)
+        {
+            await _audioSource.SetVolumeAsync(volume);
+        }
+
         public void OpenCallbackChannel()
         {
             Callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();
@@ -238,6 +244,18 @@ namespace AudioSourceHost
             try
             {
                 Callback.SettingChanged((SettingChangedInfo)e);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+        }
+
+        private void AudioSourceOnVolumeChanged(object sender, float e)
+        {
+            try
+            {
+                Callback.VolumeChanged(e);
             }
             catch (Exception ex)
             {

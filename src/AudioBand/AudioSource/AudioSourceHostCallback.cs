@@ -35,6 +35,17 @@ namespace AudioBand.AudioSource
         /// </summary>
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
+        /// <summary>
+        /// Occurs when <see cref="IAudioSourceHostCallback.VolumeChanged(float)"/> is called;
+        /// </summary>
+        public event EventHandler<float> VolumeChanged;
+
+        /// <inheritdoc/>
+        void IAudioSourceHostCallback.VolumeChanged(float volume)
+        {
+            VolumeChanged?.Invoke(this, volume);
+        }
+
         /// <inheritdoc/>
         void IAudioSourceHostCallback.SettingChanged(SettingChangedInfo info)
         {
