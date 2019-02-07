@@ -12,6 +12,7 @@ namespace iTunesAudioSource
         private Timer _checkiTunesTimer;
         private string _currentTrack;
         private bool _isPlaying;
+        private int _volume;
         private ITunesControls _itunesControls = new ITunesControls();
 
         public AudioSource()
@@ -36,6 +37,8 @@ namespace iTunesAudioSource
 #pragma warning disable 00067 // Event is not used
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 #pragma warning restore 00067 // Event is not used
+
+        public event EventHandler<float> VolumeChanged;
 
         public string Name => "iTunes";
 
@@ -80,6 +83,12 @@ namespace iTunesAudioSource
         public Task PreviousTrackAsync()
         {
             _itunesControls.Previous();
+            return Task.CompletedTask;
+        }
+
+        public Task SetVolumeAsync(float newVolume)
+        {
+            _itunesControls.Volume = (int)(newVolume * 100);
             return Task.CompletedTask;
         }
 
@@ -140,6 +149,7 @@ namespace iTunesAudioSource
                 }
 
                 NotifyPlayerState();
+                NotifyVolume();
                 if (IsNewTrack(track))
                 {
                     NotifyTrackChange(track);
@@ -155,6 +165,19 @@ namespace iTunesAudioSource
             {
                 _checkiTunesTimer.Enabled = true;
             }
+        }
+
+        private void NotifyVolume()
+        {
+            int volume = _itunesControls.Volume;
+
+            if (volume == _volume)
+            {
+                return;
+            }
+
+            _volume = volume;
+            VolumeChanged?.Invoke(this, _volume / 100f);
         }
     }
 }

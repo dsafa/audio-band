@@ -54,6 +54,8 @@ namespace SpotifyAudioSource
 
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
+        public event EventHandler<float> VolumeChanged;
+
         public string Name { get; } = "Spotify";
 
         public IAudioSourceLogger Logger { get; set; }
@@ -250,6 +252,11 @@ namespace SpotifyAudioSource
             return Task.CompletedTask;
         }
 
+        public async Task SetVolumeAsync(float newVolume)
+        {
+            await _spotifyApi.SetVolumeAsync((int)(newVolume * 100));
+        }
+
         private void Authorize()
         {
             if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret) || !_isActive)
@@ -405,6 +412,7 @@ namespace SpotifyAudioSource
         // The spotify window title is a fixed value when it is paused and the artist - song when playing
         private async void CheckSpotifyTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
+            // TODO get volume change
             try
             {
                 if (!_isActive || string.IsNullOrEmpty(_spotifyApi.AccessToken))

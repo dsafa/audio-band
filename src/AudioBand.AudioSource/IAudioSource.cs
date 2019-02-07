@@ -36,6 +36,11 @@ namespace AudioBand.AudioSource
         event EventHandler<TimeSpan> TrackProgressChanged;
 
         /// <summary>
+        /// Occurs when the volume of the audio source changes. The range of the new volume is between 0.0 and 1.0 inclusive.
+        /// </summary>
+        event EventHandler<float> VolumeChanged;
+
+        /// <summary>
         /// Gets the name of the audio source.
         /// </summary>
         /// <value>The name of the audio source.</value>
@@ -82,5 +87,12 @@ namespace AudioBand.AudioSource
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous skip to next track operation.</returns>
         Task NextTrackAsync();
+
+        /// <summary>
+        /// Called when there is a request to change the volume.
+        /// </summary>
+        /// <param name="newVolume">The new volume to set. The range is between 0.0 and 1.0 inclusive.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous set volume operation.</returns>
+        Task SetVolumeAsync(float newVolume);
     }
 }

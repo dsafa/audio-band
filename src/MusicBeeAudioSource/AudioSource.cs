@@ -17,6 +17,7 @@ namespace MusicBeeAudioSource
         private Timer _checkMusicBeeTimer;
         private bool _isPlaying;
         private string _currentId;
+        private int _volume;
 
         public AudioSource()
         {
@@ -41,6 +42,8 @@ namespace MusicBeeAudioSource
 #pragma warning disable 00067 // The event is never used
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 #pragma warning restore 00067 // The event is never used
+
+        public event EventHandler<float> VolumeChanged;
 
         public string Name => "Music Bee";
 
@@ -82,6 +85,12 @@ namespace MusicBeeAudioSource
             return Task.CompletedTask;
         }
 
+        public Task SetVolumeAsync(float newVolume)
+        {
+            _ipc.SetVolume((int)(newVolume * 100));
+            return Task.CompletedTask;
+        }
+
         private void CheckMusicBee(object sender, ElapsedEventArgs eventArgs)
         {
             try
@@ -99,6 +108,7 @@ namespace MusicBeeAudioSource
 
                 NotifyState();
                 NotifyTrackChange();
+                NotifyVolume();
 
                 var time = TimeSpan.FromMilliseconds(_ipc.GetPosition());
                 TrackProgressChanged?.Invoke(this, time);
@@ -168,6 +178,19 @@ namespace MusicBeeAudioSource
                 TrackLength = trackLength,
                 TrackName = track
             });
+        }
+
+        private void NotifyVolume()
+        {
+            var volume = _ipc.GetVolume();
+
+            if (volume == _volume)
+            {
+                return;
+            }
+
+            _volume = volume;
+            VolumeChanged?.Invoke(this, _volume / 100f);
         }
     }
 }

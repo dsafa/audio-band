@@ -63,6 +63,9 @@ namespace AudioBand.AudioSource
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
         /// <inheritdoc/>
+        public event EventHandler<float> VolumeChanged;
+
+        /// <inheritdoc/>
         public string Name
         {
             get
@@ -264,6 +267,24 @@ namespace AudioBand.AudioSource
             try
             {
                 await _hostService.GetHost().PreviousTrackAsync().ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                HandleError(e);
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task SetVolumeAsync(float newVolume)
+        {
+            if (IsClosing)
+            {
+                return;
+            }
+
+            try
+            {
+                await _hostService.GetHost().SetVolume(newVolume);
             }
             catch (Exception e)
             {

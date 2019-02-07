@@ -74,6 +74,14 @@ namespace AudioBand.ServiceContracts
         List<AudioSourceSettingInfo> GetAudioSourceSettings();
 
         /// <summary>
+        /// Contract method for <see cref="IAudioSource.SetVolumeAsync(float)"/>.
+        /// </summary>
+        /// <param name="volume"></param>
+        /// <returns></returns>
+        [OperationContract]
+        Task SetVolume(float volume);
+
+        /// <summary>
         /// Update the audio source setting with a new value.
         /// </summary>
         /// <param name="settingName">Setting name.</param>

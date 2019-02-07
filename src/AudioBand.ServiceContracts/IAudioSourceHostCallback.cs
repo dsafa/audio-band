@@ -38,5 +38,12 @@ namespace AudioBand.ServiceContracts
         /// </summary>
         [OperationContract(IsOneWay = true)]
         void TrackProgressChanged(TimeSpan progress);
+
+        /// <summary>
+        /// Contact method for <see cref="IAudioSource.VolumeChanged"/>.
+        /// </summary>
+        /// <param name="volume">The new volume.</param>
+        [OperationContract(IsOneWay = true)]
+        void VolumeChanged(float volume);
     }
 }
