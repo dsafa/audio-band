@@ -30,6 +30,11 @@ namespace AudioSourceHost
             _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
             _audioSource.VolumeChanged += AudioSourceOnVolumeChanged;
 
+            if (_audioSource is ISupportsRatings supportRatings)
+            {
+                supportRatings.TrackRatingChanged += AudioSourceOnRatingChanged;
+            }
+
             _audioSourceSettingsList = _audioSource.GetSettings();
             foreach (AudioSourceSetting setting in _audioSourceSettingsList)
             {
@@ -160,6 +165,12 @@ namespace AudioSourceHost
             await _audioSource.SetPlaybackProgress(progress);
         }
 
+        public async Task SetRatingAsync(TrackRating rating)
+        {
+            var supportsRatings = _audioSource as ISupportsRatings;
+            await supportsRatings?.SetTrackRatingAsync(rating);
+        }
+
         public void OpenCallbackChannel()
         {
             Callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();
@@ -261,6 +272,18 @@ namespace AudioSourceHost
             try
             {
                 Callback.VolumeChanged(e);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+        }
+
+        private void AudioSourceOnRatingChanged(object sender, TrackRating e)
+        {
+            try
+            {
+                Callback.TrackRatingChanged(e);
             }
             catch (Exception ex)
             {

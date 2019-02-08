@@ -40,6 +40,11 @@ namespace AudioBand.AudioSource
         /// </summary>
         public event EventHandler<float> VolumeChanged;
 
+        /// <summary>
+        /// Occurs when <see cref="IAudioSourceHostCallback.TrackRatingChanged(TrackRating)"/> is called.
+        /// </summary>
+        public event EventHandler<TrackRating> TrackRatingChanged;
+
         /// <inheritdoc/>
         void IAudioSourceHostCallback.VolumeChanged(float volume)
         {
@@ -74,6 +79,12 @@ namespace AudioBand.AudioSource
         void IAudioSourceHostCallback.TrackProgressChanged(TimeSpan progress)
         {
             TrackProgressChanged?.Invoke(this, progress);
+        }
+
+        /// <inheritdoc/>
+        void IAudioSourceHostCallback.TrackRatingChanged(TrackRating rating)
+        {
+            TrackRatingChanged?.Invoke(this, rating);
         }
     }
 }

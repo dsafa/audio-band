@@ -45,5 +45,12 @@ namespace AudioBand.ServiceContracts
         /// <param name="volume">The new volume.</param>
         [OperationContract(IsOneWay = true)]
         void VolumeChanged(float volume);
+
+        /// <summary>
+        /// Contract method for <see cref="ISupportsRatings.TrackRatingChanged"/>.
+        /// </summary>
+        /// <param name="rating"></param>
+        [OperationContract(IsOneWay = true)]
+        void TrackRatingChanged(TrackRating rating);
     }
 }
