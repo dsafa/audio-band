@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
@@ -80,6 +81,14 @@ namespace AudioBand.ServiceContracts
         /// <returns></returns>
         [OperationContract]
         Task SetVolume(float volume);
+
+        /// <summary>
+        /// Contract method for <see cref="IAudioSource.SetPlaybackProgress(TimeSpan)"/>.
+        /// </summary>
+        /// <param name="progress"></param>
+        /// <returns></returns>
+        [OperationContract]
+        Task SetPlaybackProgress(TimeSpan progress);
 
         /// <summary>
         /// Update the audio source setting with a new value.

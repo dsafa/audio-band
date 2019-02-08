@@ -292,6 +292,24 @@ namespace AudioBand.AudioSource
             }
         }
 
+        /// <inheritdoc/>
+        public async Task SetPlaybackProgress(TimeSpan newProgress)
+        {
+           if (IsClosing)
+            {
+                return;
+            }
+
+            try
+            {
+                await _hostService.GetHost().SetPlaybackProgress(newProgress);
+            }
+            catch (Exception e)
+            {
+                HandleError(e);
+            }
+        }
+
         private void HandleError(Exception e)
         {
             if (e is CommunicationObjectFaultedException || e is CommunicationObjectAbortedException)

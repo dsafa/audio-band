@@ -94,5 +94,12 @@ namespace AudioBand.AudioSource
         /// <param name="newVolume">The new volume to set. The range is between 0.0 and 1.0 inclusive.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous set volume operation.</returns>
         Task SetVolumeAsync(float newVolume);
+
+        /// <summary>
+        /// Called when there is a request to change to current playback progress.
+        /// </summary>
+        /// <param name="newProgress">The new time to seek to.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous set playback progress operation.</returns>
+        Task SetPlaybackProgress(TimeSpan newProgress);
     }
 }
