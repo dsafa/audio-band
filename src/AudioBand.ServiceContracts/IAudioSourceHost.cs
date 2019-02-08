@@ -91,6 +91,14 @@ namespace AudioBand.ServiceContracts
         Task SetPlaybackProgress(TimeSpan progress);
 
         /// <summary>
+        /// Contract method for <see cref="ISupportsRatings.SetTrackRatingAsync(TrackRating)"/>
+        /// </summary>
+        /// <param name="rating"></param>
+        /// <returns></returns>
+        [OperationContract]
+        Task SetRatingAsync(TrackRating rating);
+
+        /// <summary>
         /// Update the audio source setting with a new value.
         /// </summary>
         /// <param name="settingName">Setting name.</param>
