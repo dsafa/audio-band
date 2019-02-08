@@ -91,6 +91,12 @@ namespace MusicBeeAudioSource
             return Task.CompletedTask;
         }
 
+        public Task SetPlaybackProgress(TimeSpan newProgress)
+        {
+            _ipc.SetPosition((int)newProgress.TotalMilliseconds);
+            return Task.CompletedTask;
+        }
+
         private void CheckMusicBee(object sender, ElapsedEventArgs eventArgs)
         {
             try

@@ -155,6 +155,11 @@ namespace AudioSourceHost
             await _audioSource.SetVolumeAsync(volume);
         }
 
+        public async Task SetPlaybackProgress(TimeSpan progress)
+        {
+            await _audioSource.SetPlaybackProgress(progress);
+        }
+
         public void OpenCallbackChannel()
         {
             Callback = OperationContext.Current.GetCallbackChannel<IAudioSourceHostCallback>();

@@ -29,7 +29,19 @@ namespace iTunesAudioSource
 
         public Track CurrentTrack => GetTrack();
 
-        public TimeSpan Progress => TimeSpan.FromMilliseconds(_itunesApp.PlayerPositionMS);
+        public TimeSpan Progress
+        {
+            get
+            {
+
+                return TimeSpan.FromMilliseconds(_itunesApp.PlayerPositionMS);
+            }
+
+            set
+            {
+                _itunesApp.PlayerPositionMS = (int)value.TotalMilliseconds;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the volume from [0, 100]
