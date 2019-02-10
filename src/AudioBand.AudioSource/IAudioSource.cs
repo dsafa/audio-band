@@ -100,6 +100,6 @@ namespace AudioBand.AudioSource
         /// </summary>
         /// <param name="newProgress">The new time to seek to.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous set playback progress operation.</returns>
-        Task SetPlaybackProgress(TimeSpan newProgress);
+        Task SetPlaybackProgressAsync(TimeSpan newProgress);
     }
 }

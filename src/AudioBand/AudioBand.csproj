@@ -101,11 +101,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioSource\AudioSourceHostCallback.cs" />
-    <Compile Include="AudioSource\AudioSourceHostService.cs" />
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
-    <Compile Include="AudioSource\AudioSourceServer.cs" />
-    <Compile Include="AudioSource\IAudioSourceHostService.cs" />
     <Compile Include="AudioSource\IInternalAudioSource.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
@@ -304,9 +300,9 @@
       <Project>{30f2bfea-788a-494d-88e7-f2070528ebea}</Project>
       <Name>AudioBand.AudioSource</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioBand.ServiceContracts\AudioBand.ServiceContracts.csproj">
-      <Project>{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}</Project>
-      <Name>AudioBand.ServiceContracts</Name>
+    <ProjectReference Include="..\AudioSourceHost\AudioSourceHost.csproj">
+      <Project>{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}</Project>
+      <Name>AudioSourceHost</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

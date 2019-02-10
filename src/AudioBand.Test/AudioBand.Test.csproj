@@ -70,7 +70,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioSourceProxyTests.cs" />
     <Compile Include="CustomLabelsViewModelTests.cs" />
     <Compile Include="SettingsMapping.cs" />
     <Compile Include="SettingsMigrationTests.cs" />
@@ -86,10 +85,6 @@
     <ProjectReference Include="..\AudioBand.AudioSource\AudioBand.AudioSource.csproj">
       <Project>{30F2BFEA-788A-494D-88E7-F2070528EBEA}</Project>
       <Name>AudioBand.AudioSource</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AudioBand.ServiceContracts\AudioBand.ServiceContracts.csproj">
-      <Project>{4635735d-c08f-4fda-8baa-fa16ae58c1aa}</Project>
-      <Name>AudioBand.ServiceContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\AudioBand\AudioBand.csproj">
       <Project>{b69832ad-8373-47ac-a52a-183238903896}</Project>

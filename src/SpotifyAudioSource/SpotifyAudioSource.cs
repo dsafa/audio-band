@@ -257,7 +257,7 @@ namespace SpotifyAudioSource
             await _spotifyApi.SetVolumeAsync((int)(newVolume * 100));
         }
 
-        public async Task SetPlaybackProgress(TimeSpan newProgress)
+        public async Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
             await _spotifyApi.SeekPlaybackAsync((int)newProgress.TotalMilliseconds);
         }

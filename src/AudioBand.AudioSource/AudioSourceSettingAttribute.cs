@@ -7,6 +7,7 @@ namespace AudioBand.AudioSource
     /// </summary>
     /// <inheritdoc cref="Attribute"/>
     [AttributeUsage(AttributeTargets.Property)]
+    [Serializable]
     public class AudioSourceSettingAttribute : Attribute
     {
         /// <summary>
@@ -18,13 +19,6 @@ namespace AudioBand.AudioSource
         {
             Name = name;
         }
-
-        /// <summary>
-        /// Gets or sets the name of the validator function.
-        /// <para/>
-        /// The validation function should have the signature (<see langword="object"/> valueToValidate, <see langword="string"/> nameOfPropertyBeingSet) -> <see cref="SettingValidationResult"/>.
-        /// </summary>
-        public string ValidatorName { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the setting.

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.ServiceModel;
-using System.Threading;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using AudioBand.ServiceContracts;
+using AudioSourceHost;
 using NLog;
 
 namespace AudioBand.AudioSource
@@ -18,34 +17,33 @@ namespace AudioBand.AudioSource
         private readonly ILogger _logger;
         private readonly object _isClosingLock = new object();
         private readonly Dictionary<string, object> _settingsCache = new Dictionary<string, object>();
-        private IAudioSourceHostService _hostService;
-        private bool _hasInitializedOnce;
-        private bool _isClosing;
         private bool _isActivated;
+        private string _directory;
+        private AppDomain _appDomain;
+        private AudioSourceWrapper _wrapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceProxy"/> class
         /// with the directory and the host service.
         /// </summary>
         /// <param name="directory">The audio source directory.</param>
-        /// <param name="hostService">The host service.</param>
-        public AudioSourceProxy(string directory, IAudioSourceHostService hostService)
+        public AudioSourceProxy(string directory)
         {
-            _logger = LogManager.GetLogger($"AudioSourceProxy({new DirectoryInfo(directory).Name})");
+            _directory = directory;
+            var directoryName = new DirectoryInfo(directory).Name;
+            _logger = LogManager.GetLogger($"AudioSourceProxy({directoryName})");
 
-            _hostService = hostService;
-            hostService.HostCallback.SettingChanged += (o, e) => SettingChanged?.Invoke(this, e);
-            hostService.HostCallback.TrackInfoChanged += (o, e) => TrackInfoChanged?.Invoke(this, e);
-            hostService.HostCallback.TrackPlaying += (o, e) => TrackPlaying?.Invoke(this, e);
-            hostService.HostCallback.TrackPaused += (o, e) => TrackPaused?.Invoke(this, e);
-            hostService.HostCallback.TrackProgressChanged += (o, e) => TrackProgressChanged?.Invoke(this, e);
-            hostService.Restarted += HostServiceRestarted;
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
+
+            var domainSetupInfo = new AppDomainSetup
+            {
+                ApplicationName = $"AudioSourceHost({directoryName})",
+                ApplicationBase = DirectoryHelper.BaseDirectory,
+            };
+
+            _appDomain = AppDomain.CreateDomain(directoryName, null, domainSetupInfo);
+            CreateWrapper();
         }
-
-        /// <summary>
-        /// Occurs when the proxy is initialized and ready.
-        /// </summary>
-        public event EventHandler Ready;
 
         /// <inheritdoc/>
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
@@ -72,11 +70,11 @@ namespace AudioBand.AudioSource
             {
                 try
                 {
-                    return _hostService.GetHost().GetName();
+                    return _wrapper.Name;
                 }
                 catch (Exception e)
                 {
-                    HandleError(e);
+                    _logger.Error(e, "Error trying to get the name");
                     throw;
                 }
             }
@@ -88,26 +86,7 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Gets the settings that the audio source has.
         /// </summary>
-        public List<AudioSourceSettingAttribute> Settings { get; private set; }
-
-        private bool IsClosing
-        {
-            get
-            {
-                lock (_isClosingLock)
-                {
-                    return _isClosing;
-                }
-            }
-
-            set
-            {
-                lock (_isClosingLock)
-                {
-                    _isClosing = value;
-                }
-            }
-        }
+        public List<AudioSourceSettingAttribute> Settings { get; private set; } = new List<AudioSourceSettingAttribute>();
 
         /// <summary>
         /// Get or set a setting.
@@ -118,39 +97,30 @@ namespace AudioBand.AudioSource
         {
             get
             {
-                if (IsClosing)
-                {
-                    return null;
-                }
-
                 try
                 {
-                    var settingValue = _hostService.GetHost().GetSettingValue(settingName);
+                    var settingValue = _wrapper.GetSettingValue(settingName);
                     _settingsCache[settingName] = settingValue;
                     return settingValue;
                 }
                 catch (Exception e)
                 {
-                    HandleError(e);
-                    return null;
+                    _logger.Error(e, "Error trying to get setting.");
+                    throw;
                 }
             }
 
             set
             {
-                if (IsClosing)
-                {
-                    return;
-                }
-
                 try
                 {
                     _settingsCache[settingName] = value;
-                    _hostService.GetHost().UpdateSetting(settingName, value);
+                    _wrapper.UpdateSetting(settingName, value);
                 }
                 catch (Exception e)
                 {
-                    HandleError(e);
+                    _logger.Error(e, "Error tring to update setting.");
+                    throw;
                 }
             }
         }
@@ -160,180 +130,71 @@ namespace AudioBand.AudioSource
         /// </summary>
         public void Close()
         {
-            IsClosing = true;
-            _hostService.Close();
         }
 
         /// <inheritdoc/>
         public async Task ActivateAsync()
         {
-            if (IsClosing)
-            {
-                return;
-            }
-
-            try
-            {
-                await _hostService.GetHost().ActivateAsync().ConfigureAwait(false);
-                _isActivated = true;
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            await CallWrapperAsync(_wrapper.Activate);
+            _isActivated = true;
         }
 
         /// <inheritdoc/>
         public async Task DeactivateAsync()
         {
-            if (IsClosing)
-            {
-                return;
-            }
-
-            try
-            {
-                await _hostService.GetHost().DeactivateAsync().ConfigureAwait(false);
-                _isActivated = false;
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            await CallWrapperAsync(_wrapper.Deactivate);
+            _isActivated = false;
         }
 
         /// <inheritdoc/>
         public async Task NextTrackAsync()
         {
-            if (IsClosing)
-            {
-                return;
-            }
-
-            try
-            {
-                await _hostService.GetHost().NextTrackAsync().ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            await CallWrapperAsync(_wrapper.NextTrack);
         }
 
         /// <inheritdoc/>
         public async Task PauseTrackAsync()
         {
-            if (IsClosing)
-            {
-                return;
-            }
-
-            try
-            {
-                await _hostService.GetHost().PauseTrackAsync().ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            await CallWrapperAsync(_wrapper.PauseTrack);
         }
 
         /// <inheritdoc/>
         public async Task PlayTrackAsync()
         {
-            if (IsClosing)
-            {
-                return;
-            }
-
-            try
-            {
-                await _hostService.GetHost().PlayTrackAsync().ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            await CallWrapperAsync(_wrapper.PlayTrack);
         }
 
         /// <inheritdoc/>
         public async Task PreviousTrackAsync()
         {
-            if (IsClosing)
-            {
-                return;
-            }
-
-            try
-            {
-                await _hostService.GetHost().PreviousTrackAsync().ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            await CallWrapperAsync(_wrapper.PreviousTrack);
         }
 
         /// <inheritdoc/>
         public async Task SetVolumeAsync(float newVolume)
         {
-            if (IsClosing)
-            {
-                return;
-            }
-
-            try
-            {
-                await _hostService.GetHost().SetVolume(newVolume);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            await CallWrapperAsync(_wrapper.SetVolume, newVolume);
         }
 
         /// <inheritdoc/>
-        public async Task SetPlaybackProgress(TimeSpan newProgress)
+        public async Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
-           if (IsClosing)
-            {
-                return;
-            }
-
-            try
-            {
-                await _hostService.GetHost().SetPlaybackProgress(newProgress);
-            }
-            catch (Exception e)
-            {
-                HandleError(e);
-            }
+            await CallWrapperAsync(_wrapper.SetPlayback, newProgress);
         }
 
-        private void HandleError(Exception e)
+        private static Assembly AssemblyResolve(object sender, ResolveEventArgs e)
         {
-            if (e is CommunicationObjectFaultedException || e is CommunicationObjectAbortedException)
-            {
-                _logger.Debug("Communication already closed");
-            }
-            else
-            {
-                _logger.Error(e);
-            }
-
-            _hostService.Restart();
+            string shortName = e.Name.Substring(0, e.Name.IndexOf(','));
+            string fileName = Path.Combine(DirectoryHelper.BaseDirectory, shortName + ".dll");
+            return File.Exists(fileName) ? Assembly.LoadFrom(fileName) : null;
         }
 
-        private async void HostServiceRestarted(object sender, EventArgs e)
+        private async Task Restart()
         {
-            UpdateSettings();
+            // Assuming this won't throw because it was created previously without errors
+            CreateWrapper();
 
-            // if this is the first time the the service was started
-            if (!_hasInitializedOnce)
-            {
-                _hasInitializedOnce = true;
-                Ready?.Invoke(this, EventArgs.Empty);
-            }
+            LoadAudioSourceSettings();
 
             // re-activate if the host was restarted
             if (_isActivated)
@@ -342,17 +203,64 @@ namespace AudioBand.AudioSource
             }
         }
 
-        private void UpdateSettings()
+        private void LoadAudioSourceSettings()
         {
-            IAudioSourceHost host = _hostService.GetHost();
-
-            Settings = host.GetAudioSourceSettings().Select(s => (AudioSourceSettingAttribute)s).ToList();
-
-            // apply the settings again, if host restarted, the cache should be populated
-            foreach (var keyVal in _settingsCache)
+            try
             {
-                host.UpdateSetting(keyVal.Key, keyVal.Value);
+                Settings = _wrapper.Settings;
+
+                // apply the settings again, if host restarted, the cache should be populated
+                foreach (var keyVal in _settingsCache)
+                {
+                    _wrapper.UpdateSetting(keyVal.Key, keyVal.Value);
+                }
             }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Error loading settings");
+            }
+        }
+
+        private void CreateWrapper()
+        {
+            var wrapperType = typeof(AudioSourceWrapper);
+            var dllPath = Path.Combine(DirectoryHelper.BaseDirectory, wrapperType.Assembly.GetName().Name + ".dll");
+            _wrapper = (AudioSourceWrapper)_appDomain.CreateInstanceFromAndUnwrap(dllPath, wrapperType.FullName);
+
+            if (!_wrapper.Initialize(_directory))
+            {
+                throw new InvalidOperationException("Unable to initialize wrapper");
+            }
+
+            _wrapper.SettingChanged += new MarshaledEventHandler<SettingChangedEventArgs>(e => SettingChanged?.Invoke(this, e)).Handler;
+            _wrapper.TrackInfoChanged += new MarshaledEventHandler<TrackInfoChangedEventArgs>(e => TrackInfoChanged?.Invoke(this, e)).Handler;
+            _wrapper.TrackPaused += new MarshaledEventHandler(() => TrackPaused?.Invoke(this, EventArgs.Empty)).Handler;
+            _wrapper.TrackPlaying += new MarshaledEventHandler(() => TrackPlaying?.Invoke(this, EventArgs.Empty)).Handler;
+            _wrapper.TrackProgressChanged += new MarshaledEventHandler<TimeSpan>(e => TrackProgressChanged?.Invoke(this, e)).Handler;
+            _wrapper.VolumeChanged += new MarshaledEventHandler<float>(e => VolumeChanged?.Invoke(this, e)).Handler;
+
+            LoadAudioSourceSettings();
+        }
+
+        private async Task CallWrapperAsync(Action<MarshaledTaskCompletionSource> wrapperAction, [CallerMemberName] string caller = "")
+        {
+            try
+            {
+                var tcs = new MarshaledTaskCompletionSource();
+                wrapperAction(tcs);
+
+                await tcs.Task.ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, $"({caller}) Error calling the wrapper");
+                await Restart();
+            }
+        }
+
+        private async Task CallWrapperAsync<TArg>(Action<TArg, MarshaledTaskCompletionSource> wrapperAction, TArg arg, [CallerMemberName] string caller = "")
+        {
+            await CallWrapperAsync((tcs) => wrapperAction(arg, tcs));
         }
     }
 }

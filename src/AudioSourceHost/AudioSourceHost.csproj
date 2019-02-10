@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>AudioSourceHost</RootNamespace>
     <AssemblyName>AudioSourceHost</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -50,25 +50,18 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioSourceExtensions.cs" />
-    <Compile Include="AudioSourceHostService.cs" />
     <Compile Include="AudioSourceLoader.cs" />
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="AudioSourceSetting.cs" />
-    <Compile Include="Host.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="AudioSourceWrapper.cs" />
+    <Compile Include="MarshaledEventHandler.cs" />
+    <Compile Include="MarshaledEventHandler{T}.cs" />
+    <Compile Include="MarshaledTaskCompletionSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,13 +80,10 @@
       <Project>{30F2BFEA-788A-494D-88E7-F2070528EBEA}</Project>
       <Name>AudioBand.AudioSource</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AudioBand.ServiceContracts\AudioBand.ServiceContracts.csproj">
-      <Project>{4635735d-c08f-4fda-8baa-fa16ae58c1aa}</Project>
-      <Name>AudioBand.ServiceContracts</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetFileName)*" $(SolutionDir)AudioBand\$(OutDir)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
