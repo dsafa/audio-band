@@ -3,7 +3,7 @@
 namespace AudioBand.AudioSource
 {
     /// <summary>
-    /// Internal extension to <see cref="IAudioSource"/> that exposes methods for manipulating settings.
+    /// Internal extension to <see cref="IAudioSource"/> that exposes additional methods.
     /// </summary>
     internal interface IInternalAudioSource : IAudioSource
     {

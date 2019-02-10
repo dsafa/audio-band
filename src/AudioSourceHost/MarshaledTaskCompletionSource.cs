@@ -10,8 +10,14 @@ namespace AudioSourceHost
     {
         private TaskCompletionSource<object> _tcs = new TaskCompletionSource<object>();
 
+        /// <summary>
+        /// Gets the task.
+        /// </summary>
         public Task Task => _tcs.Task;
 
+        /// <summary>
+        /// Signal that the task is complete.
+        /// </summary>
         public void SetResult()
         {
             _tcs.SetResult(null);

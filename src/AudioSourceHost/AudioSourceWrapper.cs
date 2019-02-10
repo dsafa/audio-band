@@ -12,7 +12,7 @@ using NLog.Config;
 namespace AudioSourceHost
 {
     /// <summary>
-    /// Wrapper that isolates an audiosource,
+    /// Wrapper that isolates an audiosource.
     /// </summary>
     public class AudioSourceWrapper : MarshalByRefObject
     {

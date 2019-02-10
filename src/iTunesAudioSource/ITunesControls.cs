@@ -33,7 +33,6 @@ namespace iTunesAudioSource
         {
             get
             {
-
                 return TimeSpan.FromMilliseconds(_itunesApp.PlayerPositionMS);
             }
 
