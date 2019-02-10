@@ -92,7 +92,7 @@ namespace iTunesAudioSource
             return Task.CompletedTask;
         }
 
-        public Task SetPlaybackProgress(TimeSpan newProgress)
+        public Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
             _itunesControls.Progress = newProgress;
             return Task.CompletedTask;

@@ -29,27 +29,20 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Load all audio sources.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public async Task LoadAudioSources()
+        public void LoadAudioSources()
         {
-            Logger.Debug("Searching for orphan processes");
-            var processes = Process.GetProcessesByName("AudioSourceHost");
-            foreach (var p in processes)
-            {
-                Logger.Debug("Found orphan process");
-                p.Kill();
-                await Task.Delay(TimeSpan.FromSeconds(2));
-            }
-
             Logger.Debug("Loading audio sources");
             foreach (var dir in Directory.EnumerateDirectories(PluginFolderPath))
             {
-                var audioSourceServer = new AudioSourceServer(dir);
-                var hostService = new AudioSourceHostService(dir, audioSourceServer);
-                var proxy = new AudioSourceProxy(dir, hostService);
-                proxy.Ready += ProxyOnReady;
-
-                _uninitializedProxies.Add(proxy);
+                try
+                {
+                    var proxy = new AudioSourceProxy(dir);
+                    AudioSources.Add(proxy);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, $"Error creating proxy for {dir}");
+                }
             }
         }
 
@@ -61,17 +54,6 @@ namespace AudioBand.AudioSource
             foreach (var proxy in AudioSources.Cast<AudioSourceProxy>())
             {
                 proxy.Close();
-            }
-        }
-
-        private void ProxyOnReady(object sender, EventArgs e)
-        {
-            var proxy = sender as AudioSourceProxy;
-            _uninitializedProxies.Remove(proxy);
-
-            lock (_audioSourcesLock)
-            {
-                AudioSources.Add(proxy);
             }
         }
     }

@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTunesAudioSource", "iTunes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicBeeAudioSource", "MusicBeeAudioSource\MusicBeeAudioSource.csproj", "{741DB79C-921D-4D91-85F1-CD10C746F46E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioBand.ServiceContracts", "AudioBand.ServiceContracts\AudioBand.ServiceContracts.csproj", "{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioSourceHost", "AudioSourceHost\AudioSourceHost.csproj", "{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}"
 EndProject
 Global
@@ -49,10 +47,6 @@ Global
 		{741DB79C-921D-4D91-85F1-CD10C746F46E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{741DB79C-921D-4D91-85F1-CD10C746F46E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{741DB79C-921D-4D91-85F1-CD10C746F46E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4635735D-C08F-4FDA-8BAA-FA16AE58C1AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -49,7 +49,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingChangedEventArgs.cs" />
     <Compile Include="SettingOptions.cs" />
-    <Compile Include="SettingValidationResult.cs" />
     <Compile Include="TrackInfoChangedEventArgs.cs" />
     <Compile Include="TrackRating.cs" />
   </ItemGroup>

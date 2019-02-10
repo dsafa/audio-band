@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Host process for audio sources in AudioBand")]
-[assembly: AssemblyDescription("Host process for audio sources in AudioBand")]
+[assembly: AssemblyTitle("Host aseembly for audio sources in AudioBand")]
+[assembly: AssemblyDescription("Host aseembly for audio sources in AudioBand")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("AudioSourceHost")]

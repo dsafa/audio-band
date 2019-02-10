@@ -5,7 +5,8 @@ namespace AudioBand.AudioSource
     /// <summary>
     /// Provides data for a <see cref="IAudioSource.SettingChanged"/> event.
     /// </summary>
-    public class SettingChangedEventArgs : EventArgs
+    [Serializable]
+    public sealed class SettingChangedEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingChangedEventArgs"/> class
