@@ -17,8 +17,8 @@ namespace AudioBand.AudioSource
         private readonly ILogger _logger;
         private readonly object _isClosingLock = new object();
         private readonly Dictionary<string, object> _settingsCache = new Dictionary<string, object>();
+        private readonly string _directory;
         private bool _isActivated;
-        private string _directory;
         private AppDomain _appDomain;
         private AudioSourceWrapper _wrapper;
 
