@@ -140,6 +140,11 @@ namespace AudioSourceHost
             }
         }
 
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         private void StartTask(Func<Task> action, MarshaledTaskCompletionSource tcs)
         {
             Task task = action();
