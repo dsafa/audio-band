@@ -140,6 +140,11 @@ namespace AudioSourceHost
             }
         }
 
+        public Type GetSettingType(string settingName)
+        {
+            return _audioSourceSettings[settingName].SettingType;
+        }
+
         public override object InitializeLifetimeService()
         {
             return null;

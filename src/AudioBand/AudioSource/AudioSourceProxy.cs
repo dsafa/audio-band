@@ -233,6 +233,12 @@ namespace AudioBand.AudioSource
             await CallWrapperAsync(_wrapper.SetPlayback, newProgress);
         }
 
+        /// <inheritdoc/>
+        public Type GetSettingType(string settingName)
+        {
+            return _wrapper.GetSettingType(settingName);
+        }
+
         // Use load from context
         private static Assembly AssemblyResolve(object sender, ResolveEventArgs e)
         {
