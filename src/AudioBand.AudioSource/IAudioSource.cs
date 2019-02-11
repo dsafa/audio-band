@@ -41,6 +41,11 @@ namespace AudioBand.AudioSource
         event EventHandler<float> VolumeChanged;
 
         /// <summary>
+        /// Occurs when the shuffle state changes.
+        /// </summary>
+        event EventHandler<bool> ShuffleChanged;
+
+        /// <summary>
         /// Gets the name of the audio source.
         /// </summary>
         /// <value>The name of the audio source.</value>
@@ -101,5 +106,12 @@ namespace AudioBand.AudioSource
         /// <param name="newProgress">The new time to seek to.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous set playback progress operation.</returns>
         Task SetPlaybackProgressAsync(TimeSpan newProgress);
+
+        /// <summary>
+        /// Called when there is a request to change the shuffle state.
+        /// </summary>
+        /// <param name="shuffleOn">True if shuffle should be on; False otherwise.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous set shuffle operation.</returns>
+        Task SetShuffleAsync(bool shuffleOn);
     }
 }

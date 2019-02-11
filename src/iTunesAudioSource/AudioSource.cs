@@ -13,6 +13,7 @@ namespace iTunesAudioSource
         private string _currentTrack;
         private bool _isPlaying;
         private int _volume;
+        private bool _shuffle;
         private ITunesControls _itunesControls = new ITunesControls();
 
         public AudioSource()
@@ -39,6 +40,8 @@ namespace iTunesAudioSource
 #pragma warning restore 00067 // Event is not used
 
         public event EventHandler<float> VolumeChanged;
+
+        public event EventHandler<bool> ShuffleChanged;
 
         public string Name => "iTunes";
 
@@ -95,6 +98,12 @@ namespace iTunesAudioSource
         public Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
             _itunesControls.Progress = newProgress;
+            return Task.CompletedTask;
+        }
+
+        public Task SetShuffleAsync(bool shuffleOn)
+        {
+            _itunesControls.Shuffle = shuffleOn;
             return Task.CompletedTask;
         }
 
@@ -156,6 +165,7 @@ namespace iTunesAudioSource
 
                 NotifyPlayerState();
                 NotifyVolume();
+                NotifyShuffle();
                 if (IsNewTrack(track))
                 {
                     NotifyTrackChange(track);
@@ -184,6 +194,19 @@ namespace iTunesAudioSource
 
             _volume = volume;
             VolumeChanged?.Invoke(this, _volume / 100f);
+        }
+
+        private void NotifyShuffle()
+        {
+            bool shuffle = _itunesControls.Shuffle;
+
+            if (shuffle == _shuffle)
+            {
+                return;
+            }
+
+            _shuffle = shuffle;
+            ShuffleChanged?.Invoke(this, _shuffle);
         }
     }
 }

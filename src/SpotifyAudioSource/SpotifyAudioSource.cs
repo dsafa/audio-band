@@ -56,6 +56,8 @@ namespace SpotifyAudioSource
 
         public event EventHandler<float> VolumeChanged;
 
+        public event EventHandler<bool> ShuffleChanged;
+
         public string Name { get; } = "Spotify";
 
         public IAudioSourceLogger Logger { get; set; }
@@ -260,6 +262,11 @@ namespace SpotifyAudioSource
         public async Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
             await _spotifyApi.SeekPlaybackAsync((int)newProgress.TotalMilliseconds);
+        }
+
+        public async Task SetShuffleAsync(bool shuffleOn)
+        {
+            await _spotifyApi.SetShuffleAsync(shuffleOn);
         }
 
         private void Authorize()

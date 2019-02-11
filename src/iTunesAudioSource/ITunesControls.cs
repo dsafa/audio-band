@@ -42,6 +42,19 @@ namespace iTunesAudioSource
             }
         }
 
+        public bool Shuffle
+        {
+            get
+            {
+                return _itunesApp.CurrentPlaylist.Shuffle;
+            }
+
+            set
+            {
+                _itunesApp.CurrentPlaylist.Shuffle = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the volume from [0, 100]
         /// </summary>
