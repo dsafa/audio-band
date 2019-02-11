@@ -59,6 +59,7 @@
     <Compile Include="AudioSourceLogger.cs" />
     <Compile Include="AudioSourceSetting.cs" />
     <Compile Include="AudioSourceWrapper.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MarshaledEventHandler.cs" />
     <Compile Include="MarshaledEventHandler{T}.cs" />
     <Compile Include="MarshaledTaskCompletionSource.cs" />

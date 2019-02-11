@@ -15,7 +15,6 @@ namespace AudioBand.AudioSource
     internal class AudioSourceManager
     {
         private const string PluginFolderName = "AudioSources";
-        private const string ManifestFileName = "AudioSource.manifest";
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private static readonly object _audioSourcesLock = new object();
