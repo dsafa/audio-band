@@ -46,6 +46,11 @@ namespace AudioBand.AudioSource
         event EventHandler<bool> ShuffleChanged;
 
         /// <summary>
+        /// Occurs when the repeat mode changes.
+        /// </summary>
+        event EventHandler<RepeatMode> RepeatModeChanged;
+
+        /// <summary>
         /// Gets the name of the audio source.
         /// </summary>
         /// <value>The name of the audio source.</value>
@@ -110,8 +115,15 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Called when there is a request to change the shuffle state.
         /// </summary>
-        /// <param name="shuffleOn">True if shuffle should be on; False otherwise.</param>
+        /// <param name="shuffleOn">The new shuffle state, <see langword="true"/> if shuffle should be on; <see langword="false"/> otherwise.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous set shuffle operation.</returns>
         Task SetShuffleAsync(bool shuffleOn);
+
+        /// <summary>
+        /// Called when there is a request to change the repeat mode.
+        /// </summary>
+        /// <param name="newRepeatMode">The new <see cref="RepeatMode"/>.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous set repeat mode operation.</returns>
+        Task SetRepeatMode(RepeatMode newRepeatMode);
     }
 }

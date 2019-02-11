@@ -63,7 +63,12 @@ namespace AudioBand.AudioSource
 
         /// <inheritdoc/>
         public event EventHandler<float> VolumeChanged;
+
+        /// <inheritdoc/>
         public event EventHandler<bool> ShuffleChanged;
+
+        /// <inheritdoc/>
+        public event EventHandler<RepeatMode> RepeatModeChanged;
 
         /// <inheritdoc/>
         public string Name
@@ -246,6 +251,17 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
+        public async Task SetRepeatMode(RepeatMode newRepeatMode)
+        {
+            if (!IsActivated)
+            {
+                return;
+            }
+
+            await CallWrapperAsync(_wrapper.SetRepeatMode, newRepeatMode);
+        }
+
+        /// <inheritdoc/>
         public Type GetSettingType(string settingName)
         {
             return _wrapper.GetSettingType(settingName);
@@ -308,6 +324,7 @@ namespace AudioBand.AudioSource
             _wrapper.TrackProgressChanged += new MarshaledEventHandler<TimeSpan>(e => TrackProgressChanged?.Invoke(this, e)).Handler;
             _wrapper.VolumeChanged += new MarshaledEventHandler<float>(e => VolumeChanged?.Invoke(this, e)).Handler;
             _wrapper.ShuffleChanged += new MarshaledEventHandler<bool>(e => ShuffleChanged?.Invoke(this, e)).Handler;
+            _wrapper.RepeatModeChanged += new MarshaledEventHandler<RepeatMode>(e => RepeatModeChanged?.Invoke(this, e)).Handler;
 
             LoadAudioSourceSettings();
         }

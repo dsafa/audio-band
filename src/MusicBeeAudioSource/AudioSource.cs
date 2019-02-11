@@ -19,6 +19,7 @@ namespace MusicBeeAudioSource
         private string _currentId;
         private int _volume;
         private bool _shuffle;
+        private MusicBeeIPC.RepeatMode _repeatMode;
 
         public AudioSource()
         {
@@ -47,6 +48,8 @@ namespace MusicBeeAudioSource
         public event EventHandler<float> VolumeChanged;
 
         public event EventHandler<bool> ShuffleChanged;
+
+        public event EventHandler<RepeatMode> RepeatModeChanged;
 
         public string Name => "Music Bee";
 
@@ -106,6 +109,42 @@ namespace MusicBeeAudioSource
             return Task.CompletedTask;
         }
 
+        public Task SetRepeatMode(RepeatMode newRepeatMode)
+        {
+            _ipc.SetRepeat(ToIpcRepeat(newRepeatMode));
+            return Task.CompletedTask;
+        }
+
+        private static RepeatMode ToRepeatMode(MusicBeeIPC.RepeatMode mode)
+        {
+            switch (mode)
+            {
+                case MusicBeeIPC.RepeatMode.All:
+                    return RepeatMode.RepeatContext;
+                case MusicBeeIPC.RepeatMode.None:
+                    return RepeatMode.Off;
+                case MusicBeeIPC.RepeatMode.One:
+                    return RepeatMode.RepeatTrack;
+                default:
+                    throw new InvalidOperationException($"No case for {mode}");
+            }
+        }
+
+        private static MusicBeeIPC.RepeatMode ToIpcRepeat(RepeatMode mode)
+        {
+            switch (mode)
+            {
+                case RepeatMode.Off:
+                    return MusicBeeIPC.RepeatMode.None;
+                case RepeatMode.RepeatContext:
+                    return MusicBeeIPC.RepeatMode.All;
+                case RepeatMode.RepeatTrack:
+                    return MusicBeeIPC.RepeatMode.One;
+                default:
+                    throw new InvalidOperationException($"No case for {mode}");
+            }
+        }
+
         private void CheckMusicBee(object sender, ElapsedEventArgs eventArgs)
         {
             try
@@ -125,6 +164,7 @@ namespace MusicBeeAudioSource
                 NotifyTrackChange();
                 NotifyVolume();
                 NotifyShuffle();
+                NotifyRepeatMode();
 
                 var time = TimeSpan.FromMilliseconds(_ipc.GetPosition());
                 TrackProgressChanged?.Invoke(this, time);
@@ -220,6 +260,19 @@ namespace MusicBeeAudioSource
 
             _shuffle = shuffle;
             ShuffleChanged?.Invoke(this, _shuffle);
+        }
+
+        private void NotifyRepeatMode()
+        {
+            MusicBeeIPC.RepeatMode repeat = _ipc.GetRepeat();
+
+            if (repeat == _repeatMode)
+            {
+                return;
+            }
+
+            _repeatMode = repeat;
+            RepeatModeChanged?.Invoke(this, ToRepeatMode(_repeatMode));
         }
     }
 }

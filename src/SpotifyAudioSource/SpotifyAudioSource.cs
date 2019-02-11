@@ -58,6 +58,8 @@ namespace SpotifyAudioSource
 
         public event EventHandler<bool> ShuffleChanged;
 
+        public event EventHandler<RepeatMode> RepeatModeChanged;
+
         public string Name { get; } = "Spotify";
 
         public IAudioSourceLogger Logger { get; set; }
@@ -267,6 +269,41 @@ namespace SpotifyAudioSource
         public async Task SetShuffleAsync(bool shuffleOn)
         {
             await _spotifyApi.SetShuffleAsync(shuffleOn);
+        }
+
+        public async Task SetRepeatMode(RepeatMode newRepeatMode)
+        {
+            await _spotifyApi.SetRepeatModeAsync(ToRepeatState(newRepeatMode));
+        }
+
+        private static RepeatMode ToRepeatMode(RepeatState state)
+        {
+            switch (state)
+            {
+                case RepeatState.Context:
+                    return RepeatMode.RepeatContext;
+                case RepeatState.Off:
+                    return RepeatMode.Off;
+                case RepeatState.Track:
+                    return RepeatMode.RepeatTrack;
+                default:
+                    throw new InvalidOperationException($"No case for {state}");
+            }
+        }
+
+        private static RepeatState ToRepeatState(RepeatMode mode)
+        {
+            switch (mode)
+            {
+                case RepeatMode.Off:
+                    return RepeatState.Off;
+                case RepeatMode.RepeatContext:
+                    return RepeatState.Context;
+                case RepeatMode.RepeatTrack:
+                    return RepeatState.Track;
+                default:
+                    throw new InvalidOperationException($"No case for {mode}");
+            }
         }
 
         private void Authorize()
