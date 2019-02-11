@@ -147,12 +147,26 @@ namespace AudioSourceHost
 
         private void StartTask(Func<Task> action, MarshaledTaskCompletionSource tcs)
         {
-            SetupTask(action(), tcs);
+            try
+            {
+                SetupTask(action(), tcs);
+            }
+            catch (Exception e)
+            {
+                tcs.SetException(e);
+            }
         }
 
         private void StartTask<TArg>(Func<TArg, Task> action, TArg arg, MarshaledTaskCompletionSource tcs)
         {
-            SetupTask(action(arg), tcs);
+            try
+            {
+                SetupTask(action(arg), tcs);
+            }
+            catch (Exception e)
+            {
+                tcs.SetException(e);
+            }
         }
 
         private void SetupTask(Task task, MarshaledTaskCompletionSource tcs)
@@ -161,7 +175,7 @@ namespace AudioSourceHost
             {
                 if (t.IsFaulted)
                 {
-                    tcs.SetException((t.Exception as AggregateException).InnerException);
+                    tcs.SetException(t.Exception.InnerException);
                 }
                 else
                 {

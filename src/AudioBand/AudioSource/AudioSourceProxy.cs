@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -15,7 +16,7 @@ namespace AudioBand.AudioSource
     internal class AudioSourceProxy : IInternalAudioSource
     {
         private readonly ILogger _logger;
-        private readonly object _isClosingLock = new object();
+        private readonly object _isActivatedLock = new object();
         private readonly Dictionary<string, object> _settingsCache = new Dictionary<string, object>();
         private readonly string _directory;
         private bool _isActivated;
@@ -88,6 +89,25 @@ namespace AudioBand.AudioSource
         /// </summary>
         public List<AudioSourceSettingAttribute> Settings { get; private set; } = new List<AudioSourceSettingAttribute>();
 
+        private bool IsActivated
+        {
+            get
+            {
+                lock (_isActivatedLock)
+                {
+                    return _isActivated;
+                }
+            }
+
+            set
+            {
+                lock (_isActivatedLock)
+                {
+                    _isActivated = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Get or set a setting.
         /// </summary>
@@ -128,50 +148,88 @@ namespace AudioBand.AudioSource
         /// <inheritdoc/>
         public async Task ActivateAsync()
         {
-            await CallWrapperAsync(_wrapper.Activate);
-            _isActivated = true;
+            Debug.Assert(!IsActivated, "Audio source already activated");
+            if (await CallWrapperAsync(_wrapper.Activate))
+            {
+                IsActivated = true;
+            }
+            else
+            {
+                throw new InvalidOperationException("Unable to activate audiosource");
+            }
         }
 
         /// <inheritdoc/>
         public async Task DeactivateAsync()
         {
+            Debug.Assert(IsActivated, "Audio source is not activated");
             await CallWrapperAsync(_wrapper.Deactivate);
-            _isActivated = false;
+            IsActivated = false;
         }
 
         /// <inheritdoc/>
         public async Task NextTrackAsync()
         {
+            if (!IsActivated)
+            {
+                return;
+            }
+
             await CallWrapperAsync(_wrapper.NextTrack);
         }
 
         /// <inheritdoc/>
         public async Task PauseTrackAsync()
         {
+            if (!IsActivated)
+            {
+                return;
+            }
+
             await CallWrapperAsync(_wrapper.PauseTrack);
         }
 
         /// <inheritdoc/>
         public async Task PlayTrackAsync()
         {
+            if (!IsActivated)
+            {
+                return;
+            }
+
             await CallWrapperAsync(_wrapper.PlayTrack);
         }
 
         /// <inheritdoc/>
         public async Task PreviousTrackAsync()
         {
+            if (!IsActivated)
+            {
+                return;
+            }
+
             await CallWrapperAsync(_wrapper.PreviousTrack);
         }
 
         /// <inheritdoc/>
         public async Task SetVolumeAsync(float newVolume)
         {
+            if (!IsActivated)
+            {
+                return;
+            }
+
             await CallWrapperAsync(_wrapper.SetVolume, newVolume);
         }
 
         /// <inheritdoc/>
         public async Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
+            if (!IsActivated)
+            {
+                return;
+            }
+
             await CallWrapperAsync(_wrapper.SetPlayback, newProgress);
         }
 
@@ -189,9 +247,10 @@ namespace AudioBand.AudioSource
             CreateWrapper();
 
             // re-activate if the host was restarted
-            if (_isActivated)
+            if (IsActivated)
             {
-                await ActivateAsync();
+                // If activation fails then don't auto restart otherwise it will be a loop
+                await CallWrapperAsync(_wrapper.Activate, autoRestart: false);
             }
         }
 
@@ -234,7 +293,7 @@ namespace AudioBand.AudioSource
             LoadAudioSourceSettings();
         }
 
-        private async Task CallWrapperAsync(Action<MarshaledTaskCompletionSource> wrapperAction, [CallerMemberName] string caller = "")
+        private async Task<bool> CallWrapperAsync(Action<MarshaledTaskCompletionSource> wrapperAction, bool autoRestart = true)
         {
             try
             {
@@ -242,17 +301,23 @@ namespace AudioBand.AudioSource
                 wrapperAction(tcs);
 
                 await tcs.Task.ConfigureAwait(false);
+                return true;
             }
             catch (Exception e)
             {
-                _logger.Error(e, $"({caller}) Error calling the wrapper");
-                await Restart();
+                _logger.Error(e, $"Unexpected error when calling the wrapper, recreating wrapper");
+                if (autoRestart)
+                {
+                    await Restart();
+                }
+
+                return false;
             }
         }
 
-        private async Task CallWrapperAsync<TArg>(Action<TArg, MarshaledTaskCompletionSource> wrapperAction, TArg arg, [CallerMemberName] string caller = "")
+        private async Task<bool> CallWrapperAsync<TArg>(Action<TArg, MarshaledTaskCompletionSource> wrapperAction, TArg arg, bool autoRestart = true)
         {
-            await CallWrapperAsync((tcs) => wrapperAction(arg, tcs));
+            return await CallWrapperAsync((tcs) => wrapperAction(arg, tcs), autoRestart);
         }
     }
 }
