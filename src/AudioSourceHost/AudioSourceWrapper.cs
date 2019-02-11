@@ -147,16 +147,27 @@ namespace AudioSourceHost
 
         private void StartTask(Func<Task> action, MarshaledTaskCompletionSource tcs)
         {
-            Task task = action();
-            task.ContinueWith(t => _logger.Error(t.Exception.GetBaseException()), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-            task.ContinueWith(t => tcs.SetResult(), CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
+            SetupTask(action(), tcs);
         }
 
         private void StartTask<TArg>(Func<TArg, Task> action, TArg arg, MarshaledTaskCompletionSource tcs)
         {
-            Task task = action(arg);
-            task.ContinueWith(t => _logger.Error(t.Exception.GetBaseException()), CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-            task.ContinueWith(t => tcs.SetResult(), CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Default);
+            SetupTask(action(arg), tcs);
+        }
+
+        private void SetupTask(Task task, MarshaledTaskCompletionSource tcs)
+        {
+            task.ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    tcs.SetException((t.Exception as AggregateException).InnerException);
+                }
+                else
+                {
+                    tcs.SetResult();
+                }
+            }, TaskScheduler.Default);
         }
     }
 }

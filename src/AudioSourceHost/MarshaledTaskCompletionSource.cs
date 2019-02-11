@@ -23,6 +23,15 @@ namespace AudioSourceHost
             _tcs.SetResult(null);
         }
 
+        /// <summary>
+        /// Signal an error.
+        /// </summary>
+        /// <param name="e">The exception.</param>
+        public void SetException(Exception e)
+        {
+            _tcs.SetException(e);
+        }
+
         public override object InitializeLifetimeService()
         {
             return null;

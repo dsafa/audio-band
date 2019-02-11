@@ -182,6 +182,7 @@ namespace AudioBand.AudioSource
             await CallWrapperAsync(_wrapper.SetPlayback, newProgress);
         }
 
+        // Use load from context
         private static Assembly AssemblyResolve(object sender, ResolveEventArgs e)
         {
             string shortName = e.Name.Substring(0, e.Name.IndexOf(','));
@@ -193,8 +194,6 @@ namespace AudioBand.AudioSource
         {
             // Assuming this won't throw because it was created previously without errors
             CreateWrapper();
-
-            LoadAudioSourceSettings();
 
             // re-activate if the host was restarted
             if (_isActivated)
