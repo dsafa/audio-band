@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AudioBand.AudioSource
 {
@@ -18,5 +19,12 @@ namespace AudioBand.AudioSource
         /// <param name="settingName">The name of the setting.</param>
         /// <returns>The value of the setting.</returns>
         object this[string settingName] { get; set; }
+
+        /// <summary>
+        /// Gets the type of the setting.
+        /// </summary>
+        /// <param name="settingName">Name of the setting.</param>
+        /// <returns>The type of the setting.</returns>
+        Type GetSettingType(string settingName);
     }
 }

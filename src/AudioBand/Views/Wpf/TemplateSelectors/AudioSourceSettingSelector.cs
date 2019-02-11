@@ -72,7 +72,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
             var setting = item as AudioSourceSettingVM;
             if (setting == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(nameof(item));
             }
 
             var type = setting.SettingType;

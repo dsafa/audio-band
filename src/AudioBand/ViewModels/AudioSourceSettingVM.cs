@@ -78,7 +78,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the type of the setting.
         /// </summary>
-        public Type SettingType => Model.Value.GetType();
+        public Type SettingType => _audioSource.GetSettingType(Name);
 
         /// <summary>
         /// Gets the description of the setting.
