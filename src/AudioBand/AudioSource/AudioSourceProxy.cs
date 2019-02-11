@@ -125,13 +125,6 @@ namespace AudioBand.AudioSource
             }
         }
 
-        /// <summary>
-        /// Try to shut down gracefully.
-        /// </summary>
-        public void Close()
-        {
-        }
-
         /// <inheritdoc/>
         public async Task ActivateAsync()
         {
