@@ -29,5 +29,10 @@ namespace AudioSourceHost
         {
             _handler(args);
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

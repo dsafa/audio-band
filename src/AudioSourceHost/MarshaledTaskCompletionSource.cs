@@ -22,5 +22,10 @@ namespace AudioSourceHost
         {
             _tcs.SetResult(null);
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }
