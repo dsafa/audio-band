@@ -44,16 +44,5 @@ namespace AudioBand.AudioSource
                 }
             }
         }
-
-        /// <summary>
-        /// Close all services.
-        /// </summary>
-        public void Close()
-        {
-            foreach (var proxy in AudioSources.Cast<AudioSourceProxy>())
-            {
-                proxy.Close();
-            }
-        }
     }
 }

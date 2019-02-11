@@ -100,7 +100,6 @@ namespace AudioBand
         {
             base.OnClose();
             _appSettings.Save();
-            _audioSourceManager.Close();
         }
 
         private async Task InitializeAsync()
