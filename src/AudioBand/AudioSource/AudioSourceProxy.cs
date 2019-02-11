@@ -63,6 +63,7 @@ namespace AudioBand.AudioSource
 
         /// <inheritdoc/>
         public event EventHandler<float> VolumeChanged;
+        public event EventHandler<bool> ShuffleChanged;
 
         /// <inheritdoc/>
         public string Name
@@ -234,6 +235,17 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
+        public async Task SetShuffleAsync(bool shuffleOn)
+        {
+            if (!IsActivated)
+            {
+                return;
+            }
+
+            await CallWrapperAsync(_wrapper.SetShuffle, shuffleOn);
+        }
+
+        /// <inheritdoc/>
         public Type GetSettingType(string settingName)
         {
             return _wrapper.GetSettingType(settingName);
@@ -295,6 +307,7 @@ namespace AudioBand.AudioSource
             _wrapper.TrackPlaying += new MarshaledEventHandler(() => TrackPlaying?.Invoke(this, EventArgs.Empty)).Handler;
             _wrapper.TrackProgressChanged += new MarshaledEventHandler<TimeSpan>(e => TrackProgressChanged?.Invoke(this, e)).Handler;
             _wrapper.VolumeChanged += new MarshaledEventHandler<float>(e => VolumeChanged?.Invoke(this, e)).Handler;
+            _wrapper.ShuffleChanged += new MarshaledEventHandler<bool>(e => ShuffleChanged?.Invoke(this, e)).Handler;
 
             LoadAudioSourceSettings();
         }
