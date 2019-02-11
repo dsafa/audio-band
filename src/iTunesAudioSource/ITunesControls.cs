@@ -55,6 +55,19 @@ namespace iTunesAudioSource
             }
         }
 
+        public ITPlaylistRepeatMode RepeatMode
+        {
+            get
+            {
+                return _itunesApp.CurrentPlaylist.SongRepeat;
+            }
+
+            set
+            {
+                _itunesApp.CurrentPlaylist.SongRepeat = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the volume from [0, 100]
         /// </summary>

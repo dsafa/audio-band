@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using AudioBand.AudioSource;
+using iTunesLib;
 using Timer = System.Timers.Timer;
 
 namespace iTunesAudioSource
@@ -14,6 +15,7 @@ namespace iTunesAudioSource
         private bool _isPlaying;
         private int _volume;
         private bool _shuffle;
+        private ITPlaylistRepeatMode _repeat;
         private ITunesControls _itunesControls = new ITunesControls();
 
         public AudioSource()
@@ -42,6 +44,8 @@ namespace iTunesAudioSource
         public event EventHandler<float> VolumeChanged;
 
         public event EventHandler<bool> ShuffleChanged;
+
+        public event EventHandler<RepeatMode> RepeatModeChanged;
 
         public string Name => "iTunes";
 
@@ -105,6 +109,42 @@ namespace iTunesAudioSource
         {
             _itunesControls.Shuffle = shuffleOn;
             return Task.CompletedTask;
+        }
+
+        public Task SetRepeatMode(RepeatMode newRepeatMode)
+        {
+            _itunesControls.RepeatMode = ToITRepeat(newRepeatMode);
+            return Task.CompletedTask;
+        }
+
+        private static RepeatMode ToRepeatMode(ITPlaylistRepeatMode mode)
+        {
+            switch (mode)
+            {
+                case ITPlaylistRepeatMode.ITPlaylistRepeatModeAll:
+                    return RepeatMode.RepeatContext;
+                case ITPlaylistRepeatMode.ITPlaylistRepeatModeOff:
+                    return RepeatMode.Off;
+                case ITPlaylistRepeatMode.ITPlaylistRepeatModeOne:
+                    return RepeatMode.RepeatTrack;
+                default:
+                    throw new InvalidOperationException($"No case for {mode}");
+            }
+        }
+
+        private static ITPlaylistRepeatMode ToITRepeat(RepeatMode mode)
+        {
+            switch (mode)
+            {
+                case RepeatMode.Off:
+                    return ITPlaylistRepeatMode.ITPlaylistRepeatModeOff;
+                case RepeatMode.RepeatContext:
+                    return ITPlaylistRepeatMode.ITPlaylistRepeatModeAll;
+                case RepeatMode.RepeatTrack:
+                    return ITPlaylistRepeatMode.ITPlaylistRepeatModeOne;
+                default:
+                    throw new InvalidOperationException($"No case for {mode}");
+            }
         }
 
         private void NotifyTrackChange(Track track)
@@ -207,6 +247,19 @@ namespace iTunesAudioSource
 
             _shuffle = shuffle;
             ShuffleChanged?.Invoke(this, _shuffle);
+        }
+
+        private void NotifyRepeatMode()
+        {
+            ITPlaylistRepeatMode repeat = _itunesControls.RepeatMode;
+
+            if (repeat == _repeat)
+            {
+                return;
+            }
+
+            _repeat = repeat;
+            RepeatModeChanged?.Invoke(this, ToRepeatMode(_repeat));
         }
     }
 }

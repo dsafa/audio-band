@@ -41,6 +41,8 @@ namespace AudioSourceHost
 
         public event EventHandler<bool> ShuffleChanged;
 
+        public event EventHandler<RepeatMode> RepeatModeChanged;
+
         public string Name => _audioSource.Name;
 
         public List<AudioSourceSettingAttribute> Settings => _audioSourceSettingsList.Select(s => s.Attribute).ToList();
@@ -90,6 +92,11 @@ namespace AudioSourceHost
             StartTask(_audioSource.SetShuffleAsync, shuffle, tcs);
         }
 
+        public void SetRepeatMode(RepeatMode repeatMode, MarshaledTaskCompletionSource tcs)
+        {
+            StartTask(_audioSource.SetRepeatMode, repeatMode, tcs);
+        }
+
         public bool Initialize(string audioSourceDirectory)
         {
             try
@@ -106,6 +113,7 @@ namespace AudioSourceHost
                 _audioSource.TrackProgressChanged += (o, e) => TrackProgressChanged?.Invoke(this, e);
                 _audioSource.VolumeChanged += (o, e) => VolumeChanged?.Invoke(this, e);
                 _audioSource.ShuffleChanged += (o, e) => ShuffleChanged?.Invoke(this, e);
+                _audioSource.RepeatModeChanged += (o, e) => RepeatModeChanged?.Invoke(this, e);
 
                 _audioSourceSettingsList = _audioSource.GetSettings();
                 foreach (AudioSourceSetting setting in _audioSourceSettingsList)
