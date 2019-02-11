@@ -2,14 +2,17 @@
 using System.Windows;
 using System.Windows.Controls;
 using AudioBand.ViewModels;
+using NLog;
 
 namespace AudioBand.Views.Wpf.TemplateSelectors
 {
     /// <summary>
-    /// Template selector for <see cref="AudioSourceSettingVM"/>.
+    /// Template selector for <see cref="AudioSourceSettingVM"/>. Used to format the setting label or change the type of setting input.
     /// </summary>
     internal class AudioSourceSettingSelector : DataTemplateSelector
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// The type of template to select.
         /// </summary>
@@ -81,6 +84,8 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
 
         private DataTemplate SelectValueTemplate(Type type, AudioSourceSettingVM setting)
         {
+            Logger.Debug($"Selecting value template for setting {setting.Name}, type {type}");
+
             if (type == typeof(string))
             {
                 return setting.Sensitive ? SensitiveTemplate : StringTemplate;

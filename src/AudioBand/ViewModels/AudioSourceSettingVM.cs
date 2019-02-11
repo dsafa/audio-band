@@ -1,7 +1,7 @@
 ﻿using System;
 using AudioBand.AudioSource;
-using AudioBand.Extensions;
 using AudioBand.Models;
+using AudioSourceHost;
 
 namespace AudioBand.ViewModels
 {
@@ -26,6 +26,9 @@ namespace AudioBand.ViewModels
         {
             _settingAttribute = settingAttribute;
             _audioSource = audioSource;
+
+            // Model value was deserialized from string maybe so change to correct type
+            model.Value = TypeConvertHelper.ConvertToType(model.Value, SettingType);
 
             // If sensitive data and was not saved from before, don't automatically remember it
             if (Sensitive && !saved)
