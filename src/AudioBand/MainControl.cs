@@ -98,6 +98,14 @@ namespace AudioBand
         {
             base.OnClose();
             _appSettings.Save();
+            try
+            {
+                _currentAudioSource?.DeactivateAsync();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         private async Task InitializeAsync()

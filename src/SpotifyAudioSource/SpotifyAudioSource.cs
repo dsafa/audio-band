@@ -554,7 +554,11 @@ namespace SpotifyAudioSource
             }
             finally
             {
-                _checkSpotifyTimer.Enabled = true;
+                // check again in case
+                if (_isActive)
+                {
+                    _checkSpotifyTimer.Enabled = true;
+                }
             }
         }
 
