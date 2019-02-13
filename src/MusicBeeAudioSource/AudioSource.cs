@@ -107,7 +107,7 @@ namespace MusicBeeAudioSource
             return Task.CompletedTask;
         }
 
-        public Task SetRepeatMode(RepeatMode newRepeatMode)
+        public Task SetRepeatModeAsync(RepeatMode newRepeatMode)
         {
             _ipc.SetRepeat(ToIpcRepeat(newRepeatMode));
             return Task.CompletedTask;

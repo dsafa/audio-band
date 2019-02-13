@@ -109,7 +109,7 @@ namespace iTunesAudioSource
             return Task.CompletedTask;
         }
 
-        public Task SetRepeatMode(RepeatMode newRepeatMode)
+        public Task SetRepeatModeAsync(RepeatMode newRepeatMode)
         {
             _itunesControls.RepeatMode = ToITRepeat(newRepeatMode);
             return Task.CompletedTask;

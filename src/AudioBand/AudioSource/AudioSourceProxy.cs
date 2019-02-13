@@ -248,7 +248,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
-        public async Task SetRepeatMode(RepeatMode newRepeatMode)
+        public async Task SetRepeatModeAsync(RepeatMode newRepeatMode)
         {
             if (!IsActivated)
             {
