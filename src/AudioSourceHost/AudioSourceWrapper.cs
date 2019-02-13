@@ -92,7 +92,7 @@ namespace AudioSourceHost
 
         public void SetRepeatMode(RepeatMode repeatMode, MarshaledTaskCompletionSource tcs)
         {
-            StartTask(_audioSource.SetRepeatMode, repeatMode, tcs);
+            StartTask(_audioSource.SetRepeatModeAsync, repeatMode, tcs);
         }
 
         public bool Initialize(string audioSourceDirectory)

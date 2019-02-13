@@ -262,7 +262,7 @@ namespace SpotifyAudioSource
             await _spotifyApi.SetShuffleAsync(shuffleOn);
         }
 
-        public async Task SetRepeatMode(RepeatMode newRepeatMode)
+        public async Task SetRepeatModeAsync(RepeatMode newRepeatMode)
         {
             await _spotifyApi.SetRepeatModeAsync(ToRepeatState(newRepeatMode));
         }

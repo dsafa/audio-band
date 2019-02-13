@@ -119,6 +119,6 @@ namespace AudioBand.AudioSource
         /// </summary>
         /// <param name="newRepeatMode">The new <see cref="RepeatMode"/>.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous set repeat mode operation.</returns>
-        Task SetRepeatMode(RepeatMode newRepeatMode);
+        Task SetRepeatModeAsync(RepeatMode newRepeatMode);
     }
 }
