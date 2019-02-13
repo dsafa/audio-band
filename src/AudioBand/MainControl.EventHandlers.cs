@@ -70,16 +70,10 @@ namespace AudioBand
             await _uiDispatcher.InvokeAsync(() => { _trackModel.TrackProgress = progress; });
         }
 
-        private async void AudioSourceOnTrackPaused(object o, EventArgs args)
+        private async void AudioSourceOnIsPlayingChanged(object sender, bool isPlaying)
         {
-            Logger.Debug("State set to paused");
-            await _uiDispatcher.InvokeAsync(() => _trackModel.IsPlaying = false);
-        }
-
-        private async void AudioSourceOnTrackPlaying(object o, EventArgs args)
-        {
-            Logger.Debug("State set to playing");
-            await _uiDispatcher.InvokeAsync(() => _trackModel.IsPlaying = true);
+            Logger.Debug($"Play state changed. Is playing: {isPlaying}");
+            await _uiDispatcher.InvokeAsync(() => _trackModel.IsPlaying = isPlaying);
         }
 
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)

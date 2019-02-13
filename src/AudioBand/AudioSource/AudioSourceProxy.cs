@@ -53,10 +53,7 @@ namespace AudioBand.AudioSource
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
         /// <inheritdoc/>
-        public event EventHandler TrackPlaying;
-
-        /// <inheritdoc/>
-        public event EventHandler TrackPaused;
+        public event EventHandler<bool> IsPlayingChanged;
 
         /// <inheritdoc/>
         public event EventHandler<TimeSpan> TrackProgressChanged;
@@ -319,8 +316,7 @@ namespace AudioBand.AudioSource
 
             _wrapper.SettingChanged += new MarshaledEventHandler<SettingChangedEventArgs>(e => SettingChanged?.Invoke(this, e)).Handler;
             _wrapper.TrackInfoChanged += new MarshaledEventHandler<TrackInfoChangedEventArgs>(e => TrackInfoChanged?.Invoke(this, e)).Handler;
-            _wrapper.TrackPaused += new MarshaledEventHandler(() => TrackPaused?.Invoke(this, EventArgs.Empty)).Handler;
-            _wrapper.TrackPlaying += new MarshaledEventHandler(() => TrackPlaying?.Invoke(this, EventArgs.Empty)).Handler;
+            _wrapper.IsPlayingChanged += new MarshaledEventHandler<bool>(e => IsPlayingChanged?.Invoke(this, e)).Handler;
             _wrapper.TrackProgressChanged += new MarshaledEventHandler<TimeSpan>(e => TrackProgressChanged?.Invoke(this, e)).Handler;
             _wrapper.VolumeChanged += new MarshaledEventHandler<float>(e => VolumeChanged?.Invoke(this, e)).Handler;
             _wrapper.ShuffleChanged += new MarshaledEventHandler<bool>(e => ShuffleChanged?.Invoke(this, e)).Handler;

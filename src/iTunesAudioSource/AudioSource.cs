@@ -31,9 +31,7 @@ namespace iTunesAudioSource
 
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
-        public event EventHandler TrackPlaying;
-
-        public event EventHandler TrackPaused;
+        public event EventHandler<bool> IsPlayingChanged;
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
@@ -181,16 +179,8 @@ namespace iTunesAudioSource
                 return;
             }
 
-            if (playing)
-            {
-                TrackPlaying?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                TrackPaused.Invoke(this, EventArgs.Empty);
-            }
-
             _isPlaying = playing;
+            IsPlayingChanged?.Invoke(this, _isPlaying);
         }
 
         private void CheckItunes(object sender, ElapsedEventArgs eventArgs)

@@ -208,8 +208,7 @@ namespace AudioBand
             ResetTrack();
 
             source.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
-            source.TrackPlaying += AudioSourceOnTrackPlaying;
-            source.TrackPaused += AudioSourceOnTrackPaused;
+            source.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
             await source.ActivateAsync().ConfigureAwait(false);
@@ -227,8 +226,7 @@ namespace AudioBand
             }
 
             source.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
-            source.TrackPlaying -= AudioSourceOnTrackPlaying;
-            source.TrackPaused -= AudioSourceOnTrackPaused;
+            source.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
             source.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
 
             await source.DeactivateAsync().ConfigureAwait(false);
