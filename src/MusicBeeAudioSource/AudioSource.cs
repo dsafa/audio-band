@@ -35,9 +35,7 @@ namespace MusicBeeAudioSource
 
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
-        public event EventHandler TrackPlaying;
-
-        public event EventHandler TrackPaused;
+        public event EventHandler<bool> IsPlayingChanged;
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
@@ -187,16 +185,8 @@ namespace MusicBeeAudioSource
                 return;
             }
 
-            if (isPlaying)
-            {
-                TrackPlaying?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                TrackPaused?.Invoke(this, EventArgs.Empty);
-            }
-
             _isPlaying = isPlaying;
+            IsPlayingChanged?.Invoke(this, _isPlaying);
         }
 
         private void NotifyTrackChange()

@@ -31,9 +31,7 @@ namespace AudioSourceHost
 
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
-        public event EventHandler TrackPlaying;
-
-        public event EventHandler TrackPaused;
+        public event EventHandler<bool> IsPlayingChanged;
 
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
@@ -108,8 +106,7 @@ namespace AudioSourceHost
 
                 _audioSource.SettingChanged += (o, e) => SettingChanged?.Invoke(this, e);
                 _audioSource.TrackInfoChanged += (o, e) => TrackInfoChanged?.Invoke(this, e);
-                _audioSource.TrackPaused += (o, e) => TrackPaused?.Invoke(this, e);
-                _audioSource.TrackPlaying += (o, e) => TrackPlaying?.Invoke(this, e);
+                _audioSource.IsPlayingChanged += (o, e) => IsPlayingChanged?.Invoke(this, e);
                 _audioSource.TrackProgressChanged += (o, e) => TrackProgressChanged?.Invoke(this, e);
                 _audioSource.VolumeChanged += (o, e) => VolumeChanged?.Invoke(this, e);
                 _audioSource.ShuffleChanged += (o, e) => ShuffleChanged?.Invoke(this, e);

@@ -45,10 +45,6 @@ namespace SpotifyAudioSource
 
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
-        public event EventHandler TrackPlaying;
-
-        public event EventHandler TrackPaused;
-
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
@@ -58,6 +54,8 @@ namespace SpotifyAudioSource
         public event EventHandler<bool> ShuffleChanged;
 
         public event EventHandler<RepeatMode> RepeatModeChanged;
+
+        public event EventHandler<bool> IsPlayingChanged;
 
         public string Name { get; } = "Spotify";
 
@@ -434,16 +432,8 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            if (isPlaying)
-            {
-                TrackPlaying?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                TrackPaused?.Invoke(this, EventArgs.Empty);
-            }
-
             _currentIsPlaying = isPlaying;
+            IsPlayingChanged?.Invoke(this, _currentIsPlaying);
         }
 
         private void NotifyTrackProgress(PlaybackContext context)

@@ -21,14 +21,9 @@ namespace AudioBand.AudioSource
         event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
         /// <summary>
-        /// Occurs when the playback state has changed to playing.
+        /// Occurs when the track play state has changed. <see langword="true"/> if playing; <see langword="false"/> otherwise;
         /// </summary>
-        event EventHandler TrackPlaying;
-
-        /// <summary>
-        /// Occurs when the playback state has changed to paused.
-        /// </summary>
-        event EventHandler TrackPaused;
+        event EventHandler<bool> IsPlayingChanged;
 
         /// <summary>
         /// Occurs when the current track progress has changed.
@@ -36,12 +31,12 @@ namespace AudioBand.AudioSource
         event EventHandler<TimeSpan> TrackProgressChanged;
 
         /// <summary>
-        /// Occurs when the volume of the audio source changes. The range of the new volume is between 0.0 and 1.0 inclusive.
+        /// Occurs when the volume of the audio source changes. The range of the volume is between 0.0 and 1.0 inclusive.
         /// </summary>
         event EventHandler<float> VolumeChanged;
 
         /// <summary>
-        /// Occurs when the shuffle state changes.
+        /// Occurs when the shuffle state changes. <see langword="true"/> if shuffle is on; <see langword="false"/> otherwise;
         /// </summary>
         event EventHandler<bool> ShuffleChanged;
 
