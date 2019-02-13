@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace SpotifyAudioSource
         private HttpClient _httpClient = new HttpClient();
         private SpotifyWebAPI _spotifyApi = new SpotifyWebAPI();
         private string _currentTrackId;
+        private string _currentTrackName;
         private bool _currentIsPlaying;
         private int _currentProgress;
         private int _currentVolumePercent;
@@ -391,16 +393,25 @@ namespace SpotifyAudioSource
 
         private async Task NotifyTrackUpdate(FullTrack track)
         {
-            if (track.Id == _currentTrackId)
+            // need name because local files dont have ids
+            if (track.Id == _currentTrackId && track.Name == _currentTrackName)
             {
                 return;
             }
 
             _currentTrackId = track.Id;
+            _currentTrackName = track.Name;
 
-            var albumArtImage = await GetAlbumArt(new Uri(track.Album.Images[0].Url));
-            var trackName = track.Name;
-            var artist = track.Artists[0].Name;
+            string albumArtUrl = track.Album?.Images.FirstOrDefault()?.Url;
+            Image albumArtImage = null;
+            if (albumArtUrl != null)
+            {
+                albumArtImage = await GetAlbumArt(new Uri(albumArtUrl));
+            }
+
+            string album = track.Album?.Name;
+            string trackName = track.Name;
+            string artist = track.Artists?.FirstOrDefault()?.Name;
             var trackLength = TimeSpan.FromMilliseconds(track.DurationMs);
 
             var trackUpdateInfo = new TrackInfoChangedEventArgs
@@ -408,7 +419,7 @@ namespace SpotifyAudioSource
                 Artist = artist,
                 TrackName = trackName,
                 AlbumArt = albumArtImage,
-                Album = track.Album.Name,
+                Album = album,
                 TrackLength = trackLength
             };
 
@@ -490,6 +501,11 @@ namespace SpotifyAudioSource
 
         private async Task<Image> GetAlbumArt(Uri albumArtUrl)
         {
+            if (albumArtUrl == null)
+            {
+                return null;
+            }
+
             try
             {
                 var response = await _httpClient.GetAsync(albumArtUrl);
