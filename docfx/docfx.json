@@ -9,7 +9,7 @@
           ]
         }
       ],
-      "dest": "api",
+      "dest": "audiosource-api",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     }
@@ -18,18 +18,21 @@
     "content": [
       {
         "files": [
-          "api/**.yml",
-          "api/index.md"
+          "audiosource-api/**.yml",
+          "audiosource-api/index.md"
         ]
       },
       {
         "files": [
-          "articles/**.md",
-          "articles/**/toc.yml",
+          "audioband/**.md",
+          "audioband/**/toc.yml",
           "toc.yml",
           "*.md"
         ]
       }
+    ],
+    "xrefservice": [
+      "https://xref.docs.microsoft.com/query?uid={uid}"
     ],
     "resource": [
       {
@@ -60,6 +63,9 @@
     "noLangKeyword": false,
     "keepFileLink": false,
     "cleanupCacheHistory": false,
-    "disableGitFeatures": false
+    "disableGitFeatures": false,
+    "globalMetadata": {
+      "_enableSearch": true
+    }
   }
 }
