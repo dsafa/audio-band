@@ -59,6 +59,8 @@ namespace AudioBand.Test
 
             _audioSourceMock.SetupGet(s => s[It.Is<string>(x => x == setting1)]).Returns(val1);
             _audioSourceMock.SetupGet(s => s[It.Is<string>(x => x == setting2)]).Returns(val2);
+            _audioSourceMock.Setup(s => s.GetSettingType(It.Is<string>(x => x == setting1))).Returns(typeof(string));
+            _audioSourceMock.Setup(s => s.GetSettingType(It.Is<string>(x => x == setting2))).Returns(typeof(string));
 
             var settingModels = new List<AudioSourceSetting>
             {
