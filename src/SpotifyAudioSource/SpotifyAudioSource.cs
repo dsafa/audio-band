@@ -267,7 +267,7 @@ namespace SpotifyAudioSource
             await _spotifyApi.SetRepeatModeAsync(ToRepeatState(newRepeatMode));
         }
 
-        private static RepeatMode ToRepeatMode(RepeatState state)
+        private RepeatMode ToRepeatMode(RepeatState state)
         {
             switch (state)
             {
@@ -278,11 +278,12 @@ namespace SpotifyAudioSource
                 case RepeatState.Track:
                     return RepeatMode.RepeatTrack;
                 default:
-                    throw new InvalidOperationException($"No case for {state}");
+                    Logger.Warn($"No case for {state}");
+                    return RepeatMode.Off;
             }
         }
 
-        private static RepeatState ToRepeatState(RepeatMode mode)
+        private RepeatState ToRepeatState(RepeatMode mode)
         {
             switch (mode)
             {
@@ -293,7 +294,8 @@ namespace SpotifyAudioSource
                 case RepeatMode.RepeatTrack:
                     return RepeatState.Track;
                 default:
-                    throw new InvalidOperationException($"No case for {mode}");
+                    Logger.Warn("No case for {mode}");
+                    return RepeatState.Off;
             }
         }
 

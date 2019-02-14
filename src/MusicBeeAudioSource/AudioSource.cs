@@ -113,7 +113,7 @@ namespace MusicBeeAudioSource
             return Task.CompletedTask;
         }
 
-        private static RepeatMode ToRepeatMode(MusicBeeIPC.RepeatMode mode)
+        private RepeatMode ToRepeatMode(MusicBeeIPC.RepeatMode mode)
         {
             switch (mode)
             {
@@ -124,11 +124,12 @@ namespace MusicBeeAudioSource
                 case MusicBeeIPC.RepeatMode.One:
                     return RepeatMode.RepeatTrack;
                 default:
-                    throw new InvalidOperationException($"No case for {mode}");
+                    Logger.Warn($"No case for {mode}");
+                    return RepeatMode.Off;
             }
         }
 
-        private static MusicBeeIPC.RepeatMode ToIpcRepeat(RepeatMode mode)
+        private MusicBeeIPC.RepeatMode ToIpcRepeat(RepeatMode mode)
         {
             switch (mode)
             {
@@ -139,7 +140,8 @@ namespace MusicBeeAudioSource
                 case RepeatMode.RepeatTrack:
                     return MusicBeeIPC.RepeatMode.One;
                 default:
-                    throw new InvalidOperationException($"No case for {mode}");
+                    Logger.Warn($"No case for {mode}");
+                    return MusicBeeIPC.RepeatMode.None;
             }
         }
 
