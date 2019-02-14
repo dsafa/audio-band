@@ -19,8 +19,9 @@ namespace AudioBand.AudioSource
         }
 
         /// <summary>
-        /// Gets or sets the name of the setting's property that changed.
+        /// Gets or sets the name of the setting that changed.
         /// </summary>
+        /// <value>The name of the setting.</value>
         public string SettingName { get; set; }
     }
 }

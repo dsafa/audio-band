@@ -23,11 +23,13 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Gets or sets the name of the setting.
         /// </summary>
+        /// <value>The name of the setting.</value>
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="SettingOptions"/> flags for the setting.
         /// </summary>
+        /// <value>The option flags for this setting.</value>
         public SettingOptions Options { get; set; }
 
         /// <summary>
@@ -35,11 +37,13 @@ namespace AudioBand.AudioSource
         /// <para/>
         /// A higher value is higher priority.
         /// </summary>
+        /// <value>The priority of the setting.</value>
         public int Priority { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the setting.
         /// </summary>
+        /// <value>The description of the setting.</value>
         public string Description { get; set; }
     }
 }

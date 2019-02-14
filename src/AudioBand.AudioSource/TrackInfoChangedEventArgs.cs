@@ -30,26 +30,31 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Gets or sets the track Name
         /// </summary>
+        /// <value>The name of the track.</value>
         public string TrackName { get; set; }
 
         /// <summary>
         /// Gets or sets the artist.
         /// </summary>
+        /// <value>The name of the artist.</value>
         public string Artist { get; set; }
 
         /// <summary>
         /// Gets or sets the album art image. If <see langword="null"/>, a placeholder will be used.
         /// </summary>
+        /// <value>The album art.</value>
         public Image AlbumArt { get; set; }
 
         /// <summary>
         /// Gets or sets the album name.
         /// </summary>
+        /// <value>The name of the album.</value>
         public string Album { get; set; }
 
         /// <summary>
         /// Gets or sets the length of the track
         /// </summary>
+        /// <value>The length of the track.</value>
         public TimeSpan TrackLength { get; set; }
 
         /// <inheritdoc/>
