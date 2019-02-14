@@ -18,6 +18,15 @@ Audio Band allows you to display song information in the taskbar.
 
 ![](screenshots/custom-2.png)
 
+# Table of contents
+1. [Installation](#installation)
+2. [Usage](#usage)
+3. [Plugins](#audiosources)
+   1. [Spotify](#spotify-setup)
+   2. [iTunes](#itunes)
+   3. [MusicBee](#musicbee)
+4. [Customization](#customization)
+
 ## Installation
 There is currently no installer available, however there are prereleases in the [Release](https://github.com/dsafa/audio-band/releases) page that come with a script to install manually.
 
@@ -31,7 +40,7 @@ There is currently no installer available, however there are prereleases in the 
 
 **IMPORTANT** If nothing happens after selecting `Audio Band` from the toolbars menu or if there are no options in the `Audio Source` menu, some files are being blocked by windows. To fix it, run `unblock.ps1` with powershell. If that doesn't work you can manually fix it by right clicking the files -> properties and clicking unblock. If there are still problems, feel free to post an issue.
 
-## Current Supported Audio Sources (see below for setup instructions and issues)
+## <a name="audiosources"></a>Current Supported Audio Sources (see below for setup instructions and issues)
 - Spotify
 - iTunes
 - MusicBee
@@ -49,7 +58,6 @@ There is currently no installer available, however there are prereleases in the 
 ![](./screenshots/spotify-app-settings-callback.png)
 
 #### Spotify Issues
-- The song progress will be out of sync if you change the song's progress. This is due to current limitations making the song progress being tracked locally. This can be fixed if you pause and play again or go to a different song.
 - The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying.
 
 ### iTunes
