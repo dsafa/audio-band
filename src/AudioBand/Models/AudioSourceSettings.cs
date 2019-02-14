@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using AudioBand.AudioSource;
+﻿using System.Collections.Generic;
 
 namespace AudioBand.Models
 {
     /// <summary>
-    /// Collection of settings for a specific audio source
+    /// Collection of settings for a specific audio source.
     /// </summary>
     internal class AudioSourceSettings : ModelBase
     {
         /// <summary>
-        /// Name of the audio source
+        /// Gets or sets the name of the audio source.
         /// </summary>
         public string AudioSourceName { get; set; }
 
         /// <summary>
-        /// List of settings that the audio source exposes
+        /// Gets or sets the list of settings that the audio source exposes.
         /// </summary>
         public List<AudioSourceSetting> Settings { get; set; } = new List<AudioSourceSetting>();
     }

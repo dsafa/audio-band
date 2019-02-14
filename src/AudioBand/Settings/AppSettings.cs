@@ -1,56 +1,37 @@
-﻿using AudioBand.Models;
-using AudioBand.Settings.Migrations;
-using Nett;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using AudioBand.Settings.Models.v2;
+using AudioBand.Models;
+using AudioBand.Settings.Migrations;
+using AudioBand.Settings.Models.V2;
+using Nett;
+using NLog;
 using AudioSourceSettings = AudioBand.Models.AudioSourceSettings;
 
 namespace AudioBand.Settings
 {
+    /// <summary>
+    /// Manages application settings.
+    /// </summary>
     internal class AppSettings
     {
         private static readonly Dictionary<string, Type> SettingsTable = new Dictionary<string, Type>()
         {
-            {"0.1", typeof(Settings.Models.v1.AudioBandSettings)},
-            {"2", typeof(Settings.Models.v2.Settings)}
+            { "0.1", typeof(Settings.Models.V1.AudioBandSettings) },
+            { "2", typeof(Settings.Models.V2.Settings) }
         };
-        private static string CurrentVersion = "2";
+
+        private static readonly string CurrentVersion = "2";
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly TomlSettings _tomlSettings;
-        private Models.v2.Settings _settings;
+        private Models.V2.Settings _settings;
 
-        public string Version => _settings.Version;
-
-        public string AudioSource
-        {
-            get => _settings.AudioSource;
-            set => _settings.AudioSource = value;
-        }
-
-        public AlbumArtPopup AlbumArtPopup { get; set; }
-
-        public AlbumArt AlbumArt { get; set; }
-
-        public AudioBand.Models.AudioBand AudioBand { get;set; }
-
-        public List<CustomLabel> CustomLabels { get; set; }
-
-        public NextButton NextButton { get; set; }
-
-        public PreviousButton PreviousButton { get; set; }
-
-        public PlayPauseButton PlayPauseButton { get; set; }
-
-        public ProgressBar ProgressBar { get; set; }
-
-        public List<AudioSourceSettings> AudioSourceSettings { get; set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppSettings"/> class.
+        /// </summary>
         public AppSettings()
         {
             _tomlSettings = TomlSettings.Create(cfg =>
@@ -81,6 +62,63 @@ namespace AudioBand.Settings
             GetModels();
         }
 
+        /// <summary>
+        /// Gets or sets the name of the current audio source.
+        /// </summary>
+        public string AudioSource
+        {
+            get => _settings.AudioSource;
+            set => _settings.AudioSource = value;
+        }
+
+        /// <summary>
+        /// Gets the saved album art popup model.
+        /// </summary>
+        public AlbumArtPopup AlbumArtPopup { get; private set; }
+
+        /// <summary>
+        /// Gets the saved album art model.
+        /// </summary>
+        public AlbumArt AlbumArt { get; private set; }
+
+        /// <summary>
+        /// Gets the saved audio band model.
+        /// </summary>
+        public AudioBand.Models.AudioBand AudioBand { get; private set; }
+
+        /// <summary>
+        /// Gets the saved labels.
+        /// </summary>
+        public List<CustomLabel> CustomLabels { get; private set; }
+
+        /// <summary>
+        /// Gets the saved button model.
+        /// </summary>
+        public NextButton NextButton { get; private set; }
+
+        /// <summary>
+        /// Gets the saved previous button model.
+        /// </summary>
+        public PreviousButton PreviousButton { get; private set; }
+
+        /// <summary>
+        /// Gets the saved play pause button model.
+        /// </summary>
+        public PlayPauseButton PlayPauseButton { get; private set; }
+
+        /// <summary>
+        /// Gets the saved progress bar model.
+        /// </summary>
+        public ProgressBar ProgressBar { get; private set; }
+
+        /// <summary>
+        /// Gets the saved audio source settings.
+        /// </summary>
+        public List<AudioSourceSettings> AudioSourceSettings { get; private set; }
+
+        /// <summary>
+        /// Save the settings.
+        /// </summary>
         public void Save()
         {
             try
@@ -93,7 +131,7 @@ namespace AudioBand.Settings
                 _settings.PreviousButtonSettings = ToSetting<PreviousButtonSettings>(PreviousButton);
                 _settings.PlayPauseButtonSettings = ToSetting<PlayPauseButtonSettings>(PlayPauseButton);
                 _settings.ProgressBarSettings = ToSetting<ProgressBarSettings>(ProgressBar);
-                _settings.AudioSourceSettings = ToSetting<List<Models.v2.AudioSourceSettings>>(AudioSourceSettings);
+                _settings.AudioSourceSettings = ToSetting<List<Models.V2.AudioSourceSettings>>(AudioSourceSettings);
                 Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
             }
             catch (Exception e)
@@ -125,7 +163,8 @@ namespace AudioBand.Settings
                 {
                     Toml.WriteFile(file, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
                 }
-                _settings = Migration.MigrateSettings<Settings.Models.v2.Settings>(file.Get(SettingsTable[version]), version, CurrentVersion);
+
+                _settings = Migration.MigrateSettings<Settings.Models.V2.Settings>(file.Get(SettingsTable[version]), version, CurrentVersion);
             }
             catch (Exception e)
             {
@@ -142,7 +181,7 @@ namespace AudioBand.Settings
             }
             catch (Exception e)
             {
-                Logger.Error($"Cannot convert setting {setting} to model {typeof(TModel)}");
+                Logger.Error(e, $"Cannot convert setting {setting} to model {typeof(TModel)}");
                 throw;
             }
         }
@@ -155,17 +194,17 @@ namespace AudioBand.Settings
             }
             catch (Exception e)
             {
-                Logger.Error($"Cannot model to settings {model} target: {typeof(T)}");
+                Logger.Error(e, $"Cannot model to settings {model} target: {typeof(T)}");
                 throw;
             }
         }
 
         private void CreateDefault()
         {
-            _settings = new Models.v2.Settings
+            _settings = new Models.V2.Settings
             {
-                AudioSourceSettings = new List<Models.v2.AudioSourceSettings>(),
-                AudioBandSettings = ToSetting<Models.v2.AudioBandSettings>(new AudioBand.Models.AudioBand()),
+                AudioSourceSettings = new List<Models.V2.AudioSourceSettings>(),
+                AudioBandSettings = ToSetting<Models.V2.AudioBandSettings>(new AudioBand.Models.AudioBand()),
                 AlbumArtSettings = ToSetting<AlbumArtSettings>(new AlbumArt()),
                 AudioSource = null,
                 AlbumArtPopupSettings = ToSetting<AlbumArtPopupSettings>(new AlbumArtPopup()),
@@ -173,7 +212,7 @@ namespace AudioBand.Settings
                 NextButtonSettings = ToSetting<NextButtonSettings>(new NextButton()),
                 PreviousButtonSettings = ToSetting<PreviousButtonSettings>(new PreviousButton()),
                 ProgressBarSettings = ToSetting<ProgressBarSettings>(new ProgressBar()),
-                CustomLabelSettings = new List<CustomLabelSettings> {ToSetting<CustomLabelSettings>(new CustomLabel())}
+                CustomLabelSettings = new List<CustomLabelSettings> { ToSetting<CustomLabelSettings>(new CustomLabel()) }
             };
         }
     }

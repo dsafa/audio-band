@@ -7,20 +7,23 @@ namespace AudioBand.Commands
     /// <summary>
     /// Basic async command.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Type of the command parameter.</typeparam>
     internal class AsyncRelayCommand<T> : ICommand
     {
         private readonly Func<T, Task> _execute;
         private readonly Predicate<T> _canExecute;
 
         /// <summary>
-        /// Create an instance of <see cref="AsyncRelayCommand{T}"/> with a delegate to execute.
+        /// Initializes a new instance of the <see cref="AsyncRelayCommand{T}"/> class
+        /// with a delegate to be executed.
         /// </summary>
         /// <param name="execute">Action to execute.</param>
-        public AsyncRelayCommand(Func<T, Task> execute) : this(execute, null) { }
+        public AsyncRelayCommand(Func<T, Task> execute)
+            : this(execute, null) { }
 
         /// <summary>
-        /// Create an instace of <see cref="AsyncRelayCommand{T}"/> with a delegate to execute and a predicate to determine if it can be executed.
+        /// Initializes a new instance of the <see cref="AsyncRelayCommand{T}"/> class
+        /// with a delegate to be executed and a predicate to determine if it can be executed.
         /// </summary>
         /// <param name="execute">Async delegate to execute.</param>
         /// <param name="canExecute">Predicate to check if the commmand can execute.</param>
@@ -30,17 +33,17 @@ namespace AudioBand.Commands
             _canExecute = canExecute;
         }
 
-        /// <inheritdoc cref="ICommand.CanExecute"/>
-        public bool CanExecute(object parameter)
-        {
-            return  _canExecute?.Invoke((T)parameter) ?? true;
-        }
-
         /// <inheritdoc cref="ICommand.CanExecuteChanged"/>
         public event EventHandler CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
+        }
+
+        /// <inheritdoc cref="ICommand.CanExecute"/>
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute?.Invoke((T)parameter) ?? true;
         }
 
         /// <inheritdoc cref="ICommand.Execute"/>

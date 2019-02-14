@@ -2,11 +2,11 @@
 using System.Drawing;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
-using AudioBand.Settings.Models.v1;
-using V1Settings = AudioBand.Settings.Models.v1.AudioBandSettings;
-using V2Settings = AudioBand.Settings.Models.v2.Settings;
+using AudioBand.Settings.Models.V1;
+using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
+using V2Settings = AudioBand.Settings.Models.V2.Settings;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AudioSourceSetting = AudioBand.Settings.Models.v1.AudioSourceSetting;
+using AudioSourceSetting = AudioBand.Settings.Models.V1.AudioSourceSetting;
 
 namespace AudioBand.Test
 {

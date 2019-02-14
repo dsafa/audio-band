@@ -1,1 +1,1 @@
-﻿AudioSources = ["SpotifyAudioSource.dll"]
+﻿AudioSource = "SpotifyAudioSource.dll"

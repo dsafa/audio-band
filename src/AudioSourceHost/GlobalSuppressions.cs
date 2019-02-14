@@ -1,0 +1,1 @@
+﻿[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:Split parameters must start on line after declaration", Justification = "Ignore", Scope = "member", Target = "~M:AudioSourceHost.AudioSourceWrapper.SetupTask(System.Threading.Tasks.Task,AudioSourceHost.MarshaledTaskCompletionSource)")]

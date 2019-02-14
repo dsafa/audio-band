@@ -1,10 +1,9 @@
-﻿using AudioBand.Commands;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
+using AudioBand.Commands;
+using Microsoft.Win32;
 
 namespace AudioBand.Views.Wpf
 {
@@ -13,26 +12,41 @@ namespace AudioBand.Views.Wpf
     /// </summary>
     public partial class ImagePicker : UserControl
     {
-        public string ImagePath
-        {
-            get => (string) GetValue(ImagePathProperty);
-            set => SetValue(ImagePathProperty, value);
-        }
-
-        public static readonly DependencyProperty ImagePathProperty = 
+        /// <summary>
+        /// The dependency property for <see cref="ImagePath"/>.
+        /// </summary>
+        public static readonly DependencyProperty ImagePathProperty =
             DependencyProperty.Register(nameof(ImagePath), typeof(string), typeof(ImagePicker), new PropertyMetadata(null));
 
-        public RelayCommand ResetImageCommand { get; }
-        public RelayCommand BrowseForImageCommand { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImagePicker"/> class.
+        /// </summary>
         public ImagePicker()
         {
-
             ResetImageCommand = new RelayCommand(ResetImagePathOnExecuted, ResetImagePathCanExecute);
             BrowseForImageCommand = new RelayCommand(BrowseForImageOnExecuted);
 
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Gets or sets the curren image path.
+        /// </summary>
+        public string ImagePath
+        {
+            get => (string)GetValue(ImagePathProperty);
+            set => SetValue(ImagePathProperty, value);
+        }
+
+        /// <summary>
+        /// Gets the command to reset the image path.
+        /// </summary>
+        public RelayCommand ResetImageCommand { get; }
+
+        /// <summary>
+        /// Gets the command to open a browser for the image.
+        /// </summary>
+        public RelayCommand BrowseForImageCommand { get; }
 
         private static string SelectImage()
         {
@@ -68,7 +82,7 @@ namespace AudioBand.Views.Wpf
 
         private bool ResetImagePathCanExecute(object parameter)
         {
-            return !String.IsNullOrEmpty(ImagePath);
+            return !string.IsNullOrEmpty(ImagePath);
         }
 
         private void BrowseForImageOnExecuted(object parameter)

@@ -4,6 +4,9 @@ using System.Windows.Media;
 
 namespace AudioBand.Extensions
 {
+    /// <summary>
+    /// Extensions for <see cref="Color"/>.
+    /// </summary>
     internal static class ColorExtensions
     {
         private static readonly List<(Color color, string name)> _colors;
@@ -16,10 +19,15 @@ namespace AudioBand.Extensions
                 .ToList();
         }
 
+        /// <summary>
+        /// Get the known name of the color if available otherwise get the hex code.
+        /// </summary>
+        /// <param name="color">Color to get the name of.</param>
+        /// <returns>The known name or hex value as a string.</returns>
         public static string GetColorName(this Color color)
         {
-            var col = _colors.Where(x => Color.AreClose(x.color, color)).Select(x => x.name).Take(1).ToList();
-            return col.Any() ? col[0] : new ColorConverter().ConvertToString(color);
+            var matchingColorNames = _colors.Where(x => Color.AreClose(x.color, color)).Select(x => x.name);
+            return matchingColorNames.FirstOrDefault() ?? new ColorConverter().ConvertToString(color);
         }
     }
 }

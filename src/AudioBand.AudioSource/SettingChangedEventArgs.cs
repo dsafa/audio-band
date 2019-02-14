@@ -5,20 +5,22 @@ namespace AudioBand.AudioSource
     /// <summary>
     /// Provides data for a <see cref="IAudioSource.SettingChanged"/> event.
     /// </summary>
-    public class SettingChangedEventArgs : EventArgs
+    [Serializable]
+    public sealed class SettingChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Name of the setting's property that changed.
+        /// Initializes a new instance of the <see cref="SettingChangedEventArgs"/> class
+        /// with the setting's name.
         /// </summary>
-        public string PropertyName { get; set; }
+        /// <param name="settingName">Name of the setting that changed.</param>
+        public SettingChangedEventArgs(string settingName)
+        {
+            SettingName = settingName;
+        }
 
         /// <summary>
-        /// Creates a new instance of a <see cref="SettingChangedEventArgs"/> with the setting name.
+        /// Gets or sets the name of the setting's property that changed.
         /// </summary>
-        /// <param name="propertyName">Name of the setting's property that changed.</param>
-        public SettingChangedEventArgs(string propertyName)
-        {
-            PropertyName = propertyName;
-        }
+        public string SettingName { get; set; }
     }
 }

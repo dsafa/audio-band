@@ -1,17 +1,59 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using AudioBand.Models;
 using TextAlignment= AudioBand.Models.CustomLabel.TextAlignment;
 using Timer = System.Windows.Forms.Timer;
 
 namespace AudioBand.Views.Winforms
 {
     /// <summary>
-    /// A text label that supports formatting with placeholders
+    /// A text label that supports custom formatting.
     /// </summary>
     internal class FormattedTextLabel : Control
     {
+        private const int TickRateMs = 20;
+        private const int TickPerS = 1000 / TickRateMs;
+        private const int TextMargin = 60; // Spacing between scrolling text
+        private const int WidthPadding = 4;
+        private readonly Timer _scrollingTimer = new Timer { Interval = TickRateMs };
+        private readonly FormattedTextRenderer _renderer;
+        private float _textXPos;
+        private float _duplicateXPos; // Draw 2 labels so that there wont be a gap between
+        private int _textWidth;
+
+        private string _format;
+        private Color _defaultColor;
+        private float _fontSize;
+        private string _fontFamily;
+        private TextAlignment _alignment;
+        private string _artist;
+        private string _songName;
+        private string _albumName;
+        private TimeSpan _songProgress;
+        private TimeSpan _songLength;
+        private int _scrollSpeed;
+        private float _scrollDelta;
+        private Bitmap _renderedText;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormattedTextLabel"/> class
+        /// with initial display values.
+        /// </summary>
+        /// <param name="format">The text format.</param>
+        /// <param name="defaultColor">The default color.</param>
+        /// <param name="fontSize">The font size.</param>
+        /// <param name="fontFamily">The font family.</param>
+        /// <param name="alignment">The text alignment.</param>
+        public FormattedTextLabel(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
+        {
+            DoubleBuffered = true;
+            _renderer = new FormattedTextRenderer(format, defaultColor, fontSize, fontFamily, alignment);
+            _scrollingTimer.Tick += ScrollingTimerOnTick;
+        }
+
+        /// <summary>
+        /// Gets or sets the format of the label.
+        /// </summary>
         public string Format
         {
             get => _format;
@@ -23,6 +65,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the default color of the text.
+        /// </summary>
         public Color DefaultColor
         {
             get => _defaultColor;
@@ -34,6 +79,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the font size of the text.
+        /// </summary>
         public float FontSize
         {
             get => _fontSize;
@@ -45,6 +93,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the font family of the text.
+        /// </summary>
         public string FontFamily
         {
             get => _fontFamily;
@@ -56,6 +107,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the text alignment.
+        /// </summary>
         public TextAlignment Alignment
         {
             get => _alignment;
@@ -67,6 +121,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current artist to display.
+        /// </summary>
         public string Artist
         {
             get => _artist;
@@ -82,6 +139,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current song name.
+        /// </summary>
         public string SongName
         {
             get => _songName;
@@ -97,6 +157,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current album name.
+        /// </summary>
         public string AlbumName
         {
             get => _albumName;
@@ -112,6 +175,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current song progress.
+        /// </summary>
         public TimeSpan SongProgress
         {
             get => _songProgress;
@@ -127,6 +193,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current song length.
+        /// </summary>
         public TimeSpan SongLength
         {
             get => _songLength;
@@ -142,6 +211,9 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the scroll speed of the label.
+        /// </summary>
         public int ScrollSpeed
         {
             get => _scrollSpeed;
@@ -153,61 +225,7 @@ namespace AudioBand.Views.Winforms
             }
         }
 
-        internal int TagId { get; set; }
-
-        private const int TickRateMs = 20;
-        private const int TickPerS = 1000 / TickRateMs;
-        private readonly Timer _scrollingTimer = new Timer { Interval = TickRateMs};
-        private const int TextMargin = 60; //Spacing between scrolling text
-        private float _textXPos;
-        private float _duplicateXPos; // Draw 2 labels so that there wont be a gap between
-        private int _textWidth;
-        private const int WidthPadding = 4;
-
-        private readonly FormattedTextRenderer _renderer;
-        private string _format;
-        private Color _defaultColor;
-        private float _fontSize;
-        private string _fontFamily;
-        private TextAlignment _alignment;
-        private string _artist;
-        private string _songName;
-        private string _albumName;
-        private TimeSpan _songProgress;
-        private TimeSpan _songLength;
-        private int _scrollSpeed;
-        private float _scrollDelta;
-        private Bitmap _renderedText;
-
-        public FormattedTextLabel(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
-        {
-            DoubleBuffered = true;
-            _renderer = new FormattedTextRenderer(format, defaultColor, fontSize, fontFamily, alignment);
-            _scrollingTimer.Tick += ScrollingTimerOnTick;
-        }
-
-        private void ScrollingTimerOnTick(object sender, EventArgs eventArgs)
-        {
-            UpdateTextPositions();
-            Refresh();
-        }
-
-        private void UpdateTextPositions()
-        {
-            if (_textXPos + _textWidth + TextMargin < 0)
-            {
-                _textXPos = _duplicateXPos + _textWidth + TextMargin;
-            }
-
-            if (_duplicateXPos + _textWidth + TextMargin < 0)
-            {
-                _duplicateXPos = _textXPos + _textWidth + TextMargin;
-            }
-
-            _textXPos -= _scrollDelta;
-            _duplicateXPos -= _scrollDelta;
-        }
-
+        /// <inheritdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
             // measure
@@ -233,16 +251,47 @@ namespace AudioBand.Views.Winforms
                 _textXPos = GetNormalTextPos();
             }
 
-            Draw(e.Graphics, (int) _textXPos);
+            Draw(e.Graphics, (int)_textXPos);
 
             if (_scrollingTimer.Enabled)
             {
-                Draw(e.Graphics, (int) _duplicateXPos);
-
+                Draw(e.Graphics, (int)_duplicateXPos);
             }
         }
 
-        // Text position when not scrolling
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            _scrollingTimer.Stop();
+        }
+
+        private void ScrollingTimerOnTick(object sender, EventArgs eventArgs)
+        {
+            UpdateTextPositions();
+            Refresh();
+        }
+
+        private void UpdateTextPositions()
+        {
+            if (_textXPos + _textWidth + TextMargin < 0)
+            {
+                _textXPos = _duplicateXPos + _textWidth + TextMargin;
+            }
+
+            if (_duplicateXPos + _textWidth + TextMargin < 0)
+            {
+                _duplicateXPos = _textXPos + _textWidth + TextMargin;
+            }
+
+            _textXPos -= _scrollDelta;
+            _duplicateXPos -= _scrollDelta;
+        }
+
+        /// <summary>
+        /// Get the text position when not scrolling
+        /// </summary>
+        /// <returns>The x position.</returns>
         private int GetNormalTextPos()
         {
             switch (Alignment)
@@ -269,12 +318,6 @@ namespace AudioBand.Views.Winforms
             var rect = ClientRectangle;
             rect.X = xpos;
             g.DrawImage(_renderedText, xpos, 0, _renderedText.Width, _renderedText.Height);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            _scrollingTimer.Stop();
         }
     }
 }

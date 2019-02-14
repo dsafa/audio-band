@@ -1,28 +1,23 @@
-﻿using CSDeskBand;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Reflection;
 using System.Windows.Forms;
+using CSDeskBand;
 using Size = System.Drawing.Size;
 
 namespace AudioBand.Views.Winforms
 {
+    /// <summary>
+    /// The tooltip for the album art.
+    /// </summary>
     public class AlbumArtTooltip : ToolTip, IBindableComponent
     {
         private readonly MethodInfo _setToolMethod = typeof(ToolTip).GetMethod("SetTool", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        public Image AlbumArt { get; set; }
-        public int XPosition { get; set; }
-        public int Margin { get; set; }
-        public Size Size { get; set; }
-
-        [Browsable(false)]
-        public BindingContext BindingContext { get; set; } = new BindingContext();
-
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public ControlBindingsCollection DataBindings { get; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AlbumArtTooltip"/> class.
+        /// </summary>
         public AlbumArtTooltip()
         {
             Popup += OnPopup;
@@ -30,6 +25,40 @@ namespace AudioBand.Views.Winforms
             DataBindings = new ControlBindingsCollection(this);
         }
 
+        /// <summary>
+        /// Gets or sets the album art of the tooltip.
+        /// </summary>
+        public Image AlbumArt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x position of the tooltip.
+        /// </summary>
+        public int XPosition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the margin of the tooltip.
+        /// </summary>
+        public int Margin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the size of the tooltip.
+        /// </summary>
+        public Size Size { get; set; }
+
+        /// <inheritdoc/>
+        [Browsable(false)]
+        public BindingContext BindingContext { get; set; } = new BindingContext();
+
+        /// <inheritdoc/>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        public ControlBindingsCollection DataBindings { get; }
+
+        /// <summary>
+        /// Show the tooltip without needing focus.
+        /// </summary>
+        /// <param name="name">Name of the tooltip</param>
+        /// <param name="control">The parent control.</param>
+        /// <param name="taskbarInfo">The taskbar information.</param>
         public void ShowWithoutRequireFocus(string name, MainControl control, TaskbarInfo taskbarInfo)
         {
             if (!Active)

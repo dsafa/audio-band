@@ -1,18 +1,51 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using AudioBand.ViewModels;
 using AudioBand.Views.Winforms;
 
 namespace AudioBand
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     partial class MainControl : ICustomLabelHost
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
         private const string CustomLabelControlsKey = "CustomLabel";
 
-        private void InitializeBindingSources(AlbumArtPopupVM albumArtPopupVm, AlbumArtVM albumartVm, AudioBandVM audioBandVm, NextButtonVM nextButtonVm,
-            PlayPauseButtonVM playPauseButtonVm, PreviousButtonVM previousButtonVm, ProgressBarVM progressBarVm)
+        /// <inheritdoc/>
+        void ICustomLabelHost.AddCustomTextLabel(CustomLabelVM customLabel)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke((Action)(() => AddCustomLabelText(customLabel)));
+            }
+            else
+            {
+                AddCustomLabelText(customLabel);
+            }
+        }
+
+        /// <inheritdoc/>
+        void ICustomLabelHost.RemoveCustomTextLabel(CustomLabelVM customLabel)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke((Action)(() => RemoveCustomTextLabel(customLabel)));
+            }
+            else
+            {
+                RemoveCustomTextLabel(customLabel);
+            }
+        }
+
+        private void InitializeBindingSources(
+            AlbumArtPopupVM albumArtPopupVm,
+            AlbumArtVM albumartVm,
+            AudioBandVM audioBandVm,
+            NextButtonVM nextButtonVm,
+            PlayPauseButtonVM playPauseButtonVm,
+            PreviousButtonVM previousButtonVm,
+            ProgressBarVM progressBarVm)
         {
             AlbumArtPopupVMBindingSource.DataSource = albumArtPopupVm;
             AlbumArtVMBindingSource.DataSource = albumartVm;
@@ -21,18 +54,6 @@ namespace AudioBand
             PlayPauseButtonVMBindingSource.DataSource = playPauseButtonVm;
             PreviousButtonVMBindingSource.DataSource = previousButtonVm;
             ProgressBarVMBindingSource.DataSource = progressBarVm;
-        }
-
-        void ICustomLabelHost.AddCustomTextLabel(CustomLabelVM customLabel)
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke((Action) (() => AddCustomLabelText(customLabel)));
-            }
-            else
-            {
-                AddCustomLabelText(customLabel);
-            }
         }
 
         private void AddCustomLabelText(CustomLabelVM customLabel)
@@ -64,19 +85,7 @@ namespace AudioBand
             Controls.Add(label);
         }
 
-        void ICustomLabelHost.RemoveCustomTextLabel(CustomLabelVM customLabel)
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke((Action) (() => RemoveCustomTextLabel(customLabel)));
-            }
-            else
-            {
-                RemoveCustomTextLabel(customLabel);
-            }
-        }
-
-        void RemoveCustomTextLabel(CustomLabelVM customLabel)
+        private void RemoveCustomTextLabel(CustomLabelVM customLabel)
         {
             var control = Controls.Find(CustomLabelControlsKey, true)
                 .Cast<FormattedTextLabel>()

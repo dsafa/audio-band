@@ -1,4 +1,14 @@
-﻿using AudioBand.AudioSource;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms.Integration;
+using System.Windows.Threading;
+using AudioBand.AudioSource;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
@@ -7,15 +17,6 @@ using CSDeskBand.ContextMenu;
 using CSDeskBand.Win;
 using NLog;
 using NLog.Config;
-using NLog.Targets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms.Integration;
-using System.Windows.Threading;
 using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
@@ -27,13 +28,14 @@ namespace AudioBand
     public partial class MainControl : CSDeskBandWin
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
-        private readonly AudioSourceLoader _audioSourceLoader = new AudioSourceLoader();
         private readonly AppSettings _appSettings = new AppSettings();
         private readonly Dispatcher _uiDispatcher;
+        private AudioSourceManager _audioSourceManager;
         private SettingsWindow _settingsWindow;
         private IAudioSource _currentAudioSource;
-        private DeskBandMenu _pluginSubMenu; 
-        private CancellationTokenSource _audioSourceTokenSource = new CancellationTokenSource();
+        private DeskBandMenuAction _settingsMenuItem;
+        private DeskBandMenu _pluginSubMenu;
+        private List<DeskBandMenuAction> _audioSourceContextMenuItems;
         private SettingsWindowVM _settingsWindowVm;
 
         #region Models
@@ -53,41 +55,57 @@ namespace AudioBand
 
         static MainControl()
         {
-            var fileTarget = new FileTarget
-            {
-                MaxArchiveFiles = 3,
-                ArchiveOldFileOnStartup = true,
-                FileName = "${environment:variable=TEMP}/AudioBand.log",
-                KeepFileOpen = true,
-                OpenFileCacheTimeout = 30,
-                Layout = NLog.Layouts.Layout.FromString("${longdate}|${level:uppercase=true}|${logger}|${message} ${exception:format=tostring}")
-            };
-
-            var nullTarget = new NullTarget();
-
-            var filter = new LoggingRule("CSDeskBand.*", LogLevel.Trace, nullTarget) {Final = true};
-            var fileRule = new LoggingRule("*", LogLevel.Debug, fileTarget);
-
-            var config = new LoggingConfiguration();
-            config.AddTarget("logfile", fileTarget);
-            config.AddTarget("null", nullTarget);
-            config.LoggingRules.Add(filter);
-            config.LoggingRules.Add(fileRule);
-
-            LogManager.Configuration = config;
-
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) => LogManager.GetCurrentClassLogger().Error((Exception) args.ExceptionObject);
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) => LogManager.GetCurrentClassLogger().Error((Exception)args.ExceptionObject, "Unhandled Exception");
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainControl"/> class.
+        /// Entry point.
+        /// </summary>
         public MainControl()
         {
-
             InitializeComponent();
-#if DEBUG
-            System.Diagnostics.Debugger.Launch();
-#endif
+
+            LogManager.ThrowExceptions = true;
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(DirectoryHelper.BaseDirectory, "nlog.config"));
             _uiDispatcher = Dispatcher.CurrentDispatcher;
+#pragma warning disable CS4014
             InitializeAsync();
+#pragma warning restore CS4014
+        }
+
+        /// <summary>
+        /// Update deskband options when the size changes
+        /// </summary>
+        /// <param name="eventArgs">.</param>
+        protected override void OnResize(EventArgs eventArgs)
+        {
+            if (_audioBandModel == null)
+            {
+                return;
+            }
+
+            var audioBandSize = new Size(_audioBandModel.Width, _audioBandModel.Height);
+            Options.MinHorizontalSize = audioBandSize;
+            Options.HorizontalSize = audioBandSize;
+            Options.MaxHorizontalHeight = audioBandSize.Height;
+        }
+
+        /// <summary>
+        /// Save on close
+        /// </summary>
+        protected override void OnClose()
+        {
+            base.OnClose();
+            _appSettings.Save();
+            try
+            {
+                _currentAudioSource?.DeactivateAsync();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         private async Task InitializeAsync()
@@ -96,8 +114,11 @@ namespace AudioBand
             {
                 await Task.Run(() =>
                 {
-                    _audioSourceLoader.LoadAudioSources();
-                    Options.ContextMenuItems = BuildContextMenu();
+                    _audioSourceContextMenuItems = new List<DeskBandMenuAction>();
+                    _settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
+                    _settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
+                    RefreshContextMenu();
+
                     InitializeModels();
                 }).ConfigureAwait(false);
 
@@ -106,12 +127,15 @@ namespace AudioBand
                 await _uiDispatcher.InvokeAsync(() =>
                 {
                     _settingsWindow = new SettingsWindow(_settingsWindowVm);
-                    _settingsWindow.Saved += Saved;
-                    _settingsWindow.Canceled += Canceled;
+                    _settingsWindow.Saved += SettingsWindowOnSaved;
+                    _settingsWindow.Canceled += SettingsWindowOnCanceled;
                     ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
                 });
 
-                await SelectAudioSourceFromSettings().ConfigureAwait(false);
+                _audioSourceManager = new AudioSourceManager();
+                _audioSourceManager.AudioSources.CollectionChanged += AudioSourcesOnCollectionChanged;
+                _audioSourceManager.LoadAudioSources();
+
                 Logger.Debug("Initialization complete");
             }
             catch (Exception e)
@@ -131,7 +155,7 @@ namespace AudioBand
             _previousButtonModel = _appSettings.PreviousButton;
             _progressBarModel = _appSettings.ProgressBar;
             _audioSourceSettingsModel = _appSettings.AudioSourceSettings;
-            _trackModel = new Track();   
+            _trackModel = new Track();
         }
 
         private async Task<SettingsWindowVM> SetupViewModels()
@@ -144,22 +168,6 @@ namespace AudioBand
             var playPauseButton = new PlayPauseButtonVM(_playPauseButtonModel, _trackModel);
             var prevButton = new PreviousButtonVM(_previousButtonModel);
             var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
-            var allAudioSourceSettings = new List<AudioSourceSettingsVM>();
-
-            foreach (var audioSource in _audioSourceLoader.AudioSources)
-            {
-                var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
-                if (matchingSetting != null)
-                {
-                    allAudioSourceSettings.Add(new AudioSourceSettingsVM(matchingSetting, audioSource));
-                }
-                else
-                {
-                    var newSettings = new AudioSourceSettings {AudioSourceName = audioSource.Name};
-                    _audioSourceSettingsModel.Add(newSettings);
-                    allAudioSourceSettings.Add(new AudioSourceSettingsVM(newSettings, audioSource));
-                }
-            }
 
             await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar));
 
@@ -174,19 +182,8 @@ namespace AudioBand
                 AboutVm = new AboutVM(),
                 AlbumArtVM = albumArt,
                 CustomLabelsVM = customLabels,
-                AudioSourceSettingsVM = allAudioSourceSettings
+                AudioSourceSettingsVM = new ObservableCollection<AudioSourceSettingsVM>()
             };
-        }
-
-        private void Saved(object o, EventArgs eventArgs)
-        {
-            _settingsWindowVm.EndEdit();
-            _appSettings.Save();
-        }
-
-        private void Canceled(object sender, EventArgs e)
-        {
-            _settingsWindowVm.CancelEdit();
         }
 
         private void OpenSettingsWindow()
@@ -195,20 +192,10 @@ namespace AudioBand
             _settingsWindow.Show();
         }
 
-        private List<DeskBandMenuItem> BuildContextMenu()
+        private void RefreshContextMenu()
         {
-            var pluginList = _audioSourceLoader.AudioSources.Select(audioSource =>
-            {
-                var item = new DeskBandMenuAction(audioSource.Name);
-                item.Clicked += AudioSourceMenuItemOnClicked;
-                return item;
-            });
-
-            _pluginSubMenu = new DeskBandMenu("Audio Source", pluginList);
-            var settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
-            settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
-
-            return new List<DeskBandMenuItem>{ settingsMenuItem, _pluginSubMenu };
+            _pluginSubMenu = new DeskBandMenu("Audio Source", _audioSourceContextMenuItems);
+            Options.ContextMenuItems = new List<DeskBandMenuItem> { _settingsMenuItem, _pluginSubMenu };
         }
 
         private async Task SubscribeToAudioSource(IAudioSource source)
@@ -221,16 +208,14 @@ namespace AudioBand
             ResetTrack();
 
             source.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
-            source.TrackPlaying += AudioSourceOnTrackPlaying;
-            source.TrackPaused += AudioSourceOnTrackPaused;
+            source.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
-            _audioSourceTokenSource = new CancellationTokenSource();
-            await source.ActivateAsync(_audioSourceTokenSource.Token);
+            await source.ActivateAsync().ConfigureAwait(false);
 
             _appSettings.AudioSource = source.Name;
 
-            Logger.Debug($"Audio source selected: {source.Name}");
+            Logger.Debug($"Audio source selected: `{source.Name}`");
         }
 
         private async Task UnsubscribeToAudioSource(IAudioSource source)
@@ -241,60 +226,52 @@ namespace AudioBand
             }
 
             source.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
-            source.TrackPlaying -= AudioSourceOnTrackPlaying;
-            source.TrackPaused -= AudioSourceOnTrackPaused;
+            source.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
             source.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
 
-            _audioSourceTokenSource.Cancel();
-            await source.DeactivateAsync();
+            await source.DeactivateAsync().ConfigureAwait(false);
 
             _appSettings.AudioSource = null;
             _currentAudioSource = null;
 
             ResetTrack();
 
-            Logger.Debug("Audio source deactivated");
+            Logger.Debug($"Audio source `{source.Name}` deactivated");
         }
 
-        protected override void OnResize(EventArgs eventArgs)
-        {
-            if (_audioBandModel == null)
-            {
-                return;
-            }
-
-            var audioBandSize = new Size(_audioBandModel.Width, _audioBandModel.Height);
-            Options.MinHorizontalSize = audioBandSize;
-            Options.HorizontalSize = audioBandSize;
-            Options.MaxHorizontalHeight = audioBandSize.Height;
-        }
-
-        protected override void OnClose()
-        {
-            base.OnClose();
-            _appSettings.Save();
-            _currentAudioSource.DeactivateAsync();
-        }
-
-        private async Task SelectAudioSourceFromSettings()
+        private async Task HandleAudioSourceContextMenuItemClick(DeskBandMenuAction menuItem)
         {
             try
             {
-                var audioSource = _appSettings.AudioSource;
-                if (String.IsNullOrEmpty(audioSource))
+                if (menuItem.Checked)
                 {
+                    menuItem.Checked = false;
+                    await UnsubscribeToAudioSource(_currentAudioSource).ConfigureAwait(false);
                     return;
                 }
 
-                var menuItem = _pluginSubMenu.Items.Cast<DeskBandMenuAction>().FirstOrDefault(i => i.Text == audioSource);
-                if (menuItem != null)
+                // Uncheck old items and unsubscribe from the current source
+                foreach (var otherMenuItem in _pluginSubMenu.Items.Cast<DeskBandMenuAction>().Where(i => i != null))
                 {
-                    await Task.Run(() => AudioSourceMenuItemOnClicked(menuItem, EventArgs.Empty));
+                    otherMenuItem.Checked = false;
                 }
+
+                await UnsubscribeToAudioSource(_currentAudioSource).ConfigureAwait(false);
+
+                _currentAudioSource = _audioSourceManager.AudioSources.FirstOrDefault(c => c.Name == menuItem.Text);
+                if (_currentAudioSource == null)
+                {
+                    Logger.Warn($"Could not find matching audio source. Looking for {menuItem.Text}.");
+                    return;
+                }
+
+                await SubscribeToAudioSource(_currentAudioSource).ConfigureAwait(false);
+                menuItem.Checked = true;
             }
             catch (Exception e)
             {
-                Logger.Error(e);
+                Logger.Debug(e, $"Error activating audio source `{_currentAudioSource?.Name}`");
+                _currentAudioSource = null;
             }
         }
 

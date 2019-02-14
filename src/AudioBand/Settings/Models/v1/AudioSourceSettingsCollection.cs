@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace AudioBand.Settings.Models.v1
+namespace AudioBand.Settings.Models.V1
 {
     internal class AudioSourceSettingsCollection
     {
         public string Name { get; set; }
+
         public List<AudioSourceSetting> Settings { get; set; } = new List<AudioSourceSetting>();
     }
 }

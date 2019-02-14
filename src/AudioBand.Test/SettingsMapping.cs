@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AudioBand.Settings.Models.v2;
+using AudioBand.Settings.Models.V2;
 using AudioBand.Settings;
 using AudioBand.Models;
 

@@ -22,6 +22,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\AudioBandRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <DocumentationFile>bin\Debug\AudioBand.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
+    <CodeAnalysisRuleSet>..\AudioBandRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -58,18 +62,17 @@
       <HintPath>..\packages\MahApps.Metro.IconPacks.Material.2.3.0\lib\net46\MahApps.Metro.IconPacks.Material.dll</HintPath>
     </Reference>
     <Reference Include="Nett, Version=0.10.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nett.0.10.0\lib\Net40\Nett.dll</HintPath>
+      <HintPath>..\packages\Nett.0.10.1\lib\Net40\Nett.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
-      <HintPath>..\packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
+    <Reference Include="Svg, Version=2.4.1.756, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Svg.2.4.1\lib\Svg.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,7 +81,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
@@ -97,15 +99,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioSource\AudioSourceSettingInfo.cs" />
+    <Compile Include="AudioSource\AudioSourceProxy.cs" />
+    <Compile Include="AudioSource\IInternalAudioSource.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Extensions\AudioSourceExtenstions.cs" />
+    <Compile Include="Commands\RelayCommand{T}.cs" />
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\SvgExtensions.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MainControl.Bindings.cs">
       <SubType>UserControl</SubType>
       <DependentUpon>MainControl.cs</DependentUpon>
@@ -146,20 +150,21 @@
     <Compile Include="Settings\Models\v2\ProgressBarSettings.cs" />
     <Compile Include="Settings\SettingsMapper.cs" />
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
+    <Compile Include="ViewModels\AlsoNotifyAttribute.cs" />
     <Compile Include="ViewModels\AudioSourceSettingVM.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\AboutVM.cs" />
+    <Compile Include="ViewModels\ICustomLabelHost.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
     <Compile Include="ViewModels\PreviousButtonVM.cs" />
+    <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
     <Compile Include="ViewModels\SettingsWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="ViewModels\ViewModelBaseAttributes.cs" />
-    <Compile Include="ViewModels\ViewModelBase{T}.cs" />
+    <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AudioSource\AudioSourceLogger.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
@@ -173,6 +178,7 @@
     <Compile Include="Views\Wpf\AudioSourceSettingsView.xaml.cs">
       <DependentUpon>AudioSourceSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Wpf\Behaviours\NumericInputType.cs" />
     <Compile Include="Views\Wpf\Behaviours\PasswordBehaviour.cs" />
     <Compile Include="Views\Wpf\Behaviours\TreeSelectedVMBehaviour.cs" />
     <Compile Include="Views\Wpf\ColorPicker.xaml.cs">
@@ -210,8 +216,8 @@
     <Compile Include="Views\Wpf\TemplateSelectors\AudioSourceSettingSelector.cs" />
     <Compile Include="Views\Wpf\ValueConverters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\ColorToBrushConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\EmptyStringToBoolConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\NumberToNumericUpDownConverter.cs" />
-    <Compile Include="Views\Wpf\ValueConverters\StringToBoolConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\ReverseConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToColorConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToFontFamilyConverter.cs" />
@@ -233,7 +239,7 @@
     <Compile Include="Views\Winforms\FormattedTextLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AudioSource\AudioSourceLoader.cs" />
+    <Compile Include="AudioSource\AudioSourceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -257,11 +263,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
     <None Include="App.config" />
     <Compile Include="MainControl.EventHandlers.cs">
       <SubType>UserControl</SubType>
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
+    <None Include="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtPopupVM.datasource" />
     <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtVM.datasource" />
@@ -285,6 +297,10 @@
     <ProjectReference Include="..\AudioBand.AudioSource\AudioBand.AudioSource.csproj">
       <Project>{30f2bfea-788a-494d-88e7-f2070528ebea}</Project>
       <Name>AudioBand.AudioSource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AudioSourceHost\AudioSourceHost.csproj">
+      <Project>{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}</Project>
+      <Name>AudioSourceHost</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -349,7 +365,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if "$(ConfigurationName)" == "Debug" (

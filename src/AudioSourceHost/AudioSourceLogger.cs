@@ -1,14 +1,15 @@
-﻿using NLog;
+﻿using AudioBand.AudioSource;
+using NLog;
 
-namespace AudioBand.AudioSource
+namespace AudioSourceHost
 {
-    internal class AudioSourceLogger : IAudioSourceLogger
+    public class AudioSourceLogger : IAudioSourceLogger
     {
         private readonly ILogger _logger;
 
-        public AudioSourceLogger(string name)
+        public AudioSourceLogger(string audiosourceName)
         {
-            _logger = LogManager.GetLogger("AudioSource:" + name);
+            _logger = LogManager.GetLogger($"AudioSource({audiosourceName})");
         }
 
         public void Debug(string message)
@@ -19,6 +20,16 @@ namespace AudioBand.AudioSource
         public void Debug(object value)
         {
             _logger.Debug(value);
+        }
+
+        public void Error(string message)
+        {
+            _logger.Error(message);
+        }
+
+        public void Error(object value)
+        {
+            _logger.Error(value);
         }
 
         public void Info(string message)
@@ -39,16 +50,6 @@ namespace AudioBand.AudioSource
         public void Warn(object value)
         {
             _logger.Warn(value);
-        }
-
-        public void Error(string message)
-        {
-            _logger.Error(message);
-        }
-
-        public void Error(object value)
-        {
-            _logger.Error(value);
         }
     }
 }

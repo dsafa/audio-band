@@ -1,25 +1,82 @@
-﻿using AudioBand.ViewModels;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using AudioBand.ViewModels;
+using NLog;
 
 namespace AudioBand.Views.Wpf.TemplateSelectors
 {
+    /// <summary>
+    /// Template selector for <see cref="AudioSourceSettingVM"/>. Used to format the setting label or change the type of setting input.
+    /// </summary>
     internal class AudioSourceSettingSelector : DataTemplateSelector
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The type of template to select.
+        /// </summary>
+        public enum SettingTemplateType
+        {
+            /// <summary>
+            /// Template for the setting key.
+            /// </summary>
+            Key,
+
+            /// <summary>
+            /// Template for the setting value.
+            /// </summary>
+            Value
+        }
+
+        /// <summary>
+        /// Gets or sets the type of the template.
+        /// </summary>
         public SettingTemplateType TemplateType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the string template.
+        /// </summary>
         public DataTemplate StringTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bool template.
+        /// </summary>
         public DataTemplate BoolTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the int template.
+        /// </summary>
         public DataTemplate IntTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the uint template.
+        /// </summary>
         public DataTemplate UIntTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sensitive text template.
+        /// </summary>
         public DataTemplate SensitiveTemplate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the normal label template.
+        /// </summary>
         public DataTemplate NormalLabelTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sensitive label template.
+        /// </summary>
         public DataTemplate SensitiveLabelTemplate { get; set; }
 
+        /// <inheritdoc/>
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (!(item is AudioSourceSettingVM setting)) throw new ArgumentException();
+            var setting = item as AudioSourceSettingVM;
+            if (setting == null)
+            {
+                throw new ArgumentException(nameof(item));
+            }
 
             var type = setting.SettingType;
             return TemplateType == SettingTemplateType.Value ? SelectValueTemplate(type, setting) : SelectKeyTemplate(setting);
@@ -27,6 +84,8 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
 
         private DataTemplate SelectValueTemplate(Type type, AudioSourceSettingVM setting)
         {
+            Logger.Debug($"Selecting value template for setting {setting.Name}, type {type}");
+
             if (type == typeof(string))
             {
                 return setting.Sensitive ? SensitiveTemplate : StringTemplate;
@@ -53,12 +112,6 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
         private DataTemplate SelectKeyTemplate(AudioSourceSettingVM setting)
         {
             return setting.Sensitive ? SensitiveLabelTemplate : NormalLabelTemplate;
-        }
-
-        public enum SettingTemplateType
-        {
-            Key,
-            Value
         }
     }
 }

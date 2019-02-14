@@ -1,23 +1,19 @@
-﻿using iTunesLib;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Timers;
+using iTunesLib;
 using Timer = System.Timers.Timer;
 
 namespace iTunesAudioSource
 {
-    class ITunesControls
+    public class ITunesControls
     {
         private iTunesApp _itunesApp;
         private Timer _checkProcessTimer;
         private bool _itunesOpened;
-
-        public bool IsPlaying => GetIsPlaying();
-        public Track CurrentTrack => GetTrack();
-        public TimeSpan Progress => TimeSpan.FromMilliseconds(_itunesApp.PlayerPositionMS);
 
         public ITunesControls()
         {
@@ -27,6 +23,65 @@ namespace iTunesAudioSource
                 Enabled = false
             };
             _checkProcessTimer.Elapsed += CheckProcess;
+        }
+
+        public bool IsPlaying => GetIsPlaying();
+
+        public Track CurrentTrack => GetTrack();
+
+        public TimeSpan Progress
+        {
+            get
+            {
+                return TimeSpan.FromMilliseconds(_itunesApp.PlayerPositionMS);
+            }
+
+            set
+            {
+                _itunesApp.PlayerPositionMS = (int)value.TotalMilliseconds;
+            }
+        }
+
+        public bool Shuffle
+        {
+            get
+            {
+                return _itunesApp.CurrentPlaylist.Shuffle;
+            }
+
+            set
+            {
+                _itunesApp.CurrentPlaylist.Shuffle = value;
+            }
+        }
+
+        public ITPlaylistRepeatMode RepeatMode
+        {
+            get
+            {
+                return _itunesApp.CurrentPlaylist.SongRepeat;
+            }
+
+            set
+            {
+                _itunesApp.CurrentPlaylist.SongRepeat = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the volume from [0, 100]
+        /// </summary>
+        public int Volume
+        {
+            get
+            {
+                return _itunesApp.SoundVolume;
+            }
+
+            set
+            {
+                _itunesApp.SoundVolume = value;
+            }
         }
 
         public void Start()
@@ -64,7 +119,7 @@ namespace iTunesAudioSource
             {
                 _itunesApp.NextTrack();
             }
-            catch (COMException) {}
+            catch (COMException) { }
         }
 
         public void Previous()
@@ -73,7 +128,7 @@ namespace iTunesAudioSource
             {
                 _itunesApp.PreviousTrack();
             }
-            catch (COMException) {}
+            catch (COMException) { }
         }
 
         private Track GetTrack()
@@ -158,14 +213,5 @@ namespace iTunesAudioSource
 
             _checkProcessTimer.Enabled = true;
         }
-    }
-
-    class Track
-    {
-        public string Name { get; set; }
-        public string Album { get; set; }
-        public Image Artwork { get; set; }
-        public string Artist { get; set; }
-        public TimeSpan Length { get; set; }
     }
 }
