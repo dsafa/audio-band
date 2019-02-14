@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface ISupportsRatings
+    <title>Namespace AudioBand.AudioSource
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface ISupportsRatings
+    <meta name="title" content="Namespace AudioBand.AudioSource
    ">
     <meta name="generator" content="docfx 2.40.10.0">
     
@@ -68,94 +68,46 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="AudioBand.AudioSource.ISupportsRatings">
+            <article class="content wrap" id="_content" data-uid="AudioBand.AudioSource">
   
-  
-  <h1 id="AudioBand_AudioSource_ISupportsRatings" data-uid="AudioBand.AudioSource.ISupportsRatings" class="text-break">Interface ISupportsRatings
+  <h1 id="AudioBand_AudioSource" data-uid="AudioBand.AudioSource" class="text-break">Namespace AudioBand.AudioSource
   </h1>
-  <div class="markdown level0 summary"><p>Indicates that this audio source supports ratings on tracks.</p>
-</div>
+  <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="AudioBand.AudioSource.html">AudioBand.AudioSource</a></h6>
-  <h6><strong>Assembly</strong>: AudioBand.AudioSource.dll</h6>
-  <h5 id="AudioBand_AudioSource_ISupportsRatings_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface ISupportsRatings</code></pre>
-  </div>
-  <h3 id="methods">Methods
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
   </h3>
-  
-  
-  <a id="AudioBand_AudioSource_ISupportsRatings_SetTrackRatingAsync_" data-uid="AudioBand.AudioSource.ISupportsRatings.SetTrackRatingAsync*"></a>
-  <h4 id="AudioBand_AudioSource_ISupportsRatings_SetTrackRatingAsync_AudioBand_AudioSource_TrackRating_" data-uid="AudioBand.AudioSource.ISupportsRatings.SetTrackRatingAsync(AudioBand.AudioSource.TrackRating)">SetTrackRatingAsync(TrackRating)</h4>
-  <div class="markdown level1 summary"><p>Called when a new rating is being set.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">Task SetTrackRatingAsync(TrackRating newRating)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="AudioBand.AudioSource.TrackRating.html">TrackRating</a></td>
-        <td><span class="parametername">newRating</span></td>
-        <td><p>The new rating of the track</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></td>
-        <td><p>A <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> representing the asynchronous set rating operation.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="events">Events
+      <h4><a class="xref" href="AudioBand.AudioSource.AudioSourceSettingAttribute.html">AudioSourceSettingAttribute</a></h4>
+      <section><p>Represents a setting that is exposed to the user to modify</p>
+</section>
+      <h4><a class="xref" href="AudioBand.AudioSource.SettingChangedEventArgs.html">SettingChangedEventArgs</a></h4>
+      <section><p>Provides data for a <a class="xref" href="AudioBand.AudioSource.IAudioSource.html#AudioBand_AudioSource_IAudioSource_SettingChanged">SettingChanged</a> event.</p>
+</section>
+      <h4><a class="xref" href="AudioBand.AudioSource.TrackInfoChangedEventArgs.html">TrackInfoChangedEventArgs</a></h4>
+      <section><p>Event arguments for the <a class="xref" href="AudioBand.AudioSource.IAudioSource.html#AudioBand_AudioSource_IAudioSource_TrackInfoChanged">TrackInfoChanged</a> event.</p>
+</section>
+    <h3 id="interfaces">Interfaces
   </h3>
-  
-  
-  <h4 id="AudioBand_AudioSource_ISupportsRatings_TrackRatingChanged" data-uid="AudioBand.AudioSource.ISupportsRatings.TrackRatingChanged">TrackRatingChanged</h4>
-  <div class="markdown level1 summary"><p>Occurs when the the track's rating has changed.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">event EventHandler&lt;TrackRating&gt; TrackRatingChanged</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="AudioBand.AudioSource.TrackRating.html">TrackRating</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+      <h4><a class="xref" href="AudioBand.AudioSource.IAudioSource.html">IAudioSource</a></h4>
+      <section><p>Provides information and notifies changes from an audio source and exposes playback controls.</p>
+</section>
+      <h4><a class="xref" href="AudioBand.AudioSource.IAudioSourceLogger.html">IAudioSourceLogger</a></h4>
+      <section><p>Provides access to logging facilities for a audio source.</p>
+</section>
+      <h4><a class="xref" href="AudioBand.AudioSource.ISupportsRatings.html">ISupportsRatings</a></h4>
+      <section><p>Indicates that this audio source supports ratings on tracks.</p>
+</section>
+    <h3 id="enums">Enums
+  </h3>
+      <h4><a class="xref" href="AudioBand.AudioSource.RepeatMode.html">RepeatMode</a></h4>
+      <section><p>Specifies the repeat mode of the audio source.</p>
+</section>
+      <h4><a class="xref" href="AudioBand.AudioSource.SettingOptions.html">SettingOptions</a></h4>
+      <section><p>Flags for audio source settings.</p>
+</section>
+      <h4><a class="xref" href="AudioBand.AudioSource.TrackRating.html">TrackRating</a></h4>
+      <section><p>Options for the rating of a track.</p>
+</section>
 </article>
           </div>
           
