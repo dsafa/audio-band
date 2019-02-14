@@ -532,6 +532,10 @@ namespace SpotifyAudioSource
                     // reduce number of calls when paused
                     _checkSpotifyTimer.Interval = 3000;
                 }
+                else
+                {
+                    _checkSpotifyTimer.Interval = 1000;
+                }
 
                 var playback = await GetPlayback();
                 if (playback == null)
