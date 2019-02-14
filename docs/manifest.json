@@ -1,0 +1,246 @@
+{
+  "homepages": [],
+  "source_base_path": "E:/Code/audio-band/docfx",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.AudioSourceSettingAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.AudioSourceSettingAttribute.html",
+          "hash": "WH8ISi5TImFW2oHNHaKN3A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.IAudioSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.IAudioSource.html",
+          "hash": "7HbJdGOWZ0xEobglz3zqSw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.IAudioSourceLogger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.IAudioSourceLogger.html",
+          "hash": "LLgwvrl9oczGm8s3twMVew=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.ISupportsRatings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.ISupportsRatings.html",
+          "hash": "NedUomQquOp23bqV/X34Ng=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.RepeatMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.RepeatMode.html",
+          "hash": "jeoYWdefrNFH0QR5fsyd+Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.SettingChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.SettingChangedEventArgs.html",
+          "hash": "HeVgP6EKRlQuTg9jh90XGw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.SettingOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.SettingOptions.html",
+          "hash": "BeZciOpXS/V3X3T6Coauiw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.TrackInfoChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html",
+          "hash": "kAUE3KmhimLi55j1tKecYg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.TrackRating.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.TrackRating.html",
+          "hash": "0izxi27d/TrDkK5m2IQrzw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/AudioBand.AudioSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/AudioBand.AudioSource.html",
+          "hash": "9YAr+By88//W3CZK2w8RoA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "Pfc68PJffbGvLB14MuoywA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "fJo10k9wz9K06/u8rurzxg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "skNqwyRadziCi1fjy+8dNg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "t7iiFrmuYmrKWisdq+lN6Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "eGeGSaxXOL5eW4X8FFxzGA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "43auVXDnjcjPv9kdH4soBA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 10,
+          "skipped_file_count": 10
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 3,
+          "skipped_file_count": 2
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
