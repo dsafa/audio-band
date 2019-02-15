@@ -4,15 +4,132 @@
   "xrefmap": "xrefmap.yml",
   "files": [
     {
-      "type": "Conceptual",
-      "source_relative_path": "audioband/intro.md",
+      "type": "Resource",
       "output": {
-        ".html": {
-          "relative_path": "audioband/intro.html",
-          "hash": "Y2X0/oQoZ/0Px1lRmwNf6g=="
+        "resource": {
+          "relative_path": "index.json"
         }
       },
-      "is_incremental": true,
+      "is_incremental": false
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/audiosources.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/audiosources.html",
+          "hash": "dBfyT9Ti49y6ss5KlZOOgg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/audiosources/itunes.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/audiosources/itunes.html",
+          "hash": "72WGLHfrxEZSu/m2Ja8hTQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/audiosources/musicbee.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/audiosources/musicbee.html",
+          "hash": "6qzg3uJGEnB0ZmDzXE+jRQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/audiosources/spotify.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/audiosources/spotify.html",
+          "hash": "FsVvatahuLtGlLLZ6V2dXQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/customization.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization.html",
+          "hash": "tf64jYPGCxQGfx7/UB09aA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/customization/albumartpopup.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization/albumartpopup.html",
+          "hash": "/eEJdUqgwGthu26aq2hKxw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/customization/general.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization/general.html",
+          "hash": "TZMsOeXr8LzeaWC7Xh1yZA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/customization/textlabels.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization/textlabels.html",
+          "hash": "SOoBKmHeW/837BBqdEpKdg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/faq.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/faq.html",
+          "hash": "BTVfbrmRe4tNSSx/GsS7Pg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/index.html",
+          "hash": "EeH3cFjlvLf+jjjuAingGw=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -21,7 +138,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/toc.html",
-          "hash": "t7iiFrmuYmrKWisdq+lN6Q=="
+          "hash": "rGgUcHL4Z14YWrj7m9CA9w=="
         }
       },
       "is_incremental": false,
@@ -33,10 +150,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.AudioSourceSettingAttribute.html",
-          "hash": "9Fb0uPvYS+hqMntK/0jW+Q=="
+          "hash": "4rx3wHOIA2bsKv0t1BqXzA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -45,10 +162,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSource.html",
-          "hash": "QEeD0gfDv++Ai3TwMdESKw=="
+          "hash": "I7dYYtZ0hfoffi8Kxvy8Pg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -57,10 +174,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSourceLogger.html",
-          "hash": "xR9LyPosZ/PfjOGyi3xMsQ=="
+          "hash": "5+SXtOrrkf1+PTwBec+A3A=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -69,10 +186,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.ISupportsRatings.html",
-          "hash": "UB+AKCpXwCU2jhYG+BqCHw=="
+          "hash": "B3d4Uo9xJeaLC5/vegwfzg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -81,10 +198,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.RepeatMode.html",
-          "hash": "xvNlNfjPkRaTp5KFUUyeAA=="
+          "hash": "A0OtGt+IVnfMsfX39hJekQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -93,10 +210,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.html",
-          "hash": "Y2bmWr+Dc5AQweI7rp6/eQ=="
+          "hash": "o+n1cQNxRX0yliMtnZMxkw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -105,10 +222,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.SettingOptions.html",
-          "hash": "3JNc7qxGYhrsGZA/QnUPcA=="
+          "hash": "dzRxCrToJhy3OSTfVZLK8g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -117,10 +234,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html",
-          "hash": "Q/5F3L3/z4k7hwZytsuVtQ=="
+          "hash": "MUnuoQ2HyXlviK3ehMYcUw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -129,10 +246,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.TrackRating.html",
-          "hash": "ZHit5JQWmoXKixsnu6cbmw=="
+          "hash": "FQCotKzQrd0S+voYOXGB7A=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -141,10 +258,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.html",
-          "hash": "obB+/x2NwbV+r3TRM7ztRw=="
+          "hash": "oWWcoNoIoVHQLgjKEjxqPQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -153,10 +270,10 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/index.html",
-          "hash": "4RkMyxuLoOxZPQ9Y1cL5CQ=="
+          "hash": "2s1Vf+1YJ8w+kaz+b/xAFQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -172,18 +289,59 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
+      "type": "Resource",
+      "source_relative_path": "images/click-audiosource.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/click-audiosource.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/hover-over.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/hover-over.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/spotify-app-settings-callback.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/spotify-app-settings-callback.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/spotify-dashboard.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/spotify-dashboard.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "SmYBT0qSOjbFwnK3oOVyCA=="
+          "hash": "SEnWWA2oEx7XuAOsAjtSOg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -192,7 +350,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "iBRs5vKDpoIj9NrP3GIKcw=="
+          "hash": "8IJ6rQAel1ojkUyGzfZAmQ=="
         }
       },
       "is_incremental": false,
@@ -208,31 +366,38 @@
         "skipped_file_count": 0
       },
       "processors": {
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 3,
-          "skipped_file_count": 3
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 10,
-          "skipped_file_count": 10
-        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
           "total_file_count": 0,
           "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 12,
+          "skipped_file_count": 10
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 10,
+          "skipped_file_count": 10
         }
       }
     },
     {
       "status": {
-        "can_incremental": true,
-        "details": "Can support incremental post processing.",
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
         "incrementalPhase": "postProcessing",
         "total_file_count": 0,
         "skipped_file_count": 0
