@@ -1,5 +1,6 @@
 - name: AudioBand Documentation
   href: audioband/
+  homepage: audioband/index.md
 - name: AudioSource Documentation
   href: audiosource-api/
   homepage: audiosource-api/index.md
