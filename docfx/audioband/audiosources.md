@@ -9,4 +9,4 @@ Check below for links on the specific audio source and setup instructions.
 - [MusicBee](audiosources/musicbee.md)
 
 ## Audio source development
-[See here to find out how to develop and add a custom audio source](~/audiosource-api/index.md)
+[See here to find out how to develop and add a custom audio source](~/audiosource-docs/index.md)
