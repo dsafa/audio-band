@@ -27,7 +27,7 @@ Audio Band allows you to display song information in the taskbar.
 4. Right click the toolbar and select an audio source
 
 ## Audiosource development
-[Click here for the documentation](https://dsafa.github.io/audio-band/audiosource-api/index.html)
+[Click here for the documentation](https://dsafa.github.io/audio-band/audiosource-docs/index.html)
 
 ## Building
 This project uses C# 7 features so a compatible compiler is required.
