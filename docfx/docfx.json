@@ -26,6 +26,8 @@
         "files": [
           "audioband/**.md",
           "audioband/**/toc.yml",
+          "audiosource-docs/**.md",
+          "audiosource-docs/**/toc.yml",
           "toc.yml",
           "*.md"
         ]

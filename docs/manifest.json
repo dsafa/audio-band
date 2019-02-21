@@ -18,7 +18,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/audiosources.html",
-          "hash": "dBfyT9Ti49y6ss5KlZOOgg=="
+          "hash": "OsV5qmJhjo7fnTGzm+QTZQ=="
         }
       },
       "is_incremental": false,
@@ -78,7 +78,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/customization/albumartpopup.html",
-          "hash": "/eEJdUqgwGthu26aq2hKxw=="
+          "hash": "/TFloKu+DOXJSqCvpjS6tA=="
         }
       },
       "is_incremental": false,
@@ -102,7 +102,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/customization/textlabels.html",
-          "hash": "SOoBKmHeW/837BBqdEpKdg=="
+          "hash": "4DKSp7SgBY0O33Nxh4aNsw=="
         }
       },
       "is_incremental": false,
@@ -150,7 +150,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.AudioSourceSettingAttribute.html",
-          "hash": "4rx3wHOIA2bsKv0t1BqXzA=="
+          "hash": "2qBjZzVr62DD36HcH/Y+zw=="
         }
       },
       "is_incremental": false,
@@ -162,7 +162,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSource.html",
-          "hash": "I7dYYtZ0hfoffi8Kxvy8Pg=="
+          "hash": "OQDRg1Yho3m0DkvR6vZNvw=="
         }
       },
       "is_incremental": false,
@@ -174,7 +174,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSourceLogger.html",
-          "hash": "5+SXtOrrkf1+PTwBec+A3A=="
+          "hash": "NO7jq5aKIeohVGBZiazdIA=="
         }
       },
       "is_incremental": false,
@@ -186,7 +186,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.ISupportsRatings.html",
-          "hash": "B3d4Uo9xJeaLC5/vegwfzg=="
+          "hash": "49GOeJ2UcREYGYEe/6FOMQ=="
         }
       },
       "is_incremental": false,
@@ -198,7 +198,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.RepeatMode.html",
-          "hash": "A0OtGt+IVnfMsfX39hJekQ=="
+          "hash": "MyleieFEeRqwoYb6PTuuyQ=="
         }
       },
       "is_incremental": false,
@@ -210,7 +210,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.html",
-          "hash": "o+n1cQNxRX0yliMtnZMxkw=="
+          "hash": "qez0mHolNB6XjJsJq84Juw=="
         }
       },
       "is_incremental": false,
@@ -222,7 +222,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.SettingOptions.html",
-          "hash": "dzRxCrToJhy3OSTfVZLK8g=="
+          "hash": "l9skmM/yPGfojjuBhs4jpA=="
         }
       },
       "is_incremental": false,
@@ -234,7 +234,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html",
-          "hash": "MUnuoQ2HyXlviK3ehMYcUw=="
+          "hash": "pqJtxEuka3l2UUcfLG/qsg=="
         }
       },
       "is_incremental": false,
@@ -246,7 +246,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.TrackRating.html",
-          "hash": "FQCotKzQrd0S+voYOXGB7A=="
+          "hash": "21AQLse2MzQog47KbRLN+Q=="
         }
       },
       "is_incremental": false,
@@ -258,7 +258,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.html",
-          "hash": "oWWcoNoIoVHQLgjKEjxqPQ=="
+          "hash": "LiZFOqQpwbwqdoribangdA=="
         }
       },
       "is_incremental": false,
@@ -270,7 +270,19 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/index.html",
-          "hash": "2s1Vf+1YJ8w+kaz+b/xAFQ=="
+          "hash": "HaMezeE+0x9IR47715F1UQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audiosource-docs/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-docs/index.html",
+          "hash": "wp6z7+aXRbuYIIT3x9PdYg=="
         }
       },
       "is_incremental": false,
@@ -278,11 +290,11 @@
     },
     {
       "type": "Toc",
-      "source_relative_path": "audiosource-api/toc.yml",
+      "source_relative_path": "audiosource-docs/toc.yml",
       "output": {
         ".html": {
-          "relative_path": "audiosource-api/toc.html",
-          "hash": "fJo10k9wz9K06/u8rurzxg=="
+          "relative_path": "audiosource-docs/toc.html",
+          "hash": "kCPa/v7RDfclPMIDfP1eGw=="
         }
       },
       "is_incremental": false,
@@ -338,7 +350,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "SEnWWA2oEx7XuAOsAjtSOg=="
+          "hash": "7ZeOMN6z7j/o/0mpwqsPXA=="
         }
       },
       "is_incremental": false,
@@ -350,7 +362,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "8IJ6rQAel1ojkUyGzfZAmQ=="
+          "hash": "vFpFSHwgcKz97xxcmaX0XA=="
         }
       },
       "is_incremental": false,
@@ -366,13 +378,6 @@
         "skipped_file_count": 0
       },
       "processors": {
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
@@ -383,14 +388,21 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 12,
-          "skipped_file_count": 10
+          "total_file_count": 13,
+          "skipped_file_count": 11
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 10,
           "skipped_file_count": 10
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
         }
       }
     },

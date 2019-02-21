@@ -18,14 +18,16 @@ Audio Band allows you to display song information in the taskbar.
 
 ![](screenshots/custom-2.png)
 
-# Table of contents
-1. [Quick Start](#quick-start)
-2. [Building](#building)
-3. [Contributing](#contributing)
-4. [License](#license)
-
 ## Quick Start
-[Check the documentation for quick start](https://dsafa.github.io/audio-band/audioband/index.html)
+[Check the full documentation to get started](https://dsafa.github.io/audio-band/audioband/index.html)
+
+1. Download from the [releases](https://github.com/dsafa/audio-band/releases) page.
+2. Run `install.cmd`
+3. Right click the taskbar > toolbars > Audio band
+4. Right click the toolbar and select an audio source
+
+## Audiosource development
+[Click here for the documentation](https://dsafa.github.io/audio-band/audiosource-api/index.html)
 
 ## Building
 This project uses C# 7 features so a compatible compiler is required.

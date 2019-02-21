@@ -1,4 +1,38 @@
 # Text Labels
+
+## Name
+Name of the label. Used for indentification purposes
+
+## Visibility
+Whether to show the label or not
+
+## Width
+Width of the label. If the text exceeds the width, the text will scroll
+
+## Height
+Height of the text
+
+## X Position
+The x position of the text
+
+## Y Position
+The Y Position of the text
+
+## Font family
+The font family for the text
+
+## Font size
+The font size of the text
+
+## Font color
+The default color of the text
+
+## Alignment
+The alignment of the label
+
+## Scroll speed
+The scroll speed of the label when the text scrolls
+
 ## Text Format
 The text format for a label determines what text is shown
 It can be any combination of text or placeholders. For example the format `This is some text` will make the label display `This is some text` or `Song name: {song}` will display `Song name: ` followed by whatever the current song's name is.
