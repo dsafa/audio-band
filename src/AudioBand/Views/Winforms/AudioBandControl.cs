@@ -1,7 +1,9 @@
 ﻿using NLog;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,12 +14,16 @@ namespace AudioBand.Views.Winforms
 {
     public abstract class AudioBandControl : Control
     {
+        private const double LogicalDpi = 96.0;
         private const int WmDpiChanged = 0x02E0;
         private const int WHCallWndProc = 4;
+        private const int DeviceCapsLogicalPixelsX = 88;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IntPtr _hook;
         private readonly CallWndProc _callback;
         private readonly IntPtr _taskBarHwnd;
+        private Size _logicalSize;
+        private Point _logicalLocation;
 
         private delegate IntPtr CallWndProc(int nCode, IntPtr wParam, IntPtr lParam);
 
@@ -30,11 +36,14 @@ namespace AudioBand.Views.Winforms
         [DllImport("user32", EntryPoint = "CallNextHookEx")]
         private static extern IntPtr CallNextHook(IntPtr hHook, int ncode, IntPtr wParam, IntPtr lParam);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32")]
         private static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, IntPtr processId);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32")]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("gdi32.dll")]
+        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 
         [StructLayout(LayoutKind.Sequential)]
         private struct CWPSTRUCT
@@ -47,7 +56,10 @@ namespace AudioBand.Views.Winforms
 
         public AudioBandControl()
         {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw, true);
+            Dpi = GetDpi();
+            OnDpiChanged();
+
             _callback = HookCallback;
             _taskBarHwnd = FindWindow("Shell_TrayWnd", null);
             var taskbarHwndThreadId = GetWindowThreadProcessId(_taskBarHwnd, IntPtr.Zero);
@@ -66,9 +78,46 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        [Browsable(true)]
+        [Bindable(BindableSupport.Yes)]
+        public Size LogicalSize
+        {
+            get => _logicalSize;
+            set
+            {
+                _logicalSize = value;
+                UpdateSize();
+            }
+        }
+
+        [Browsable(true)]
+        [Bindable(BindableSupport.Yes)]
+        public Point LogicalLocation
+        {
+            get => _logicalLocation;
+            set
+            {
+                _logicalLocation = value;
+                UpdateLocation();
+            }
+        }
+
+        private double Dpi { get; set; } = LogicalDpi;
+
+        private double ScalingFactor => Dpi / LogicalDpi;
+
         private static short HiWord(IntPtr ptr)
         {
             return unchecked((short)((long)ptr >> 16));
+        }
+
+        private static double GetDpi()
+        {
+            var g = Graphics.FromHwnd(IntPtr.Zero);
+            var desktopHdc = g.GetHdc();
+            var dpi = GetDeviceCaps(desktopHdc, DeviceCapsLogicalPixelsX);
+            g.ReleaseHdc(desktopHdc);
+            return dpi;
         }
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
@@ -81,15 +130,28 @@ namespace AudioBand.Views.Winforms
             var info = Marshal.PtrToStructure<CWPSTRUCT>(lParam);
             if (info.Message == WmDpiChanged && info.Hwnd == _taskBarHwnd)
             {
-                OnDpiChanged(HiWord(info.WParam));
+                var newDpi = HiWord(info.WParam);
+                Dpi = newDpi;
+                OnDpiChanged();
             }
 
             return CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
         }
 
-        private void OnDpiChanged(short newDpi)
+        private void OnDpiChanged()
         {
+            UpdateLocation();
+            UpdateSize();
+        }
 
+        private void UpdateSize()
+        {
+            Size = new Size((int)(_logicalSize.Width * ScalingFactor), (int)(_logicalSize.Height * ScalingFactor));
+        }
+
+        private void UpdateLocation()
+        {
+            Location = new Point((int)(_logicalLocation.X * ScalingFactor), (int)(_logicalLocation.Y * ScalingFactor));
         }
     }
 }

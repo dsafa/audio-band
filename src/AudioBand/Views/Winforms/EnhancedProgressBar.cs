@@ -12,15 +12,6 @@ namespace AudioBand.Views.Winforms
     {
         private TimeSpan _progress;
         private TimeSpan _total;
-        private int _maximum;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EnhancedProgressBar"/> class.
-        /// </summary>
-        public EnhancedProgressBar()
-        {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-        }
 
         /// <summary>
         /// Gets or sets the current progress.
@@ -52,18 +43,6 @@ namespace AudioBand.Views.Winforms
             }
         }
 
-        [Browsable(true)]
-        [Bindable(BindableSupport.Yes)]
-        public int Maximum
-        {
-            get => _maximum;
-            set
-            {
-                _maximum = value;
-                Refresh();
-            }
-        }
-
         /// <inheritdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -74,19 +53,13 @@ namespace AudioBand.Views.Winforms
             {
                 progress = 0;
             }
-            else if (progress >= Maximum)
+            else if (progress >= 1)
             {
                 progress = 1;
             }
 
             rect.Width = (int)(rect.Width * progress);
             e.Graphics.FillRectangle(new SolidBrush(ForeColor), 0, 0, rect.Width, rect.Height);
-        }
-
-        protected override void OnDpiChangedBeforeParent(EventArgs e)
-        {
-            base.OnDpiChangedBeforeParent(e);
-            var a = DeviceDpi;
         }
     }
 }
