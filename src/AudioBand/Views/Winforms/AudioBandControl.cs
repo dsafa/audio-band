@@ -17,7 +17,6 @@ namespace AudioBand.Views.Winforms
         private const double LogicalDpi = 96.0;
         private const int WmDpiChanged = 0x02E0;
         private const int WHCallWndProc = 4;
-        private const int DeviceCapsLogicalPixelsX = 88;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IntPtr _hook;
         private readonly CallWndProc _callback;
@@ -42,8 +41,8 @@ namespace AudioBand.Views.Winforms
         [DllImport("user32")]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
-        [DllImport("gdi32.dll")]
-        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        [DllImport("user32.dll")]
+        private static extern int GetDpiForWindow(IntPtr hWnd);
 
         [StructLayout(LayoutKind.Sequential)]
         private struct CWPSTRUCT
@@ -57,7 +56,7 @@ namespace AudioBand.Views.Winforms
         public AudioBandControl()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw, true);
-            Dpi = GetDpi();
+            Dpi = GetDpiForWindow(Handle);
             OnDpiChanged();
 
             _callback = HookCallback;
@@ -109,15 +108,6 @@ namespace AudioBand.Views.Winforms
         private static short HiWord(IntPtr ptr)
         {
             return unchecked((short)((long)ptr >> 16));
-        }
-
-        private static double GetDpi()
-        {
-            var g = Graphics.FromHwnd(IntPtr.Zero);
-            var desktopHdc = g.GetHdc();
-            var dpi = GetDeviceCaps(desktopHdc, DeviceCapsLogicalPixelsX);
-            g.ReleaseHdc(desktopHdc);
-            return dpi;
         }
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
