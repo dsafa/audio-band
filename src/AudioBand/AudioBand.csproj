@@ -168,6 +168,9 @@
     </Compile>
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
+    <Compile Include="Views\Winforms\AudioBandControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
     <Compile Include="Views\Wpf\AlbumArtSettingsView.xaml.cs">
@@ -267,12 +270,16 @@
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <Compile Include="MainControl.EventHandlers.cs">
       <SubType>UserControl</SubType>
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
-    <None Include="app.manifest" />
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

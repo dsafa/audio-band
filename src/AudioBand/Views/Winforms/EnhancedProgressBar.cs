@@ -8,10 +8,11 @@ namespace AudioBand.Views.Winforms
     /// <summary>
     /// A enhanced progress bar supporting custom colors.
     /// </summary>
-    public class EnhancedProgressBar : ProgressBar
+    public class EnhancedProgressBar : AudioBandControl
     {
         private TimeSpan _progress;
         private TimeSpan _total;
+        private int _maximum;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EnhancedProgressBar"/> class.
@@ -51,6 +52,18 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        [Browsable(true)]
+        [Bindable(BindableSupport.Yes)]
+        public int Maximum
+        {
+            get => _maximum;
+            set
+            {
+                _maximum = value;
+                Refresh();
+            }
+        }
+
         /// <inheritdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -68,6 +81,12 @@ namespace AudioBand.Views.Winforms
 
             rect.Width = (int)(rect.Width * progress);
             e.Graphics.FillRectangle(new SolidBrush(ForeColor), 0, 0, rect.Width, rect.Height);
+        }
+
+        protected override void OnDpiChangedBeforeParent(EventArgs e)
+        {
+            base.OnDpiChangedBeforeParent(e);
+            var a = DeviceDpi;
         }
     }
 }
