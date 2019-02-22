@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/v32xl29r8uucuwj3?svg=true)](https://ci.appveyor.com/project/dsafa/audio-band)
+[![Build Status](https://dsafa.visualstudio.com/AudioBand/_apis/build/status/AudioBand%20Dev%20CI?branchName=master)](https://dsafa.visualstudio.com/AudioBand/_build/latest?definitionId=3&branchName=master)
 
 # Audio Band
 Audio Band allows you to display song information in the taskbar.
