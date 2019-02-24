@@ -125,6 +125,7 @@
     <Compile Include="Models\ProgressBar.cs" />
     <Compile Include="Models\CustomLabel.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
     <Compile Include="Settings\Migrations\Migration.cs" />
     <Compile Include="Settings\Migrations\V1ToV2.cs" />
@@ -270,9 +271,6 @@
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <Compile Include="MainControl.EventHandlers.cs">
       <SubType>UserControl</SubType>
       <DependentUpon>MainControl.cs</DependentUpon>
