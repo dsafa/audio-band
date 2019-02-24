@@ -1,17 +1,15 @@
-﻿using NLog;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using NLog;
 
 namespace AudioBand.Views.Winforms
 {
+    /// <summary>
+    /// Base class for audioband controls. Handles dpi changes.
+    /// </summary>
     public abstract class AudioBandControl : Control
     {
         private const double LogicalDpi = 96.0;
@@ -19,64 +17,45 @@ namespace AudioBand.Views.Winforms
         private const int WHCallWndProc = 4;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IntPtr _hook;
-        private readonly CallWndProc _callback;
+        private readonly NativeMethods.CallWndProc _callback;
         private readonly IntPtr _taskBarHwnd;
         private Size _logicalSize;
         private Point _logicalLocation;
 
-        private delegate IntPtr CallWndProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32", EntryPoint = "SetWindowsHookExA")]
-        private static extern IntPtr SetWindowsHookEx(int idHook, CallWndProc lpfn, IntPtr hmod, IntPtr dwThreadId);
-
-        [DllImport("user32", EntryPoint = "UnhookWindowsHookEx")]
-        private static extern IntPtr UnhookWindowsHookEx(IntPtr hHook);
-
-        [DllImport("user32", EntryPoint = "CallNextHookEx")]
-        private static extern IntPtr CallNextHook(IntPtr hHook, int ncode, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32")]
-        private static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, IntPtr processId);
-
-        [DllImport("user32")]
-        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll")]
-        private static extern int GetDpiForWindow(IntPtr hWnd);
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct CWPSTRUCT
-        {
-            public IntPtr LParam;
-            public IntPtr WParam;
-            public int Message;
-            public IntPtr Hwnd;
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioBandControl"/> class.
+        /// </summary>
         public AudioBandControl()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw, true);
-            Dpi = GetDpiForWindow(Handle);
-            OnDpiChanged();
+            OnDpiChanged(GetDpi());
 
+            // Hook the window proc of the taskbar to listen to WM_DPICHANGED events
             _callback = HookCallback;
-            _taskBarHwnd = FindWindow("Shell_TrayWnd", null);
-            var taskbarHwndThreadId = GetWindowThreadProcessId(_taskBarHwnd, IntPtr.Zero);
-            _hook = SetWindowsHookEx(WHCallWndProc, _callback, IntPtr.Zero, taskbarHwndThreadId);
+            _taskBarHwnd = NativeMethods.FindWindow("Shell_TrayWnd", null);
+            var taskbarHwndThreadId = NativeMethods.GetWindowThreadProcessId(_taskBarHwnd, IntPtr.Zero);
+            _hook = NativeMethods.SetWindowsHookEx(WHCallWndProc, _callback, IntPtr.Zero, taskbarHwndThreadId);
             if (_hook == IntPtr.Zero)
             {
                 Logger.Error("Unable to set windows hook");
             }
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="AudioBandControl"/> class.
+        /// </summary>
         ~AudioBandControl()
         {
             if (_hook != IntPtr.Zero)
             {
-                UnhookWindowsHookEx(_hook);
+                NativeMethods.UnhookWindowsHookEx(_hook);
             }
         }
 
+        /// <summary>
+        /// Gets or sets the logical size of the control.
+        /// </summary>
+        /// <remarks>This is the device independent size</remarks>
         [Browsable(true)]
         [Bindable(BindableSupport.Yes)]
         public Size LogicalSize
@@ -89,6 +68,10 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the logical position of the control.
+        /// </summary>
+        /// <remarks>This is the device independent position</remarks>
         [Browsable(true)]
         [Bindable(BindableSupport.Yes)]
         public Point LogicalLocation
@@ -114,22 +97,22 @@ namespace AudioBand.Views.Winforms
         {
             if (nCode < 0 || wParam != IntPtr.Zero)
             {
-                return CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
+                return NativeMethods.CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
             }
 
-            var info = Marshal.PtrToStructure<CWPSTRUCT>(lParam);
+            var info = Marshal.PtrToStructure<NativeMethods.CWPSTRUCT>(lParam);
             if (info.Message == WmDpiChanged && info.Hwnd == _taskBarHwnd)
             {
                 var newDpi = HiWord(info.WParam);
-                Dpi = newDpi;
-                OnDpiChanged();
+                OnDpiChanged(newDpi);
             }
 
-            return CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
+            return NativeMethods.CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
         }
 
-        private void OnDpiChanged()
+        private void OnDpiChanged(double newDpi)
         {
+            Dpi = newDpi;
             UpdateLocation();
             UpdateSize();
         }
@@ -142,6 +125,17 @@ namespace AudioBand.Views.Winforms
         private void UpdateLocation()
         {
             Location = new Point((int)(_logicalLocation.X * ScalingFactor), (int)(_logicalLocation.Y * ScalingFactor));
+        }
+
+        private double GetDpi()
+        {
+            var win10Anniversary = new Version(10, 0, 14393);
+            if (Environment.OSVersion.Version.CompareTo(win10Anniversary) < 0)
+            {
+                return 96.0;
+            }
+
+            return NativeMethods.GetDpiForWindow(Handle);
         }
     }
 }
