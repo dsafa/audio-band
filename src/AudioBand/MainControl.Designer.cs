@@ -32,13 +32,13 @@ namespace AudioBand
         {
             this.components = new System.ComponentModel.Container();
             this.AlbumArtControl = new System.Windows.Forms.PictureBox();
-            this.PreviousButtonControl = new System.Windows.Forms.Button();
-            this.PlayPauseButtonControl = new System.Windows.Forms.Button();
-            this.NextButtonControl = new System.Windows.Forms.Button();
             this.AlbumArtVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.PreviousButtonControl = new System.Windows.Forms.Button();
             this.PreviousButtonVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.NextButtonVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.PlayPauseButtonControl = new System.Windows.Forms.Button();
             this.PlayPauseButtonVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.NextButtonControl = new System.Windows.Forms.Button();
+            this.NextButtonVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ProgressBarControl = new AudioBand.Views.Winforms.EnhancedProgressBar();
             this.ProgressBarVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.AudioBandVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -47,8 +47,8 @@ namespace AudioBand
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreviousButtonVMBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NextButtonVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PlayPauseButtonVMBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NextButtonVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ProgressBarVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AudioBandVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtPopupVMBindingSource)).BeginInit();
@@ -68,6 +68,10 @@ namespace AudioBand
             this.AlbumArtControl.TabStop = false;
             this.AlbumArtControl.MouseLeave += new System.EventHandler(this.AlbumArtOnMouseLeave);
             this.AlbumArtControl.MouseHover += new System.EventHandler(this.AlbumArtOnMouseHover);
+            // 
+            // AlbumArtVMBindingSource
+            // 
+            this.AlbumArtVMBindingSource.DataSource = typeof(AudioBand.ViewModels.AlbumArtVM);
             // 
             // PreviousButtonControl
             // 
@@ -89,6 +93,10 @@ namespace AudioBand
             this.PreviousButtonControl.UseVisualStyleBackColor = true;
             this.PreviousButtonControl.Click += new System.EventHandler(this.PreviousButtonOnClick);
             // 
+            // PreviousButtonVMBindingSource
+            // 
+            this.PreviousButtonVMBindingSource.DataSource = typeof(AudioBand.ViewModels.PreviousButtonVM);
+            // 
             // PlayPauseButtonControl
             // 
             this.PlayPauseButtonControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -108,6 +116,10 @@ namespace AudioBand
             this.PlayPauseButtonControl.TabIndex = 1;
             this.PlayPauseButtonControl.UseVisualStyleBackColor = true;
             this.PlayPauseButtonControl.Click += new System.EventHandler(this.PlayPauseButtonOnClick);
+            // 
+            // PlayPauseButtonVMBindingSource
+            // 
+            this.PlayPauseButtonVMBindingSource.DataSource = typeof(AudioBand.ViewModels.PlayPauseButtonVM);
             // 
             // NextButtonControl
             // 
@@ -129,21 +141,9 @@ namespace AudioBand
             this.NextButtonControl.UseVisualStyleBackColor = true;
             this.NextButtonControl.Click += new System.EventHandler(this.NextButtonOnClick);
             // 
-            // AlbumArtVMBindingSource
-            // 
-            this.AlbumArtVMBindingSource.DataSource = typeof(AudioBand.ViewModels.AlbumArtVM);
-            // 
-            // PreviousButtonVMBindingSource
-            // 
-            this.PreviousButtonVMBindingSource.DataSource = typeof(AudioBand.ViewModels.PreviousButtonVM);
-            // 
             // NextButtonVMBindingSource
             // 
             this.NextButtonVMBindingSource.DataSource = typeof(AudioBand.ViewModels.NextButtonVM);
-            // 
-            // PlayPauseButtonVMBindingSource
-            // 
-            this.PlayPauseButtonVMBindingSource.DataSource = typeof(AudioBand.ViewModels.PlayPauseButtonVM);
             // 
             // ProgressBarControl
             // 
@@ -193,26 +193,22 @@ namespace AudioBand
             // 
             // MainControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.Controls.Add(this.AlbumArtControl);
             this.Controls.Add(this.PreviousButtonControl);
             this.Controls.Add(this.NextButtonControl);
             this.Controls.Add(this.PlayPauseButtonControl);
             this.Controls.Add(this.ProgressBarControl);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("MinimumSize", this.AudioBandVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Size", this.AudioBandVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.AudioBandVMBindingSource, "Size", true));
             this.Margin = new System.Windows.Forms.Padding(0);
             this.MaximumSize = new System.Drawing.Size(250, 30);
             this.MinimumSize = new System.Drawing.Size(250, 30);
-            this.Name = "MainControl";
             this.Size = new System.Drawing.Size(250, 30);
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreviousButtonVMBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NextButtonVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PlayPauseButtonVMBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NextButtonVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ProgressBarVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AudioBandVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtPopupVMBindingSource)).EndInit();

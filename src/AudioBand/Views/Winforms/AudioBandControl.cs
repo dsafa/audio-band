@@ -10,7 +10,7 @@ namespace AudioBand.Views.Winforms
     /// <summary>
     /// Base class for audioband controls. Handles dpi changes.
     /// </summary>
-    public abstract class AudioBandControl : Control
+    public class AudioBandControl : ContainerControl
     {
         private const double LogicalDpi = 96.0;
         private const int WmDpiChanged = 0x02E0;
@@ -84,9 +84,35 @@ namespace AudioBand.Views.Winforms
             }
         }
 
-        private double Dpi { get; set; } = LogicalDpi;
+        /// <summary>
+        /// Gets the dpi
+        /// </summary>
+        public double Dpi { get; private set; } = LogicalDpi;
 
-        private double ScalingFactor => Dpi / LogicalDpi;
+        /// <summary>
+        /// Gets the scaling factor
+        /// </summary>
+        public double ScalingFactor => Dpi / LogicalDpi;
+
+        /// <summary>
+        /// Gets the size scaled by the <see cref="ScalingFactor"/>.
+        /// </summary>
+        /// <param name="size">The size to scale</param>
+        /// <returns>The new scaled size.</returns>
+        protected Size GetScaledSize(Size size)
+        {
+            return new Size((int)Math.Round(size.Width * ScalingFactor), (int)Math.Round(size.Height * ScalingFactor));
+        }
+
+        /// <summary>
+        /// Gets the point scaled by the <see cref="ScalingFactor"/>
+        /// </summary>
+        /// <param name="point">The point to scale</param>
+        /// <returns>The new scaled point.</returns>
+        protected Point GetScaledPoint(Point point)
+        {
+            return new Point((int)Math.Round(point.X * ScalingFactor), (int)Math.Round(point.Y * ScalingFactor));
+        }
 
         private static short HiWord(IntPtr ptr)
         {
@@ -119,12 +145,15 @@ namespace AudioBand.Views.Winforms
 
         private void UpdateSize()
         {
-            Size = new Size((int)(_logicalSize.Width * ScalingFactor), (int)(_logicalSize.Height * ScalingFactor));
+            var size = GetScaledSize(LogicalSize);
+            Size = size;
+            MinimumSize = size;
+            MaximumSize = size;
         }
 
         private void UpdateLocation()
         {
-            Location = new Point((int)(_logicalLocation.X * ScalingFactor), (int)(_logicalLocation.Y * ScalingFactor));
+            Location = GetScaledPoint(LogicalLocation);
         }
 
         private double GetDpi()

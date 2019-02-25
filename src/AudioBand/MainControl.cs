@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
 using System.Windows.Threading;
@@ -12,9 +10,9 @@ using AudioBand.AudioSource;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
+using AudioBand.Views.Winforms;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
-using CSDeskBand.Win;
 using NLog;
 using NLog.Config;
 using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
@@ -22,10 +20,7 @@ using Size = System.Drawing.Size;
 
 namespace AudioBand
 {
-    [Guid("957D8782-5B07-4126-9B24-1E917BAAAD64")]
-    [ComVisible(true)]
-    [CSDeskBandRegistration(Name = "Audio Band", ShowDeskBand = true)]
-    public partial class MainControl : CSDeskBandWin
+    public partial class MainControl : AudioBandControl
     {
         private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
         private readonly AppSettings _appSettings = new AppSettings();
@@ -62,16 +57,46 @@ namespace AudioBand
         /// Initializes a new instance of the <see cref="MainControl"/> class.
         /// Entry point.
         /// </summary>
-        public MainControl()
+        /// <param name="options">The deskband options.</param>
+        /// <param name="info">The taskbar info.</param>
+        public MainControl(CSDeskBandOptions options, TaskbarInfo info)
         {
             InitializeComponent();
 
             LogManager.ThrowExceptions = true;
             LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(DirectoryHelper.BaseDirectory, "nlog.config"));
             _uiDispatcher = Dispatcher.CurrentDispatcher;
+            Options = options;
+            TaskbarInfo = info;
 #pragma warning disable CS4014
             InitializeAsync();
 #pragma warning restore CS4014
+        }
+
+        /// <summary>
+        /// Gets the deskband options.
+        /// </summary>
+        public CSDeskBandOptions Options { get; }
+
+        /// <summary>
+        /// Gets the taskbar info.
+        /// </summary>
+        public TaskbarInfo TaskbarInfo { get; }
+
+        /// <summary>
+        /// Save on close
+        /// </summary>
+        public void CloseAudioband()
+        {
+            _appSettings.Save();
+            try
+            {
+                _currentAudioSource?.DeactivateAsync();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         /// <summary>
@@ -85,27 +110,11 @@ namespace AudioBand
                 return;
             }
 
-            var audioBandSize = new Size(_audioBandModel.Width, _audioBandModel.Height);
+            // use model size because we want to only chnage when it changes instead of catching all resize events
+            var audioBandSize = GetScaledSize(new Size(_audioBandModel.Width, _audioBandModel.Height));
             Options.MinHorizontalSize = audioBandSize;
             Options.HorizontalSize = audioBandSize;
             Options.MaxHorizontalHeight = audioBandSize.Height;
-        }
-
-        /// <summary>
-        /// Save on close
-        /// </summary>
-        protected override void OnClose()
-        {
-            base.OnClose();
-            _appSettings.Save();
-            try
-            {
-                _currentAudioSource?.DeactivateAsync();
-            }
-            catch (Exception)
-            {
-                // ignore
-            }
         }
 
         private async Task InitializeAsync()
