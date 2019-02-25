@@ -240,10 +240,11 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Draws the formatted text with the current values.
         /// </summary>
+        /// <param name="scaling">The scaling factor</param>
         /// <returns>A bitmap of the rendered text.</returns>
-        public Bitmap Draw()
+        public Bitmap Draw(double scaling)
         {
-            var size = Measure();
+            var size = Measure(scaling);
             if (size.Width < 1 || size.Height < 1)
             {
                 return new Bitmap(100, 20);
@@ -253,7 +254,7 @@ namespace AudioBand.Views.Winforms
             using (var graphics = Graphics.FromImage(bitmap))
             {
                 graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-                Draw(graphics, false);
+                Draw(graphics, false, scaling);
             }
 
             return bitmap;
@@ -262,10 +263,11 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Measures the size that the text would be.
         /// </summary>
+        /// <param name="scaling">The scaling factor</param>
         /// <returns>The bounds of the text.</returns>
-        public Size Measure()
+        public Size Measure(double scaling)
         {
-            return Draw(null, true);
+            return Draw(null, true, scaling);
         }
 
         private void Parse()
@@ -273,6 +275,11 @@ namespace AudioBand.Views.Winforms
             // Build up chunks, each chunk is a sparately formatted piece of text
             Chunks = new List<TextChunk>();
             var currentText = new StringBuilder();
+
+            if (Format == null)
+            {
+                return;
+            }
 
             // go through building up chunks character by character
             for (int i = 0; i < Format.Length; i++)
@@ -413,20 +420,26 @@ namespace AudioBand.Views.Winforms
             }
         }
 
-        private Size Draw(Graphics graphics, bool measure)
+        private Size Draw(Graphics graphics, bool measure, double scaling)
         {
             var totalTextSize = default(Size);
             var x = 0;
 
-            // Padding because the last character is being cut off
+            if (Chunks.Count == 0)
+            {
+                return totalTextSize;
+            }
+
+            // Add a chunk at the end for padding because the last character is being cut off
             AddChunk(new StringBuilder(" ", 1), false);
             foreach (var textChunk in Chunks)
             {
-                var font = new Font(FontFamily, FontSize, GetFontStyle(textChunk.Type), GraphicsUnit.Point);
+                var fontSize = (float)(FontSize * scaling);
+                var font = new Font(FontFamily, fontSize, GetFontStyle(textChunk.Type), GraphicsUnit.Point);
                 var textSize = TextRenderer.MeasureText(textChunk.Text, font, new Size(1000, 1000), TextFormatFlags.NoPrefix);
                 if (textSize.Width > 0)
                 {
-                    // keep padding in last item
+                    // remove padding between items
                     textSize.Width -= MeasurePadding(font);
                 }
 

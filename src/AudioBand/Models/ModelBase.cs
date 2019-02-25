@@ -8,7 +8,7 @@ namespace AudioBand.Models
     /// <summary>
     /// Base class for models.
     /// </summary>
-    internal class ModelBase : INotifyPropertyChanged
+    public class ModelBase : INotifyPropertyChanged
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.
@@ -21,6 +21,9 @@ namespace AudioBand.Models
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Gets the logger for the model
+        /// </summary>
         protected ILogger Logger { get; }
 
         /// <summary>

@@ -5,7 +5,7 @@ namespace AudioBand.Models
     /// <summary>
     /// Model for the progress bar.
     /// </summary>
-    internal class ProgressBar : ModelBase
+    public class ProgressBar : ModelBase
     {
         private Color _foregroundColor = Color.DodgerBlue;
         private Color _backgroundColor = Color.Black;

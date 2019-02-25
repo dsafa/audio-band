@@ -5,7 +5,7 @@ namespace AudioBand.Models
     /// <summary>
     /// A key / value pair that represents a single setting for an audio source.
     /// </summary>
-    internal class AudioSourceSetting : ModelBase
+    public class AudioSourceSetting : ModelBase
     {
         private string _name;
         private object _value;

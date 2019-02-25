@@ -24,7 +24,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _progress = value;
-                Refresh();
+                InvokeRefresh();
             }
         }
 
@@ -39,7 +39,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _total = value;
-                Refresh();
+                InvokeRefresh();
             }
         }
 

@@ -5,7 +5,7 @@ namespace AudioBand.Models
     /// <summary>
     /// Model for a custom label.
     /// </summary>
-    internal class CustomLabel : ModelBase
+    public class CustomLabel : ModelBase
     {
         private bool _isVisible = true;
         private int _width = 220;
