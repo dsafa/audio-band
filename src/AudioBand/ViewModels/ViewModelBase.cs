@@ -15,7 +15,7 @@ namespace AudioBand.ViewModels
     /// Base class for view models with automatic support for
     /// <see cref="INotifyPropertyChanged"/>, <see cref="IEditableObject"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and commands.
     /// </summary>
-    internal abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject, INotifyDataErrorInfo
+    public abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject, INotifyDataErrorInfo
     {
         private readonly Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
 

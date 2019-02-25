@@ -10,7 +10,7 @@ namespace AudioBand.Views.Winforms
     /// <summary>
     /// Base class for audioband controls. Handles dpi changes.
     /// </summary>
-    public class AudioBandControl : ContainerControl
+    public class AudioBandControl : UserControl
     {
         private const double LogicalDpi = 96.0;
         private const int WmDpiChanged = 0x02E0;
@@ -112,6 +112,21 @@ namespace AudioBand.Views.Winforms
         protected Point GetScaledPoint(Point point)
         {
             return new Point((int)Math.Round(point.X * ScalingFactor), (int)Math.Round(point.Y * ScalingFactor));
+        }
+
+        /// <summary>
+        /// Cross thread safe refresh.
+        /// </summary>
+        protected void InvokeRefresh()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(Refresh));
+            }
+            else
+            {
+                Refresh();
+            }
         }
 
         private static short HiWord(IntPtr ptr)

@@ -15,7 +15,7 @@ namespace AudioBand.ViewModels
     /// Base class for a viewmodel with a model.
     /// </summary>
     /// <typeparam name="TModel">Type of the model</typeparam>
-    internal abstract class ViewModelBase<TModel> : ViewModelBase
+    public abstract class ViewModelBase<TModel> : ViewModelBase
         where TModel : ModelBase, new()
     {
         // Mapping from a model and model property to the viewmodel property name

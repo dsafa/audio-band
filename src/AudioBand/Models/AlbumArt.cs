@@ -3,7 +3,7 @@
     /// <summary>
     /// Model for the album art.
     /// </summary>
-    internal class AlbumArt : ModelBase
+    public class AlbumArt : ModelBase
     {
         private bool _isVisible = true;
         private int _width = 30;

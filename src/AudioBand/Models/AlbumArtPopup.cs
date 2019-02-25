@@ -3,7 +3,7 @@
     /// <summary>
     /// Model for the album art popup.
     /// </summary>
-    internal class AlbumArtPopup : ModelBase
+    public class AlbumArtPopup : ModelBase
     {
         private bool _isVisible = true;
         private int _width = 250;

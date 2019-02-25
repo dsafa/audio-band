@@ -3,7 +3,7 @@
     /// <summary>
     /// Model for the next button.
     /// </summary>
-    internal class NextButton : ModelBase
+    public class NextButton : ModelBase
     {
         private string _imagePath = "";
         private bool _isVisible = true;

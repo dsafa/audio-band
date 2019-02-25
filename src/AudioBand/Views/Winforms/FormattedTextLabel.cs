@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using TextAlignment= AudioBand.Models.CustomLabel.TextAlignment;
@@ -9,7 +10,7 @@ namespace AudioBand.Views.Winforms
     /// <summary>
     /// A text label that supports custom formatting.
     /// </summary>
-    internal class FormattedTextLabel : Control
+    public class FormattedTextLabel : AudioBandControl
     {
         private const int TickRateMs = 20;
         private const int TickPerS = 1000 / TickRateMs;
@@ -54,6 +55,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the format of the label.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public string Format
         {
             get => _format;
@@ -68,6 +70,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the default color of the text.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public Color DefaultColor
         {
             get => _defaultColor;
@@ -82,6 +85,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the font size of the text.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public float FontSize
         {
             get => _fontSize;
@@ -96,6 +100,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the font family of the text.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public string FontFamily
         {
             get => _fontFamily;
@@ -110,6 +115,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the text alignment.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public TextAlignment Alignment
         {
             get => _alignment;
@@ -124,6 +130,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the current artist to display.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public string Artist
         {
             get => _artist;
@@ -142,6 +149,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the current song name.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public string SongName
         {
             get => _songName;
@@ -160,6 +168,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the current album name.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public string AlbumName
         {
             get => _albumName;
@@ -178,6 +187,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the current song progress.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public TimeSpan SongProgress
         {
             get => _songProgress;
@@ -196,6 +206,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the current song length.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public TimeSpan SongLength
         {
             get => _songLength;
@@ -214,6 +225,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the scroll speed of the label.
         /// </summary>
+        [Bindable(BindableSupport.Yes)]
         public int ScrollSpeed
         {
             get => _scrollSpeed;
@@ -229,7 +241,7 @@ namespace AudioBand.Views.Winforms
         protected override void OnPaint(PaintEventArgs e)
         {
             // measure
-            _textWidth = _renderer.Measure().Width;
+            _textWidth = _renderer.Measure(ScalingFactor).Width;
             var textTooLong = _textWidth > ClientRectangle.Width - WidthPadding; // extra padding in case
 
             // to long and not scrolling -> start scrolling
@@ -309,7 +321,7 @@ namespace AudioBand.Views.Winforms
 
         private void Redraw()
         {
-            _renderedText = _renderer.Draw();
+            _renderedText = _renderer.Draw(ScalingFactor);
             InvokeRefresh();
         }
 
@@ -318,18 +330,6 @@ namespace AudioBand.Views.Winforms
             var rect = ClientRectangle;
             rect.X = xpos;
             g.DrawImage(_renderedText, xpos, 0, _renderedText.Width, _renderedText.Height);
-        }
-
-        private void InvokeRefresh()
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action(Refresh));
-            }
-            else
-            {
-                Refresh();
-            }
         }
     }
 }

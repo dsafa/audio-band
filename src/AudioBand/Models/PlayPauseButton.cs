@@ -3,7 +3,7 @@
     /// <summary>
     /// Model for the play/pause button.
     /// </summary>
-    internal class PlayPauseButton : ModelBase
+    public class PlayPauseButton : ModelBase
     {
         private string _playButtonImagePath = "";
         private string _pauseButtonImagePath = "";
