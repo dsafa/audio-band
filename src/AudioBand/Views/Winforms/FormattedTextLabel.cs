@@ -221,7 +221,7 @@ namespace AudioBand.Views.Winforms
             {
                 _scrollSpeed = value;
                 _scrollDelta = (float)_scrollSpeed / TickPerS;
-                Refresh();
+                InvokeRefresh();
             }
         }
 
@@ -269,7 +269,7 @@ namespace AudioBand.Views.Winforms
         private void ScrollingTimerOnTick(object sender, EventArgs eventArgs)
         {
             UpdateTextPositions();
-            Refresh();
+            InvokeRefresh();
         }
 
         private void UpdateTextPositions()
@@ -310,7 +310,7 @@ namespace AudioBand.Views.Winforms
         private void Redraw()
         {
             _renderedText = _renderer.Draw();
-            Refresh();
+            InvokeRefresh();
         }
 
         private void Draw(Graphics g, int xpos)
@@ -318,6 +318,18 @@ namespace AudioBand.Views.Winforms
             var rect = ClientRectangle;
             rect.X = xpos;
             g.DrawImage(_renderedText, xpos, 0, _renderedText.Width, _renderedText.Height);
+        }
+
+        private void InvokeRefresh()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(Refresh));
+            }
+            else
+            {
+                Refresh();
+            }
         }
     }
 }
