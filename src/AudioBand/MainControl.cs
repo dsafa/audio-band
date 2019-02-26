@@ -62,7 +62,7 @@ namespace AudioBand
         public MainControl(CSDeskBandOptions options, TaskbarInfo info)
         {
             InitializeComponent();
-            System.Diagnostics.Debugger.Launch();
+
             LogManager.ThrowExceptions = true;
             LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(DirectoryHelper.BaseDirectory, "nlog.config"));
             _uiDispatcher = Dispatcher.CurrentDispatcher;
