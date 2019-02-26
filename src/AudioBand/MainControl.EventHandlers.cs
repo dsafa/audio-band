@@ -22,7 +22,7 @@ namespace AudioBand
 
         private void AlbumArtOnMouseHover(object o, EventArgs args)
         {
-            AlbumArtPopup.ShowWithoutRequireFocus("Album Art", this, TaskbarInfo);
+            AlbumArtPopup.ShowWithoutRequireFocus("Album Art", this, TaskbarInfo, ScalingFactor);
         }
 
         private async void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)

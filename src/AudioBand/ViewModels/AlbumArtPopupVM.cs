@@ -1,13 +1,13 @@
 ﻿using System.Drawing;
-using AudioBand.Extensions;
 using AudioBand.Models;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the album art popup.
     /// </summary>
-    internal class AlbumArtPopupVM : ViewModelBase<AlbumArtPopup>
+    public class AlbumArtPopupVM : ViewModelBase<AlbumArtPopup>
     {
         private readonly Track _track;
 
@@ -56,7 +56,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public Image AlbumArt => _track.AlbumArt?.Resize(Width, Height);
+        public Image AlbumArt => _track.AlbumArt;
 
         /// <summary>
         /// Gets the size of the popup.
@@ -65,3 +65,4 @@ namespace AudioBand.ViewModels
         public Size Size => new Size(Width, Height);
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

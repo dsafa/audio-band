@@ -28,7 +28,7 @@ namespace AudioBand.Views.Winforms
         public AudioBandControl()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw, true);
-            OnDpiChanged(GetDpi());
+            UpdateDpi(GetDpi());
 
             // Hook the window proc of the taskbar to listen to WM_DPICHANGED events
             _callback = HookCallback;
@@ -129,6 +129,11 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Occurs when dpi changed
+        /// </summary>
+        protected virtual void OnDpiChanged() { }
+
         private static short HiWord(IntPtr ptr)
         {
             return unchecked((short)((long)ptr >> 16));
@@ -145,17 +150,18 @@ namespace AudioBand.Views.Winforms
             if (info.Message == WmDpiChanged && info.Hwnd == _taskBarHwnd)
             {
                 var newDpi = HiWord(info.WParam);
-                OnDpiChanged(newDpi);
+                UpdateDpi(newDpi);
             }
 
             return NativeMethods.CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
         }
 
-        private void OnDpiChanged(double newDpi)
+        private void UpdateDpi(double newDpi)
         {
             Dpi = newDpi;
             UpdateLocation();
             UpdateSize();
+            OnDpiChanged();
         }
 
         private void UpdateSize()
