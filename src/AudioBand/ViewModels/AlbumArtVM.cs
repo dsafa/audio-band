@@ -4,12 +4,13 @@ using AudioBand.Extensions;
 using AudioBand.Models;
 using Svg;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the album art.
     /// </summary>
-    internal class AlbumArtVM : ViewModelBase<AlbumArt>
+    public class AlbumArtVM : ViewModelBase<AlbumArt>
     {
         private static readonly SvgDocument DefaultAlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
         private readonly Track _track;
@@ -75,7 +76,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public Image AlbumArt => _track.AlbumArt?.Resize(Width, Height);
+        public Image AlbumArt => _track.AlbumArt;
 
         /// <summary>
         /// Gets the location of the album art.
@@ -109,3 +110,4 @@ namespace AudioBand.ViewModels
         }
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
