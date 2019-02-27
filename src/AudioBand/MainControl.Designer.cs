@@ -31,7 +31,7 @@ namespace AudioBand
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.AlbumArtControl = new System.Windows.Forms.PictureBox();
+            this.AlbumArtControl = new AlbumArtDisplay();
             this.AlbumArtVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.PreviousButtonControl = new System.Windows.Forms.Button();
             this.PreviousButtonVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -44,7 +44,6 @@ namespace AudioBand
             this.AudioBandVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.AlbumArtPopup = new AudioBand.Views.Winforms.AlbumArtTooltip();
             this.AlbumArtPopupVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.AlbumArtControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreviousButtonVMBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PlayPauseButtonVMBindingSource)).BeginInit();
@@ -56,9 +55,9 @@ namespace AudioBand
             // 
             // AlbumArtControl
             // 
-            this.AlbumArtControl.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.AlbumArtVMBindingSource, "AlbumArt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.AlbumArtControl.DataBindings.Add(new System.Windows.Forms.Binding("Location", this.AlbumArtVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.AlbumArtControl.DataBindings.Add(new System.Windows.Forms.Binding("Size", this.AlbumArtVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AlbumArtControl.DataBindings.Add(new System.Windows.Forms.Binding("AlbumArt", this.AlbumArtVMBindingSource, "AlbumArt", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AlbumArtControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.AlbumArtVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AlbumArtControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.AlbumArtVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.AlbumArtControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.AlbumArtVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.AlbumArtControl.Location = new System.Drawing.Point(0, 0);
             this.AlbumArtControl.Margin = new System.Windows.Forms.Padding(0);
@@ -201,10 +200,6 @@ namespace AudioBand
             this.Controls.Add(this.ProgressBarControl);
             this.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.AudioBandVMBindingSource, "Size", true));
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MaximumSize = new System.Drawing.Size(250, 30);
-            this.MinimumSize = new System.Drawing.Size(250, 30);
-            this.Size = new System.Drawing.Size(250, 30);
-            ((System.ComponentModel.ISupportInitialize)(this.AlbumArtControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlbumArtVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreviousButtonVMBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PlayPauseButtonVMBindingSource)).EndInit();
@@ -217,7 +212,7 @@ namespace AudioBand
         }
 
         #endregion
-        private System.Windows.Forms.PictureBox AlbumArtControl;
+        private AlbumArtDisplay AlbumArtControl;
         private System.Windows.Forms.Button PreviousButtonControl;
         private System.Windows.Forms.Button PlayPauseButtonControl;
         private System.Windows.Forms.Button NextButtonControl;

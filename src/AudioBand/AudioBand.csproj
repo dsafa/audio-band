@@ -160,6 +160,9 @@
     <Compile Include="ViewModels\SettingsWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
+    <Compile Include="Views\Winforms\AlbumArtDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
