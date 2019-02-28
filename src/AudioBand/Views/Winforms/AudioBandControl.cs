@@ -153,6 +153,7 @@ namespace AudioBand.Views.Winforms
             {
                 var newDpi = HiWord(info.WParam);
                 UpdateDpi(newDpi);
+                OnDpiChanged();
             }
 
             return NativeMethods.CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
@@ -163,7 +164,6 @@ namespace AudioBand.Views.Winforms
             Dpi = newDpi;
             UpdateLocation();
             UpdateSize();
-            OnDpiChanged();
         }
 
         private void UpdateSize()

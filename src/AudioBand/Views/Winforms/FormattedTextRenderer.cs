@@ -425,7 +425,7 @@ namespace AudioBand.Views.Winforms
             var totalTextSize = default(Size);
             var x = 0;
 
-            if (Chunks.Count == 0)
+            if (Chunks?.Count == 0)
             {
                 return totalTextSize;
             }
