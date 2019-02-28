@@ -109,7 +109,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MainControl.Bindings.cs">
       <DependentUpon>MainControl.cs</DependentUpon>
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Models\AlbumArt.cs" />
     <Compile Include="Models\AlbumArtPopup.cs" />
@@ -169,7 +169,7 @@
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\AudioBandControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\Winforms\CustomButton.cs">
       <SubType>UserControl</SubType>
@@ -232,7 +232,7 @@
     <Compile Include="ViewModels\AlbumArtVM.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="MainControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MainControl.Designer.cs">
       <DependentUpon>MainControl.cs</DependentUpon>
@@ -241,10 +241,10 @@
     <Compile Include="ViewModels\AudioSourceSettingsVM.cs" />
     <Compile Include="ViewModels\NextButtonVM.cs" />
     <Compile Include="Views\Winforms\EnhancedProgressBar.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\Winforms\FormattedTextLabel.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="AudioSource\AudioSourceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -275,7 +275,7 @@
     </AdditionalFiles>
     <Compile Include="MainControl.EventHandlers.cs">
       <DependentUpon>MainControl.cs</DependentUpon>
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
