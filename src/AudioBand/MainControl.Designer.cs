@@ -33,11 +33,11 @@ namespace AudioBand
             this.components = new System.ComponentModel.Container();
             this.AlbumArtControl = new AlbumArtDisplay();
             this.AlbumArtVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.PreviousButtonControl = new System.Windows.Forms.Button();
+            this.PreviousButtonControl = new CustomButton();
             this.PreviousButtonVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.PlayPauseButtonControl = new System.Windows.Forms.Button();
+            this.PlayPauseButtonControl = new CustomButton();
             this.PlayPauseButtonVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.NextButtonControl = new System.Windows.Forms.Button();
+            this.NextButtonControl = new CustomButton();
             this.NextButtonVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ProgressBarControl = new AudioBand.Views.Winforms.EnhancedProgressBar();
             this.ProgressBarVMBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -76,20 +76,15 @@ namespace AudioBand
             // 
             this.PreviousButtonControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.PreviousButtonVMBindingSource, "Image", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Location", this.PreviousButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Size", this.PreviousButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.PreviousButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.PreviousButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.PreviousButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.PreviousButtonControl.FlatAppearance.BorderSize = 0;
-            this.PreviousButtonControl.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.PreviousButtonControl.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.PreviousButtonControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PreviousButtonControl.ForeColor = System.Drawing.Color.White;
             this.PreviousButtonControl.Location = new System.Drawing.Point(0, 0);
             this.PreviousButtonControl.Margin = new System.Windows.Forms.Padding(0);
             this.PreviousButtonControl.Name = "PreviousButtonControl";
             this.PreviousButtonControl.Size = new System.Drawing.Size(73, 12);
             this.PreviousButtonControl.TabIndex = 0;
-            this.PreviousButtonControl.UseVisualStyleBackColor = true;
             this.PreviousButtonControl.Click += new System.EventHandler(this.PreviousButtonOnClick);
             // 
             // PreviousButtonVMBindingSource
@@ -100,20 +95,15 @@ namespace AudioBand
             // 
             this.PlayPauseButtonControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.PlayPauseButtonVMBindingSource, "Image", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Location", this.PlayPauseButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Size", this.PlayPauseButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.PlayPauseButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.PlayPauseButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.PlayPauseButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.PlayPauseButtonControl.FlatAppearance.BorderSize = 0;
-            this.PlayPauseButtonControl.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.PlayPauseButtonControl.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.PlayPauseButtonControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PlayPauseButtonControl.ForeColor = System.Drawing.Color.White;
             this.PlayPauseButtonControl.Location = new System.Drawing.Point(73, 0);
             this.PlayPauseButtonControl.Margin = new System.Windows.Forms.Padding(0);
             this.PlayPauseButtonControl.Name = "PlayPauseButtonControl";
             this.PlayPauseButtonControl.Size = new System.Drawing.Size(73, 12);
             this.PlayPauseButtonControl.TabIndex = 1;
-            this.PlayPauseButtonControl.UseVisualStyleBackColor = true;
             this.PlayPauseButtonControl.Click += new System.EventHandler(this.PlayPauseButtonOnClick);
             // 
             // PlayPauseButtonVMBindingSource
@@ -124,20 +114,15 @@ namespace AudioBand
             // 
             this.NextButtonControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.NextButtonVMBindingSource, "Image", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Location", this.NextButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Size", this.NextButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.NextButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.NextButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.NextButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.NextButtonControl.FlatAppearance.BorderSize = 0;
-            this.NextButtonControl.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.NextButtonControl.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.NextButtonControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NextButtonControl.ForeColor = System.Drawing.Color.White;
             this.NextButtonControl.Location = new System.Drawing.Point(146, 0);
             this.NextButtonControl.Margin = new System.Windows.Forms.Padding(0);
             this.NextButtonControl.Name = "NextButtonControl";
             this.NextButtonControl.Size = new System.Drawing.Size(74, 12);
             this.NextButtonControl.TabIndex = 2;
-            this.NextButtonControl.UseVisualStyleBackColor = true;
             this.NextButtonControl.Click += new System.EventHandler(this.NextButtonOnClick);
             // 
             // NextButtonVMBindingSource
@@ -213,9 +198,9 @@ namespace AudioBand
 
         #endregion
         private AlbumArtDisplay AlbumArtControl;
-        private System.Windows.Forms.Button PreviousButtonControl;
-        private System.Windows.Forms.Button PlayPauseButtonControl;
-        private System.Windows.Forms.Button NextButtonControl;
+        private CustomButton PreviousButtonControl;
+        private CustomButton PlayPauseButtonControl;
+        private CustomButton NextButtonControl;
         private EnhancedProgressBar ProgressBarControl;
         private AlbumArtTooltip AlbumArtPopup;
         private System.Windows.Forms.BindingSource AlbumArtVMBindingSource;

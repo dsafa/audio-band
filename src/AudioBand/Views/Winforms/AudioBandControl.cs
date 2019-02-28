@@ -132,7 +132,9 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Occurs when dpi changed
         /// </summary>
-        protected virtual void OnDpiChanged() { }
+        protected virtual void OnDpiChanged()
+        {
+        }
 
         private static short HiWord(IntPtr ptr)
         {

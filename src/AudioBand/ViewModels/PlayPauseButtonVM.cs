@@ -4,12 +4,13 @@ using AudioBand.Extensions;
 using AudioBand.Models;
 using Svg;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the play/pause button.
     /// </summary>
-    internal class PlayPauseButtonVM : ViewModelBase<PlayPauseButton>
+    public class PlayPauseButtonVM : ViewModelBase<PlayPauseButton>
     {
         private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
         private static readonly SvgDocument DefaultPauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
@@ -110,9 +111,7 @@ namespace AudioBand.ViewModels
             get
             {
                 var image = _track.IsPlaying ? PauseImage : PlayImage;
-
-                // Need padding so the image can fit properly in a button.
-                return image.Scale(Width - 1, Height - 1);
+                return image;
             }
         }
 
@@ -149,3 +148,4 @@ namespace AudioBand.ViewModels
         }
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
