@@ -272,6 +272,13 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <inheritdoc/>
+        protected override void OnDpiChanged()
+        {
+            base.OnDpiChanged();
+            Redraw();
+        }
+
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
