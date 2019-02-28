@@ -34,7 +34,7 @@ namespace AudioBand.Extensions
         }
 
         /// <summary>
-        /// Scale an image to fill as much space as possible.
+        /// Scale an image to fill as much space as possible while maintaining aspect ratio.
         /// </summary>
         /// <param name="image">Image to scale.</param>
         /// <param name="targetWidth">Target width to scale to.</param>

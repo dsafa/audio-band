@@ -171,6 +171,9 @@
     <Compile Include="Views\Winforms\AudioBandControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Views\Winforms\CustomButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
     <Compile Include="Views\Wpf\AlbumArtSettingsView.xaml.cs">
