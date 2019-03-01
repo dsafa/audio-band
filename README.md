@@ -1,4 +1,7 @@
-[![Build Status](https://dsafa.visualstudio.com/AudioBand/_apis/build/status/AudioBand%20Dev%20CI?branchName=master)](https://dsafa.visualstudio.com/AudioBand/_build/latest?definitionId=3&branchName=master)
+|Branch|Build Status|
+|---|---|
+|Master (development)|[![Build Status](https://dsafa.visualstudio.com/AudioBand/_apis/build/status/AudioBand%20Dev%20CI?branchName=master)](https://dsafa.visualstudio.com/AudioBand/_build/latest?definitionId=3&branchName=master)|
+|Release|[![Build Status](https://dev.azure.com/dsafa/AudioBand/_apis/build/status/AudioBand%20Release?branchName=release)](https://dev.azure.com/dsafa/AudioBand/_build/latest?definitionId=4&branchName=release)|
 
 # Audio Band
 Audio Band allows you to display song information in the taskbar.
@@ -36,6 +39,7 @@ This project uses C# 7 features so a compatible compiler is required.
 Help is appreciated
 - Ask questions, report bugs, suggest features in issues
 - Send pull requests
+- Master branch is the main development branch
 
 ## License
 [LICENSE](https://github.com/dsafa/audio-band/blob/master/LICENSE)
