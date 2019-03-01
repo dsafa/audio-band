@@ -186,17 +186,6 @@ namespace CSDeskBand
         /// <inheritdoc/>
         public int SetSite([In, MarshalAs(UnmanagedType.IUnknown)] object pUnkSite)
         {
-            /**
-            1.Release any site pointer that is currently being held.
-            2.If the pointer passed to SetSite is set to NULL, the band is being removed. SetSite can return S_OK.
-            3.If the pointer passed to SetSite is non-NULL, a new site is being set. SetSite should do the following:
-                a.Call QueryInterface on the site for its IOleWindow interface.
-                b.Call IOleWindow::GetWindow to obtain the parent window's handle. Save the handle for later use. Release IOleWindow if it is no longer needed.
-                c.Create the band object's window as a child of the window obtained in the previous step. Do not create it as a visible window.
-                d.If the band object implements IInputObject, call QueryInterface on the site for its IInputObjectSite interface. Store the pointer to this interface for use later.
-                e.If all steps are successful, return S_OK. If not, return the OLE-defined error code indicating what failed.
-            **/
-
             // .net will automatically release when garbage collected
             _parentSite = null;
 
