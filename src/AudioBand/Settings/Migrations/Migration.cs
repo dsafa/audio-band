@@ -39,7 +39,7 @@ namespace AudioBand.Settings.Migrations
                 throw new ArgumentException($"No migration plan from {oldVersion} to {newVersion}");
             }
 
-            Logger.Debug($"Found old settings v{oldVersion}. Migrating settings using {string.Join("->", plan)}");
+            Logger.Debug("Found old settings v{old}. Migrating settings using {plan}", oldVersion, string.Join("->", plan));
 
             object settings = plan.Aggregate(oldSettings, (current, settingsMigrator) => settingsMigrator.MigrateSetting(current));
             return (TNew)settings;
