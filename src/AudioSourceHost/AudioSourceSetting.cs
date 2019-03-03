@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using AudioBand.AudioSource;
+using AudioBand.Logging;
 using FastMember;
 using NLog;
 
@@ -11,7 +12,7 @@ namespace AudioSourceHost
     /// </summary>
     internal class AudioSourceSetting
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioSourceSetting>();
         private readonly ObjectAccessor _accessor;
 
         /// <summary>

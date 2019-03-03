@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using AudioBand.Logging;
 using AudioBand.ViewModels;
 using NLog;
 
@@ -11,7 +12,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
     /// </summary>
     internal class AudioSourceSettingSelector : DataTemplateSelector
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioSourceSettingSelector>();
 
         /// <summary>
         /// The type of template to select.

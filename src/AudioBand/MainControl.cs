@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
 using System.Windows.Threading;
 using AudioBand.AudioSource;
+using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
@@ -14,7 +15,6 @@ using AudioBand.Views.Winforms;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
 using NLog;
-using NLog.Config;
 using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
@@ -22,7 +22,7 @@ namespace AudioBand
 {
     public partial class MainControl : AudioBandControl
     {
-        private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger("Audio Band");
         private readonly AppSettings _appSettings = new AppSettings();
         private readonly Dispatcher _uiDispatcher;
         private AudioSourceManager _audioSourceManager;
@@ -48,11 +48,6 @@ namespace AudioBand
 
         #endregion
 
-        static MainControl()
-        {
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) => LogManager.GetCurrentClassLogger().Error((Exception)args.ExceptionObject, "Unhandled Exception");
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MainControl"/> class.
         /// Entry point.
@@ -63,8 +58,6 @@ namespace AudioBand
         {
             InitializeComponent();
 
-            LogManager.ThrowExceptions = true;
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(DirectoryHelper.BaseDirectory, "nlog.config"));
             _uiDispatcher = Dispatcher.CurrentDispatcher;
             Options = options;
             TaskbarInfo = info;

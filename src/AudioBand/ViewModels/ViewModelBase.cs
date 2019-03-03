@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using AudioBand.Commands;
+using AudioBand.Logging;
 using AutoMapper;
 using FastMember;
 using NLog;
@@ -24,7 +25,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         protected ViewModelBase()
         {
-            Logger = LogManager.GetLogger(GetType().FullName);
+            Logger = AudioBandLogManager.GetLogger(GetType().FullName);
             Accessor = TypeAccessor.Create(GetType());
 
             BeginEditCommand = new RelayCommand(o => BeginEdit());
@@ -72,7 +73,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the logger for the view model
         /// </summary>
-        protected Logger Logger { get; }
+        protected ILogger Logger { get; }
 
         /// <summary>
         /// Gets the type accessor for this object.

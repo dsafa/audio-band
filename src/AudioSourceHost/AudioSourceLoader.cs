@@ -3,6 +3,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using AudioBand.AudioSource;
+using AudioBand.Logging;
 using Nett;
 using NLog;
 
@@ -14,7 +15,7 @@ namespace AudioSourceHost
     internal class AudioSourceLoader
     {
         private const string ManifestFileName = "AudioSource.manifest";
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioSourceLoader>();
 
         /// <summary>
         /// Load audio source from a directory.

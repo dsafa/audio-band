@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using AudioBand.Logging;
 using NLog;
 
 namespace AudioBand.AudioSource
@@ -16,7 +14,7 @@ namespace AudioBand.AudioSource
     {
         private const string PluginFolderName = "AudioSources";
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioSourceManager>();
         private static readonly object _audioSourcesLock = new object();
         private readonly List<AudioSourceProxy> _uninitializedProxies = new List<AudioSourceProxy>();
 
