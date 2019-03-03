@@ -85,7 +85,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
 
         private DataTemplate SelectValueTemplate(Type type, AudioSourceSettingVM setting)
         {
-            Logger.Debug($"Selecting value template for setting {setting.Name}, type {type}");
+            Logger.Debug("Selecting value template for setting {name}, type {type}", setting.Name, type);
 
             if (type == typeof(string))
             {
@@ -107,7 +107,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
                 return UIntTemplate;
             }
 
-            throw new ArgumentException($"No matching value template for `{type}`");
+            throw new ArgumentException("No matching value template for `{type}`");
         }
 
         private DataTemplate SelectKeyTemplate(AudioSourceSettingVM setting)

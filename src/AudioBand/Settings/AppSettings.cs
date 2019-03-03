@@ -169,7 +169,7 @@ namespace AudioBand.Settings
             }
             catch (Exception e)
             {
-                Logger.Error("Error loading settings: " + e);
+                Logger.Error(e, "Error loading settings");
                 throw;
             }
         }
@@ -182,7 +182,7 @@ namespace AudioBand.Settings
             }
             catch (Exception e)
             {
-                Logger.Error(e, $"Cannot convert setting {setting} to model {typeof(TModel)}");
+                Logger.Error(e, "Cannot convert setting {name} to model of type {type}", setting, typeof(TModel));
                 throw;
             }
         }
@@ -195,7 +195,7 @@ namespace AudioBand.Settings
             }
             catch (Exception e)
             {
-                Logger.Error(e, $"Cannot model to settings {model} target: {typeof(T)}");
+                Logger.Error(e, "Cannot convert model {@model} to setting of type {type}", model, typeof(T));
                 throw;
             }
         }

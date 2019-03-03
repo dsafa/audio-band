@@ -92,7 +92,7 @@ namespace AudioBand
 
             if (control == null)
             {
-                Logger.Warn("Tried removing label but the control was not found");
+                Logger.Warn("Tried removing label but the control was not found. Label: {@label}", customLabel);
                 return;
             }
 

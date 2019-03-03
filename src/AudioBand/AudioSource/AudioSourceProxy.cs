@@ -128,7 +128,7 @@ namespace AudioBand.AudioSource
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Error trying to get setting.");
+                    _logger.Error(e, "Error trying to get setting {name}", settingName);
                     throw;
                 }
             }
@@ -142,7 +142,7 @@ namespace AudioBand.AudioSource
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Error tring to update setting.");
+                    _logger.Error(e, "Error tring to update setting {name}", settingName);
                     throw;
                 }
             }

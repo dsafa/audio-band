@@ -71,7 +71,7 @@ namespace AudioSourceHost
             }
             catch (Exception e)
             {
-                Logger.Error(e, $"Error occured while changing audio source settings. property: `{PropertyName}`, value: {value}");
+                Logger.Error(e, "Error occured while updating audio source settings. {info}", new { PropertyName, Value = value, SettingType });
                 throw;
             }
         }

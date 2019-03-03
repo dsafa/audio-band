@@ -28,7 +28,7 @@ namespace AudioBand.AudioSource
         /// </summary>
         public void LoadAudioSources()
         {
-            Logger.Debug("Loading audio sources");
+            Logger.Debug("Loading audio sources as {path}", PluginFolderPath);
             foreach (var dir in Directory.EnumerateDirectories(PluginFolderPath))
             {
                 try
@@ -38,7 +38,7 @@ namespace AudioBand.AudioSource
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e, $"Error creating proxy for {dir}");
+                    Logger.Error(e, "Error creating proxy for audiosource in {path}", dir);
                 }
             }
         }

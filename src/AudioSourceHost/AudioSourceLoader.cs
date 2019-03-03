@@ -24,12 +24,12 @@ namespace AudioSourceHost
         /// <returns>A list of audiosources found in the directory.</returns>
         public static IAudioSource LoadFromDirectory(string directory)
         {
-            Logger.Debug($"Probing path `{directory}` for audio source");
+            Logger.Debug("Probing path {path} for audio source", directory);
 
             var manifestPath = Directory.GetFiles(directory, ManifestFileName, SearchOption.TopDirectoryOnly).FirstOrDefault();
             if (manifestPath == null)
             {
-                throw new FileNotFoundException("No manifest found in {directory}");
+                throw new FileNotFoundException($"No manifest found in {directory}");
             }
 
             var manifestData = Toml.ReadFile<Manifest>(manifestPath);
@@ -39,7 +39,7 @@ namespace AudioSourceHost
             }
 
             var audioSourcePath = Path.Combine(directory, manifestData.AudioSource);
-            Logger.Debug($"Loading audio source from path `{audioSourcePath}`");
+            Logger.Debug("Loading audio source from path {path}", audioSourcePath);
 
             var container = new CompositionContainer(new AssemblyCatalog(audioSourcePath));
             return container.GetExportedValue<IAudioSource>();

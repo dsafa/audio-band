@@ -114,6 +114,8 @@ namespace AudioBand
         {
             try
             {
+                Logger.Debug("Initialization started");
+
                 await Task.Run(() =>
                 {
                     _audioSourceContextMenuItems = new List<DeskBandMenuAction>();
@@ -142,7 +144,7 @@ namespace AudioBand
             }
             catch (Exception e)
             {
-                Logger.Error(e);
+                Logger.Error(e, "Error during initialization");
             }
         }
 
@@ -204,6 +206,7 @@ namespace AudioBand
         {
             if (source == null)
             {
+                Logger.Warn("Tried subscribing to audiosource but it was null");
                 return;
             }
 
@@ -213,23 +216,27 @@ namespace AudioBand
             source.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
-            await source.ActivateAsync().ConfigureAwait(false);
+            Logger.Debug("Activating audio source {name}", source.Name);
 
+            await source.ActivateAsync().ConfigureAwait(false);
             _appSettings.AudioSource = source.Name;
 
-            Logger.Debug($"Audio source selected: `{source.Name}`");
+            Logger.Debug("Audio source {name} was activated", source.Name);
         }
 
         private async Task UnsubscribeToAudioSource(IAudioSource source)
         {
             if (source == null)
             {
+                Logger.Warn("Tried unsubscribing to audio source but it was null");
                 return;
             }
 
             source.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
             source.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
             source.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
+
+            Logger.Debug("Deactivating audio source {name}", source.Name);
 
             await source.DeactivateAsync().ConfigureAwait(false);
 
@@ -238,7 +245,7 @@ namespace AudioBand
 
             ResetTrack();
 
-            Logger.Debug($"Audio source `{source.Name}` deactivated");
+            Logger.Debug("Audio source {name} deactivated", source.Name);
         }
 
         private async Task HandleAudioSourceContextMenuItemClick(DeskBandMenuAction menuItem)
@@ -263,7 +270,9 @@ namespace AudioBand
                 _currentAudioSource = _audioSourceManager.AudioSources.FirstOrDefault(c => c.Name == menuItem.Text);
                 if (_currentAudioSource == null)
                 {
-                    Logger.Warn($"Could not find matching audio source. Looking for {menuItem.Text}.");
+                    var menuItemsText = _audioSourceContextMenuItems.Select(m => m.Text);
+                    var sources = _audioSourceManager.AudioSources.Select(s => s.Name);
+                    Logger.Warn("Contenxt menu item {menuName} had no matching audiosource. Context menu items: {@items}. Audiosources: {@audiosources}", menuItem.Text, menuItemsText, sources);
                     return;
                 }
 
@@ -272,7 +281,7 @@ namespace AudioBand
             }
             catch (Exception e)
             {
-                Logger.Debug(e, $"Error activating audio source `{_currentAudioSource?.Name}`");
+                Logger.Error(e, "Error changing audio source. Current: {current}. Menu item: {menu}", _currentAudioSource?.Name, menuItem.Text);
                 _currentAudioSource = null;
             }
         }
