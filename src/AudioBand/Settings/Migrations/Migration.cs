@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AudioBand.Logging;
 using NLog;
 
 namespace AudioBand.Settings.Migrations
@@ -15,7 +16,7 @@ namespace AudioBand.Settings.Migrations
             { ("0.1", "2"), new V1ToV2() }
         };
 
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger(typeof(Migration).FullName);
 
         /// <summary>
         /// Migrate settings to new version.

@@ -157,7 +157,7 @@ namespace AudioBand.ViewModels
             }
             catch (Exception e)
             {
-                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {path}, {e}");
+                Logger.Error(e, $"Error loading image from {path}");
                 return defaultImage;
             }
         }

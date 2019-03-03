@@ -1,4 +1,5 @@
 ﻿using AudioBand.AudioSource;
+using AudioBand.Logging;
 using NLog;
 
 namespace AudioSourceHost
@@ -9,7 +10,7 @@ namespace AudioSourceHost
 
         public AudioSourceLogger(string audiosourceName)
         {
-            _logger = LogManager.GetLogger($"AudioSource({audiosourceName})");
+            _logger = AudioBandLogManager.GetLogger($"AudioSource({audiosourceName})");
         }
 
         public void Debug(string message)

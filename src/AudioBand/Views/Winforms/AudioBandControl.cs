@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using AudioBand.Logging;
 using NLog;
 
 namespace AudioBand.Views.Winforms
@@ -15,7 +16,7 @@ namespace AudioBand.Views.Winforms
         private const double LogicalDpi = 96.0;
         private const int WmDpiChanged = 0x02E0;
         private const int WHCallWndProc = 4;
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioBandControl>();
         private readonly IntPtr _hook;
         private readonly NativeMethods.CallWndProc _callback;
         private readonly IntPtr _taskBarHwnd;
