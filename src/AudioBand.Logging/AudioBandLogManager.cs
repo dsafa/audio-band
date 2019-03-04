@@ -11,7 +11,7 @@ namespace AudioBand.Logging
     /// </summary>
     public static class AudioBandLogManager
     {
-        private static LogFactory LogFactory;
+        private static LogFactory LogFactory = new LogFactory();
 
         public static ILogger GetLogger(string name)
         {
@@ -28,7 +28,7 @@ namespace AudioBand.Logging
             LayoutRenderer.Register<AudioBandExceptionLayoutRenderer>("audioband-exception");
             var configFileFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var config = new XmlLoggingConfiguration(Path.Combine(configFileFolder, "nlog.config"));
-            LogFactory = new LogFactory(config);
+            LogFactory.Configuration = config;
         }
     }
 }
