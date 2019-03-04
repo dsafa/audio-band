@@ -68,13 +68,6 @@
     "disableGitFeatures": false,
     "globalMetadata": {
       "_enableSearch": true
-    },
-    "fileMetadata": {
-      "_gitContribute": {
-        "audiosource-api/**.yml": {
-          "branch": "release"
-        }
-      }
     }
   }
 }
