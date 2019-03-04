@@ -1,0 +1,22 @@
+- name: Introduction
+  href: index.md
+- name: Audio Sources Setup
+  href: audiosources.md
+  items:
+    - name: Spotify
+      href: audiosources/spotify.md
+    - name: iTunes
+      href: audiosources/itunes.md
+    - name: MusicBee
+      href: audiosources/musicbee.md
+- name: Customization
+  href: customization.md
+  items:
+  - name: General
+    href: customization/general.md
+  - name: TextLabels
+    href: customization/textlabels.md
+  - name: Album Art Popup
+    href: customization/albumartpopup.md
+- name: FAQ
+  href: faq.md

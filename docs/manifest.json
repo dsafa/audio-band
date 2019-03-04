@@ -1,0 +1,426 @@
+{
+  "homepages": [],
+  "source_base_path": "E:/Code/audio-band/docfx",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      },
+      "is_incremental": false
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/audiosources.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/audiosources.html",
+          "hash": "OsV5qmJhjo7fnTGzm+QTZQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/audiosources/itunes.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/audiosources/itunes.html",
+          "hash": "72WGLHfrxEZSu/m2Ja8hTQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/audiosources/musicbee.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/audiosources/musicbee.html",
+          "hash": "6qzg3uJGEnB0ZmDzXE+jRQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/audiosources/spotify.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/audiosources/spotify.html",
+          "hash": "FsVvatahuLtGlLLZ6V2dXQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/customization.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization.html",
+          "hash": "tf64jYPGCxQGfx7/UB09aA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/customization/albumartpopup.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization/albumartpopup.html",
+          "hash": "/TFloKu+DOXJSqCvpjS6tA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/customization/general.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization/general.html",
+          "hash": "TZMsOeXr8LzeaWC7Xh1yZA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/customization/textlabels.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization/textlabels.html",
+          "hash": "4DKSp7SgBY0O33Nxh4aNsw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/faq.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/faq.html",
+          "hash": "BTVfbrmRe4tNSSx/GsS7Pg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/index.html",
+          "hash": "EeH3cFjlvLf+jjjuAingGw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "audioband/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/toc.html",
+          "hash": "rGgUcHL4Z14YWrj7m9CA9w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.AudioSourceSettingAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.AudioSourceSettingAttribute.html",
+          "hash": "2qBjZzVr62DD36HcH/Y+zw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSource.html",
+          "hash": "OQDRg1Yho3m0DkvR6vZNvw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSourceLogger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSourceLogger.html",
+          "hash": "NO7jq5aKIeohVGBZiazdIA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.ISupportsRatings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.ISupportsRatings.html",
+          "hash": "49GOeJ2UcREYGYEe/6FOMQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.RepeatMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.RepeatMode.html",
+          "hash": "MyleieFEeRqwoYb6PTuuyQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.html",
+          "hash": "qez0mHolNB6XjJsJq84Juw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.SettingOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.SettingOptions.html",
+          "hash": "l9skmM/yPGfojjuBhs4jpA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html",
+          "hash": "pqJtxEuka3l2UUcfLG/qsg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.TrackRating.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.TrackRating.html",
+          "hash": "21AQLse2MzQog47KbRLN+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "audiosource-api/AudioBand.AudioSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/AudioBand.AudioSource.html",
+          "hash": "LiZFOqQpwbwqdoribangdA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audiosource-api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-api/index.html",
+          "hash": "HaMezeE+0x9IR47715F1UQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audiosource-docs/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-docs/index.html",
+          "hash": "wp6z7+aXRbuYIIT3x9PdYg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "audiosource-docs/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "audiosource-docs/toc.html",
+          "hash": "kCPa/v7RDfclPMIDfP1eGw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/click-audiosource.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/click-audiosource.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/hover-over.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/hover-over.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/spotify-app-settings-callback.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/spotify-app-settings-callback.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/spotify-dashboard.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/spotify-dashboard.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "7ZeOMN6z7j/o/0mpwqsPXA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "vFpFSHwgcKz97xxcmaX0XA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 13,
+          "skipped_file_count": 11
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 10,
+          "skipped_file_count": 10
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
