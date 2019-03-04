@@ -3,7 +3,7 @@
     {
       "src": [
         {
-          "src": "../",
+          "src": "../audioband-master",
           "files": [
             "src/AudioBand.AudioSource/AudioBand.AudioSource.csproj"
           ]
@@ -54,7 +54,7 @@
         ]
       }
     ],
-    "dest": "../docs",
+    "dest": "../",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
