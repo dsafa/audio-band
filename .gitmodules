@@ -1,4 +1,4 @@
-[submodule "audioband-master"]
-	path = audioband-master
-	url = git@github.com:dsafa/audio-band.git
-	branch = master
+[submodule "audioband-release"]
+	path = audioband-release
+	url = https://github.com/dsafa/audio-band.git
+	branch = release

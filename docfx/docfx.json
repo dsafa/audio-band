@@ -3,7 +3,7 @@
     {
       "src": [
         {
-          "src": "../audioband-master",
+          "src": "../audioband-release",
           "files": [
             "src/AudioBand.AudioSource/AudioBand.AudioSource.csproj"
           ]
