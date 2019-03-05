@@ -9,17 +9,18 @@
     <OutputType>Library</OutputType>
     <RootNamespace>AudioBand</RootNamespace>
     <AssemblyName>AudioBand</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DESKBAND_WINFORMS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\AudioBandRules.ruleset</CodeAnalysisRuleSet>
@@ -30,11 +31,14 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DESKBAND_WINFORMS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
     <CodeAnalysisRuleSet>..\AudioBandRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -45,12 +49,6 @@
     </Reference>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
-    </Reference>
-    <Reference Include="CSDeskBand, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66d19cfc65a1cc19, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSDeskBand.2.1.0\lib\net461\CSDeskBand.dll</HintPath>
-    </Reference>
-    <Reference Include="CSDeskBand.Win, Version=2.0.0.0, Culture=neutral, PublicKeyToken=66d19cfc65a1cc19, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSDeskBand.Win.2.1.0\lib\net461\CSDeskBand.Win.dll</HintPath>
     </Reference>
     <Reference Include="FastMember, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.1.4.1\lib\net461\FastMember.dll</HintPath>
@@ -64,9 +62,7 @@
     <Reference Include="Nett, Version=0.10.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b, processorArchitecture=MSIL">
       <HintPath>..\packages\Nett.0.10.1\lib\Net40\Nett.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
-    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Svg, Version=2.4.1.756, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
@@ -82,9 +78,6 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -104,6 +97,8 @@
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommand{T}.cs" />
+    <Compile Include="CSDeskBand\CSDeskBand.cs" />
+    <Compile Include="Deskband.cs" />
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
@@ -111,8 +106,8 @@
     <Compile Include="Extensions\SvgExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MainControl.Bindings.cs">
-      <SubType>UserControl</SubType>
       <DependentUpon>MainControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Models\AlbumArt.cs" />
     <Compile Include="Models\AlbumArtPopup.cs" />
@@ -124,6 +119,7 @@
     <Compile Include="Models\ProgressBar.cs" />
     <Compile Include="Models\CustomLabel.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
     <Compile Include="Settings\Migrations\Migration.cs" />
     <Compile Include="Settings\Migrations\V1ToV2.cs" />
@@ -162,11 +158,20 @@
     <Compile Include="ViewModels\SettingsWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
+    <Compile Include="Views\Winforms\AlbumArtDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Views\Winforms\AlbumArtTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
+    <Compile Include="Views\Winforms\AudioBandControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Winforms\CustomButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
     <Compile Include="Views\Wpf\AlbumArtSettingsView.xaml.cs">
@@ -234,10 +239,10 @@
     <Compile Include="ViewModels\AudioSourceSettingsVM.cs" />
     <Compile Include="ViewModels\NextButtonVM.cs" />
     <Compile Include="Views\Winforms\EnhancedProgressBar.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\Winforms\FormattedTextLabel.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="AudioSource\AudioSourceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -266,11 +271,13 @@
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
-    <None Include="App.config" />
     <Compile Include="MainControl.EventHandlers.cs">
-      <SubType>UserControl</SubType>
       <DependentUpon>MainControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -297,6 +304,10 @@
     <ProjectReference Include="..\AudioBand.AudioSource\AudioBand.AudioSource.csproj">
       <Project>{30f2bfea-788a-494d-88e7-f2070528ebea}</Project>
       <Name>AudioBand.AudioSource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AudioBand.Logging\AudioBand.Logging.csproj">
+      <Project>{d8e1d3e5-d0ab-43c4-8af6-60c14c5c6843}</Project>
+      <Name>AudioBand.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\AudioSourceHost\AudioSourceHost.csproj">
       <Project>{D3F92C3E-E546-4A6B-ADA2-FACD95E229F7}</Project>

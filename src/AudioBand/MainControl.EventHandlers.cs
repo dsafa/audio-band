@@ -13,8 +13,6 @@ namespace AudioBand
     {
         private static readonly object _audiosourceListLock = new object();
 
-        #region Winforms event handlers
-
         private void AlbumArtOnMouseLeave(object o, EventArgs args)
         {
             AlbumArtPopup.Hide(this);
@@ -22,7 +20,7 @@ namespace AudioBand
 
         private void AlbumArtOnMouseHover(object o, EventArgs args)
         {
-            AlbumArtPopup.ShowWithoutRequireFocus("Album Art", this, TaskbarInfo);
+            AlbumArtPopup.ShowWithoutRequireFocus("Album Art", this, TaskbarInfo, ScalingFactor);
         }
 
         private async void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
@@ -47,10 +45,6 @@ namespace AudioBand
             await (_currentAudioSource?.NextTrackAsync() ?? Task.CompletedTask);
         }
 
-        #endregion
-
-        #region Deskband context menu event handlers
-
         private void SettingsMenuItemOnClicked(object sender, EventArgs eventArgs)
         {
             OpenSettingsWindow();
@@ -61,10 +55,6 @@ namespace AudioBand
             await HandleAudioSourceContextMenuItemClick(sender as DeskBandMenuAction).ConfigureAwait(false);
         }
 
-        #endregion
-
-        #region Audio source event handlers
-
         private async void AudioSourceOnTrackProgressChanged(object o, TimeSpan progress)
         {
             await _uiDispatcher.InvokeAsync(() => { _trackModel.TrackProgress = progress; });
@@ -72,43 +62,29 @@ namespace AudioBand
 
         private async void AudioSourceOnIsPlayingChanged(object sender, bool isPlaying)
         {
-            Logger.Debug($"Play state changed. Is playing: {isPlaying}");
+            Logger.Debug("Play state changed. Is playing: {playing}", isPlaying);
             await _uiDispatcher.InvokeAsync(() => _trackModel.IsPlaying = isPlaying);
         }
 
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs trackInfoChangedEventArgs)
+        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
         {
-            if (trackInfoChangedEventArgs == null)
+            if (e == null)
             {
                 Logger.Error("TrackInfoChanged event arg is null");
                 return;
             }
 
-            if (trackInfoChangedEventArgs.TrackName == null)
-            {
-                trackInfoChangedEventArgs.TrackName = "";
-                Logger.Warn("Track name is null");
-            }
-
-            if (trackInfoChangedEventArgs.Artist == null)
-            {
-                trackInfoChangedEventArgs.Artist = "";
-                Logger.Warn("Artist is null");
-            }
-
-            Logger.Debug($"Track changed - Name: '{trackInfoChangedEventArgs.TrackName}', Artist: '{trackInfoChangedEventArgs.Artist}'");
+            Logger.Debug("Track changed. {track}", new { e.Artist, e.TrackName, e.Album, e.TrackLength });
 
             _uiDispatcher.InvokeAsync(() =>
             {
-                _trackModel.AlbumArt = trackInfoChangedEventArgs.AlbumArt;
-                _trackModel.Artist = trackInfoChangedEventArgs.Artist;
-                _trackModel.TrackName = trackInfoChangedEventArgs.TrackName;
-                _trackModel.TrackLength = trackInfoChangedEventArgs.TrackLength;
-                _trackModel.AlbumName = trackInfoChangedEventArgs.Album;
+                _trackModel.AlbumArt = e.AlbumArt;
+                _trackModel.Artist = e.Artist;
+                _trackModel.TrackName = e.TrackName;
+                _trackModel.TrackLength = e.TrackLength;
+                _trackModel.AlbumName = e.Album;
             });
         }
-
-        #endregion
 
         private void SettingsWindowOnSaved(object o, EventArgs eventArgs)
         {
@@ -132,7 +108,7 @@ namespace AudioBand
             }
             else
             {
-                Logger.Warn($"Action {e.Action} not supported");
+                Logger.Warn("Action {action} not supported", e.Action);
             }
         }
 

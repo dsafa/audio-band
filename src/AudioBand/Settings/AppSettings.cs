@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
 using AudioBand.Settings.Models.V2;
@@ -25,7 +26,7 @@ namespace AudioBand.Settings
         private static readonly string CurrentVersion = "2";
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AppSettings>();
         private readonly TomlSettings _tomlSettings;
         private Models.V2.Settings _settings;
 
@@ -168,7 +169,7 @@ namespace AudioBand.Settings
             }
             catch (Exception e)
             {
-                Logger.Error("Error loading settings: " + e);
+                Logger.Error(e, "Error loading settings");
                 throw;
             }
         }
@@ -181,7 +182,7 @@ namespace AudioBand.Settings
             }
             catch (Exception e)
             {
-                Logger.Error(e, $"Cannot convert setting {setting} to model {typeof(TModel)}");
+                Logger.Error(e, "Cannot convert setting {name} to model of type {type}", setting, typeof(TModel));
                 throw;
             }
         }
@@ -194,7 +195,7 @@ namespace AudioBand.Settings
             }
             catch (Exception e)
             {
-                Logger.Error(e, $"Cannot model to settings {model} target: {typeof(T)}");
+                Logger.Error(e, "Cannot convert model {@model} to setting of type {type}", model, typeof(T));
                 throw;
             }
         }

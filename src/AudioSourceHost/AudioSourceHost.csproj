@@ -44,9 +44,7 @@
     <Reference Include="Nett, Version=0.10.0.0, Culture=neutral, PublicKeyToken=605dcfe7a1d3365b, processorArchitecture=MSIL">
       <HintPath>..\packages\Nett.0.10.1\lib\Net40\Nett.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
-    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -82,6 +80,10 @@
     <ProjectReference Include="..\AudioBand.AudioSource\AudioBand.AudioSource.csproj">
       <Project>{30F2BFEA-788A-494D-88E7-F2070528EBEA}</Project>
       <Name>AudioBand.AudioSource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AudioBand.Logging\AudioBand.Logging.csproj">
+      <Project>{d8e1d3e5-d0ab-43c4-8af6-60c14c5c6843}</Project>
+      <Name>AudioBand.Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

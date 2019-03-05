@@ -3,7 +3,7 @@
     /// <summary>
     /// The model for the toolbar.
     /// </summary>
-    internal class AudioBand : ModelBase
+    public class AudioBand : ModelBase
     {
         private int _width = 250;
         private int _height = 30;

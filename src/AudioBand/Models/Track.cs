@@ -6,7 +6,7 @@ namespace AudioBand.Models
     /// <summary>
     /// Model for the current track.
     /// </summary>
-    internal class Track : ModelBase
+    public class Track : ModelBase
     {
         private bool _isPlaying;
         private TimeSpan _trackProgress;

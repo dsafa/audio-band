@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using AudioBand.Logging;
 using NLog;
 
 namespace AudioBand.Models
@@ -8,19 +9,22 @@ namespace AudioBand.Models
     /// <summary>
     /// Base class for models.
     /// </summary>
-    internal class ModelBase : INotifyPropertyChanged
+    public class ModelBase : INotifyPropertyChanged
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.
         /// </summary>
         public ModelBase()
         {
-            Logger = LogManager.GetLogger(GetType().FullName);
+            Logger = AudioBandLogManager.GetLogger(GetType().FullName);
         }
 
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Gets the logger for the model
+        /// </summary>
         protected ILogger Logger { get; }
 
         /// <summary>

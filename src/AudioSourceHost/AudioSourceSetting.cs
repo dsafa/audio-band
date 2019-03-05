@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using AudioBand.AudioSource;
+using AudioBand.Logging;
 using FastMember;
 using NLog;
 
@@ -11,7 +12,7 @@ namespace AudioSourceHost
     /// </summary>
     internal class AudioSourceSetting
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioSourceSetting>();
         private readonly ObjectAccessor _accessor;
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace AudioSourceHost
             }
             catch (Exception e)
             {
-                Logger.Error(e, $"Error occured while changing audio source settings. property: `{PropertyName}`, value: {value}");
+                Logger.Error(e, "Error occured while updating audio source settings. {info}", new { PropertyName, Value = value, SettingType });
                 throw;
             }
         }

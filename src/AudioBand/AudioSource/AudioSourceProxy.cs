@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using AudioBand.Logging;
 using AudioSourceHost;
 using NLog;
 
@@ -32,7 +32,7 @@ namespace AudioBand.AudioSource
         {
             _directory = directory;
             var directoryName = new DirectoryInfo(directory).Name;
-            _logger = LogManager.GetLogger($"AudioSourceProxy({directoryName})");
+            _logger = AudioBandLogManager.GetLogger($"AudioSourceProxy({directoryName})");
 
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
 
@@ -128,7 +128,7 @@ namespace AudioBand.AudioSource
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Error trying to get setting.");
+                    _logger.Error(e, "Error trying to get setting {name}", settingName);
                     throw;
                 }
             }
@@ -142,7 +142,7 @@ namespace AudioBand.AudioSource
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Error tring to update setting.");
+                    _logger.Error(e, "Error tring to update setting {name}", settingName);
                     throw;
                 }
             }

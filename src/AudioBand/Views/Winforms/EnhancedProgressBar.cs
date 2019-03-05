@@ -8,18 +8,10 @@ namespace AudioBand.Views.Winforms
     /// <summary>
     /// A enhanced progress bar supporting custom colors.
     /// </summary>
-    public class EnhancedProgressBar : ProgressBar
+    public class EnhancedProgressBar : AudioBandControl
     {
         private TimeSpan _progress;
         private TimeSpan _total;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EnhancedProgressBar"/> class.
-        /// </summary>
-        public EnhancedProgressBar()
-        {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-        }
 
         /// <summary>
         /// Gets or sets the current progress.
@@ -32,7 +24,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _progress = value;
-                Refresh();
+                InvokeRefresh();
             }
         }
 
@@ -47,7 +39,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _total = value;
-                Refresh();
+                InvokeRefresh();
             }
         }
 
@@ -61,7 +53,7 @@ namespace AudioBand.Views.Winforms
             {
                 progress = 0;
             }
-            else if (progress >= Maximum)
+            else if (progress >= 1)
             {
                 progress = 1;
             }

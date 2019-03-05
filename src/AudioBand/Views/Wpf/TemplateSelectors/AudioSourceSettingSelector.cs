@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using AudioBand.Logging;
 using AudioBand.ViewModels;
 using NLog;
 
@@ -11,7 +12,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
     /// </summary>
     internal class AudioSourceSettingSelector : DataTemplateSelector
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioSourceSettingSelector>();
 
         /// <summary>
         /// The type of template to select.
@@ -84,7 +85,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
 
         private DataTemplate SelectValueTemplate(Type type, AudioSourceSettingVM setting)
         {
-            Logger.Debug($"Selecting value template for setting {setting.Name}, type {type}");
+            Logger.Debug("Selecting value template for setting {name}, type {type}", setting.Name, type);
 
             if (type == typeof(string))
             {
@@ -106,7 +107,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
                 return UIntTemplate;
             }
 
-            throw new ArgumentException($"No matching value template for `{type}`");
+            throw new ArgumentException("No matching value template for `{type}`");
         }
 
         private DataTemplate SelectKeyTemplate(AudioSourceSettingVM setting)

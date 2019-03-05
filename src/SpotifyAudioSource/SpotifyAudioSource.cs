@@ -267,7 +267,7 @@ namespace SpotifyAudioSource
             await _spotifyApi.SetRepeatModeAsync(ToRepeatState(newRepeatMode));
         }
 
-        private static RepeatMode ToRepeatMode(RepeatState state)
+        private RepeatMode ToRepeatMode(RepeatState state)
         {
             switch (state)
             {
@@ -278,11 +278,12 @@ namespace SpotifyAudioSource
                 case RepeatState.Track:
                     return RepeatMode.RepeatTrack;
                 default:
-                    throw new InvalidOperationException($"No case for {state}");
+                    Logger.Warn($"No case for {state}");
+                    return RepeatMode.Off;
             }
         }
 
-        private static RepeatState ToRepeatState(RepeatMode mode)
+        private RepeatState ToRepeatState(RepeatMode mode)
         {
             switch (mode)
             {
@@ -293,7 +294,8 @@ namespace SpotifyAudioSource
                 case RepeatMode.RepeatTrack:
                     return RepeatState.Track;
                 default:
-                    throw new InvalidOperationException($"No case for {mode}");
+                    Logger.Warn("No case for {mode}");
+                    return RepeatState.Off;
             }
         }
 
@@ -326,17 +328,24 @@ namespace SpotifyAudioSource
 
         private async void OnAuthReceived(object sender, AuthorizationCode payload)
         {
-            _auth.Stop();
-            if (payload.Error != null)
+            try
             {
-                Logger.Warn($"Error with authorization: {payload.Error}");
-                return;
+                _auth.Stop();
+                if (payload.Error != null)
+                {
+                    Logger.Warn($"Error with authorization: {payload.Error}");
+                    return;
+                }
+
+                Logger.Debug("Authorization recieved");
+
+                var token = await _auth.ExchangeCode(payload.Code);
+                UpdateAccessToken(token);
             }
-
-            Logger.Debug("Authorization recieved");
-
-            var token = await _auth.ExchangeCode(payload.Code);
-            UpdateAccessToken(token);
+            catch (Exception e)
+            {
+                Logger.Error($"Error with authorization {e}");
+            }
         }
 
         private void UpdateProxy()
@@ -607,6 +616,17 @@ namespace SpotifyAudioSource
                 return;
             }
 
+            if (token == null)
+            {
+                Logger.Warn("Token is null");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(token.AccessToken))
+            {
+                Logger.Warn("Access token is null");
+            }
+
             _spotifyApi = new SpotifyWebAPI(UseProxy ? _proxyConfig : null)
             {
                 AccessToken = token.AccessToken,
@@ -619,7 +639,7 @@ namespace SpotifyAudioSource
             }
 
             var expiresIn = TimeSpan.FromSeconds(token.ExpiresIn);
-            Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn}). Token: {token.AccessToken.Substring(0, 20)}...");
+            Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn})");
         }
     }
 }

@@ -7,12 +7,14 @@ using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
+#pragma warning disable 1591
+
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// The view model for a custom label.
     /// </summary>
-    internal class CustomLabelVM : ViewModelBase<CustomLabel>
+    public class CustomLabelVM : ViewModelBase<CustomLabel>
     {
         public CustomLabelVM(CustomLabel model)
             : base(model) { }
@@ -123,3 +125,4 @@ namespace AudioBand.ViewModels
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
     }
 }
+#pragma warning restore 1591

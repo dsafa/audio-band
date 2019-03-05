@@ -115,7 +115,7 @@ namespace iTunesAudioSource
             return Task.CompletedTask;
         }
 
-        private static RepeatMode ToRepeatMode(ITPlaylistRepeatMode mode)
+        private RepeatMode ToRepeatMode(ITPlaylistRepeatMode mode)
         {
             switch (mode)
             {
@@ -126,11 +126,12 @@ namespace iTunesAudioSource
                 case ITPlaylistRepeatMode.ITPlaylistRepeatModeOne:
                     return RepeatMode.RepeatTrack;
                 default:
-                    throw new InvalidOperationException($"No case for {mode}");
+                    Logger.Warn($"No case for {mode}");
+                    return RepeatMode.Off;
             }
         }
 
-        private static ITPlaylistRepeatMode ToITRepeat(RepeatMode mode)
+        private ITPlaylistRepeatMode ToITRepeat(RepeatMode mode)
         {
             switch (mode)
             {
@@ -141,7 +142,8 @@ namespace iTunesAudioSource
                 case RepeatMode.RepeatTrack:
                     return ITPlaylistRepeatMode.ITPlaylistRepeatModeOne;
                 default:
-                    throw new InvalidOperationException($"No case for {mode}");
+                    Logger.Warn($"No case for {mode}");
+                    return ITPlaylistRepeatMode.ITPlaylistRepeatModeOff;
             }
         }
 

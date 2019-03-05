@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
+using AudioBand.Logging;
 using NLog;
-using NLog.Config;
 
 namespace AudioSourceHost
 {
@@ -23,8 +21,7 @@ namespace AudioSourceHost
 
         public AudioSourceWrapper()
         {
-            var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(basePath, "nlog.config"));
+            AudioBandLogManager.Initialize();
         }
 
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
@@ -99,8 +96,11 @@ namespace AudioSourceHost
         {
             try
             {
-                _logger = LogManager.GetLogger($"AudioSourceWrapper({new DirectoryInfo(audioSourceDirectory).Name})");
+                _logger = AudioBandLogManager.GetLogger($"AudioSourceWrapper({new DirectoryInfo(audioSourceDirectory).Name})");
                 _logger.Debug("Initializing wrapper");
+
+                AppDomain.CurrentDomain.UnhandledException += (o, e) => _logger.Error(e.ExceptionObject as Exception, "Unhandled exception in wrapper");
+
                 _audioSource = AudioSourceLoader.LoadFromDirectory(audioSourceDirectory);
                 _audioSource.Logger = new AudioSourceLogger(_audioSource.Name);
 

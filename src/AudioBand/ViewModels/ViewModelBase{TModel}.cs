@@ -15,7 +15,7 @@ namespace AudioBand.ViewModels
     /// Base class for a viewmodel with a model.
     /// </summary>
     /// <typeparam name="TModel">Type of the model</typeparam>
-    internal abstract class ViewModelBase<TModel> : ViewModelBase
+    public abstract class ViewModelBase<TModel> : ViewModelBase
         where TModel : ModelBase, new()
     {
         // Mapping from a model and model property to the viewmodel property name
@@ -105,7 +105,7 @@ namespace AudioBand.ViewModels
             base.OnCancelEdit();
             if (_backup == null)
             {
-                Logger.Warn("Backup is null. Begin edit wasn't called.");
+                Logger.Warn("Cancelling edit but backup is null. Begin edit wasn't called.");
             }
 
             _mapperConfiguration.CreateMapper().Map(_backup, Model);
@@ -120,7 +120,7 @@ namespace AudioBand.ViewModels
             base.OnEndEdit();
             if (_backup == null)
             {
-                Logger.Warn("Backup is null. Begin edit wasn't called.");
+                Logger.Warn("Ending edit but backup is null. Begin edit wasn't called.");
             }
 
             _backup = null;
@@ -157,7 +157,7 @@ namespace AudioBand.ViewModels
             }
             catch (Exception e)
             {
-                LogManager.GetCurrentClassLogger().Debug($"Error loading image from {path}, {e}");
+                Logger.Error(e, "Error loading image from {path}", path);
                 return defaultImage;
             }
         }

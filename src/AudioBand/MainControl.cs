@@ -3,31 +3,26 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Integration;
 using System.Windows.Threading;
 using AudioBand.AudioSource;
+using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
+using AudioBand.Views.Winforms;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
-using CSDeskBand.Win;
 using NLog;
-using NLog.Config;
 using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
 namespace AudioBand
 {
-    [Guid("957D8782-5B07-4126-9B24-1E917BAAAD64")]
-    [ComVisible(true)]
-    [CSDeskBandRegistration(Name = "Audio Band", ShowDeskBand = true)]
-    public partial class MainControl : CSDeskBandWin
+    public partial class MainControl : AudioBandControl
     {
-        private static readonly ILogger Logger = LogManager.GetLogger("Audio Band");
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger("Audio Band");
         private readonly AppSettings _appSettings = new AppSettings();
         private readonly Dispatcher _uiDispatcher;
         private AudioSourceManager _audioSourceManager;
@@ -53,25 +48,48 @@ namespace AudioBand
 
         #endregion
 
-        static MainControl()
-        {
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) => LogManager.GetCurrentClassLogger().Error((Exception)args.ExceptionObject, "Unhandled Exception");
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MainControl"/> class.
         /// Entry point.
         /// </summary>
-        public MainControl()
+        /// <param name="options">The deskband options.</param>
+        /// <param name="info">The taskbar info.</param>
+        public MainControl(CSDeskBandOptions options, TaskbarInfo info)
         {
             InitializeComponent();
 
-            LogManager.ThrowExceptions = true;
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(DirectoryHelper.BaseDirectory, "nlog.config"));
             _uiDispatcher = Dispatcher.CurrentDispatcher;
+            Options = options;
+            TaskbarInfo = info;
 #pragma warning disable CS4014
             InitializeAsync();
 #pragma warning restore CS4014
+        }
+
+        /// <summary>
+        /// Gets the deskband options.
+        /// </summary>
+        public CSDeskBandOptions Options { get; }
+
+        /// <summary>
+        /// Gets the taskbar info.
+        /// </summary>
+        public TaskbarInfo TaskbarInfo { get; }
+
+        /// <summary>
+        /// Save on close
+        /// </summary>
+        public void CloseAudioband()
+        {
+            _appSettings.Save();
+            try
+            {
+                _currentAudioSource?.DeactivateAsync();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         /// <summary>
@@ -85,33 +103,19 @@ namespace AudioBand
                 return;
             }
 
-            var audioBandSize = new Size(_audioBandModel.Width, _audioBandModel.Height);
+            // use model size because we want to only chnage when it changes instead of catching all resize events
+            var audioBandSize = GetScaledSize(new Size(_audioBandModel.Width, _audioBandModel.Height));
             Options.MinHorizontalSize = audioBandSize;
             Options.HorizontalSize = audioBandSize;
             Options.MaxHorizontalHeight = audioBandSize.Height;
-        }
-
-        /// <summary>
-        /// Save on close
-        /// </summary>
-        protected override void OnClose()
-        {
-            base.OnClose();
-            _appSettings.Save();
-            try
-            {
-                _currentAudioSource?.DeactivateAsync();
-            }
-            catch (Exception)
-            {
-                // ignore
-            }
         }
 
         private async Task InitializeAsync()
         {
             try
             {
+                Logger.Debug("Initialization started");
+
                 await Task.Run(() =>
                 {
                     _audioSourceContextMenuItems = new List<DeskBandMenuAction>();
@@ -140,7 +144,7 @@ namespace AudioBand
             }
             catch (Exception e)
             {
-                Logger.Error(e);
+                Logger.Error(e, "Error during initialization");
             }
         }
 
@@ -202,6 +206,7 @@ namespace AudioBand
         {
             if (source == null)
             {
+                Logger.Warn("Tried subscribing to audiosource but it was null");
                 return;
             }
 
@@ -211,23 +216,27 @@ namespace AudioBand
             source.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
             source.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
 
-            await source.ActivateAsync().ConfigureAwait(false);
+            Logger.Debug("Activating audio source {name}", source.Name);
 
+            await source.ActivateAsync().ConfigureAwait(false);
             _appSettings.AudioSource = source.Name;
 
-            Logger.Debug($"Audio source selected: `{source.Name}`");
+            Logger.Debug("Audio source {name} was activated", source.Name);
         }
 
         private async Task UnsubscribeToAudioSource(IAudioSource source)
         {
             if (source == null)
             {
+                Logger.Warn("Tried unsubscribing to audio source but it was null");
                 return;
             }
 
             source.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
             source.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
             source.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
+
+            Logger.Debug("Deactivating audio source {name}", source.Name);
 
             await source.DeactivateAsync().ConfigureAwait(false);
 
@@ -236,7 +245,7 @@ namespace AudioBand
 
             ResetTrack();
 
-            Logger.Debug($"Audio source `{source.Name}` deactivated");
+            Logger.Debug("Audio source {name} deactivated", source.Name);
         }
 
         private async Task HandleAudioSourceContextMenuItemClick(DeskBandMenuAction menuItem)
@@ -261,7 +270,9 @@ namespace AudioBand
                 _currentAudioSource = _audioSourceManager.AudioSources.FirstOrDefault(c => c.Name == menuItem.Text);
                 if (_currentAudioSource == null)
                 {
-                    Logger.Warn($"Could not find matching audio source. Looking for {menuItem.Text}.");
+                    var menuItemsText = _audioSourceContextMenuItems.Select(m => m.Text);
+                    var sources = _audioSourceManager.AudioSources.Select(s => s.Name);
+                    Logger.Warn("Contenxt menu item {menuName} had no matching audiosource. Context menu items: {@items}. Audiosources: {@audiosources}", menuItem.Text, menuItemsText, sources);
                     return;
                 }
 
@@ -270,7 +281,7 @@ namespace AudioBand
             }
             catch (Exception e)
             {
-                Logger.Debug(e, $"Error activating audio source `{_currentAudioSource?.Name}`");
+                Logger.Error(e, "Error changing audio source. Current: {current}. Menu item: {menu}", _currentAudioSource?.Name, menuItem.Text);
                 _currentAudioSource = null;
             }
         }
