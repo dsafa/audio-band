@@ -609,6 +609,17 @@ namespace SpotifyAudioSource
                 return;
             }
 
+            if (token == null)
+            {
+                Logger.Warn("Token is null");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(token.AccessToken))
+            {
+                Logger.Warn("Access token is null");
+            }
+
             _spotifyApi = new SpotifyWebAPI(UseProxy ? _proxyConfig : null)
             {
                 AccessToken = token.AccessToken,
@@ -621,7 +632,7 @@ namespace SpotifyAudioSource
             }
 
             var expiresIn = TimeSpan.FromSeconds(token.ExpiresIn);
-            Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn}). Token: {token.AccessToken.Substring(0, 20)}...");
+            Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn})");
         }
     }
 }
