@@ -98,6 +98,9 @@ namespace AudioSourceHost
             {
                 _logger = AudioBandLogManager.GetLogger($"AudioSourceWrapper({new DirectoryInfo(audioSourceDirectory).Name})");
                 _logger.Debug("Initializing wrapper");
+
+                AppDomain.CurrentDomain.UnhandledException += (o, e) => _logger.Error(e.ExceptionObject as Exception, "Unhandled exception in wrapper");
+
                 _audioSource = AudioSourceLoader.LoadFromDirectory(audioSourceDirectory);
                 _audioSource.Logger = new AudioSourceLogger(_audioSource.Name);
 

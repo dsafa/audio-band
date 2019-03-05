@@ -328,17 +328,24 @@ namespace SpotifyAudioSource
 
         private async void OnAuthReceived(object sender, AuthorizationCode payload)
         {
-            _auth.Stop();
-            if (payload.Error != null)
+            try
             {
-                Logger.Warn($"Error with authorization: {payload.Error}");
-                return;
+                _auth.Stop();
+                if (payload.Error != null)
+                {
+                    Logger.Warn($"Error with authorization: {payload.Error}");
+                    return;
+                }
+
+                Logger.Debug("Authorization recieved");
+
+                var token = await _auth.ExchangeCode(payload.Code);
+                UpdateAccessToken(token);
             }
-
-            Logger.Debug("Authorization recieved");
-
-            var token = await _auth.ExchangeCode(payload.Code);
-            UpdateAccessToken(token);
+            catch (Exception e)
+            {
+                Logger.Error($"Error with authorization {e}");
+            }
         }
 
         private void UpdateProxy()
