@@ -18,6 +18,9 @@ namespace AudioBand.Logging
             sb.AppendLine("---START OF EXCEPTION---");
             sb.AppendLine(ex.ToStringDemystified());
             sb.AppendLine("---END OF EXCEPTION---");
+            sb.AppendLine("---ORIGINAL EXCEPTION---");
+            sb.AppendLine(ex.ToString());
+            sb.AppendLine("---END OF ORIGINAL EXCEPTION");
         }
     }
 }
