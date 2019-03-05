@@ -22,8 +22,7 @@ namespace AudioBand.ViewModels
 
         public Image Image
         {
-            // Need padding to fit image in a button.
-            get => _image.Scale(Width - 1, Height - 1);
+            get => _image;
             set => SetProperty(ref _image, value);
         }
 
