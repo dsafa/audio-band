@@ -2,6 +2,10 @@
 Here you will find links to get you started with AudioBand
 
 ## Quick Start
+### Requirements
+- **.Net framework 4.7**
+- **Windows 10 anniversary** for High dpi support.
+
 ### Installation
 There is currently no installer available, however there are prereleases in the [Release](https://github.com/dsafa/audio-band/releases) page that come with a script to install manually.
 
