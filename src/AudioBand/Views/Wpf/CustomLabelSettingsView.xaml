@@ -97,7 +97,7 @@
 
         <Label Grid.Row="10" Grid.Column="0" Content="{StaticResource ScrollSpeedLabelText}" />
         <metro:NumericUpDown Grid.Row="10" Grid.Column="1" 
-                             behaviours:NumericInput.Type="Size"
+                             behaviours:NumericInput.Type="WholeNumber"
                              Value="{Binding ScrollSpeed, Mode=TwoWay}"/>
 
         <StackPanel Grid.Row="11" Grid.Column="0" Orientation="Horizontal"

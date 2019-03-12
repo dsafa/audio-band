@@ -120,6 +120,11 @@
                         <Setter Property="NumericInputMode" Value="Numbers"/>
                         <Setter Property="Interval" Value="1"/>
                     </Trigger>
+                    <Trigger Property="behaviours:NumericInput.Type" Value="WholeNumber">
+                        <Setter Property="NumericInputMode" Value="Numbers"/>
+                        <Setter Property="Minimum" Value="0"/>
+                        <Setter Property="Interval" Value="1"/>
+                    </Trigger>
                 </Style.Triggers>
             </Style>
         </Style.Resources>

@@ -29,5 +29,10 @@
         /// Any integer.
         /// </summary>
         Integer,
+
+        /// <summary>
+        /// Integer 0 or greater.
+        /// </summary>
+        WholeNumber,
     }
 }
