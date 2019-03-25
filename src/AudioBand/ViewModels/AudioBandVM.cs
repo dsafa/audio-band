@@ -1,14 +1,19 @@
 ﻿using System.Drawing;
+using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the general application.
     /// </summary>
-    internal class AudioBandVM : ViewModelBase<Models.AudioBand>
+    public class AudioBandVM : ViewModelBase<Models.AudioBand>
     {
-        public AudioBandVM(Models.AudioBand model)
-            : base(model) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioBandVM"/> class.
+        /// </summary>
+        /// <param name="appsettings">The app settings.</param>
+        public AudioBandVM(IAppSettings appsettings)
+            : base(appsettings.AudioBand) { }
 
         [PropertyChangeBinding(nameof(Models.AudioBand.Width))]
         [AlsoNotify(nameof(Size))]

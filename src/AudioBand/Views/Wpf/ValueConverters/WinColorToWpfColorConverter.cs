@@ -20,6 +20,11 @@ namespace AudioBand.Views.Wpf.ValueConverters
                 return default(WpfColor);
             }
 
+            if (value is WpfColor)
+            {
+                return value;
+            }
+
             var winColor = (WinColor)value;
             return WpfColor.FromArgb(winColor.A, winColor.R, winColor.G, winColor.B);
         }
@@ -30,6 +35,11 @@ namespace AudioBand.Views.Wpf.ValueConverters
             if (value == null)
             {
                 return default(WinColor);
+            }
+
+            if (value is WinColor)
+            {
+                return value;
             }
 
             var wpfColor = (WpfColor)value;

@@ -1,18 +1,24 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using AudioBand.ViewModels;
 
 namespace AudioBand.Views.Wpf
 {
     /// <summary>
     /// Interaction logic for ColorPicker.xaml
     /// </summary>
-    internal partial class ColorPicker : UserControl
+    public partial class ColorPicker : UserControl
     {
         /// <summary>
         /// Dependency property for <see cref="Color"/>.
         /// </summary>
         public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(nameof(Color), typeof(Color), typeof(ColorPicker));
+
+        /// <summary>
+        /// Dependency property for <see cref="DialogService"/>
+        /// </summary>
+        public static readonly DependencyProperty DialogServiceProperty = DependencyProperty.Register(nameof(DialogService), typeof(IDialogService), typeof(ColorPicker));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ColorPicker"/> class.
@@ -31,9 +37,18 @@ namespace AudioBand.Views.Wpf
             set => SetValue(ColorProperty, value);
         }
 
-        private void ChangeColorOnClick(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Gets or sets the dialog service.
+        /// </summary>
+        public IDialogService DialogService
         {
-            var res = DialogService.ShowColorPickerDialog(Window.GetWindow(this), Color);
+            get => (IDialogService)GetValue(DialogServiceProperty);
+            set => SetValue(DialogServiceProperty, value);
+        }
+
+        private void OpenColorPickerOnClick(object sender, RoutedEventArgs e)
+        {
+            var res = DialogService?.ShowColorPickerDialog(Color);
             if (res.HasValue)
             {
                 Color = res.Value;

@@ -8,7 +8,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the `about audioband` view.
     /// </summary>
-    internal class AboutVM
+    public class AboutVM : ViewModelBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AboutVM"/> class.
@@ -22,7 +22,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Represents the view for the about dialog.
         /// </summary>
-        internal interface IAboutView
+        public interface IAboutView
         {
             /// <summary>
             /// Show the about dialong.

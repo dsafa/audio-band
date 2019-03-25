@@ -2,6 +2,8 @@
 using System.IO;
 using AudioBand.Extensions;
 using AudioBand.Models;
+using AudioBand.Resources;
+using AudioBand.Settings;
 using Svg;
 
 namespace AudioBand.ViewModels
@@ -9,14 +11,22 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the previous button.
     /// </summary>
-    internal class PreviousButtonVM : ViewModelBase<PreviousButton>
+    public class PreviousButtonVM : ViewModelBase<PreviousButton>
     {
-        private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
+        private readonly SvgDocument _defaultPreviousButtonSvg;
+        private readonly IResourceLoader _resourceLoader;
         private Image _image;
 
-        public PreviousButtonVM(PreviousButton model)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PreviousButtonVM"/> class.
+        /// </summary>
+        /// <param name="appsettings">The app settings.</param>
+        /// <param name="resourceLoader">The resource loader.</param>
+        public PreviousButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader)
+            : base(appsettings.PreviousButton)
         {
+            _defaultPreviousButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.previous);
+            _resourceLoader = resourceLoader;
             LoadImage();
         }
 
@@ -34,7 +44,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.ImagePath), value))
                 {
-                    Image = LoadImage(value, DefaultPreviousButtonSvg.ToBitmap());
+                    Image = _resourceLoader.TryLoadImageFromPath(value, _defaultPreviousButtonSvg.ToBitmap());
                 }
             }
         }
@@ -104,7 +114,7 @@ namespace AudioBand.ViewModels
 
         private void LoadImage()
         {
-            Image = LoadImage(ImagePath, DefaultPreviousButtonSvg.ToBitmap());
+            Image = _resourceLoader.TryLoadImageFromPath(ImagePath, _defaultPreviousButtonSvg.ToBitmap());
         }
     }
 }

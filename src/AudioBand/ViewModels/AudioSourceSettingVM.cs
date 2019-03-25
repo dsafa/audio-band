@@ -8,7 +8,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for <see cref="AudioSourceSetting"/>.
     /// </summary>
-    internal class AudioSourceSettingVM : ViewModelBase<AudioSourceSetting>
+    public class AudioSourceSettingVM : ViewModelBase<AudioSourceSetting>
     {
         private readonly AudioSourceSettingAttribute _settingAttribute;
         private readonly IInternalAudioSource _audioSource;

@@ -10,6 +10,7 @@
              xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
              xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             Name="customLabelSettingsView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance viewmodels:CustomLabelVM}">
@@ -87,8 +88,9 @@
                             Value="{Binding FontSize, Mode=TwoWay}"/>
 
         <Label Grid.Row="8" Grid.Column="0" Content="{StaticResource FontColorLabelText}" />
-        <local:ColorPicker Grid.Row="8" Grid.Column="1" 
-                           Color="{Binding Color, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+        <local:ColorPicker Grid.Row="8" Grid.Column="1"
+                           DialogService="{Binding Path=DialogService}"
+                           Color="{Binding Path=Color, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
         <Label Grid.Row="9" Grid.Column="0" Content="Alignment" />
         <ComboBox Grid.Row="9" Grid.Column="1" 

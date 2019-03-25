@@ -16,8 +16,16 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class CustomLabelVM : ViewModelBase<CustomLabel>
     {
-        public CustomLabelVM(CustomLabel model)
-            : base(model) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomLabelVM"/> class.
+        /// </summary>
+        /// <param name="model">The custom label</param>
+        /// <param name="dialogService">The dialog service</param>
+        public CustomLabelVM(CustomLabel model, IDialogService dialogService)
+            : base(model)
+        {
+            DialogService = dialogService;
+        }
 
         [PropertyChangeBinding(nameof(CustomLabel.Name))]
         public string Name
@@ -123,6 +131,11 @@ namespace AudioBand.ViewModels
         /// Gets the values of <see cref="CustomLabel.TextAlignment"/>.
         /// </summary>
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
+
+        /// <summary>
+        /// Gets the dialog service
+        /// </summary>
+        public IDialogService DialogService { get; private set; }
     }
 }
 #pragma warning restore 1591

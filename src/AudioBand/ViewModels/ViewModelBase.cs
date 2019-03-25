@@ -9,14 +9,18 @@ using AudioBand.Logging;
 using AutoMapper;
 using FastMember;
 using NLog;
+using PubSub.Extension;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// Base class for view models with automatic support for
-    /// <see cref="INotifyPropertyChanged"/>, <see cref="IEditableObject"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and commands.
+    /// <see cref="INotifyPropertyChanged"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and commands.
     /// </summary>
-    public abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject, INotifyDataErrorInfo
+    /// <remarks>
+    /// <see cref="IEditableObject"/> is implemented explicitly through methods instead of the interface because of issues with the methods being automatically called.
+    /// </remarks>
+    public abstract class ViewModelBase : INotifyPropertyChanged, IResettableObject, INotifyDataErrorInfo
     {
         private readonly Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
 
@@ -66,6 +70,11 @@ namespace AudioBand.ViewModels
         public RelayCommand ResetCommand { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the current object is being edited.
+        /// </summary>
+        public bool IsEditing { get; private set; }
+
+        /// <summary>
         /// Gets the map from [model property name] to [other vm property names]
         /// </summary>
         protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
@@ -91,22 +100,52 @@ namespace AudioBand.ViewModels
             return null;
         }
 
-        /// <inheritdoc cref="IEditableObject.BeginEdit"/>
+        /// <summary>
+        /// Begins editing on this object.
+        /// </summary>
         public void BeginEdit()
         {
+            if (IsEditing)
+            {
+                return;
+            }
+
+            Logger.Debug("Starting edit");
             OnBeginEdit();
+            IsEditing = true;
+            this.Subscribe<EditMessage>(EditMessageOnPublished);
         }
 
-        /// <inheritdoc cref="IEditableObject.EndEdit"/>
+        /// <summary>
+        /// Ends and commits the changes to this object since the last <see cref="BeginEdit"/>.
+        /// </summary>
         public void EndEdit()
         {
+            if (!IsEditing)
+            {
+                return;
+            }
+
+            Logger.Debug("Ending edit");
             OnEndEdit();
+            IsEditing = false;
+            this.Unsubscribe<EditMessage>();
         }
 
-        /// <inheritdoc cref="IEditableObject.CancelEdit"/>
+        /// <summary>
+        /// Cancels all changes to this object since the last <see cref="BeginEdit"/>.
+        /// </summary>
         public void CancelEdit()
         {
+            if (!IsEditing)
+            {
+                return;
+            }
+
+            Logger.Debug("Cancelling edit");
             OnCancelEdit();
+            IsEditing = false;
+            this.Unsubscribe<EditMessage>();
         }
 
         /// <inheritdoc cref="IResettableObject.Reset"/>
@@ -224,6 +263,19 @@ namespace AudioBand.ViewModels
             {
                 var attr = (AlsoNotifyAttribute)propertyInfo.GetAttribute(typeof(AlsoNotifyAttribute), true);
                 AlsoNotifyMap.Add(propertyInfo.Name, attr.AlsoNotify);
+            }
+        }
+
+        private void EditMessageOnPublished(EditMessage message)
+        {
+            switch (message)
+            {
+                case EditMessage.AcceptEdits:
+                    EndEdit();
+                    break;
+                case EditMessage.CancelEdits:
+                    CancelEdit();
+                    break;
             }
         }
     }

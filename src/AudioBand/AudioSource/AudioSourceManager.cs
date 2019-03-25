@@ -10,7 +10,7 @@ namespace AudioBand.AudioSource
     /// <summary>
     /// Detects and loads audio sources.
     /// </summary>
-    internal class AudioSourceManager
+    public class AudioSourceManager : IAudioSourceManager
     {
         private const string PluginFolderName = "AudioSources";
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);

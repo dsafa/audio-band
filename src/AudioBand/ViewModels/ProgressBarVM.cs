@@ -1,21 +1,30 @@
 ﻿using System;
 using System.Drawing;
 using AudioBand.Models;
+using AudioBand.Settings;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the progress bar.
     /// </summary>
-    internal class ProgressBarVM : ViewModelBase<ProgressBar>
+    public class ProgressBarVM : ViewModelBase<ProgressBar>
     {
         private readonly Track _track;
 
-        public ProgressBarVM(ProgressBar model, Track track)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressBarVM"/> class.
+        /// </summary>
+        /// <param name="appsettings">The app settings</param>
+        /// <param name="dialogService">The dialog service</param>
+        /// <param name="track">The track model.</param>
+        public ProgressBarVM(IAppSettings appsettings, IDialogService dialogService, Track track)
+            : base(appsettings.ProgressBar)
         {
             _track = track;
             SetupModelBindings(_track);
+            DialogService = dialogService;
         }
 
         [PropertyChangeBinding(nameof(ProgressBar.ForegroundColor))]
@@ -88,5 +97,11 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Size Size => new Size(Width, Height);
+
+        /// <summary>
+        /// Gets the dialog service
+        /// </summary>
+        public IDialogService DialogService { get; set; }
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

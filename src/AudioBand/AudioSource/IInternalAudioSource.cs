@@ -6,7 +6,7 @@ namespace AudioBand.AudioSource
     /// <summary>
     /// Internal extension to <see cref="IAudioSource"/> that exposes additional methods.
     /// </summary>
-    internal interface IInternalAudioSource : IAudioSource
+    public interface IInternalAudioSource : IAudioSource
     {
         /// <summary>
         /// Gets the settings that the audio source exposes.

@@ -2,6 +2,8 @@
 using System.IO;
 using AudioBand.Extensions;
 using AudioBand.Models;
+using AudioBand.Resources;
+using AudioBand.Settings;
 using Svg;
 
 namespace AudioBand.ViewModels
@@ -9,14 +11,22 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the next button.
     /// </summary>
-    internal class NextButtonVM : ViewModelBase<NextButton>
+    public class NextButtonVM : ViewModelBase<NextButton>
     {
-        private static readonly SvgDocument DefaultNextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
+        private readonly SvgDocument _defaultNextButtonSvg;
+        private readonly IResourceLoader _resourceLoader;
         private Image _image;
 
-        public NextButtonVM(NextButton model)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NextButtonVM"/> class.
+        /// </summary>
+        /// <param name="appsettings">The appsettings.</param>
+        /// <param name="resourceLoader">The resource loader.</param>
+        public NextButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader)
+            : base(appsettings.NextButton)
         {
+            _resourceLoader = resourceLoader;
+            _defaultNextButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.next);
             LoadImage();
         }
 
@@ -34,7 +44,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.ImagePath), value))
                 {
-                    Image = LoadImage(value, DefaultNextButtonSvg.ToBitmap());
+                    Image = _resourceLoader.TryLoadImageFromPath(value, _defaultNextButtonSvg.ToBitmap());
                 }
             }
         }
@@ -106,7 +116,7 @@ namespace AudioBand.ViewModels
 
         private void LoadImage()
         {
-            Image = LoadImage(ImagePath, DefaultNextButtonSvg.ToBitmap());
+            Image = _resourceLoader.TryLoadImageFromPath(ImagePath, _defaultNextButtonSvg.ToBitmap());
         }
     }
 }

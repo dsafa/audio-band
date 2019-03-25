@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides functionality to reset back to the initial state.
     /// </summary>
-    internal interface IResettableObject
+    public interface IResettableObject
     {
         /// <summary>
         /// Reset to the initial state.
