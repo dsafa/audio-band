@@ -12,10 +12,10 @@ using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using AudioBand.Views.Winforms;
+using AudioBand.Views.Wpf;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
 using NLog;
-using SettingsWindow = AudioBand.Views.Wpf.SettingsWindow;
 using Size = System.Drawing.Size;
 
 namespace AudioBand
@@ -23,30 +23,16 @@ namespace AudioBand
     public partial class MainControl : AudioBandControl
     {
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger("Audio Band");
-        private readonly AppSettings _appSettings = new AppSettings();
+        private readonly IAppSettings _appSettings;
+        private readonly IAudioSourceManager _audioSourceManager;
+        private readonly ISettingsWindow _settingsWindow;
+        private readonly ICustomLabelService _labelService;
         private readonly Dispatcher _uiDispatcher;
-        private AudioSourceManager _audioSourceManager;
-        private SettingsWindow _settingsWindow;
+        private readonly Track _track;
         private IAudioSource _currentAudioSource;
         private DeskBandMenuAction _settingsMenuItem;
         private DeskBandMenu _pluginSubMenu;
         private List<DeskBandMenuAction> _audioSourceContextMenuItems;
-        private SettingsWindowVM _settingsWindowVm;
-
-        #region Models
-
-        private AlbumArt _albumArtModel;
-        private AlbumArtPopup _albumArtPopupModel;
-        private Models.AudioBand _audioBandModel;
-        private List<AudioSourceSettings> _audioSourceSettingsModel;
-        private List<CustomLabel> _customLabelsModel;
-        private NextButton _nextButtonModel;
-        private PlayPauseButton _playPauseButtonModel;
-        private PreviousButton _previousButtonModel;
-        private ProgressBar _progressBarModel;
-        private Track _trackModel;
-
-        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainControl"/> class.
@@ -54,15 +40,33 @@ namespace AudioBand
         /// </summary>
         /// <param name="options">The deskband options.</param>
         /// <param name="info">The taskbar info.</param>
-        public MainControl(CSDeskBandOptions options, TaskbarInfo info)
+        /// <param name="track">The track model.</param>
+        /// <param name="appsettings">The app settings</param>
+        /// <param name="audiosourceMananger">The audio source manager</param>
+        /// <param name="settingsWindow">The settings window.</param>
+        /// <param name="labelService">The label service.</param>
+        public MainControl(
+            CSDeskBandOptions options,
+            TaskbarInfo info,
+            Track track,
+            IAppSettings appsettings,
+            IAudioSourceManager audiosourceMananger,
+            ISettingsWindow settingsWindow,
+            ICustomLabelService labelService)
         {
-            InitializeComponent();
+            InitializeComponent(); System.Diagnostics.Debugger.Launch();
 
             _uiDispatcher = Dispatcher.CurrentDispatcher;
             Options = options;
             TaskbarInfo = info;
+            _appSettings = appsettings;
+            _audioSourceManager = audiosourceMananger;
+            _track = track;
+            _settingsWindow = settingsWindow;
+            _labelService = labelService;
+
 #pragma warning disable CS4014
-            InitializeAsync();
+            Task.Run(InitializeAsync);
 #pragma warning restore CS4014
         }
 
@@ -98,13 +102,13 @@ namespace AudioBand
         /// <param name="eventArgs">.</param>
         protected override void OnResize(EventArgs eventArgs)
         {
-            if (_audioBandModel == null)
+            if (_appSettings?.AudioBand == null)
             {
                 return;
             }
 
             // use model size because we want to only chnage when it changes instead of catching all resize events
-            var audioBandSize = GetScaledSize(new Size(_audioBandModel.Width, _audioBandModel.Height));
+            var audioBandSize = GetScaledSize(new Size(_appSettings.AudioBand.Width, _appSettings.AudioBand.Height));
             Options.MinHorizontalSize = audioBandSize;
             Options.HorizontalSize = audioBandSize;
             Options.MaxHorizontalHeight = audioBandSize.Height;
@@ -116,27 +120,29 @@ namespace AudioBand
             {
                 Logger.Debug("Initialization started");
 
-                await Task.Run(() =>
+                _audioSourceContextMenuItems = new List<DeskBandMenuAction>();
+                _settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
+                _settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
+                RefreshContextMenu();
+
+                _labelService.CustomLabelAdded += LabelServiceOnAddCustomTextLabel;
+                _labelService.CustomLabelRemoved += LabelServiceOnRemoveCustomTextLabel;
+                foreach (var label in _labelService.Labels)
                 {
-                    _audioSourceContextMenuItems = new List<DeskBandMenuAction>();
-                    _settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
-                    _settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
-                    RefreshContextMenu();
+                    LabelServiceOnAddCustomTextLabel(null, label);
+                }
 
-                    InitializeModels();
-                }).ConfigureAwait(false);
+                await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(
+                    _settingsWindow.AlbumArtPopupVM,
+                    _settingsWindow.AlbumArtVM,
+                    _settingsWindow.AudioBandVM,
+                    _settingsWindow.NextButtonVM,
+                    _settingsWindow.PlayPauseButtonVM,
+                    _settingsWindow.PreviousButtonVM,
+                    _settingsWindow.ProgressBarVM));
 
-                _settingsWindowVm = await SetupViewModels().ConfigureAwait(false);
+                _settingsWindow.Saved += SettingsWindowOnSaved;
 
-                await _uiDispatcher.InvokeAsync(() =>
-                {
-                    _settingsWindow = new SettingsWindow(_settingsWindowVm);
-                    _settingsWindow.Saved += SettingsWindowOnSaved;
-                    _settingsWindow.Canceled += SettingsWindowOnCanceled;
-                    ElementHost.EnableModelessKeyboardInterop(_settingsWindow);
-                });
-
-                _audioSourceManager = new AudioSourceManager();
                 _audioSourceManager.AudioSources.CollectionChanged += AudioSourcesOnCollectionChanged;
                 _audioSourceManager.LoadAudioSources();
 
@@ -148,52 +154,9 @@ namespace AudioBand
             }
         }
 
-        private void InitializeModels()
-        {
-            _albumArtModel = _appSettings.AlbumArt;
-            _albumArtPopupModel = _appSettings.AlbumArtPopup;
-            _audioBandModel = _appSettings.AudioBand;
-            _customLabelsModel = _appSettings.CustomLabels;
-            _nextButtonModel = _appSettings.NextButton;
-            _playPauseButtonModel = _appSettings.PlayPauseButton;
-            _previousButtonModel = _appSettings.PreviousButton;
-            _progressBarModel = _appSettings.ProgressBar;
-            _audioSourceSettingsModel = _appSettings.AudioSourceSettings;
-            _trackModel = new Track();
-        }
-
-        private async Task<SettingsWindowVM> SetupViewModels()
-        {
-            var albumArt = new AlbumArtVM(_albumArtModel, _trackModel);
-            var albumArtPopup = new AlbumArtPopupVM(_albumArtPopupModel, _trackModel);
-            var audioBand = new AudioBandVM(_audioBandModel);
-            var customLabels = new CustomLabelsVM(_customLabelsModel, this);
-            var nextButton = new NextButtonVM(_nextButtonModel);
-            var playPauseButton = new PlayPauseButtonVM(_playPauseButtonModel, _trackModel);
-            var prevButton = new PreviousButtonVM(_previousButtonModel);
-            var progressBar = new ProgressBarVM(_progressBarModel, _trackModel);
-
-            await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(albumArtPopup, albumArt, audioBand, nextButton, playPauseButton, prevButton, progressBar));
-
-            return new SettingsWindowVM
-            {
-                AlbumArtPopupVM = albumArtPopup,
-                ProgressBarVM = progressBar,
-                PreviousButtonVM = prevButton,
-                PlayPauseButtonVM = playPauseButton,
-                NextButtonVM = nextButton,
-                AudioBandVM = audioBand,
-                AboutVm = new AboutVM(),
-                AlbumArtVM = albumArt,
-                CustomLabelsVM = customLabels,
-                AudioSourceSettingsVM = new ObservableCollection<AudioSourceSettingsVM>()
-            };
-        }
-
         private void OpenSettingsWindow()
         {
-            _settingsWindowVm.BeginEdit();
-            _settingsWindow.Show();
+            _settingsWindow.ShowWindow();
         }
 
         private void RefreshContextMenu()
@@ -288,13 +251,13 @@ namespace AudioBand
 
         private void ResetTrack()
         {
-            _trackModel.AlbumArt = null;
-            _trackModel.AlbumName = null;
-            _trackModel.Artist = null;
-            _trackModel.TrackName = null;
-            _trackModel.IsPlaying = false;
-            _trackModel.TrackLength = TimeSpan.Zero;
-            _trackModel.TrackProgress = TimeSpan.Zero;
+            _track.AlbumArt = null;
+            _track.AlbumName = null;
+            _track.Artist = null;
+            _track.TrackName = null;
+            _track.IsPlaying = false;
+            _track.TrackLength = TimeSpan.Zero;
+            _track.TrackProgress = TimeSpan.Zero;
         }
     }
 }

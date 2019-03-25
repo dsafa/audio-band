@@ -65,10 +65,12 @@
 
         <Label Grid.Row="5" Grid.Column="0" Content="{StaticResource BackgroundColorLabelText}" />
         <local:ColorPicker Grid.Row="5" Grid.Column="1"
+                           DialogService="{Binding DialogService}"
                         Color="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
         <Label Grid.Row="6" Grid.Column="0" Content="{StaticResource ForegroundColorLabelText}" />
-        <local:ColorPicker Grid.Row="6" Grid.Column="1" 
+        <local:ColorPicker Grid.Row="6" Grid.Column="1"
+                           DialogService="{Binding DialogService}"
                         Color="{Binding ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
         <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" 

@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AudioBand.Views.Wpf"
+             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
              mc:Ignorable="d" 
              x:Name="ColorPickerControl"
              d:DesignHeight="50" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance local:ColorPicker}" x:ClassModifier="internal">
+             d:DataContext="{d:DesignInstance local:ColorPicker}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -33,7 +34,7 @@
                    Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"/>
         <Label Grid.Column="1" HorizontalAlignment="Center"
                Content="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={StaticResource ColorToStringConverter}}" />
-        <Button Grid.Column="2" Click="ChangeColorOnClick" 
+        <Button Grid.Column="2" Click="OpenColorPickerOnClick"
                 MinWidth="20" VerticalAlignment="Stretch"
                 Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"
                 Content="{iconPacks:Material Kind=Palette}">

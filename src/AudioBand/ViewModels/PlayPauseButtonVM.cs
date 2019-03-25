@@ -2,6 +2,8 @@
 using System.IO;
 using AudioBand.Extensions;
 using AudioBand.Models;
+using AudioBand.Resources;
+using AudioBand.Settings;
 using Svg;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -12,17 +14,27 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class PlayPauseButtonVM : ViewModelBase<PlayPauseButton>
     {
-        private static readonly SvgDocument DefaultPlayButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.play));
-        private static readonly SvgDocument DefaultPauseButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.pause));
+        private readonly SvgDocument _defaultPlayButtonSvg;
+        private readonly SvgDocument _defaultPauseButtonSvg;
         private readonly Track _track;
+        private readonly IResourceLoader _resourceLoader;
         private Image _playImage;
         private Image _pauseImage;
 
-        public PlayPauseButtonVM(PlayPauseButton model, Track track)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayPauseButtonVM"/> class.
+        /// </summary>
+        /// <param name="appsettings">App settings.</param>
+        /// <param name="resourceLoader">Resource loader</param>
+        /// <param name="track">The track.</param>
+        public PlayPauseButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader, Track track)
+            : base(appsettings.PlayPauseButton)
         {
             _track = track;
             SetupModelBindings(_track);
+            _defaultPlayButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.play);
+            _defaultPauseButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.pause);
+            _resourceLoader = resourceLoader;
             LoadImages();
         }
 
@@ -41,7 +53,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.PlayButtonImagePath), value))
                 {
-                    PlayImage = LoadImage(value, DefaultPlayButtonSvg.ToBitmap());
+                    PlayImage = _resourceLoader.TryLoadImageFromPath(value, _defaultPlayButtonSvg.ToBitmap());
                 }
             }
         }
@@ -61,7 +73,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.PauseButtonImagePath), value))
                 {
-                    PauseImage = LoadImage(value, DefaultPauseButtonSvg.ToBitmap());
+                    PauseImage = _resourceLoader.TryLoadImageFromPath(value, _defaultPauseButtonSvg.ToBitmap());
                 }
             }
         }
@@ -143,8 +155,8 @@ namespace AudioBand.ViewModels
 
         private void LoadImages()
         {
-            PlayImage = LoadImage(PlayImagePath, DefaultPlayButtonSvg.ToBitmap());
-            PauseImage = LoadImage(PauseImagePath, DefaultPauseButtonSvg.ToBitmap());
+            PlayImage = _resourceLoader.TryLoadImageFromPath(PlayImagePath, _defaultPlayButtonSvg.ToBitmap());
+            PauseImage = _resourceLoader.TryLoadImageFromPath(PauseImagePath, _defaultPauseButtonSvg.ToBitmap());
         }
     }
 }

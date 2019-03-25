@@ -18,7 +18,7 @@
             Height="600"
             Width="800"
             GlowBrush="{DynamicResource AccentColorBrush}"
-            WindowStartupLocation="CenterScreen" x:ClassModifier="internal">
+            WindowStartupLocation="CenterScreen">
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,7 +30,7 @@
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
             <Button Content="{StaticResource AboutButtonText}" 
-                    Command="{Binding AboutVm.ShowHelp}" 
+                    Command="{Binding ElementName=Window, Path=AboutVM.ShowHelp}" 
                     CommandParameter="{Binding ElementName=HelpFlyout}"/>
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
@@ -47,24 +47,24 @@
                 <behaviours:TreeSelectedVMBehaviour SelectedVM="{Binding SelectedVM, Mode=TwoWay}"/>
             </i:Interaction.Behaviors>
             <TreeViewItem Header="{StaticResource GeneralSettingsTab}"
-                          Tag="{Binding ElementName=Window, Path=DataContext.AudioBandVM}"/>
+                          Tag="{Binding ElementName=Window, Path=AudioBandVM}"/>
             <TreeViewItem Header="{StaticResource PlaybackControlsTab}" IsExpanded="True">
                 <TreeViewItem Header="{StaticResource PlayPauseButtonTab}"
-                              Tag="{Binding ElementName=Window, Path=DataContext.PlayPauseButtonVM}"/>                
+                              Tag="{Binding ElementName=Window, Path=PlayPauseButtonVM}"/>                
                 <TreeViewItem Header="{StaticResource NextButtonTab}"
-                              Tag="{Binding ElementName=Window, Path=DataContext.NextButtonVM}"/>                
+                              Tag="{Binding ElementName=Window, Path=NextButtonVM}"/>                
                 <TreeViewItem Header="{StaticResource PrevButtonTab}"
-                              Tag="{Binding ElementName=Window, Path=DataContext.PreviousButtonVM}"/>
+                              Tag="{Binding ElementName=Window, Path=PreviousButtonVM}"/>
             </TreeViewItem>
             <TreeViewItem Header="{StaticResource CustomLabelsTab}" IsExpanded="True"
-                          ItemsSource="{Binding CustomLabelsVM.CustomLabels}"
-                          Tag="{Binding CustomLabelsVM}">
+                          ItemsSource="{Binding ElementName=Window,  Path=CustomLabelsVM.CustomLabels}"
+                          Tag="{Binding ElementName=Window, Path=CustomLabelsVM}">
                 <TreeViewItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <HeaderedContentControl Header="{StaticResource CustomLabelsTab}" Margin="0, 0, 10, 0"/>
                             <Button Style="{StaticResource TreeviewButtonPositive}"
-                                    Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.AddLabelCommand}"
+                                    Command="{Binding ElementName=Window, Path=CustomLabelsVM.AddLabelCommand}"
                                     Content="{iconPacks:Material Kind=Plus}">
                                 <Button.ToolTip>
                                     <TextBlock Text="{StaticResource AddNewLabelHelpText}"/>
@@ -77,7 +77,7 @@
                     <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
                         <StackPanel Orientation="Horizontal">
                             <Button Style="{StaticResource TreeviewButtonNegative}"
-                                    Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.RemoveLabelCommand}"
+                                    Command="{Binding ElementName=Window, Path=CustomLabelsVM.RemoveLabelCommand}"
                                     CommandParameter="{Binding}"
                                     Content="{iconPacks:Material Kind=DeleteForever}">
                                 <Button.ToolTip>
@@ -90,14 +90,14 @@
                 </TreeViewItem.ItemTemplate>
             </TreeViewItem>
             <TreeViewItem Header="{StaticResource ProgressBarTab}"
-                          Tag="{Binding ElementName=Window, Path=DataContext.ProgressBarVM}"/>
+                          Tag="{Binding ElementName=Window, Path=ProgressBarVM}"/>
             <TreeViewItem Header="{StaticResource AlbumArtTab}" IsExpanded="True"
-                          Tag="{Binding ElementName=Window, Path=DataContext.AlbumArtVM}">
+                          Tag="{Binding ElementName=Window, Path=AlbumArtVM}">
                 <TreeViewItem Header="{StaticResource AlbumArtPopupTab}"
-                              Tag="{Binding ElementName=Window, Path=DataContext.AlbumArtPopupVM}"/>
+                              Tag="{Binding ElementName=Window, Path=AlbumArtPopupVM}"/>
             </TreeViewItem>
             <TreeViewItem Header="{StaticResource AudioSourceSettingsTab}" IsExpanded="True"
-                          ItemsSource="{Binding AudioSourceSettingsVM}">
+                          ItemsSource="{Binding ElementName=Window, Path=AudioSourceSettingsVM}">
                 <TreeViewItem.ItemTemplate>
                     <DataTemplate>
                         <HeaderedContentControl Header="{Binding AudioSourceName}"/>
@@ -136,7 +136,7 @@
                         <DockPanel>
                             <Button Content="{StaticResource NewLabelButtonText}" 
                                     HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    Command="{Binding ElementName=Window, Path=DataContext.CustomLabelsVM.AddLabelCommand}"/>
+                                    Command="{Binding ElementName=Window, Path=CustomLabelsVM.AddLabelCommand}"/>
                         </DockPanel>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:AudioSourceSettingsVM}">
@@ -148,7 +148,7 @@
     </DockPanel>
     <metro:MetroWindow.Flyouts>
         <metro:FlyoutsControl>
-            <local:AboutFlyout x:Name="HelpFlyout" DataContext="{Binding AboutVm}"/>
+            <local:AboutFlyout x:Name="HelpFlyout" DataContext="{Binding ElementName=Window, Path=AboutVM}"/>
         </metro:FlyoutsControl>
     </metro:MetroWindow.Flyouts>
 </metro:MetroWindow>

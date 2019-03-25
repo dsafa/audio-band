@@ -15,7 +15,7 @@ namespace AudioBand.Test
     [TestClass]
     public class CustomLabelsViewModelTests
     {
-        private Mock<ICustomLabelHost> _hostMock;
+        private Mock<ICustomLabelService> _hostMock;
         private Mock<IDialogService> _dialogMock;
         private CustomLabel _label;
         private CustomLabelsVM _vm;
@@ -23,7 +23,7 @@ namespace AudioBand.Test
         [TestInitialize]
         public void Init()
         {
-            _hostMock = new Mock<ICustomLabelHost>();
+            _hostMock = new Mock<ICustomLabelService>();
             _dialogMock = new Mock<IDialogService>();
             _label = new CustomLabel();
             _vm = new CustomLabelsVM(new List<CustomLabel>(), _hostMock.Object);
@@ -82,7 +82,7 @@ namespace AudioBand.Test
         [TestMethod]
         public async Task RemoveLabel_ThenCancel()
         {
-            var host = new Mock<ICustomLabelHost>();
+            var host = new Mock<ICustomLabelService>();
             var dialog = new Mock<IDialogService>();
             var vm = new CustomLabelsVM(new List<CustomLabel> { new CustomLabel()}, host.Object);
             vm.BeginEdit();

@@ -15,7 +15,7 @@ namespace AudioBand.Settings
     /// <summary>
     /// Manages application settings.
     /// </summary>
-    internal class AppSettings
+    public class AppSettings : IAppSettings
     {
         private static readonly Dictionary<string, Type> SettingsTable = new Dictionary<string, Type>()
         {

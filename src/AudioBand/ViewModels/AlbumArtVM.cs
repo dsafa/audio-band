@@ -1,7 +1,8 @@
 ﻿using System.Drawing;
-using System.IO;
 using AudioBand.Extensions;
 using AudioBand.Models;
+using AudioBand.Resources;
+using AudioBand.Settings;
 using Svg;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -12,15 +13,24 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class AlbumArtVM : ViewModelBase<AlbumArt>
     {
-        private static readonly SvgDocument DefaultAlbumArtPlaceholderSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.placeholder_album));
+        private readonly SvgDocument _defaultAlbumArtPlaceholderSvg;
         private readonly Track _track;
+        private readonly IResourceLoader _resourceLoader;
 
-        public AlbumArtVM(AlbumArt model, Track track)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AlbumArtVM"/> class.
+        /// </summary>
+        /// <param name="appsettings">The app settings.</param>
+        /// <param name="resourceLoader">The resource loader.</param>
+        /// <param name="track">The track model.</param>
+        public AlbumArtVM(IAppSettings appsettings, IResourceLoader resourceLoader, Track track)
+            : base(appsettings.AlbumArt)
         {
             _track = track;
             SetupModelBindings(_track);
-            LoadPlaceholder();
+            _defaultAlbumArtPlaceholderSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.placeholder_album);
+            _resourceLoader = resourceLoader;
+            LoadAlbumArtPlaceholder();
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.IsVisible))]
@@ -70,7 +80,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.PlaceholderPath), value))
                 {
-                    LoadPlaceholder();
+                    LoadAlbumArtPlaceholder();
                 }
             }
         }
@@ -94,19 +104,19 @@ namespace AudioBand.ViewModels
         protected override void OnReset()
         {
             base.OnReset();
-            LoadPlaceholder();
+            LoadAlbumArtPlaceholder();
         }
 
         /// <inheritdoc/>
         protected override void OnCancelEdit()
         {
             base.OnCancelEdit();
-            LoadPlaceholder();
+            LoadAlbumArtPlaceholder();
         }
 
-        private void LoadPlaceholder()
+        private void LoadAlbumArtPlaceholder()
         {
-            _track.UpdatePlaceholder(LoadImage(Model.PlaceholderPath, DefaultAlbumArtPlaceholderSvg.ToBitmap()));
+            _track.UpdatePlaceholder(_resourceLoader.TryLoadImageFromPath(Model.PlaceholderPath, _defaultAlbumArtPlaceholderSvg.ToBitmap()));
         }
     }
 }

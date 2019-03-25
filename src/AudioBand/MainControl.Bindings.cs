@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using AudioBand.Models;
 using AudioBand.ViewModels;
 using AudioBand.Views.Winforms;
 
 namespace AudioBand
 {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    partial class MainControl : ICustomLabelHost
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+    partial class MainControl
     {
         private const string CustomLabelControlsKey = "CustomLabel";
 
-        /// <inheritdoc/>
-        void ICustomLabelHost.AddCustomTextLabel(CustomLabelVM customLabel)
+        private void LabelServiceOnAddCustomTextLabel(object sender, CustomLabelVM customLabel)
         {
             if (InvokeRequired)
             {
@@ -26,8 +22,7 @@ namespace AudioBand
             }
         }
 
-        /// <inheritdoc/>
-        void ICustomLabelHost.RemoveCustomTextLabel(CustomLabelVM customLabel)
+        private void LabelServiceOnRemoveCustomTextLabel(object sender, CustomLabelVM customLabel)
         {
             if (InvokeRequired)
             {
@@ -63,7 +58,7 @@ namespace AudioBand
             var labelBindingSource = new BindingSource(components);
             var trackBindingSource = new BindingSource(components);
             labelBindingSource.DataSource = customLabel;
-            trackBindingSource.DataSource = _trackModel;
+            trackBindingSource.DataSource = _track;
             label.DataBindings.Add(new Binding(nameof(label.Format), labelBindingSource, nameof(customLabel.FormatString), true, DataSourceUpdateMode.OnPropertyChanged));
             label.DataBindings.Add(new Binding(nameof(label.DefaultColor), labelBindingSource, nameof(customLabel.Color), true, DataSourceUpdateMode.OnPropertyChanged));
             label.DataBindings.Add(new Binding(nameof(label.FontSize), labelBindingSource, nameof(customLabel.FontSize), true, DataSourceUpdateMode.OnPropertyChanged));
@@ -73,11 +68,11 @@ namespace AudioBand
             label.DataBindings.Add(new Binding(nameof(label.LogicalSize), labelBindingSource, nameof(customLabel.Size), true, DataSourceUpdateMode.OnPropertyChanged));
             label.DataBindings.Add(new Binding(nameof(label.LogicalLocation), labelBindingSource, nameof(customLabel.Location), true, DataSourceUpdateMode.OnPropertyChanged));
             label.DataBindings.Add(new Binding(nameof(label.ScrollSpeed), labelBindingSource, nameof(customLabel.ScrollSpeed), true, DataSourceUpdateMode.OnPropertyChanged));
-            label.DataBindings.Add(new Binding(nameof(label.AlbumName), trackBindingSource, nameof(_trackModel.AlbumName), true, DataSourceUpdateMode.OnPropertyChanged));
-            label.DataBindings.Add(new Binding(nameof(label.Artist), trackBindingSource, nameof(_trackModel.Artist), true, DataSourceUpdateMode.OnPropertyChanged));
-            label.DataBindings.Add(new Binding(nameof(label.SongName), trackBindingSource, nameof(_trackModel.TrackName), true, DataSourceUpdateMode.OnPropertyChanged));
-            label.DataBindings.Add(new Binding(nameof(label.SongLength), trackBindingSource, nameof(_trackModel.TrackLength), true, DataSourceUpdateMode.OnPropertyChanged));
-            label.DataBindings.Add(new Binding(nameof(label.SongProgress), trackBindingSource, nameof(_trackModel.TrackProgress), true, DataSourceUpdateMode.OnPropertyChanged));
+            label.DataBindings.Add(new Binding(nameof(label.AlbumName), trackBindingSource, nameof(_track.AlbumName), true, DataSourceUpdateMode.OnPropertyChanged));
+            label.DataBindings.Add(new Binding(nameof(label.Artist), trackBindingSource, nameof(_track.Artist), true, DataSourceUpdateMode.OnPropertyChanged));
+            label.DataBindings.Add(new Binding(nameof(label.SongName), trackBindingSource, nameof(_track.TrackName), true, DataSourceUpdateMode.OnPropertyChanged));
+            label.DataBindings.Add(new Binding(nameof(label.SongLength), trackBindingSource, nameof(_track.TrackLength), true, DataSourceUpdateMode.OnPropertyChanged));
+            label.DataBindings.Add(new Binding(nameof(label.SongProgress), trackBindingSource, nameof(_track.TrackProgress), true, DataSourceUpdateMode.OnPropertyChanged));
 
             label.Tag = customLabel;
             label.Name = CustomLabelControlsKey;

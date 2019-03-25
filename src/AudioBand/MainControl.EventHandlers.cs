@@ -25,7 +25,7 @@ namespace AudioBand
 
         private async void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
         {
-            if (_trackModel.IsPlaying)
+            if (_track.IsPlaying)
             {
                 await (_currentAudioSource?.PauseTrackAsync() ?? Task.CompletedTask);
             }
@@ -57,13 +57,13 @@ namespace AudioBand
 
         private async void AudioSourceOnTrackProgressChanged(object o, TimeSpan progress)
         {
-            await _uiDispatcher.InvokeAsync(() => { _trackModel.TrackProgress = progress; });
+            await _uiDispatcher.InvokeAsync(() => { _track.TrackProgress = progress; });
         }
 
         private async void AudioSourceOnIsPlayingChanged(object sender, bool isPlaying)
         {
             Logger.Debug("Play state changed. Is playing: {playing}", isPlaying);
-            await _uiDispatcher.InvokeAsync(() => _trackModel.IsPlaying = isPlaying);
+            await _uiDispatcher.InvokeAsync(() => _track.IsPlaying = isPlaying);
         }
 
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
@@ -78,23 +78,17 @@ namespace AudioBand
 
             _uiDispatcher.InvokeAsync(() =>
             {
-                _trackModel.AlbumArt = e.AlbumArt;
-                _trackModel.Artist = e.Artist;
-                _trackModel.TrackName = e.TrackName;
-                _trackModel.TrackLength = e.TrackLength;
-                _trackModel.AlbumName = e.Album;
+                _track.AlbumArt = e.AlbumArt;
+                _track.Artist = e.Artist;
+                _track.TrackName = e.TrackName;
+                _track.TrackLength = e.TrackLength;
+                _track.AlbumName = e.Album;
             });
         }
 
         private void SettingsWindowOnSaved(object o, EventArgs eventArgs)
         {
-            _settingsWindowVm.EndEdit();
             _appSettings.Save();
-        }
-
-        private void SettingsWindowOnCanceled(object sender, EventArgs e)
-        {
-            _settingsWindowVm.CancelEdit();
         }
 
         private async void AudioSourcesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -127,20 +121,20 @@ namespace AudioBand
             if (settings.Count > 0)
             {
                 // check if the settings were saved previously and reuse them
-                var matchingSetting = _audioSourceSettingsModel.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
+                var matchingSetting = _appSettings.AudioSourceSettings.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
                 if (matchingSetting != null)
                 {
                     var viewModel = new AudioSourceSettingsVM(matchingSetting, audioSource);
 
                     // the collection was created on the ui thread
-                    await _uiDispatcher.InvokeAsync(() => _settingsWindowVm.AudioSourceSettingsVM.Add(viewModel));
+                    await _uiDispatcher.InvokeAsync(() => _settingsWindow.AudioSourceSettingsVM.Add(viewModel));
                 }
                 else
                 {
                     var newSettingsModel = new AudioSourceSettings { AudioSourceName = audioSource.Name };
-                    _audioSourceSettingsModel.Add(newSettingsModel);
+                    _appSettings.AudioSourceSettings.Add(newSettingsModel);
                     var newViewModel = new AudioSourceSettingsVM(newSettingsModel, audioSource);
-                    await _uiDispatcher.InvokeAsync(() => _settingsWindowVm.AudioSourceSettingsVM.Add(newViewModel));
+                    await _uiDispatcher.InvokeAsync(() => _settingsWindow.AudioSourceSettingsVM.Add(newViewModel));
                 }
             }
 

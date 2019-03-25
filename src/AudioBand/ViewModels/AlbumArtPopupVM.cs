@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using AudioBand.Models;
+using AudioBand.Settings;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
@@ -11,8 +12,13 @@ namespace AudioBand.ViewModels
     {
         private readonly Track _track;
 
-        public AlbumArtPopupVM(AlbumArtPopup model, Track track)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AlbumArtPopupVM"/> class.
+        /// </summary>
+        /// <param name="appSettings">The app settings.</param>
+        /// <param name="track">The track mode.</param>
+        public AlbumArtPopupVM(IAppSettings appSettings, Track track)
+            : base(appSettings.AlbumArtPopup)
         {
             _track = track;
             SetupModelBindings(_track);

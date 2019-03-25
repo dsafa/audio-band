@@ -8,7 +8,7 @@ namespace AudioBand.Commands
     /// Basic async command.
     /// </summary>
     /// <typeparam name="T">Type of the command parameter.</typeparam>
-    internal class AsyncRelayCommand<T> : ICommand
+    public class AsyncRelayCommand<T> : ICommand
     {
         private readonly Func<T, Task> _execute;
         private readonly Predicate<T> _canExecute;

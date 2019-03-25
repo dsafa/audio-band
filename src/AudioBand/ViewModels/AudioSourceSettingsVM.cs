@@ -8,7 +8,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for all audio source settings
     /// </summary>
-    internal class AudioSourceSettingsVM : ViewModelBase<AudioSourceSettings>
+    public class AudioSourceSettingsVM : ViewModelBase<AudioSourceSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceSettingsVM"/> class
