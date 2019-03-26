@@ -117,7 +117,7 @@ namespace AudioBand.Views.Wpf
         public AboutVM AboutVM { get; private set; }
 
         /// <inheritdoc/>
-        public ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM => new ObservableCollection<AudioSourceSettingsVM>();
+        public ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM { get; } = new ObservableCollection<AudioSourceSettingsVM>();
 
         /// <inheritdoc/>
         public void ShowWindow()
