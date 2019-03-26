@@ -54,7 +54,7 @@ namespace AudioBand
             ISettingsWindow settingsWindow,
             ICustomLabelService labelService)
         {
-            InitializeComponent(); System.Diagnostics.Debugger.Launch();
+            InitializeComponent();
 
             _uiDispatcher = Dispatcher.CurrentDispatcher;
             Options = options;
