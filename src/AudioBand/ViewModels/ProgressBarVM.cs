@@ -99,7 +99,7 @@ namespace AudioBand.ViewModels
         public Size Size => new Size(Width, Height);
 
         /// <summary>
-        /// Gets the dialog service
+        /// Gets or sets the dialog service
         /// </summary>
         public IDialogService DialogService { get; set; }
     }

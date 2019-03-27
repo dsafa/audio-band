@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using AudioBand.Settings;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
@@ -13,7 +14,9 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         public AudioBandVM(IAppSettings appsettings)
-            : base(appsettings.AudioBand) { }
+            : base(appsettings.AudioBand)
+        {
+        }
 
         [PropertyChangeBinding(nameof(Models.AudioBand.Width))]
         [AlsoNotify(nameof(Size))]
@@ -38,3 +41,4 @@ namespace AudioBand.ViewModels
         public Size Size => new Size(Width, Height);
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

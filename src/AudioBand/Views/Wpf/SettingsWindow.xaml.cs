@@ -99,9 +99,6 @@ namespace AudioBand.Views.Wpf
         public CustomLabelsVM CustomLabelsVM { get; private set; }
 
         /// <inheritdoc/>
-        public AboutVM AboutVm { get; private set; }
-
-        /// <inheritdoc/>
         public NextButtonVM NextButtonVM { get; private set; }
 
         /// <inheritdoc/>

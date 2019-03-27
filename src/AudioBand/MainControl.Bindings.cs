@@ -6,6 +6,9 @@ using AudioBand.Views.Winforms;
 
 namespace AudioBand
 {
+    /// <summary>
+    /// Partial main control
+    /// </summary>
     partial class MainControl
     {
         private const string CustomLabelControlsKey = "CustomLabel";

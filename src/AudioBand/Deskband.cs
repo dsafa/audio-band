@@ -63,7 +63,7 @@ namespace AudioBand
                 _container.Register<IDialogService, DialogService>(Lifestyle.Singleton);
                 _container.Register<ISettingsWindow, SettingsWindow>(Lifestyle.Transient);
 
-                var viewmodelExclude = new Type[] { typeof(AudioSourceSettingVM), typeof(AudioSourceSettingsVM)};
+                var viewmodelExclude = new Type[] { typeof(AudioSourceSettingVM), typeof(AudioSourceSettingsVM) };
                 var viewmodels = typeof(ViewModelBase)
                     .Assembly
                     .GetTypes()
