@@ -1,0 +1,6 @@
+- name: General
+  href: general.md
+- name: TextLabels
+  href: textlabels.md
+- name: Album Art Popup
+  href: albumartpopup.md

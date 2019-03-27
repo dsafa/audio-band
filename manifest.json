@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "D:/a/1/s/docfx",
+  "source_base_path": "E:/Code/audio-band/docfx",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -14,11 +14,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "audioband/audiosources.md",
+      "source_relative_path": "audioband/audiosources/index.md",
       "output": {
         ".html": {
-          "relative_path": "audioband/audiosources.html",
-          "hash": "r69zM8QT5FOLmpGFKsJinA=="
+          "relative_path": "audioband/audiosources/index.html",
+          "hash": "M1dRSi9s+wdy7heEhiyhjA=="
         }
       },
       "is_incremental": false,
@@ -62,18 +62,6 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "audioband/customization.md",
-      "output": {
-        ".html": {
-          "relative_path": "audioband/customization.html",
-          "hash": "8vb6cXbqIOv4PJGzRb6VgA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "audioband/customization/albumartpopup.md",
       "output": {
         ".html": {
@@ -98,6 +86,18 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "audioband/customization/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/customization/index.html",
+          "hash": "PS8e4ZlkrPDGmf2TU/UVFQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "audioband/customization/textlabels.md",
       "output": {
         ".html": {
@@ -109,12 +109,39 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "audioband/development/project-layout.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/development/project-layout.html",
+          "hash": "AwlsOQnK6U2lBZv1IAPdBg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "audioband/development/setup.md",
+      "output": {
+        ".html": {
+          "relative_path": "audioband/development/setup.html",
+          "hash": "T8dXhmqgrNwlzAwT6oGTeQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "audioband/faq.md",
       "output": {
         ".html": {
           "relative_path": "audioband/faq.html",
-          "hash": "CFsy1MeNOSTKm2nV/hxldw=="
+          "hash": "Kv5yM3gr4DvyyII00IjJMw=="
         }
       },
       "is_incremental": false,
@@ -126,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/index.html",
-          "hash": "1yS1/4Aj5NKviWhjbYzFKw=="
+          "hash": "Ngaj2peS+3bAGNEkOSb3YA=="
         }
       },
       "is_incremental": false,
@@ -138,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/toc.html",
-          "hash": "rGgUcHL4Z14YWrj7m9CA9w=="
+          "hash": "7BQn/l6JukJsiZgDcTBdxA=="
         }
       },
       "is_incremental": false,
@@ -372,14 +399,19 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot build incrementally because last build info is missing.",
+        "can_incremental": true,
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0,
-        "full_build_reason_code": "NoAvailableBuildCache"
+        "skipped_file_count": 0
       },
       "processors": {
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
@@ -388,23 +420,16 @@
           "skipped_file_count": 0
         },
         "ConceptualDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 13,
-          "skipped_file_count": 0
+          "total_file_count": 15,
+          "skipped_file_count": 14
         },
         "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 10,
-          "skipped_file_count": 0
-        },
-        "ResourceDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
+          "skipped_file_count": 10
         }
       }
     },

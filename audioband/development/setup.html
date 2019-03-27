@@ -5,19 +5,19 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>FAQ </title>
+    <title>Setup </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="FAQ ">
+    <meta name="title" content="Setup ">
     <meta name="generator" content="docfx 2.40.11.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
     
-    <meta property="docfx:rel" content="../">
+    <meta property="docfx:rel" content="../../">
     
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
@@ -34,8 +34,8 @@
                 <span class="icon-bar"></span>
               </button>
               
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -77,10 +77,30 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="faq">FAQ</h1>
+<h2 id="setup">Setup</h2>
 
-<h2 id="q-why-is-there-a-margin-on-the-right-of-the-toolbar"><strong>Q.</strong> <em>Why is there a margin on the right of the toolbar?</em></h2>
-<p>This occurs if you've moved the toolbar, then lock the task bar. Restarting explorer should get rid of the margin</p>
+<ol>
+<li>Install <code>Visual Studio 2017</code>. Make sure to install support for <code>.Net Framework 4.7</code> development.</li>
+<li>Clone the repo <code>git clone git@github.com:dsafa/audio-band.git</code></li>
+<li>Open the solution file under <code>src/AudioBand.sln</code> in visual studio.</li>
+<li>Update nuget packages before building</li>
+</ol>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Explorer does not unload audioband so you will not be able to build if explorer has loaded it. The <code>debug configuration</code> will automatically close explorer to build the audioband project and restart it after the build.</p>
+</div>
+<h2 id="running-local-version">Running local version</h2>
+<p>To test the local version of audioband, it needs to be installed as a toolbar. The easiest way is to copy the install script from <code>tools/install.cmd</code> to the build folder and run it.</p>
+<div class="WARNING">
+<h5>Warning</h5>
+<p>Installing the development version will overwrite any other installations.</p>
+</div>
+<h2 id="debugging">Debugging</h2>
+<p>There are 2 ways you can use a debugger on audioband.</p>
+<ul>
+<li>Attach the debugger: In visual studio, open the <code>attach to process</code> menu (ctrl + alt + p). Select <code>explorer.exe</code> and click attach.</li>
+<li>Insert the statement <code>System.Diagnostics.Debugger.Launch();</code> will allow you to attach a debugger at place in the code. This is useful if you need the debugger at the start.</li>
+</ul>
 </article>
           </div>
           
@@ -89,7 +109,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/dsafa/audio-band/blob/gh-pages/docfx/audioband/faq.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/dsafa/audio-band/blob/gh-pages/docfx/audioband/development/setup.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
@@ -115,8 +135,8 @@
       </footer>
     </div>
     
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
   </body>
 </html>
