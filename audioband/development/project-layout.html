@@ -8,7 +8,7 @@
     <title>Project layout </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Project layout ">
-    <meta name="generator" content="docfx 2.40.11.0">
+    <meta name="generator" content="docfx 2.40.12.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -89,9 +89,31 @@
 </ul>
 <h1 id="audioband-project">AudioBand project</h1>
 <h2 id="entry-point">Entry point</h2>
-<p>The entry point for audioband can be found in the [!code-csharp<a href="../../../audioband-release/src/AudioBand/Deskband.cs" title="Desband.cs">Deskband</a>]. This is where the main control <code>MainControl.cs</code> gets initialized and also the composition root of the application. Its the equivalent of the main function in a normal winforms or wpf application but instead of calling <code>Application.run()</code>, we just instantiate the control directly.</p>
+<p>The entry point for audioband can be found in the <code>Deskband.cs</code> file. This is where the main control <code>MainControl.cs</code> gets initialized and also the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling <code>Application.Run()</code>, we just instantiate the control directly.</p>
 <h2 id="maincontrolcs">MainControl.cs</h2>
-<p>This is the top level user control, equivalent to the main window in wpf or main form in winforms.</p>
+<p>This is the top level user control, equivalent to the main window in wpf or main form in winforms. Note that the file also has 2 other partial classes <code>MainControl.Bindings.cs</code> and <code>MainControl.EventHandlers.cs</code>. These are the dependencies:</p>
+<ul>
+<li>CSDeskBandOptions: the object that contains deskband settings such as the context menu</li>
+<li>TaskbarInfo: To check the orientation of the taskbar. not currently used</li>
+<li>Track: The track model instance that is shared between the viewmodels that depend on it</li>
+<li>IAppSettings: Contains saving/retrieving the models</li>
+<li>IAudioSourceMananger: Loads the audio sources</li>
+<li>ISettingsWindow: The interface for accessing the settings windows and also the view models for those settings.</li>
+<li>ICustomLabelService: Provides notifications for new/deleting custom labels since they are dynamically generated and not hardcoded in like the other controls.</li>
+</ul>
+<h2 id="audio-source-loading">Audio source loading</h2>
+<p>Audio source loading is done by the <code>AudioSource/AudioSourceManager</code> class. Each audio source is loaded in their own app domain using the <code>AudioSourceHost</code> project. The creation and communication with the app domain is done through the <code>AudioSource/AudioSourceProxy</code> class. Audio sources are added to the <code>IAudioSourceManager.AudioSources</code> collection and audioband subscribes to the <code>ObservableCollection.CollectionChanged</code> event. When new audio sources are added, these steps are performed:</p>
+<ol>
+<li>Add a new entry to the context menu</li>
+<li>Merge settings.
+<ol>
+<li>If there are already saved settings for the audio source, then the settings are applied to the audio source</li>
+<li>If there are no previously saved settings, then the default setting values are extracted and saved.</li>
+<li>Viewmodels for these settings are built and added to the <code>ISettingsWindow.AudioSourceSettings</code> collection.</li>
+</ol>
+</li>
+<li>If the audio source is selected in the settings, then it is activated.</li>
+</ol>
 </article>
           </div>
           
