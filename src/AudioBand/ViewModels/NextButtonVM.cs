@@ -1,11 +1,11 @@
 ﻿using System.Drawing;
-using System.IO;
 using AudioBand.Extensions;
 using AudioBand.Models;
 using AudioBand.Resources;
 using AudioBand.Settings;
 using Svg;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
@@ -120,3 +120,4 @@ namespace AudioBand.ViewModels
         }
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
