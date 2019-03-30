@@ -8,7 +8,7 @@
     <title>Project layout </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Project layout ">
-    <meta name="generator" content="docfx 2.40.12.0">
+    <meta name="generator" content="docfx 2.41.0.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -90,6 +90,18 @@
 <h1 id="audioband-project">AudioBand project</h1>
 <h2 id="entry-point">Entry point</h2>
 <p>The entry point for audioband can be found in the <code>Deskband.cs</code> file. This is where the main control <code>MainControl.cs</code> gets initialized and also the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling <code>Application.Run()</code>, we just instantiate the control directly.</p>
+<p>Main steps:</p>
+<ol>
+<li>Create <code>MainControl</code></li>
+<li>Load settings
+<ol>
+<li>Load saved models</li>
+<li>Create viewmodels using the models</li>
+<li>Setup databinding for winforms (wpf is done through xaml but winforms is manual)</li>
+</ol>
+</li>
+<li>Load Audio sources</li>
+</ol>
 <h2 id="maincontrolcs">MainControl.cs</h2>
 <p>This is the top level user control, equivalent to the main window in wpf or main form in winforms. Note that the file also has 2 other partial classes <code>MainControl.Bindings.cs</code> and <code>MainControl.EventHandlers.cs</code>. These are the dependencies:</p>
 <ul>
@@ -101,6 +113,7 @@
 <li>ISettingsWindow: The interface for accessing the settings windows and also the view models for those settings.</li>
 <li>ICustomLabelService: Provides notifications for new/deleting custom labels since they are dynamically generated and not hardcoded in like the other controls.</li>
 </ul>
+<p>AudioBand uses Winforms controls for the toolbar and Wpf for the settings window.</p>
 <h2 id="audio-source-loading">Audio source loading</h2>
 <p>Audio source loading is done by the <code>AudioSource/AudioSourceManager</code> class. Each audio source is loaded in their own app domain using the <code>AudioSourceHost</code> project. The creation and communication with the app domain is done through the <code>AudioSource/AudioSourceProxy</code> class. Audio sources are added to the <code>IAudioSourceManager.AudioSources</code> collection and audioband subscribes to the <code>ObservableCollection.CollectionChanged</code> event. When new audio sources are added, these steps are performed:</p>
 <ol>
@@ -114,6 +127,48 @@
 </li>
 <li>If the audio source is selected in the settings, then it is activated.</li>
 </ol>
+<h2 id="app-settings-loading">App settings loading</h2>
+<p>App settings are loaded by the <code>Settings/AppSettings</code> class. It is just simple serialization in the <code>toml</code> format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, which is not as readable with toml but it is still workable.</p>
+<p>There is also a <code>Migrations</code> subfolder that contains code to settings migrations. These classes update old configuration files to the latest format.</p>
+<h2 id="viewmodels">ViewModels</h2>
+<p>There are two base classes for view models: <code>ViewModels/ViewModelBase.cs</code> and <code>ViewModels/ViewModelBase{TModel}.cs</code>. Viewmodels participate in databinding for both Winforms and Wpf controls.</p>
+<p><code>ViewModelBase</code> provides automatic implementations for</p>
+<ul>
+<li><code>INotifyPropertyChanged</code>: Has a <code>SetProperty</code> method that automatically calls <code>INotifyPropertyChanged.PropertyChanged</code> event if a field value changes. The attribute <code>AlsoNotify</code> can also be applied to raise <code>PropertyChanged</code> for other properties. Example:</li>
+</ul>
+<pre><code class="lang-csharp">[AlsoNotify(nameof(Size))]
+public int Width
+{
+    get =&gt; _width;
+    set =&gt; SetProperty(ref _width, value);
+}
+
+public Size Size =&gt; new Size(Width, Height);
+</code></pre>
+<ul>
+<li><code>INotifyDataError</code>: Provides a few <code>RaiseValidationError</code> methods that raise the <code>INotifyDataError.ErrorsChanged</code> event.</li>
+<li><code>IResettable</code>: Custom interface that exposes a method to reset the viewmodel to default values. The base class implements a command to call reset and the method <code>ResetObject&lt;T&gt;</code> to reset an object to its default value.</li>
+<li>Undo support: Implments commands to call <code>BeginEdit</code>, <code>EndEdit</code>, <code>CancelEdit</code> and virtual methods to handle them.</li>
+</ul>
+<p><code>ViewModelBase&lt;T&gt;</code> extends <code>ViewModelBase</code> by automatically supporting the above features for a model.</p>
+<ul>
+<li><code>INotifyPropertyChanged</code>: Allows the view model to use a model to back its properties by applying the <code>PropertyChangedBindingAttribute</code> and using the <code>SetProperty</code> method.The <code>AlsoNotify</code> property can also be applied. Example:</li>
+</ul>
+<pre><code class="lang-csharp">// Bind this property to the 'Width' property of the model.
+// When the model's Width property changes, PropertyChanged is invoked for the viewmodel
+[PropertyChangeBinding(nameof(Model.Width))]
+public int Width
+{
+    get =&gt; Model.Width; // Using the model as the source for the value
+    set =&gt; SetProperty(nameof(Model.Width), value); // Set the value in the model
+}
+</code></pre>
+<ul>
+<li><code>IResettable</code>: When calling reset, the model is automatically reset.</li>
+<li>Undo: Automatic support to undoing changes to the model.</li>
+</ul>
+<h2 id="winforms-controls">Winforms controls</h2>
+<p>Winforms controls are used for the toolbar. The class are under the <code>Views/Winforms</code> directory. The controls, including the main control derive from <code>AudioBandControl</code> which is a usercontrol that contains support for DPI aware scaling. It exposes two properties <code>LogicalSize</code> and <code>LogicalLocation</code>. By using those properties, it can automatically scale the <code>Size</code> and <code>Location</code> properties.</p>
 </article>
           </div>
           
