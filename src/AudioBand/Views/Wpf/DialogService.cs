@@ -12,10 +12,10 @@ namespace AudioBand.Views.Wpf
         /// <inheritdoc/>
         public Color? ShowColorPickerDialog(Color initialColor)
         {
-            var colorPickerDialog = new ColorPickerDialog
+            var colorPickerDialog = new Dsafa.WpfColorPicker.ColorPickerDialog(initialColor)
             {
-                Color = initialColor,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ResizeMode = ResizeMode.NoResize
             };
 
             var res = colorPickerDialog.ShowDialog();
