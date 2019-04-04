@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Forms;
 using AudioBand.AudioSource;
 using AudioBand.Logging;
@@ -30,6 +31,11 @@ namespace AudioBand
         /// </summary>
         public Deskband()
         {
+            if (System.Windows.Application.Current?.MainWindow == null)
+            {
+                new System.Windows.Application().MainWindow = new Window();
+            }
+
             AudioBandLogManager.Initialize();
             AppDomain.CurrentDomain.UnhandledException += (sender, args) => AudioBandLogManager.GetLogger("AudioBand").Error((Exception)args.ExceptionObject, "Unhandled Exception");
             ConfigureDependencies();

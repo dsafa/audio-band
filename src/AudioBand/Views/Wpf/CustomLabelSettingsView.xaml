@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:AudioBand.Views.Wpf"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
@@ -26,20 +25,20 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -93,7 +92,7 @@
                            Color="{Binding Path=Color, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
         <Label Grid.Row="9" Grid.Column="0" Content="Alignment" />
-        <ComboBox Grid.Row="9" Grid.Column="1" 
+        <ComboBox Grid.Row="9" Grid.Column="1" IsEditable="False"
                   ItemsSource="{Binding TextAlignValues}"
                   SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
 

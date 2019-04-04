@@ -19,7 +19,8 @@ namespace AudioBand.Views.Wpf
         private static readonly HashSet<string> _bindingHelpAssemblies = new HashSet<string>
         {
             "MahApps.Metro.IconPacks.Material",
-            "ColorPickerWPF"
+            "ColorPickerWPF",
+            "FluentWPF"
         };
 
         private bool _shouldSave;
