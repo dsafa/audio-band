@@ -1,112 +1,127 @@
-﻿<metro:MetroWindow
-            xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+﻿<fw:AcrylicWindow
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:local="clr-namespace:AudioBand.Views.Wpf"
             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-            xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
-            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+            xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
             x:Class="AudioBand.Views.Wpf.SettingsWindow"
             mc:Ignorable="d" 
             x:Name="Window"
             d:DesignHeight="600" d:DesignWidth="400"
             d:DataContext="{d:DesignInstance viewmodels:SettingsWindowVM}"
             Title="Audio Band Settings"
-            Height="600"
-            Width="800"
-            GlowBrush="{DynamicResource AccentColorBrush}"
+            Height="800"
+            Width="1000"
+            NoiseOpacity="0"
+            fw:PointerTracker.Enabled="True"
             WindowStartupLocation="CenterScreen">
-    <metro:MetroWindow.Resources>
+    <fw:AcrylicWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Style.xaml"/>
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </metro:MetroWindow.Resources>
-    <metro:MetroWindow.RightWindowCommands>
-        <metro:WindowCommands>
-            <Button Content="{StaticResource AboutButtonText}" 
-                    Command="{Binding ElementName=Window, Path=AboutVM.ShowHelp}" 
-                    CommandParameter="{Binding ElementName=HelpFlyout}"/>
-        </metro:WindowCommands>
-    </metro:MetroWindow.RightWindowCommands>
+    </fw:AcrylicWindow.Resources>
     <DockPanel LastChildFill="True">
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-            <Button Margin="4" Content="{StaticResource CancelButtonText}" 
-                    Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
-            <Button Margin="4" Content="{StaticResource SaveButtonText}" Style="{StaticResource AccentButton}"
-                    Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
-        </StackPanel>
-        <TreeView x:Name="NavigationTree" DockPanel.Dock="Left" 
-                  Style="{StaticResource TreeViewNavigation}" Padding="0, 0, 20, 0">
-            <i:Interaction.Behaviors>
-                <behaviours:TreeSelectedVMBehaviour SelectedVM="{Binding SelectedVM, Mode=TwoWay}"/>
-            </i:Interaction.Behaviors>
-            <TreeViewItem Header="{StaticResource GeneralSettingsTab}"
-                          Tag="{Binding ElementName=Window, Path=AudioBandVM}"/>
-            <TreeViewItem Header="{StaticResource PlaybackControlsTab}" IsExpanded="True">
-                <TreeViewItem Header="{StaticResource PlayPauseButtonTab}"
-                              Tag="{Binding ElementName=Window, Path=PlayPauseButtonVM}"/>                
-                <TreeViewItem Header="{StaticResource NextButtonTab}"
-                              Tag="{Binding ElementName=Window, Path=NextButtonVM}"/>                
-                <TreeViewItem Header="{StaticResource PrevButtonTab}"
-                              Tag="{Binding ElementName=Window, Path=PreviousButtonVM}"/>
-            </TreeViewItem>
-            <TreeViewItem Header="{StaticResource CustomLabelsTab}" IsExpanded="True"
-                          ItemsSource="{Binding ElementName=Window,  Path=CustomLabelsVM.CustomLabels}"
-                          Tag="{Binding ElementName=Window, Path=CustomLabelsVM}">
-                <TreeViewItem.HeaderTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <HeaderedContentControl Header="{StaticResource CustomLabelsTab}" Margin="0, 0, 10, 0"/>
-                            <Button Style="{StaticResource TreeviewButtonPositive}"
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel DockPanel.Dock="Left" Background="Transparent" x:Name="NavigationPane">
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource GeneralSettingsTab}"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AudioBandVM}"/>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource PlayPauseButtonTab}"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=PlayPauseButtonVM}"/>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource NextButtonTab}"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=NextButtonVM}"/>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource PrevButtonTab}"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=PreviousButtonVM}"/>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource ProgressBarTab}"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=ProgressBarVM}"/>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource AlbumArtTab}"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AlbumArtVM}"/>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource AlbumArtPopupTab}"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AlbumArtPopupVM}"/>
+                <Expander Style="{StaticResource NavigationPaneExpander}">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{StaticResource CustomLabelsTab}" Style="{StaticResource NavigationPaneTextBlock}"
+                                       VerticalAlignment="Center">
+                            </TextBlock>
+                            <Button Grid.Column="1" Style="{StaticResource RevealButton}"
+                                    Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
                                     Command="{Binding ElementName=Window, Path=CustomLabelsVM.AddLabelCommand}"
                                     Content="{iconPacks:Material Kind=Plus}">
                                 <Button.ToolTip>
                                     <TextBlock Text="{StaticResource AddNewLabelHelpText}"/>
                                 </Button.ToolTip>
                             </Button>
-                        </StackPanel>
-                    </DataTemplate>
-                </TreeViewItem.HeaderTemplate>
-                <TreeViewItem.ItemTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource TreeviewButtonNegative}"
-                                    Command="{Binding ElementName=Window, Path=CustomLabelsVM.RemoveLabelCommand}"
-                                    CommandParameter="{Binding}"
-                                    Content="{iconPacks:Material Kind=DeleteForever}">
-                                <Button.ToolTip>
-                                    <TextBlock Text="{StaticResource DeleteLabelHelpText}"/>
-                                </Button.ToolTip>
-                            </Button>
-                            <HeaderedContentControl Header="{Binding Name}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </TreeViewItem.ItemTemplate>
-            </TreeViewItem>
-            <TreeViewItem Header="{StaticResource ProgressBarTab}"
-                          Tag="{Binding ElementName=Window, Path=ProgressBarVM}"/>
-            <TreeViewItem Header="{StaticResource AlbumArtTab}" IsExpanded="True"
-                          Tag="{Binding ElementName=Window, Path=AlbumArtVM}">
-                <TreeViewItem Header="{StaticResource AlbumArtPopupTab}"
-                              Tag="{Binding ElementName=Window, Path=AlbumArtPopupVM}"/>
-            </TreeViewItem>
-            <TreeViewItem Header="{StaticResource AudioSourceSettingsTab}" IsExpanded="True"
-                          ItemsSource="{Binding ElementName=Window, Path=AudioSourceSettingsVM}">
-                <TreeViewItem.ItemTemplate>
-                    <DataTemplate>
-                        <HeaderedContentControl Header="{Binding AudioSourceName}"/>
-                    </DataTemplate>
-                </TreeViewItem.ItemTemplate>
-            </TreeViewItem>
-        </TreeView>
-        <ScrollViewer>
-            <ContentControl Content="{Binding SelectedVM}">
+                        </Grid>
+                    </Expander.Header>
+                    <ListBox Background="Transparent" ItemsSource="{Binding ElementName=Window, Path=CustomLabelsVM.CustomLabels}"
+                             ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" 
+                                             GroupName="nav"
+                                             Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
+                                             CommandParameter="{Binding}">
+                                    <Grid HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Margin="25,0,0,0" Text="{Binding Name}" 
+                                                    HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                                        <Button Grid.Column="1" Style="{StaticResource RevealButton}"
+                                                    Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
+                                                    Command="{Binding ElementName=Window, Path=CustomLabelsVM.RemoveLabelCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="{iconPacks:Material Kind=Close}">
+                                            <Button.ToolTip>
+                                                <TextBlock Text="{StaticResource DeleteLabelHelpText}"/>
+                                            </Button.ToolTip>
+                                        </Button>
+                                    </Grid>
+                                </RadioButton>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Expander>
+                <Expander Style="{StaticResource NavigationPaneExpander}">
+                    <Expander.Header>
+                        <TextBlock Padding="0, 0, 10, 0" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"/>
+                    </Expander.Header>
+                    <ListBox Background="Transparent" ItemsSource="{Binding ElementName=Window, Path=AudioSourceSettingsVM}"
+                             ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" 
+                                             GroupName="nav"
+                                             Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
+                                             CommandParameter="{Binding}">
+                                    <TextBlock Margin="25,0,0,0" Text="{Binding AudioSourceName}"/>
+                                </RadioButton>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Stretch"
+                    FlowDirection="RightToLeft" Background="White" SnapsToDevicePixels="True">
+            <Button Margin="8" Content="{StaticResource SaveButtonText}" IsDefault="True" Width="100"
+                    Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
+            <Button Margin="8" Content="{StaticResource CancelButtonText}" IsCancel="True" Width="100"
+                    Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
+        </StackPanel>
+        <ScrollViewer Background="White" Padding="20" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto">
+            <ContentControl Content="{Binding SelectedVM}" BorderThickness="0">
                 <ContentControl.Resources>
                     <DataTemplate DataType="{x:Type viewmodels:AudioBandVM}">
                         <local:GeneralSettingsView DataContext="{Binding}"/>
@@ -146,12 +161,7 @@
             </ContentControl>
         </ScrollViewer>
     </DockPanel>
-    <metro:MetroWindow.Flyouts>
-        <metro:FlyoutsControl>
-            <local:AboutFlyout x:Name="HelpFlyout" DataContext="{Binding ElementName=Window, Path=AboutVM}"/>
-        </metro:FlyoutsControl>
-    </metro:MetroWindow.Flyouts>
-</metro:MetroWindow>
+</fw:AcrylicWindow>
 
 
 

@@ -27,7 +27,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Rectangle Grid.Column="0" MinWidth="20" VerticalAlignment="Stretch" Stroke="Black"
                    Fill="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
@@ -35,7 +35,6 @@
         <Label Grid.Column="1" HorizontalAlignment="Center"
                Content="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={StaticResource ColorToStringConverter}}" />
         <Button Grid.Column="2" Click="OpenColorPickerOnClick"
-                MinWidth="20" VerticalAlignment="Stretch"
                 Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"
                 Content="{iconPacks:Material Kind=Palette}">
             <Button.ToolTip>
