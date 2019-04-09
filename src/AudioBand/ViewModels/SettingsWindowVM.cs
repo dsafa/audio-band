@@ -7,20 +7,20 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class SettingsWindowVM : ViewModelBase
     {
-        private object _selectedVM;
+        private ViewModelBase _selectedVM;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindowVM"/> class.
         /// </summary>
         public SettingsWindowVM()
         {
-            SelectViewModelCommand = new RelayCommand<object>(SelectViewModelOnExecute);
+            SelectViewModelCommand = new RelayCommand<ViewModelBase>(SelectViewModelOnExecute);
         }
 
         /// <summary>
         /// Gets or sets the currently selected view model.
         /// </summary>
-        public object SelectedVM
+        public ViewModelBase SelectedVM
         {
             get => _selectedVM;
             set
@@ -38,9 +38,9 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the command to select the view model.
         /// </summary>
-        public RelayCommand<object> SelectViewModelCommand { get; private set; }
+        public RelayCommand<ViewModelBase> SelectViewModelCommand { get; private set; }
 
-        private void SelectViewModelOnExecute(object newViewmodel)
+        private void SelectViewModelOnExecute(ViewModelBase newViewmodel)
         {
             SelectedVM = newViewmodel;
         }

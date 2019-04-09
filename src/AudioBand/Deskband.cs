@@ -16,7 +16,7 @@ using SimpleInjector;
 namespace AudioBand
 {
     /// <summary>
-    /// The deskband
+    /// Entry point of the application
     /// </summary>
     [ComVisible(true)]
     [Guid("957D8782-5B07-4126-9B24-1E917BAAAD64")]
@@ -31,6 +31,7 @@ namespace AudioBand
         /// </summary>
         public Deskband()
         {
+            // Assign a fake main window since some libraries require one
             if (System.Windows.Application.Current?.MainWindow == null)
             {
                 new System.Windows.Application().MainWindow = new Window();

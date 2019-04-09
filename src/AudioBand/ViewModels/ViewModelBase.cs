@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using AudioBand.Commands;
 using AudioBand.Logging;
+using AudioBand.Messages;
 using AutoMapper;
 using FastMember;
 using NLog;

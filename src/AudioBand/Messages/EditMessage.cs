@@ -1,9 +1,7 @@
-﻿using AudioBand.ViewModels;
-
-namespace AudioBand.Messages
+﻿namespace AudioBand.Messages
 {
     /// <summary>
-    /// Global edit messages for all <see cref="ViewModelBase"/>
+    /// Global edit messages for view models.
     /// </summary>
     public enum EditMessage
     {

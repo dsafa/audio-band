@@ -155,7 +155,7 @@
     <Compile Include="ViewModels\CustomLabelService.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\AboutVM.cs" />
-    <Compile Include="ViewModels\EditMessage.cs" />
+    <Compile Include="Messages\EditMessage.cs" />
     <Compile Include="ViewModels\ICustomLabelService.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
