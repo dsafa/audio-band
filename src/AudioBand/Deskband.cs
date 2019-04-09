@@ -5,12 +5,14 @@ using System.Windows;
 using System.Windows.Forms;
 using AudioBand.AudioSource;
 using AudioBand.Logging;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Resources;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using AudioBand.Views.Wpf;
 using CSDeskBand;
+using PubSub.Extension;
 using SimpleInjector;
 
 namespace AudioBand
@@ -41,6 +43,7 @@ namespace AudioBand
             AppDomain.CurrentDomain.UnhandledException += (sender, args) => AudioBandLogManager.GetLogger("AudioBand").Error((Exception)args.ExceptionObject, "Unhandled Exception");
             ConfigureDependencies();
             _mainControl = _container.GetInstance<MainControl>();
+            this.Subscribe<FocusChangedMessage>(FocusCaptured);
         }
 
         /// <inheritdoc/>
@@ -90,6 +93,15 @@ namespace AudioBand
             {
                 AudioBandLogManager.GetLogger("AudioBand").Error(e);
                 throw;
+            }
+        }
+
+        private void FocusCaptured(FocusChangedMessage msg)
+        {
+            // Capture focus so that tab button is captured
+            if (msg == FocusChangedMessage.FocusCaptured)
+            {
+                UpdateFocus(true);
             }
         }
     }

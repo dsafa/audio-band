@@ -26,8 +26,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </fw:AcrylicWindow.Resources>
-    <DockPanel LastChildFill="True">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <DockPanel LastChildFill="True" KeyboardNavigation.IsTabStop="False">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" IsTabStop="False">
             <StackPanel DockPanel.Dock="Left" Background="Transparent" x:Name="NavigationPane">
                 <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource GeneralSettingsTab}"
                              Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AudioBandVM}"/>
@@ -64,7 +64,8 @@
                         </Grid>
                     </Expander.Header>
                     <ListBox Background="Transparent" ItemsSource="{Binding ElementName=Window, Path=CustomLabelsVM.CustomLabels}"
-                             ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
+                             ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}"
+                             KeyboardNavigation.TabNavigation="Local">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <RadioButton Style="{StaticResource NavigationPaneRadioButton}" 
@@ -120,8 +121,9 @@
             <Button Margin="8" Content="{StaticResource CancelButtonText}" IsCancel="True" Width="100"
                     Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
         </StackPanel>
-        <ScrollViewer Background="White" Padding="20" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto">
-            <ContentControl Content="{Binding SelectedVM}" BorderThickness="0">
+        <ScrollViewer Background="White" Padding="20" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto"
+                      IsTabStop="False">
+            <ContentControl Content="{Binding SelectedVM}" BorderThickness="0" IsTabStop="False">
                 <ContentControl.Resources>
                     <DataTemplate DataType="{x:Type viewmodels:AudioBandVM}">
                         <local:GeneralSettingsView DataContext="{Binding}"/>

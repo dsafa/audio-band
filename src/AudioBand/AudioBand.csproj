@@ -110,6 +110,7 @@
       <DependentUpon>MainControl.cs</DependentUpon>
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Messages\FocusChangedMessage.cs" />
     <Compile Include="Models\AlbumArt.cs" />
     <Compile Include="Models\AlbumArtPopup.cs" />
     <Compile Include="Models\AudioBand.cs" />

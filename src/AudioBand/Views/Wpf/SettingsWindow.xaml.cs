@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Forms.Integration;
+using System.Windows.Input;
 using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.ViewModels;
@@ -72,6 +74,8 @@ namespace AudioBand.Views.Wpf
             InitializeComponent();
             DataContext = vm;
             _vm = vm;
+
+            Activated += OnActivated;
         }
 
         /// <inheritdoc/>
@@ -126,6 +130,7 @@ namespace AudioBand.Views.Wpf
             _shouldSave = false;
             _vm.SelectedVM?.BeginEdit();
             Show();
+            Activate();
         }
 
         /// <inheritdoc/>
@@ -148,6 +153,26 @@ namespace AudioBand.Views.Wpf
             Hide();
         }
 
+        /// <summary>
+        /// Manually handle tab navigation since deskband focus is weird
+        /// </summary>
+        /// <param name="e">Key event</param>
+        protected override void OnPreviewKeyUp(KeyEventArgs e)
+        {
+            base.OnPreviewKeyUp(e);
+            if (e.Key != Key.Tab)
+            {
+                return;
+            }
+
+            var focusedElement = Keyboard.FocusedElement as UIElement;
+            FocusNavigationDirection direction = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)
+                ? FocusNavigationDirection.Previous
+                : FocusNavigationDirection.Next;
+
+            focusedElement?.MoveFocus(new TraversalRequest(direction));
+        }
+
         // Problem with late binding. Fuslogvw shows its not probing the original location.
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
@@ -160,6 +185,11 @@ namespace AudioBand.Views.Wpf
 
             var filename = Path.Combine(DirectoryHelper.BaseDirectory, asmName + ".dll");
             return File.Exists(filename) ? Assembly.LoadFrom(filename) : null;
+        }
+
+        private void OnActivated(object sender, EventArgs e)
+        {
+            this.Publish(FocusChangedMessage.FocusCaptured);
         }
 
         private void SaveCloseCommandOnExecute(object o)
