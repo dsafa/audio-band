@@ -103,6 +103,15 @@
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
+                                                        To="{StaticResource BorderHoverColor}" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Border>
                 </ControlTemplate>
@@ -123,6 +132,7 @@
         <Setter Property="Background" Value="Transparent"/>
     </Style>
     <Style x:Key="NavigationPaneListBoxItem" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
