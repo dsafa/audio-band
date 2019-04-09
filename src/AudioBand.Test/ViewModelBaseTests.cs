@@ -1,4 +1,5 @@
 ﻿using System;
+using AudioBand.Messages;
 using AudioBand.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PubSub.Extension;

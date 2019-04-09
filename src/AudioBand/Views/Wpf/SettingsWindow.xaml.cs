@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms.Integration;
 using AudioBand.Commands;
+using AudioBand.Messages;
 using AudioBand.ViewModels;
 using PubSub.Extension;
 
@@ -24,6 +25,7 @@ namespace AudioBand.Views.Wpf
         };
 
         private bool _shouldSave;
+        private SettingsWindowVM _vm;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindow"/> class
@@ -69,6 +71,7 @@ namespace AudioBand.Views.Wpf
 
             InitializeComponent();
             DataContext = vm;
+            _vm = vm;
         }
 
         /// <inheritdoc/>
@@ -120,12 +123,15 @@ namespace AudioBand.Views.Wpf
         /// <inheritdoc/>
         public void ShowWindow()
         {
+            _shouldSave = false;
+            _vm.SelectedVM?.BeginEdit();
             Show();
         }
 
         /// <inheritdoc/>
         protected override void OnClosing(CancelEventArgs e)
         {
+            // Hide instead of closing the window
             e.Cancel = true;
 
             if (_shouldSave)
@@ -139,7 +145,6 @@ namespace AudioBand.Views.Wpf
                 Canceled?.Invoke(this, EventArgs.Empty);
             }
 
-            _shouldSave = false;
             Hide();
         }
 
@@ -165,7 +170,6 @@ namespace AudioBand.Views.Wpf
 
         private void CancelCloseCommandOnExecute(object o)
         {
-            _shouldSave = false;
             Close();
         }
     }
