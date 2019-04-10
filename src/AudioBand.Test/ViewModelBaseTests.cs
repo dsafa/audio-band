@@ -86,9 +86,9 @@ namespace AudioBand.Test
         }
 
         [TestMethod]
-        public void ResetStartsEdit()
+        public void ResetViewModelWithModelStartsEdit()
         {
-            var vm = new ViewModel();
+            var vm = new ViewModelWithModel();
             vm.Reset();
             
             Assert.IsTrue(vm.IsEditing);
