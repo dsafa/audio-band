@@ -6,7 +6,7 @@ using AudioSourceHost;
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// View model for <see cref="AudioSourceSetting"/>.
+    /// View model for <see cref="AudioSourceSetting"/>. Represents one key-value pair
     /// </summary>
     public class AudioSourceSettingVM : ViewModelBase<AudioSourceSetting>
     {
