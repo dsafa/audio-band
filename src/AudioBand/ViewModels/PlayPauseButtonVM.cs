@@ -42,7 +42,7 @@ namespace AudioBand.ViewModels
         public Image PlayImage
         {
             get => _playImage;
-            set => SetProperty(ref _playImage, value);
+            set => SetProperty(ref _playImage, value, trackChanges: false);
         }
 
         [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonImagePath))]
@@ -62,7 +62,7 @@ namespace AudioBand.ViewModels
         public Image PauseImage
         {
             get => _pauseImage;
-            set => SetProperty(ref _pauseImage, value);
+            set => SetProperty(ref _pauseImage, value, trackChanges: false);
         }
 
         [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonImagePath))]

@@ -52,16 +52,24 @@ namespace AudioBand.ViewModels
         /// <typeparam name="TValue">Type of the property to set.</typeparam>
         /// <param name="modelPropertyName">Name of the property to set.</param>
         /// <param name="newValue">New value to set.</param>
+        /// <param name="trackChanges">True if changes are tracked by calling <see cref="ViewModelBase.BeginEdit"/>.</param>
         /// <param name="propertyName">Name of the property to notify with.</param>
         /// <returns>Returns true if new value was set</returns>
-        protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, bool trackChanges = true, [CallerMemberName] string propertyName = null)
         {
-            // Try and set the new value
-            _modelToAccessor[Model][modelPropertyName] = newValue;
+            var currentModelValue = (TValue)_modelToAccessor[Model][modelPropertyName];
+            if (EqualityComparer<TValue>.Default.Equals(currentModelValue, newValue))
+            {
+                return false;
+            }
 
-            // See if the value has changed
-            var currentValue = (TValue)_modelToAccessor[Model][modelPropertyName];
-            return EqualityComparer<TValue>.Default.Equals(currentValue, newValue);
+            if (trackChanges)
+            {
+                BeginEdit();
+            }
+
+            _modelToAccessor[Model][modelPropertyName] = newValue;
+            return true;
         }
 
         /// <summary>
@@ -90,7 +98,7 @@ namespace AudioBand.ViewModels
         protected override void OnReset()
         {
             base.OnReset();
-
+            BeginEdit();
             ResetObject(Model);
         }
 

@@ -33,7 +33,7 @@ namespace AudioBand.ViewModels
         public Image Image
         {
             get => _image;
-            set => SetProperty(ref _image, value);
+            set => SetProperty(ref _image, value, trackChanges: false);
         }
 
         [PropertyChangeBinding(nameof(PreviousButton.ImagePath))]

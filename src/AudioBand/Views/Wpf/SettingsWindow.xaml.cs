@@ -128,7 +128,6 @@ namespace AudioBand.Views.Wpf
         public void ShowWindow()
         {
             _shouldSave = false;
-            _vm.SelectedVM?.BeginEdit();
             Show();
             Activate();
         }

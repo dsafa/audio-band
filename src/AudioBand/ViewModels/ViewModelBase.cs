@@ -202,13 +202,19 @@ namespace AudioBand.ViewModels
         /// <typeparam name="TValue">Type of the value.</typeparam>
         /// <param name="field">Field to set.</param>
         /// <param name="newValue">New value of the field.</param>
+        /// <param name="trackChanges">True if <see cref="BeginEdit"/> should be called if the value changes.</param>
         /// <param name="propertyName">Name of the property to notify with.</param>
         /// <returns>Returns true if new value was set</returns>
-        protected bool SetProperty<TValue>(ref TValue field, TValue newValue, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<TValue>(ref TValue field, TValue newValue, bool trackChanges = true, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<TValue>.Default.Equals(field, newValue))
             {
                 return false;
+            }
+
+            if (trackChanges)
+            {
+                BeginEdit();
             }
 
             field = newValue;
