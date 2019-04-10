@@ -5,7 +5,8 @@
                     xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
                     xmlns:converters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF">
+                    xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+                    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.ToggleSwitch.xaml" />
@@ -27,18 +28,16 @@
     <sys:Double x:Key="NavigationPaneItemFontSize">24</sys:Double>
     <sys:Double x:Key="BodyFontSize">14</sys:Double>
     <sys:Double x:Key="TitleFontSize">46</sys:Double>
-    <SolidColorBrush x:Key="BorderDefaultColorBrush" Color="{StaticResource BorderDefaultColor}"/>
-    <SolidColorBrush x:Key="BorderHoverColorBrush" Color="{StaticResource BorderHoverColor}"/>
+    <SolidColorBrush x:Key="BorderDefaultColorBrush" Color="{StaticResource BorderDefaultColor}" o:Freeze="True"/>
+    <SolidColorBrush x:Key="BorderHoverColorBrush" Color="{StaticResource BorderHoverColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderFocusedColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
-    <SolidColorBrush x:Key="NavigationPaneHoverBackgroundBrush" Color="{StaticResource NavigationPaneHoverBackgroundColor}"/>
-    <SolidColorBrush x:Key="IconColorBrush" Color="#999999"/>
-    <SolidColorBrush x:Key="ButtonDisabledColorBrush" Color="{StaticResource ButtonDisabledColor}"/>
+    <SolidColorBrush x:Key="NavigationPaneHoverBackgroundBrush" Color="{StaticResource NavigationPaneHoverBackgroundColor}" o:Freeze="True"/>
+    <SolidColorBrush x:Key="IconColorBrush" Color="#999999" o:Freeze="True"/>
+    <SolidColorBrush x:Key="ButtonDisabledColorBrush" Color="{StaticResource ButtonDisabledColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchBrush.Win10" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchMouseOverBrush.Win10" Color="{x:Static fw:AccentColors.ImmersiveSystemAccentLight1}" />
-    <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10" Color="White" />
-    <RadialGradientBrush x:Shared="False" x:Key="RevealHoverLightBrush" MappingMode="Absolute"
-                         RadiusX="200"
-                         RadiusY="200">
+    <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10" Color="White" o:Freeze="True"/>
+    <RadialGradientBrush x:Shared="False" x:Key="RevealHoverLightBrush" MappingMode="Absolute" RadiusX="200" RadiusY="200">
         <RadialGradientBrush.Center>
             <MultiBinding Converter="{StaticResource relativePositionConverter}">
                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Rectangle}}" Path="(fw:PointerTracker.RootObject)"/>
@@ -178,30 +177,19 @@
                         </Border>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="Transparent" Duration="0"/>
-                                        <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
-                                                         To="1" Duration="0:0:0.01"/>
-                                        <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
-                                                         To="1" Duration="0:0:0.01"/>
-                                        <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
-                                                         To="0" Duration="0:0:0.4"/>
-                                    </Storyboard>
-                                </VisualState>
+                                <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource NavigationPaneHoverBackgroundColor}" Duration="0:0:0.1"/>
+                                                        To="{StaticResource NavigationPaneHoverBackgroundColor}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
-                                                         To="1" Duration="0:0:0.2"/>
+                                                         To="1" Duration="0"/>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource NavigationPaneClickBackgroundColor}" Duration="0:0:0.1"/>
+                                                        To="{StaticResource NavigationPaneClickBackgroundColor}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
                                                          To="0.98" Duration="0:0:0.01"/>
                                         <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
@@ -239,20 +227,13 @@
                         </DockPanel>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="Transparent" Duration="0"/>
-                                        <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
-                                                         To="0" Duration="0:0:0.4"/>
-                                    </Storyboard>
-                                </VisualState>
+                                <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource NavigationPaneHoverBackgroundColor}" Duration="0:0:0.2"/>
+                                                        To="{StaticResource NavigationPaneHoverBackgroundColor}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
-                                                         To="1" Duration="0:0:0.2"/>
+                                                         To="1" Duration="0"/>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
