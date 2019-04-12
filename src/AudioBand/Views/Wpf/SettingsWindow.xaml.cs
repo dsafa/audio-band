@@ -27,7 +27,7 @@ namespace AudioBand.Views.Wpf
         };
 
         private bool _shouldSave;
-        private SettingsWindowVM _vm;
+        private IDialogService _dialogService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindow"/> class
@@ -43,6 +43,7 @@ namespace AudioBand.Views.Wpf
         /// <param name="playPauseButtonVM">The play/pause button view model</param>
         /// <param name="previousButtonVM">The previous button view model</param>
         /// <param name="progressBarVM">The progress bar view model</param>
+        /// <param name="dialogService">The dialog service</param>
         public SettingsWindow(
             SettingsWindowVM vm,
             AudioBandVM audioBandVM,
@@ -53,7 +54,8 @@ namespace AudioBand.Views.Wpf
             NextButtonVM nextButtonVM,
             PlayPauseButtonVM playPauseButtonVM,
             PreviousButtonVM previousButtonVM,
-            ProgressBarVM progressBarVM)
+            ProgressBarVM progressBarVM,
+            IDialogService dialogService)
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             ElementHost.EnableModelessKeyboardInterop(this);
@@ -73,7 +75,7 @@ namespace AudioBand.Views.Wpf
 
             InitializeComponent();
             DataContext = vm;
-            _vm = vm;
+            _dialogService = dialogService;
 
             Activated += OnActivated;
         }
@@ -142,14 +144,16 @@ namespace AudioBand.Views.Wpf
             {
                 this.Publish(EditMessage.AcceptEdits);
                 Saved?.Invoke(this, EventArgs.Empty);
+                Hide();
+                return;
             }
-            else
+
+            if (_dialogService.ShowConfirmationDialog(ConfirmationDialogType.DiscardChanges))
             {
                 this.Publish(EditMessage.CancelEdits);
                 Canceled?.Invoke(this, EventArgs.Empty);
+                Hide();
             }
-
-            Hide();
         }
 
         /// <summary>

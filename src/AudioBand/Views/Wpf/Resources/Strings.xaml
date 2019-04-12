@@ -45,6 +45,7 @@
     <sys:String x:Key="NewLabelButtonText">Add New Label</sys:String>
     <sys:String x:Key="AboutButtonText">About</sys:String>
     <sys:String x:Key="DeleteButtonText">Delete</sys:String>
+    <sys:String x:Key="DiscardButtonText">Discard</sys:String>
 
     <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
     <sys:String x:Key="DefaultImageHelpText">Reset image to its default.</sys:String>
@@ -71,4 +72,6 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="RememberHelpText">This setting will be saved. Are you sure?</sys:String>
     <sys:String x:Key="DeleteLabelDialogTitle">Delete label</sys:String>
     <sys:String x:Key="DeleteLabelDialogBody">Are you sure you want to delete the label '{0}'?</sys:String>
+    <sys:String x:Key="DiscardChangesDialogTitle">Discard changes</sys:String>
+    <sys:String x:Key="DiscardChangesDialogBody">Are you sure you want to discard all changes?</sys:String>
 </ResourceDictionary>
