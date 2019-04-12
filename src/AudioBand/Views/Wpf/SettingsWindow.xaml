@@ -116,10 +116,10 @@
         </ScrollViewer>
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Stretch"
                     FlowDirection="RightToLeft" Background="White" SnapsToDevicePixels="True">
-            <Button Margin="8" Content="{StaticResource SaveButtonText}" IsDefault="True" Width="100"
-                    Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
             <Button Margin="8" Content="{StaticResource CancelButtonText}" IsCancel="True" Width="100"
                     Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
+            <Button Margin="8" Content="{StaticResource SaveButtonText}" IsDefault="True" Width="100"
+                    Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
         </StackPanel>
         <ScrollViewer Background="White" Padding="20" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto"
                       IsTabStop="False">
