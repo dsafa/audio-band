@@ -111,7 +111,7 @@ namespace AudioBand.ViewModels
         {
             BeginEdit();
 
-            if (!_dialogService.ShowConfirmationDialog("Delete Label", $"Are you sure you want to delete the label '{labelVm.Name}'?"))
+            if (!_dialogService.ShowConfirmationDialog(ConfirmationDialogType.DeleteLabel, labelVm.Name))
             {
                 return;
             }

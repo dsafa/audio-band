@@ -15,7 +15,7 @@
             Title="Audio Band Settings"
             Height="800"
             Width="1000"
-            NoiseOpacity="0"
+            NoiseOpacity="0.01"
             fw:PointerTracker.Enabled="True"
             WindowStartupLocation="CenterScreen">
     <fw:AcrylicWindow.Resources>

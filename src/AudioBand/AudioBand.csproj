@@ -153,6 +153,7 @@
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
     <Compile Include="ViewModels\AlsoNotifyAttribute.cs" />
     <Compile Include="ViewModels\AudioSourceSettingVM.cs" />
+    <Compile Include="ViewModels\ConfirmationDialogType.cs" />
     <Compile Include="ViewModels\CustomLabelService.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\AboutVM.cs" />
@@ -210,6 +211,9 @@
     </Compile>
     <Compile Include="Views\Wpf\Behaviours\NumericInput.cs" />
     <Compile Include="Views\Wpf\ISettingsWindow.cs" />
+    <Compile Include="Views\Wpf\ConfirmationDialog.xaml.cs">
+      <DependentUpon>ConfirmationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Wpf\PlaybackButtonSettingsView.xaml.cs">
       <DependentUpon>PlaybackButtonSettingsView.xaml</DependentUpon>
     </Compile>
@@ -349,6 +353,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Wpf\ImagePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\ConfirmationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

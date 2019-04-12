@@ -28,10 +28,11 @@ namespace AudioBand.Views.Wpf
         }
 
         /// <inheritdoc/>
-        public bool ShowConfirmationDialog(string title, string message)
+        public bool ShowConfirmationDialog(ConfirmationDialogType confirmType, params object[] data)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show(message, title, MessageBoxButton.YesNo);
-            return messageBoxResult == MessageBoxResult.Yes;
+            var dialog = new ConfirmationDialog(confirmType, data);
+            var result = dialog.ShowDialog();
+            return result.GetValueOrDefault(false);
         }
     }
 }
