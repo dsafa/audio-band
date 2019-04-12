@@ -11,10 +11,10 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Show a confirmation dialog.
         /// </summary>
-        /// <param name="title">Title of the dialog.</param>
-        /// <param name="message">Message of the dialog.</param>
+        /// <param name="confirmType">Type of confirmation dialog.</param>
+        /// <param name="data">Data for the confirmation dialog.</param>
         /// <returns>True if accepted; false otherwise.</returns>
-        bool ShowConfirmationDialog(string title, string message);
+        bool ShowConfirmationDialog(ConfirmationDialogType confirmType, params object[] data);
 
         /// <summary>
         /// Show the color picker dialog.
