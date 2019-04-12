@@ -27,7 +27,7 @@
     <sys:Double x:Key="NavigationPaneItemHeight">50</sys:Double>
     <sys:Double x:Key="NavigationPaneItemFontSize">24</sys:Double>
     <sys:Double x:Key="BodyFontSize">14</sys:Double>
-    <sys:Double x:Key="TitleFontSize">46</sys:Double>
+    <sys:Double x:Key="TitleFontSize">24</sys:Double>
     <SolidColorBrush x:Key="BorderDefaultColorBrush" Color="{StaticResource BorderDefaultColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderHoverColorBrush" Color="{StaticResource BorderHoverColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderFocusedColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>

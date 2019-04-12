@@ -28,12 +28,15 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock FontSize="26" Grid.Row="0" x:Name="MessageTitle" TextWrapping="Wrap">
+        <TextBlock FontSize="{StaticResource TitleFontSize}" Grid.Row="0" x:Name="MessageTitle" TextWrapping="Wrap">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DeleteLabel">
                             <Setter Property="Text" Value="{StaticResource DeleteLabelDialogTitle}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DiscardChanges">
+                            <Setter Property="Text" Value="{StaticResource DiscardChangesDialogTitle}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -46,6 +49,9 @@
                         <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DeleteLabel">
                             <Setter Property="Text" Value="{Binding ElementName=ConfirmationDialogWindow, Path=DialogData[0], StringFormat={StaticResource DeleteLabelDialogBody}}"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DiscardChanges">
+                            <Setter Property="Text" Value="{StaticResource DiscardChangesDialogBody}"/>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </TextBlock.Style>
@@ -57,6 +63,9 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DeleteLabel">
                                 <Setter Property="Content" Value="{StaticResource DeleteButtonText}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DiscardChanges">
+                                <Setter Property="Content" Value="{StaticResource DiscardButtonText}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

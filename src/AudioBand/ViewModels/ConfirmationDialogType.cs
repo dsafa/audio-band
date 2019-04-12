@@ -8,6 +8,11 @@
         /// <summary>
         /// Dialog to delete the label
         /// </summary>
-        DeleteLabel
+        DeleteLabel,
+
+        /// <summary>
+        /// Dialog to discard changes
+        /// </summary>
+        DiscardChanges
     }
 }
