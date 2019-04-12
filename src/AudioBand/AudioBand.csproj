@@ -47,8 +47,8 @@
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="Dsafa.WpfColorPicker, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dsafa.WpfColorPicker.1.1.0\lib\net462\Dsafa.WpfColorPicker.dll</HintPath>
+    <Reference Include="Dsafa.WpfColorPicker, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dsafa.WpfColorPicker.1.2.0\lib\net462\Dsafa.WpfColorPicker.dll</HintPath>
     </Reference>
     <Reference Include="FastMember, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.1.4.1\lib\net461\FastMember.dll</HintPath>
