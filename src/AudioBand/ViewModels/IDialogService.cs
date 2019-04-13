@@ -22,5 +22,10 @@ namespace AudioBand.ViewModels
         /// <param name="initialColor">The initial color.</param>
         /// <returns>The new color; otherwise the action was cancelled.</returns>
         Color? ShowColorPickerDialog(Color initialColor);
+
+        /// <summary>
+        /// Show the about dialog.
+        /// </summary>
+        void ShowAboutDialog();
     }
 }

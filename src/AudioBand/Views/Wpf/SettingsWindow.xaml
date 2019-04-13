@@ -114,13 +114,22 @@
                 </Expander>
             </StackPanel>
         </ScrollViewer>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Stretch"
-                    FlowDirection="RightToLeft" Background="White" SnapsToDevicePixels="True">
-            <Button Margin="8" Content="{StaticResource CancelButtonText}" IsCancel="True" Width="100"
-                    Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
-            <Button Margin="8" Content="{StaticResource SaveButtonText}" IsDefault="True" Width="100"
-                    Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
-        </StackPanel>
+        <Grid DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" SnapsToDevicePixels="True" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button Margin="8" Content="{StaticResource AboutButtonText}" Width="100"
+                        Command="{Binding ElementName=Window, Path=OpenAboutDialogCommand}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button Margin="8" Content="{StaticResource CancelButtonText}" IsCancel="True" Width="100"
+                        Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
+                <Button Margin="8" Content="{StaticResource SaveButtonText}" IsDefault="True" Width="100"
+                        Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
+            </StackPanel>
+        </Grid>
         <ScrollViewer Background="White" Padding="20" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto"
                       IsTabStop="False">
             <ContentControl Content="{Binding SelectedVM}" BorderThickness="0" IsTabStop="False">
