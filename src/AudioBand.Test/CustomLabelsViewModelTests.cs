@@ -45,27 +45,33 @@ namespace AudioBand.Test
         [TestMethod]
         public void RemoveLabel_confirm()
         {
-            _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>())).Returns(true);
+            _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(true);
             _vm.AddLabelCommand.Execute(null);
             var newLabel = _vm.CustomLabels[0];
             _vm.RemoveLabelCommand.Execute(newLabel);
 
             Assert.AreEqual(0, _vm.CustomLabels.Count);
             _labelServiceMock.Verify(o => o.RemoveCustomTextLabel(newLabel), Times.Once);
-            _dialogMock.Verify(o => o.ShowConfirmationDialog(It.Is<ConfirmationDialogType>(type => type == ConfirmationDialogType.DeleteLabel)), Times.Once);
+            _dialogMock.Verify(o => o.ShowConfirmationDialog(
+                It.Is<ConfirmationDialogType>(type => type == ConfirmationDialogType.DeleteLabel),
+                It.Is<object[]>(data => data.Length == 1)), 
+                Times.Once);
         }
 
         [TestMethod]
         public void RemoveLabel_deny()
         {
-            _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>())).Returns(false);
+            _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(false);
             _vm.AddLabelCommand.Execute(null);
             var newLabel = _vm.CustomLabels[0];
             _vm.RemoveLabelCommand.Execute(newLabel);
 
             Assert.AreEqual(1, _vm.CustomLabels.Count);
             _labelServiceMock.Verify(o => o.RemoveCustomTextLabel(newLabel), Times.Never);
-            _dialogMock.Verify(o => o.ShowConfirmationDialog(It.Is<ConfirmationDialogType>(type => type == ConfirmationDialogType.DeleteLabel)), Times.Once);
+            _dialogMock.Verify(o => o.ShowConfirmationDialog(
+                It.Is<ConfirmationDialogType>(type => type == ConfirmationDialogType.DeleteLabel),
+                It.Is<object[]>(data => data.Length == 1)),
+                Times.Once);
         }
 
         [TestMethod]
@@ -85,7 +91,7 @@ namespace AudioBand.Test
         public void RemoveLabel_ThenCancel()
         {
             _appSettingsMock.SetupGet(x => x.CustomLabels).Returns(new List<CustomLabel> { new CustomLabel() });
-            _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>())).Returns(true);
+            _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(true);
             _vm = new CustomLabelsVM(_appSettingsMock.Object, _labelServiceMock.Object, _dialogMock.Object);
             _vm.BeginEdit();
             var label = _vm.CustomLabels[0];
