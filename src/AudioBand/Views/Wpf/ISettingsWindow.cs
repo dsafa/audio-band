@@ -60,11 +60,6 @@ namespace AudioBand.Views.Wpf
         ProgressBarVM ProgressBarVM { get; }
 
         /// <summary>
-        /// Gets the view model for the about view model
-        /// </summary>
-        AboutVM AboutVM { get; }
-
-        /// <summary>
         /// Gets the collection for view models for the audio source settings
         /// </summary>
         ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM { get; }

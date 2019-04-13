@@ -27,6 +27,12 @@ namespace AudioBand.Views.Wpf
             return null;
         }
 
+        /// <inheritdoc />
+        public void ShowAboutDialog()
+        {
+            new AboutDialog().ShowDialog();
+        }
+
         /// <inheritdoc/>
         public bool ShowConfirmationDialog(ConfirmationDialogType confirmType, params object[] data)
         {

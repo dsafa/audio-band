@@ -19,15 +19,15 @@ namespace AudioBand.Views.Wpf
     /// </summary>
     public partial class SettingsWindow : ISettingsWindow
     {
-        private static readonly HashSet<string> _bindingHelpAssemblies = new HashSet<string>
+        private static readonly HashSet<string> LateBindAssemblies = new HashSet<string>
         {
             "MahApps.Metro.IconPacks.Material",
-            "ColorPickerWPF",
+            "MahApps.Metro",
             "FluentWPF"
         };
 
         private bool _shouldSave;
-        private IDialogService _dialogService;
+        private readonly IDialogService _dialogService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindow"/> class
@@ -38,7 +38,6 @@ namespace AudioBand.Views.Wpf
         /// <param name="albumArtPopupVM">The album art popup view model</param>
         /// <param name="albumArtVM">The album art view model</param>
         /// <param name="customLabelsVM">The custom labels view model</param>
-        /// <param name="aboutVm">The about dialog view model</param>
         /// <param name="nextButtonVM">The next button view model</param>
         /// <param name="playPauseButtonVM">The play/pause button view model</param>
         /// <param name="previousButtonVM">The previous button view model</param>
@@ -50,7 +49,6 @@ namespace AudioBand.Views.Wpf
             AlbumArtPopupVM albumArtPopupVM,
             AlbumArtVM albumArtVM,
             CustomLabelsVM customLabelsVM,
-            AboutVM aboutVm,
             NextButtonVM nextButtonVM,
             PlayPauseButtonVM playPauseButtonVM,
             PreviousButtonVM previousButtonVM,
@@ -62,12 +60,12 @@ namespace AudioBand.Views.Wpf
 
             CancelCloseCommand = new RelayCommand(CancelCloseCommandOnExecute);
             SaveCloseCommand = new RelayCommand(SaveCloseCommandOnExecute);
+            OpenAboutDialogCommand = new RelayCommand(OpenAboutCommandOnExecute);
 
             AudioBandVM = audioBandVM;
             AlbumArtPopupVM = albumArtPopupVM;
             AlbumArtVM = albumArtVM;
             CustomLabelsVM = customLabelsVM;
-            AboutVM = aboutVm;
             NextButtonVM = nextButtonVM;
             PlayPauseButtonVM = playPauseButtonVM;
             PreviousButtonVM = previousButtonVM;
@@ -96,6 +94,11 @@ namespace AudioBand.Views.Wpf
         /// </summary>
         public RelayCommand SaveCloseCommand { get; }
 
+        /// <summary>
+        /// Gets the command to open the about dialog
+        /// </summary>
+        public RelayCommand OpenAboutDialogCommand { get; }
+
         /// <inheritdoc/>
         public AudioBandVM AudioBandVM { get; private set; }
 
@@ -119,9 +122,6 @@ namespace AudioBand.Views.Wpf
 
         /// <inheritdoc/>
         public ProgressBarVM ProgressBarVM { get; private set; }
-
-        /// <inheritdoc/>
-        public AboutVM AboutVM { get; private set; }
 
         /// <inheritdoc/>
         public ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM { get; } = new ObservableCollection<AudioSourceSettingsVM>();
@@ -181,7 +181,7 @@ namespace AudioBand.Views.Wpf
         {
             // name is in this format Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4
             var asmName = args.Name.Substring(0, args.Name.IndexOf(','));
-            if (!_bindingHelpAssemblies.Contains(asmName))
+            if (!LateBindAssemblies.Contains(asmName))
             {
                 return null;
             }
@@ -204,6 +204,11 @@ namespace AudioBand.Views.Wpf
         private void CancelCloseCommandOnExecute(object o)
         {
             Close();
+        }
+
+        private void OpenAboutCommandOnExecute(object o)
+        {
+            _dialogService.ShowAboutDialog();
         }
     }
 }
