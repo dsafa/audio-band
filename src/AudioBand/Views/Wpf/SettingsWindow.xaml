@@ -17,6 +17,7 @@
             Width="1000"
             NoiseOpacity="0.01"
             fw:PointerTracker.Enabled="True"
+            ExtendViewIntoTitleBar="True"
             WindowStartupLocation="CenterScreen">
     <fw:AcrylicWindow.Resources>
         <ResourceDictionary>
@@ -130,9 +131,12 @@
                         Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
             </StackPanel>
         </Grid>
-        <ScrollViewer Background="White" Padding="20" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto"
+        <ScrollViewer Background="White" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto"
                       IsTabStop="False">
-            <ContentControl Content="{Binding SelectedVM}" BorderThickness="0" IsTabStop="False">
+            <ScrollViewer.Padding>
+                <Thickness Top="{x:Static SystemParameters.CaptionHeight}"/>
+            </ScrollViewer.Padding>
+            <ContentControl Content="{Binding SelectedVM}" BorderThickness="0" IsTabStop="False" Margin="20">
                 <ContentControl.Resources>
                     <DataTemplate DataType="{x:Type viewmodels:AudioBandVM}">
                         <local:GeneralSettingsView DataContext="{Binding}"/>
