@@ -10,6 +10,7 @@
              NoiseOpacity="0.01"
              Width="600" Height="500"
              WindowStartupLocation="CenterScreen"
+             ExtendViewIntoTitleBar="True"
              Title="About Audio Band">
     <fw:AcrylicWindow.Resources>
         <ResourceDictionary>
@@ -31,12 +32,15 @@
             <TextBlock HorizontalAlignment="Center" FontSize="{StaticResource HeaderFontSize}" Text="Audio Band" FontWeight="Bold"/>
             <TextBlock HorizontalAlignment="Center" Margin="0, 10" FontSize="14" Text="{Binding Version}"/>
         </StackPanel>
-        <Grid Grid.Column="1" Background="#88FFFFFF">
+        <Grid Grid.Column="1" Background="#AAFFFFFF">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Stretch">
+                <StackPanel.Margin>
+                    <Thickness Top="{x:Static SystemParameters.CaptionHeight}"/>
+                </StackPanel.Margin>
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                         <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
