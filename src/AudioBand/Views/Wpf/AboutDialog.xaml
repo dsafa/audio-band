@@ -5,14 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
-             xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
+             xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
+             Icon="pack://application:,,,/AudioBand;component/audioband.ico"
              NoiseOpacity="0.01"
              Width="600" Height="500"
              WindowStartupLocation="CenterScreen"
              ExtendViewIntoTitleBar="True"
              Title="About Audio Band">
+    <i:Interaction.Behaviors>
+        <behaviours:AppUserModelID/>
+    </i:Interaction.Behaviors>
     <fw:AcrylicWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

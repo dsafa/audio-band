@@ -7,18 +7,24 @@
             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
             xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+            xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
             x:Class="AudioBand.Views.Wpf.SettingsWindow"
             mc:Ignorable="d" 
             x:Name="Window"
             d:DesignHeight="600" d:DesignWidth="400"
             d:DataContext="{d:DesignInstance viewmodels:SettingsWindowVM}"
             Title="Audio Band Settings"
+            Icon="pack://application:,,,/AudioBand;component/audioband.ico"
             Height="800"
             Width="1000"
             NoiseOpacity="0.01"
             fw:PointerTracker.Enabled="True"
             ExtendViewIntoTitleBar="True"
             WindowStartupLocation="CenterScreen">
+    <i:Interaction.Behaviors>
+        <behaviours:AppUserModelID/>
+    </i:Interaction.Behaviors>
     <fw:AcrylicWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
