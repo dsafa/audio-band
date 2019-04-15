@@ -9,6 +9,8 @@ namespace AudioBand.Views.Wpf
     /// </summary>
     public class DialogService : IDialogService
     {
+        private AboutDialog _instance;
+
         /// <inheritdoc/>
         public Color? ShowColorPickerDialog(Color initialColor)
         {
@@ -30,7 +32,16 @@ namespace AudioBand.Views.Wpf
         /// <inheritdoc />
         public void ShowAboutDialog()
         {
-            new AboutDialog().ShowDialog();
+            if (_instance != null)
+            {
+                _instance.Activate();
+            }
+            else
+            {
+                _instance = new AboutDialog();
+                _instance.Closed += (o, e) => _instance = null;
+                _instance.Show();
+            }
         }
 
         /// <inheritdoc/>
