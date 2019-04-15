@@ -40,6 +40,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>audioband.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
@@ -191,6 +194,7 @@
     <Compile Include="Views\Wpf\AudioSourceSettingsView.xaml.cs">
       <DependentUpon>AudioSourceSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Wpf\Behaviours\AppUserModelID.cs" />
     <Compile Include="Views\Wpf\Behaviours\NumericInputType.cs" />
     <Compile Include="Views\Wpf\Behaviours\PasswordBehaviour.cs" />
     <Compile Include="Views\Wpf\ColorPicker.xaml.cs">
@@ -304,6 +308,7 @@
     <EmbeddedResource Include="Resources\play.svg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="audioband.ico" />
     <Content Include="Resources\next.svg" />
     <Content Include="Resources\pause.svg" />
     <Content Include="Resources\placeholder-album.svg" />
