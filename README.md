@@ -1,3 +1,6 @@
+<div align="center"><img src="logo/logotype_cover.svg"/></div>
+<br/><br/>
+
 |Branch|Build Status|
 |---|---|
 |Master (development)|[![Build Status](https://dsafa.visualstudio.com/AudioBand/_apis/build/status/AudioBand%20Dev%20CI?branchName=master)](https://dsafa.visualstudio.com/AudioBand/_build/latest?definitionId=3&branchName=master)|
@@ -6,7 +9,7 @@
 # Audio Band
 Audio Band allows you to display song information in the taskbar.
 
-![Demo](./screenshots/demo.gif)
+<img align="right" src="screenshots/demo.gif"/>
 
 ## Features
 - Displays song information - album art, artist, title, progress
@@ -41,3 +44,5 @@ Help is appreciated
 [LICENSE](https://github.com/dsafa/audio-band/blob/master/LICENSE)
 
 [THIRD PARTY](https://github.com/dsafa/audio-band/blob/master/LICENSE-3RD-PARTY)
+
+Logo by @mirzazulfan
