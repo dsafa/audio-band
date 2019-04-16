@@ -9,6 +9,7 @@ namespace AudioBand.Models
     {
         private Color _foregroundColor = Color.DodgerBlue;
         private Color _backgroundColor = Color.Black;
+        private Color _hoverColor = Color.DeepSkyBlue;
         private bool _isVisible = true;
         private int _xPosition = 30;
         private int _yPosition = 28;
@@ -31,6 +32,15 @@ namespace AudioBand.Models
         {
             get => _backgroundColor;
             set => SetProperty(ref _backgroundColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the hover color
+        /// </summary>
+        public Color HoverColor
+        {
+            get => _hoverColor;
+            set => SetProperty(ref _hoverColor, value);
         }
 
         /// <summary>

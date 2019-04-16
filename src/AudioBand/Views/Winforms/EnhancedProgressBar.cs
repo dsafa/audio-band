@@ -12,6 +12,8 @@ namespace AudioBand.Views.Winforms
     {
         private TimeSpan _progress;
         private TimeSpan _total;
+        private Color _hoverColor;
+        private bool _isHovered;
 
         /// <summary>
         /// Gets or sets the current progress.
@@ -43,6 +45,37 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the hover color
+        /// </summary>
+        [Browsable(true)]
+        [Bindable(BindableSupport.Yes)]
+        public Color HoverColor
+        {
+            get => _hoverColor;
+            set
+            {
+                _hoverColor = value;
+                InvokeRefresh();
+            }
+        }
+
+        /// <inheritdoc />
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            base.OnMouseEnter(e);
+            _isHovered = true;
+            InvokeRefresh();
+        }
+
+        /// <inheritdoc />
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            _isHovered = false;
+            InvokeRefresh();
+        }
+
         /// <inheritdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -58,8 +91,10 @@ namespace AudioBand.Views.Winforms
                 progress = 1;
             }
 
+            var foregroundBrush = _isHovered ? new SolidBrush(HoverColor) : new SolidBrush(ForeColor);
+
             rect.Width = (int)(rect.Width * progress);
-            e.Graphics.FillRectangle(new SolidBrush(ForeColor), 0, 0, rect.Width, rect.Height);
+            e.Graphics.FillRectangle(foregroundBrush, 0, 0, rect.Width, rect.Height);
         }
     }
 }
