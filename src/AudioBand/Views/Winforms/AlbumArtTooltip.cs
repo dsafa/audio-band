@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Reflection;
 using System.Windows.Forms;
 using CSDeskBand;
 using Size = System.Drawing.Size;
@@ -12,19 +11,16 @@ namespace AudioBand.Views.Winforms
     /// <summary>
     /// The tooltip for the album art.
     /// </summary>
-    public class AlbumArtTooltip : ToolTip, IBindableComponent
+    public class AlbumArtTooltip : AudioBandTooltip
     {
-        private readonly MethodInfo _setToolMethod = typeof(ToolTip).GetMethod("SetTool", BindingFlags.Instance | BindingFlags.NonPublic);
         private double _scaling = 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlbumArtTooltip"/> class.
         /// </summary>
         public AlbumArtTooltip()
+            : base("AlbumArtTooltip")
         {
-            Popup += OnPopup;
-            Draw += OnDraw;
-            DataBindings = new ControlBindingsCollection(this);
         }
 
         /// <summary>
@@ -51,22 +47,13 @@ namespace AudioBand.Views.Winforms
         [Bindable(BindableSupport.Yes)]
         public Size Size { get; set; }
 
-        /// <inheritdoc/>
-        [Browsable(false)]
-        public BindingContext BindingContext { get; set; } = new BindingContext();
-
-        /// <inheritdoc/>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public ControlBindingsCollection DataBindings { get; }
-
         /// <summary>
         /// Show the tooltip without needing focus.
         /// </summary>
-        /// <param name="name">Name of the tooltip</param>
         /// <param name="control">The parent control.</param>
         /// <param name="taskbarInfo">The taskbar information.</param>
         /// <param name="scaling">The scaling factor.</param>
-        public void ShowWithoutRequireFocus(string name, MainControl control, TaskbarInfo taskbarInfo, double scaling)
+        public void Show(MainControl control, TaskbarInfo taskbarInfo, double scaling)
         {
             if (!Active)
             {
@@ -85,18 +72,19 @@ namespace AudioBand.Views.Winforms
             }
 
             _scaling = scaling;
-            const int TooltipTypeAbsolutePos = 2;
             var controlScreenLocation = control.PointToScreen(new Point(0, 0));
             var popupLocation = new Point(controlScreenLocation.X + (int)Math.Round(XPosition * scaling), controlScreenLocation.Y + (int)Math.Round(yOffset * scaling));
-            _setToolMethod.Invoke(this, new object[] { control, name, TooltipTypeAbsolutePos, popupLocation });
+            Show(control, PositionType.Absolute, popupLocation);
         }
 
-        private void OnPopup(object sender, PopupEventArgs popupEventArgs)
+        /// <inheritdoc />
+        protected override void OnPopup(PopupEventArgs popupEventArgs)
         {
             popupEventArgs.ToolTipSize = new Size((int)Math.Round(Size.Width * _scaling), (int)Math.Round(Size.Height * _scaling));
         }
 
-        private void OnDraw(object sender, DrawToolTipEventArgs drawToolTipEventArgs)
+        /// <inheritdoc />
+        protected override void OnDraw(DrawToolTipEventArgs drawToolTipEventArgs)
         {
             if (AlbumArt == null)
             {
