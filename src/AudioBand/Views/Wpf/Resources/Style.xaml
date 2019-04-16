@@ -293,6 +293,13 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="NavigationPaneIcon" TargetType="{x:Type Image}">
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0, 0, 20, 0"/>
+    </Style>
     <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
         <Setter Property="IsMoveToPointEnabled" Value="True"/>
     </Style>
