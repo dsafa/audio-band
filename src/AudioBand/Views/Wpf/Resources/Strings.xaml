@@ -46,6 +46,7 @@
     <sys:String x:Key="AboutButtonText">About</sys:String>
     <sys:String x:Key="DeleteButtonText">Delete</sys:String>
     <sys:String x:Key="DiscardButtonText">Discard</sys:String>
+    <sys:String x:Key="PickColorButtonText">Change Color</sys:String>
 
     <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
     <sys:String x:Key="DefaultImageHelpText">Reset image to its default.</sys:String>

@@ -30,26 +30,65 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Style.xaml"/>
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
+                <ResourceDictionary Source="Resources/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </fw:AcrylicWindow.Resources>
     <DockPanel LastChildFill="True" KeyboardNavigation.IsTabStop="False">
-        <ScrollViewer VerticalScrollBarVisibility="Auto" IsTabStop="False">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" IsTabStop="False" Width="300">
+            <ScrollViewer.Margin>
+                <Thickness Top="{x:Static SystemParameters.CaptionHeight}"/>
+            </ScrollViewer.Margin>
             <StackPanel DockPanel.Dock="Left" Background="Transparent" x:Name="NavigationPane">
-                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource GeneralSettingsTab}"
-                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AudioBandVM}"/>
-                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource PlayPauseButtonTab}"
-                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=PlayPauseButtonVM}"/>
-                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource NextButtonTab}"
-                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=NextButtonVM}"/>
-                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource PrevButtonTab}"
-                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=PreviousButtonVM}"/>
-                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource ProgressBarTab}"
-                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=ProgressBarVM}"/>
-                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource AlbumArtTab}"
-                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AlbumArtVM}"/>
-                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" Content="{StaticResource AlbumArtPopupTab}"
-                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AlbumArtPopupVM}"/>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AudioBandVM}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Gear}"/>
+                        <TextBlock Text="{StaticResource GeneralSettingsTab}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=PlayPauseButtonVM}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Play}"/>
+                        <TextBlock Text="{StaticResource PlayPauseButtonTab}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" 
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=NextButtonVM}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Next}"/>
+                        <TextBlock Text="{StaticResource NextButtonTab}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=PreviousButtonVM}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Previous}"/>
+                        <TextBlock Text="{StaticResource PrevButtonTab}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=ProgressBarVM}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Progress}"/>
+                        <TextBlock Text="{StaticResource ProgressBarTab}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AlbumArtVM}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Album}"/>
+                        <TextBlock Text="{StaticResource AlbumArtTab}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
+                             Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ElementName=Window, Path=AlbumArtPopupVM}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource AlbumPopup}"/>
+                        <TextBlock Text="{StaticResource AlbumArtPopupTab}"/>
+                    </StackPanel>
+                </RadioButton>
                 <Expander Style="{StaticResource NavigationPaneExpander}">
                     <Expander.Header>
                         <Grid>
@@ -81,12 +120,14 @@
                                              CommandParameter="{Binding}">
                                     <Grid HorizontalAlignment="Stretch">
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Margin="25,0,0,0" Text="{Binding Name}" 
+                                        <Image Grid.Column="0" Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource TextLabels}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}" 
                                                     HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                                        <Button Grid.Column="1" Style="{StaticResource RevealButton}"
+                                        <Button Grid.Column="2" Style="{StaticResource RevealButton}"
                                                     Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
                                                     Command="{Binding ElementName=Window, Path=CustomLabelsVM.RemoveLabelCommand}"
                                                     CommandParameter="{Binding}"
@@ -113,7 +154,14 @@
                                              GroupName="nav"
                                              Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
                                              CommandParameter="{Binding}">
-                                    <TextBlock Margin="25,0,0,0" Text="{Binding AudioSourceName}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Grid.Column="0" Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource AudioSources}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding AudioSourceName}"/>
+                                    </Grid>
                                 </RadioButton>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
