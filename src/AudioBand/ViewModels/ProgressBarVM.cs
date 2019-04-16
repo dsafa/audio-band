@@ -46,6 +46,13 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.BackgroundColor), value);
         }
 
+        [PropertyChangeBinding(nameof(ProgressBar.HoverColor))]
+        public Color HoverColor
+        {
+            get => Model.HoverColor;
+            set => SetProperty(nameof(Model.HoverColor), value);
+        }
+
         [PropertyChangeBinding(nameof(ProgressBar.IsVisible))]
         public bool IsVisible
         {

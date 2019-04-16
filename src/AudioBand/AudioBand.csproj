@@ -94,6 +94,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Windows.Forms" />
@@ -193,6 +194,9 @@
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="Views\Winforms\AudioBandControl.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Winforms\AudioBandTooltip.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Views\Winforms\CustomButton.cs">
       <SubType>UserControl</SubType>

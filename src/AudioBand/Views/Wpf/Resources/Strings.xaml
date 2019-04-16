@@ -20,6 +20,7 @@
     <sys:String x:Key="ScrollSpeedLabelText">Scroll Speed</sys:String>
     <sys:String x:Key="BackgroundColorLabelText">Background Color</sys:String>
     <sys:String x:Key="ForegroundColorLabelText">Foreground Color</sys:String>
+    <sys:String x:Key="HoverColorLabelText">Hover Color</sys:String>
     <sys:String x:Key="PlaceholderImageLabelText">Placeholder Image</sys:String>
     <sys:String x:Key="YOffsetLabelText">Margin</sys:String>
     <sys:String x:Key="AboutTitle">About AudioBand</sys:String>

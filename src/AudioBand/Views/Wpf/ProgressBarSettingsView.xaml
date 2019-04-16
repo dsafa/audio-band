@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:AudioBand.Views.Wpf"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
              xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
              mc:Ignorable="d" 
@@ -24,6 +23,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource GridRowHeight}" />
             <RowDefinition Height="{StaticResource GridRowHeight}" />
             <RowDefinition Height="{StaticResource GridRowHeight}" />
             <RowDefinition Height="{StaticResource GridRowHeight}" />
@@ -73,7 +73,11 @@
                            DialogService="{Binding DialogService}"
                         Color="{Binding ForegroundColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
 
-        <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" 
+        <Label Grid.Row="7" Grid.Column="0" Content="{StaticResource HoverColorLabelText}"/>
+        <local:ColorPicker Grid.Row="7" Grid.Column="1" DialogService="{Binding DialogService}"
+                           Color="{Binding HoverColor, Mode=TwoWay, Converter={StaticResource WinColorToWpfColorConverter}}"/>
+
+        <Button Grid.Row="8" Grid.Column="0" HorizontalAlignment="Left" 
                 Content="{StaticResource ResetButtonText}"
                 Command="{Binding ResetCommand}"/>
     </Grid>

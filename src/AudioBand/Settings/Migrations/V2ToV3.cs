@@ -25,12 +25,14 @@ namespace AudioBand.Settings.Migrations
 
         private MapperConfiguration GetMapConfig()
         {
-            return new MapperConfiguration(cfg =>
+            var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Models.V2.CustomLabelSettings, CustomLabel>();
                 cfg.CreateMap<Models.V2.AudioSourceSettings, AudioSourceSettings>();
                 cfg.CreateMap<Models.V2.AudioSourceSetting, AudioSourceSetting>()
                     .ForMember(dest => dest.Remember, opt => opt.Ignore());
+                cfg.CreateMap<Models.V2.ProgressBarSettings, ProgressBar>()
+                    .ForMember(dest => dest.HoverColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.Settings, ProfileV3>()
                     .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.MapFrom(source => source.AlbumArtPopupSettings))
                     .ForMember(dest => dest.AlbumArtSettings, opt => opt.MapFrom(source => source.AlbumArtSettings))
@@ -47,6 +49,11 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.Profiles, opt => opt.MapFrom(source => source))
                     .ForMember(dest => dest.CurrentProfileName, opt => opt.MapFrom(source => SettingsV3.DefaultProfileName));
             });
+
+#if DEBUG
+            config.AssertConfigurationIsValid();
+#endif
+            return config;
         }
 
         private class ProfilesConverter : ITypeConverter<Models.V2.Settings, Dictionary<string, ProfileV3>>
