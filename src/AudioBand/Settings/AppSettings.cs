@@ -5,7 +5,7 @@ using System.IO;
 using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
-using AudioBand.Settings.Models.V2;
+using AudioBand.Settings.Models.v3;
 using Nett;
 using NLog;
 using AudioSourceSettings = AudioBand.Models.AudioSourceSettings;
@@ -20,15 +20,17 @@ namespace AudioBand.Settings
         private static readonly Dictionary<string, Type> SettingsTable = new Dictionary<string, Type>()
         {
             { "0.1", typeof(Settings.Models.V1.AudioBandSettings) },
-            { "2", typeof(Settings.Models.V2.Settings) }
+            { "2", typeof(Settings.Models.V2.Settings) },
+            { "3", typeof(SettingsV3) }
         };
 
-        private static readonly string CurrentVersion = "2";
+        private static readonly string CurrentVersion = "3";
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AppSettings>();
         private readonly TomlSettings _tomlSettings;
-        private Models.V2.Settings _settings;
+        private SettingsV3 _settings;
+        private UISettingsV3 _currentProfile;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSettings"/> class.
@@ -124,15 +126,6 @@ namespace AudioBand.Settings
         {
             try
             {
-                _settings.AlbumArtPopupSettings = ToSetting<AlbumArtPopupSettings>(AlbumArtPopup);
-                _settings.AlbumArtSettings = ToSetting<AlbumArtSettings>(AlbumArt);
-                _settings.AudioBandSettings = ToSetting<AudioBandSettings>(AudioBand);
-                _settings.CustomLabelSettings = ToSetting<List<CustomLabelSettings>>(CustomLabels);
-                _settings.NextButtonSettings = ToSetting<NextButtonSettings>(NextButton);
-                _settings.PreviousButtonSettings = ToSetting<PreviousButtonSettings>(PreviousButton);
-                _settings.PlayPauseButtonSettings = ToSetting<PlayPauseButtonSettings>(PlayPauseButton);
-                _settings.ProgressBarSettings = ToSetting<ProgressBarSettings>(ProgressBar);
-                _settings.AudioSourceSettings = ToSetting<List<Models.V2.AudioSourceSettings>>(AudioSourceSettings);
                 Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
             }
             catch (Exception e)
@@ -143,15 +136,17 @@ namespace AudioBand.Settings
 
         private void GetModels()
         {
-            AlbumArtPopup = ToModel<AlbumArtPopup>(_settings.AlbumArtPopupSettings);
-            AlbumArt = ToModel<AlbumArt>(_settings.AlbumArtSettings);
-            AudioBand = ToModel<AudioBand.Models.AudioBand>(_settings.AudioBandSettings);
-            CustomLabels = ToModel<List<CustomLabel>>(_settings.CustomLabelSettings);
-            NextButton = ToModel<NextButton>(_settings.NextButtonSettings);
-            PreviousButton = ToModel<PreviousButton>(_settings.PreviousButtonSettings);
-            PlayPauseButton = ToModel<PlayPauseButton>(_settings.PlayPauseButtonSettings);
-            ProgressBar = ToModel<ProgressBar>(_settings.ProgressBarSettings);
-            AudioSourceSettings = ToModel<List<AudioSourceSettings>>(_settings.AudioSourceSettings) ?? new List<AudioSourceSettings>();
+            _currentProfile = _settings.DefaultProfile;
+
+            AlbumArtPopup = _currentProfile.AlbumArtPopupSettings;
+            AlbumArt = _currentProfile.AlbumArtSettings;
+            AudioBand = _currentProfile.AudioBandSettings;
+            CustomLabels = _currentProfile.CustomLabelSettings;
+            NextButton = _currentProfile.NextButtonSettings;
+            PreviousButton = _currentProfile.PreviousButtonSettings;
+            PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
+            ProgressBar = _currentProfile.ProgressBarSettings;
+            AudioSourceSettings = _settings?.AudioSourceSettings ?? new List<AudioSourceSettings>();
         }
 
         private void LoadSettings()
@@ -165,7 +160,7 @@ namespace AudioBand.Settings
                     Toml.WriteFile(file, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
                 }
 
-                _settings = Migration.MigrateSettings<Settings.Models.V2.Settings>(file.Get(SettingsTable[version]), version, CurrentVersion);
+                _settings = Migration.MigrateSettings<SettingsV3>(file.Get(SettingsTable[version]), version, CurrentVersion);
             }
             catch (Exception e)
             {
@@ -174,46 +169,24 @@ namespace AudioBand.Settings
             }
         }
 
-        private TModel ToModel<TModel>(object setting)
-        {
-            try
-            {
-                return SettingsMapper.ToModel<TModel>(setting);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "Cannot convert setting {name} to model of type {type}", setting, typeof(TModel));
-                throw;
-            }
-        }
-
-        private T ToSetting<T>(object model)
-        {
-            try
-            {
-                return SettingsMapper.ToModel<T>(model);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "Cannot convert model {@model} to setting of type {type}", model, typeof(T));
-                throw;
-            }
-        }
-
         private void CreateDefault()
         {
-            _settings = new Models.V2.Settings
+            _settings = new SettingsV3()
             {
-                AudioSourceSettings = new List<Models.V2.AudioSourceSettings>(),
-                AudioBandSettings = ToSetting<Models.V2.AudioBandSettings>(new AudioBand.Models.AudioBand()),
-                AlbumArtSettings = ToSetting<AlbumArtSettings>(new AlbumArt()),
                 AudioSource = null,
-                AlbumArtPopupSettings = ToSetting<AlbumArtPopupSettings>(new AlbumArtPopup()),
-                PlayPauseButtonSettings = ToSetting<PlayPauseButtonSettings>(new PlayPauseButton()),
-                NextButtonSettings = ToSetting<NextButtonSettings>(new NextButton()),
-                PreviousButtonSettings = ToSetting<PreviousButtonSettings>(new PreviousButton()),
-                ProgressBarSettings = ToSetting<ProgressBarSettings>(new ProgressBar()),
-                CustomLabelSettings = new List<CustomLabelSettings> { ToSetting<CustomLabelSettings>(new CustomLabel()) }
+                AudioSourceSettings = new List<AudioSourceSettings>(),
+                DefaultProfile = new UISettingsV3()
+                {
+                    AudioBandSettings = new AudioBand.Models.AudioBand(),
+                    AlbumArtSettings = new AlbumArt(),
+                    AlbumArtPopupSettings = new AlbumArtPopup(),
+                    PlayPauseButtonSettings = new PlayPauseButton(),
+                    NextButtonSettings = new NextButton(),
+                    PreviousButtonSettings = new PreviousButton(),
+                    ProgressBarSettings = new ProgressBar(),
+                    CustomLabelSettings = new List<CustomLabel> { new CustomLabel() }
+                },
+                Profiles = new Dictionary<string, UISettingsV3>()
             };
         }
     }

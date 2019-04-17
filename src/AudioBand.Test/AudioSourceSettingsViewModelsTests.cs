@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace AudioBand.Test
 {
     [TestClass]
-    public class SettingsViewModelsTests
+    public class AudioSourceSettingsViewModelsTests
     {
         private Mock<IInternalAudioSource> _audioSourceMock;
 
