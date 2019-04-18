@@ -188,9 +188,6 @@
                           x:Name="ProfilesComboBox"
                           SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}"
                           ItemsSource="{Binding Profiles}">
-                    <i:Interaction.Behaviors>
-                        <behaviours:SelectionChangedCommandBehavior Command="{Binding ProfileSelectionChangedCommand}"/>
-                    </i:Interaction.Behaviors>
                 </ComboBox>
                 <Button Content="{StaticResource NewProfileButtonText}" 
                         Command="{Binding AddProfileCommand}"/>

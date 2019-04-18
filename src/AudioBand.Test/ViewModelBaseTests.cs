@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Windows.Controls;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.ViewModels;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PubSub.Extension;
 
@@ -94,6 +96,48 @@ namespace AudioBand.Test
             Assert.IsTrue(vm.IsEditing);
         }
 
+        [TestMethod]
+        public void ViewModelWithModelSetupBindingsProperly()
+        {
+            var m = new Model();
+            var vm = new ViewModelWithModel(m);
+
+            bool raised = false;
+            vm.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModelWithModel.Field))
+                {
+                    raised = true;
+                }
+            };
+
+            m.ModelField = 10;
+
+            Assert.IsTrue(raised);
+        }
+
+        [TestMethod]
+        public void ViewModelWithModelUnbindModelProperly()
+        {
+            var m = new Model();
+            var vm = new ViewModelWithModel(m);
+
+            bool raised = false;
+            vm.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ViewModelWithModel.Field))
+                {
+                    raised = true;
+                }
+            };
+
+            vm.Unbind();
+
+            m.ModelField = 10;
+
+            Assert.IsFalse(raised);
+        }
+
         private class ViewModel : ViewModelBase
         {
             public int _field;
@@ -111,11 +155,20 @@ namespace AudioBand.Test
             {
             }
 
+            public ViewModelWithModel(Model m) : base(m)
+            {
+            }
+
             [PropertyChangeBinding(nameof(ViewModelBaseTests.Model.ModelField))]
             public int Field
             {
                 get => Model.ModelField;
                 set => SetProperty(nameof(ViewModelBaseTests.Model.ModelField), value);
+            }
+
+            public void Unbind()
+            {
+                UnbindModel(Model);
             }
         }
 

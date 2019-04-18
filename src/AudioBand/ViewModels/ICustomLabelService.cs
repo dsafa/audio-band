@@ -18,6 +18,11 @@ namespace AudioBand.ViewModels
         event EventHandler<CustomLabelVM> CustomLabelRemoved;
 
         /// <summary>
+        /// Occurs when labels should be cleared.
+        /// </summary>
+        event EventHandler CustomLabelsCleared;
+
+        /// <summary>
         /// Adds a new custom label.
         /// </summary>
         /// <param name="label">The new label to add.</param>
@@ -28,5 +33,10 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="label">The label to remove.</param>
         void RemoveCustomTextLabel(CustomLabelVM label);
+
+        /// <summary>
+        /// Clears all labels
+        /// </summary>
+        void ClearCustomLabels();
     }
 }

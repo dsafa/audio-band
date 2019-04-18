@@ -1,8 +1,11 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using AudioBand.Extensions;
 using AudioBand.Models;
 using AudioBand.Resources;
 using AudioBand.Settings;
+using AutoMapper;
 using Svg;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -14,6 +17,7 @@ namespace AudioBand.ViewModels
     public class AlbumArtVM : ViewModelBase<AlbumArt>
     {
         private readonly SvgDocument _defaultAlbumArtPlaceholderSvg;
+        private readonly IAppSettings _appsettings;
         private readonly Track _track;
         private readonly IResourceLoader _resourceLoader;
 
@@ -26,11 +30,14 @@ namespace AudioBand.ViewModels
         public AlbumArtVM(IAppSettings appsettings, IResourceLoader resourceLoader, Track track)
             : base(appsettings.AlbumArt)
         {
+            _appsettings = appsettings;
             _track = track;
             SetupModelBindings(_track);
             _defaultAlbumArtPlaceholderSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.placeholder_album);
             _resourceLoader = resourceLoader;
             LoadAlbumArtPlaceholder();
+
+            appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.IsVisible))]
@@ -117,6 +124,12 @@ namespace AudioBand.ViewModels
         private void LoadAlbumArtPlaceholder()
         {
             _track.UpdatePlaceholder(_resourceLoader.TryLoadImageFromPath(Model.PlaceholderPath, _defaultAlbumArtPlaceholderSvg.ToBitmap()));
+        }
+
+        private void AppsettingsOnProfileChanged(object sender, EventArgs e)
+        {
+            Debug.Assert(IsEditing == false, "Should not be editing");
+            ReplaceModel(_appsettings.AlbumArt);
         }
     }
 }

@@ -11,6 +11,7 @@ using AudioBand.Resources;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using AudioBand.Views.Wpf;
+using AudioBandModel.Settings;
 using CSDeskBand;
 using PubSub.Extension;
 using SimpleInjector;

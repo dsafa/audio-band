@@ -26,21 +26,16 @@ namespace AudioBand.ViewModels
         public SettingsWindowVM(IAppSettings appSettings)
         {
             _appSettings = appSettings;
+            _selectedProfileName = appSettings.CurrentProfile;
             Profiles = new ObservableCollection<string>(appSettings.Profiles);
             SelectViewModelCommand = new RelayCommand<ViewModelBase>(SelectViewModelOnExecute);
             DeleteProfileCommand = new RelayCommand<string>(DeleteProfileCommandOnExecute, DeleteProfileCommandCanExecute);
             DeleteProfileCommand.Observe(Profiles);
             AddProfileCommand = new RelayCommand(AddProfileCommandOnExecute);
             RenameProfileCommand = new RelayCommand<string>(RenameProfileCommandOnExecute);
-            ProfileSelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChangedCommandOnExecute);
 
             this.Subscribe<StartEditMessage>(StartEditMessageHandler);
             this.Subscribe<EndEditMessage>(EndEditMessageHandler);
-        }
-
-        private void SelectionChangedCommandOnExecute(SelectionChangedEventArgs obj)
-        {
-            this.Publish(EndEditMessage.CancelEdits);
         }
 
         /// <summary>
@@ -59,6 +54,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(ref _selectedProfileName, value, trackChanges: false))
                 {
+                    this.Publish(EndEditMessage.AcceptEdits);
                     _appSettings.CurrentProfile = value;
                 }
             }
@@ -85,8 +81,6 @@ namespace AudioBand.ViewModels
         public RelayCommand AddProfileCommand { get; }
 
         public RelayCommand<string> RenameProfileCommand { get; }
-
-        public RelayCommand<SelectionChangedEventArgs> ProfileSelectionChangedCommand { get; }
 
         private void SelectViewModelOnExecute(ViewModelBase newViewmodel)
         {

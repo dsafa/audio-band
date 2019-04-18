@@ -13,6 +13,9 @@ namespace AudioBand.ViewModels
         /// <inheritdoc/>
         public event EventHandler<CustomLabelVM> CustomLabelRemoved;
 
+        /// <inheritdoc />
+        public event EventHandler CustomLabelsCleared;
+
         /// <inheritdoc/>
         public void AddCustomTextLabel(CustomLabelVM label)
         {
@@ -23,6 +26,11 @@ namespace AudioBand.ViewModels
         public void RemoveCustomTextLabel(CustomLabelVM label)
         {
             CustomLabelRemoved?.Invoke(this, label);
+        }
+
+        public void ClearCustomLabels()
+        {
+            CustomLabelsCleared?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -37,6 +37,18 @@ namespace AudioBand
             }
         }
 
+        private void LabelServiceOnCustomLabelsCleared(object sender, EventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke((Action)RemoveAllCustomTextLabels);
+            }
+            else
+            {
+                RemoveAllCustomTextLabels();
+            }
+        }
+
         private void InitializeBindingSources(
             AlbumArtPopupVM albumArtPopupVm,
             AlbumArtVM albumartVm,
@@ -95,6 +107,14 @@ namespace AudioBand
             }
 
             Controls.Remove(control);
+        }
+
+        private void RemoveAllCustomTextLabels()
+        {
+            foreach (var labelControl in Controls.Find(CustomLabelControlsKey, true))
+            {
+                Controls.Remove(labelControl);
+            }
         }
     }
 }

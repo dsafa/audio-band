@@ -125,7 +125,6 @@ namespace AudioBand
                 _settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
                 RefreshContextMenu();
 
-                // saved labels should be already created
                 foreach (var label in _settingsWindow.CustomLabelsVM.CustomLabels)
                 {
                     LabelServiceOnAddCustomTextLabel(null, label);
@@ -133,6 +132,7 @@ namespace AudioBand
 
                 _labelService.CustomLabelAdded += LabelServiceOnAddCustomTextLabel;
                 _labelService.CustomLabelRemoved += LabelServiceOnRemoveCustomTextLabel;
+                _labelService.CustomLabelsCleared += LabelServiceOnCustomLabelsCleared;
 
                 await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(
                     _settingsWindow.AlbumArtPopupVM,
