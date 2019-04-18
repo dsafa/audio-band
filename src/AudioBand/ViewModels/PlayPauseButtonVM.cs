@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using AudioBand.Extensions;
 using AudioBand.Models;
@@ -16,6 +18,7 @@ namespace AudioBand.ViewModels
     {
         private readonly SvgDocument _defaultPlayButtonSvg;
         private readonly SvgDocument _defaultPauseButtonSvg;
+        private readonly IAppSettings _appsettings;
         private readonly Track _track;
         private readonly IResourceLoader _resourceLoader;
         private Image _playImage;
@@ -30,12 +33,15 @@ namespace AudioBand.ViewModels
         public PlayPauseButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader, Track track)
             : base(appsettings.PlayPauseButton)
         {
+            _appsettings = appsettings;
             _track = track;
             SetupModelBindings(_track);
             _defaultPlayButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.play);
             _defaultPauseButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.pause);
             _resourceLoader = resourceLoader;
             LoadImages();
+
+            _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
         [AlsoNotify(nameof(Image))]
@@ -157,6 +163,12 @@ namespace AudioBand.ViewModels
         {
             PlayImage = _resourceLoader.TryLoadImageFromPath(PlayImagePath, _defaultPlayButtonSvg.ToBitmap());
             PauseImage = _resourceLoader.TryLoadImageFromPath(PauseImagePath, _defaultPauseButtonSvg.ToBitmap());
+        }
+
+        private void AppsettingsOnProfileChanged(object sender, EventArgs e)
+        {
+            Debug.Assert(IsEditing == false, "Should not be editing");
+            ReplaceModel(_appsettings.PlayPauseButton);
         }
     }
 }

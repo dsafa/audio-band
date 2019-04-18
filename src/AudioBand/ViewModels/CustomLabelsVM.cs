@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using AudioBand.Commands;
 using AudioBand.Models;
@@ -15,7 +17,7 @@ namespace AudioBand.ViewModels
         private readonly ICustomLabelService _labelService;
         private readonly HashSet<CustomLabelVM> _added = new HashSet<CustomLabelVM>();
         private readonly HashSet<CustomLabelVM> _removed = new HashSet<CustomLabelVM>();
-        private readonly List<CustomLabel> _customLabels;
+        private readonly IAppSettings _appsettings;
         private readonly IDialogService _dialogService;
 
         /// <summary>
@@ -27,24 +29,20 @@ namespace AudioBand.ViewModels
         /// <param name="dialogService">The dialog service</param>
         public CustomLabelsVM(IAppSettings appsettings, ICustomLabelService labelService, IDialogService dialogService)
         {
+            _appsettings = appsettings;
             _dialogService = dialogService;
-            _customLabels = appsettings.CustomLabels;
-            CustomLabels = new ObservableCollection<CustomLabelVM>(_customLabels.Select(customLabel => new CustomLabelVM(customLabel, dialogService)));
             _labelService = labelService;
-
-            foreach (var customLabelVm in CustomLabels)
-            {
-                _labelService.AddCustomTextLabel(customLabelVm);
-            }
+            SetupLabels();
 
             AddLabelCommand = new RelayCommand(AddLabelCommandOnExecute);
             RemoveLabelCommand = new RelayCommand<CustomLabelVM>(RemoveLabelCommandOnExecute);
+            _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
         /// <summary>
         /// Gets the collection of custom label viewmodels.
         /// </summary>
-        public ObservableCollection<CustomLabelVM> CustomLabels { get; }
+        public ObservableCollection<CustomLabelVM> CustomLabels { get; } = new ObservableCollection<CustomLabelVM>();
 
         /// <summary>
         /// Gets the command to add a new label.
@@ -88,11 +86,11 @@ namespace AudioBand.ViewModels
             _added.Clear();
             _removed.Clear();
 
-            _customLabels.Clear();
+            _appsettings.CustomLabels.Clear();
 
             foreach (var customLabelVm in CustomLabels)
             {
-                _customLabels.Add(customLabelVm.GetModel());
+                _appsettings.CustomLabels.Add(customLabelVm.GetModel());
             }
         }
 
@@ -124,6 +122,27 @@ namespace AudioBand.ViewModels
             {
                 _removed.Add(labelVm);
             }
+        }
+
+        private void SetupLabels()
+        {
+            CustomLabels.Clear();
+            foreach (var customLabelVm in _appsettings.CustomLabels.Select(customLabel => new CustomLabelVM(customLabel, _dialogService)))
+            {
+                CustomLabels.Add(customLabelVm);
+                _labelService.AddCustomTextLabel(customLabelVm);
+            }
+        }
+
+        private void AppsettingsOnProfileChanged(object sender, EventArgs e)
+        {
+            Debug.Assert(IsEditing == false, "Should not be editing while profile is changing");
+
+            CustomLabels.Clear();
+            _labelService.ClearCustomLabels();
+
+            // Add labels for new profile
+            SetupLabels();
         }
     }
 }

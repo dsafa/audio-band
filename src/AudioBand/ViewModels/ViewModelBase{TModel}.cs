@@ -33,9 +33,9 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Gets the model associated with this view model.
+        /// Gets or sets the model associated with this view model.
         /// </summary>
-        protected TModel Model { get; }
+        protected TModel Model { get; set; }
 
         /// <summary>
         /// Get the model representation of this viewmodel. By default it returns <see cref="Model"/>.
@@ -90,6 +90,42 @@ namespace AudioBand.ViewModels
             }
 
             model.PropertyChanged += ModelOnPropertyChanged;
+        }
+
+        /// <summary>
+        /// Unbinds the model
+        /// </summary>
+        /// <typeparam name="T">The type of the model</typeparam>
+        /// <param name="model">The model to unbind</param>
+        protected void UnbindModel<T>(T model)
+            where T : ModelBase
+        {
+            if (model == null)
+            {
+                return;
+            }
+
+            _modelToAccessor.Remove(model);
+            model.PropertyChanged -= ModelOnPropertyChanged;
+            var keys = _modelToPropertyName.Keys.Where(key => key.model == model).ToList();
+            foreach (var key in keys)
+            {
+                _modelToPropertyName.Remove(key);
+            }
+        }
+
+        /// <summary>
+        /// Unbinds the current <see cref="Model"/> and binds to new one.
+        /// </summary>
+        /// <typeparam name="T">The type of the model</typeparam>
+        /// <param name="newModel">The new model to replace</param>
+        protected void ReplaceModel<T>(T newModel)
+            where T : TModel
+        {
+            UnbindModel(Model);
+            Model = newModel;
+            SetupModelBindings(Model);
+            RaisePropertyChangedAll();
         }
 
         /// <summary>

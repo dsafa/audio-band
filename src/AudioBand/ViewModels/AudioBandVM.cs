@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using AudioBand.Settings;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -9,6 +11,8 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class AudioBandVM : ViewModelBase<Models.AudioBand>
     {
+        private readonly IAppSettings _appsettings;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioBandVM"/> class.
         /// </summary>
@@ -16,6 +20,8 @@ namespace AudioBand.ViewModels
         public AudioBandVM(IAppSettings appsettings)
             : base(appsettings.AudioBand)
         {
+            _appsettings = appsettings;
+            appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
         [PropertyChangeBinding(nameof(Models.AudioBand.Width))]
@@ -39,6 +45,12 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Size Size => new Size(Width, Height);
+
+        private void AppsettingsOnProfileChanged(object sender, EventArgs e)
+        {
+            Debug.Assert(IsEditing == false, "Should not be editing");
+            ReplaceModel(_appsettings.AudioBand);
+        }
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

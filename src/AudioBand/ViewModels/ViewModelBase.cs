@@ -165,6 +165,14 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Notifies all properties changed
+        /// </summary>
+        protected void RaisePropertyChangedAll()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
+        }
+
+        /// <summary>
         /// Resets an object to its default state.
         /// </summary>
         /// <typeparam name="T">Object type.</typeparam>

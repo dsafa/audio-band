@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using AudioBand.Logging;
 using AudioBand.Models;
+using AudioBand.Settings;
 using AudioBand.Settings.Migrations;
 using AudioBand.Settings.Models.v3;
+using AutoMapper;
 using Nett;
 using NLog;
-using AudioSourceSettings = AudioBand.Models.AudioSourceSettings;
 
-namespace AudioBand.Settings
+namespace AudioBandModel.Settings
 {
     /// <summary>
     /// Manages application settings.
@@ -20,8 +22,8 @@ namespace AudioBand.Settings
     {
         private static readonly Dictionary<string, Type> SettingsTable = new Dictionary<string, Type>()
         {
-            { "0.1", typeof(Settings.Models.V1.AudioBandSettings) },
-            { "2", typeof(Settings.Models.V2.Settings) },
+            { "0.1", typeof(AudioBand.Settings.Models.V1.AudioBandSettings) },
+            { "2", typeof(AudioBand.Settings.Models.V2.Settings) },
             { "3", typeof(SettingsV3) }
         };
 
@@ -81,53 +83,58 @@ namespace AudioBand.Settings
         /// <summary>
         /// Gets the saved album art popup model.
         /// </summary>
-        public AlbumArtPopup AlbumArtPopup { get; private set; }
+        public AlbumArtPopup AlbumArtPopup { get; private set; } = new AlbumArtPopup();
 
         /// <summary>
         /// Gets the saved album art model.
         /// </summary>
-        public AlbumArt AlbumArt { get; private set; }
+        public AlbumArt AlbumArt { get; private set; } = new AlbumArt();
 
         /// <summary>
         /// Gets the saved audio band model.
         /// </summary>
-        public AudioBand.Models.AudioBand AudioBand { get; private set; }
+        public AudioBand.Models.AudioBand AudioBand { get; private set; } = new AudioBand.Models.AudioBand();
 
         /// <summary>
         /// Gets the saved labels.
         /// </summary>
-        public List<CustomLabel> CustomLabels { get; private set; }
+        public List<CustomLabel> CustomLabels { get; private set; } = new List<CustomLabel>();
 
         /// <summary>
         /// Gets the saved button model.
         /// </summary>
-        public NextButton NextButton { get; private set; }
+        public NextButton NextButton { get; private set; } = new NextButton();
 
         /// <summary>
         /// Gets the saved previous button model.
         /// </summary>
-        public PreviousButton PreviousButton { get; private set; }
+        public PreviousButton PreviousButton { get; private set; } = new PreviousButton();
 
         /// <summary>
         /// Gets the saved play pause button model.
         /// </summary>
-        public PlayPauseButton PlayPauseButton { get; private set; }
+        public PlayPauseButton PlayPauseButton { get; private set; } = new PlayPauseButton();
 
         /// <summary>
         /// Gets the saved progress bar model.
         /// </summary>
-        public ProgressBar ProgressBar { get; private set; }
+        public ProgressBar ProgressBar { get; private set; } = new ProgressBar();
 
         /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
-        public List<AudioSourceSettings> AudioSourceSettings { get; }
+        public List<AudioSourceSettings> AudioSourceSettings { get; } = new List<AudioSourceSettings>();
 
         public string CurrentProfile
         {
             get => _settings.CurrentProfileName;
             set
             {
+                if (value == _settings.CurrentProfileName)
+                {
+                    return;
+                }
+
                 _settings.CurrentProfileName = value;
                 SelectProfile(value);
             }
@@ -168,22 +175,6 @@ namespace AudioBand.Settings
             }
 
             _settings.Profiles.Remove(profileName);
-        }
-
-        private void SelectProfile(string profileName)
-        {
-            _currentProfile = _settings.Profiles[profileName];
-
-            AlbumArtPopup = _currentProfile.AlbumArtPopupSettings;
-            AlbumArt = _currentProfile.AlbumArtSettings;
-            AudioBand = _currentProfile.AudioBandSettings;
-            CustomLabels = _currentProfile.CustomLabelSettings;
-            NextButton = _currentProfile.NextButtonSettings;
-            PreviousButton = _currentProfile.PreviousButtonSettings;
-            PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
-            ProgressBar = _currentProfile.ProgressBarSettings;
-
-            ProfileChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -244,6 +235,25 @@ namespace AudioBand.Settings
                 ProgressBarSettings = new ProgressBar(),
                 CustomLabelSettings = new List<CustomLabel> { new CustomLabel() }
             };
+        }
+
+        private void SelectProfile(string profileName)
+        {
+            Debug.Assert(_settings.Profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}");
+
+            // Get new profile. Map to the app settings properties to trigger notification changes
+            _currentProfile = _settings.Profiles[profileName];
+
+            AlbumArtPopup = _currentProfile.AlbumArtPopupSettings;
+            AlbumArt = _currentProfile.AlbumArtSettings;
+            AudioBand = _currentProfile.AudioBandSettings;
+            CustomLabels = _currentProfile.CustomLabelSettings;
+            NextButton = _currentProfile.NextButtonSettings;
+            PreviousButton = _currentProfile.PreviousButtonSettings;
+            PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
+            ProgressBar = _currentProfile.ProgressBarSettings;
+
+            ProfileChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

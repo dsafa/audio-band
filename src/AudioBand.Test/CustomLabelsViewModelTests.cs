@@ -117,5 +117,20 @@ namespace AudioBand.Test
             _labelServiceMock.Verify(o => o.AddCustomTextLabel(It.IsAny<CustomLabelVM>()), Times.Once);
             _labelServiceMock.Verify(o => o.RemoveCustomTextLabel(newLabel), Times.Once);
         }
+
+        [TestMethod, Ignore("Issue with verifying invocation")]
+        public void ProfileChangeRemovesAllLabelsAndAddsNewOnes()
+        {
+
+            var settingsMock = new Mock<IAppSettings>();
+            settingsMock.SetupGet(m => m.CustomLabels).Returns(new List<CustomLabel> {new CustomLabel()});
+            var labelServiceMock = new Mock<ICustomLabelService>();
+
+            var vm = new CustomLabelsVM(settingsMock.Object, labelServiceMock.Object, new Mock<IDialogService>().Object);
+            Assert.AreEqual(1, vm.CustomLabels.Count);
+            _appSettingsMock.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
+            labelServiceMock.Verify(m => m.ClearCustomLabels(), Times.Once);
+            labelServiceMock.Verify(m => m.AddCustomTextLabel(It.IsAny<CustomLabelVM>()), Times.Exactly(2)); // Add one in the beginning then one after profile switch
+        }
     }
 }

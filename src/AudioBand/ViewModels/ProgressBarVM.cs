@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using AudioBand.Models;
 using AudioBand.Settings;
@@ -11,6 +12,7 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class ProgressBarVM : ViewModelBase<ProgressBar>
     {
+        private readonly IAppSettings _appsettings;
         private readonly Track _track;
 
         /// <summary>
@@ -22,9 +24,12 @@ namespace AudioBand.ViewModels
         public ProgressBarVM(IAppSettings appsettings, IDialogService dialogService, Track track)
             : base(appsettings.ProgressBar)
         {
+            _appsettings = appsettings;
             _track = track;
             SetupModelBindings(_track);
             DialogService = dialogService;
+
+            _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
         [PropertyChangeBinding(nameof(ProgressBar.ForegroundColor))]
@@ -102,6 +107,12 @@ namespace AudioBand.ViewModels
         /// Gets or sets the dialog service
         /// </summary>
         public IDialogService DialogService { get; set; }
+
+        private void AppsettingsOnProfileChanged(object sender, EventArgs e)
+        {
+            Debug.Assert(IsEditing == false, "Should not be editing");
+            ReplaceModel(_appsettings.ProgressBar);
+        }
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

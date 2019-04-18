@@ -115,15 +115,20 @@ namespace AudioBand.Test
         }
 
         [TestMethod]
-        public void SelectProfileCancelsEdits()
+        public void SelectProfileEndsEdits()
         {
+            string profile1 = "profile 1";
+            string profile2 = "profile 2";
+
+            _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> { profile1, profile2 });
             var vm = new SettingsWindowVM(_appSettings.Object);
 
-            EndEditMessage msg = EndEditMessage.AcceptEdits;
+            EndEditMessage msg = EndEditMessage.CancelEdits;
             this.Subscribe<EndEditMessage>(m => msg = m);
-            vm.ProfileSelectionChangedCommand.Execute(null);
 
-            Assert.AreEqual(EndEditMessage.CancelEdits, msg);
+            vm.SelectedProfileName = profile2;
+
+            Assert.AreEqual(EndEditMessage.AcceptEdits, msg);
         }
     }
 }
