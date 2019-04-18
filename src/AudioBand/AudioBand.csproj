@@ -114,6 +114,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Messages\FocusChangedMessage.cs" />
+    <Compile Include="Messages\StartEditMessage.cs" />
     <Compile Include="Models\AlbumArt.cs" />
     <Compile Include="Models\AlbumArtPopup.cs" />
     <Compile Include="Models\AudioBand.cs" />
@@ -161,7 +162,7 @@
     <Compile Include="ViewModels\CustomLabelService.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\AboutVM.cs" />
-    <Compile Include="Messages\EditMessage.cs" />
+    <Compile Include="Messages\EndEditMessage.cs" />
     <Compile Include="ViewModels\ICustomLabelService.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Views\Wpf\Behaviours\AppUserModelID.cs" />
     <Compile Include="Views\Wpf\Behaviours\NumericInputType.cs" />
     <Compile Include="Views\Wpf\Behaviours\PasswordBehaviour.cs" />
+    <Compile Include="Views\Wpf\Behaviours\SelectionChangedCommandBehavior.cs" />
     <Compile Include="Views\Wpf\ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>

@@ -29,6 +29,7 @@
     <sys:Double x:Key="BodyFontSize">14</sys:Double>
     <sys:Double x:Key="TitleFontSize">24</sys:Double>
     <sys:Double x:Key="HeaderFontSize">46</sys:Double>
+    <sys:Double x:Key="DefaultButtonHeight">30</sys:Double>
     <SolidColorBrush x:Key="BorderDefaultColorBrush" Color="{StaticResource BorderDefaultColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderHoverColorBrush" Color="{StaticResource BorderHoverColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderFocusedColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
@@ -63,7 +64,7 @@
         <Setter Property="Background" Value="{StaticResource BorderDefaultColorBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderDefaultColorBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="Height" Value="30"/>
+        <Setter Property="Height" Value="{StaticResource DefaultButtonHeight}"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Template">
@@ -391,6 +392,43 @@
             <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource BorderHoverColor}"/>
         </Style.Resources>
     </Style>
+    <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+        <Style.Resources>
+            <sys:Double x:Key="ComboBoxItemHeight">30</sys:Double>
+        </Style.Resources>
+        <Setter Property="Height" Value="{StaticResource ComboBoxItemHeight}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Border x:Name="ComboBoxItem"
+                                BorderBrush="{fw:RevealBrush Color=LightGray, Size={StaticResource ComboBoxItemHeight}, Opacity=0.8}"
+                                BorderThickness="1" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{x:Static fw:AccentColors.ImmersiveSystemAccentLight3Brush}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationPaneHoverBackgroundBrush}"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True"/>
+                    <Condition Property="IsMouseOver" Value="True"/>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Background" Value="{x:Static fw:AccentColors.ImmersiveSystemAccentBrush}"/>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}"/>
@@ -494,45 +532,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Resources>
-            <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                <Style.Resources>
-                    <sys:Double x:Key="ComboBoxItemHeight">30</sys:Double>
-                </Style.Resources>
-                <Setter Property="Height" Value="{StaticResource ComboBoxItemHeight}"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="Margin" Value="0"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                            <Border x:Name="ComboBoxItem"
-                                BorderBrush="{fw:RevealBrush Color=LightGray, Size={StaticResource ComboBoxItemHeight}, Opacity=0.8}"
-                                BorderThickness="1" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
-                                <ContentPresenter/>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="{x:Static fw:AccentColors.ImmersiveSystemAccentLight3Brush}"/>
-                    </Trigger>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{StaticResource NavigationPaneHoverBackgroundBrush}"/>
-                    </Trigger>
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsSelected" Value="True"/>
-                            <Condition Property="IsMouseOver" Value="True"/>
-                        </MultiTrigger.Conditions>
-                        <MultiTrigger.Setters>
-                            <Setter Property="Background" Value="{x:Static fw:AccentColors.ImmersiveSystemAccentBrush}"/>
-                        </MultiTrigger.Setters>
-                    </MultiTrigger>
-                </Style.Triggers>
-            </Style>
-        </Style.Resources>
     </Style>
     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}"/>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
@@ -30,7 +31,7 @@ namespace AudioBand.Settings
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AppSettings>();
         private readonly TomlSettings _tomlSettings;
         private SettingsV3 _settings;
-        private UISettingsV3 _currentProfile;
+        private ProfileV3 _currentProfile;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSettings"/> class.
@@ -62,8 +63,11 @@ namespace AudioBand.Settings
                 LoadSettings();
             }
 
-            GetModels();
+            AudioSourceSettings = _settings.AudioSourceSettings ?? new List<AudioSourceSettings>();
+            SelectProfile(_settings.CurrentProfileName);
         }
+
+        public event EventHandler ProfileChanged;
 
         /// <summary>
         /// Gets or sets the name of the current audio source.
@@ -117,7 +121,70 @@ namespace AudioBand.Settings
         /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
-        public List<AudioSourceSettings> AudioSourceSettings { get; private set; }
+        public List<AudioSourceSettings> AudioSourceSettings { get; }
+
+        public string CurrentProfile
+        {
+            get => _settings.CurrentProfileName;
+            set
+            {
+                _settings.CurrentProfileName = value;
+                SelectProfile(value);
+            }
+        }
+
+        public List<string> Profiles => _settings.Profiles.Keys.ToList();
+
+        public void CreateProfile(string profileName)
+        {
+            if (profileName == null)
+            {
+                throw new ArgumentNullException(nameof(profileName));
+            }
+
+            if (_settings.Profiles.ContainsKey(profileName))
+            {
+                throw new ArgumentException("Profile name already exists", nameof(profileName));
+            }
+
+            _settings.Profiles.Add(profileName, CreateProfileModel());
+        }
+
+        public void DeleteProfile(string profileName)
+        {
+            if (profileName == null)
+            {
+                throw new ArgumentNullException(nameof(profileName));
+            }
+
+            if (_settings.Profiles.Count == 1)
+            {
+                throw new ArgumentException("Must have at least one profile", nameof(profileName));
+            }
+
+            if (!_settings.Profiles.ContainsKey(profileName))
+            {
+                throw new ArgumentException($"Profile {profileName} does not exist", nameof(profileName));
+            }
+
+            _settings.Profiles.Remove(profileName);
+        }
+
+        private void SelectProfile(string profileName)
+        {
+            _currentProfile = _settings.Profiles[profileName];
+
+            AlbumArtPopup = _currentProfile.AlbumArtPopupSettings;
+            AlbumArt = _currentProfile.AlbumArtSettings;
+            AudioBand = _currentProfile.AudioBandSettings;
+            CustomLabels = _currentProfile.CustomLabelSettings;
+            NextButton = _currentProfile.NextButtonSettings;
+            PreviousButton = _currentProfile.PreviousButtonSettings;
+            PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
+            ProgressBar = _currentProfile.ProgressBarSettings;
+
+            ProfileChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         /// <summary>
         /// Save the settings.
@@ -132,21 +199,6 @@ namespace AudioBand.Settings
             {
                 Logger.Error(e);
             }
-        }
-
-        private void GetModels()
-        {
-            _currentProfile = _settings.DefaultProfile;
-
-            AlbumArtPopup = _currentProfile.AlbumArtPopupSettings;
-            AlbumArt = _currentProfile.AlbumArtSettings;
-            AudioBand = _currentProfile.AudioBandSettings;
-            CustomLabels = _currentProfile.CustomLabelSettings;
-            NextButton = _currentProfile.NextButtonSettings;
-            PreviousButton = _currentProfile.PreviousButtonSettings;
-            PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
-            ProgressBar = _currentProfile.ProgressBarSettings;
-            AudioSourceSettings = _settings?.AudioSourceSettings ?? new List<AudioSourceSettings>();
         }
 
         private void LoadSettings()
@@ -175,18 +227,22 @@ namespace AudioBand.Settings
             {
                 AudioSource = null,
                 AudioSourceSettings = new List<AudioSourceSettings>(),
-                DefaultProfile = new UISettingsV3()
-                {
-                    AudioBandSettings = new AudioBand.Models.AudioBand(),
-                    AlbumArtSettings = new AlbumArt(),
-                    AlbumArtPopupSettings = new AlbumArtPopup(),
-                    PlayPauseButtonSettings = new PlayPauseButton(),
-                    NextButtonSettings = new NextButton(),
-                    PreviousButtonSettings = new PreviousButton(),
-                    ProgressBarSettings = new ProgressBar(),
-                    CustomLabelSettings = new List<CustomLabel> { new CustomLabel() }
-                },
-                Profiles = new Dictionary<string, UISettingsV3>()
+                Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, CreateProfileModel() } }
+            };
+        }
+
+        private ProfileV3 CreateProfileModel()
+        {
+            return new ProfileV3
+            {
+                AudioBandSettings = new AudioBand.Models.AudioBand(),
+                AlbumArtSettings = new AlbumArt(),
+                AlbumArtPopupSettings = new AlbumArtPopup(),
+                PlayPauseButtonSettings = new PlayPauseButton(),
+                NextButtonSettings = new NextButton(),
+                PreviousButtonSettings = new PreviousButton(),
+                ProgressBarSettings = new ProgressBar(),
+                CustomLabelSettings = new List<CustomLabel> { new CustomLabel() }
             };
         }
     }

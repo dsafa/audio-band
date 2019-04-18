@@ -142,7 +142,7 @@ namespace AudioBand.Views.Wpf
 
             if (_shouldSave)
             {
-                this.Publish(EditMessage.AcceptEdits);
+                this.Publish(EndEditMessage.AcceptEdits);
                 Saved?.Invoke(this, EventArgs.Empty);
                 Hide();
                 return;
@@ -150,7 +150,7 @@ namespace AudioBand.Views.Wpf
 
             if (_dialogService.ShowConfirmationDialog(ConfirmationDialogType.DiscardChanges))
             {
-                this.Publish(EditMessage.CancelEdits);
+                this.Publish(EndEditMessage.CancelEdits);
                 Canceled?.Invoke(this, EventArgs.Empty);
                 Hide();
             }

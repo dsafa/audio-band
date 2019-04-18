@@ -7,7 +7,7 @@
             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
             xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
-            xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+            xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
             xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
             x:Class="AudioBand.Views.Wpf.SettingsWindow"
             mc:Ignorable="d" 
@@ -170,18 +170,39 @@
             </StackPanel>
         </ScrollViewer>
         <Grid DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" SnapsToDevicePixels="True" Background="White">
+            <Grid.Resources>
+                <Thickness x:Key="ItemMargins">8</Thickness>
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Margin" Value="{StaticResource ItemMargins}"/>
+                    <Setter Property="Width" Value="100"/>
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <Button Margin="8" Content="{StaticResource AboutButtonText}" Width="100"
+                <Button Content="{StaticResource AboutButtonText}"
                         Command="{Binding ElementName=Window, Path=OpenAboutDialogCommand}"/>
+                <ComboBox Width="200" SelectedIndex="0" Margin="{StaticResource ItemMargins}" Height="{StaticResource DefaultButtonHeight}"
+                          x:Name="ProfilesComboBox"
+                          SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}"
+                          ItemsSource="{Binding Profiles}">
+                    <i:Interaction.Behaviors>
+                        <behaviours:SelectionChangedCommandBehavior Command="{Binding ProfileSelectionChangedCommand}"/>
+                    </i:Interaction.Behaviors>
+                </ComboBox>
+                <Button Content="{StaticResource NewProfileButtonText}" 
+                        Command="{Binding AddProfileCommand}"/>
+                <Button Content="{StaticResource DeleteProfileButtonText}" 
+                        Command="{Binding DeleteProfileCommand}" CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}"/>
+                <Button Content="{StaticResource RenameProfileButtonText}"
+                        Command="{Binding RenameProfileCommand}" CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-                <Button Margin="8" Content="{StaticResource CancelButtonText}" IsCancel="True" Width="100"
+                <Button Content="{StaticResource CancelButtonText}" IsCancel="True"
                         Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
-                <Button Margin="8" Content="{StaticResource SaveButtonText}" IsDefault="True" Width="100"
+                <Button Content="{StaticResource SaveButtonText}" IsDefault="True"
                         Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
             </StackPanel>
         </Grid>
