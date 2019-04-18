@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AudioBand.Models;
 
 namespace AudioBand.Settings
@@ -8,6 +9,8 @@ namespace AudioBand.Settings
     /// </summary>
     public interface IAppSettings
     {
+        event EventHandler ProfileChanged;
+
         /// <summary>
         ///  Gets or sets the saved audio source.
         /// </summary>
@@ -57,6 +60,28 @@ namespace AudioBand.Settings
         /// Gets the saved audio source settings.
         /// </summary>
         List<AudioSourceSettings> AudioSourceSettings { get; }
+
+        /// <summary>
+        /// Gets or sets the current profile.
+        /// </summary>
+        string CurrentProfile { get; set; }
+
+        /// <summary>
+        /// Gets the list of profiles
+        /// </summary>
+        List<string> Profiles { get; }
+
+        /// <summary>
+        /// Creates a new profile.
+        /// </summary>
+        /// <param name="profileName">The name of the new profile.</param>
+        void CreateProfile(string profileName);
+
+        /// <summary>
+        /// Deletes a profile.
+        /// </summary>
+        /// <param name="profileName">The name of the profile to delete.</param>
+        void DeleteProfile(string profileName);
 
         /// <summary>
         /// Save the settings.

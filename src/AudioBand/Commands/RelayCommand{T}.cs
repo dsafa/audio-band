@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace AudioBand.Commands
@@ -42,10 +44,43 @@ namespace AudioBand.Commands
             return _canExecute?.Invoke((T)parameter) ?? true;
         }
 
+        /// <summary>
+        /// Raises <see cref="CanExecuteChanged"/> event.
+        /// </summary>
+        public void RaiseCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
+        }
+
         /// <inheritdoc cref="ICommand.Execute"/>
         public void Execute(object parameter)
         {
             _execute((T)parameter);
+        }
+
+        /// <summary>
+        /// Observes a <see cref="INotifyPropertyChanged"/> subject and raises <see cref="CanExecuteChanged"/> when a property changes.
+        /// </summary>
+        /// <param name="subject">The subject to observe.</param>
+        /// <param name="propertyName">The property to observe</param>
+        public void Observe(INotifyPropertyChanged subject, string propertyName)
+        {
+            subject.PropertyChanged += (o, e) =>
+            {
+                if (e.PropertyName == propertyName)
+                {
+                    RaiseCanExecuteChanged();
+                }
+            };
+        }
+
+        /// <summary>
+        /// Observes a <see cref="INotifyCollectionChanged"/> subject and raises <see cref="CanExecuteChanged"/> when the collection changes.
+        /// </summary>
+        /// <param name="subject">The subject</param>
+        public void Observe(INotifyCollectionChanged subject)
+        {
+            subject.CollectionChanged += (o, e) => RaiseCanExecuteChanged();
         }
     }
 }

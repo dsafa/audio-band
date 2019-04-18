@@ -114,7 +114,7 @@ namespace AudioBand.ViewModels
             Logger.Debug("Starting edit");
             OnBeginEdit();
             IsEditing = true;
-            this.Subscribe<EditMessage>(EditMessageOnPublished);
+            this.Subscribe<EndEditMessage>(EditMessageOnPublished);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace AudioBand.ViewModels
             Logger.Debug("Ending edit");
             OnEndEdit();
             IsEditing = false;
-            this.Unsubscribe<EditMessage>();
+            this.Unsubscribe<EndEditMessage>();
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace AudioBand.ViewModels
             Logger.Debug("Cancelling edit");
             OnCancelEdit();
             IsEditing = false;
-            this.Unsubscribe<EditMessage>();
+            this.Unsubscribe<EndEditMessage>();
         }
 
         /// <inheritdoc cref="IResettableObject.Reset"/>
@@ -273,14 +273,14 @@ namespace AudioBand.ViewModels
             }
         }
 
-        private void EditMessageOnPublished(EditMessage message)
+        private void EditMessageOnPublished(EndEditMessage message)
         {
             switch (message)
             {
-                case EditMessage.AcceptEdits:
+                case EndEditMessage.AcceptEdits:
                     EndEdit();
                     break;
-                case EditMessage.CancelEdits:
+                case EndEditMessage.CancelEdits:
                     CancelEdit();
                     break;
             }

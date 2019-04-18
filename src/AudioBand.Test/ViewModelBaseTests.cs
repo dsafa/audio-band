@@ -47,7 +47,7 @@ namespace AudioBand.Test
             vm.BeginEdit();
 
             Assert.IsTrue(vm.IsEditing);
-            this.Publish(EditMessage.AcceptEdits);
+            this.Publish(EndEditMessage.AcceptEdits);
             Assert.IsFalse(vm.IsEditing);
         }
 
@@ -58,7 +58,7 @@ namespace AudioBand.Test
             vm.BeginEdit();
 
             Assert.IsTrue(vm.IsEditing);
-            this.Publish(EditMessage.CancelEdits);
+            this.Publish(EndEditMessage.CancelEdits);
             Assert.IsFalse(vm.IsEditing);
         }
 

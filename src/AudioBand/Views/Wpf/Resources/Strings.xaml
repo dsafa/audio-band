@@ -24,6 +24,7 @@
     <sys:String x:Key="YOffsetLabelText">Margin</sys:String>
     <sys:String x:Key="AboutTitle">About AudioBand</sys:String>
     <sys:String x:Key="RememberSettingLabelText">Remember</sys:String>
+    <sys:String x:Key="DefaultProfileItemText">Default Profile</sys:String>
 
     <sys:String x:Key="GeneralSettingsTab">General</sys:String>
     <sys:String x:Key="PlaybackControlsTab">Playback Controls</sys:String>
@@ -47,6 +48,9 @@
     <sys:String x:Key="DeleteButtonText">Delete</sys:String>
     <sys:String x:Key="DiscardButtonText">Discard</sys:String>
     <sys:String x:Key="PickColorButtonText">Change Color</sys:String>
+    <sys:String x:Key="NewProfileButtonText">New Profile</sys:String>
+    <sys:String x:Key="DeleteProfileButtonText">Delete Profile</sys:String>
+    <sys:String x:Key="RenameProfileButtonText">Rename Profile</sys:String>
 
     <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
     <sys:String x:Key="DefaultImageHelpText">Reset image to its default.</sys:String>

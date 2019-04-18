@@ -3,7 +3,7 @@
     /// <summary>
     /// Global edit messages for view models.
     /// </summary>
-    public enum EditMessage
+    public enum EndEditMessage
     {
         /// <summary>
         /// Accept edits
