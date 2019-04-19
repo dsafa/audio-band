@@ -171,8 +171,8 @@
                     </Expander>
                 </StackPanel>
             </ScrollViewer>
-            <ComboBox SelectedIndex="0" Margin="8" Height="{StaticResource DefaultButtonHeight}"
-                      x:Name="ProfilesComboBox" Grid.Row="1"
+            <ComboBox Margin="8" Height="{StaticResource DefaultButtonHeight}"
+                      x:Name="ProfilesComboBox" Grid.Row="1" IsSynchronizedWithCurrentItem="True"
                       SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}"
                       ItemsSource="{Binding Profiles}">
             </ComboBox>
@@ -194,7 +194,7 @@
                 <Button Content="{StaticResource DeleteProfileButtonText}" Width="110"
                         Command="{Binding DeleteProfileCommand}" CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}"/>
                 <Button Content="{StaticResource RenameProfileButtonText}" Width="110"
-                        Command="{Binding RenameProfileCommand}" CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}"/>
+                        Command="{Binding RenameProfileCommand}"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
                 <Button Content="{StaticResource CancelButtonText}" IsCancel="True" Width="80"

@@ -166,7 +166,7 @@ namespace AudioBandModel.Settings
 
             if (_settings.Profiles.Count == 1)
             {
-                throw new ArgumentException("Must have at least one profile", nameof(profileName));
+                throw new InvalidOperationException("Must have at least one profile");
             }
 
             if (!_settings.Profiles.ContainsKey(profileName))
@@ -175,6 +175,28 @@ namespace AudioBandModel.Settings
             }
 
             _settings.Profiles.Remove(profileName);
+        }
+
+        public void RenameCurrentProfile(string newProfileName)
+        {
+            if (newProfileName == null)
+            {
+                throw new ArgumentNullException(nameof(newProfileName));
+            }
+
+            if (_currentProfile == null)
+            {
+                throw new InvalidOperationException("No profile selected. Current profile is null");
+            }
+
+            if (_settings.Profiles.ContainsKey(newProfileName))
+            {
+                throw new ArgumentException("Profile already exists", nameof(newProfileName));
+            }
+
+            _settings.Profiles.Remove(_settings.CurrentProfileName);
+            _settings.CurrentProfileName = newProfileName;
+            _settings.Profiles.Add(newProfileName, _currentProfile);
         }
 
         /// <summary>

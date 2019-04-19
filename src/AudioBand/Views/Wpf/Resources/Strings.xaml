@@ -83,4 +83,5 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="AudioBandAboutDialogProjectPre">Check out the project site to report issues and get more help</sys:String>
     <sys:String x:Key="AudioBandAboutDialogLicenseLinkText">License</sys:String>
     <sys:String x:Key="AudioBandAboutDialogThirdPartyLicenseLink">Third party licenses</sys:String>
+    <sys:String x:Key="RenameProfileDialogTitle">Renaming profile {0}</sys:String>
 </ResourceDictionary>

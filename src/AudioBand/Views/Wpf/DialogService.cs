@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using AudioBand.ViewModels;
 
@@ -42,6 +43,20 @@ namespace AudioBand.Views.Wpf
                 _instance.Closed += (o, e) => _instance = null;
                 _instance.Show();
             }
+        }
+
+        /// <inheritdoc />
+        public string ShowRenameDialog(string currentName, IEnumerable<string> profiles)
+        {
+            var vm = new RenameProfileDialogVM(currentName, profiles);
+            var dialog = new RenameProfileDialog(vm);
+            var result = dialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                return vm.NewProfileName;
+            }
+
+            return null;
         }
 
         /// <inheritdoc/>
