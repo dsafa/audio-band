@@ -245,7 +245,6 @@
     <Compile Include="Views\Wpf\RenameProfileDialog.xaml.cs">
       <DependentUpon>RenameProfileDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Wpf\Rules\ProfileRenameValidationRule.cs" />
     <Compile Include="Views\Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

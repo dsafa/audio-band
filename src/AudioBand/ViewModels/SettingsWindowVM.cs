@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.Settings;
-using AudioBand.Views.Wpf.Rules;
 using PubSub.Extension;
 
 namespace AudioBand.ViewModels
