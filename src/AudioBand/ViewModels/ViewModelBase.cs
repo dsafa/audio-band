@@ -271,6 +271,25 @@ namespace AudioBand.ViewModels
             RaiseValidationError(e.ToString(), propertyName);
         }
 
+        /// <summary>
+        /// Clears validation errors.
+        /// </summary>
+        protected void ClearErrors()
+        {
+            _propertyErrors.Clear();
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(string.Empty));
+        }
+
+        /// <summary>
+        /// Clears errors for a property.
+        /// </summary>
+        /// <param name="propertyName">The property to clear.</param>
+        protected void ClearError(string propertyName)
+        {
+            _propertyErrors.Remove(propertyName);
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
         private void SetupAlsoNotify()
         {
             var alsoNotifyProperties = Accessor.GetMembers().Where(m => m.IsDefined(typeof(AlsoNotifyAttribute)));

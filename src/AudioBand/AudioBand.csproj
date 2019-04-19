@@ -179,6 +179,7 @@
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
     <Compile Include="ViewModels\PreviousButtonVM.cs" />
     <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
+    <Compile Include="ViewModels\RenameProfileDialogVM.cs" />
     <Compile Include="ViewModels\SettingsWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
@@ -241,6 +242,10 @@
     <Compile Include="Views\Wpf\ProgressBarSettingsView.xaml.cs">
       <DependentUpon>ProgressBarSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Wpf\RenameProfileDialog.xaml.cs">
+      <DependentUpon>RenameProfileDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wpf\Rules\ProfileRenameValidationRule.cs" />
     <Compile Include="Views\Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -388,6 +393,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Wpf\ProgressBarSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wpf\RenameProfileDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

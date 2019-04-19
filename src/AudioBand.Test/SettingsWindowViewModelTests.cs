@@ -19,18 +19,20 @@ namespace AudioBand.Test
     public class SettingsWindowViewModelTests
     {
         private Mock<IAppSettings> _appSettings;
+        private Mock<IDialogService> _dialog;
 
         [TestInitialize]
         public void TestSetup()
         {
             _appSettings = new Mock<IAppSettings>();
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string>());
+            _dialog = new Mock<IDialogService>();
         }
 
         [TestMethod]
         public void HasUnsavedChangesWhenEditMessagePublished()
         {
-            var vm = new SettingsWindowVM(_appSettings.Object);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
 
             Assert.IsFalse(vm.HasUnsavedChanges);
             this.Publish(StartEditMessage.Started);
@@ -40,7 +42,7 @@ namespace AudioBand.Test
         [TestMethod]
         public void NoUnsavedChangesWhenEndEdit()
         {
-            var vm = new SettingsWindowVM(_appSettings.Object);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
 
             vm.HasUnsavedChanges = true;
             this.Publish(EndEditMessage.CancelEdits);
@@ -55,7 +57,7 @@ namespace AudioBand.Test
         public void DisableDeleteProfileCommandWhenOnlyOneProfile()
         {
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string>{"profile 1"});
-            var vm = new SettingsWindowVM(_appSettings.Object);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
 
             Assert.IsFalse(vm.DeleteProfileCommand.CanExecute(null));
         }
@@ -66,7 +68,7 @@ namespace AudioBand.Test
             string profile1 = "profile 1";
             string profile2 = "profile 2";
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> {profile1, profile2});
-            var vm = new SettingsWindowVM(_appSettings.Object);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
 
             Assert.AreEqual(2, vm.Profiles.Count);
             Assert.AreEqual(profile1, vm.Profiles[0]);
@@ -77,7 +79,7 @@ namespace AudioBand.Test
         public void CreateProfileAddsProfileToSettingsAndViewModel()
         {
             _appSettings.Setup(m => m.CreateProfile(It.IsAny<string>()));
-            var vm = new SettingsWindowVM(_appSettings.Object);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
 
             Assert.AreEqual(0, vm.Profiles.Count);
             vm.AddProfileCommand.Execute(null);
@@ -93,7 +95,7 @@ namespace AudioBand.Test
             string profile2 = "profile 2";
             _appSettings.SetupSet(m => m.CurrentProfile = It.IsAny<string>());
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> {profile1, profile2});
-            var vm = new SettingsWindowVM(_appSettings.Object);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
 
             vm.SelectedProfileName = profile2;
             _appSettings.VerifySet(m => m.CurrentProfile = It.Is<string>(x => x == profile2));
@@ -106,7 +108,7 @@ namespace AudioBand.Test
             string profile2 = "profile 2";
 
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> {profile1, profile2});
-            var vm = new SettingsWindowVM(_appSettings.Object);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
             vm.SelectedProfileName = profile2;
             vm.DeleteProfileCommand.Execute(profile2);
 
@@ -121,7 +123,7 @@ namespace AudioBand.Test
             string profile2 = "profile 2";
 
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> { profile1, profile2 });
-            var vm = new SettingsWindowVM(_appSettings.Object);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
 
             EndEditMessage msg = EndEditMessage.CancelEdits;
             this.Subscribe<EndEditMessage>(m => msg = m);
@@ -129,6 +131,59 @@ namespace AudioBand.Test
             vm.SelectedProfileName = profile2;
 
             Assert.AreEqual(EndEditMessage.AcceptEdits, msg);
+        }
+
+        [TestMethod]
+        public void RenameProfileDialogAccepted()
+        {
+            string profile1 = "profile1";
+            string profile2 = "profile2";
+
+            _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> {profile1});
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile1);
+            _dialog.Setup(m => m.ShowRenameDialog(It.Is<string>(s => s == profile1), It.Is<IEnumerable<string>>(e => e.Contains(profile1))))
+                .Returns(profile2);
+
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
+            vm.RenameProfileCommand.Execute(null);
+
+            _dialog.Verify(m => m.ShowRenameDialog(It.Is<string>(s => s == profile1), It.Is<IEnumerable<string>>(e => e.Contains(profile1))));
+            _appSettings.Verify(m => m.RenameCurrentProfile(It.Is<string>(s => s == profile2)), Times.Once);
+            Assert.AreEqual(profile2, vm.SelectedProfileName);
+            Assert.AreEqual(profile2, vm.Profiles[0]);
+            Assert.AreEqual(1, vm.Profiles.Count);
+        }
+
+        [TestMethod]
+        public void RenameProfileDialogCanceled()
+        {
+            string profile1 = "profile1";
+
+            _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> {profile1});
+            _dialog.Setup(m => m.ShowRenameDialog(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+                .Returns((string)null);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
+            vm.SelectedProfileName = profile1;
+
+            _appSettings.Verify(m => m.RenameCurrentProfile(It.IsAny<string>()), Times.Never);
+            Assert.AreEqual(profile1, vm.SelectedProfileName);
+            Assert.AreEqual(profile1, vm.Profiles[0]);
+        }
+
+        [TestMethod]
+        public void RenameProfileSameProfileIgnored()
+        {
+            string profile1 = "profile1";
+
+            _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> { profile1 });
+            _dialog.Setup(m => m.ShowRenameDialog(It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
+                .Returns(profile1);
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
+            vm.SelectedProfileName = profile1;
+
+            _appSettings.Verify(m => m.RenameCurrentProfile(It.IsAny<string>()), Times.Never);
+            Assert.AreEqual(profile1, vm.SelectedProfileName);
+            Assert.AreEqual(profile1, vm.Profiles[0]);
         }
     }
 }

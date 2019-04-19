@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Controls;
 using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.Settings;
+using AudioBand.Views.Wpf.Rules;
 using PubSub.Extension;
 
 namespace AudioBand.ViewModels
@@ -15,6 +17,7 @@ namespace AudioBand.ViewModels
     public class SettingsWindowVM : ViewModelBase
     {
         private readonly IAppSettings _appSettings;
+        private readonly IDialogService _dialogService;
         private ViewModelBase _selectedVM;
         private string _selectedProfileName;
         private bool _hasUnsavedChanges;
@@ -23,16 +26,17 @@ namespace AudioBand.ViewModels
         /// Initializes a new instance of the <see cref="SettingsWindowVM"/> class.
         /// </summary>
         /// <param name="appSettings">The app settings</param>
-        public SettingsWindowVM(IAppSettings appSettings)
+        public SettingsWindowVM(IAppSettings appSettings, IDialogService dialogService)
         {
             _appSettings = appSettings;
+            _dialogService = dialogService;
             _selectedProfileName = appSettings.CurrentProfile;
             Profiles = new ObservableCollection<string>(appSettings.Profiles);
             SelectViewModelCommand = new RelayCommand<ViewModelBase>(SelectViewModelOnExecute);
             DeleteProfileCommand = new RelayCommand<string>(DeleteProfileCommandOnExecute, DeleteProfileCommandCanExecute);
             DeleteProfileCommand.Observe(Profiles);
             AddProfileCommand = new RelayCommand(AddProfileCommandOnExecute);
-            RenameProfileCommand = new RelayCommand<string>(RenameProfileCommandOnExecute);
+            RenameProfileCommand = new RelayCommand(RenameProfileCommandOnExecute);
 
             this.Subscribe<StartEditMessage>(StartEditMessageHandler);
             this.Subscribe<EndEditMessage>(EndEditMessageHandler);
@@ -47,6 +51,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _selectedVM, value, trackChanges: false);
         }
 
+        /// <summary>
+        /// Gets or sets the selected profile name
+        /// </summary>
         public string SelectedProfileName
         {
             get => _selectedProfileName;
@@ -60,6 +67,9 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether there are unsaved changes.
+        /// </summary>
         public bool HasUnsavedChanges
         {
             get => _hasUnsavedChanges;
@@ -76,11 +86,20 @@ namespace AudioBand.ViewModels
         /// </summary>
         public RelayCommand<ViewModelBase> SelectViewModelCommand { get; }
 
+        /// <summary>
+        /// Gets the command to delete a profile.
+        /// </summary>
         public RelayCommand<string> DeleteProfileCommand { get; }
 
+        /// <summary>
+        /// Gets the command to add a profile.
+        /// </summary>
         public RelayCommand AddProfileCommand { get; }
 
-        public RelayCommand<string> RenameProfileCommand { get; }
+        /// <summary>
+        /// Gets the command to rename the current profile.
+        /// </summary>
+        public RelayCommand RenameProfileCommand { get; }
 
         private void SelectViewModelOnExecute(ViewModelBase newViewmodel)
         {
@@ -117,8 +136,18 @@ namespace AudioBand.ViewModels
             Profiles.Add(newprofile);
         }
 
-        private void RenameProfileCommandOnExecute(string profileName)
+        private void RenameProfileCommandOnExecute(object obj)
         {
+            string newProfileName = _dialogService.ShowRenameDialog(SelectedProfileName, Profiles.ToList());
+            if (newProfileName == null || newProfileName == SelectedProfileName)
+            {
+                return;
+            }
+
+            _appSettings.RenameCurrentProfile(newProfileName);
+            var index = Profiles.IndexOf(SelectedProfileName);
+            Profiles[index] = newProfileName;
+            SelectedProfileName = newProfileName;
         }
 
         private void StartEditMessageHandler(StartEditMessage obj)

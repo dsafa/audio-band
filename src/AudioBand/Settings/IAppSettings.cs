@@ -83,6 +83,8 @@ namespace AudioBand.Settings
         /// <param name="profileName">The name of the profile to delete.</param>
         void DeleteProfile(string profileName);
 
+        void RenameCurrentProfile(string newProfileName);
+
         /// <summary>
         /// Save the settings.
         /// </summary>
