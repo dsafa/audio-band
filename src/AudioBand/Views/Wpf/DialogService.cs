@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using AudioBand.ViewModels;
@@ -62,6 +63,18 @@ namespace AudioBand.Views.Wpf
         /// <inheritdoc/>
         public bool ShowConfirmationDialog(ConfirmationDialogType confirmType, params object[] data)
         {
+#if DEBUG
+            switch (confirmType)
+            {
+                case ConfirmationDialogType.DeleteLabel:
+                    Debug.Assert(data.Length == 1, "Expected Data[0] to contain the label name");
+                    break;
+                case ConfirmationDialogType.DeleteProfile:
+                    Debug.Assert(data.Length == 1, "Expected data[0] to contain the profile name");
+                    break;
+            }
+#endif
+
             var dialog = new ConfirmationDialog(confirmType, data);
             var result = dialog.ShowDialog();
             return result.GetValueOrDefault(false);
