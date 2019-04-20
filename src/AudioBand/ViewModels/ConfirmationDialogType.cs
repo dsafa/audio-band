@@ -13,6 +13,11 @@
         /// <summary>
         /// Dialog to discard changes
         /// </summary>
-        DiscardChanges
+        DiscardChanges,
+
+        /// <summary>
+        /// Dialog to delete a profile
+        /// </summary>
+        DeleteProfile,
     }
 }

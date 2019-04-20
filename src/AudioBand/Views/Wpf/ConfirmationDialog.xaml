@@ -44,6 +44,9 @@
                         <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DiscardChanges">
                             <Setter Property="Text" Value="{StaticResource DiscardChangesDialogTitle}"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DeleteProfile">
+                            <Setter Property="Text" Value="{StaticResource DeleteProfileDialogTitle}"/>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </TextBlock.Style>
@@ -57,6 +60,9 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DiscardChanges">
                             <Setter Property="Text" Value="{StaticResource DiscardChangesDialogBody}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DeleteProfile">
+                            <Setter Property="Text" Value="{Binding ElementName=ConfirmationDialogWindow, Path=DialogData[0], StringFormat={StaticResource DeleteProfileDialogBody}}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -72,6 +78,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DiscardChanges">
                                 <Setter Property="Content" Value="{StaticResource DiscardButtonText}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=ConfirmationDialogWindow, Path=DialogType}" Value="DeleteProfile">
+                                <Setter Property="Content" Value="{StaticResource DeleteButtonText}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

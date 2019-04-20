@@ -25,6 +25,7 @@ namespace AudioBand.ViewModels
         /// Initializes a new instance of the <see cref="SettingsWindowVM"/> class.
         /// </summary>
         /// <param name="appSettings">The app settings</param>
+        /// <param name="dialogService">The dialog service</param>
         public SettingsWindowVM(IAppSettings appSettings, IDialogService dialogService)
         {
             _appSettings = appSettings;
@@ -108,6 +109,12 @@ namespace AudioBand.ViewModels
         private void DeleteProfileCommandOnExecute(string profileName)
         {
             Debug.Assert(Profiles.Count > 1, "Should not be able to delete profiles if there is only one");
+
+            var deleteConfirmed = _dialogService.ShowConfirmationDialog(ConfirmationDialogType.DeleteProfile, profileName);
+            if (!deleteConfirmed)
+            {
+                return;
+            }
 
             _appSettings.DeleteProfile(profileName);
             Profiles.Remove(profileName);

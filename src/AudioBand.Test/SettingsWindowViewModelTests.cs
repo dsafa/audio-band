@@ -102,11 +102,33 @@ namespace AudioBand.Test
         }
 
         [TestMethod]
+        public void DeleteProfileConfirmationCancelDoesNotDelete()
+        {
+            string profile1 = "profile 1";
+            string profile2 = "profile 2";
+
+            _dialog.Setup(m => m.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object[]>()))
+                .Returns(false);
+            _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> { profile1, profile2 });
+            var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
+            vm.SelectedProfileName = profile2;
+            vm.DeleteProfileCommand.Execute(profile2);
+
+            Assert.AreEqual(2, vm.Profiles.Count);
+            Assert.AreEqual(profile2, vm.SelectedProfileName);
+            _dialog.Verify(m => m.ShowConfirmationDialog(It.Is<ConfirmationDialogType>(c => c == ConfirmationDialogType.DeleteProfile),
+                It.Is<object[]>(data => (string)data[0] == profile2)));
+            _appSettings.Verify(m => m.DeleteProfile(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
         public void DeleteProfileSelectsNewItem()
         {
             string profile1 = "profile 1";
             string profile2 = "profile 2";
 
+            _dialog.Setup(m => m.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object[]>()))
+                .Returns(true);
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> {profile1, profile2});
             var vm = new SettingsWindowVM(_appSettings.Object, _dialog.Object);
             vm.SelectedProfileName = profile2;
