@@ -21,15 +21,16 @@
     <Color x:Key="BorderDefaultColor">#CCCCCC</Color>
     <Color x:Key="BorderHoverColor">#7A7A7A</Color>
     <Color x:Key="ButtonDisabledColor">#888888</Color>
-    <Color x:Key="NavigationPaneHoverBackgroundColor">#CCAAAAAA</Color>
+    <Color x:Key="NavigationPaneHoverBackgroundColor">#44444444</Color>
     <Color x:Key="NavigationPaneClickBackgroundColor">#DD888888</Color>
     <GridLength x:Key="GridRowHeight">35</GridLength>
-    <sys:Double x:Key="NavigationPaneItemHeight">50</sys:Double>
-    <sys:Double x:Key="NavigationPaneItemFontSize">24</sys:Double>
+    <sys:Double x:Key="NavigationPaneItemHeight">42</sys:Double>
+    <sys:Double x:Key="NavigationPaneItemFontSize">22</sys:Double>
     <sys:Double x:Key="BodyFontSize">14</sys:Double>
     <sys:Double x:Key="TitleFontSize">24</sys:Double>
     <sys:Double x:Key="HeaderFontSize">46</sys:Double>
     <sys:Double x:Key="DefaultButtonHeight">30</sys:Double>
+    <sys:Double x:Key="NavigationPaneIconLength">18</sys:Double>
     <SolidColorBrush x:Key="BorderDefaultColorBrush" Color="{StaticResource BorderDefaultColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderHoverColorBrush" Color="{StaticResource BorderHoverColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderFocusedColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
@@ -55,7 +56,7 @@
             </MultiBinding>
         </RadialGradientBrush.GradientOrigin>
         <GradientStop Color="#44FFFFFF" Offset="0"/>
-        <GradientStop Color="Transparent" Offset="1"/>
+        <GradientStop Color="Transparent" Offset="0.8"/>
     </RadialGradientBrush>
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -170,7 +171,7 @@
                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                    Fill="{StaticResource RevealHoverLightBrush}"/>
                         <Border BorderBrush="{fw:RevealBrush Color=LightGray, Size=50, Opacity=0.8}"
-                                BorderThickness="1" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                                BorderThickness="0,1,1,1" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
                             <DockPanel LastChildFill="True">
                                 <Rectangle DockPanel.Dock="Left" Fill="{x:Static fw:AccentColors.ImmersiveSystemAccentBrush}" Width="5" Height="25"
                                            Visibility="{TemplateBinding IsChecked, Converter={StaticResource BoolToVisibilityConverter}}" VerticalAlignment="Center"/>
@@ -295,11 +296,12 @@
         </Setter>
     </Style>
     <Style x:Key="NavigationPaneIcon" TargetType="{x:Type Image}">
-        <Setter Property="Height" Value="20"/>
-        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="{StaticResource NavigationPaneIconLength}"/>
+        <Setter Property="Width" Value="{StaticResource NavigationPaneIconLength}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0, 0, 20, 0"/>
+        <Setter Property="Margin" Value="0, 0, 15, 0"/>
     </Style>
     <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
         <Setter Property="IsMoveToPointEnabled" Value="True"/>
@@ -398,15 +400,13 @@
         </Style.Resources>
         <Setter Property="Height" Value="{StaticResource ComboBoxItemHeight}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Margin" Value="2"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                    <Border x:Name="ComboBoxItem"
-                                BorderBrush="{fw:RevealBrush Color=LightGray, Size={StaticResource ComboBoxItemHeight}, Opacity=0.8}"
-                                BorderThickness="1" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
-                        <ContentPresenter/>
+                    <Border x:Name="ComboBoxItem" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -503,7 +503,7 @@
                                       Background="#F8F8F8">
                                     <Border x:Name="DropDownBorder" BorderThickness="1"
                                             BorderBrush="{StaticResource BorderDefaultColorBrush}"/>
-                                    <ScrollViewer Margin="4" SnapsToDevicePixels="True">
+                                    <ScrollViewer Margin="2" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
                                 </Grid>
@@ -576,5 +576,9 @@
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
         </Style.Resources>
+    </Style>
+    <Style TargetType="{x:Type Hyperlink}" BasedOn="{StaticResource {x:Type Hyperlink}}">
+        <Setter Property="Foreground" Value="{x:Static fw:AccentColors.ImmersiveSystemAccentBrush}"/>
+        <Setter Property="TextDecorations" Value="{x:Null}"/>
     </Style>
 </ResourceDictionary>

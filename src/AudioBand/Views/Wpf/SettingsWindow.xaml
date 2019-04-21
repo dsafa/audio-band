@@ -16,8 +16,8 @@
             d:DataContext="{d:DesignInstance viewmodels:SettingsWindowVM}"
             Title="Audio Band Settings"
             Icon="pack://application:,,,/AudioBand;component/audioband.ico"
-            Height="800"
-            Width="1000"
+            Height="700"
+            Width="930"
             NoiseOpacity="0.01"
             fw:PointerTracker.Enabled="True"
             ExtendViewIntoTitleBar="True"
@@ -99,7 +99,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{StaticResource CustomLabelsTab}" Style="{StaticResource NavigationPaneTextBlock}"
-                                           VerticalAlignment="Center">
+                                           VerticalAlignment="Center" FontWeight="Normal">
                                 </TextBlock>
                                 <Button Grid.Column="1" Style="{StaticResource RevealButton}"
                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
@@ -146,7 +146,7 @@
                     </Expander>
                     <Expander Style="{StaticResource NavigationPaneExpander}">
                         <Expander.Header>
-                            <TextBlock Padding="0, 0, 10, 0" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"/>
+                            <TextBlock Padding="0, 0, 10, 0" FontWeight="Normal" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"/>
                         </Expander.Header>
                         <ListBox Background="Transparent" ItemsSource="{Binding ElementName=Window, Path=AudioSourceSettingsVM}"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
@@ -209,7 +209,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel x:Name="CaptionControls" Orientation="Horizontal" Grid.Row="0" WindowChrome.IsHitTestVisibleInChrome="True"
-                        Height="{x:Static SystemParameters.CaptionHeight}" HorizontalAlignment="Right" Margin="0, 0, 150, 0">
+                        Height="{x:Static SystemParameters.CaptionHeight}" HorizontalAlignment="Right" Margin="0, 0, 140, 0">
                 <TextBlock VerticalAlignment="Center">
                     <Hyperlink Command="{Binding ElementName=Window, Path=OpenAboutDialogCommand}">
                         <Run Text="{StaticResource AboutButtonText}"/>
