@@ -60,6 +60,28 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets the time from the current mouse position.
+        /// </summary>
+        /// <returns>The time corresponding to the current mouse position.</returns>
+        public TimeSpan GetSeekPositionFromMouse()
+        {
+            var mousePosition = PointToClient(MousePosition);
+            if (mousePosition.X < 0)
+            {
+                return TimeSpan.Zero;
+            }
+
+            if (mousePosition.X > Width)
+            {
+                return Total;
+            }
+
+            var percentage = (float)mousePosition.X / Width;
+            var seekTimeMs = percentage * Total.TotalMilliseconds;
+            return TimeSpan.FromMilliseconds(seekTimeMs);
+        }
+
         /// <inheritdoc />
         protected override void OnMouseEnter(EventArgs e)
         {

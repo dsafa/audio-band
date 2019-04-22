@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 using AudioBand.Models;
 using AudioBand.ViewModels;
+using AudioBand.Views.Winforms;
 using CSDeskBand.ContextMenu;
 
 namespace AudioBand
@@ -146,6 +148,17 @@ namespace AudioBand
             }
 
             await HandleAudioSourceContextMenuItemClick(menuItem).ConfigureAwait(false);
+        }
+
+        private async void ProgressBarOnClick(object sender, EventArgs e)
+        {
+            var progressBar = sender as EnhancedProgressBar;
+            Debug.Assert(progressBar != null, "Event should be for progress bar");
+
+            if (_currentAudioSource != null)
+            {
+                await _currentAudioSource.SetPlaybackProgressAsync(progressBar.GetSeekPositionFromMouse());
+            }
         }
     }
 }

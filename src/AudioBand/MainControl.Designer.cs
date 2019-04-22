@@ -106,7 +106,7 @@ namespace AudioBand
             this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.PlayPauseButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PlayPauseButtonControl.ForeColor = System.Drawing.Color.White;
             this.PlayPauseButtonControl.Image = null;
-            this.PlayPauseButtonControl.Location = new System.Drawing.Point(73, 0);
+            this.PlayPauseButtonControl.Location = new System.Drawing.Point(0, 0);
             this.PlayPauseButtonControl.LogicalLocation = new System.Drawing.Point(0, 0);
             this.PlayPauseButtonControl.LogicalSize = new System.Drawing.Size(0, 0);
             this.PlayPauseButtonControl.Margin = new System.Windows.Forms.Padding(0);
@@ -128,7 +128,7 @@ namespace AudioBand
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.NextButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.NextButtonControl.ForeColor = System.Drawing.Color.White;
             this.NextButtonControl.Image = null;
-            this.NextButtonControl.Location = new System.Drawing.Point(146, 0);
+            this.NextButtonControl.Location = new System.Drawing.Point(0, 0);
             this.NextButtonControl.LogicalLocation = new System.Drawing.Point(0, 0);
             this.NextButtonControl.LogicalSize = new System.Drawing.Size(0, 0);
             this.NextButtonControl.Margin = new System.Windows.Forms.Padding(0);
@@ -161,6 +161,7 @@ namespace AudioBand
             this.ProgressBarControl.Size = new System.Drawing.Size(250, 2);
             this.ProgressBarControl.TabIndex = 3;
             this.ProgressBarControl.Total = System.TimeSpan.Parse("00:00:00");
+            this.ProgressBarControl.Click += new System.EventHandler(this.ProgressBarOnClick);
             // 
             // ProgressBarVMBindingSource
             // 
