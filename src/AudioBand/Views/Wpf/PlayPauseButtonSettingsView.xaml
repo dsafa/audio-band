@@ -61,10 +61,10 @@
                              Value="{Binding YPosition, Mode=TwoWay}"/>
 
         <Label Grid.Row="5" Grid.Column="0" Content="{StaticResource PlayButtonImageLabelText}" />
-        <local:ImagePicker Grid.Row="5" Grid.Column="1" ImagePath="{Binding PlayImagePath, Mode=TwoWay}" />
+        <local:ImagePicker Grid.Row="5" Grid.Column="1" ImagePath="{Binding PlayImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
 
         <Label Grid.Row="6" Grid.Column="0" Content="{StaticResource PauseButtonImageLabelText}" />
-        <local:ImagePicker Grid.Row="6" Grid.Column="1" ImagePath="{Binding PauseImagePath, Mode=TwoWay}" />
+        <local:ImagePicker Grid.Row="6" Grid.Column="1" ImagePath="{Binding PauseImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
 
         <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" 
                 Content="{StaticResource ResetButtonText}"

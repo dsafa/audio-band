@@ -25,9 +25,11 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The appsettings.</param>
         /// <param name="resourceLoader">The resource loader.</param>
-        public NextButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader)
+        /// <param name="dialogService">The dialog service.</param>
+        public NextButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader, IDialogService dialogService)
             : base(appsettings.NextButton)
         {
+            DialogService = dialogService;
             _appsettings = appsettings;
             _resourceLoader = resourceLoader;
             _defaultNextButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.next);
@@ -105,6 +107,11 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Size Size => new Size(Width, Height);
+
+        /// <summary>
+        /// Gets the dialog service.
+        /// </summary>
+        public IDialogService DialogService { get; }
 
         /// <inheritdoc/>
         protected override void OnReset()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using AudioBand.Extensions;
 using AudioBand.Logging;
 using NLog;
 using Svg;
@@ -25,7 +26,17 @@ namespace AudioBand.Resources
         {
             try
             {
-                return string.IsNullOrEmpty(path) ? fallbackImage : Image.FromFile(path);
+                if (string.IsNullOrEmpty(path))
+                {
+                    return fallbackImage;
+                }
+
+                if (path.EndsWith(".svg"))
+                {
+                    return SvgDocument.Open(path).ToBitmap();
+                }
+
+                return Image.FromFile(path);
             }
             catch (Exception e)
             {

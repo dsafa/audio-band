@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using AudioBand.ViewModels;
+using Microsoft.Win32;
 
 namespace AudioBand.Views.Wpf
 {
@@ -11,6 +12,19 @@ namespace AudioBand.Views.Wpf
     /// </summary>
     public class DialogService : IDialogService
     {
+        private static readonly string[] ImageFilters =
+        {
+            "Images (*.bmp;*.dib;*.rle;*.jpg;*.jpeg;*.jpe,*.jfif;*.tiff;*.tif;*.png;*.svg)|*.bmp;*.dib;*.rle;*.jpg;*.jpeg;*.jpe,*.jfif;*.tiff;*.tif;*.png;*.svg",
+            "Bmp files (*.bmp;*.dib;*.rle)|*.bmp;*.dib;*.rle",
+            "Jpeg Files (*.jpg;*.jpeg;*.jpe,*.jfif)|*.jpg;*.jpeg;*.jpe,*.jfif",
+            "Tiff Files (*.tiff;*.tif)|*.tiff;*.tif",
+            "Png Files (*.png)|*.png",
+            "Svg Files (*.svg)|*.svg",
+            "All Files (*.*)|*.*"
+        };
+
+        private static readonly string FileDialogImageFilter = string.Join("|", ImageFilters);
+
         private AboutDialog _instance;
 
         /// <inheritdoc/>
@@ -78,6 +92,20 @@ namespace AudioBand.Views.Wpf
             var dialog = new ConfirmationDialog(confirmType, data);
             var result = dialog.ShowDialog();
             return result.GetValueOrDefault(false);
+        }
+
+        /// <inheritdoc />
+        public string ShowImagePickerDialog()
+        {
+            var dialog = new OpenFileDialog { Filter = FileDialogImageFilter };
+
+            var res = dialog.ShowDialog();
+            if (res.HasValue && res.Value)
+            {
+                return dialog.FileName;
+            }
+
+            return null;
         }
     }
 }
