@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Windows;
 using System.Windows.Controls;
 using AudioBand.Commands;
+using AudioBand.ViewModels;
 using Microsoft.Win32;
 
 namespace AudioBand.Views.Wpf
@@ -17,6 +19,12 @@ namespace AudioBand.Views.Wpf
         /// </summary>
         public static readonly DependencyProperty ImagePathProperty =
             DependencyProperty.Register(nameof(ImagePath), typeof(string), typeof(ImagePicker), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Dependency property for <see cref="DialogService"/>
+        /// </summary>
+        public static readonly DependencyProperty DialogServiceProperty =
+            DependencyProperty.Register(nameof(DialogService), typeof(IDialogService), typeof(ImagePicker));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImagePicker"/> class.
@@ -39,6 +47,15 @@ namespace AudioBand.Views.Wpf
         }
 
         /// <summary>
+        /// Gets or sets the dialog service
+        /// </summary>
+        public IDialogService DialogService
+        {
+            get => (IDialogService) GetValue(DialogServiceProperty);
+            set => SetValue(DialogServiceProperty, value);
+        }
+
+        /// <summary>
         /// Gets the command to reset the image path.
         /// </summary>
         public RelayCommand ResetImageCommand { get; }
@@ -47,33 +64,6 @@ namespace AudioBand.Views.Wpf
         /// Gets the command to open a browser for the image.
         /// </summary>
         public RelayCommand BrowseForImageCommand { get; }
-
-        private static string SelectImage()
-        {
-            var dlg = new OpenFileDialog();
-
-            var codecs = ImageCodecInfo.GetImageEncoders();
-            var filters = new List<string>();
-            var fileExtensions = new List<string>();
-
-            foreach (var codec in codecs)
-            {
-                var codecName = codec.CodecName.Substring(8).Replace("Codec", "Files").Trim();
-                filters.Add($"{codecName} ({codec.FilenameExtension})|{codec.FilenameExtension}");
-                fileExtensions.Add(codec.FilenameExtension);
-            }
-
-            var allFilter = "All |" + string.Join(";", fileExtensions);
-            dlg.Filter = allFilter + "|" + string.Join("|", filters);
-
-            var res = dlg.ShowDialog();
-            if (res.HasValue && res.Value)
-            {
-                return dlg.FileName;
-            }
-
-            return null;
-        }
 
         private void ResetImagePathOnExecuted(object parameter)
         {
@@ -87,7 +77,9 @@ namespace AudioBand.Views.Wpf
 
         private void BrowseForImageOnExecuted(object parameter)
         {
-            var path = SelectImage();
+            Debug.Assert(DialogService != null, "Dialog service not assigned");
+
+            var path = DialogService.ShowImagePickerDialog();
             if (path == null)
             {
                 return;

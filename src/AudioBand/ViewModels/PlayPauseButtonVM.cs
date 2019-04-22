@@ -29,10 +29,12 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">App settings.</param>
         /// <param name="resourceLoader">Resource loader</param>
+        /// <param name="dialogService">The dialog service</param>
         /// <param name="track">The track.</param>
-        public PlayPauseButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader, Track track)
+        public PlayPauseButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader, IDialogService dialogService, Track track)
             : base(appsettings.PlayPauseButton)
         {
+            DialogService = dialogService;
             _appsettings = appsettings;
             _track = track;
             SetupModelBindings(_track);
@@ -144,6 +146,11 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <remarks>This property exists so the designer can bind to it.</remarks>
         public Size Size => new Size(Width, Height);
+
+        /// <summary>
+        /// Gets the dialog service
+        /// </summary>
+        public IDialogService DialogService { get; }
 
         /// <inheritdoc/>
         protected override void OnReset()

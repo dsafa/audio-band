@@ -15,6 +15,7 @@ namespace AudioBand.Test
     {
         private Mock<IAppSettings> _appSettings;
         private Mock<IResourceLoader> _resourceLoader;
+        private Mock<IDialogService> _dialog;
 
         [TestInitialize]
         public void TestInit()
@@ -22,6 +23,7 @@ namespace AudioBand.Test
             _appSettings = new Mock<IAppSettings>();
             _resourceLoader = new Mock<IResourceLoader>();
             _resourceLoader.Setup(m => m.LoadSVGFromResource(It.IsAny<byte[]>())).Returns(new SvgDocument());
+            _dialog = new Mock<IDialogService>();
         }
 
         [TestMethod]
@@ -33,7 +35,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new NextButtonVM(_appSettings.Object, _resourceLoader.Object);
+            var vm = new NextButtonVM(_appSettings.Object, _resourceLoader.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
@@ -55,7 +57,7 @@ namespace AudioBand.Test
                 .Setup(m => m.TryLoadImageFromPath(It.Is<string>(s => s == path), It.IsAny<Image>()))
                 .Returns(image);
 
-            var vm = new NextButtonVM(_appSettings.Object, _resourceLoader.Object);
+            var vm = new NextButtonVM(_appSettings.Object, _resourceLoader.Object, _dialog.Object);
 
             vm.ImagePath = path;
 
@@ -72,7 +74,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new PlayPauseButtonVM(_appSettings.Object, _resourceLoader.Object, new Track());
+            var vm = new PlayPauseButtonVM(_appSettings.Object, _resourceLoader.Object, _dialog.Object, new Track());
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
@@ -93,7 +95,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new PreviousButtonVM(_appSettings.Object, _resourceLoader.Object);
+            var vm = new PreviousButtonVM(_appSettings.Object, _resourceLoader.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 

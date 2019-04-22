@@ -25,9 +25,11 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         /// <param name="resourceLoader">The resource loader.</param>
-        public PreviousButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader)
+        /// <param name="dialogService">The dialog service</param>
+        public PreviousButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader, IDialogService dialogService)
             : base(appsettings.PreviousButton)
         {
+            DialogService = dialogService;
             _defaultPreviousButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.previous);
             _appsettings = appsettings;
             _resourceLoader = resourceLoader;
@@ -103,6 +105,11 @@ namespace AudioBand.ViewModels
         /// Gets the size of the button.
         /// </summary>
         public Size Size => new Size(Width, Height);
+
+        /// <summary>
+        /// Gets the dialog service
+        /// </summary>
+        public IDialogService DialogService { get; }
 
         /// <inheritdoc/>
         protected override void OnReset()
