@@ -26,7 +26,9 @@ namespace AudioBand.Test
             _appSettings = new Mock<IAppSettings>();
             _appSettings.SetupGet(m => m.AlbumArt).Returns(new AlbumArt());
             _loader = new Mock<IResourceLoader>();
-            _loader.Setup(m => m.LoadSVGFromResource(It.IsAny<byte[]>())).Returns(new SvgDocument());
+            _loader.SetupGet(m => m.DefaultPlaceholderAlbumImage).Returns(new DrawingImage(new Bitmap(1, 1)));
+            _loader.Setup(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<IImage>()))
+                .Returns(new DrawingImage(new Bitmap(1, 1)));
         }
 
         [TestMethod]
@@ -34,8 +36,8 @@ namespace AudioBand.Test
         {
             var vm = new AlbumArtVM(_appSettings.Object, _loader.Object, new Track());
 
-            _loader.Verify(m => m.LoadSVGFromResource(It.IsAny<byte[]>()), Times.Once);
-            _loader.Verify(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<Image>()));
+            _loader.Verify(m => m.DefaultPlaceholderAlbumImage, Times.Once);
+            _loader.Verify(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<IImage>()));
         }
 
         [TestMethod]

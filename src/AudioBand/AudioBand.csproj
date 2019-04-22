@@ -138,8 +138,11 @@
     <Compile Include="Models\CustomLabel.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="Resources\DrawingImage.cs" />
+    <Compile Include="Resources\IImage.cs" />
     <Compile Include="Resources\IResourceLoader.cs" />
     <Compile Include="Resources\ResourceLoader.cs" />
+    <Compile Include="Resources\SvgImage.cs" />
     <Compile Include="Settings\IAppSettings.cs" />
     <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
     <Compile Include="Settings\Migrations\Migration.cs" />

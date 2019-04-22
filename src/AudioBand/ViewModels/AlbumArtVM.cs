@@ -16,7 +16,6 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class AlbumArtVM : ViewModelBase<AlbumArt>
     {
-        private readonly SvgDocument _defaultAlbumArtPlaceholderSvg;
         private readonly IAppSettings _appsettings;
         private readonly Track _track;
         private readonly IResourceLoader _resourceLoader;
@@ -33,7 +32,6 @@ namespace AudioBand.ViewModels
             _appsettings = appsettings;
             _track = track;
             SetupModelBindings(_track);
-            _defaultAlbumArtPlaceholderSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.placeholder_album);
             _resourceLoader = resourceLoader;
             LoadAlbumArtPlaceholder();
 
@@ -123,7 +121,7 @@ namespace AudioBand.ViewModels
 
         private void LoadAlbumArtPlaceholder()
         {
-            _track.UpdatePlaceholder(_resourceLoader.TryLoadImageFromPath(Model.PlaceholderPath, _defaultAlbumArtPlaceholderSvg.ToBitmap()));
+            _track.UpdatePlaceholder(_resourceLoader.TryLoadImageFromPath(Model.PlaceholderPath, _resourceLoader.DefaultPlaceholderAlbumImage).Draw(Width, Height));
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
