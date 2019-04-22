@@ -15,7 +15,6 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class NextButtonVM : ViewModelBase<NextButton>
     {
-        private readonly SvgDocument _defaultNextButtonSvg;
         private readonly IAppSettings _appsettings;
         private readonly IResourceLoader _resourceLoader;
         private Image _image;
@@ -32,7 +31,6 @@ namespace AudioBand.ViewModels
             DialogService = dialogService;
             _appsettings = appsettings;
             _resourceLoader = resourceLoader;
-            _defaultNextButtonSvg = resourceLoader.LoadSVGFromResource(Properties.Resources.next);
             LoadImage();
 
             _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
@@ -52,7 +50,8 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.ImagePath), value))
                 {
-                    Image = _resourceLoader.TryLoadImageFromPath(value, _defaultNextButtonSvg.ToBitmap());
+                    Image?.Dispose();
+                    Image = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultNextImage).Draw(Width, Height);
                 }
             }
         }
@@ -129,7 +128,7 @@ namespace AudioBand.ViewModels
 
         private void LoadImage()
         {
-            Image = _resourceLoader.TryLoadImageFromPath(ImagePath, _defaultNextButtonSvg.ToBitmap());
+            Image = _resourceLoader.TryLoadImageFromPath(ImagePath, _resourceLoader.DefaultNextImage).Draw(Width, Height);
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)

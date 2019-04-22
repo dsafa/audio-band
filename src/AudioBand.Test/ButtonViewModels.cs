@@ -22,7 +22,8 @@ namespace AudioBand.Test
         {
             _appSettings = new Mock<IAppSettings>();
             _resourceLoader = new Mock<IResourceLoader>();
-            _resourceLoader.Setup(m => m.LoadSVGFromResource(It.IsAny<byte[]>())).Returns(new SvgDocument());
+            _resourceLoader.Setup(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<IImage>()))
+                .Returns(new Mock<IImage>().Object);
             _dialog = new Mock<IDialogService>();
         }
 
@@ -45,24 +46,6 @@ namespace AudioBand.Test
             Assert.IsFalse(vm.IsEditing);
             Assert.IsTrue(raised);
             Assert.AreEqual(second.Height, vm.Height);
-        }
-
-        [TestMethod]
-        public void NextButtonLoadsFromImagePath()
-        {
-            string path = "path";
-            var image = new Bitmap(1, 1);
-            _appSettings.SetupGet(m => m.NextButton).Returns(new NextButton());
-            _resourceLoader
-                .Setup(m => m.TryLoadImageFromPath(It.Is<string>(s => s == path), It.IsAny<Image>()))
-                .Returns(image);
-
-            var vm = new NextButtonVM(_appSettings.Object, _resourceLoader.Object, _dialog.Object);
-
-            vm.ImagePath = path;
-
-            _resourceLoader.Verify(m => m.TryLoadImageFromPath(It.Is<string>(s => s == path), It.IsAny<Image>()), Times.Once);
-            Assert.AreEqual(image, vm.Image);
         }
 
         [TestMethod]
