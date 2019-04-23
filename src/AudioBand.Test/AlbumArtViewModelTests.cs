@@ -19,6 +19,7 @@ namespace AudioBand.Test
     {
         private Mock<IAppSettings> _appSettings;
         private Mock<IResourceLoader> _loader;
+        private Mock<IDialogService> _dialog;
 
         [TestInitialize]
         public void TestInit()
@@ -29,12 +30,13 @@ namespace AudioBand.Test
             _loader.SetupGet(m => m.DefaultPlaceholderAlbumImage).Returns(new DrawingImage(new Bitmap(1, 1)));
             _loader.Setup(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<IImage>()))
                 .Returns(new DrawingImage(new Bitmap(1, 1)));
+            _dialog = new Mock<IDialogService>();
         }
 
         [TestMethod]
         public void LoadsDefaultImage()
         {
-            var vm = new AlbumArtVM(_appSettings.Object, _loader.Object, new Track());
+            var vm = new AlbumArtVM(_appSettings.Object, _loader.Object, _dialog.Object, new Track());
 
             _loader.Verify(m => m.DefaultPlaceholderAlbumImage, Times.Once);
             _loader.Verify(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<IImage>()));
@@ -48,7 +50,7 @@ namespace AudioBand.Test
             _appSettings.SetupSequence(m => m.AlbumArt)
                 .Returns(first)
                 .Returns(second);
-            var vm = new AlbumArtVM(_appSettings.Object, _loader.Object, new Track());
+            var vm = new AlbumArtVM(_appSettings.Object, _loader.Object, _dialog.Object, new Track());
             bool raised = false;
             vm.PropertyChanged += (sender, e) => raised = true;
 
