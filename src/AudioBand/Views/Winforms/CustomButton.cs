@@ -83,7 +83,7 @@ namespace AudioBand.Views.Winforms
                 return;
             }
 
-            using (var image = Image.Draw(Width, Height))
+            using (var image = Image.GetScaledSize(Width, Height))
             {
                 var centerX = (e.ClipRectangle.Width - image.Width) / 2;
                 var centerY = (e.ClipRectangle.Height - image.Height) / 2;

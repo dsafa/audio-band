@@ -29,17 +29,7 @@ namespace AudioBand.Extensions
         /// <returns>A bitmap representation of the svg</returns>
         public static Bitmap ToBitmap(this SvgDocument svg, int width, int height)
         {
-            var bmp = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
-            using (var graphics = Graphics.FromImage(bmp))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                svg.Draw(graphics);
-                return bmp;
-            }
+            return svg.Draw(width, height);
         }
     }
 }

@@ -8,6 +8,11 @@ namespace AudioBand.Resources
     public interface IImage
     {
         /// <summary>
+        /// Gets the desired size
+        /// </summary>
+        Size DesiredSize { get; }
+
+        /// <summary>
         /// Gets an image instance
         /// </summary>
         /// <param name="width">The target width.</param>
