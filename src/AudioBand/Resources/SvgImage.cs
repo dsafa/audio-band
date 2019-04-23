@@ -21,12 +21,12 @@ namespace AudioBand.Resources
         }
 
         /// <inheritdoc />
+        public Size DesiredSize => new Size((int)_svgDocument.Width.Value, (int)_svgDocument.Height.Value);
+
+        /// <inheritdoc />
         public Image Draw(int width, int height)
         {
-            using (var svgBitmap = _svgDocument.ToBitmap())
-            {
-                return svgBitmap.Scale(width, height);
-            }
+            return _svgDocument.ToBitmap(width, height);
         }
     }
 }

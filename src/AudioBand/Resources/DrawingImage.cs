@@ -20,6 +20,9 @@ namespace AudioBand.Resources
         }
 
         /// <inheritdoc />
+        public Size DesiredSize => _internalImage.Size;
+
+        /// <inheritdoc />
         public Image Draw(int width, int height)
         {
             return _internalImage.Scale(width, height);

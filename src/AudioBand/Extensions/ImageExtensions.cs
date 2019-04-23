@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
+using AudioBand.Resources;
 
 namespace AudioBand.Extensions
 {
@@ -42,18 +43,35 @@ namespace AudioBand.Extensions
         /// <returns>A copy of the scaled image.</returns>
         public static Image Scale(this Image image, int targetWidth, int targetHeight)
         {
-            var ratiow = (float)image.Width / targetWidth;
-            var ratioh = (float)image.Height / targetHeight;
+            var size = Scale(image.Size, new Size(targetWidth, targetHeight));
+            return Resize(image, size.Width, size.Height);
+        }
 
-            if (ratiow > ratioh)
+        /// <summary>
+        /// Scale an image to fill as much space as possible while maintaining aspect ratio.
+        /// </summary>
+        /// <param name="image">The image to scale</param>
+        /// <param name="targetWidth">The target width.</param>
+        /// <param name="targetHeight">The target height.</param>
+        /// <returns>The scaled image</returns>
+        public static Image GetScaledSize(this IImage image, int targetWidth, int targetHeight)
+        {
+            var size = Scale(image.DesiredSize, new Size(targetWidth, targetHeight));
+            return image.Draw(size.Width, size.Height);
+        }
+
+        private static Size Scale(Size sourceSize, Size targetSize)
+        {
+            var ratioW = (float)sourceSize.Width / targetSize.Width;
+            var ratioH = (float)sourceSize.Height / targetSize.Height;
+
+            if (ratioW > ratioH)
             {
                 // The width is bigger so the new width will become the target's width and the height will be scaled with the ratio between the original width and the target width
-                return Resize(image, targetWidth, (int)(image.Height / ratiow));
+                return new Size(targetSize.Width, (int)(sourceSize.Height / ratioW));
             }
-            else
-            {
-                return Resize(image, (int)(image.Width / ratioh), targetHeight);
-            }
+
+            return new Size((int)(sourceSize.Width / ratioH), targetSize.Height);
         }
     }
 }
