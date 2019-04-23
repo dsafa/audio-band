@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using AudioBand.Resources;
 
 namespace AudioBand.Views.Winforms
 {
@@ -15,13 +11,13 @@ namespace AudioBand.Views.Winforms
     /// </summary>
     public class AlbumArtDisplay : AudioBandControl
     {
-        private Image _albumArt;
+        private IImage _albumArt;
 
         /// <summary>
         /// Gets or sets the album art
         /// </summary>
         [Bindable(BindableSupport.Yes)]
-        public Image AlbumArt
+        public IImage AlbumArt
         {
             get => _albumArt;
             set
@@ -46,7 +42,10 @@ namespace AudioBand.Views.Winforms
             graphics.SmoothingMode = SmoothingMode.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            graphics.DrawImage(AlbumArt, e.ClipRectangle);
+            using (var image = _albumArt.Draw(Width, Height))
+            {
+                graphics.DrawImage(image, e.ClipRectangle);
+            }
         }
     }
 }

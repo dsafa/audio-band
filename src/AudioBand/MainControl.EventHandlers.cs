@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 using AudioBand.Models;
+using AudioBand.Resources;
 using AudioBand.ViewModels;
 using AudioBand.Views.Winforms;
 using CSDeskBand.ContextMenu;
@@ -80,7 +81,7 @@ namespace AudioBand
 
             _uiDispatcher.InvokeAsync(() =>
             {
-                _track.AlbumArt = e.AlbumArt;
+                _track.AlbumArt = new DrawingImage(e.AlbumArt);
                 _track.Artist = e.Artist;
                 _track.TrackName = e.TrackName;
                 _track.TrackLength = e.TrackLength;

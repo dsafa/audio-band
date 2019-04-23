@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using AudioBand.Resources;
 
 namespace AudioBand.Models
 {
@@ -14,8 +14,8 @@ namespace AudioBand.Models
         private TimeSpan _trackLength;
         private string _artist;
         private string _albumName;
-        private Image _albumArt;
-        private Image _placeholderImage;
+        private IImage _albumArt;
+        private IImage _placeholderImage;
 
         /// <summary>
         /// Gets or sets a value indicating whether the track is playing.
@@ -78,20 +78,24 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the album art.
         /// </summary>
-        public Image AlbumArt
+        public IImage AlbumArt
         {
             get => _albumArt ?? _placeholderImage;
             set => SetProperty(ref _albumArt, value);
         }
 
         /// <summary>
-        /// Change the placeholder image.
+        /// Sets the placeholder image
         /// </summary>
-        /// <param name="placeholder">The new placeholder image.</param>
-        public void UpdatePlaceholder(Image placeholder)
+        public IImage PlaceHolderImage
         {
-            _placeholderImage = placeholder;
-            RaisePropertyChanged(nameof(AlbumArt));
+            set
+            {
+                if (SetProperty(ref _placeholderImage, value))
+                {
+                    RaisePropertyChanged(nameof(AlbumArt));
+                }
+            }
         }
     }
 }
