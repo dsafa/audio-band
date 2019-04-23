@@ -1,26 +1,76 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- http://simpleicon.com/music-note-5.html -->
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
-  <defs>
-    <linearGradient id="strokeColour">
-      <stop stop-color="#ffffff"/>
-    </linearGradient>
-    <rect id="outsideBox" x="0" y="0" width="100%" height="100%"/>
-    <line id="boxLine" x1="12%" y1="0" x2="12%" y2="100%"/>
-    <circle id="disk" cx="55%" cy="50%" r="30%"/>
-    <circle id="diskInner" cx="55%" cy="50%" r="5%"/>
-    <circle id="diskInner2" cx="55%" cy="50%" r="10%"/>
-    <path id="ukwNHQztq" d="M160,96v304.594C143,390.375,120.688,384,96,384c-53,0-96,28.625-96,64s43,64,96,64s96-28.625,96-64V151.281l288-78.563
-	    v231.875C463,294.375,440.688,288,416,288c-53,0-96,28.625-96,64s43,64,96,64s96-28.625,96-64V0L160,96z"/>
-  </defs>
-  <g>
-	  <use xlink:href="#outsideBox" fill-opacity="0" stroke="url(#strokeColour)" stroke-opacity="1" stroke-width="8%"/>
-    <use xlink:href="#boxLine" stroke="url(#strokeColour)" stroke-width="4%"/>
-    <use xlink:href="#disk" fill-opacity="0" stroke="url(#strokeColour)" stroke-width="4%"/>
-    <use xlink:href="#diskInner" fill-opacity="0" stroke="url(#strokeColour)" stroke-width="4%"/>
-    <use xlink:href="#diskInner2" fill-opacity="0" stroke="url(#strokeColour)" stroke-width="4%"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="256px"
+   height="256px"
+   viewBox="0 0 256 256"
+   version="1.1"
+   id="SVGRoot"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="album.svg">
+  <defs
+     id="defs1401" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2"
+     inkscape:cx="112.3567"
+     inkscape:cy="111.73155"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="-8"
+     inkscape:window-y="193"
+     inkscape:window-maximized="1"
+     inkscape:grid-bbox="true" />
+  <metadata
+     id="metadata1404">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1957"
+       width="240"
+       height="240"
+       x="8"
+       y="8" />
+    <circle
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1959"
+       cx="128"
+       cy="128"
+       r="84" />
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1961"
+       cx="128"
+       cy="128"
+       r="24" />
   </g>
 </svg>
