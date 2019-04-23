@@ -16,8 +16,8 @@ namespace AudioBand.ViewModels
         private readonly IAppSettings _appsettings;
         private readonly Track _track;
         private readonly IResourceLoader _resourceLoader;
-        private Image _playImage;
-        private Image _pauseImage;
+        private IImage _playImage;
+        private IImage _pauseImage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayPauseButtonVM"/> class.
@@ -40,7 +40,7 @@ namespace AudioBand.ViewModels
         }
 
         [AlsoNotify(nameof(Image))]
-        public Image PlayImage
+        public IImage PlayImage
         {
             get => _playImage;
             set => SetProperty(ref _playImage, value, trackChanges: false);
@@ -54,14 +54,13 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.PlayButtonImagePath), value))
                 {
-                    PlayImage?.Dispose();
-                    PlayImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPlayImage).Draw(Width, Height);
+                    PlayImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPlayImage);
                 }
             }
         }
 
         [AlsoNotify(nameof(Image))]
-        public Image PauseImage
+        public IImage PauseImage
         {
             get => _pauseImage;
             set => SetProperty(ref _pauseImage, value, trackChanges: false);
@@ -75,8 +74,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.PauseButtonImagePath), value))
                 {
-                    PauseImage?.Dispose();
-                    PauseImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPauseImage).Draw(Width, Height);
+                    PauseImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPauseImage);
                 }
             }
         }
@@ -121,7 +119,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Track.IsPlaying))]
-        public Image Image
+        public IImage Image
         {
             get
             {
@@ -163,8 +161,8 @@ namespace AudioBand.ViewModels
 
         private void LoadImages()
         {
-            PlayImage = _resourceLoader.TryLoadImageFromPath(PlayImagePath, _resourceLoader.DefaultPlayImage).Draw(Width, Height);
-            PauseImage = _resourceLoader.TryLoadImageFromPath(PauseImagePath, _resourceLoader.DefaultPauseImage).Draw(Width, Height);
+            PlayImage = _resourceLoader.TryLoadImageFromPath(PlayImagePath, _resourceLoader.DefaultPlayImage);
+            PauseImage = _resourceLoader.TryLoadImageFromPath(PauseImagePath, _resourceLoader.DefaultPauseImage);
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
