@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using AudioBand.Extensions;
 using AudioBand.Models;
 using AudioBand.Resources;
 using AudioBand.Settings;
-using AutoMapper;
-using Svg;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
@@ -91,7 +88,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public Image AlbumArt => _track.AlbumArt;
+        public IImage AlbumArt => _track.AlbumArt;
 
         /// <summary>
         /// Gets the location of the album art.
@@ -121,7 +118,7 @@ namespace AudioBand.ViewModels
 
         private void LoadAlbumArtPlaceholder()
         {
-            _track.UpdatePlaceholder(_resourceLoader.TryLoadImageFromPath(Model.PlaceholderPath, _resourceLoader.DefaultPlaceholderAlbumImage).Draw(Width, Height));
+            _track.PlaceHolderImage = _resourceLoader.TryLoadImageFromPath(Model.PlaceholderPath, _resourceLoader.DefaultPlaceholderAlbumImage);
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)

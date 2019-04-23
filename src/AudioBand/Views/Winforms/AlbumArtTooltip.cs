@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using AudioBand.Resources;
 using CSDeskBand;
 using Size = System.Drawing.Size;
 
@@ -27,7 +28,7 @@ namespace AudioBand.Views.Winforms
         /// Gets or sets the album art of the tooltip.
         /// </summary>
         [Bindable(BindableSupport.Yes)]
-        public Image AlbumArt { get; set; }
+        public IImage AlbumArt { get; set; }
 
         /// <summary>
         /// Gets or sets the x position of the tooltip.
@@ -99,7 +100,10 @@ namespace AudioBand.Views.Winforms
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
             var bounds = drawToolTipEventArgs.Bounds;
-            graphics.DrawImage(AlbumArt, bounds);
+            using (var image = AlbumArt.Draw(bounds.Width, bounds.Height))
+            {
+                graphics.DrawImage(image, bounds);
+            }
         }
     }
 }

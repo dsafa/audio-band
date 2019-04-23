@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using AudioBand.Models;
+using AudioBand.Resources;
 using AudioBand.Settings;
 using AutoMapper;
 
@@ -68,7 +69,7 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public Image AlbumArt => _track.AlbumArt;
+        public IImage AlbumArt => _track.AlbumArt;
 
         /// <summary>
         /// Gets the size of the popup.
