@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using Svg;
 
 namespace AudioBand.Extensions
@@ -28,7 +29,7 @@ namespace AudioBand.Extensions
         /// <returns>A bitmap representation of the svg</returns>
         public static Bitmap ToBitmap(this SvgDocument svg, int width, int height)
         {
-            var bmp = new Bitmap(width, height);
+            var bmp = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
             using (var graphics = Graphics.FromImage(bmp))
             {
                 graphics.CompositingMode = CompositingMode.SourceCopy;

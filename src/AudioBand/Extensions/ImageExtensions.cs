@@ -19,7 +19,7 @@ namespace AudioBand.Extensions
         {
             // Padding issues
             var rect = new Rectangle(0, 0, width, height);
-            var newImage = new Bitmap(width, height);
+            var newImage = new Bitmap(width, height, image.PixelFormat);
             using (var graphics = Graphics.FromImage(newImage))
             {
                 graphics.CompositingMode = CompositingMode.SourceCopy;

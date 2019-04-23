@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using AudioBand.Extensions;
+using AudioBand.Resources;
 
 namespace AudioBand.Views.Winforms
 {
@@ -16,14 +17,14 @@ namespace AudioBand.Views.Winforms
         private static readonly Color MouseDownColor = Color.FromArgb(15, 255, 255, 255);
         private static readonly Color NoOverlay = Color.FromArgb(0);
 
-        private Image _image;
+        private IImage _image;
         private Color _overlayColor = NoOverlay;
 
         /// <summary>
         /// Gets or sets the button's image.
         /// </summary>
         [Bindable(BindableSupport.Yes)]
-        public Image Image
+        public IImage Image
         {
             get => _image;
             set
@@ -61,7 +62,7 @@ namespace AudioBand.Views.Winforms
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            _overlayColor = NoOverlay;
+            _overlayColor = HoverColor;
             InvokeRefresh();
         }
 
@@ -69,23 +70,25 @@ namespace AudioBand.Views.Winforms
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics graphics = e.Graphics;
-            graphics.CompositingMode = CompositingMode.SourceCopy;
+            graphics.CompositingMode = CompositingMode.SourceOver;
             graphics.CompositingQuality = CompositingQuality.HighQuality;
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphics.SmoothingMode = SmoothingMode.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            e.Graphics.FillRectangle(new SolidBrush(_overlayColor), e.ClipRectangle);
+            graphics.Clear(_overlayColor);
 
             if (Image == null)
             {
                 return;
             }
 
-            var scaledImage = Image.Scale(e.ClipRectangle.Width, e.ClipRectangle.Height);
-            var centerX = (e.ClipRectangle.Width - scaledImage.Width) / 2;
-            var centerY = (e.ClipRectangle.Height - scaledImage.Height) / 2;
-            graphics.DrawImageUnscaled(scaledImage, new Point(centerX, centerY));
+            using (var image = Image.Draw(Width, Height))
+            {
+                var centerX = (e.ClipRectangle.Width - image.Width) / 2;
+                var centerY = (e.ClipRectangle.Height - image.Height) / 2;
+                graphics.DrawImageUnscaled(image, new Point(centerX, centerY));
+            }
         }
     }
 }

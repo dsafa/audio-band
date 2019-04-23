@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using AudioBand.Extensions;
 using AudioBand.Models;
 using AudioBand.Resources;
 using AudioBand.Settings;
-using Svg;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
@@ -17,7 +15,7 @@ namespace AudioBand.ViewModels
     {
         private readonly IAppSettings _appsettings;
         private readonly IResourceLoader _resourceLoader;
-        private Image _image;
+        private IImage _image;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NextButtonVM"/> class.
@@ -36,7 +34,7 @@ namespace AudioBand.ViewModels
             _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
-        public Image Image
+        public IImage Image
         {
             get => _image;
             set => SetProperty(ref _image, value, trackChanges: false);
@@ -50,8 +48,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(nameof(Model.ImagePath), value))
                 {
-                    Image?.Dispose();
-                    Image = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultNextImage).Draw(Width, Height);
+                    Image = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultNextImage);
                 }
             }
         }
@@ -128,7 +125,7 @@ namespace AudioBand.ViewModels
 
         private void LoadImage()
         {
-            Image = _resourceLoader.TryLoadImageFromPath(ImagePath, _resourceLoader.DefaultNextImage).Draw(Width, Height);
+            Image = _resourceLoader.TryLoadImageFromPath(ImagePath, _resourceLoader.DefaultNextImage);
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
