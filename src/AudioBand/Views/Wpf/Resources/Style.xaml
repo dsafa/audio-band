@@ -28,7 +28,7 @@
     <sys:Double x:Key="NavigationPaneItemFontSize">22</sys:Double>
     <sys:Double x:Key="BodyFontSize">14</sys:Double>
     <sys:Double x:Key="TitleFontSize">24</sys:Double>
-    <sys:Double x:Key="HeaderFontSize">46</sys:Double>
+    <sys:Double x:Key="HeaderFontSize">34</sys:Double>
     <sys:Double x:Key="DefaultButtonHeight">30</sys:Double>
     <sys:Double x:Key="NavigationPaneIconLength">18</sys:Double>
     <SolidColorBrush x:Key="BorderDefaultColorBrush" Color="{StaticResource BorderDefaultColor}" o:Freeze="True"/>
@@ -558,10 +558,10 @@
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
             </Style>
             <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-                <Setter Property="Margin" Value="2, 2, 8, 0"/>
+                <Setter Property="Margin" Value="0, 2, 8, 0"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                <Setter Property="Margin" Value="2, 2, 8, 0"/>
+                <Setter Property="Margin" Value="0, 2, 8, 0"/>
             </Style>
             <Style TargetType="{x:Type DockPanel}">
                 <Setter Property="Margin" Value="{StaticResource GridMargin}"/>

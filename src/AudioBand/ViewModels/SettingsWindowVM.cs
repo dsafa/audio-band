@@ -20,6 +20,7 @@ namespace AudioBand.ViewModels
         private ViewModelBase _selectedVM;
         private string _selectedProfileName;
         private bool _hasUnsavedChanges;
+        private string _selectedViewHeader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindowVM"/> class.
@@ -32,7 +33,7 @@ namespace AudioBand.ViewModels
             _dialogService = dialogService;
             _selectedProfileName = appSettings.CurrentProfile;
             Profiles = new ObservableCollection<string>(appSettings.Profiles);
-            SelectViewModelCommand = new RelayCommand<ViewModelBase>(SelectViewModelOnExecute);
+            SelectViewModelCommand = new RelayCommand<object[]>(SelectViewModelOnExecute);
             DeleteProfileCommand = new RelayCommand<string>(DeleteProfileCommandOnExecute, DeleteProfileCommandCanExecute);
             DeleteProfileCommand.Observe(Profiles);
             AddProfileCommand = new RelayCommand(AddProfileCommandOnExecute);
@@ -68,6 +69,15 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the current title of the view
+        /// </summary>
+        public string SelectedViewHeader
+        {
+            get => _selectedViewHeader;
+            set => SetProperty(ref _selectedViewHeader, value, trackChanges: false);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether there are unsaved changes.
         /// </summary>
         public bool HasUnsavedChanges
@@ -84,7 +94,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the command to select the view model.
         /// </summary>
-        public RelayCommand<ViewModelBase> SelectViewModelCommand { get; }
+        public RelayCommand<object[]> SelectViewModelCommand { get; }
 
         /// <summary>
         /// Gets the command to delete a profile.
@@ -101,9 +111,10 @@ namespace AudioBand.ViewModels
         /// </summary>
         public RelayCommand RenameProfileCommand { get; }
 
-        private void SelectViewModelOnExecute(ViewModelBase newViewmodel)
+        private void SelectViewModelOnExecute(object[] data)
         {
-            SelectedVM = newViewmodel;
+            SelectedVM = data[0] as ViewModelBase;
+            SelectedViewHeader = data[1] as string;
         }
 
         private void DeleteProfileCommandOnExecute(string profileName)
