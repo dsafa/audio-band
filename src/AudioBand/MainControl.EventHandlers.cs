@@ -167,8 +167,13 @@ namespace AudioBand
             await HandleAudioSourceContextMenuItemClick(menuItem).ConfigureAwait(false);
         }
 
-        private async void ProgressBarOnClick(object sender, EventArgs e)
+        private async void ProgressBarOnClick(object sender, MouseEventArgs e)
         {
+            if (!e.Button.HasFlag(MouseButtons.Left))
+            {
+                return;
+            }
+
             var progressBar = sender as EnhancedProgressBar;
             Debug.Assert(progressBar != null, "Event should be for progress bar");
 

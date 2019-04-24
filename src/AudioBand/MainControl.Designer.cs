@@ -161,7 +161,7 @@ namespace AudioBand
             this.ProgressBarControl.Size = new System.Drawing.Size(250, 2);
             this.ProgressBarControl.TabIndex = 3;
             this.ProgressBarControl.Total = System.TimeSpan.Parse("00:00:00");
-            this.ProgressBarControl.Click += new System.EventHandler(this.ProgressBarOnClick);
+            this.ProgressBarControl.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ProgressBarOnClick);
             // 
             // ProgressBarVMBindingSource
             // 
