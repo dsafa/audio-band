@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AudioBand.AudioSource;
 using AudioBand.Models;
 using AudioBand.Resources;
@@ -26,8 +27,13 @@ namespace AudioBand
             AlbumArtPopup.Show(this, TaskbarInfo, ScalingFactor);
         }
 
-        private async void PlayPauseButtonOnClick(object sender, EventArgs eventArgs)
+        private async void PlayPauseButtonOnClick(object sender, MouseEventArgs eventArgs)
         {
+            if (!eventArgs.Button.HasFlag(MouseButtons.Left))
+            {
+                return;
+            }
+
             if (_track.IsPlaying)
             {
                 await (_currentAudioSource?.PauseTrackAsync() ?? Task.CompletedTask);
@@ -38,13 +44,23 @@ namespace AudioBand
             }
         }
 
-        private async void PreviousButtonOnClick(object sender, EventArgs eventArgs)
+        private async void PreviousButtonOnClick(object sender, MouseEventArgs eventArgs)
         {
+            if (!eventArgs.Button.HasFlag(MouseButtons.Left))
+            {
+                return;
+            }
+
             await (_currentAudioSource?.PreviousTrackAsync() ?? Task.CompletedTask);
         }
 
-        private async void NextButtonOnClick(object sender, EventArgs eventArgs)
+        private async void NextButtonOnClick(object sender, MouseEventArgs eventArgs)
         {
+            if (!eventArgs.Button.HasFlag(MouseButtons.Left))
+            {
+                return;
+            }
+
             await (_currentAudioSource?.NextTrackAsync() ?? Task.CompletedTask);
         }
 
