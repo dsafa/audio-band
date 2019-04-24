@@ -18,7 +18,6 @@ namespace AudioBand.Views.Winforms
         private static readonly Color NoOverlay = Color.FromArgb(0);
 
         private IImage _image;
-        private Color _overlayColor = NoOverlay;
 
         /// <summary>
         /// Gets or sets the button's image.
@@ -38,50 +37,50 @@ namespace AudioBand.Views.Winforms
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
-            _overlayColor = HoverColor;
-            InvokeRefresh();
+            BackColor = HoverColor;
         }
 
         /// <inheritdoc/>
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
-            _overlayColor = NoOverlay;
-            InvokeRefresh();
+            BackColor = NoOverlay;
         }
 
         /// <inheritdoc/>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            _overlayColor = MouseDownColor;
-            InvokeRefresh();
+            if (e.Button.HasFlag(MouseButtons.Left))
+            {
+                BackColor = MouseDownColor;
+            }
         }
 
         /// <inheritdoc/>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            _overlayColor = HoverColor;
-            InvokeRefresh();
+            if (e.Button.HasFlag(MouseButtons.Left))
+            {
+                BackColor = HoverColor;
+            }
         }
 
         /// <inheritdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (Image == null)
+            {
+                return;
+            }
+
             Graphics graphics = e.Graphics;
             graphics.CompositingMode = CompositingMode.SourceOver;
             graphics.CompositingQuality = CompositingQuality.HighQuality;
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             graphics.SmoothingMode = SmoothingMode.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-            graphics.Clear(_overlayColor);
-
-            if (Image == null)
-            {
-                return;
-            }
 
             using (var image = Image.GetScaledSize(Width, Height))
             {
