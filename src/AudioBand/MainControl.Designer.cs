@@ -91,7 +91,7 @@ namespace AudioBand
             this.PreviousButtonControl.Name = "PreviousButtonControl";
             this.PreviousButtonControl.Size = new System.Drawing.Size(73, 12);
             this.PreviousButtonControl.TabIndex = 0;
-            this.PreviousButtonControl.Click += new System.EventHandler(this.PreviousButtonOnClick);
+            this.PreviousButtonControl.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PreviousButtonOnClick);
             // 
             // PreviousButtonVMBindingSource
             // 
@@ -113,7 +113,7 @@ namespace AudioBand
             this.PlayPauseButtonControl.Name = "PlayPauseButtonControl";
             this.PlayPauseButtonControl.Size = new System.Drawing.Size(73, 12);
             this.PlayPauseButtonControl.TabIndex = 1;
-            this.PlayPauseButtonControl.Click += new System.EventHandler(this.PlayPauseButtonOnClick);
+            this.PlayPauseButtonControl.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PlayPauseButtonOnClick);
             // 
             // PlayPauseButtonVMBindingSource
             // 
@@ -135,7 +135,7 @@ namespace AudioBand
             this.NextButtonControl.Name = "NextButtonControl";
             this.NextButtonControl.Size = new System.Drawing.Size(74, 12);
             this.NextButtonControl.TabIndex = 2;
-            this.NextButtonControl.Click += new System.EventHandler(this.NextButtonOnClick);
+            this.NextButtonControl.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NextButtonOnClick);
             // 
             // NextButtonVMBindingSource
             // 
