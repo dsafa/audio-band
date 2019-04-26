@@ -16,6 +16,7 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
     </ResourceDictionary.MergedDictionaries>
+    <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <converters:WinColorToWpfColorConverter x:Key="ColorConverter"/>
     <Thickness x:Key="DefaultControlMargin" Left="0" Top="4" Right="0" Bottom="0"/>
     <Thickness x:Key="InputSpacing" Left="4" Top="0" Right="4" Bottom="0"/>
@@ -26,6 +27,7 @@
     <Color x:Key="ButtonDisabledColor">#888888</Color>
     <Color x:Key="NavigationPaneHoverBackgroundColor">#44444444</Color>
     <Color x:Key="NavigationPaneClickBackgroundColor">#DD888888</Color>
+    <Color x:Key="SecondaryTextColor">#555555</Color>
     <GridLength x:Key="DefaultControlHeight">35</GridLength>
     <sys:Double x:Key="NavigationPaneItemHeight">42</sys:Double>
     <sys:Double x:Key="NavigationPaneItemFontSize">22</sys:Double>
@@ -34,6 +36,7 @@
     <sys:Double x:Key="HeaderFontSize">34</sys:Double>
     <sys:Double x:Key="DefaultButtonHeight">30</sys:Double>
     <sys:Double x:Key="NavigationPaneIconLength">18</sys:Double>
+    <SolidColorBrush x:Key="SecondaryTextColorBrush" Color="{StaticResource SecondaryTextColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderDefaultColorBrush" Color="{StaticResource BorderDefaultColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderHoverColorBrush" Color="{StaticResource BorderHoverColor}" o:Freeze="True"/>
     <SolidColorBrush x:Key="BorderFocusedColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
@@ -584,6 +587,9 @@
                 <Setter Property="Width" Value="120"/>
             </Style>
             <Style TargetType="{x:Type local:ColorPicker}">
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
+            </Style>
+            <Style TargetType="{x:Type local:ImagePicker}">
                 <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
         </Style.Resources>

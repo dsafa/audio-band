@@ -44,13 +44,24 @@
         <TextBlock Text="{StaticResource ClickedColorLabelText}"/>
         <local:ColorPicker Color="{Binding ClickedBackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
 
-        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource ContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
+        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PlayImageSectionText}" Style="{StaticResource TitleTextBlock}"/>
         <TextBlock Text="{StaticResource PlayButtonImageLabelText}" />
         <local:ImagePicker ImagePath="{Binding PlayImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
-        <TextBlock  Text="{StaticResource PauseButtonImageLabelText}" />
-        <local:ImagePicker ImagePath="{Binding PauseImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+        <TextBlock Text="{StaticResource PlayButtonHoveredImageLabelText}" />
+        <local:ImagePicker ImagePath="{Binding PlayHoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
+        <TextBlock Text="{StaticResource PlayButtonClickedImageLabelText}" />
+        <local:ImagePicker ImagePath="{Binding PlayClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
 
-        <Button HorizontalAlignment="Left" Margin="{StaticResource SectionMargin}"
+        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PauseImageSectionText}" Style="{StaticResource TitleTextBlock}"/>
+        <TextBlock Text="{StaticResource PauseButtonImageLabelText}" />
+        <local:ImagePicker ImagePath="{Binding PauseImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+        <TextBlock Text="{StaticResource PauseButtonHoveredImageLabelText}" />
+        <local:ImagePicker ImagePath="{Binding PauseHoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+        <TextBlock Text="{StaticResource PauseButtonClickedImageLabelText}" />
+        <local:ImagePicker ImagePath="{Binding PauseClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+
+        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
+        <Button HorizontalAlignment="Left"
                 Content="{StaticResource ResetButtonText}"
                 Command="{Binding ResetCommand}"/>
     </StackPanel>

@@ -18,6 +18,10 @@ namespace AudioBand.ViewModels
         private readonly IResourceLoader _resourceLoader;
         private IImage _playImage;
         private IImage _pauseImage;
+        private IImage _playHoveredImage;
+        private IImage _playClickedImage;
+        private IImage _pauseHoveredImage;
+        private IImage _pauseClickedImage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayPauseButtonVM"/> class.
@@ -46,6 +50,20 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _playImage, value, trackChanges: false);
         }
 
+        [AlsoNotify(nameof(Image))]
+        public IImage PlayHoveredImage
+        {
+            get => _playHoveredImage;
+            set => SetProperty(ref _playHoveredImage, value, trackChanges: false);
+        }
+
+        [AlsoNotify(nameof(Image))]
+        public IImage PlayClickedImage
+        {
+            get => _playClickedImage;
+            set => SetProperty(ref _playClickedImage, value, trackChanges: false);
+        }
+
         [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonImagePath))]
         public string PlayImagePath
         {
@@ -59,11 +77,51 @@ namespace AudioBand.ViewModels
             }
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonHoveredImagePath))]
+        public string PlayHoveredImagePath
+        {
+            get => Model.PlayButtonHoveredImagePath;
+            set
+            {
+                if (SetProperty(nameof(Model.PlayButtonHoveredImagePath), value))
+                {
+                    PlayHoveredImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPlayImage);
+                }
+            }
+        }
+
+        [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonClickedImagePath))]
+        public string PlayClickedImagePath
+        {
+            get => Model.PlayButtonClickedImagePath;
+            set
+            {
+                if (SetProperty(nameof(Model.PlayButtonClickedImagePath), value))
+                {
+                    PlayClickedImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPlayImage);
+                }
+            }
+        }
+
         [AlsoNotify(nameof(Image))]
         public IImage PauseImage
         {
             get => _pauseImage;
             set => SetProperty(ref _pauseImage, value, trackChanges: false);
+        }
+
+        [AlsoNotify(nameof(Image))]
+        public IImage PauseHoveredImage
+        {
+            get => _pauseHoveredImage;
+            set => SetProperty(ref _pauseHoveredImage, value, trackChanges: false);
+        }
+
+        [AlsoNotify(nameof(Image))]
+        public IImage PauseClickedImage
+        {
+            get => _pauseClickedImage;
+            set => SetProperty(ref _pauseClickedImage, value, trackChanges: false);
         }
 
         [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonImagePath))]
@@ -75,6 +133,32 @@ namespace AudioBand.ViewModels
                 if (SetProperty(nameof(Model.PauseButtonImagePath), value))
                 {
                     PauseImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPauseImage);
+                }
+            }
+        }
+
+        [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonHoveredImagePath))]
+        public string PauseHoveredImagePath
+        {
+            get => Model.PauseButtonHoveredImagePath;
+            set
+            {
+                if (SetProperty(nameof(Model.PauseButtonHoveredImagePath), value))
+                {
+                    PauseHoveredImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPauseImage);
+                }
+            }
+        }
+
+        [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonClickedImagePath))]
+        public string PauseClickedImagePath
+        {
+            get => Model.PauseButtonClickedImagePath;
+            set
+            {
+                if (SetProperty(nameof(Model.PauseButtonClickedImagePath), value))
+                {
+                    PauseClickedImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPauseImage);
                 }
             }
         }
@@ -119,14 +203,13 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Track.IsPlaying))]
-        public IImage Image
-        {
-            get
-            {
-                var image = _track.IsPlaying ? PauseImage : PlayImage;
-                return image;
-            }
-        }
+        public IImage Image => _track.IsPlaying ? PauseImage : PlayImage;
+
+        [PropertyChangeBinding(nameof(Track.IsPlaying))]
+        public IImage HoveredImage => _track.IsPlaying ? PauseHoveredImage : PlayHoveredImage;
+
+        [PropertyChangeBinding(nameof(Track.IsPlaying))]
+        public IImage ClickedImage => _track.IsPlaying ? PauseClickedImage : PlayClickedImage;
 
         [PropertyChangeBinding(nameof(PlayPauseButton.DefaultBackgroundColor))]
         public Color DefaultBackgroundColor
@@ -183,7 +266,11 @@ namespace AudioBand.ViewModels
         private void LoadImages()
         {
             PlayImage = _resourceLoader.TryLoadImageFromPath(PlayImagePath, _resourceLoader.DefaultPlayImage);
+            PlayHoveredImage = PlayImage;
+            PlayClickedImage = PlayImage;
             PauseImage = _resourceLoader.TryLoadImageFromPath(PauseImagePath, _resourceLoader.DefaultPauseImage);
+            PauseHoveredImage = PauseImage;
+            PauseClickedImage = PauseImage;
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
