@@ -43,8 +43,8 @@ namespace AudioBandModel.Settings
             _tomlSettings = TomlSettings.Create(cfg =>
             {
                 cfg.ConfigureType<Color>(type => type.WithConversionFor<TomlString>(convert => convert
-                    .ToToml(ColorTranslator.ToHtml)
-                    .FromToml(tomlString => ColorTranslator.FromHtml(tomlString.Value))));
+                    .ToToml(SerializationConversions.ColorToString)
+                    .FromToml(tomlString => SerializationConversions.StringToColor(tomlString.Value))));
                 cfg.ConfigureType<CustomLabel.TextAlignment>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(SerializationConversions.EnumToString)
                     .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
