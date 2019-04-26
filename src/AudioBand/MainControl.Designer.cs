@@ -78,11 +78,14 @@ namespace AudioBand
             // PreviousButtonControl
             // 
             this.PreviousButtonControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.PreviousButtonControl.ClickedBackgroundColor = System.Drawing.Color.Empty;
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.PreviousButtonVMBindingSource, "Image", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.PreviousButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.PreviousButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.PreviousButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.PreviousButtonControl.DefaultBackgroundColor = System.Drawing.Color.Empty;
             this.PreviousButtonControl.ForeColor = System.Drawing.Color.White;
+            this.PreviousButtonControl.HoveredBackgroundColor = System.Drawing.Color.Empty;
             this.PreviousButtonControl.Image = null;
             this.PreviousButtonControl.Location = new System.Drawing.Point(0, 0);
             this.PreviousButtonControl.LogicalLocation = new System.Drawing.Point(0, 0);
@@ -100,11 +103,17 @@ namespace AudioBand
             // PlayPauseButtonControl
             // 
             this.PlayPauseButtonControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.PlayPauseButtonControl.ClickedBackgroundColor = System.Drawing.Color.Empty;
             this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.PlayPauseButtonVMBindingSource, "Image", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.PlayPauseButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.PlayPauseButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.PlayPauseButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("ClickedBackgroundColor", this.PlayPauseButtonVMBindingSource, "ClickedBackgroundColor", true));
+            this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("DefaultBackgroundColor", this.PlayPauseButtonVMBindingSource, "DefaultBackgroundColor", true));
+            this.PlayPauseButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("HoveredBackgroundColor", this.PlayPauseButtonVMBindingSource, "HoveredBackgroundColor", true));
+            this.PlayPauseButtonControl.DefaultBackgroundColor = System.Drawing.Color.Empty;
             this.PlayPauseButtonControl.ForeColor = System.Drawing.Color.White;
+            this.PlayPauseButtonControl.HoveredBackgroundColor = System.Drawing.Color.Empty;
             this.PlayPauseButtonControl.Image = null;
             this.PlayPauseButtonControl.Location = new System.Drawing.Point(0, 0);
             this.PlayPauseButtonControl.LogicalLocation = new System.Drawing.Point(0, 0);
@@ -122,11 +131,14 @@ namespace AudioBand
             // NextButtonControl
             // 
             this.NextButtonControl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.NextButtonControl.ClickedBackgroundColor = System.Drawing.Color.Empty;
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Image", this.NextButtonVMBindingSource, "Image", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.NextButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.NextButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.NextButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.NextButtonControl.DefaultBackgroundColor = System.Drawing.Color.Empty;
             this.NextButtonControl.ForeColor = System.Drawing.Color.White;
+            this.NextButtonControl.HoveredBackgroundColor = System.Drawing.Color.Empty;
             this.NextButtonControl.Image = null;
             this.NextButtonControl.Location = new System.Drawing.Point(0, 0);
             this.NextButtonControl.LogicalLocation = new System.Drawing.Point(0, 0);

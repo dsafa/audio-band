@@ -128,6 +128,27 @@ namespace AudioBand.ViewModels
             }
         }
 
+        [PropertyChangeBinding(nameof(PlayPauseButton.DefaultBackgroundColor))]
+        public Color DefaultBackgroundColor
+        {
+            get => Model.DefaultBackgroundColor;
+            set => SetProperty(nameof(Model.DefaultBackgroundColor), value);
+        }
+
+        [PropertyChangeBinding(nameof(PlayPauseButton.HoveredBackgroundColor))]
+        public Color HoveredBackgroundColor
+        {
+            get => Model.HoveredBackgroundColor;
+            set => SetProperty(nameof(Model.HoveredBackgroundColor), value);
+        }
+
+        [PropertyChangeBinding(nameof(PlayPauseButton.ClickedBackgroundColor))]
+        public Color ClickedBackgroundColor
+        {
+            get => Model.ClickedBackgroundColor;
+            set => SetProperty(nameof(Model.ClickedBackgroundColor), value);
+        }
+
         /// <summary>
         /// Gets the location of the button.
         /// </summary>

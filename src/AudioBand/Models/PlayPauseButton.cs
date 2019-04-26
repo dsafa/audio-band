@@ -1,4 +1,6 @@
-﻿namespace AudioBand.Models
+﻿using System.Drawing;
+
+namespace AudioBand.Models
 {
     /// <summary>
     /// Model for the play/pause button.
@@ -12,6 +14,9 @@
         private int _width = 73;
         private int _height = 12;
         private bool _isVisible = true;
+        private Color _defaultBackgroundColor = Color.Transparent;
+        private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
+        private Color _clickedBackgroundColor = Color.FromArgb(15, 255, 255, 255);
 
         /// <summary>
         /// Gets or sets the path for the play image.
@@ -74,6 +79,33 @@
         {
             get => _yPosition;
             set => SetProperty(ref _yPosition, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the background color in a normal state.
+        /// </summary>
+        public Color DefaultBackgroundColor
+        {
+            get => _defaultBackgroundColor;
+            set => SetProperty(ref _defaultBackgroundColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the background color in a hovered state.
+        /// </summary>
+        public Color HoveredBackgroundColor
+        {
+            get => _hoveredBackgroundColor;
+            set => SetProperty(ref _hoveredBackgroundColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the background color in a clicked state.
+        /// </summary>
+        public Color ClickedBackgroundColor
+        {
+            get => _clickedBackgroundColor;
+            set => SetProperty(ref _clickedBackgroundColor, value);
         }
     }
 }

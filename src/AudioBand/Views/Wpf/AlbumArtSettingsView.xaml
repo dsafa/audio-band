@@ -20,12 +20,12 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
+            <RowDefinition Height="{StaticResource DefaultControlHeight}" />
+            <RowDefinition Height="{StaticResource DefaultControlHeight}" />
+            <RowDefinition Height="{StaticResource DefaultControlHeight}" />
+            <RowDefinition Height="{StaticResource DefaultControlHeight}" />
+            <RowDefinition Height="{StaticResource DefaultControlHeight}" />
+            <RowDefinition Height="{StaticResource DefaultControlHeight}" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>

@@ -12,7 +12,6 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Style.xaml"/>
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <valueConverters:ReverseConverter x:Key="ColorToStringConverter">
@@ -21,22 +20,17 @@
             <valueConverters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Rectangle Grid.Column="0" MinWidth="20" VerticalAlignment="Stretch" Stroke="Black"
-                   Fill="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"
-                   Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"/>
-        <Label Grid.Column="1" HorizontalAlignment="Center"
-               Content="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={StaticResource ColorToStringConverter}}" />
-        <Button Grid.Column="2" Click="OpenColorPickerOnClick"
+    <StackPanel Orientation="Horizontal">
+        <Rectangle VerticalAlignment="Stretch" Stroke="Black"
+                   Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
+                   Fill="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={StaticResource ColorToBrushConverter}}"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8, 0" MinWidth="100" TextAlignment="Center"
+                   Text="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={StaticResource ColorToStringConverter}}" />
+        <Button Click="OpenColorPickerOnClick"
                 Content="{StaticResource PickColorButtonText}">
             <Button.ToolTip>
                 <TextBlock Text="{StaticResource ChooseColorHelpText}"/>
             </Button.ToolTip>
         </Button>
-    </Grid>
+    </StackPanel>
 </UserControl>
