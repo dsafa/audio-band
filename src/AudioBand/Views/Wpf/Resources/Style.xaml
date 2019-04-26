@@ -6,7 +6,8 @@
                     xmlns:converters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
-                    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+                    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+                    xmlns:local="clr-namespace:AudioBand.Views.Wpf">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.ToggleSwitch.xaml" />
@@ -15,15 +16,17 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Thickness x:Key="GridMargin" Left="0" Top="4" Right="0" Bottom="0"/>
+    <converters:WinColorToWpfColorConverter x:Key="ColorConverter"/>
+    <Thickness x:Key="DefaultControlMargin" Left="0" Top="4" Right="0" Bottom="0"/>
     <Thickness x:Key="InputSpacing" Left="4" Top="0" Right="4" Bottom="0"/>
     <Thickness x:Key="BorderThickness">2</Thickness>
+    <Thickness x:Key="SectionMargin" Top="16"/>
     <Color x:Key="BorderDefaultColor">#CCCCCC</Color>
     <Color x:Key="BorderHoverColor">#7A7A7A</Color>
     <Color x:Key="ButtonDisabledColor">#888888</Color>
     <Color x:Key="NavigationPaneHoverBackgroundColor">#44444444</Color>
     <Color x:Key="NavigationPaneClickBackgroundColor">#DD888888</Color>
-    <GridLength x:Key="GridRowHeight">35</GridLength>
+    <GridLength x:Key="DefaultControlHeight">35</GridLength>
     <sys:Double x:Key="NavigationPaneItemHeight">42</sys:Double>
     <sys:Double x:Key="NavigationPaneItemFontSize">22</sys:Double>
     <sys:Double x:Key="BodyFontSize">14</sys:Double>
@@ -546,39 +549,56 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style TargetType="{x:Type Grid}">
+    <Style x:Key="SettingsStackPanel" TargetType="{x:Type StackPanel}">
         <Style.Resources>
+            <Style TargetType="{x:Type metro:ToggleSwitch}" BasedOn="{StaticResource {x:Type metro:ToggleSwitch}}">
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
+            </Style>
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
-            </Style>
-            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-                <Setter Property="Margin" Value="0, 2, 8, 0"/>
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
             <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                <Setter Property="Margin" Value="0, 2, 8, 0"/>
+                <Setter Property="Margin" Value="0, 8, 0, 0"/>
+                <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
+                <Setter Property="TextAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
             <Style TargetType="{x:Type DockPanel}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
             <Style TargetType="{x:Type Rectangle}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
             <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource {x:Type PasswordBox}}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
             <Style TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource {x:Type metro:NumericUpDown}}">
-                <Setter Property="Margin" Value="{StaticResource GridMargin}"/>
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Width" Value="120"/>
+            </Style>
+            <Style TargetType="{x:Type local:ColorPicker}">
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
         </Style.Resources>
+    </Style>
+    <Style x:Key="ArrangementGridStyle" TargetType="{x:Type UniformGrid}">
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
     </Style>
     <Style TargetType="{x:Type Hyperlink}" BasedOn="{StaticResource {x:Type Hyperlink}}">
         <Setter Property="Foreground" Value="{x:Static fw:AccentColors.ImmersiveSystemAccentBrush}"/>
         <Setter Property="TextDecorations" Value="{x:Null}"/>
+    </Style>
+    <Style x:Key="TitleTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="{StaticResource TitleFontSize}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="LineHeight" Value="28"/>
     </Style>
 </ResourceDictionary>

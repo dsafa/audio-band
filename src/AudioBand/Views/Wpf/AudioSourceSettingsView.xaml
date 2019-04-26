@@ -34,7 +34,7 @@
                         </Style>
                     </Grid.Style>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="{StaticResource GridRowHeight}"/>
+                        <RowDefinition Height="{StaticResource DefaultControlHeight}"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="SettingName"/>

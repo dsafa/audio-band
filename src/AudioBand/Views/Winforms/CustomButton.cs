@@ -13,11 +13,8 @@ namespace AudioBand.Views.Winforms
     /// </summary>
     public class CustomButton : AudioBandControl
     {
-        private static readonly Color HoverColor = Color.FromArgb(25, 255, 255, 255);
-        private static readonly Color MouseDownColor = Color.FromArgb(15, 255, 255, 255);
-        private static readonly Color NoOverlay = Color.FromArgb(0);
-
         private IImage _image;
+        private Color _defaultBackColor = Color.Transparent;
 
         /// <summary>
         /// Gets or sets the button's image.
@@ -33,18 +30,45 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <summary>
+        /// Gets or sets the default back color
+        /// </summary>
+        [Bindable(BindableSupport.Yes)]
+        public Color DefaultBackgroundColor
+        {
+            get => _defaultBackColor;
+            set
+            {
+                _defaultBackColor = value;
+                BackColor = _defaultBackColor;
+                InvokeRefresh();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the hover back color
+        /// </summary>
+        [Bindable(BindableSupport.Yes)]
+        public Color HoveredBackgroundColor { get; set; } = Color.FromArgb(25, 255, 255, 255);
+
+        /// <summary>
+        /// Gets or sets the clicked back color
+        /// </summary>
+        [Bindable(BindableSupport.Yes)]
+        public Color ClickedBackgroundColor { get; set; } = Color.FromArgb(15, 255, 255, 255);
+
         /// <inheritdoc/>
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
-            BackColor = HoverColor;
+            BackColor = HoveredBackgroundColor;
         }
 
         /// <inheritdoc/>
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
-            BackColor = NoOverlay;
+            BackColor = DefaultBackgroundColor;
         }
 
         /// <inheritdoc/>
@@ -53,7 +77,7 @@ namespace AudioBand.Views.Winforms
             base.OnMouseDown(e);
             if (e.Button.HasFlag(MouseButtons.Left))
             {
-                BackColor = MouseDownColor;
+                BackColor = ClickedBackgroundColor;
             }
         }
 
@@ -63,7 +87,7 @@ namespace AudioBand.Views.Winforms
             base.OnMouseUp(e);
             if (e.Button.HasFlag(MouseButtons.Left))
             {
-                BackColor = HoverColor;
+                BackColor = HoveredBackgroundColor;
             }
         }
 

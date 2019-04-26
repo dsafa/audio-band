@@ -20,7 +20,9 @@
     <sys:String x:Key="ScrollSpeedLabelText">Scroll Speed</sys:String>
     <sys:String x:Key="BackgroundColorLabelText">Background Color</sys:String>
     <sys:String x:Key="ForegroundColorLabelText">Foreground Color</sys:String>
+    <sys:String x:Key="DefaultColorLabelText">Default Color</sys:String>
     <sys:String x:Key="HoverColorLabelText">Hover Color</sys:String>
+    <sys:String x:Key="ClickedColorLabelText">Clicked Color</sys:String>
     <sys:String x:Key="PlaceholderImageLabelText">Placeholder Image</sys:String>
     <sys:String x:Key="YOffsetLabelText">Margin</sys:String>
     <sys:String x:Key="AboutTitle">About AudioBand</sys:String>
@@ -89,4 +91,8 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="DeleteProfileDialogBody">Are you sure you want to delete the profile '{0}'</sys:String>
     <sys:String x:Key="LabelsViewHeaderFormat">{0} Label</sys:String>
     <sys:String x:Key="AudioSourceViewHeaderFormat">{0} Audio Source</sys:String>
+    <sys:String x:Key="ArrangementSectionText">Arrangement</sys:String>
+    <sys:String x:Key="ContentSectionText">Content</sys:String>
+    <sys:String x:Key="AppearanceSectionText">Appearance</sys:String>
+    <sys:String x:Key="BackgroundColorSectionText">Background Colors</sys:String>
 </ResourceDictionary>

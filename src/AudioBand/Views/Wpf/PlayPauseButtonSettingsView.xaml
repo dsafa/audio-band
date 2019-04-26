@@ -7,6 +7,7 @@
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
+             xmlns:converters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance viewmodels:PlayPauseButtonVM}"
@@ -19,55 +20,38 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="{StaticResource GridRowHeight}" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="{StaticResource VisibilityLabelText}" />
-        <metro:ToggleSwitch Grid.Row="0" Grid.Column="1" 
-                            OnLabel="{StaticResource StatusVisible}" 
-                            OffLabel="{StaticResource StatusHidden}" 
-                            IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
+    <StackPanel Style="{StaticResource SettingsStackPanel}">
+        <TextBlock Text="{StaticResource ArrangementSectionText}" Style="{StaticResource TitleTextBlock}"/>
 
-        <Label Grid.Row="1" Grid.Column="0" Content="{StaticResource WidthLabelText}" />
-        <metro:NumericUpDown Grid.Row="1" Grid.Column="1" 
-                             behaviours:NumericInput.Type="Size" 
-                             Value="{Binding Width, Mode=TwoWay}"/>
+        <TextBlock Text="{StaticResource VisibilityLabelText}" />
+        <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}" IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
+        <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
+            <TextBlock Text="{StaticResource WidthLabelText}" />
+            <TextBlock Text="{StaticResource HeightLabelText}" />
+            <metro:NumericUpDown behaviours:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
+            <metro:NumericUpDown behaviours:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
+            <TextBlock Text="{StaticResource XPositionLabelText}" />
+            <TextBlock Text="{StaticResource YPositionLabelText}" />
+            <metro:NumericUpDown behaviours:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
+            <metro:NumericUpDown behaviours:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
+        </UniformGrid>
 
-        <Label Grid.Row="2" Grid.Column="0" Content="{StaticResource HeightLabelText}" />
-        <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                             behaviours:NumericInput.Type="Size" 
-                             Value="{Binding Height, Mode=TwoWay}"/>
+        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
+        <TextBlock Text="{StaticResource DefaultColorLabelText}"/>
+        <local:ColorPicker Color="{Binding DefaultBackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
+        <TextBlock Text="{StaticResource HoverColorLabelText}"/>
+        <local:ColorPicker Color="{Binding HoveredBackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
+        <TextBlock Text="{StaticResource ClickedColorLabelText}"/>
+        <local:ColorPicker Color="{Binding ClickedBackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
 
-        <Label Grid.Row="3" Grid.Column="0" Content="{StaticResource XPositionLabelText}" />
-        <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
-                             behaviours:NumericInput.Type="Position" 
-                             Value="{Binding XPosition, Mode=TwoWay}"/>
+        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource ContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
+        <TextBlock Text="{StaticResource PlayButtonImageLabelText}" />
+        <local:ImagePicker ImagePath="{Binding PlayImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
+        <TextBlock  Text="{StaticResource PauseButtonImageLabelText}" />
+        <local:ImagePicker ImagePath="{Binding PauseImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
 
-        <Label Grid.Row="4" Grid.Column="0" Content="{StaticResource YPositionLabelText}" />
-        <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                             behaviours:NumericInput.Type="Position" 
-                             Value="{Binding YPosition, Mode=TwoWay}"/>
-
-        <Label Grid.Row="5" Grid.Column="0" Content="{StaticResource PlayButtonImageLabelText}" />
-        <local:ImagePicker Grid.Row="5" Grid.Column="1" ImagePath="{Binding PlayImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
-
-        <Label Grid.Row="6" Grid.Column="0" Content="{StaticResource PauseButtonImageLabelText}" />
-        <local:ImagePicker Grid.Row="6" Grid.Column="1" ImagePath="{Binding PauseImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
-
-        <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Left" 
+        <Button HorizontalAlignment="Left" Margin="{StaticResource SectionMargin}"
                 Content="{StaticResource ResetButtonText}"
                 Command="{Binding ResetCommand}"/>
-    </Grid>
+    </StackPanel>
 </UserControl>
