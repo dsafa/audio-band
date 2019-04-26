@@ -9,31 +9,33 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Style.xaml"/>
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
-                <ResourceDictionary Source="Resources/Icons.xaml"/>
+                <ResourceDictionary Source="Resources/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <DockPanel DataContext="{Binding ElementName=ImagePickerControl}">
-        <Button DockPanel.Dock="Left"
-                Content="{StaticResource DefaultButtonText}"
-                Command="{Binding ResetImageCommand}">
-            <Button.ToolTip>
-                <TextBlock Text="{StaticResource DefaultImageHelpText}" />
-            </Button.ToolTip>
-        </Button>
-        <Button DockPanel.Dock="Left" Margin="4, 0"
-                Content="{StaticResource BrowseButtonText}"
-                Command="{Binding BrowseForImageCommand}">
-            <Button.ToolTip>
-                <TextBlock Text="{StaticResource BrowseImageHelpText}"/>
-            </Button.ToolTip>
-        </Button>
-        <Label Content="{Binding ImagePath, Mode=TwoWay}">
-            <Label.ToolTip>
-                <TextBlock Text="{Binding ImagePath, Mode=OneWay}"/>
-            </Label.ToolTip>
-        </Label>
-    </DockPanel>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+        <TextBlock Text="{Binding ImagePath, ElementName=ImagePickerControl, Mode=OneWay}" Foreground="{StaticResource SecondaryTextColorBrush}"
+                   VerticalAlignment="Center" Margin="0, 0, 0, 2"
+                   Visibility="{Binding ImagePath, ElementName=ImagePickerControl, Converter={StaticResource StringToVisibilityConverter}}">
+            <TextBlock.ToolTip>
+                <TextBlock Text="{Binding ImagePath, ElementName=ImagePickerControl, Mode=OneWay}"/>
+            </TextBlock.ToolTip>
+        </TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="{StaticResource DefaultButtonText}"
+                    Command="{Binding ResetImageCommand, ElementName=ImagePickerControl}">
+                <Button.ToolTip>
+                    <TextBlock Text="{StaticResource DefaultImageHelpText}" />
+                </Button.ToolTip>
+            </Button>
+            <Button Margin="4, 0"
+                    Content="{StaticResource BrowseButtonText}"
+                    Command="{Binding BrowseForImageCommand, ElementName=ImagePickerControl}">
+                <Button.ToolTip>
+                    <TextBlock Text="{StaticResource BrowseImageHelpText}"/>
+                </Button.ToolTip>
+            </Button>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

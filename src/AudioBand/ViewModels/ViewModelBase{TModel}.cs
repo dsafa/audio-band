@@ -16,7 +16,7 @@ namespace AudioBand.ViewModels
         where TModel : ModelBase, new()
     {
         // Mapping from a model and model property to the viewmodel property name
-        private readonly Dictionary<(object model, string modelPropName), string> _modelToPropertyName = new Dictionary<(object model, string modelPropName), string>();
+        private readonly Dictionary<(object model, string modelPropName), List<string>> _modelToPropertyName = new Dictionary<(object model, string modelPropName), List<string>>();
         private readonly Dictionary<object, ObjectAccessor> _modelToAccessor = new Dictionary<object, ObjectAccessor>();
         private readonly MapperConfiguration _mapperConfiguration = new MapperConfiguration(cfg => cfg.CreateMap<TModel, TModel>());
         private TModel _backup;
@@ -86,7 +86,15 @@ namespace AudioBand.ViewModels
             foreach (var member in members)
             {
                 var bindingAttr = (PropertyChangeBindingAttribute)member.GetAttribute(typeof(PropertyChangeBindingAttribute), true);
-                _modelToPropertyName.Add((model, bindingAttr.PropertyName), member.Name);
+                var key = (model, bindingAttr.PropertyName);
+                if (_modelToPropertyName.ContainsKey(key))
+                {
+                    _modelToPropertyName[key].Add(member.Name);
+                }
+                else
+                {
+                    _modelToPropertyName.Add(key, new List<string> { member.Name });
+                }
             }
 
             model.PropertyChanged += ModelOnPropertyChanged;
@@ -181,24 +189,27 @@ namespace AudioBand.ViewModels
         /// <param name="propertyChangedEventArgs">The event args.</param>
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            if (!_modelToPropertyName.TryGetValue((sender, propertyChangedEventArgs.PropertyName), out var propertyName))
+            if (!_modelToPropertyName.TryGetValue((sender, propertyChangedEventArgs.PropertyName), out var propertyNames))
             {
                 return;
             }
 
-            RaisePropertyChanged(propertyName);
-
-            if (!AlsoNotifyMap.TryGetValue(propertyName, out var alsoNotfify))
+            foreach (var propertyName in propertyNames)
             {
-                return;
-            }
+                RaisePropertyChanged(propertyName);
 
-            foreach (var name in alsoNotfify)
-            {
-                RaisePropertyChanged(name);
-            }
+                if (!AlsoNotifyMap.TryGetValue(propertyName, out var alsoNotfify))
+                {
+                    continue;
+                }
 
-            OnModelPropertyChanged(propertyName);
+                foreach (var name in alsoNotfify)
+                {
+                    RaisePropertyChanged(name);
+                }
+
+                OnModelPropertyChanged(propertyName);
+            }
         }
     }
 }

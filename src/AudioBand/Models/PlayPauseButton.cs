@@ -8,7 +8,11 @@ namespace AudioBand.Models
     public class PlayPauseButton : ModelBase
     {
         private string _playButtonImagePath = "";
+        private string _playButtonHoveredImagePath = "";
+        private string _playButtonClickedImagePath = "";
         private string _pauseButtonImagePath = "";
+        private string _pauseButtonHoveredImagePath = "";
+        private string _pauseButtonClickedImagePath = "";
         private int _xPosition = 103;
         private int _yPosition = 15;
         private int _width = 73;
@@ -28,12 +32,48 @@ namespace AudioBand.Models
         }
 
         /// <summary>
+        /// Gets or sets the path for the play image when hovered.
+        /// </summary>
+        public string PlayButtonHoveredImagePath
+        {
+            get => _playButtonHoveredImagePath;
+            set => SetProperty(ref _playButtonHoveredImagePath, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the path for the play image when clicked.
+        /// </summary>
+        public string PlayButtonClickedImagePath
+        {
+            get => _playButtonClickedImagePath;
+            set => SetProperty(ref _playButtonClickedImagePath, value);
+        }
+
+        /// <summary>
         /// Gets or sets the path for the pause image.
         /// </summary>
         public string PauseButtonImagePath
         {
             get => _pauseButtonImagePath;
             set => SetProperty(ref _pauseButtonImagePath, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the path for the pause image when hovered.
+        /// </summary>
+        public string PauseButtonHoveredImagePath
+        {
+            get => _pauseButtonHoveredImagePath;
+            set => SetProperty(ref _pauseButtonHoveredImagePath, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the path for the pause image when clicked.
+        /// </summary>
+        public string PauseButtonClickedImagePath
+        {
+            get => _pauseButtonClickedImagePath;
+            set => SetProperty(ref _pauseButtonClickedImagePath, value);
         }
 
         /// <summary>

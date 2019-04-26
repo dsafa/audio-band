@@ -15,6 +15,7 @@ namespace AudioBand.Views.Winforms
     {
         private IImage _image;
         private Color _defaultBackColor = Color.Transparent;
+        private IImage _currentImage;
 
         /// <summary>
         /// Gets or sets the button's image.
@@ -26,9 +27,22 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _image = value;
-                InvokeRefresh();
+                _currentImage = value;
+                InvokeRefresh(); // refresh because when the image changes, the button will be in a normal state
             }
         }
+
+        /// <summary>
+        /// Gets or sets the buttons image when hovered
+        /// </summary>
+        [Bindable(BindableSupport.Yes)]
+        public IImage HoveredImage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the buttons image when clicked
+        /// </summary>
+        [Bindable(BindableSupport.Yes)]
+        public IImage ClickedImage { get; set; }
 
         /// <summary>
         /// Gets or sets the default back color
@@ -61,6 +75,7 @@ namespace AudioBand.Views.Winforms
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
+            _currentImage = HoveredImage;
             BackColor = HoveredBackgroundColor;
         }
 
@@ -68,6 +83,7 @@ namespace AudioBand.Views.Winforms
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
+            _currentImage = Image;
             BackColor = DefaultBackgroundColor;
         }
 
@@ -77,6 +93,7 @@ namespace AudioBand.Views.Winforms
             base.OnMouseDown(e);
             if (e.Button.HasFlag(MouseButtons.Left))
             {
+                _currentImage = ClickedImage;
                 BackColor = ClickedBackgroundColor;
             }
         }
@@ -87,6 +104,7 @@ namespace AudioBand.Views.Winforms
             base.OnMouseUp(e);
             if (e.Button.HasFlag(MouseButtons.Left))
             {
+                _currentImage = HoveredImage;
                 BackColor = HoveredBackgroundColor;
             }
         }
@@ -106,7 +124,7 @@ namespace AudioBand.Views.Winforms
             graphics.SmoothingMode = SmoothingMode.HighQuality;
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            using (var image = Image.GetScaledSize(Width, Height))
+            using (var image = _currentImage.GetScaledSize(Width, Height))
             {
                 var centerX = (e.ClipRectangle.Width - image.Width) / 2;
                 var centerY = (e.ClipRectangle.Height - image.Height) / 2;

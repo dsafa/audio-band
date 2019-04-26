@@ -265,6 +265,7 @@
     <Compile Include="Views\Wpf\ValueConverters\ReverseConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToColorConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\StringToFontFamilyConverter.cs" />
+    <Compile Include="Views\Wpf\ValueConverters\StringToVisibilityConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\WinColorToWpfColorConverter.cs" />
     <Compile Include="ViewModels\AlbumArtVM.cs" />
     <Compile Include="DirectoryHelper.cs" />

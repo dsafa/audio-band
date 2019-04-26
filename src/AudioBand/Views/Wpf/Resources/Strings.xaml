@@ -8,8 +8,12 @@
     <sys:String x:Key="StatusHidden">Hidden</sys:String>
     <sys:String x:Key="XPositionLabelText">X Position</sys:String>
     <sys:String x:Key="YPositionLabelText">Y Position</sys:String>
-    <sys:String x:Key="PlayButtonImageLabelText">Play Button Image</sys:String>
-    <sys:String x:Key="PauseButtonImageLabelText">Pause Buutton Image</sys:String>
+    <sys:String x:Key="PlayButtonImageLabelText">Play image</sys:String>
+    <sys:String x:Key="PlayButtonHoveredImageLabelText">Play image when hovered</sys:String>
+    <sys:String x:Key="PlayButtonClickedImageLabelText">Play image when clicked</sys:String>
+    <sys:String x:Key="PauseButtonImageLabelText">Pause image</sys:String>
+    <sys:String x:Key="PauseButtonHoveredImageLabelText">Pause image when hovered</sys:String>
+    <sys:String x:Key="PauseButtonClickedImageLabelText">Pause image when clicked</sys:String>
     <sys:String x:Key="ButtonImageLabelText">Button Image</sys:String>
     <sys:String x:Key="CustomNameLabelText">Name</sys:String>
     <sys:String x:Key="FontFamilyLabelText">Font Family</sys:String>
@@ -20,9 +24,9 @@
     <sys:String x:Key="ScrollSpeedLabelText">Scroll Speed</sys:String>
     <sys:String x:Key="BackgroundColorLabelText">Background Color</sys:String>
     <sys:String x:Key="ForegroundColorLabelText">Foreground Color</sys:String>
-    <sys:String x:Key="DefaultColorLabelText">Default Color</sys:String>
-    <sys:String x:Key="HoverColorLabelText">Hover Color</sys:String>
-    <sys:String x:Key="ClickedColorLabelText">Clicked Color</sys:String>
+    <sys:String x:Key="DefaultColorLabelText">Background color</sys:String>
+    <sys:String x:Key="HoverColorLabelText">Background color when hovered</sys:String>
+    <sys:String x:Key="ClickedColorLabelText">Background color when clicked</sys:String>
     <sys:String x:Key="PlaceholderImageLabelText">Placeholder Image</sys:String>
     <sys:String x:Key="YOffsetLabelText">Margin</sys:String>
     <sys:String x:Key="AboutTitle">About AudioBand</sys:String>
@@ -92,7 +96,9 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="LabelsViewHeaderFormat">{0} Label</sys:String>
     <sys:String x:Key="AudioSourceViewHeaderFormat">{0} Audio Source</sys:String>
     <sys:String x:Key="ArrangementSectionText">Arrangement</sys:String>
-    <sys:String x:Key="ContentSectionText">Content</sys:String>
+    <sys:String x:Key="PlayImageSectionText">Play Image</sys:String>
+    <sys:String x:Key="PauseImageSectionText">Pause Image</sys:String>
     <sys:String x:Key="AppearanceSectionText">Appearance</sys:String>
     <sys:String x:Key="BackgroundColorSectionText">Background Colors</sys:String>
+    <sys:String x:Key="OtherSectionText">Other</sys:String>
 </ResourceDictionary>
