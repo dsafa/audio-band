@@ -80,7 +80,7 @@ namespace AudioBand.Settings
         {
             if (s == null)
             {
-                return default;
+                return default(Color);
             }
 
             var match = ColorStringRegex.Match(s);
