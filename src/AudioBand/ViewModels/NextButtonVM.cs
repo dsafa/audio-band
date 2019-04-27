@@ -31,5 +31,17 @@ namespace AudioBand.ViewModels
         {
             return ResourceLoader.TryLoadImageFromPath(ImagePath, ResourceLoader.DefaultNextImage);
         }
+
+        /// <inheritdoc />
+        protected override IImage GetHoveredImage()
+        {
+            return ResourceLoader.TryLoadImageFromPath(HoveredImagePath, ResourceLoader.DefaultNextImage);
+        }
+
+        /// <inheritdoc />
+        protected override IImage GetClickedImage()
+        {
+            return ResourceLoader.TryLoadImageFromPath(ClickedImagePath, ResourceLoader.DefaultNextImage);
+        }
     }
 }

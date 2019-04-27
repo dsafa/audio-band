@@ -29,6 +29,18 @@ namespace AudioBand.Settings.Migrations
             {
                 cfg.CreateMap<Models.V2.CustomLabelSettings, CustomLabel>();
                 cfg.CreateMap<Models.V2.AudioSourceSettings, AudioSourceSettings>();
+                cfg.CreateMap<Models.V2.NextButtonSettings, NextButton>()
+                    .ForMember(dest => dest.HoveredImagePath, opt => opt.Ignore())
+                    .ForMember(dest => dest.ClickedImagePath, opt => opt.Ignore())
+                    .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.HoveredBackgroundColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore());
+                cfg.CreateMap<Models.V2.PreviousButtonSettings, PreviousButton>()
+                    .ForMember(dest => dest.HoveredImagePath, opt => opt.Ignore())
+                    .ForMember(dest => dest.ClickedImagePath, opt => opt.Ignore())
+                    .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.HoveredBackgroundColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.PlayPauseButtonSettings, PlayPauseButton>()
                     .ForMember(dest => dest.DefaultBackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.HoveredBackgroundColor, opt => opt.Ignore())

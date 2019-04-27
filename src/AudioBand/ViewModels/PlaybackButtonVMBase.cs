@@ -15,6 +15,8 @@ namespace AudioBand.ViewModels
         where TButton : PlaybackButtonBase, new()
     {
         private IImage _image;
+        private IImage _hoveredImage;
+        private IImage _clickedImage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaybackButtonVMBase{TButton}"/> class.
@@ -32,6 +34,8 @@ namespace AudioBand.ViewModels
 
             AppSettings.ProfileChanged += AppsSettingsOnProfileChanged;
             Image = GetDefaultImage(); // Abstract method but everything should be initialized already
+            HoveredImage = GetHoveredImage();
+            ClickedImage = GetClickedImage();
         }
 
         /// <summary>
@@ -44,9 +48,27 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the hovered image.
+        /// </summary>
+        public IImage HoveredImage
+        {
+            get => _hoveredImage;
+            set => SetProperty(ref _hoveredImage, value, trackChanges: false);
+        }
+
+        /// <summary>
+        /// Gets or sets the clicked image.
+        /// </summary>
+        public IImage ClickedImage
+        {
+            get => _clickedImage;
+            set => SetProperty(ref _clickedImage, value, trackChanges: false);
+        }
+
+        /// <summary>
         /// Gets or sets the default image path.
         /// </summary>
-        [PropertyChangeBinding(nameof(NextButton.ImagePath))]
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.ImagePath))]
         public string ImagePath
         {
             get => Model.ImagePath;
@@ -60,9 +82,41 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the hovered image path.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.HoveredImagePath))]
+        public string HoveredImagePath
+        {
+            get => Model.HoveredImagePath;
+            set
+            {
+                if (SetProperty(nameof(Model.HoveredImagePath), value))
+                {
+                    HoveredImage = GetHoveredImage();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the clicked image path.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.ClickedImagePath))]
+        public string ClickedImagePath
+        {
+            get => Model.ClickedImagePath;
+            set
+            {
+                if (SetProperty(nameof(Model.ClickedImagePath), value))
+                {
+                    ClickedImage = GetClickedImage();
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the button is visible.
         /// </summary>
-        [PropertyChangeBinding(nameof(NextButton.IsVisible))]
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.IsVisible))]
         public bool IsVisible
         {
             get => Model.IsVisible;
@@ -72,7 +126,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets or sets the width of the button.
         /// </summary>
-        [PropertyChangeBinding(nameof(NextButton.Width))]
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.Width))]
         [AlsoNotify(nameof(Size))]
         public int Width
         {
@@ -83,7 +137,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets or sets the height of the button.
         /// </summary>
-        [PropertyChangeBinding(nameof(NextButton.Height))]
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.Height))]
         [AlsoNotify(nameof(Size))]
         public int Height
         {
@@ -94,7 +148,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets or sets the x position of the button.
         /// </summary>
-        [PropertyChangeBinding(nameof(NextButton.XPosition))]
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.XPosition))]
         [AlsoNotify(nameof(Location))]
         public int XPosition
         {
@@ -105,12 +159,42 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets or sets the y position of the button.
         /// </summary>
-        [PropertyChangeBinding(nameof(NextButton.YPosition))]
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.YPosition))]
         [AlsoNotify(nameof(Location))]
         public int YPosition
         {
             get => Model.YPosition;
             set => SetProperty(nameof(Model.YPosition), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the background color.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.BackgroundColor))]
+        public Color BackgroundColor
+        {
+            get => Model.BackgroundColor;
+            set => SetProperty(nameof(Model.BackgroundColor), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the hovered background color.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.HoveredBackgroundColor))]
+        public Color HoveredBackgroundColor
+        {
+            get => Model.HoveredBackgroundColor;
+            set => SetProperty(nameof(Model.HoveredBackgroundColor), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the clicked background color.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.ClickedBackgroundColor))]
+        public Color ClickedBackgroundColor
+        {
+            get => Model.ClickedBackgroundColor;
+            set => SetProperty(nameof(Model.ClickedBackgroundColor), value);
         }
 
         /// <summary>
@@ -165,6 +249,18 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <returns>The default image.</returns>
         protected abstract IImage GetDefaultImage();
+
+        /// <summary>
+        /// Gets the hovered image.
+        /// </summary>
+        /// <returns>The hovered image.</returns>
+        protected abstract IImage GetHoveredImage();
+
+        /// <summary>
+        /// Gets the clicked image.
+        /// </summary>
+        /// <returns>The clicked image.</returns>
+        protected abstract IImage GetClickedImage();
 
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {

@@ -20,14 +20,28 @@ namespace AudioBand.ViewModels
         {
         }
 
+        /// <inheritdoc />
         protected override PreviousButton GetReplacementModel()
         {
             return AppSettings.PreviousButton;
         }
 
+        /// <inheritdoc />
         protected override IImage GetDefaultImage()
         {
             return ResourceLoader.TryLoadImageFromPath(ImagePath, ResourceLoader.DefaultPreviousImage);
+        }
+
+        /// <inheritdoc />
+        protected override IImage GetHoveredImage()
+        {
+            return ResourceLoader.TryLoadImageFromPath(HoveredImagePath, ResourceLoader.DefaultPreviousImage);
+        }
+
+        /// <inheritdoc />
+        protected override IImage GetClickedImage()
+        {
+            return ResourceLoader.TryLoadImageFromPath(ClickedImagePath, ResourceLoader.DefaultPreviousImage);
         }
     }
 }
