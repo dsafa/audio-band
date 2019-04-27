@@ -15,6 +15,8 @@
     <sys:String x:Key="PauseButtonHoveredImageLabelText">Pause image when hovered</sys:String>
     <sys:String x:Key="PauseButtonClickedImageLabelText">Pause image when clicked</sys:String>
     <sys:String x:Key="ButtonImageLabelText">Button Image</sys:String>
+    <sys:String x:Key="ButtonHoveredImageLabelText">Button image when hovered</sys:String>
+    <sys:String x:Key="ButtonClickedImageLabelText">Button image when clicked</sys:String>
     <sys:String x:Key="CustomNameLabelText">Name</sys:String>
     <sys:String x:Key="FontFamilyLabelText">Font Family</sys:String>
     <sys:String x:Key="FontSizeLabelText">Font Size</sys:String>
@@ -101,4 +103,5 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="AppearanceSectionText">Appearance</sys:String>
     <sys:String x:Key="BackgroundColorSectionText">Background Colors</sys:String>
     <sys:String x:Key="OtherSectionText">Other</sys:String>
+    <sys:String x:Key="ImageSectionText">Image</sys:String>
 </ResourceDictionary>

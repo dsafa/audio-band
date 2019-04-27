@@ -84,6 +84,11 @@ namespace AudioBand
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.PreviousButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.PreviousButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.PreviousButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("ClickedBackgroundColor", this.PreviousButtonVMBindingSource, "ClickedBackgroundColor", true));
+            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("ClickedImage", this.PreviousButtonVMBindingSource, "ClickedImage", true));
+            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("DefaultBackgroundColor", this.PreviousButtonVMBindingSource, "BackgroundColor", true));
+            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("HoveredBackgroundColor", this.PreviousButtonVMBindingSource, "HoveredBackgroundColor", true));
+            this.PreviousButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("HoveredImage", this.PreviousButtonVMBindingSource, "HoveredImage", true));
             this.PreviousButtonControl.DefaultBackgroundColor = System.Drawing.Color.Empty;
             this.PreviousButtonControl.ForeColor = System.Drawing.Color.White;
             this.PreviousButtonControl.HoveredBackgroundColor = System.Drawing.Color.Empty;
@@ -143,6 +148,11 @@ namespace AudioBand
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalLocation", this.NextButtonVMBindingSource, "Location", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("LogicalSize", this.NextButtonVMBindingSource, "Size", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("Visible", this.NextButtonVMBindingSource, "IsVisible", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("ClickedBackgroundColor", this.NextButtonVMBindingSource, "ClickedBackgroundColor", true));
+            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("ClickedImage", this.NextButtonVMBindingSource, "ClickedImage", true));
+            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("DefaultBackgroundColor", this.NextButtonVMBindingSource, "BackgroundColor", true));
+            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("HoveredBackgroundColor", this.NextButtonVMBindingSource, "HoveredBackgroundColor", true));
+            this.NextButtonControl.DataBindings.Add(new System.Windows.Forms.Binding("HoveredImage", this.NextButtonVMBindingSource, "HoveredImage", true));
             this.NextButtonControl.DefaultBackgroundColor = System.Drawing.Color.Empty;
             this.NextButtonControl.ForeColor = System.Drawing.Color.White;
             this.NextButtonControl.HoveredBackgroundColor = System.Drawing.Color.Empty;

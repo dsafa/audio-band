@@ -77,6 +77,7 @@ namespace AudioBand.Views.Winforms
             base.OnMouseEnter(e);
             _currentImage = HoveredImage;
             BackColor = HoveredBackgroundColor;
+            InvokeRefresh();
         }
 
         /// <inheritdoc/>
@@ -85,28 +86,35 @@ namespace AudioBand.Views.Winforms
             base.OnMouseLeave(e);
             _currentImage = Image;
             BackColor = DefaultBackgroundColor;
+            InvokeRefresh();
         }
 
         /// <inheritdoc/>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            if (e.Button.HasFlag(MouseButtons.Left))
+            if (!e.Button.HasFlag(MouseButtons.Left))
             {
-                _currentImage = ClickedImage;
-                BackColor = ClickedBackgroundColor;
+                return;
             }
+
+            _currentImage = ClickedImage;
+            BackColor = ClickedBackgroundColor;
+            InvokeRefresh();
         }
 
         /// <inheritdoc/>
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (e.Button.HasFlag(MouseButtons.Left))
+            if (!e.Button.HasFlag(MouseButtons.Left))
             {
-                _currentImage = HoveredImage;
-                BackColor = HoveredBackgroundColor;
+                return;
             }
+
+            _currentImage = HoveredImage;
+            BackColor = HoveredBackgroundColor;
+            InvokeRefresh();
         }
 
         /// <inheritdoc/>
