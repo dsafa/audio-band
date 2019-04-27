@@ -132,6 +132,7 @@
     <Compile Include="Models\AudioBand.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NextButton.cs" />
+    <Compile Include="Models\PlaybackButtonBase.cs" />
     <Compile Include="Models\PlayPauseButton.cs" />
     <Compile Include="Models\PreviousButton.cs" />
     <Compile Include="Models\ProgressBar.cs" />
