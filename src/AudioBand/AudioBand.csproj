@@ -181,6 +181,7 @@
     <Compile Include="Messages\EndEditMessage.cs" />
     <Compile Include="ViewModels\ICustomLabelService.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
+    <Compile Include="ViewModels\PlaybackButtonVMBase.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
     <Compile Include="ViewModels\PreviousButtonVM.cs" />
     <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
