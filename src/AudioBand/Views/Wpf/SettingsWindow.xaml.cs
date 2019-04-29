@@ -24,26 +24,26 @@ namespace AudioBand.Views.Wpf
             "MahApps.Metro.IconPacks.Material",
             "MahApps.Metro",
             "FluentWPF",
-            "System.Windows.Interactivity"
+            "System.Windows.Interactivity",
         };
 
-        private bool _shouldSave;
         private readonly IDialogService _dialogService;
+        private bool _shouldSave;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindow"/> class
         /// with the settings viewmodel.
         /// </summary>
         /// <param name="vm">The settings window viewmodel.</param>
-        /// <param name="audioBandVM">The audioband view model</param>
-        /// <param name="albumArtPopupVM">The album art popup view model</param>
-        /// <param name="albumArtVM">The album art view model</param>
-        /// <param name="customLabelsVM">The custom labels view model</param>
-        /// <param name="nextButtonVM">The next button view model</param>
-        /// <param name="playPauseButtonVM">The play/pause button view model</param>
-        /// <param name="previousButtonVM">The previous button view model</param>
-        /// <param name="progressBarVM">The progress bar view model</param>
-        /// <param name="dialogService">The dialog service</param>
+        /// <param name="audioBandVM">The audioband view model.</param>
+        /// <param name="albumArtPopupVM">The album art popup view model.</param>
+        /// <param name="albumArtVM">The album art view model.</param>
+        /// <param name="customLabelsVM">The custom labels view model.</param>
+        /// <param name="nextButtonVM">The next button view model.</param>
+        /// <param name="playPauseButtonVM">The play/pause button view model.</param>
+        /// <param name="previousButtonVM">The previous button view model.</param>
+        /// <param name="progressBarVM">The progress bar view model.</param>
+        /// <param name="dialogService">The dialog service.</param>
         public SettingsWindow(
             SettingsWindowVM vm,
             AudioBandVM audioBandVM,
@@ -96,7 +96,7 @@ namespace AudioBand.Views.Wpf
         public RelayCommand SaveCloseCommand { get; }
 
         /// <summary>
-        /// Gets the command to open the about dialog
+        /// Gets the command to open the about dialog.
         /// </summary>
         public RelayCommand OpenAboutDialogCommand { get; }
 
@@ -158,9 +158,9 @@ namespace AudioBand.Views.Wpf
         }
 
         /// <summary>
-        /// Manually handle tab navigation since deskband focus is weird
+        /// Manually handle tab navigation since deskband focus is weird.
         /// </summary>
-        /// <param name="e">Key event</param>
+        /// <param name="e">Key event.</param>
         protected override void OnPreviewKeyUp(KeyEventArgs e)
         {
             base.OnPreviewKeyUp(e);

@@ -5,7 +5,6 @@ using AudioBand.Models;
 using AudioBand.Resources;
 using AudioBand.Settings;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
@@ -27,8 +26,8 @@ namespace AudioBand.ViewModels
         /// Initializes a new instance of the <see cref="PlayPauseButtonVM"/> class.
         /// </summary>
         /// <param name="appsettings">App settings.</param>
-        /// <param name="resourceLoader">Resource loader</param>
-        /// <param name="dialogService">The dialog service</param>
+        /// <param name="resourceLoader">Resource loader.</param>
+        /// <param name="dialogService">The dialog service.</param>
         /// <param name="track">The track.</param>
         public PlayPauseButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader, IDialogService dialogService, Track track)
             : base(appsettings.PlayPauseButton)
@@ -43,6 +42,9 @@ namespace AudioBand.ViewModels
             _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
+        /// <summary>
+        /// Gets or sets the play image.
+        /// </summary>
         [AlsoNotify(nameof(Image))]
         public IImage PlayImage
         {
@@ -50,6 +52,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _playImage, value, trackChanges: false);
         }
 
+        /// <summary>
+        /// Gets or sets the play image when hovered.
+        /// </summary>
         [AlsoNotify(nameof(Image))]
         public IImage PlayHoveredImage
         {
@@ -57,6 +62,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _playHoveredImage, value, trackChanges: false);
         }
 
+        /// <summary>
+        /// Gets or sets the play image when clicked.
+        /// </summary>
         [AlsoNotify(nameof(Image))]
         public IImage PlayClickedImage
         {
@@ -64,6 +72,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _playClickedImage, value, trackChanges: false);
         }
 
+        /// <summary>
+        /// Gets or sets the play image path.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonImagePath))]
         public string PlayImagePath
         {
@@ -77,6 +88,9 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the path of the play image when hovered.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonHoveredImagePath))]
         public string PlayHoveredImagePath
         {
@@ -90,6 +104,9 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the path of the play image when clicked.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonClickedImagePath))]
         public string PlayClickedImagePath
         {
@@ -103,6 +120,9 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the pause image.
+        /// </summary>
         [AlsoNotify(nameof(Image))]
         public IImage PauseImage
         {
@@ -110,6 +130,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _pauseImage, value, trackChanges: false);
         }
 
+        /// <summary>
+        /// Gets or sets the pause image when hovered.
+        /// </summary>
         [AlsoNotify(nameof(Image))]
         public IImage PauseHoveredImage
         {
@@ -117,6 +140,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _pauseHoveredImage, value, trackChanges: false);
         }
 
+        /// <summary>
+        /// Gets or sets the pause image when clicked.
+        /// </summary>
         [AlsoNotify(nameof(Image))]
         public IImage PauseClickedImage
         {
@@ -124,6 +150,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(ref _pauseClickedImage, value, trackChanges: false);
         }
 
+        /// <summary>
+        /// Gets or sets the path of the pause image.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonImagePath))]
         public string PauseImagePath
         {
@@ -137,6 +166,9 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the path of the pause image when hovered.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonHoveredImagePath))]
         public string PauseHoveredImagePath
         {
@@ -150,6 +182,9 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the path of the pause image when clicked.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonClickedImagePath))]
         public string PauseClickedImagePath
         {
@@ -163,6 +198,9 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the play pause button is visible.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.IsVisible))]
         public bool IsVisible
         {
@@ -170,6 +208,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.IsVisible), value);
         }
 
+        /// <summary>
+        /// Gets or sets the width of the button.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.Width))]
         [AlsoNotify(nameof(Size))]
         public int Width
@@ -178,6 +219,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Width), value);
         }
 
+        /// <summary>
+        /// Gets or sets the height of the button.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.Height))]
         [AlsoNotify(nameof(Size))]
         public int Height
@@ -186,6 +230,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Height), value);
         }
 
+        /// <summary>
+        /// Gets or sets the x position.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.XPosition))]
         [AlsoNotify(nameof(Location))]
         public int XPosition
@@ -194,6 +241,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.XPosition), value);
         }
 
+        /// <summary>
+        /// Gets or sets the y position.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.YPosition))]
         [AlsoNotify(nameof(Location))]
         public int YPosition
@@ -202,15 +252,27 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.YPosition), value);
         }
 
+        /// <summary>
+        /// Gets the current image.
+        /// </summary>
         [PropertyChangeBinding(nameof(Track.IsPlaying))]
         public IImage Image => _track.IsPlaying ? PauseImage : PlayImage;
 
+        /// <summary>
+        /// Gets the current hovered image.
+        /// </summary>
         [PropertyChangeBinding(nameof(Track.IsPlaying))]
         public IImage HoveredImage => _track.IsPlaying ? PauseHoveredImage : PlayHoveredImage;
 
+        /// <summary>
+        /// Gets the current clicked image.
+        /// </summary>
         [PropertyChangeBinding(nameof(Track.IsPlaying))]
         public IImage ClickedImage => _track.IsPlaying ? PauseClickedImage : PlayClickedImage;
 
+        /// <summary>
+        /// Gets or sets the default background color.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.DefaultBackgroundColor))]
         public Color DefaultBackgroundColor
         {
@@ -218,6 +280,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.DefaultBackgroundColor), value);
         }
 
+        /// <summary>
+        /// Gets or sets the background color when hovered.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.HoveredBackgroundColor))]
         public Color HoveredBackgroundColor
         {
@@ -225,6 +290,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.HoveredBackgroundColor), value);
         }
 
+        /// <summary>
+        /// Gets or sets the background color when clicked.
+        /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.ClickedBackgroundColor))]
         public Color ClickedBackgroundColor
         {
@@ -245,7 +313,7 @@ namespace AudioBand.ViewModels
         public Size Size => new Size(Width, Height);
 
         /// <summary>
-        /// Gets the dialog service
+        /// Gets the dialog service.
         /// </summary>
         public IDialogService DialogService { get; }
 
@@ -280,4 +348,3 @@ namespace AudioBand.ViewModels
         }
     }
 }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

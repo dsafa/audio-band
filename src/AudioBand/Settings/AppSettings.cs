@@ -24,7 +24,7 @@ namespace AudioBandModel.Settings
         {
             { "0.1", typeof(AudioBand.Settings.Models.V1.AudioBandSettings) },
             { "2", typeof(AudioBand.Settings.Models.V2.Settings) },
-            { "3", typeof(SettingsV3) }
+            { "3", typeof(SettingsV3) },
         };
 
         private static readonly string CurrentVersion = "3";
@@ -69,6 +69,9 @@ namespace AudioBandModel.Settings
             SelectProfile(_settings.CurrentProfileName);
         }
 
+        /// <summary>
+        /// Occurs when the current profile changes
+        /// </summary>
         public event EventHandler ProfileChanged;
 
         /// <summary>
@@ -125,6 +128,9 @@ namespace AudioBandModel.Settings
         /// </summary>
         public List<AudioSourceSettings> AudioSourceSettings { get; } = new List<AudioSourceSettings>();
 
+        /// <summary>
+        /// Gets or sets the current profile.
+        /// </summary>
         public string CurrentProfile
         {
             get => _settings.CurrentProfileName;
@@ -140,8 +146,15 @@ namespace AudioBandModel.Settings
             }
         }
 
+        /// <summary>
+        /// Gets a list of available profiles.
+        /// </summary>
         public List<string> Profiles => _settings.Profiles.Keys.ToList();
 
+        /// <summary>
+        /// Creates a new profile.
+        /// </summary>
+        /// <param name="profileName">The name of the new profile.</param>
         public void CreateProfile(string profileName)
         {
             if (profileName == null)
@@ -157,6 +170,10 @@ namespace AudioBandModel.Settings
             _settings.Profiles.Add(profileName, CreateProfileModel());
         }
 
+        /// <summary>
+        /// Deletes the profile.
+        /// </summary>
+        /// <param name="profileName">The name of the profile to delete.</param>
         public void DeleteProfile(string profileName)
         {
             if (profileName == null)
@@ -177,6 +194,10 @@ namespace AudioBandModel.Settings
             _settings.Profiles.Remove(profileName);
         }
 
+        /// <summary>
+        /// Renames the current profile.
+        /// </summary>
+        /// <param name="newProfileName">The new profile name.</param>
         public void RenameCurrentProfile(string newProfileName)
         {
             if (newProfileName == null)
@@ -240,7 +261,7 @@ namespace AudioBandModel.Settings
             {
                 AudioSource = null,
                 AudioSourceSettings = new List<AudioSourceSettings>(),
-                Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, CreateProfileModel() } }
+                Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, CreateProfileModel() } },
             };
         }
 
@@ -255,7 +276,7 @@ namespace AudioBandModel.Settings
                 NextButtonSettings = new NextButton(),
                 PreviousButtonSettings = new PreviousButton(),
                 ProgressBarSettings = new ProgressBar(),
-                CustomLabelSettings = new List<CustomLabel> { new CustomLabel() }
+                CustomLabelSettings = new List<CustomLabel> { new CustomLabel() },
             };
         }
 

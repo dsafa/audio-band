@@ -28,6 +28,7 @@ namespace AudioBand.ViewModels
             CustomLabelRemoved?.Invoke(this, label);
         }
 
+        /// <inheritdoc />
         public void ClearCustomLabels()
         {
             CustomLabelsCleared?.Invoke(this, EventArgs.Empty);

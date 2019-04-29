@@ -11,7 +11,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// Base class for a viewmodel with a model.
     /// </summary>
-    /// <typeparam name="TModel">Type of the model</typeparam>
+    /// <typeparam name="TModel">Type of the model.</typeparam>
     public abstract class ViewModelBase<TModel> : ViewModelBase
         where TModel : ModelBase, new()
     {
@@ -40,7 +40,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Get the model representation of this viewmodel. By default it returns <see cref="Model"/>.
         /// </summary>
-        /// <returns>A model representation</returns>
+        /// <returns>A model representation.</returns>
         public virtual TModel GetModel()
         {
             return Model;
@@ -54,7 +54,7 @@ namespace AudioBand.ViewModels
         /// <param name="newValue">New value to set.</param>
         /// <param name="trackChanges">True if changes are tracked by calling <see cref="ViewModelBase.BeginEdit"/>.</param>
         /// <param name="propertyName">Name of the property to notify with.</param>
-        /// <returns>Returns true if new value was set</returns>
+        /// <returns>Returns true if new value was set.</returns>
         protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, bool trackChanges = true, [CallerMemberName] string propertyName = null)
         {
             var currentModelValue = (TValue)_modelToAccessor[Model][modelPropertyName];
@@ -101,10 +101,10 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Unbinds the model
+        /// Unbinds the model.
         /// </summary>
-        /// <typeparam name="T">The type of the model</typeparam>
-        /// <param name="model">The model to unbind</param>
+        /// <typeparam name="T">The type of the model.</typeparam>
+        /// <param name="model">The model to unbind.</param>
         protected void UnbindModel<T>(T model)
             where T : ModelBase
         {
@@ -125,8 +125,8 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Unbinds the current <see cref="Model"/> and binds to new one.
         /// </summary>
-        /// <typeparam name="T">The type of the model</typeparam>
-        /// <param name="newModel">The new model to replace</param>
+        /// <typeparam name="T">The type of the model.</typeparam>
+        /// <param name="newModel">The new model to replace..</param>
         protected void ReplaceModel<T>(T newModel)
             where T : TModel
         {
@@ -178,7 +178,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Called when a model property changes.
         /// </summary>
-        /// <param name="propertyName">Name of the property that changed</param>
+        /// <param name="propertyName">Name of the property that changed.</param>
         protected virtual void OnModelPropertyChanged(string propertyName) { }
 
         /// <summary>

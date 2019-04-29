@@ -1,26 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using AudioBand.ViewModels;
 
 namespace AudioBand.Views.Wpf
 {
     /// <summary>
-    /// Interaction logic for RenameProfileDialog.xaml
+    /// Dialog to rename a profile.
     /// </summary>
     public partial class RenameProfileDialog
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenameProfileDialog"/> class.
+        /// </summary>
+        /// <param name="vm">The view model.</param>
         public RenameProfileDialog(RenameProfileDialogVM vm)
         {
             InitializeComponent();
