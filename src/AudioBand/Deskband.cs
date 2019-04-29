@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
@@ -74,19 +73,17 @@ namespace AudioBand
                 _container.Register<IDialogService, DialogService>(Lifestyle.Singleton);
                 _container.Register<ISettingsWindow, SettingsWindow>(Lifestyle.Transient);
 
-                var viewmodelExclude = new Type[] { typeof(AudioSourceSettingVM), typeof(AudioSourceSettingsVM), typeof(RenameProfileDialogVM) };
-                var viewmodels = typeof(ViewModelBase)
-                    .Assembly
-                    .GetTypes()
-                    .Where(type => type.Namespace == "AudioBand.ViewModels"
-                        && type.IsClass
-                        && !type.IsAbstract
-                        && typeof(ViewModelBase).IsAssignableFrom(type)
-                        && !viewmodelExclude.Contains(type));
-                foreach (var viewmodel in viewmodels)
-                {
-                    _container.Register(viewmodel);
-                }
+                _container.Register<AboutVM>();
+                _container.Register<AlbumArtVM>();
+                _container.Register<AlbumArtPopupVM>();
+                _container.Register<AudioBandVM>();
+                _container.Register<CustomLabelVM>();
+                _container.Register<CustomLabelsVM>();
+                _container.Register<NextButtonVM>();
+                _container.Register<PlayPauseButtonVM>();
+                _container.Register<PreviousButtonVM>();
+                _container.Register<ProgressBarVM>();
+                _container.Register<SettingsWindowVM>();
 
                 _container.Verify();
             }

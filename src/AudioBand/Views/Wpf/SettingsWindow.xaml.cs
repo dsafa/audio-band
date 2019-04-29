@@ -23,7 +23,8 @@ namespace AudioBand.Views.Wpf
         {
             "MahApps.Metro.IconPacks.Material",
             "MahApps.Metro",
-            "FluentWPF"
+            "FluentWPF",
+            "System.Windows.Interactivity"
         };
 
         private bool _shouldSave;
