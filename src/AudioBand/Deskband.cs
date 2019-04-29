@@ -12,7 +12,6 @@ using AudioBand.ViewModels;
 using AudioBand.Views.Wpf;
 using AudioBandModel.Settings;
 using CSDeskBand;
-using PubSub.Extension;
 using SimpleInjector;
 
 namespace AudioBand
@@ -43,7 +42,7 @@ namespace AudioBand
             AppDomain.CurrentDomain.UnhandledException += (sender, args) => AudioBandLogManager.GetLogger("AudioBand").Error((Exception)args.ExceptionObject, "Unhandled Exception");
             ConfigureDependencies();
             _mainControl = _container.GetInstance<MainControl>();
-            this.Subscribe<FocusChangedMessage>(FocusCaptured);
+            _container.GetInstance<IMessageBus>().Subscribe<FocusChangedMessage>(FocusCaptured);
         }
 
         /// <inheritdoc/>
@@ -65,6 +64,7 @@ namespace AudioBand
                 _container = new Container();
                 _container.RegisterInstance(Options);
                 _container.RegisterInstance(TaskbarInfo);
+                _container.Register<IMessageBus, MessageBus>(Lifestyle.Singleton);
                 _container.Register<Track>(Lifestyle.Singleton);
                 _container.Register<IAudioSourceManager, AudioSourceManager>(Lifestyle.Singleton);
                 _container.Register<IAppSettings, AppSettings>(Lifestyle.Singleton);

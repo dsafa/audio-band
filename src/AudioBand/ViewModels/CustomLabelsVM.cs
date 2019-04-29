@@ -26,7 +26,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The app setings.</param>
         /// <param name="labelService">The host for the labels.</param>
-        /// <param name="dialogService">The dialog service</param>
+        /// <param name="dialogService">The dialog service.</param>
         public CustomLabelsVM(IAppSettings appsettings, ICustomLabelService labelService, IDialogService dialogService)
         {
             _appsettings = appsettings;
