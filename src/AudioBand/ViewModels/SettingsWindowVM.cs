@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Controls;
 using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.Settings;
-using PubSub.Extension;
 
 namespace AudioBand.ViewModels
 {
@@ -25,8 +22,8 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindowVM"/> class.
         /// </summary>
-        /// <param name="appSettings">The app settings</param>
-        /// <param name="dialogService">The dialog service</param>
+        /// <param name="appSettings">The app settings.</param>
+        /// <param name="dialogService">The dialog service.</param>
         public SettingsWindowVM(IAppSettings appSettings, IDialogService dialogService)
         {
             _appSettings = appSettings;
@@ -38,9 +35,6 @@ namespace AudioBand.ViewModels
             DeleteProfileCommand.Observe(Profiles);
             AddProfileCommand = new RelayCommand(AddProfileCommandOnExecute);
             RenameProfileCommand = new RelayCommand(RenameProfileCommandOnExecute);
-
-            this.Subscribe<StartEditMessage>(StartEditMessageHandler);
-            this.Subscribe<EndEditMessage>(EndEditMessageHandler);
         }
 
         /// <summary>
@@ -62,7 +56,6 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(ref _selectedProfileName, value, trackChanges: false))
                 {
-                    this.Publish(EndEditMessage.AcceptEdits);
                     _appSettings.CurrentProfile = value;
                 }
             }

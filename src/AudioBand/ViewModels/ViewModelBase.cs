@@ -10,7 +10,6 @@ using AudioBand.Messages;
 using AutoMapper;
 using FastMember;
 using NLog;
-using PubSub.Extension;
 
 namespace AudioBand.ViewModels
 {
@@ -24,6 +23,7 @@ namespace AudioBand.ViewModels
     public abstract class ViewModelBase : INotifyPropertyChanged, IResettableObject, INotifyDataErrorInfo
     {
         private readonly Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
+        private bool _isEditing;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
@@ -73,15 +73,19 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets a value indicating whether the current object is being edited.
         /// </summary>
-        public bool IsEditing { get; private set; }
+        public bool IsEditing
+        {
+            get => _isEditing;
+            private set => SetProperty(ref _isEditing, value, trackChanges: false);
+        }
 
         /// <summary>
-        /// Gets the map from [model property name] to [other vm property names]
+        /// Gets the map from [model property name] to [other vm property names].
         /// </summary>
         protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
 
         /// <summary>
-        /// Gets the logger for the view model
+        /// Gets the logger for the view model.
         /// </summary>
         protected ILogger Logger { get; }
 
@@ -114,7 +118,6 @@ namespace AudioBand.ViewModels
             Logger.Debug("Starting edit");
             OnBeginEdit();
             IsEditing = true;
-            this.Subscribe<EndEditMessage>(EditMessageOnPublished);
         }
 
         /// <summary>
@@ -130,7 +133,6 @@ namespace AudioBand.ViewModels
             Logger.Debug("Ending edit");
             OnEndEdit();
             IsEditing = false;
-            this.Unsubscribe<EndEditMessage>();
         }
 
         /// <summary>
@@ -146,7 +148,6 @@ namespace AudioBand.ViewModels
             Logger.Debug("Cancelling edit");
             OnCancelEdit();
             IsEditing = false;
-            this.Unsubscribe<EndEditMessage>();
         }
 
         /// <inheritdoc cref="IResettableObject.Reset"/>

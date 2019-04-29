@@ -23,17 +23,17 @@ namespace AudioBand.ViewModels
         public string Version => GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
         /// <summary>
-        /// Gets the link to the project
+        /// Gets the link to the project.
         /// </summary>
         public string ProjectLink => "https://github.com/dsafa/audio-band";
 
         /// <summary>
-        /// Gets the license link
+        /// Gets the license link.
         /// </summary>
         public string LicenseLink => "https://github.com/dsafa/audio-band/blob/master/LICENSE";
 
         /// <summary>
-        /// Gets the third party licenses link
+        /// Gets the third party licenses link.
         /// </summary>
         public string ThirdPartyLicenseLink => "https://github.com/dsafa/audio-band/blob/master/LICENSE-3RD-PARTY";
 

@@ -10,7 +10,6 @@ using System.Windows.Input;
 using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.ViewModels;
-using PubSub.Extension;
 
 namespace AudioBand.Views.Wpf
 {
@@ -28,6 +27,7 @@ namespace AudioBand.Views.Wpf
         };
 
         private readonly IDialogService _dialogService;
+        private readonly IMessageBus _messageBus;
         private bool _shouldSave;
 
         /// <summary>
@@ -44,6 +44,7 @@ namespace AudioBand.Views.Wpf
         /// <param name="previousButtonVM">The previous button view model.</param>
         /// <param name="progressBarVM">The progress bar view model.</param>
         /// <param name="dialogService">The dialog service.</param>
+        /// <param name="messageBus">The message bus.</param>
         public SettingsWindow(
             SettingsWindowVM vm,
             AudioBandVM audioBandVM,
@@ -54,7 +55,8 @@ namespace AudioBand.Views.Wpf
             PlayPauseButtonVM playPauseButtonVM,
             PreviousButtonVM previousButtonVM,
             ProgressBarVM progressBarVM,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            IMessageBus messageBus)
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             ElementHost.EnableModelessKeyboardInterop(this);
@@ -75,6 +77,7 @@ namespace AudioBand.Views.Wpf
             InitializeComponent();
             DataContext = vm;
             _dialogService = dialogService;
+            _messageBus = messageBus;
 
             Activated += OnActivated;
         }
@@ -143,7 +146,7 @@ namespace AudioBand.Views.Wpf
 
             if (_shouldSave)
             {
-                this.Publish(EndEditMessage.AcceptEdits);
+                _messageBus.Publish(EndEditMessage.AcceptEdits);
                 Saved?.Invoke(this, EventArgs.Empty);
                 Hide();
                 return;
@@ -151,7 +154,7 @@ namespace AudioBand.Views.Wpf
 
             if (_dialogService.ShowConfirmationDialog(ConfirmationDialogType.DiscardChanges))
             {
-                this.Publish(EndEditMessage.CancelEdits);
+                _messageBus.Publish(EndEditMessage.CancelEdits);
                 Canceled?.Invoke(this, EventArgs.Empty);
                 Hide();
             }
@@ -193,7 +196,7 @@ namespace AudioBand.Views.Wpf
 
         private void OnActivated(object sender, EventArgs e)
         {
-            this.Publish(FocusChangedMessage.FocusCaptured);
+            _messageBus.Publish(FocusChangedMessage.FocusCaptured);
         }
 
         private void SaveCloseCommandOnExecute(object o)

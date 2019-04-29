@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AudioBand.Commands;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// View model for the rename profile dialog
+    /// View model for the rename profile dialog.
     /// </summary>
     public class RenameProfileDialogVM : ViewModelBase
     {
