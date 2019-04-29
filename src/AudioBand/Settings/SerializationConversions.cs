@@ -10,6 +10,9 @@ namespace AudioBand.Settings
     /// </summary>
     internal static class SerializationConversions
     {
+        private static readonly Regex ColorStringRegex =
+            new Regex(@"#(?<a>[0-9a-fA-F]{2})(?<r>[0-9a-fA-F]{2})(?<g>[0-9a-fA-F]{2})(?<b>[0-9a-fA-F]{2})", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+
         /// <summary>
         /// Convert a font to a string representation.
         /// </summary>
@@ -68,14 +71,11 @@ namespace AudioBand.Settings
             return $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
         }
 
-        private static readonly Regex ColorStringRegex =
-            new Regex(@"#(?<a>[0-9a-fA-F]{2})(?<r>[0-9a-fA-F]{2})(?<g>[0-9a-fA-F]{2})(?<b>[0-9a-fA-F]{2})", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-
         /// <summary>
-        /// Converts string to color
+        /// Converts string to color.
         /// </summary>
-        /// <param name="s">The string to convert</param>
-        /// <returns>The color from the string</returns>
+        /// <param name="s">The string to convert.</param>
+        /// <returns>The color from the string.</returns>
         public static Color StringToColor(string s)
         {
             if (s == null)

@@ -10,7 +10,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model base for playback button.
     /// </summary>
-    /// <typeparam name="TButton">The playback button model</typeparam>
+    /// <typeparam name="TButton">The playback button model.</typeparam>
     public abstract class PlaybackButtonVMBase<TButton> : ViewModelBase<TButton>
         where TButton : PlaybackButtonBase, new()
     {
@@ -220,7 +220,7 @@ namespace AudioBand.ViewModels
         protected IAppSettings AppSettings { get; }
 
         /// <summary>
-        /// Gets the resource loader
+        /// Gets the resource loader.
         /// </summary>
         protected IResourceLoader ResourceLoader { get; }
 
@@ -267,6 +267,5 @@ namespace AudioBand.ViewModels
             Debug.Assert(IsEditing == false, "Should not be editing");
             ReplaceModel(GetReplacementModel());
         }
-
     }
 }

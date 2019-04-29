@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing.Imaging;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using AudioBand.Commands;
 using AudioBand.ViewModels;
-using Microsoft.Win32;
 
 namespace AudioBand.Views.Wpf
 {
     /// <summary>
-    /// Interaction logic for ImagePicker.xaml
+    /// Image picker control.
     /// </summary>
     public partial class ImagePicker : UserControl
     {
@@ -21,7 +18,7 @@ namespace AudioBand.Views.Wpf
             DependencyProperty.Register(nameof(ImagePath), typeof(string), typeof(ImagePicker), new PropertyMetadata(null));
 
         /// <summary>
-        /// Dependency property for <see cref="DialogService"/>
+        /// Dependency property for <see cref="DialogService"/>.
         /// </summary>
         public static readonly DependencyProperty DialogServiceProperty =
             DependencyProperty.Register(nameof(DialogService), typeof(IDialogService), typeof(ImagePicker));
@@ -47,11 +44,11 @@ namespace AudioBand.Views.Wpf
         }
 
         /// <summary>
-        /// Gets or sets the dialog service
+        /// Gets or sets the dialog service.
         /// </summary>
         public IDialogService DialogService
         {
-            get => (IDialogService) GetValue(DialogServiceProperty);
+            get => (IDialogService)GetValue(DialogServiceProperty);
             set => SetValue(DialogServiceProperty, value);
         }
 
