@@ -3,7 +3,7 @@
 namespace AudioBand.Models
 {
     /// <summary>
-    /// Base class for next and previous button
+    /// Base class for next and previous button.
     /// </summary>
     public class PlaybackButtonBase : ModelBase
     {

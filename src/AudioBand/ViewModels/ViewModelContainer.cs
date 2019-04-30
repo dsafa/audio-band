@@ -3,7 +3,7 @@
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// Container for all the view models
+    /// Container for all the view models.
     /// </summary>
     public class ViewModelContainer : IViewModelContainer
     {
@@ -35,7 +35,7 @@ namespace AudioBand.ViewModels
             NextButtonVM = nextButtonVm;
             PlayPauseButtonVM = playPauseButtonVm;
             PreviousButtonVM = previousButtonVm;
-            ProgressBarVM = progressBarVm;;
+            ProgressBarVM = progressBarVm;
         }
 
         /// <inheritdoc />

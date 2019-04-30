@@ -20,7 +20,7 @@ namespace AudioBand.Views.Wpf
             "Tiff Files (*.tiff;*.tif)|*.tiff;*.tif",
             "Png Files (*.png)|*.png",
             "Svg Files (*.svg)|*.svg",
-            "All Files (*.*)|*.*"
+            "All Files (*.*)|*.*",
         };
 
         private static readonly string FileDialogImageFilter = string.Join("|", ImageFilters);
@@ -33,7 +33,7 @@ namespace AudioBand.Views.Wpf
             var colorPickerDialog = new Dsafa.WpfColorPicker.ColorPickerDialog(initialColor)
             {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ResizeMode = ResizeMode.NoResize
+                ResizeMode = ResizeMode.NoResize,
             };
 
             var res = colorPickerDialog.ShowDialog();

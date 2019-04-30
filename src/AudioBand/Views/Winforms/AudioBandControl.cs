@@ -56,7 +56,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the logical size of the control.
         /// </summary>
-        /// <remarks>This is the device independent size</remarks>
+        /// <remarks>This is the device independent size.</remarks>
         [Browsable(true)]
         [Bindable(BindableSupport.Yes)]
         public Size LogicalSize
@@ -72,7 +72,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets or sets the logical position of the control.
         /// </summary>
-        /// <remarks>This is the device independent position</remarks>
+        /// <remarks>This is the device independent position.</remarks>
         [Browsable(true)]
         [Bindable(BindableSupport.Yes)]
         public Point LogicalLocation
@@ -86,19 +86,19 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Gets the dpi
+        /// Gets the dpi.
         /// </summary>
         public double Dpi { get; private set; } = LogicalDpi;
 
         /// <summary>
-        /// Gets the scaling factor
+        /// Gets the scaling factor.
         /// </summary>
         public double ScalingFactor => Dpi / LogicalDpi;
 
         /// <summary>
         /// Gets the size scaled by the <see cref="ScalingFactor"/>.
         /// </summary>
-        /// <param name="size">The size to scale</param>
+        /// <param name="size">The size to scale.</param>
         /// <returns>The new scaled size.</returns>
         protected Size GetScaledSize(Size size)
         {
@@ -106,9 +106,9 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Gets the point scaled by the <see cref="ScalingFactor"/>
+        /// Gets the point scaled by the <see cref="ScalingFactor"/>.
         /// </summary>
-        /// <param name="point">The point to scale</param>
+        /// <param name="point">The point to scale.</param>
         /// <returns>The new scaled point.</returns>
         protected Point GetScaledPoint(Point point)
         {
@@ -131,7 +131,7 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Occurs when dpi changed
+        /// Occurs when dpi changed.
         /// </summary>
         protected virtual void OnDpiChanged()
         {

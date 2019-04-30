@@ -85,7 +85,7 @@ namespace AudioBand.Models
         }
 
         /// <summary>
-        /// Sets the placeholder image
+        /// Sets the placeholder image.
         /// </summary>
         public IImage PlaceHolderImage
         {

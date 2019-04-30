@@ -4,7 +4,7 @@ using AudioBand.ViewModels;
 namespace AudioBand.Views.Wpf
 {
     /// <summary>
-    /// Interaction logic for AboutDialog.xaml
+    /// Interaction logic for AboutDialog.xaml.
     /// </summary>
     public partial class AboutDialog
     {

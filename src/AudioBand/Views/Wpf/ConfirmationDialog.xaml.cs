@@ -4,7 +4,7 @@ using AudioBand.ViewModels;
 namespace AudioBand.Views.Wpf
 {
     /// <summary>
-    /// Interaction logic for ConfirmationDialog.xaml
+    /// Interaction logic for ConfirmationDialog.xaml.
     /// </summary>
     public partial class ConfirmationDialog
     {

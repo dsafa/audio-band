@@ -11,7 +11,7 @@ namespace AudioBand.Views.Wpf.ValueConverters
     internal class BoolToVisibilityConverter : IValueConverter
     {
         /// <summary>
-        /// Gets or sets a value indicating whether to collapse when hidden
+        /// Gets or sets a value indicating whether to collapse when hidden.
         /// </summary>
         public bool Collapse { get; set; } = true;
 

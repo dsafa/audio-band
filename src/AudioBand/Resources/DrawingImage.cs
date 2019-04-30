@@ -4,7 +4,7 @@ using AudioBand.Extensions;
 namespace AudioBand.Resources
 {
     /// <summary>
-    /// Image class for system.drawing images
+    /// Image class for system.drawing images.
     /// </summary>
     public class DrawingImage : IImage
     {
@@ -13,7 +13,7 @@ namespace AudioBand.Resources
         /// <summary>
         /// Initializes a new instance of the <see cref="DrawingImage"/> class.
         /// </summary>
-        /// <param name="image">The image to use</param>
+        /// <param name="image">The image to use.</param>
         public DrawingImage(Image image)
         {
             _internalImage = image;

@@ -166,7 +166,7 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Notifies all properties changed
+        /// Notifies all properties changed.
         /// </summary>
         protected void RaisePropertyChangedAll()
         {
@@ -213,7 +213,7 @@ namespace AudioBand.ViewModels
         /// <param name="newValue">New value of the field.</param>
         /// <param name="trackChanges">True if <see cref="BeginEdit"/> should be called if the value changes.</param>
         /// <param name="propertyName">Name of the property to notify with.</param>
-        /// <returns>Returns true if new value was set</returns>
+        /// <returns>Returns true if new value was set.</returns>
         protected bool SetProperty<TValue>(ref TValue field, TValue newValue, bool trackChanges = true, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<TValue>.Default.Equals(field, newValue))

@@ -27,7 +27,7 @@ namespace AudioBand.Views.Wpf.TemplateSelectors
             /// <summary>
             /// Template for the setting value.
             /// </summary>
-            Value
+            Value,
         }
 
         /// <summary>

@@ -35,7 +35,7 @@ namespace AudioBand.Models
         }
 
         /// <summary>
-        /// Gets or sets the hover color
+        /// Gets or sets the hover color.
         /// </summary>
         public Color HoverColor
         {

@@ -62,7 +62,7 @@ namespace AudioBand.Commands
         /// Observes a <see cref="INotifyPropertyChanged"/> subject and raises <see cref="CanExecuteChanged"/> when a property changes.
         /// </summary>
         /// <param name="subject">The subject to observe.</param>
-        /// <param name="propertyName">The property to observe</param>
+        /// <param name="propertyName">The property to observe.</param>
         public void Observe(INotifyPropertyChanged subject, string propertyName)
         {
             subject.PropertyChanged += (o, e) =>
@@ -77,7 +77,7 @@ namespace AudioBand.Commands
         /// <summary>
         /// Observes a <see cref="INotifyCollectionChanged"/> subject and raises <see cref="CanExecuteChanged"/> when the collection changes.
         /// </summary>
-        /// <param name="subject">The subject</param>
+        /// <param name="subject">The subject.</param>
         public void Observe(INotifyCollectionChanged subject)
         {
             subject.CollectionChanged += (o, e) => RaiseCanExecuteChanged();

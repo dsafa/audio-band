@@ -7,7 +7,7 @@ using AudioBand.Views.Winforms;
 namespace AudioBand
 {
     /// <summary>
-    /// Partial main control
+    /// Partial main control.
     /// </summary>
     partial class MainControl
     {

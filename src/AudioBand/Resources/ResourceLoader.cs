@@ -8,7 +8,7 @@ using Svg;
 namespace AudioBand.Resources
 {
     /// <summary>
-    /// Default resource loader
+    /// Default resource loader.
     /// </summary>
     public class ResourceLoader : IResourceLoader
     {

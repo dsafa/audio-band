@@ -17,7 +17,7 @@ using SimpleInjector;
 namespace AudioBand
 {
     /// <summary>
-    /// Entry point of the application
+    /// Entry point of the application.
     /// </summary>
     [ComVisible(true)]
     [Guid("957D8782-5B07-4126-9B24-1E917BAAAD64")]

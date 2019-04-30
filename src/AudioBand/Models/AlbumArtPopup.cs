@@ -21,7 +21,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the width of the album art popup
+        /// Gets or sets the width of the album art popup.
         /// </summary>
         public int Width
         {

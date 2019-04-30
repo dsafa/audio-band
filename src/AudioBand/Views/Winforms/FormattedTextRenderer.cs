@@ -112,7 +112,7 @@ namespace AudioBand.Views.Winforms
             /// <summary>
             /// Text is underlined.
             /// </summary>
-            Underline = 256
+            Underline = 256,
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Draws the formatted text with the current values.
         /// </summary>
-        /// <param name="scaling">The scaling factor</param>
+        /// <param name="scaling">The scaling factor.</param>
         /// <returns>A bitmap of the rendered text.</returns>
         public Bitmap Draw(double scaling)
         {
@@ -263,7 +263,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Measures the size that the text would be.
         /// </summary>
-        /// <param name="scaling">The scaling factor</param>
+        /// <param name="scaling">The scaling factor.</param>
         /// <returns>The bounds of the text.</returns>
         public Size Measure(double scaling)
         {

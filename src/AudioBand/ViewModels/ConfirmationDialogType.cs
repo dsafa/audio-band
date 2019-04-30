@@ -1,7 +1,7 @@
 ﻿namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// Types for confirmation dialogs
+    /// Types for confirmation dialogs.
     /// </summary>
     public enum ConfirmationDialogType
     {

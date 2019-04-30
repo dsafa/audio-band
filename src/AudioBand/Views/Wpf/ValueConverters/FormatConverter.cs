@@ -5,7 +5,7 @@ using System.Windows.Data;
 namespace AudioBand.Views.Wpf.ValueConverters
 {
     /// <summary>
-    /// Converts string with string format
+    /// Converts string with string format..
     /// </summary>
     [ValueConversion(typeof(object), typeof(string), ParameterType = typeof(string))]
     public class FormatConverter : IValueConverter

@@ -50,10 +50,10 @@ namespace AudioBand.Extensions
         /// <summary>
         /// Scale an image to fill as much space as possible while maintaining aspect ratio.
         /// </summary>
-        /// <param name="image">The image to scale</param>
+        /// <param name="image">The image to scale.</param>
         /// <param name="targetWidth">The target width.</param>
         /// <param name="targetHeight">The target height.</param>
-        /// <returns>The scaled image</returns>
+        /// <returns>The scaled image.</returns>
         public static Image GetScaledSize(this IImage image, int targetWidth, int targetHeight)
         {
             var size = Scale(image.DesiredSize, new Size(targetWidth, targetHeight));

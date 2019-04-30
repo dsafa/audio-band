@@ -5,7 +5,7 @@ using Svg;
 namespace AudioBand.Resources
 {
     /// <summary>
-    /// Image class for svgs
+    /// Image class for svgs.
     /// </summary>
     public class SvgImage : IImage
     {

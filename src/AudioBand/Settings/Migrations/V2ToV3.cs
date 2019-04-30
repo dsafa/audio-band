@@ -7,7 +7,7 @@ using AutoMapper;
 namespace AudioBand.Settings.Migrations
 {
     /// <summary>
-    /// Migrates settings from v2 to v3
+    /// Migrates settings from v2 to v3.
     /// </summary>
     public class V2ToV3 : ISettingsMigrator
     {

@@ -20,7 +20,7 @@
         /// <summary>
         /// Log an info level message.
         /// </summary>
-        /// <param name="message">Message to be logged</param>
+        /// <param name="message">Message to be logged.</param>
         void Info(string message);
 
         /// <summary>
@@ -32,7 +32,7 @@
         /// <summary>
         /// Log a warning level message.
         /// </summary>
-        /// <param name="message">Message to be logged</param>
+        /// <param name="message">Message to be logged.</param>
         void Warn(string message);
 
         /// <summary>
@@ -44,7 +44,7 @@
         /// <summary>
         /// Log an error level message.
         /// </summary>
-        /// <param name="message">Message to be logged</param>
+        /// <param name="message">Message to be logged.</param>
         void Error(string message);
 
         /// <summary>

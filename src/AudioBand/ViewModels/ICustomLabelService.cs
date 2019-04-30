@@ -3,7 +3,7 @@
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// Represents a service to add and remove new custom labels
+    /// Represents a service to add and remove new custom labels.
     /// </summary>
     public interface ICustomLabelService
     {
@@ -35,7 +35,7 @@ namespace AudioBand.ViewModels
         void RemoveCustomTextLabel(CustomLabelVM label);
 
         /// <summary>
-        /// Clears all labels
+        /// Clears all labels.
         /// </summary>
         void ClearCustomLabels();
     }
