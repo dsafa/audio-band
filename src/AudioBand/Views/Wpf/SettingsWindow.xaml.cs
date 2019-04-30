@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
@@ -16,7 +15,7 @@ namespace AudioBand.Views.Wpf
     /// <summary>
     /// The code behind for the settings window.
     /// </summary>
-    public partial class SettingsWindow : ISettingsWindow
+    public partial class SettingsWindow
     {
         private static readonly HashSet<string> LateBindAssemblies = new HashSet<string>
         {
@@ -28,140 +27,38 @@ namespace AudioBand.Views.Wpf
 
         private readonly IDialogService _dialogService;
         private readonly IMessageBus _messageBus;
-        private bool _shouldSave;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsWindow"/> class
         /// with the settings viewmodel.
         /// </summary>
         /// <param name="vm">The settings window viewmodel.</param>
-        /// <param name="audioBandVM">The audioband view model.</param>
-        /// <param name="albumArtPopupVM">The album art popup view model.</param>
-        /// <param name="albumArtVM">The album art view model.</param>
-        /// <param name="customLabelsVM">The custom labels view model.</param>
-        /// <param name="nextButtonVM">The next button view model.</param>
-        /// <param name="playPauseButtonVM">The play/pause button view model.</param>
-        /// <param name="previousButtonVM">The previous button view model.</param>
-        /// <param name="progressBarVM">The progress bar view model.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="messageBus">The message bus.</param>
-        public SettingsWindow(
-            SettingsWindowVM vm,
-            AudioBandVM audioBandVM,
-            AlbumArtPopupVM albumArtPopupVM,
-            AlbumArtVM albumArtVM,
-            CustomLabelsVM customLabelsVM,
-            NextButtonVM nextButtonVM,
-            PlayPauseButtonVM playPauseButtonVM,
-            PreviousButtonVM previousButtonVM,
-            ProgressBarVM progressBarVM,
-            IDialogService dialogService,
-            IMessageBus messageBus)
+        public SettingsWindow(SettingsWindowVM vm, IDialogService dialogService, IMessageBus messageBus)
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             ElementHost.EnableModelessKeyboardInterop(this);
 
-            CancelCloseCommand = new RelayCommand(CancelCloseCommandOnExecute);
-            SaveCloseCommand = new RelayCommand(SaveCloseCommandOnExecute);
             OpenAboutDialogCommand = new RelayCommand(OpenAboutCommandOnExecute);
-
-            AudioBandVM = audioBandVM;
-            AlbumArtPopupVM = albumArtPopupVM;
-            AlbumArtVM = albumArtVM;
-            CustomLabelsVM = customLabelsVM;
-            NextButtonVM = nextButtonVM;
-            PlayPauseButtonVM = playPauseButtonVM;
-            PreviousButtonVM = previousButtonVM;
-            ProgressBarVM = progressBarVM;
 
             InitializeComponent();
             DataContext = vm;
             _dialogService = dialogService;
             _messageBus = messageBus;
+            _messageBus.Subscribe<SettingsWindowMessage>(SettingsWindowMessageHandler);
 
             Activated += OnActivated;
+            Closing += OnClosing;
         }
-
-        /// <inheritdoc/>
-        public event EventHandler Saved;
-
-        /// <inheritdoc/>
-        public event EventHandler Canceled;
-
-        /// <summary>
-        /// Gets the command to cancel changes and close.
-        /// </summary>
-        public RelayCommand CancelCloseCommand { get; }
-
-        /// <summary>
-        /// Gets the command to save changes and close.
-        /// </summary>
-        public RelayCommand SaveCloseCommand { get; }
 
         /// <summary>
         /// Gets the command to open the about dialog.
         /// </summary>
         public RelayCommand OpenAboutDialogCommand { get; }
 
-        /// <inheritdoc/>
-        public AudioBandVM AudioBandVM { get; private set; }
-
-        /// <inheritdoc/>
-        public AlbumArtPopupVM AlbumArtPopupVM { get; private set; }
-
-        /// <inheritdoc/>
-        public AlbumArtVM AlbumArtVM { get; private set; }
-
-        /// <inheritdoc/>
-        public CustomLabelsVM CustomLabelsVM { get; private set; }
-
-        /// <inheritdoc/>
-        public NextButtonVM NextButtonVM { get; private set; }
-
-        /// <inheritdoc/>
-        public PlayPauseButtonVM PlayPauseButtonVM { get; private set; }
-
-        /// <inheritdoc/>
-        public PreviousButtonVM PreviousButtonVM { get; private set; }
-
-        /// <inheritdoc/>
-        public ProgressBarVM ProgressBarVM { get; private set; }
-
-        /// <inheritdoc/>
-        public ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM { get; } = new ObservableCollection<AudioSourceSettingsVM>();
-
-        /// <inheritdoc/>
-        public void ShowWindow()
-        {
-            _shouldSave = false;
-            Show();
-            Activate();
-        }
-
-        /// <inheritdoc/>
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            // Hide instead of closing the window
-            e.Cancel = true;
-
-            if (_shouldSave)
-            {
-                _messageBus.Publish(EndEditMessage.AcceptEdits);
-                Saved?.Invoke(this, EventArgs.Empty);
-                Hide();
-                return;
-            }
-
-            if (_dialogService.ShowConfirmationDialog(ConfirmationDialogType.DiscardChanges))
-            {
-                _messageBus.Publish(EndEditMessage.CancelEdits);
-                Canceled?.Invoke(this, EventArgs.Empty);
-                Hide();
-            }
-        }
-
         /// <summary>
-        /// Manually handle tab navigation since deskband focus is weird.
+        /// Manually handle tab navigation. Tab not working maybe because accelerators aren't translated.
         /// </summary>
         /// <param name="e">Key event.</param>
         protected override void OnPreviewKeyUp(KeyEventArgs e)
@@ -199,20 +96,28 @@ namespace AudioBand.Views.Wpf
             _messageBus.Publish(FocusChangedMessage.FocusCaptured);
         }
 
-        private void SaveCloseCommandOnExecute(object o)
-        {
-            _shouldSave = true;
-            Close();
-        }
-
-        private void CancelCloseCommandOnExecute(object o)
-        {
-            Close();
-        }
-
         private void OpenAboutCommandOnExecute(object o)
         {
             _dialogService.ShowAboutDialog();
+        }
+
+        private void SettingsWindowMessageHandler(SettingsWindowMessage msg)
+        {
+            switch (msg)
+            {
+                case SettingsWindowMessage.CloseWindow:
+                    Hide();
+                    break;
+                case SettingsWindowMessage.OpenWindow:
+                    Show();
+                    Activate();
+                    break;
+            }
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 }

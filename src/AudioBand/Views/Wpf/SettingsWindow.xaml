@@ -14,7 +14,7 @@
             mc:Ignorable="d" 
             x:Name="Window"
             d:DesignHeight="600" d:DesignWidth="400"
-            d:DataContext="{d:DesignInstance viewmodels:SettingsWindowVM}"
+            d:DataContext="{d:DesignInstance viewmodels:SettingsWindowVM, IsDesignTimeCreatable=True}"
             Title="Audio Band Settings"
             Icon="pack://application:,,,/AudioBand;component/audioband.ico"
             Height="700"
@@ -26,6 +26,11 @@
     <i:Interaction.Behaviors>
         <behaviours:AppUserModelID/>
     </i:Interaction.Behaviors>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding CloseCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <fw:AcrylicWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -49,7 +54,7 @@
                                  Command="{Binding SelectViewModelCommand}">
                         <RadioButton.CommandParameter>
                             <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding ElementName="Window" Path="AudioBandVM"/>
+                                <Binding Path="ViewModels.AudioBandVM"/>
                                 <Binding Source="{StaticResource GeneralSettingsTab}"/>
                             </MultiBinding>
                         </RadioButton.CommandParameter>
@@ -62,7 +67,7 @@
                                  Command="{Binding SelectViewModelCommand}">
                         <RadioButton.CommandParameter>
                             <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding ElementName="Window" Path="PlayPauseButtonVM"/>
+                                <Binding Path="ViewModels.PlayPauseButtonVM"/>
                                 <Binding Source="{StaticResource PlayPauseButtonTab}"/>
                             </MultiBinding>
                         </RadioButton.CommandParameter>
@@ -75,7 +80,7 @@
                                  Command="{Binding SelectViewModelCommand}">
                         <RadioButton.CommandParameter>
                             <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding ElementName="Window" Path="NextButtonVM"/>
+                                <Binding Path="ViewModels.NextButtonVM"/>
                                 <Binding Source="{StaticResource NextButtonTab}"/>
                             </MultiBinding>
                         </RadioButton.CommandParameter>
@@ -88,7 +93,7 @@
                                  Command="{Binding SelectViewModelCommand}">
                         <RadioButton.CommandParameter>
                             <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding ElementName="Window" Path="PreviousButtonVM"/>
+                                <Binding Path="ViewModels.PreviousButtonVM"/>
                                 <Binding Source="{StaticResource PrevButtonTab}"/>
                             </MultiBinding>
                         </RadioButton.CommandParameter>
@@ -101,7 +106,7 @@
                                  Command="{Binding SelectViewModelCommand}">
                         <RadioButton.CommandParameter>
                             <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding ElementName="Window" Path="ProgressBarVM"/>
+                                <Binding Path="ViewModels.ProgressBarVM"/>
                                 <Binding Source="{StaticResource ProgressBarTab}"/>
                             </MultiBinding>
                         </RadioButton.CommandParameter>
@@ -114,7 +119,7 @@
                                  Command="{Binding SelectViewModelCommand}">
                         <RadioButton.CommandParameter>
                             <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding ElementName="Window" Path="AlbumArtVM"/>
+                                <Binding Path="ViewModels.AlbumArtVM"/>
                                 <Binding Source="{StaticResource AlbumArtTab}"/>
                             </MultiBinding>
                         </RadioButton.CommandParameter>
@@ -127,7 +132,7 @@
                                  Command="{Binding SelectViewModelCommand}">
                         <RadioButton.CommandParameter>
                             <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding ElementName="Window" Path="AlbumArtPopupVM"/>
+                                <Binding Path="ViewModels.AlbumArtPopupVM"/>
                                 <Binding Source="{StaticResource AlbumArtPopupTab}"/>
                             </MultiBinding>
                         </RadioButton.CommandParameter>
@@ -148,7 +153,7 @@
                                 </TextBlock>
                                 <Button Grid.Column="1" Style="{StaticResource RevealButton}"
                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
-                                        Command="{Binding ElementName=Window, Path=CustomLabelsVM.AddLabelCommand}"
+                                        Command="{Binding Path=ViewModels.CustomLabelsVM.AddLabelCommand}"
                                         Content="{iconPacks:Material Kind=Plus}">
                                     <Button.ToolTip>
                                         <TextBlock Text="{StaticResource AddNewLabelHelpText}"/>
@@ -156,7 +161,7 @@
                                 </Button>
                             </Grid>
                         </Expander.Header>
-                        <ListBox Background="Transparent" ItemsSource="{Binding ElementName=Window, Path=CustomLabelsVM.CustomLabels}"
+                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.CustomLabelsVM.CustomLabels}"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}"
                                  KeyboardNavigation.TabNavigation="Local">
                             <ListBox.ItemTemplate>
@@ -181,7 +186,7 @@
                                                         HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                                             <Button Grid.Column="2" Style="{StaticResource RevealButton}"
                                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
-                                                        Command="{Binding ElementName=Window, Path=CustomLabelsVM.RemoveLabelCommand}"
+                                                        Command="{Binding ElementName=Window, Path=DataContext.ViewModels.CustomLabelsVM.RemoveLabelCommand}"
                                                         CommandParameter="{Binding}"
                                                         Content="{iconPacks:Material Kind=Close}">
                                                 <Button.ToolTip>
@@ -198,7 +203,7 @@
                         <Expander.Header>
                             <TextBlock Padding="0, 0, 10, 0" FontWeight="Normal" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"/>
                         </Expander.Header>
-                        <ListBox Background="Transparent" ItemsSource="{Binding ElementName=Window, Path=AudioSourceSettingsVM}"
+                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsVM}"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -252,10 +257,10 @@
                         Command="{Binding RenameProfileCommand}"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-                <Button Content="{StaticResource CancelButtonText}" IsCancel="True" Width="80"
-                        Command="{Binding ElementName=Window, Path=CancelCloseCommand}"/>
-                <Button Content="{StaticResource SaveButtonText}" IsDefault="True" Width="80"
-                        Command="{Binding ElementName=Window, Path=SaveCloseCommand}"/>
+                <Button Content="{StaticResource CloseButtonText}" IsCancel="True" Width="80"
+                        Command="{Binding CloseCommand}"/>
+                <Button Content="{StaticResource SaveButtonText}" Width="80"
+                        Command="{Binding SaveCommand}"/>
             </StackPanel>
         </Grid>
         <Grid Background="White" SnapsToDevicePixels="True">
@@ -275,7 +280,7 @@
             <TextBlock x:Name="ViewHeader" Grid.Row="1" Margin="20, 0" FontWeight="Light" LineHeight="40"
                        Text="{Binding SelectedViewHeader}" FontSize="{StaticResource HeaderFontSize}"/>
             <ScrollViewer VerticalScrollBarVisibility="Auto" IsTabStop="False" Grid.Row="2">
-                <ContentControl Content="{Binding SelectedVM}" BorderThickness="0" IsTabStop="False" Margin="20">
+                <ContentControl Content="{Binding SelectedViewModel}" BorderThickness="0" IsTabStop="False" Margin="20">
                 <ContentControl.Resources>
                     <DataTemplate DataType="{x:Type viewmodels:AudioBandVM}">
                         <local:GeneralSettingsView DataContext="{Binding}"/>
@@ -300,13 +305,6 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:AlbumArtPopupVM}">
                         <local:AlbumPopupSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:CustomLabelsVM}">
-                        <DockPanel>
-                            <Button Content="{StaticResource NewLabelButtonText}" 
-                                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    Command="{Binding ElementName=Window, Path=CustomLabelsVM.AddLabelCommand}"/>
-                        </DockPanel>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:AudioSourceSettingsVM}">
                         <local:AudioSourceSettingsView DataContext="{Binding}"/>

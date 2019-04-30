@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using AudioBand.Logging;
 using NLog;
@@ -43,18 +44,15 @@ namespace AudioBand.Messages
         /// <inheritdoc />
         public void Publish<TMessage>(TMessage message, [CallerMemberName] string caller = "")
         {
-            Logger.Debug("Publishing message {message}", message);
-
             if (!_handlers.TryGetValue(typeof(TMessage), out var handlers))
             {
                 return;
             }
 
-            Logger.Debug("{publisher} -> {@handlers}", caller, handlers);
-
-            foreach (var handler in handlers)
+            foreach (var handler in handlers.Cast<Action<TMessage>>())
             {
-                ((Action<TMessage>)handler)(message);
+                Logger.Debug("Message published {caller} -> {info}", caller, new { Target = handler.Target.GetType(), Handler = handler.Method.Name, Message = message });
+                handler(message);
             }
         }
     }

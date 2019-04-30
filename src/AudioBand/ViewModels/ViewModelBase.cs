@@ -300,18 +300,5 @@ namespace AudioBand.ViewModels
                 AlsoNotifyMap.Add(propertyInfo.Name, attr.AlsoNotify);
             }
         }
-
-        private void EditMessageOnPublished(EndEditMessage message)
-        {
-            switch (message)
-            {
-                case EndEditMessage.AcceptEdits:
-                    EndEdit();
-                    break;
-                case EndEditMessage.CancelEdits:
-                    CancelEdit();
-                    break;
-            }
-        }
     }
 }

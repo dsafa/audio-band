@@ -60,6 +60,7 @@
     <sys:String x:Key="NewProfileButtonText">New Profile</sys:String>
     <sys:String x:Key="DeleteProfileButtonText">Delete Profile</sys:String>
     <sys:String x:Key="RenameProfileButtonText">Rename Profile</sys:String>
+    <sys:String x:Key="CloseButtonText">Close</sys:String>
 
     <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
     <sys:String x:Key="DefaultImageHelpText">Reset image to its default.</sys:String>
@@ -87,7 +88,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="DeleteLabelDialogTitle">Delete label</sys:String>
     <sys:String x:Key="DeleteLabelDialogBody">Are you sure you want to delete the label '{0}'?</sys:String>
     <sys:String x:Key="DiscardChangesDialogTitle">Discard changes</sys:String>
-    <sys:String x:Key="DiscardChangesDialogBody">Are you sure you want to discard all changes?</sys:String>
+    <sys:String x:Key="DiscardChangesDialogBody">Are you sure you want to discard all unsaved changes?</sys:String>
     <sys:String x:Key="AudioBandAboutDialogDescription">Audio Band is an application that adds music player capabilities to the windows taskbar. Created with help from the open source community.</sys:String>
     <sys:String x:Key="AudioBandAboutDialogProjectPre">Check out the project site to report issues and get more help</sys:String>
     <sys:String x:Key="AudioBandAboutDialogLicenseLinkText">License</sys:String>

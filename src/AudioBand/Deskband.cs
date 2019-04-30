@@ -26,13 +26,14 @@ namespace AudioBand
     {
         private MainControl _mainControl;
         private Container _container;
+        private Window _settingsWindow;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Deskband"/> class.
         /// </summary>
         public Deskband()
         {
-            // Assign a fake main window since some libraries require one
+            // Fluentwpf requires an application window
             if (System.Windows.Application.Current?.MainWindow == null)
             {
                 new System.Windows.Application().MainWindow = new Window();
@@ -41,6 +42,8 @@ namespace AudioBand
             AudioBandLogManager.Initialize();
             AppDomain.CurrentDomain.UnhandledException += (sender, args) => AudioBandLogManager.GetLogger("AudioBand").Error((Exception)args.ExceptionObject, "Unhandled Exception");
             ConfigureDependencies();
+
+            _settingsWindow = _container.GetInstance<SettingsWindow>();
             _mainControl = _container.GetInstance<MainControl>();
             _container.GetInstance<IMessageBus>().Subscribe<FocusChangedMessage>(FocusCaptured);
         }
@@ -54,7 +57,9 @@ namespace AudioBand
             base.DeskbandOnClosed();
             _mainControl.CloseAudioband();
             _mainControl.Hide();
+            _mainControl.Dispose();
             _mainControl = null;
+            _settingsWindow = null;
         }
 
         private void ConfigureDependencies()
@@ -71,19 +76,18 @@ namespace AudioBand
                 _container.Register<IResourceLoader, ResourceLoader>(Lifestyle.Singleton);
                 _container.Register<ICustomLabelService, CustomLabelService>(Lifestyle.Singleton);
                 _container.Register<IDialogService, DialogService>(Lifestyle.Singleton);
-                _container.Register<ISettingsWindow, SettingsWindow>(Lifestyle.Transient);
+                _container.Register<IViewModelContainer, ViewModelContainer>(Lifestyle.Singleton);
 
-                _container.Register<AboutVM>();
-                _container.Register<AlbumArtVM>();
-                _container.Register<AlbumArtPopupVM>();
-                _container.Register<AudioBandVM>();
-                _container.Register<CustomLabelVM>();
-                _container.Register<CustomLabelsVM>();
-                _container.Register<NextButtonVM>();
-                _container.Register<PlayPauseButtonVM>();
-                _container.Register<PreviousButtonVM>();
-                _container.Register<ProgressBarVM>();
-                _container.Register<SettingsWindowVM>();
+                _container.Register<AboutVM>(Lifestyle.Singleton);
+                _container.Register<AlbumArtVM>(Lifestyle.Singleton);
+                _container.Register<AlbumArtPopupVM>(Lifestyle.Singleton);
+                _container.Register<AudioBandVM>(Lifestyle.Singleton);
+                _container.Register<CustomLabelsVM>(Lifestyle.Singleton);
+                _container.Register<NextButtonVM>(Lifestyle.Singleton);
+                _container.Register<PlayPauseButtonVM>(Lifestyle.Singleton);
+                _container.Register<PreviousButtonVM>(Lifestyle.Singleton);
+                _container.Register<ProgressBarVM>(Lifestyle.Singleton);
+                _container.Register<SettingsWindowVM>(Lifestyle.Singleton);
 
                 _container.Verify();
             }
