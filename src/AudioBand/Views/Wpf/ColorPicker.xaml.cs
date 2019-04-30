@@ -6,7 +6,7 @@ using AudioBand.ViewModels;
 namespace AudioBand.Views.Wpf
 {
     /// <summary>
-    /// Interaction logic for ColorPicker.xaml
+    /// Interaction logic for ColorPicker.xaml.
     /// </summary>
     public partial class ColorPicker : UserControl
     {
@@ -16,7 +16,7 @@ namespace AudioBand.Views.Wpf
         public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(nameof(Color), typeof(Color), typeof(ColorPicker));
 
         /// <summary>
-        /// Dependency property for <see cref="DialogService"/>
+        /// Dependency property for <see cref="DialogService"/>.
         /// </summary>
         public static readonly DependencyProperty DialogServiceProperty = DependencyProperty.Register(nameof(DialogService), typeof(IDialogService), typeof(ColorPicker));
 

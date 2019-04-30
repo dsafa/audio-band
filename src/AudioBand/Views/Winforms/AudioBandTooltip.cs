@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace AudioBand.Views.Winforms
 {
     /// <summary>
-    /// Custom tooltip class
+    /// Custom tooltip class.
     /// </summary>
     public abstract class AudioBandTooltip : ToolTip, IBindableComponent
     {
@@ -29,7 +29,7 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Flags for the positioning of the tooltip
+        /// Flags for the positioning of the tooltip.
         /// </summary>
         [Flags]
         protected enum PositionType
@@ -76,11 +76,11 @@ namespace AudioBand.Views.Winforms
         protected abstract void OnPopup(PopupEventArgs popupEventArgs);
 
         /// <summary>
-        /// Shows the tooltip without focus being required
+        /// Shows the tooltip without focus being required.
         /// </summary>
         /// <param name="parent">The parent control to show the tooltip over.</param>
         /// <param name="positionType">The type of positioning used to interpret <paramref name="position"/>.</param>
-        /// <param name="position">The position of the tooltip</param>
+        /// <param name="position">The position of the tooltip.</param>
         protected void Show(Control parent, PositionType positionType, Point position)
         {
             _setToolMethod.Invoke(this, new object[] { parent, _name, positionType, position });

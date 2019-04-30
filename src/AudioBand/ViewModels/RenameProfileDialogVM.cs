@@ -76,7 +76,7 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Gets the ok command
+        /// Gets the ok command.
         /// </summary>
         public RelayCommand OkCommand { get; }
 

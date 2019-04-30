@@ -308,7 +308,7 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Get the text position when not scrolling
+        /// Get the text position when not scrolling.
         /// </summary>
         /// <returns>The x position.</returns>
         private int GetNormalTextPos()

@@ -9,7 +9,7 @@ namespace AudioBand.Views.Wpf.ValueConverters
     /// </summary>
     /// <remarks>
     /// There are issues binding a number to the value property of a numericupdown control (double?).
-    /// Example message: Cannot convert from type 'UInt32' to type 'System.Nullable`1[System.Double]
+    /// Example message: Cannot convert from type 'UInt32' to type 'System.Nullable`1[System.Double].
     /// </remarks>
     internal class NumberToNumericUpDownConverter : IValueConverter
     {

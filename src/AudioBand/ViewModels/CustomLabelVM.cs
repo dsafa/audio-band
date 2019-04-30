@@ -19,8 +19,8 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomLabelVM"/> class.
         /// </summary>
-        /// <param name="model">The custom label</param>
-        /// <param name="dialogService">The dialog service</param>
+        /// <param name="model">The custom label.</param>
+        /// <param name="dialogService">The dialog service.</param>
         public CustomLabelVM(CustomLabel model, IDialogService dialogService)
             : base(model)
         {
@@ -133,7 +133,7 @@ namespace AudioBand.ViewModels
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
 
         /// <summary>
-        /// Gets the dialog service
+        /// Gets the dialog service.
         /// </summary>
         public IDialogService DialogService { get; private set; }
     }

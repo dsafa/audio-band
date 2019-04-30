@@ -6,7 +6,7 @@ using AudioSourceHost;
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// View model for <see cref="AudioSourceSetting"/>. Represents one key-value pair
+    /// View model for <see cref="AudioSourceSetting"/>. Represents one key-value pair.
     /// </summary>
     public class AudioSourceSettingVM : ViewModelBase<AudioSourceSetting>
     {
@@ -15,7 +15,7 @@ namespace AudioBand.ViewModels
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceSettingVM"/> class
-        /// with the model, setting information and if it was saved,
+        /// with the model, setting information and if it was saved.
         /// </summary>
         /// <param name="audioSource">The associated <see cref="IInternalAudioSource"/>.</param>
         /// <param name="model">The <see cref="AudioSource"/>.</param>
@@ -94,7 +94,7 @@ namespace AudioBand.ViewModels
         public int Priority => _settingAttribute.Priority;
 
         /// <summary>
-        /// Applies the value to the audio source
+        /// Applies the value to the audio source.
         /// </summary>
         public void ApplyChanges()
         {

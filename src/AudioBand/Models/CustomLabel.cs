@@ -38,7 +38,7 @@ namespace AudioBand.Models
             /// <summary>
             /// Align the text in the center.
             /// </summary>
-            Center
+            Center,
         }
 
         /// <summary>

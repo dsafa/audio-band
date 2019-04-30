@@ -39,8 +39,8 @@ namespace AudioBand
         /// <param name="options">The deskband options.</param>
         /// <param name="info">The taskbar info.</param>
         /// <param name="track">The track model.</param>
-        /// <param name="appsettings">The app settings</param>
-        /// <param name="audiosourceMananger">The audio source manager</param>
+        /// <param name="appsettings">The app settings.</param>
+        /// <param name="audiosourceMananger">The audio source manager.</param>
         /// <param name="viewModelContainer">The settings window.</param>
         /// <param name="labelService">The label service.</param>
         /// <param name="messageBus">The message bus.</param>
@@ -82,7 +82,7 @@ namespace AudioBand
         public TaskbarInfo TaskbarInfo { get; }
 
         /// <summary>
-        /// Save on close
+        /// Save on close.
         /// </summary>
         public void CloseAudioband()
         {
@@ -98,7 +98,7 @@ namespace AudioBand
         }
 
         /// <summary>
-        /// Update deskband options when the size changes
+        /// Update deskband options when the size changes.
         /// </summary>
         /// <param name="eventArgs">.</param>
         protected override void OnResize(EventArgs eventArgs)

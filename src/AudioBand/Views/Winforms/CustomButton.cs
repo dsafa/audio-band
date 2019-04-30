@@ -9,7 +9,7 @@ using AudioBand.Resources;
 namespace AudioBand.Views.Winforms
 {
     /// <summary>
-    /// Custom button
+    /// Custom button.
     /// </summary>
     public class CustomButton : AudioBandControl
     {
@@ -33,19 +33,19 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Gets or sets the buttons image when hovered
+        /// Gets or sets the buttons image when hovered.
         /// </summary>
         [Bindable(BindableSupport.Yes)]
         public IImage HoveredImage { get; set; }
 
         /// <summary>
-        /// Gets or sets the buttons image when clicked
+        /// Gets or sets the buttons image when clicked.
         /// </summary>
         [Bindable(BindableSupport.Yes)]
         public IImage ClickedImage { get; set; }
 
         /// <summary>
-        /// Gets or sets the default back color
+        /// Gets or sets the default back color.
         /// </summary>
         [Bindable(BindableSupport.Yes)]
         public Color DefaultBackgroundColor
@@ -60,13 +60,13 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Gets or sets the hover back color
+        /// Gets or sets the hover back color.
         /// </summary>
         [Bindable(BindableSupport.Yes)]
         public Color HoveredBackgroundColor { get; set; } = Color.FromArgb(25, 255, 255, 255);
 
         /// <summary>
-        /// Gets or sets the clicked back color
+        /// Gets or sets the clicked back color.
         /// </summary>
         [Bindable(BindableSupport.Yes)]
         public Color ClickedBackgroundColor { get; set; } = Color.FromArgb(15, 255, 255, 255);

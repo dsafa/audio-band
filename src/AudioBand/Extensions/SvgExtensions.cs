@@ -14,7 +14,7 @@ namespace AudioBand.Extensions
         /// Convert to a bitmap.
         /// </summary>
         /// <param name="svg">Svg to convert.</param>
-        /// <returns>A bitmap representation of the svg</returns>
+        /// <returns>A bitmap representation of the svg.</returns>
         public static Bitmap ToBitmap(this SvgDocument svg)
         {
             return ToBitmap(svg, (int)svg.Width.Value, (int)svg.Height.Value);
@@ -26,7 +26,7 @@ namespace AudioBand.Extensions
         /// <param name="svg">Svg to convert.</param>
         /// <param name="width">Width of the converted image.</param>
         /// <param name="height">Height of the converted image.</param>
-        /// <returns>A bitmap representation of the svg</returns>
+        /// <returns>A bitmap representation of the svg.</returns>
         public static Bitmap ToBitmap(this SvgDocument svg, int width, int height)
         {
             return svg.Draw(width, height);

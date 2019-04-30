@@ -28,7 +28,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <summary>
-        /// Gets or sets the track Name
+        /// Gets or sets the track Name.
         /// </summary>
         /// <value>The name of the track.</value>
         public string TrackName { get; set; }
@@ -52,7 +52,7 @@ namespace AudioBand.AudioSource
         public string Album { get; set; }
 
         /// <summary>
-        /// Gets or sets the length of the track
+        /// Gets or sets the length of the track.
         /// </summary>
         /// <value>The length of the track.</value>
         public TimeSpan TrackLength { get; set; }

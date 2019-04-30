@@ -6,7 +6,7 @@ using AudioBand.Models;
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// View model for all audio source settings
+    /// View model for all audio source settings.
     /// </summary>
     public class AudioSourceSettingsVM : ViewModelBase<AudioSourceSettings>
     {

@@ -23,14 +23,14 @@ namespace AudioBand.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Gets the logger for the model
+        /// Gets the logger for the model.
         /// </summary>
         protected ILogger Logger { get; }
 
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event.
         /// </summary>
-        /// <param name="propertyName">Name of the property that changed</param>
+        /// <param name="propertyName">Name of the property that changed.</param>
         protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

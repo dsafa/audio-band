@@ -8,7 +8,7 @@ namespace AudioBand.Views.Wpf.ValueConverters
     /// <summary>
     /// Reverses the direction of a <see cref="IValueConverter"/>.
     /// </summary>
-    /// <remarks>https://stackoverflow.com/a/19916654</remarks>
+    /// <remarks>https://stackoverflow.com/a/19916654.</remarks>
     [ContentProperty("Converter")]
     public class ReverseConverter : IValueConverter
     {

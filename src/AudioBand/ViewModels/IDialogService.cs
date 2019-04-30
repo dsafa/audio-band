@@ -29,15 +29,15 @@ namespace AudioBand.ViewModels
         void ShowAboutDialog();
 
         /// <summary>
-        /// Show the rename dialog
+        /// Show the rename dialog.
         /// </summary>
-        /// <param name="currentName">The current name</param>
-        /// <param name="profiles">The list of profiles</param>
+        /// <param name="currentName">The current name.</param>
+        /// <param name="profiles">The list of profiles.</param>
         /// <returns>Null if canceled, otherwise the new name.</returns>
         string ShowRenameDialog(string currentName, IEnumerable<string> profiles);
 
         /// <summary>
-        /// Show the image picker dialog
+        /// Show the image picker dialog.
         /// </summary>
         /// <returns>The path of the image.</returns>
         string ShowImagePickerDialog();

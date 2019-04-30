@@ -16,7 +16,7 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Called when a new rating is being set.
         /// </summary>
-        /// <param name="newRating">The new rating of the track</param>
+        /// <param name="newRating">The new rating of the track.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous set rating operation.</returns>
         Task SetTrackRatingAsync(TrackRating newRating);
     }

@@ -46,7 +46,7 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Gets or sets the hover color
+        /// Gets or sets the hover color.
         /// </summary>
         [Browsable(true)]
         [Bindable(BindableSupport.Yes)]

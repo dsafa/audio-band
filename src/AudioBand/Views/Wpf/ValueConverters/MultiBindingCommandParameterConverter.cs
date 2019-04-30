@@ -5,7 +5,7 @@ using System.Windows.Data;
 namespace AudioBand.Views.Wpf.ValueConverters
 {
     /// <summary>
-    /// Converts multi binding for command parameter
+    /// Converts multi binding for command parameter.
     /// </summary>
     [ValueConversion(typeof(object[]), typeof(object[]))]
     public class MultiBindingCommandParameterConverter : IMultiValueConverter

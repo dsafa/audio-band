@@ -7,14 +7,14 @@ using AudioBand.Resources;
 namespace AudioBand.Views.Winforms
 {
     /// <summary>
-    /// Control for the album art
+    /// Control for the album art.
     /// </summary>
     public class AlbumArtDisplay : AudioBandControl
     {
         private IImage _albumArt;
 
         /// <summary>
-        /// Gets or sets the album art
+        /// Gets or sets the album art.
         /// </summary>
         [Bindable(BindableSupport.Yes)]
         public IImage AlbumArt

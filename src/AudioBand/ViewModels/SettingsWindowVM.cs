@@ -119,7 +119,7 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Gets the list of profiles
+        /// Gets the list of profiles.
         /// </summary>
         public ObservableCollection<string> Profiles { get; }
 

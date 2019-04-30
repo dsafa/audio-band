@@ -5,7 +5,7 @@ using System.Windows.Interop;
 namespace AudioBand.Views.Wpf.Behaviours
 {
     /// <summary>
-    /// Attached behaviour that changes the application user model id so that the window is separate from explorer in the taskbar
+    /// Attached behaviour that changes the application user model id so that the window is separate from explorer in the taskbar.
     /// </summary>
     public class AppUserModelID : Behavior<Window>
     {

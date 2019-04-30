@@ -14,7 +14,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
         /// <param name="resourceLoader">The resource loader.</param>
-        /// <param name="dialogService">The dialog service</param>
+        /// <param name="dialogService">The dialog service.</param>
         public PreviousButtonVM(IAppSettings appSettings, IResourceLoader resourceLoader, IDialogService dialogService)
             : base(appSettings, resourceLoader, dialogService, appSettings.PreviousButton)
         {

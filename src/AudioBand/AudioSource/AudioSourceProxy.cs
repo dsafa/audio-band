@@ -114,7 +114,7 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Get or set a setting.
         /// </summary>
-        /// <param name="settingName">Name of the setting</param>
+        /// <param name="settingName">Name of the setting.</param>
         /// <returns>The setting value.</returns>
         public object this[string settingName]
         {

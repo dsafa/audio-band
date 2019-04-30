@@ -6,7 +6,7 @@ using System.Windows.Data;
 namespace AudioBand.Views.Wpf.ValueConverters
 {
     /// <summary>
-    /// Converts a string to a <see cref="Visibility"/> value;
+    /// Converts a string to a <see cref="Visibility"/> value.
     /// </summary>
     [ValueConversion(typeof(string), typeof(Visibility))]
     public class StringToVisibilityConverter : IValueConverter
