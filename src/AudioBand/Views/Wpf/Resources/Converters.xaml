@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters">
+    <valueConverters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <valueConverters:WinColorToWpfColorConverter x:Key="ColorConverter"/>
+    <valueConverters:MultiBindingCommandParameterConverter x:Key="SelectedViewModelConverter"/>
+    <valueConverters:FormatConverter x:Key="FormatConverter"/>
+</ResourceDictionary>
