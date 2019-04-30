@@ -10,7 +10,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
-                <ResourceDictionary Source="Resources/Style.xaml"/>
+                <ResourceDictionary Source="Resources/Shared.xaml"/>
+                <ResourceDictionary Source="Resources/Converters.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -23,7 +24,7 @@
             </TextBlock.ToolTip>
         </TextBlock>
         <StackPanel Orientation="Horizontal">
-            <Button Content="{StaticResource DefaultButtonText}"
+            <Button Content="{StaticResource DefaultButtonText}" Margin="0"
                     Command="{Binding ResetImageCommand, ElementName=ImagePickerControl}">
                 <Button.ToolTip>
                     <TextBlock Text="{StaticResource DefaultImageHelpText}" />

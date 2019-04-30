@@ -49,91 +49,49 @@
             <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" IsTabStop="False" Width="300" WindowChrome.IsHitTestVisibleInChrome="True">
                 <StackPanel DockPanel.Dock="Left" Background="Transparent" x:Name="NavigationPane">
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}">
-                        <RadioButton.CommandParameter>
-                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding Path="ViewModels.AudioBandVM"/>
-                                <Binding Source="{StaticResource GeneralSettingsTab}"/>
-                            </MultiBinding>
-                        </RadioButton.CommandParameter>
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AudioBandVM}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Gear}"/>
                             <TextBlock Text="{StaticResource GeneralSettingsTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}">
-                        <RadioButton.CommandParameter>
-                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding Path="ViewModels.PlayPauseButtonVM"/>
-                                <Binding Source="{StaticResource PlayPauseButtonTab}"/>
-                            </MultiBinding>
-                        </RadioButton.CommandParameter>
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.PlayPauseButtonVM}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Play}"/>
                             <TextBlock Text="{StaticResource PlayPauseButtonTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" 
-                                 Command="{Binding SelectViewModelCommand}">
-                        <RadioButton.CommandParameter>
-                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding Path="ViewModels.NextButtonVM"/>
-                                <Binding Source="{StaticResource NextButtonTab}"/>
-                            </MultiBinding>
-                        </RadioButton.CommandParameter>
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.NextButtonVM}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Next}"/>
                             <TextBlock Text="{StaticResource NextButtonTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}">
-                        <RadioButton.CommandParameter>
-                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding Path="ViewModels.PreviousButtonVM"/>
-                                <Binding Source="{StaticResource PrevButtonTab}"/>
-                            </MultiBinding>
-                        </RadioButton.CommandParameter>
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.PreviousButtonVM}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Previous}"/>
                             <TextBlock Text="{StaticResource PrevButtonTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}">
-                        <RadioButton.CommandParameter>
-                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding Path="ViewModels.ProgressBarVM"/>
-                                <Binding Source="{StaticResource ProgressBarTab}"/>
-                            </MultiBinding>
-                        </RadioButton.CommandParameter>
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.ProgressBarVM}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Progress}"/>
                             <TextBlock Text="{StaticResource ProgressBarTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}">
-                        <RadioButton.CommandParameter>
-                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding Path="ViewModels.AlbumArtVM"/>
-                                <Binding Source="{StaticResource AlbumArtTab}"/>
-                            </MultiBinding>
-                        </RadioButton.CommandParameter>
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AlbumArtVM}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Album}"/>
                             <TextBlock Text="{StaticResource AlbumArtTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}">
-                        <RadioButton.CommandParameter>
-                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                <Binding Path="ViewModels.AlbumArtPopupVM"/>
-                                <Binding Source="{StaticResource AlbumArtPopupTab}"/>
-                            </MultiBinding>
-                        </RadioButton.CommandParameter>
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AlbumArtPopupVM}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource AlbumPopup}"/>
                             <TextBlock Text="{StaticResource AlbumArtPopupTab}"/>
@@ -166,13 +124,8 @@
                                 <DataTemplate>
                                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" 
                                                  GroupName="nav"
-                                                 Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}">
-                                        <RadioButton.CommandParameter>
-                                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                                <Binding Path="."/>
-                                                <Binding Path="Name" Converter="{StaticResource FormatConverter}" ConverterParameter="{StaticResource LabelsViewHeaderFormat}"/>
-                                            </MultiBinding>
-                                        </RadioButton.CommandParameter>
+                                                 Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
+                                                 CommandParameter="{Binding}">
                                         <Grid HorizontalAlignment="Stretch">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
@@ -207,13 +160,8 @@
                                 <DataTemplate>
                                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" 
                                                  GroupName="nav"
-                                                 Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}">
-                                        <RadioButton.CommandParameter>
-                                            <MultiBinding Converter="{StaticResource SelectedViewModelConverter}">
-                                                <Binding Path="."/>
-                                                <Binding Path="AudioSourceName" Converter="{StaticResource FormatConverter}" ConverterParameter="{StaticResource AudioSourceViewHeaderFormat}"/>
-                                            </MultiBinding>
-                                        </RadioButton.CommandParameter>
+                                                 Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
+                                                 CommandParameter="{Binding}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
@@ -257,7 +205,7 @@
             <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
                 <Button Content="{StaticResource CloseButtonText}" IsCancel="True" Width="80"
                         Command="{Binding CloseCommand}"/>
-                <Button Content="{StaticResource SaveButtonText}" Width="80"
+                <Button Content="{StaticResource ApplyButtonText}" Width="80"
                         Command="{Binding SaveCommand}"/>
             </StackPanel>
         </Grid>
@@ -275,38 +223,61 @@
                     </Hyperlink>
                 </TextBlock>
             </StackPanel>
-            <TextBlock x:Name="ViewHeader" Grid.Row="1" Margin="20, 0" FontWeight="Light" LineHeight="40"
-                       Text="{Binding SelectedViewHeader}" FontSize="{StaticResource HeaderFontSize}"/>
+            <TextBlock x:Name="ViewHeader" Grid.Row="1" Margin="20, 0" FontWeight="Light" LineHeight="40" 
+                       FontSize="{StaticResource HeaderFontSize}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:AlbumArtVM}">
+                                <Setter Property="Text" Value="{StaticResource AlbumArtTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:AlbumArtPopupVM}">
+                                <Setter Property="Text" Value="{StaticResource AlbumArtPopupTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:AudioBandVM}">
+                                <Setter Property="Text" Value="{StaticResource GeneralSettingsTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:AudioSourceSettingsVM}">
+                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:AudioSourceSettingsVM.AudioSourceName), 
+                                                                        Converter={StaticResource FormatConverter}, 
+                                                                        ConverterParameter={StaticResource AudioSourceViewHeaderFormat}}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:CustomLabelVM}">
+                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:CustomLabelVM.Name),
+                                                                        Converter={StaticResource FormatConverter},
+                                                                        ConverterParameter={StaticResource LabelsViewHeaderFormat}}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:PlayPauseButtonVM}">
+                                <Setter Property="Text" Value="{StaticResource PlayPauseButtonTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:NextButtonVM}">
+                                <Setter Property="Text" Value="{StaticResource NextButtonTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:PreviousButtonVM}">
+                                <Setter Property="Text" Value="{StaticResource PrevButtonTab}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type viewmodels:ProgressBarVM}">
+                                <Setter Property="Text" Value="{StaticResource ProgressBarTab}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <ScrollViewer x:Name="ContentScrollView" VerticalScrollBarVisibility="Auto" IsTabStop="False" Grid.Row="2">
                 <ContentControl Content="{Binding SelectedViewModel}" BorderThickness="0" IsTabStop="False" Margin="20">
                 <ContentControl.Resources>
-                    <DataTemplate DataType="{x:Type viewmodels:AudioBandVM}">
-                        <local:GeneralSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:PlayPauseButtonVM}">
-                        <local:PlayPauseButtonSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:PreviousButtonVM}">
-                        <local:PlaybackButtonSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:NextButtonVM}">
-                        <local:PlaybackButtonSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
-                        <local:CustomLabelSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:ProgressBarVM}">
-                        <local:ProgressBarSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:AlbumArtVM}">
-                        <local:AlbumArtSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:AlbumArtPopupVM}">
-                        <local:AlbumPopupSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:AudioSourceSettingsVM}">
-                        <local:AudioSourceSettingsView DataContext="{Binding}"/>
-                    </DataTemplate>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="AlbumArtSettingsView.xaml"/>
+                            <ResourceDictionary Source="AlbumPopupSettingsView.xaml"/>
+                            <ResourceDictionary Source="AudioSourceSettingsView.xaml"/>
+                            <ResourceDictionary Source="CustomLabelSettingsView.xaml"/>
+                            <ResourceDictionary Source="GeneralSettingsView.xaml"/>
+                            <ResourceDictionary Source="PlaybackButtonSettingsView.xaml"/>
+                            <ResourceDictionary Source="PlayPauseButtonSettingsView.xaml"/>
+                            <ResourceDictionary Source="ProgressBarSettingsView.xaml"/>
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
                 </ContentControl.Resources>
             </ContentControl>
         </ScrollViewer>

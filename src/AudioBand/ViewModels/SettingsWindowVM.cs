@@ -39,7 +39,7 @@ namespace AudioBand.ViewModels
             _selectedProfileName = appSettings.CurrentProfile;
             Profiles = new ObservableCollection<string>(appSettings.Profiles);
 
-            SelectViewModelCommand = new RelayCommand<object[]>(SelectViewModelOnExecute);
+            SelectViewModelCommand = new RelayCommand<ViewModelBase>(SelectViewModelOnExecute);
             DeleteProfileCommand = new RelayCommand<string>(DeleteProfileCommandOnExecute, DeleteProfileCommandCanExecute);
             DeleteProfileCommand.Observe(Profiles);
             AddProfileCommand = new RelayCommand(AddProfileCommandOnExecute);
@@ -126,7 +126,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the command to select the view model.
         /// </summary>
-        public RelayCommand<object[]> SelectViewModelCommand { get; }
+        public RelayCommand<ViewModelBase> SelectViewModelCommand { get; }
 
         /// <summary>
         /// Gets the command to delete a profile.
@@ -153,10 +153,9 @@ namespace AudioBand.ViewModels
         /// </summary>
         public RelayCommand CloseCommand { get; }
 
-        private void SelectViewModelOnExecute(object[] data)
+        private void SelectViewModelOnExecute(ViewModelBase viewModel)
         {
-            SelectedViewModel = data[0] as ViewModelBase;
-            SelectedViewHeader = data[1] as string;
+            SelectedViewModel = viewModel;
         }
 
         private void DeleteProfileCommandOnExecute(string profileName)

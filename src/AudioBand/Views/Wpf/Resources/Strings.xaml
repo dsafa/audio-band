@@ -61,6 +61,7 @@
     <sys:String x:Key="DeleteProfileButtonText">Delete Profile</sys:String>
     <sys:String x:Key="RenameProfileButtonText">Rename Profile</sys:String>
     <sys:String x:Key="CloseButtonText">Close</sys:String>
+    <sys:String x:Key="ApplyButtonText">Apply</sys:String>
 
     <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
     <sys:String x:Key="DefaultImageHelpText">Reset image to its default.</sys:String>
