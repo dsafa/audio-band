@@ -50,6 +50,7 @@ namespace AudioBand.Views.Wpf
 
             Activated += OnActivated;
             Closing += OnClosing;
+            vm.PropertyChanged += ViewModelOnPropertyChanged;
         }
 
         /// <summary>
@@ -118,6 +119,16 @@ namespace AudioBand.Views.Wpf
         private void OnClosing(object sender, CancelEventArgs e)
         {
             e.Cancel = true;
+        }
+
+        private void ViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(SettingsWindowVM.SelectedViewModel))
+            {
+                return;
+            }
+
+            ContentScrollView.ScrollToTop();
         }
     }
 }

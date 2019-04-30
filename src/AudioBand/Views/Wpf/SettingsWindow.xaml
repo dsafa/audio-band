@@ -279,7 +279,7 @@
             </StackPanel>
             <TextBlock x:Name="ViewHeader" Grid.Row="1" Margin="20, 0" FontWeight="Light" LineHeight="40"
                        Text="{Binding SelectedViewHeader}" FontSize="{StaticResource HeaderFontSize}"/>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" IsTabStop="False" Grid.Row="2">
+            <ScrollViewer x:Name="ContentScrollView" VerticalScrollBarVisibility="Auto" IsTabStop="False" Grid.Row="2">
                 <ContentControl Content="{Binding SelectedViewModel}" BorderThickness="0" IsTabStop="False" Margin="20">
                 <ContentControl.Resources>
                     <DataTemplate DataType="{x:Type viewmodels:AudioBandVM}">
