@@ -9,7 +9,6 @@
             xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
             xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
-            xmlns:converters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
             x:Class="AudioBand.Views.Wpf.SettingsWindow"
             mc:Ignorable="d" 
             x:Name="Window"
@@ -37,9 +36,8 @@
                 <ResourceDictionary Source="Resources/Style.xaml"/>
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
                 <ResourceDictionary Source="Resources/Icons.xaml"/>
+                <ResourceDictionary Source="Resources/Converters.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:MultiBindingCommandParameterConverter x:Key="SelectedViewModelConverter"/>
-            <converters:FormatConverter x:Key="FormatConverter"/>
         </ResourceDictionary>
     </fw:AcrylicWindow.Resources>
     <DockPanel LastChildFill="True" KeyboardNavigation.IsTabStop="False">
