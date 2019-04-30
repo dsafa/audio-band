@@ -1,57 +1,64 @@
-﻿<UserControl x:Class="AudioBand.Views.Wpf.PlaybackButtonSettingsView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AudioBand.Views.Wpf"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:behaviours="clr-namespace:AudioBand.Views.Wpf.Behaviours"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Style.xaml"/>
-                <ResourceDictionary Source="Resources/Strings.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <StackPanel Style="{StaticResource SettingsStackPanel}">
-        <TextBlock Text="{StaticResource ArrangementSectionText}" Style="{StaticResource TitleTextBlock}"/>
-        <TextBlock Text="{StaticResource VisibilityLabelText}" />
-        <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <DataTemplate x:Key="PlaybackButtonContent">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="Resources/Style.xaml"/>
+                    <ResourceDictionary Source="Resources/Strings.xaml"/>
+                    <ResourceDictionary Source="Resources/Converters.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel Style="{StaticResource SettingsStackPanel}" d:DataContext="{d:DesignInstance viewmodels:NextButtonVM}">
+            <TextBlock Text="{StaticResource ArrangementSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{StaticResource VisibilityLabelText}" />
+            <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}"
                             IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-        <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
-            <TextBlock Text="{StaticResource WidthLabelText}" />
-            <TextBlock Text="{StaticResource HeightLabelText}" />
-            <metro:NumericUpDown behaviours:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
-            <metro:NumericUpDown behaviours:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
-            <TextBlock Text="{StaticResource XPositionLabelText}" />
-            <TextBlock Text="{StaticResource YPositionLabelText}" />
-            <metro:NumericUpDown behaviours:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
-            <metro:NumericUpDown behaviours:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
-        </UniformGrid>
+            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
+                <TextBlock Text="{StaticResource WidthLabelText}" />
+                <TextBlock Text="{StaticResource HeightLabelText}" />
+                <metro:NumericUpDown behaviours:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
+                <metro:NumericUpDown behaviours:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
+                <TextBlock Text="{StaticResource XPositionLabelText}" />
+                <TextBlock Text="{StaticResource YPositionLabelText}" />
+                <metro:NumericUpDown behaviours:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
+                <metro:NumericUpDown behaviours:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
+            </UniformGrid>
 
-        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
-        <TextBlock Text="{StaticResource DefaultColorLabelText}"/>
-        <local:ColorPicker Color="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
-        <TextBlock Text="{StaticResource HoverColorLabelText}"/>
-        <local:ColorPicker Color="{Binding HoveredBackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
-        <TextBlock Text="{StaticResource ClickedColorLabelText}"/>
-        <local:ColorPicker Color="{Binding ClickedBackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{StaticResource DefaultColorLabelText}"/>
+            <local:ColorPicker Color="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
+            <TextBlock Text="{StaticResource HoverColorLabelText}"/>
+            <local:ColorPicker Color="{Binding HoveredBackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
+            <TextBlock Text="{StaticResource ClickedColorLabelText}"/>
+            <local:ColorPicker Color="{Binding ClickedBackgroundColor, Mode=TwoWay, Converter={StaticResource ColorConverter}}" DialogService="{Binding DialogService}"/>
 
-        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource ImageSectionText}" Style="{StaticResource TitleTextBlock}"/>
-        <TextBlock Text="{StaticResource ButtonImageLabelText}" />
-        <local:ImagePicker ImagePath="{Binding ImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
-        <TextBlock Text="{StaticResource ButtonHoveredImageLabelText}" />
-        <local:ImagePicker ImagePath="{Binding HoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
-        <TextBlock Text="{StaticResource ButtonClickedImageLabelText}" />
-        <local:ImagePicker ImagePath="{Binding ClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource ImageSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{StaticResource ButtonImageLabelText}" />
+            <local:ImagePicker ImagePath="{Binding ImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+            <TextBlock Text="{StaticResource ButtonHoveredImageLabelText}" />
+            <local:ImagePicker ImagePath="{Binding HoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+            <TextBlock Text="{StaticResource ButtonClickedImageLabelText}" />
+            <local:ImagePicker ImagePath="{Binding ClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
 
-        <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
-        <Button HorizontalAlignment="Left" 
+            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <Button HorizontalAlignment="Left" 
                 Content="{StaticResource ResetButtonText}"
                 Command="{Binding ResetCommand}"/>
-    </StackPanel>
-</UserControl>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:NextButtonVM}">
+        <ContentControl ContentTemplate="{StaticResource PlaybackButtonContent}" Content="{Binding}"/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewmodels:PreviousButtonVM}">
+        <ContentControl ContentTemplate="{StaticResource PlaybackButtonContent}" Content="{Binding}"/>
+    </DataTemplate>
+</ResourceDictionary>

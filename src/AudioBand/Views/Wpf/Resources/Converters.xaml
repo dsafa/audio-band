@@ -5,4 +5,13 @@
     <valueConverters:WinColorToWpfColorConverter x:Key="ColorConverter"/>
     <valueConverters:MultiBindingCommandParameterConverter x:Key="SelectedViewModelConverter"/>
     <valueConverters:FormatConverter x:Key="FormatConverter"/>
+    <valueConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <valueConverters:EmptyStringToBoolConverter x:Key="StringToBoolConverter"/>
+    <valueConverters:NumberToNumericUpDownConverter x:Key="NumericUpDownConverter"/>
+    <valueConverters:ReverseConverter x:Key="ColorToStringConverter">
+        <valueConverters:StringToColorConverter/>
+    </valueConverters:ReverseConverter>
+    <valueConverters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+    <valueConverters:StringToFontFamilyConverter x:Key="StringToFontFamilyConverter"/>
+    <valueConverters:ObjectToTypeConverter x:Key="ObjectToTypeConverter"/>
 </ResourceDictionary>

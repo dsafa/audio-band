@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AudioBand.Views.Wpf"
-             xmlns:valueConverters="clr-namespace:AudioBand.Views.Wpf.ValueConverters"
              mc:Ignorable="d" 
              x:Name="ColorPickerControl"
              d:DesignHeight="50" d:DesignWidth="300"
@@ -13,11 +12,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Strings.xaml"/>
+                <ResourceDictionary Source="Resources/Converters.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <valueConverters:ReverseConverter x:Key="ColorToStringConverter">
-                <valueConverters:StringToColorConverter/>
-            </valueConverters:ReverseConverter>
-            <valueConverters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
