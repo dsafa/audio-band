@@ -69,9 +69,6 @@
       <HintPath>..\packages\Nett.0.11.0\lib\Net40\Nett.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
-    <Reference Include="PubSub, Version=3.0.0.0, Culture=neutral, PublicKeyToken=fe4ede83ff72b2e0, processorArchitecture=MSIL">
-      <HintPath>..\packages\PubSub.3.0.0\lib\netstandard2.0\PubSub.dll</HintPath>
-    </Reference>
     <Reference Include="Svg, Version=2.4.2.26702, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>..\packages\Svg.2.4.2\lib\Svg.dll</HintPath>
     </Reference>

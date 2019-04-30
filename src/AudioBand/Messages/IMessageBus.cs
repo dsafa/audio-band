@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace AudioBand.Messages
 {
@@ -27,6 +28,6 @@ namespace AudioBand.Messages
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="message">The message to publish.</param>
         /// <param name="caller">The caller.</param>
-        void Publish<TMessage>(TMessage message, string caller = "");
+        void Publish<TMessage>(TMessage message, [CallerMemberName] string caller = "");
     }
 }

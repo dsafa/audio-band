@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using AudioBand.Commands;
@@ -14,7 +16,9 @@ namespace AudioBand.ViewModels
     {
         private readonly IAppSettings _appSettings;
         private readonly IDialogService _dialogService;
-        private ViewModelBase _selectedVM;
+        private readonly IMessageBus _messageBus;
+        private readonly List<ViewModelBase> _dirtyViewModels = new List<ViewModelBase>();
+        private ViewModelBase _selectedViewModel;
         private string _selectedProfileName;
         private bool _hasUnsavedChanges;
         private string _selectedViewHeader;
@@ -24,30 +28,64 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public SettingsWindowVM(IAppSettings appSettings, IDialogService dialogService)
+        /// <param name="viewModels">The view models.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public SettingsWindowVM(IAppSettings appSettings, IDialogService dialogService, IViewModelContainer viewModels, IMessageBus messageBus)
         {
             _appSettings = appSettings;
             _dialogService = dialogService;
+            _messageBus = messageBus;
+            ViewModels = viewModels;
             _selectedProfileName = appSettings.CurrentProfile;
             Profiles = new ObservableCollection<string>(appSettings.Profiles);
+
             SelectViewModelCommand = new RelayCommand<object[]>(SelectViewModelOnExecute);
             DeleteProfileCommand = new RelayCommand<string>(DeleteProfileCommandOnExecute, DeleteProfileCommandCanExecute);
             DeleteProfileCommand.Observe(Profiles);
             AddProfileCommand = new RelayCommand(AddProfileCommandOnExecute);
             RenameProfileCommand = new RelayCommand(RenameProfileCommandOnExecute);
+            SaveCommand = new RelayCommand(SaveCommandOnExecute, SaveCommandCanExecute);
+            SaveCommand.Observe(this, nameof(HasUnsavedChanges));
+            CloseCommand = new RelayCommand(CloseCommandOnExecute);
+
+            ViewModels.CustomLabelsVM.PropertyChanged += ViewModelOnEditChanged;
         }
+
+        /// <summary>
+        /// Gets the view models.
+        /// </summary>
+        public IViewModelContainer ViewModels { get; }
 
         /// <summary>
         /// Gets or sets the currently selected view model.
         /// </summary>
-        public ViewModelBase SelectedVM
+        public ViewModelBase SelectedViewModel
         {
-            get => _selectedVM;
-            set => SetProperty(ref _selectedVM, value, trackChanges: false);
+            get => _selectedViewModel;
+            set
+            {
+                var old = _selectedViewModel;
+                if (SetProperty(ref _selectedViewModel, value, trackChanges: false))
+                {
+                    if (old != null)
+                    {
+                        old.PropertyChanged -= ViewModelOnEditChanged;
+                    }
+
+                    if (value != null)
+                    {
+                        value.PropertyChanged += ViewModelOnEditChanged;
+                        if (value.IsEditing)
+                        {
+                            HandleViewModelEditing(value);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
-        /// Gets or sets the selected profile name
+        /// Gets or sets the selected profile name.
         /// </summary>
         public string SelectedProfileName
         {
@@ -56,13 +94,14 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(ref _selectedProfileName, value, trackChanges: false))
                 {
+                    EndEdits();
                     _appSettings.CurrentProfile = value;
                 }
             }
         }
 
         /// <summary>
-        /// Gets or sets the current title of the view
+        /// Gets or sets the current title of the view.
         /// </summary>
         public string SelectedViewHeader
         {
@@ -104,9 +143,19 @@ namespace AudioBand.ViewModels
         /// </summary>
         public RelayCommand RenameProfileCommand { get; }
 
+        /// <summary>
+        /// Gets the command to save settings.
+        /// </summary>
+        public RelayCommand SaveCommand { get; }
+
+        /// <summary>
+        /// Gets the command to close the settings editor.
+        /// </summary>
+        public RelayCommand CloseCommand { get; }
+
         private void SelectViewModelOnExecute(object[] data)
         {
-            SelectedVM = data[0] as ViewModelBase;
+            SelectedViewModel = data[0] as ViewModelBase;
             SelectedViewHeader = data[1] as string;
         }
 
@@ -160,14 +209,73 @@ namespace AudioBand.ViewModels
             SelectedProfileName = newProfileName;
         }
 
-        private void StartEditMessageHandler(StartEditMessage obj)
+        private void CloseCommandOnExecute(object obj)
         {
-            _hasUnsavedChanges = true;
+            if (!HasUnsavedChanges)
+            {
+                _messageBus.Publish(SettingsWindowMessage.CloseWindow);
+                return;
+            }
+
+            var discardChanges = _dialogService.ShowConfirmationDialog(ConfirmationDialogType.DiscardChanges);
+            if (discardChanges)
+            {
+                CancelEdits();
+                _messageBus.Publish(SettingsWindowMessage.CloseWindow);
+            }
         }
 
-        private void EndEditMessageHandler(EndEditMessage obj)
+        private void SaveCommandOnExecute(object obj)
         {
-            _hasUnsavedChanges = false;
+            _appSettings.Save();
+            EndEdits();
+        }
+
+        private bool SaveCommandCanExecute(object obj)
+        {
+            return HasUnsavedChanges;
+        }
+
+        private void EndEdits()
+        {
+            foreach (var dirtyViewModel in _dirtyViewModels)
+            {
+                dirtyViewModel.EndEdit();
+            }
+
+            _dirtyViewModels.Clear();
+            HasUnsavedChanges = false;
+        }
+
+        private void CancelEdits()
+        {
+            foreach (var dirtyViewModel in _dirtyViewModels)
+            {
+                dirtyViewModel.CancelEdit();
+            }
+
+            _dirtyViewModels.Clear();
+            HasUnsavedChanges = false;
+        }
+
+        private void ViewModelOnEditChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(IsEditing))
+            {
+                return;
+            }
+
+            var vm = (ViewModelBase)sender;
+            if (vm.IsEditing)
+            {
+                HandleViewModelEditing(vm);
+            }
+        }
+
+        private void HandleViewModelEditing(ViewModelBase vm)
+        {
+            HasUnsavedChanges = true;
+            _dirtyViewModels.Add(vm);
         }
     }
 }

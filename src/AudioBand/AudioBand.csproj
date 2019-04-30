@@ -125,7 +125,7 @@
     <Compile Include="Messages\FocusChangedMessage.cs" />
     <Compile Include="Messages\IMessageBus.cs" />
     <Compile Include="Messages\MessageBus.cs" />
-    <Compile Include="Messages\StartEditMessage.cs" />
+    <Compile Include="Messages\SettingsWindowMessage.cs" />
     <Compile Include="Models\AlbumArt.cs" />
     <Compile Include="Models\AlbumArtPopup.cs" />
     <Compile Include="Models\AudioBand.cs" />
@@ -177,7 +177,6 @@
     <Compile Include="ViewModels\CustomLabelService.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\AboutVM.cs" />
-    <Compile Include="Messages\EndEditMessage.cs" />
     <Compile Include="ViewModels\ICustomLabelService.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
     <Compile Include="ViewModels\PlaybackButtonVMBase.cs" />
@@ -188,6 +187,7 @@
     <Compile Include="ViewModels\SettingsWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
+    <Compile Include="ViewModels\ViewModelContainer.cs" />
     <Compile Include="Views\Winforms\AlbumArtDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -236,7 +236,7 @@
       <DependentUpon>ImagePicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Wpf\Behaviours\NumericInput.cs" />
-    <Compile Include="Views\Wpf\ISettingsWindow.cs" />
+    <Compile Include="ViewModels\IViewModelContainer.cs" />
     <Compile Include="Views\Wpf\ConfirmationDialog.xaml.cs">
       <DependentUpon>ConfirmationDialog.xaml</DependentUpon>
     </Compile>

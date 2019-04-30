@@ -105,7 +105,7 @@ namespace AudioBand
             });
         }
 
-        private void SettingsWindowOnSaved(object o, EventArgs eventArgs)
+        private void ViewModelContainerOnSaved(object o, EventArgs eventArgs)
         {
             _appSettings.Save();
         }
@@ -146,14 +146,14 @@ namespace AudioBand
                     var viewModel = new AudioSourceSettingsVM(matchingSetting, audioSource);
 
                     // the collection was created on the ui thread
-                    await _uiDispatcher.InvokeAsync(() => _settingsWindow.AudioSourceSettingsVM.Add(viewModel));
+                    await _uiDispatcher.InvokeAsync(() => _viewModelContainer.AudioSourceSettingsVM.Add(viewModel));
                 }
                 else
                 {
                     var newSettingsModel = new AudioSourceSettings { AudioSourceName = audioSource.Name };
                     _appSettings.AudioSourceSettings.Add(newSettingsModel);
                     var newViewModel = new AudioSourceSettingsVM(newSettingsModel, audioSource);
-                    await _uiDispatcher.InvokeAsync(() => _settingsWindow.AudioSourceSettingsVM.Add(newViewModel));
+                    await _uiDispatcher.InvokeAsync(() => _viewModelContainer.AudioSourceSettingsVM.Add(newViewModel));
                 }
             }
 

@@ -5,7 +5,6 @@ using AudioBand.Models;
 using AudioBand.ViewModels;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PubSub.Extension;
 
 namespace AudioBand.Test
 {
@@ -15,14 +14,12 @@ namespace AudioBand.Test
         [TestMethod]
         public void SetPropertyWithChangedFieldCallsPropertyChanged()
         {
-            int called = 0;
             string propertyName = null;
             var vm = new ViewModel();
-            vm.PropertyChanged += (o, e) => { propertyName = e.PropertyName; called++; };
+            vm.PropertyChanged += (o, e) => { propertyName = e.PropertyName; };
             vm._field = 0;
             vm.Field = 10;
 
-            Assert.AreEqual(1, called);
             Assert.AreEqual(nameof(ViewModel.Field), propertyName);
             Assert.AreEqual(10, vm._field);
         }
@@ -40,28 +37,6 @@ namespace AudioBand.Test
             Assert.AreEqual(0, called);
             Assert.AreEqual(null, propertyName);
             Assert.AreEqual(0, vm._field);
-        }
-
-        [TestMethod]
-        public void ListensForEndEditMessage()
-        {
-            var vm = new ViewModel();
-            vm.BeginEdit();
-
-            Assert.IsTrue(vm.IsEditing);
-            this.Publish(EndEditMessage.AcceptEdits);
-            Assert.IsFalse(vm.IsEditing);
-        }
-
-        [TestMethod]
-        public void ListensForCancelEditMessage()
-        {
-            var vm = new ViewModel();
-            vm.BeginEdit();
-
-            Assert.IsTrue(vm.IsEditing);
-            this.Publish(EndEditMessage.CancelEdits);
-            Assert.IsFalse(vm.IsEditing);
         }
 
         [TestMethod]

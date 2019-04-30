@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms.Integration;
 using System.Windows.Threading;
 using AudioBand.AudioSource;
 using AudioBand.Logging;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using AudioBand.Views.Winforms;
-using AudioBand.Views.Wpf;
 using CSDeskBand;
 using CSDeskBand.ContextMenu;
 using NLog;
@@ -25,8 +22,9 @@ namespace AudioBand
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger("Audio Band");
         private readonly IAppSettings _appSettings;
         private readonly IAudioSourceManager _audioSourceManager;
-        private readonly ISettingsWindow _settingsWindow;
+        private readonly IViewModelContainer _viewModelContainer;
         private readonly ICustomLabelService _labelService;
+        private readonly IMessageBus _messageBus;
         private readonly Dispatcher _uiDispatcher;
         private readonly Track _track;
         private IAudioSource _currentAudioSource;
@@ -43,16 +41,18 @@ namespace AudioBand
         /// <param name="track">The track model.</param>
         /// <param name="appsettings">The app settings</param>
         /// <param name="audiosourceMananger">The audio source manager</param>
-        /// <param name="settingsWindow">The settings window.</param>
+        /// <param name="viewModelContainer">The settings window.</param>
         /// <param name="labelService">The label service.</param>
+        /// <param name="messageBus">The message bus.</param>
         public MainControl(
             CSDeskBandOptions options,
             TaskbarInfo info,
             Track track,
             IAppSettings appsettings,
             IAudioSourceManager audiosourceMananger,
-            ISettingsWindow settingsWindow,
-            ICustomLabelService labelService)
+            IViewModelContainer viewModelContainer,
+            ICustomLabelService labelService,
+            IMessageBus messageBus)
         {
             InitializeComponent();
 
@@ -62,8 +62,9 @@ namespace AudioBand
             _appSettings = appsettings;
             _audioSourceManager = audiosourceMananger;
             _track = track;
-            _settingsWindow = settingsWindow;
+            _viewModelContainer = viewModelContainer;
             _labelService = labelService;
+            _messageBus = messageBus;
 
 #pragma warning disable CS4014
             Task.Run(InitializeAsync);
@@ -125,7 +126,7 @@ namespace AudioBand
                 _settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
                 RefreshContextMenu();
 
-                foreach (var label in _settingsWindow.CustomLabelsVM.CustomLabels)
+                foreach (var label in _viewModelContainer.CustomLabelsVM.CustomLabels)
                 {
                     LabelServiceOnAddCustomTextLabel(null, label);
                 }
@@ -135,15 +136,13 @@ namespace AudioBand
                 _labelService.CustomLabelsCleared += LabelServiceOnCustomLabelsCleared;
 
                 await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(
-                    _settingsWindow.AlbumArtPopupVM,
-                    _settingsWindow.AlbumArtVM,
-                    _settingsWindow.AudioBandVM,
-                    _settingsWindow.NextButtonVM,
-                    _settingsWindow.PlayPauseButtonVM,
-                    _settingsWindow.PreviousButtonVM,
-                    _settingsWindow.ProgressBarVM));
-
-                _settingsWindow.Saved += SettingsWindowOnSaved;
+                    _viewModelContainer.AlbumArtPopupVM,
+                    _viewModelContainer.AlbumArtVM,
+                    _viewModelContainer.AudioBandVM,
+                    _viewModelContainer.NextButtonVM,
+                    _viewModelContainer.PlayPauseButtonVM,
+                    _viewModelContainer.PreviousButtonVM,
+                    _viewModelContainer.ProgressBarVM));
 
                 _audioSourceManager.AudioSources.CollectionChanged += AudioSourcesOnCollectionChanged;
                 _audioSourceManager.LoadAudioSources();
@@ -158,7 +157,7 @@ namespace AudioBand
 
         private void OpenSettingsWindow()
         {
-            _settingsWindow.ShowWindow();
+            _messageBus.Publish(SettingsWindowMessage.OpenWindow);
         }
 
         private void RefreshContextMenu()
