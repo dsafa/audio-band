@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using AudioBand.ViewModels;
+using AudioBand.Messages;
 
 namespace AudioBand.Views.Wpf
 {
@@ -11,7 +11,9 @@ namespace AudioBand.Views.Wpf
         /// <summary>
         /// Initializes a new instance of the <see cref="AboutDialog"/> class.
         /// </summary>
-        public AboutDialog()
+        /// <param name="messageBus">The message bus.</param>
+        public AboutDialog(IMessageBus messageBus)
+            : base(messageBus)
         {
             InitializeComponent();
         }

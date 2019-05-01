@@ -114,6 +114,7 @@
     <Compile Include="Deskband.cs" />
     <Compile Include="Extensions\BindingExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\DpiExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\SvgExtensions.cs" />
@@ -122,6 +123,7 @@
       <DependentUpon>MainControl.cs</DependentUpon>
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Messages\DpiChangedMessage.cs" />
     <Compile Include="Messages\FocusChangedMessage.cs" />
     <Compile Include="Messages\IMessageBus.cs" />
     <Compile Include="Messages\MessageBus.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Settings\Models\v2\PreviousButtonSettings.cs" />
     <Compile Include="Settings\Models\v2\ProgressBarSettings.cs" />
     <Compile Include="Settings\Models\v3\SettingsV3.cs" />
+    <Compile Include="TaskbarHook.cs" />
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
     <Compile Include="ViewModels\AlsoNotifyAttribute.cs" />
     <Compile Include="ViewModels\AudioSourceSettingVM.cs" />
@@ -231,6 +234,7 @@
     <Compile Include="Views\Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Wpf\SettingsWindowBase.cs" />
     <Compile Include="Views\Wpf\TemplateSelectors\AudioSourceSettingSelector.cs" />
     <Compile Include="Views\Wpf\ValueConverters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Wpf\ValueConverters\ColorToBrushConverter.cs" />

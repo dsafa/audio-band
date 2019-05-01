@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
+using AudioBand.Messages;
 using AudioBand.ViewModels;
 using Microsoft.Win32;
 
@@ -24,8 +25,18 @@ namespace AudioBand.Views.Wpf
         };
 
         private static readonly string FileDialogImageFilter = string.Join("|", ImageFilters);
+        private readonly IMessageBus _messageBus;
 
         private AboutDialog _instance;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DialogService"/> class.
+        /// </summary>
+        /// <param name="messageBus">The message bus to use.</param>
+        public DialogService(IMessageBus messageBus)
+        {
+            _messageBus = messageBus;
+        }
 
         /// <inheritdoc/>
         public Color? ShowColorPickerDialog(Color initialColor)
@@ -54,7 +65,7 @@ namespace AudioBand.Views.Wpf
             }
             else
             {
-                _instance = new AboutDialog();
+                _instance = new AboutDialog(_messageBus);
                 _instance.Closed += (o, e) => _instance = null;
                 _instance.Show();
             }
@@ -64,7 +75,7 @@ namespace AudioBand.Views.Wpf
         public string ShowRenameDialog(string currentName, IEnumerable<string> profiles)
         {
             var vm = new RenameProfileDialogVM(currentName, profiles);
-            var dialog = new RenameProfileDialog(vm);
+            var dialog = new RenameProfileDialog(vm, _messageBus);
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
@@ -89,7 +100,7 @@ namespace AudioBand.Views.Wpf
             }
 #endif
 
-            var dialog = new ConfirmationDialog(confirmType, data);
+            var dialog = new ConfirmationDialog(_messageBus, confirmType, data);
             var result = dialog.ShowDialog();
             return result.GetValueOrDefault(false);
         }

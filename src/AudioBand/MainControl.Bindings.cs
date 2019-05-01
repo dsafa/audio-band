@@ -49,24 +49,6 @@ namespace AudioBand
             }
         }
 
-        private void InitializeBindingSources(
-            AlbumArtPopupVM albumArtPopupVm,
-            AlbumArtVM albumartVm,
-            AudioBandVM audioBandVm,
-            NextButtonVM nextButtonVm,
-            PlayPauseButtonVM playPauseButtonVm,
-            PreviousButtonVM previousButtonVm,
-            ProgressBarVM progressBarVm)
-        {
-            AlbumArtPopupVMBindingSource.DataSource = albumArtPopupVm;
-            AlbumArtVMBindingSource.DataSource = albumartVm;
-            AudioBandVMBindingSource.DataSource = audioBandVm;
-            NextButtonVMBindingSource.DataSource = nextButtonVm;
-            PlayPauseButtonVMBindingSource.DataSource = playPauseButtonVm;
-            PreviousButtonVMBindingSource.DataSource = previousButtonVm;
-            ProgressBarVMBindingSource.DataSource = progressBarVm;
-        }
-
         private void AddCustomLabelText(CustomLabelVM customLabel)
         {
             var label = new FormattedTextLabel(customLabel.FormatString, customLabel.Color, customLabel.FontSize, customLabel.FontFamily, customLabel.TextAlignment);

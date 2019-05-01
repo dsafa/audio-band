@@ -27,6 +27,7 @@ namespace AudioBand
         private MainControl _mainControl;
         private Container _container;
         private Window _settingsWindow;
+        private TaskbarHook _taskbarHook;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Deskband"/> class.
@@ -46,6 +47,7 @@ namespace AudioBand
             _settingsWindow = _container.GetInstance<SettingsWindow>();
             _mainControl = _container.GetInstance<MainControl>();
             _container.GetInstance<IMessageBus>().Subscribe<FocusChangedMessage>(FocusCaptured);
+            _taskbarHook = new TaskbarHook(_container.GetInstance<IMessageBus>());
         }
 
         /// <inheritdoc/>
@@ -60,6 +62,7 @@ namespace AudioBand
             _mainControl.Dispose();
             _mainControl = null;
             _settingsWindow = null;
+            _taskbarHook = null;
         }
 
         private void ConfigureDependencies()

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using AudioBand.Messages;
 using AudioBand.ViewModels;
 
 namespace AudioBand.Views.Wpf
@@ -11,9 +12,11 @@ namespace AudioBand.Views.Wpf
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfirmationDialog"/> class.
         /// </summary>
+        /// <param name="messageBus">The message bus to use.</param>
         /// <param name="confirmType">Type of confirmation.</param>
         /// <param name="data">Data for confirmation dialog.</param>
-        public ConfirmationDialog(ConfirmationDialogType confirmType, object[] data)
+        public ConfirmationDialog(IMessageBus messageBus, ConfirmationDialogType confirmType, object[] data)
+            : base(messageBus)
         {
             DialogType = confirmType;
             DialogData = data;

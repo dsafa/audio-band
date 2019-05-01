@@ -65,10 +65,9 @@ namespace AudioBand
             _viewModelContainer = viewModelContainer;
             _labelService = labelService;
             _messageBus = messageBus;
+            messageBus.Subscribe<DpiChangedMessage>(DpiChangedMessageHandler);
 
-#pragma warning disable CS4014
-            Task.Run(InitializeAsync);
-#pragma warning restore CS4014
+            Load += InitializeAsync;
         }
 
         /// <summary>
@@ -97,34 +96,28 @@ namespace AudioBand
             }
         }
 
-        /// <summary>
-        /// Update deskband options when the size changes.
-        /// </summary>
-        /// <param name="eventArgs">.</param>
-        protected override void OnResize(EventArgs eventArgs)
+        /// <inheritdoc />
+        protected override void OnDpiChanging()
         {
-            if (_appSettings?.AudioBand == null)
-            {
-                return;
-            }
-
-            // use model size because we want to only chnage when it changes instead of catching all resize events
-            var audioBandSize = GetScaledSize(new Size(_appSettings.AudioBand.Width, _appSettings.AudioBand.Height));
+            var audioBandSize = new Size((int)(_appSettings.AudioBand.Width * ScalingFactor), (int)(_appSettings.AudioBand.Height * ScalingFactor));
             Options.MinHorizontalSize = audioBandSize;
             Options.HorizontalSize = audioBandSize;
             Options.MaxHorizontalHeight = audioBandSize.Height;
         }
 
-        private async Task InitializeAsync()
+        private async void InitializeAsync(object sender, EventArgs args)
         {
             try
             {
                 Logger.Debug("Initialization started");
 
-                _audioSourceContextMenuItems = new List<DeskBandMenuAction>();
-                _settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
-                _settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
-                RefreshContextMenu();
+                await Task.Run(() =>
+                {
+                    _audioSourceContextMenuItems = new List<DeskBandMenuAction>();
+                    _settingsMenuItem = new DeskBandMenuAction("Audio Band Settings");
+                    _settingsMenuItem.Clicked += SettingsMenuItemOnClicked;
+                    RefreshContextMenu();
+                });
 
                 foreach (var label in _viewModelContainer.CustomLabelsVM.CustomLabels)
                 {
@@ -135,17 +128,16 @@ namespace AudioBand
                 _labelService.CustomLabelRemoved += LabelServiceOnRemoveCustomTextLabel;
                 _labelService.CustomLabelsCleared += LabelServiceOnCustomLabelsCleared;
 
-                await _uiDispatcher.InvokeAsync(() => InitializeBindingSources(
-                    _viewModelContainer.AlbumArtPopupVM,
-                    _viewModelContainer.AlbumArtVM,
-                    _viewModelContainer.AudioBandVM,
-                    _viewModelContainer.NextButtonVM,
-                    _viewModelContainer.PlayPauseButtonVM,
-                    _viewModelContainer.PreviousButtonVM,
-                    _viewModelContainer.ProgressBarVM));
+                AlbumArtPopupVMBindingSource.DataSource = _viewModelContainer.AlbumArtPopupVM;
+                AlbumArtVMBindingSource.DataSource = _viewModelContainer.AlbumArtVM;
+                AudioBandVMBindingSource.DataSource = _viewModelContainer.AudioBandVM;
+                NextButtonVMBindingSource.DataSource = _viewModelContainer.NextButtonVM;
+                PlayPauseButtonVMBindingSource.DataSource = _viewModelContainer.PlayPauseButtonVM;
+                PreviousButtonVMBindingSource.DataSource = _viewModelContainer.PreviousButtonVM;
+                ProgressBarVMBindingSource.DataSource = _viewModelContainer.ProgressBarVM;
 
                 _audioSourceManager.AudioSources.CollectionChanged += AudioSourcesOnCollectionChanged;
-                _audioSourceManager.LoadAudioSources();
+                await Task.Run(_audioSourceManager.LoadAudioSources);
 
                 Logger.Debug("Initialization complete");
             }
@@ -259,6 +251,11 @@ namespace AudioBand
             _track.IsPlaying = false;
             _track.TrackLength = TimeSpan.Zero;
             _track.TrackProgress = TimeSpan.Zero;
+        }
+
+        private void DpiChangedMessageHandler(DpiChangedMessage msg)
+        {
+            UpdateDpi(msg.NewDpi);
         }
     }
 }

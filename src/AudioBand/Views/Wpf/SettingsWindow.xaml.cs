@@ -36,6 +36,7 @@ namespace AudioBand.Views.Wpf
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="messageBus">The message bus.</param>
         public SettingsWindow(SettingsWindowVM vm, IDialogService dialogService, IMessageBus messageBus)
+            : base(messageBus)
         {
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             ElementHost.EnableModelessKeyboardInterop(this);

@@ -1,4 +1,4 @@
-﻿<fw:AcrylicWindow
+﻿<local:SettingsWindowBase
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -30,7 +30,7 @@
             <i:InvokeCommandAction Command="{Binding CloseCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <fw:AcrylicWindow.Resources>
+    <local:SettingsWindowBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Style.xaml"/>
@@ -39,7 +39,7 @@
                 <ResourceDictionary Source="Resources/Converters.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </fw:AcrylicWindow.Resources>
+    </local:SettingsWindowBase.Resources>
     <DockPanel LastChildFill="True" KeyboardNavigation.IsTabStop="False">
         <Grid>
             <Grid.RowDefinitions>
@@ -283,7 +283,7 @@
         </ScrollViewer>
         </Grid>
     </DockPanel>
-</fw:AcrylicWindow>
+</local:SettingsWindowBase>
 
 
 
