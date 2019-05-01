@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
+using System.Linq;
 using System.Windows.Forms;
-using AudioBand.Logging;
-using NLog;
+using AudioBand.Extensions;
 
 namespace AudioBand.Views.Winforms
 {
@@ -14,12 +13,6 @@ namespace AudioBand.Views.Winforms
     public class AudioBandControl : UserControl
     {
         private const double LogicalDpi = 96.0;
-        private const int WmDpiChanged = 0x02E0;
-        private const int WHCallWndProc = 4;
-        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioBandControl>();
-        private readonly IntPtr _hook;
-        private readonly NativeMethods.CallWndProc _callback;
-        private readonly IntPtr _taskBarHwnd;
         private Size _logicalSize;
         private Point _logicalLocation;
 
@@ -29,28 +22,6 @@ namespace AudioBand.Views.Winforms
         public AudioBandControl()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw, true);
-            UpdateDpi(GetDpi());
-
-            // Hook the window proc of the taskbar to listen to WM_DPICHANGED events
-            _callback = HookCallback;
-            _taskBarHwnd = NativeMethods.FindWindow("Shell_TrayWnd", null);
-            var taskbarHwndThreadId = NativeMethods.GetWindowThreadProcessId(_taskBarHwnd, IntPtr.Zero);
-            _hook = NativeMethods.SetWindowsHookEx(WHCallWndProc, _callback, IntPtr.Zero, taskbarHwndThreadId);
-            if (_hook == IntPtr.Zero)
-            {
-                Logger.Error("Unable to set windows hook");
-            }
-        }
-
-        /// <summary>
-        /// Finalizes an instance of the <see cref="AudioBandControl"/> class.
-        /// </summary>
-        ~AudioBandControl()
-        {
-            if (_hook != IntPtr.Zero)
-            {
-                NativeMethods.UnhookWindowsHookEx(_hook);
-            }
         }
 
         /// <summary>
@@ -130,41 +101,48 @@ namespace AudioBand.Views.Winforms
             }
         }
 
+        /// <inheritdoc />
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            UpdateDpi(this.GetDpi());
+        }
+
         /// <summary>
-        /// Occurs when dpi changed.
+        /// Occurs when dpi changed after layout and resize.
         /// </summary>
         protected virtual void OnDpiChanged()
         {
         }
 
-        private static short HiWord(IntPtr ptr)
+        /// <summary>
+        /// Occurs when dpi is changing before layout and resize.
+        /// </summary>
+        protected virtual void OnDpiChanging()
         {
-            return unchecked((short)((long)ptr >> 16));
         }
 
-        private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        /// <summary>
+        /// Updates the dpi of the control, then recursively calls it on the controls children.
+        /// </summary>
+        /// <param name="newDpi">The new dpi.</param>
+        protected void UpdateDpi(double newDpi)
         {
-            if (nCode < 0 || wParam != IntPtr.Zero)
+            if (Math.Abs(newDpi - Dpi) < 0.0001)
             {
-                return NativeMethods.CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
+                return;
             }
 
-            var info = Marshal.PtrToStructure<NativeMethods.CWPSTRUCT>(lParam);
-            if (info.Message == WmDpiChanged && info.Hwnd == _taskBarHwnd)
-            {
-                var newDpi = HiWord(info.WParam);
-                UpdateDpi(newDpi);
-                OnDpiChanged();
-            }
-
-            return NativeMethods.CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
-        }
-
-        private void UpdateDpi(double newDpi)
-        {
             Dpi = newDpi;
+            OnDpiChanging();
             UpdateLocation();
             UpdateSize();
+            OnDpiChanged();
+
+            foreach (AudioBandControl control in Controls.OfType<AudioBandControl>())
+            {
+                control.UpdateDpi(newDpi);
+            }
         }
 
         private void UpdateSize()
@@ -178,17 +156,6 @@ namespace AudioBand.Views.Winforms
         private void UpdateLocation()
         {
             Location = GetScaledPoint(LogicalLocation);
-        }
-
-        private double GetDpi()
-        {
-            var win10Anniversary = new Version(10, 0, 14393);
-            if (Environment.OSVersion.Version.CompareTo(win10Anniversary) < 0)
-            {
-                return 96.0;
-            }
-
-            return NativeMethods.GetDpiForWindow(Handle);
         }
     }
 }

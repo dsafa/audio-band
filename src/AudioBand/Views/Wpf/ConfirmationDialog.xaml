@@ -1,4 +1,4 @@
-﻿<fluentWpf:AcrylicWindow x:Class="AudioBand.Views.Wpf.ConfirmationDialog"
+﻿<local:SettingsWindowBase x:Class="AudioBand.Views.Wpf.ConfirmationDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -89,4 +89,4 @@
             <Button x:Name="CancelButton" IsCancel="True" Click="CancelButtonOnClick" Content="{StaticResource CancelButtonText}" Width="100" Margin="8, 0"/>
         </StackPanel>
     </Grid>
-</fluentWpf:AcrylicWindow>
+</local:SettingsWindowBase>

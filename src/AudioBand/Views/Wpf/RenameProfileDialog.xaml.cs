@@ -1,4 +1,5 @@
 ﻿using System;
+using AudioBand.Messages;
 using AudioBand.ViewModels;
 
 namespace AudioBand.Views.Wpf
@@ -12,7 +13,9 @@ namespace AudioBand.Views.Wpf
         /// Initializes a new instance of the <see cref="RenameProfileDialog"/> class.
         /// </summary>
         /// <param name="vm">The view model.</param>
-        public RenameProfileDialog(RenameProfileDialogVM vm)
+        /// <param name="messageBus">The message bus to use.</param>
+        public RenameProfileDialog(RenameProfileDialogVM vm, IMessageBus messageBus)
+            : base(messageBus)
         {
             InitializeComponent();
             DataContext = vm;
