@@ -6,14 +6,12 @@ using System.IO;
 using System.Linq;
 using AudioBand.Logging;
 using AudioBand.Models;
-using AudioBand.Settings;
 using AudioBand.Settings.Migrations;
 using AudioBand.Settings.Models.v3;
-using AutoMapper;
 using Nett;
 using NLog;
 
-namespace AudioBandModel.Settings
+namespace AudioBand.Settings
 {
     /// <summary>
     /// Manages application settings.
@@ -237,7 +235,7 @@ namespace AudioBandModel.Settings
         /// <inheritdoc />
         public void ImportProfilesFromPath(string path)
         {
-            var profilesToImport = Toml.ReadFile<ProfileExportV3>(path);
+            var profilesToImport = Toml.ReadFile<ProfileExportV3>(path, _tomlSettings);
             foreach (var keyVal in profilesToImport.Profiles)
             {
                 var key = GetUniqueProfileName(keyVal.Key);

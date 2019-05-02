@@ -8,9 +8,9 @@ namespace AudioBand.Settings.Models.v3
     public class ProfileExportV3
     {
         /// <summary>
-        /// Gets the version.
+        /// Gets or sets the version.
         /// </summary>
-        public string Version => "3";
+        public string Version { get; set; } = "3";
 
         /// <summary>
         /// Gets or sets the profiles.
