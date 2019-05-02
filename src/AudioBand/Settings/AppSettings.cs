@@ -57,12 +57,11 @@ namespace AudioBandModel.Settings
 
             if (!File.Exists(SettingsFilePath))
             {
-                CreateDefault();
-                Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
+                CreateDefaultSettingsFile();
             }
             else
             {
-                LoadSettings();
+                LoadSettingsFromPath(SettingsFilePath);
             }
 
             AudioSourceSettings = _settings.AudioSourceSettings ?? new List<AudioSourceSettings>();
@@ -126,7 +125,7 @@ namespace AudioBandModel.Settings
         /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
-        public List<AudioSourceSettings> AudioSourceSettings { get; } = new List<AudioSourceSettings>();
+        public List<AudioSourceSettings> AudioSourceSettings { get; private set; } = new List<AudioSourceSettings>();
 
         /// <summary>
         /// Gets or sets the current profile.
@@ -235,18 +234,42 @@ namespace AudioBandModel.Settings
             }
         }
 
-        private void LoadSettings()
+        /// <inheritdoc />
+        public void ImportProfilesFromPath(string path)
+        {
+            var profilesToImport = Toml.ReadFile<ProfileExportV3>(path);
+            foreach (var keyVal in profilesToImport.Profiles)
+            {
+                var key = GetUniqueProfileName(keyVal.Key);
+                _settings.Profiles[key] = keyVal.Value;
+            }
+        }
+
+        /// <inheritdoc />
+        public void ExportProfilesToPath(string path)
+        {
+            var exportObject = new ProfileExportV3 { Profiles = _settings.Profiles };
+            Toml.WriteFile(exportObject, path, _tomlSettings);
+        }
+
+        private void LoadSettingsFromPath(string path)
         {
             try
             {
-                var file = Toml.ReadFile(SettingsFilePath, _tomlSettings);
-                var version = file["Version"].Get<string>();
+                var tomlFile = Toml.ReadFile(path, _tomlSettings);
+                var version = tomlFile["Version"].Get<string>();
+
+                // Create backup
                 if (version != CurrentVersion)
                 {
-                    Toml.WriteFile(file, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
+                    Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
+                    _settings = Migration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
+                    Save();
                 }
-
-                _settings = Migration.MigrateSettings<SettingsV3>(file.Get(SettingsTable[version]), version, CurrentVersion);
+                else
+                {
+                    _settings = tomlFile.Get<SettingsV3>();
+                }
             }
             catch (Exception e)
             {
@@ -255,7 +278,7 @@ namespace AudioBandModel.Settings
             }
         }
 
-        private void CreateDefault()
+        private void CreateDefaultSettingsFile()
         {
             _settings = new SettingsV3()
             {
@@ -263,6 +286,7 @@ namespace AudioBandModel.Settings
                 AudioSourceSettings = new List<AudioSourceSettings>(),
                 Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, CreateProfileModel() } },
             };
+            Save();
         }
 
         private ProfileV3 CreateProfileModel()
@@ -297,6 +321,18 @@ namespace AudioBandModel.Settings
             ProgressBar = _currentProfile.ProgressBarSettings;
 
             ProfileChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private string GetUniqueProfileName(string name)
+        {
+            string newName = name;
+            int count = 0;
+            while (_settings.Profiles.ContainsKey(newName))
+            {
+                newName += count;
+            }
+
+            return newName;
         }
     }
 }

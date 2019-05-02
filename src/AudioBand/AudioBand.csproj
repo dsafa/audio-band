@@ -171,6 +171,8 @@
     <Compile Include="Settings\Models\v2\PlayPauseButtonSettings.cs" />
     <Compile Include="Settings\Models\v2\PreviousButtonSettings.cs" />
     <Compile Include="Settings\Models\v2\ProgressBarSettings.cs" />
+    <Compile Include="Settings\Models\v3\ProfileExportV3.cs" />
+    <Compile Include="Settings\Models\v3\ProfileV3.cs" />
     <Compile Include="Settings\Models\v3\SettingsV3.cs" />
     <Compile Include="TaskbarHook.cs" />
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
