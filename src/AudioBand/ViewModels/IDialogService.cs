@@ -41,5 +41,17 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <returns>The path of the image.</returns>
         string ShowImagePickerDialog();
+
+        /// <summary>
+        /// Shows the dialog to import profiles.
+        /// </summary>
+        /// <returns>The path to the file to import. Null if canceled.</returns>
+        string ShowImportProfilesDialog();
+
+        /// <summary>
+        /// Shows the dialog to export profiles.
+        /// </summary>
+        /// <returns>The path to export to. Null if canceled.</returns>
+        string ShowExportProfilesDialog();
     }
 }
