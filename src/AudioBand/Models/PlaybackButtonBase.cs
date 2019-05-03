@@ -7,17 +7,20 @@ namespace AudioBand.Models
     /// </summary>
     public class PlaybackButtonBase : ModelBase
     {
-        private string _imagePath;
-        private string _hoveredImagePath;
-        private string _clickedImagePath;
-        private bool _isVisible;
+        private string _imagePath = "";
+        private string _hoveredImagePath = "";
+        private string _clickedImagePath = "";
+        private bool _isVisible = true;
         private int _width;
         private int _height;
         private int _xPosition;
         private int _yPosition;
-        private Color _backgroundColor;
-        private Color _hoveredBackgroundColor;
-        private Color _clickedBackgroundColor;
+        private Color _backgroundColor = Color.Transparent;
+        private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
+        private Color _clickedBackgroundColor = Color.FromArgb(15, 255, 255, 255);
+        private ButtonContentType _contentType = ButtonContentType.Image;
+        private string _textFontFamily = "Segoe MDL2 Assets";
+        private string _text;
 
         /// <summary>
         /// Gets or sets the path of the button image.
@@ -116,6 +119,33 @@ namespace AudioBand.Models
         {
             get => _clickedBackgroundColor;
             set => SetProperty(ref _clickedBackgroundColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the content type for the button.
+        /// </summary>
+        public ButtonContentType ContentType
+        {
+            get => _contentType;
+            set => SetProperty(ref _contentType, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font family for the button text.
+        /// </summary>
+        public string TextFontFamily
+        {
+            get => _textFontFamily;
+            set => SetProperty(ref _textFontFamily, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text for button.
+        /// </summary>
+        public string Text
+        {
+            get => _text;
+            set => SetProperty(ref _text, value);
         }
     }
 }

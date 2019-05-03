@@ -16,6 +16,7 @@
             Height = 12;
             XPosition = 30;
             YPosition = 15;
+            Text = "";
         }
     }
 }
