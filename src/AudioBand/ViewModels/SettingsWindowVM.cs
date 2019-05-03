@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -47,6 +48,8 @@ namespace AudioBand.ViewModels
             SaveCommand = new RelayCommand(SaveCommandOnExecute, SaveCommandCanExecute);
             SaveCommand.Observe(this, nameof(HasUnsavedChanges));
             CloseCommand = new RelayCommand(CloseCommandOnExecute);
+            ImportProfilesCommand = new RelayCommand(ImportProfilesCommandOnExecute);
+            ExportProfilesCommand = new RelayCommand(ExportProfilesCommandOnExecute);
 
             ViewModels.CustomLabelsVM.PropertyChanged += ViewModelOnEditChanged;
         }
@@ -153,6 +156,16 @@ namespace AudioBand.ViewModels
         /// </summary>
         public RelayCommand CloseCommand { get; }
 
+        /// <summary>
+        /// Gets the command to import profiles.
+        /// </summary>
+        public RelayCommand ImportProfilesCommand { get; }
+
+        /// <summary>
+        /// Gets the command to export profiles.
+        /// </summary>
+        public RelayCommand ExportProfilesCommand { get; }
+
         private void SelectViewModelOnExecute(ViewModelBase viewModel)
         {
             SelectedViewModel = viewModel;
@@ -173,6 +186,7 @@ namespace AudioBand.ViewModels
 
             _appSettings.CurrentProfile = Profiles[0];
             SelectedProfileName = Profiles[0];
+            _appSettings.Save();
         }
 
         private bool DeleteProfileCommandCanExecute(string obj)
@@ -275,6 +289,42 @@ namespace AudioBand.ViewModels
         {
             HasUnsavedChanges = true;
             _dirtyViewModels.Add(vm);
+        }
+
+        private void ExportProfilesCommandOnExecute(object obj)
+        {
+            var exportPath = _dialogService.ShowExportProfilesDialog();
+            if (exportPath == null)
+            {
+                return;
+            }
+
+            _appSettings.ExportProfilesToPath(exportPath);
+        }
+
+        private void ImportProfilesCommandOnExecute(object obj)
+        {
+            try
+            {
+                var profilesPath = _dialogService.ShowImportProfilesDialog();
+                if (profilesPath == null)
+                {
+                    return;
+                }
+
+                _appSettings.ImportProfilesFromPath(profilesPath);
+                foreach (var newProfile in _appSettings.Profiles.Where(p => !Profiles.Contains(p)))
+                {
+                    // Should not be too slow unless a lot of profiles.
+                    Profiles.Add(newProfile);
+                }
+
+                _appSettings.Save();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Error with importing profiles");
+            }
         }
     }
 }

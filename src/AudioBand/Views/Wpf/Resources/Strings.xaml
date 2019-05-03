@@ -57,9 +57,6 @@
     <sys:String x:Key="DeleteButtonText">Delete</sys:String>
     <sys:String x:Key="DiscardButtonText">Discard</sys:String>
     <sys:String x:Key="PickColorButtonText">Change Color</sys:String>
-    <sys:String x:Key="NewProfileButtonText">New Profile</sys:String>
-    <sys:String x:Key="DeleteProfileButtonText">Delete Profile</sys:String>
-    <sys:String x:Key="RenameProfileButtonText">Rename Profile</sys:String>
     <sys:String x:Key="CloseButtonText">Close</sys:String>
     <sys:String x:Key="ApplyButtonText">Apply</sys:String>
 
@@ -106,4 +103,9 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="BackgroundColorSectionText">Background Colors</sys:String>
     <sys:String x:Key="OtherSectionText">Other</sys:String>
     <sys:String x:Key="ImageSectionText">Image</sys:String>
+    <sys:String x:Key="NewProfileHelpText">New profile</sys:String>
+    <sys:String x:Key="DeleteProfileHelpText">Delete the current profile</sys:String>
+    <sys:String x:Key="RenameProfileHelpText">Rename the current profile</sys:String>
+    <sys:String x:Key="ImportProfilesHelpText">Import profiles</sys:String>
+    <sys:String x:Key="ExportProfilesHelpText">Export profiles</sys:String>
 </ResourceDictionary>

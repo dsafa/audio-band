@@ -45,6 +45,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" IsTabStop="False" Width="300" WindowChrome.IsHitTestVisibleInChrome="True">
                 <StackPanel DockPanel.Dock="Left" Background="Transparent" x:Name="NavigationPane">
@@ -177,38 +178,56 @@
                     </Expander>
                 </StackPanel>
             </ScrollViewer>
-            <ComboBox Margin="8" Height="{StaticResource DefaultButtonHeight}"
-                      x:Name="ProfilesComboBox" Grid.Row="1" IsSynchronizedWithCurrentItem="True"
+            <ComboBox Margin="8" Height="{StaticResource DefaultButtonHeight}" Grid.Row="1"
+                      x:Name="ProfilesComboBox"  IsSynchronizedWithCurrentItem="True"
                       SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}"
                       ItemsSource="{Binding Profiles}">
             </ComboBox>
+            <UniformGrid Grid.Row="2" Rows="1" SnapsToDevicePixels="True">
+                <UniformGrid.Resources>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource RevealButton}"/>
+                </UniformGrid.Resources>
+                <Button Command="{Binding AddProfileCommand}">
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE710;" FontSize="17"/> <!-- Line up the icon better by using different font size-->
+                    <Button.ToolTip>
+                        <TextBlock Text="{StaticResource NewProfileHelpText}"/>
+                    </Button.ToolTip>
+                </Button>
+                <Button Command="{Binding DeleteProfileCommand}" 
+                        CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}">
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE74D;"/>
+                    <Button.ToolTip>
+                        <TextBlock Text="{StaticResource DeleteProfileHelpText}"/>
+                    </Button.ToolTip>
+                </Button>
+                <Button Command="{Binding RenameProfileCommand}">
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE8AC;"/>
+                    <Button.ToolTip>
+                        <TextBlock Text="{StaticResource RenameProfileHelpText}"/>
+                    </Button.ToolTip>
+                </Button>
+                <Button Command="{Binding ImportProfilesCommand}">
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE896;"/>
+                    <Button.ToolTip>
+                        <TextBlock Text="{StaticResource ImportProfilesHelpText}"/>
+                    </Button.ToolTip>
+                </Button>
+                <Button Command="{Binding ExportProfilesCommand}">
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE898;"/>
+                    <Button.ToolTip>
+                        <TextBlock Text="{StaticResource ExportProfilesHelpText}"/>
+                    </Button.ToolTip>
+                </Button>
+            </UniformGrid>
         </Grid>
-        <Grid DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" SnapsToDevicePixels="True" Background="White">
-            <Grid.Resources>
-                <Thickness x:Key="ItemMargins">8</Thickness>
-                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                    <Setter Property="Margin" Value="{StaticResource ItemMargins}"/>
-                </Style>
-            </Grid.Resources>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <Button Content="{StaticResource NewProfileButtonText}" Width="110"
-                        Command="{Binding AddProfileCommand}"/>
-                <Button Content="{StaticResource DeleteProfileButtonText}" Width="110"
-                        Command="{Binding DeleteProfileCommand}" CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}"/>
-                <Button Content="{StaticResource RenameProfileButtonText}" Width="110"
-                        Command="{Binding RenameProfileCommand}"/>
-            </StackPanel>
-            <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-                <Button Content="{StaticResource CloseButtonText}" IsCancel="True" Width="80"
-                        Command="{Binding CloseCommand}"/>
-                <Button Content="{StaticResource ApplyButtonText}" Width="80"
-                        Command="{Binding SaveCommand}"/>
-            </StackPanel>
-        </Grid>
+        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft"
+                    DockPanel.Dock="Bottom" HorizontalAlignment="Stretch"
+                    SnapsToDevicePixels="True" Background="White">
+            <Button Content="{StaticResource CloseButtonText}" IsCancel="True" Width="80" Margin="8"
+                    Command="{Binding CloseCommand}"/>
+            <Button Content="{StaticResource ApplyButtonText}" Width="80" Margin="8"
+                    Command="{Binding SaveCommand}"/>
+        </StackPanel>
         <Grid Background="White" SnapsToDevicePixels="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -263,7 +282,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <ScrollViewer x:Name="ContentScrollView" VerticalScrollBarVisibility="Auto" IsTabStop="False" Grid.Row="2">
+            <ScrollViewer x:Name="ContentScrollView" VerticalScrollBarVisibility="Auto" IsTabStop="False" Focusable="False" Grid.Row="2">
                 <ContentControl Content="{Binding SelectedViewModel}" BorderThickness="0" IsTabStop="False" Margin="20">
                 <ContentControl.Resources>
                     <ResourceDictionary>

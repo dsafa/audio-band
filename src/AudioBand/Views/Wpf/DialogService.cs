@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using AudioBand.Messages;
 using AudioBand.ViewModels;
-using Microsoft.Win32;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace AudioBand.Views.Wpf
 {
@@ -13,6 +13,7 @@ namespace AudioBand.Views.Wpf
     /// </summary>
     public class DialogService : IDialogService
     {
+        private const string AudioBandSettingsFileFilter = "Audio Band Settings files (*.settings)|*.settings";
         private static readonly string[] ImageFilters =
         {
             "Images (*.bmp;*.dib;*.rle;*.jpg;*.jpeg;*.jpe,*.jfif;*.tiff;*.tif;*.png;*.svg)|*.bmp;*.dib;*.rle;*.jpg;*.jpeg;*.jpe,*.jfif;*.tiff;*.tif;*.png;*.svg",
@@ -114,6 +115,42 @@ namespace AudioBand.Views.Wpf
             if (res.HasValue && res.Value)
             {
                 return dialog.FileName;
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
+        public string ShowImportProfilesDialog()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = AudioBandSettingsFileFilter,
+            };
+
+            var result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                return openFileDialog.FileName;
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
+        public string ShowExportProfilesDialog()
+        {
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = "AudioBandProfiles",
+                DefaultExt = ".settings",
+                Filter = AudioBandSettingsFileFilter,
+            };
+
+            var result = saveFileDialog.ShowDialog();
+            if (result == true)
+            {
+                return saveFileDialog.FileName;
             }
 
             return null;
