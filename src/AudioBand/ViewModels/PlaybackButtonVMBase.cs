@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime;
 using AudioBand.Models;
 using AudioBand.Resources;
 using AudioBand.Settings;
@@ -195,6 +196,36 @@ namespace AudioBand.ViewModels
         {
             get => Model.ClickedBackgroundColor;
             set => SetProperty(nameof(Model.ClickedBackgroundColor), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the content type for the button.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.ContentType))]
+        public ButtonContentType ContentType
+        {
+            get => Model.ContentType;
+            set => SetProperty(nameof(Model.ContentType), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font family for the button text.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.TextFontFamily))]
+        public string TextFontFamily
+        {
+            get => Model.TextFontFamily;
+            set => SetProperty(nameof(Model.TextFontFamily), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text for button.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.Text))]
+        public string Text
+        {
+            get => Model.Text;
+            set => SetProperty(nameof(Model.Text), value);
         }
 
         /// <summary>

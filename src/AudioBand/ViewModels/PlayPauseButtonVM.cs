@@ -317,6 +317,66 @@ namespace AudioBand.ViewModels
         /// </summary>
         public IDialogService DialogService { get; }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ButtonContentType"/> for the play button.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonContentType))]
+        public ButtonContentType PlayButtonContentType
+        {
+            get => Model.PlayButtonContentType;
+            set => SetProperty(nameof(Model.PlayButtonContentType), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ButtonContentType"/> for the pause button.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonContentType))]
+        public ButtonContentType PauseButtonContentType
+        {
+            get => Model.PauseButtonContentType;
+            set => SetProperty(nameof(Model.PauseButtonContentType), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font family for the play button.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonTextFontFamily))]
+        public string PlayButtonTextFontFamily
+        {
+            get => Model.PlayButtonTextFontFamily;
+            set => SetProperty(nameof(Model.PlayButtonTextFontFamily), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font family for the pause button.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonTextFontFamily))]
+        public string PauseButtonTextFontFamily
+        {
+            get => Model.PauseButtonTextFontFamily;
+            set => SetProperty(nameof(Model.PauseButtonTextFontFamily), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text for the play button.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonText))]
+        public string PlayButtonText
+        {
+            get => Model.PlayButtonText;
+            set => SetProperty(nameof(Model.PlayButtonText), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text for the pause button.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlayPauseButton.PauseButtonText))]
+        public string PauseButtonText
+        {
+            get => Model.PauseButtonText;
+            set => SetProperty(nameof(Model.PauseButtonText), value);
+        }
+
         /// <inheritdoc/>
         protected override void OnReset()
         {

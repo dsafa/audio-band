@@ -34,13 +34,19 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.ClickedImagePath, opt => opt.Ignore())
                     .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.HoveredBackgroundColor, opt => opt.Ignore())
-                    .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore());
+                    .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.ContentType, opt => opt.Ignore())
+                    .ForMember(dest => dest.TextFontFamily, opt => opt.Ignore())
+                    .ForMember(dest => dest.Text, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.PreviousButtonSettings, PreviousButton>()
                     .ForMember(dest => dest.HoveredImagePath, opt => opt.Ignore())
                     .ForMember(dest => dest.ClickedImagePath, opt => opt.Ignore())
                     .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.HoveredBackgroundColor, opt => opt.Ignore())
-                    .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore());
+                    .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.ContentType, opt => opt.Ignore())
+                    .ForMember(dest => dest.TextFontFamily, opt => opt.Ignore())
+                    .ForMember(dest => dest.Text, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.PlayPauseButtonSettings, PlayPauseButton>()
                     .ForMember(dest => dest.DefaultBackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.HoveredBackgroundColor, opt => opt.Ignore())
@@ -48,7 +54,13 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.PlayButtonHoveredImagePath, opt => opt.Ignore())
                     .ForMember(dest => dest.PlayButtonClickedImagePath, opt => opt.Ignore())
                     .ForMember(dest => dest.PauseButtonHoveredImagePath, opt => opt.Ignore())
-                    .ForMember(dest => dest.PauseButtonClickedImagePath, opt => opt.Ignore());
+                    .ForMember(dest => dest.PauseButtonClickedImagePath, opt => opt.Ignore())
+                    .ForMember(dest => dest.PlayButtonContentType, opt => opt.Ignore())
+                    .ForMember(dest => dest.PauseButtonContentType, opt => opt.Ignore())
+                    .ForMember(dest => dest.PlayButtonTextFontFamily, opt => opt.Ignore())
+                    .ForMember(dest => dest.PauseButtonTextFontFamily, opt => opt.Ignore())
+                    .ForMember(dest => dest.PlayButtonText, opt => opt.Ignore())
+                    .ForMember(dest => dest.PauseButtonText, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.AudioSourceSetting, AudioSourceSetting>()
                     .ForMember(dest => dest.Remember, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.ProgressBarSettings, ProgressBar>()

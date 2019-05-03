@@ -21,6 +21,12 @@ namespace AudioBand.Models
         private Color _defaultBackgroundColor = Color.Transparent;
         private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
         private Color _clickedBackgroundColor = Color.FromArgb(15, 255, 255, 255);
+        private ButtonContentType _playButtonContentType = ButtonContentType.Image;
+        private ButtonContentType _pauseButtonContentType = ButtonContentType.Image;
+        private string _playButtonTextFontFamily = "Segoe MDL2 Assets";
+        private string _pauseButtonTextFontFamily = "Segoe MDL2 Assets";
+        private string _playButtonText = "";
+        private string _pauseButtonText = "";
 
         /// <summary>
         /// Gets or sets the path for the play image.
@@ -146,6 +152,60 @@ namespace AudioBand.Models
         {
             get => _clickedBackgroundColor;
             set => SetProperty(ref _clickedBackgroundColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ButtonContentType"/> for the play button.
+        /// </summary>
+        public ButtonContentType PlayButtonContentType
+        {
+            get => _playButtonContentType;
+            set => SetProperty(ref _playButtonContentType, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ButtonContentType"/> for the pause button.
+        /// </summary>
+        public ButtonContentType PauseButtonContentType
+        {
+            get => _pauseButtonContentType;
+            set => SetProperty(ref _pauseButtonContentType, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font family for the play button.
+        /// </summary>
+        public string PlayButtonTextFontFamily
+        {
+            get => _playButtonTextFontFamily;
+            set => SetProperty(ref _playButtonTextFontFamily, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font family for the pause button.
+        /// </summary>
+        public string PauseButtonTextFontFamily
+        {
+            get => _pauseButtonTextFontFamily;
+            set => SetProperty(ref _pauseButtonTextFontFamily, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text for the play button.
+        /// </summary>
+        public string PlayButtonText
+        {
+            get => _playButtonText;
+            set => SetProperty(ref _playButtonText, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text for the pause button.
+        /// </summary>
+        public string PauseButtonText
+        {
+            get => _pauseButtonText;
+            set => SetProperty(ref _pauseButtonText, value);
         }
     }
 }
