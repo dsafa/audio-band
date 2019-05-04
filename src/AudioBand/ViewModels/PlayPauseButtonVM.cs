@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using AudioBand.Models;
 using AudioBand.Resources;
 using AudioBand.Settings;
@@ -12,6 +14,7 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class PlayPauseButtonVM : ViewModelBase<PlayPauseButton>
     {
+        private static readonly List<ButtonContentType> ContentTypes = Enum.GetValues(typeof(ButtonContentType)).Cast<ButtonContentType>().ToList();
         private readonly IAppSettings _appsettings;
         private readonly Track _track;
         private readonly IResourceLoader _resourceLoader;
@@ -376,6 +379,11 @@ namespace AudioBand.ViewModels
             get => Model.PauseButtonText;
             set => SetProperty(nameof(Model.PauseButtonText), value);
         }
+
+        /// <summary>
+        /// Gets the button content types.
+        /// </summary>
+        public IEnumerable<ButtonContentType> ButtonContentTypes => ContentTypes;
 
         /// <inheritdoc/>
         protected override void OnReset()

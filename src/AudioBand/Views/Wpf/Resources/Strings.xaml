@@ -34,6 +34,14 @@
     <sys:String x:Key="AboutTitle">About AudioBand</sys:String>
     <sys:String x:Key="RememberSettingLabelText">Remember</sys:String>
     <sys:String x:Key="DefaultProfileItemText">Default Profile</sys:String>
+    <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
+    <sys:String x:Key="PauseButtonContentSectionText">Pause button content</sys:String>
+    <sys:String x:Key="PlayButtonContentTypeDescription">Select the content type for the play button</sys:String>
+    <sys:String x:Key="PlayButtonFontFamilyDescription">Select the font family for the play button text</sys:String>
+    <sys:String x:Key="PlayButtonTextDescription">Play button text</sys:String>
+    <sys:String x:Key="PauseButtonContentTypeDescription">Select the content type for the pause button</sys:String>
+    <sys:String x:Key="PauseButtonFontFamilyDescription">Select the font family for the pause button text</sys:String>
+    <sys:String x:Key="PauseButtonTextDescription">Pause button text</sys:String>
 
     <sys:String x:Key="GeneralSettingsTab">General</sys:String>
     <sys:String x:Key="PlaybackControlsTab">Playback Controls</sys:String>
