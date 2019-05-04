@@ -3,7 +3,6 @@
                     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF">
-    <Thickness x:Key="DefaultControlMargin" Left="0" Top="4" Right="0" Bottom="0"/>
     <Thickness x:Key="InputSpacing" Left="4" Top="0" Right="4" Bottom="0"/>
     <Thickness x:Key="BorderThickness">2</Thickness>
     <Thickness x:Key="SectionMargin" Top="16"/>
