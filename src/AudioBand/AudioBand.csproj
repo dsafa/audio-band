@@ -146,6 +146,7 @@
     <Compile Include="Resources\IResourceLoader.cs" />
     <Compile Include="Resources\ResourceLoader.cs" />
     <Compile Include="Resources\SvgImage.cs" />
+    <Compile Include="Resources\TextImage.cs" />
     <Compile Include="Settings\IAppSettings.cs" />
     <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
     <Compile Include="Settings\Migrations\Migration.cs" />
