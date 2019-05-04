@@ -60,7 +60,13 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.PlayButtonTextFontFamily, opt => opt.Ignore())
                     .ForMember(dest => dest.PauseButtonTextFontFamily, opt => opt.Ignore())
                     .ForMember(dest => dest.PlayButtonText, opt => opt.Ignore())
-                    .ForMember(dest => dest.PauseButtonText, opt => opt.Ignore());
+                    .ForMember(dest => dest.PauseButtonText, opt => opt.Ignore())
+                    .ForMember(dest => dest.PlayButtonTextColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.PlayButtonTextHoverColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.PlayButtonTextClickedColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.PauseButtonTextColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.PauseButtonTextHoverColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.PauseButtonTextClickedColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.AudioSourceSetting, AudioSourceSetting>()
                     .ForMember(dest => dest.Remember, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.ProgressBarSettings, ProgressBar>()

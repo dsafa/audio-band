@@ -27,6 +27,12 @@ namespace AudioBand.Models
         private string _pauseButtonTextFontFamily = "Segoe MDL2 Assets";
         private string _playButtonText = "";
         private string _pauseButtonText = "";
+        private Color _playButtonTextColor = Color.White;
+        private Color _playButtonTextHoverColor = Color.White;
+        private Color _playButtonTextClickedColor = Color.White;
+        private Color _pauseButtonTextColor = Color.White;
+        private Color _pauseButtonTextHoverColor = Color.White;
+        private Color _pauseButtonTextClickedColor = Color.White;
 
         /// <summary>
         /// Gets or sets the path for the play image.
@@ -206,6 +212,60 @@ namespace AudioBand.Models
         {
             get => _pauseButtonText;
             set => SetProperty(ref _pauseButtonText, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color for the play button.
+        /// </summary>
+        public Color PlayButtonTextColor
+        {
+            get => _playButtonTextColor;
+            set => SetProperty(ref _playButtonTextColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color for the play button when hovered.
+        /// </summary>
+        public Color PlayButtonTextHoverColor
+        {
+            get => _playButtonTextHoverColor;
+            set => SetProperty(ref _playButtonTextHoverColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color for the play button when clicked.
+        /// </summary>
+        public Color PlayButtonTextClickedColor
+        {
+            get => _playButtonTextClickedColor;
+            set => SetProperty(ref _playButtonTextClickedColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color for the pause button.
+        /// </summary>
+        public Color PauseButtonTextColor
+        {
+            get => _pauseButtonTextColor;
+            set => SetProperty(ref _pauseButtonTextColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color for the pause button when hovered.
+        /// </summary>
+        public Color PauseButtonTextHoverColor
+        {
+            get => _pauseButtonTextHoverColor;
+            set => SetProperty(ref _pauseButtonTextHoverColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color for the pause button when clicked.
+        /// </summary>
+        public Color PauseButtonTextClickedColor
+        {
+            get => _pauseButtonTextClickedColor;
+            set => SetProperty(ref _pauseButtonTextClickedColor, value);
         }
     }
 }
