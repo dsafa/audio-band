@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- Common settings -->
     <sys:String x:Key="WidthLabelText">Width</sys:String>
     <sys:String x:Key="HeightLabelText">Height</sys:String>
     <sys:String x:Key="VisibilityLabelText">Visibility</sys:String>
@@ -8,15 +9,38 @@
     <sys:String x:Key="StatusHidden">Hidden</sys:String>
     <sys:String x:Key="XPositionLabelText">X Position</sys:String>
     <sys:String x:Key="YPositionLabelText">Y Position</sys:String>
+    <sys:String x:Key="DefaultColorLabelText">Background color</sys:String>
+    <sys:String x:Key="HoverColorLabelText">Background color when hovered</sys:String>
+    <sys:String x:Key="ClickedColorLabelText">Background color when clicked</sys:String>
+    <sys:String x:Key="ButtonTextColorDescription">Normal text color</sys:String>
+    <sys:String x:Key="ButtonTextHoverColorDescription">Text color when hovered</sys:String>
+    <sys:String x:Key="ButtonTextClickedColorDescription">Text color when clicked</sys:String>
+
+    <!-- Play/pause button settings -->
     <sys:String x:Key="PlayButtonImageLabelText">Play image</sys:String>
     <sys:String x:Key="PlayButtonHoveredImageLabelText">Play image when hovered</sys:String>
     <sys:String x:Key="PlayButtonClickedImageLabelText">Play image when clicked</sys:String>
     <sys:String x:Key="PauseButtonImageLabelText">Pause image</sys:String>
     <sys:String x:Key="PauseButtonHoveredImageLabelText">Pause image when hovered</sys:String>
     <sys:String x:Key="PauseButtonClickedImageLabelText">Pause image when clicked</sys:String>
+    <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
+    <sys:String x:Key="PauseButtonContentSectionText">Pause button content</sys:String>
+    <sys:String x:Key="PlayButtonContentTypeDescription">Select the content type for the play button</sys:String>
+    <sys:String x:Key="PlayButtonFontFamilyDescription">Select the font family for the play button text</sys:String>
+    <sys:String x:Key="PlayButtonTextDescription">Play button text</sys:String>
+    <sys:String x:Key="PauseButtonContentTypeDescription">Select the content type for the pause button</sys:String>
+    <sys:String x:Key="PauseButtonFontFamilyDescription">Select the font family for the pause button text</sys:String>
+    <sys:String x:Key="PauseButtonTextDescription">Pause button text</sys:String>
+
+    <!-- Playback button settings -->
     <sys:String x:Key="ButtonImageLabelText">Button Image</sys:String>
     <sys:String x:Key="ButtonHoveredImageLabelText">Button image when hovered</sys:String>
     <sys:String x:Key="ButtonClickedImageLabelText">Button image when clicked</sys:String>
+    <sys:String x:Key="PlaybackButtonContentSectionText">Button content</sys:String>
+    <sys:String x:Key="PlaybackButtonContentTypeDescription">Select the content type for the button</sys:String>
+    <sys:String x:Key="PlaybackButtonFontFamilyDescription">Select the font family for the button text</sys:String>
+    <sys:String x:Key="PlaybackButtonTextDescription">Button text</sys:String>
+
     <sys:String x:Key="CustomNameLabelText">Name</sys:String>
     <sys:String x:Key="FontFamilyLabelText">Font Family</sys:String>
     <sys:String x:Key="FontSizeLabelText">Font Size</sys:String>
@@ -26,25 +50,11 @@
     <sys:String x:Key="ScrollSpeedLabelText">Scroll Speed</sys:String>
     <sys:String x:Key="BackgroundColorLabelText">Background Color</sys:String>
     <sys:String x:Key="ForegroundColorLabelText">Foreground Color</sys:String>
-    <sys:String x:Key="DefaultColorLabelText">Background color</sys:String>
-    <sys:String x:Key="HoverColorLabelText">Background color when hovered</sys:String>
-    <sys:String x:Key="ClickedColorLabelText">Background color when clicked</sys:String>
     <sys:String x:Key="PlaceholderImageLabelText">Placeholder Image</sys:String>
     <sys:String x:Key="YOffsetLabelText">Margin</sys:String>
     <sys:String x:Key="AboutTitle">About AudioBand</sys:String>
     <sys:String x:Key="RememberSettingLabelText">Remember</sys:String>
     <sys:String x:Key="DefaultProfileItemText">Default Profile</sys:String>
-    <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
-    <sys:String x:Key="PauseButtonContentSectionText">Pause button content</sys:String>
-    <sys:String x:Key="PlayButtonContentTypeDescription">Select the content type for the play button</sys:String>
-    <sys:String x:Key="PlayButtonFontFamilyDescription">Select the font family for the play button text</sys:String>
-    <sys:String x:Key="PlayButtonTextDescription">Play button text</sys:String>
-    <sys:String x:Key="PauseButtonContentTypeDescription">Select the content type for the pause button</sys:String>
-    <sys:String x:Key="PauseButtonFontFamilyDescription">Select the font family for the pause button text</sys:String>
-    <sys:String x:Key="PauseButtonTextDescription">Pause button text</sys:String>
-    <sys:String x:Key="ButtonTextColorDescription">Normal text color</sys:String>
-    <sys:String x:Key="ButtonTextHoverColorDescription">Text color when hovered</sys:String>
-    <sys:String x:Key="ButtonTextClickedColorDescription">Text color when clicked</sys:String>
 
     <sys:String x:Key="GeneralSettingsTab">General</sys:String>
     <sys:String x:Key="PlaybackControlsTab">Playback Controls</sys:String>

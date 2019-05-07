@@ -13,7 +13,7 @@ namespace AudioBand.Views.Wpf
         /// <summary>
         /// Dependency property for <see cref="Color"/>.
         /// </summary>
-        public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(nameof(Color), typeof(Color), typeof(ColorPicker));
+        public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(nameof(Color), typeof(Color), typeof(ColorPicker), new FrameworkPropertyMetadata(Colors.White, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
         /// Dependency property for <see cref="DialogService"/>.

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Runtime;
 using AudioBand.Models;
 using AudioBand.Resources;
@@ -15,6 +17,7 @@ namespace AudioBand.ViewModels
     public abstract class PlaybackButtonVMBase<TButton> : ViewModelBase<TButton>
         where TButton : PlaybackButtonBase, new()
     {
+        private static readonly List<ButtonContentType> ContentTypes = Enum.GetValues(typeof(ButtonContentType)).Cast<ButtonContentType>().ToList();
         private IImage _image;
         private IImage _hoveredImage;
         private IImage _clickedImage;
@@ -34,9 +37,7 @@ namespace AudioBand.ViewModels
             ResourceLoader = resourceLoader;
 
             AppSettings.ProfileChanged += AppsSettingsOnProfileChanged;
-            Image = GetDefaultImage(); // Abstract method but everything should be initialized already
-            HoveredImage = GetHoveredImage();
-            ClickedImage = GetClickedImage();
+            UpdateImages();
         }
 
         /// <summary>
@@ -75,9 +76,9 @@ namespace AudioBand.ViewModels
             get => Model.ImagePath;
             set
             {
-                if (SetProperty(nameof(Model.ImagePath), value))
+                if (SetProperty(nameof(Model.ImagePath), value) && ContentType == ButtonContentType.Image)
                 {
-                    Image = GetDefaultImage();
+                    Image = LoadDrawingImage(value);
                 }
             }
         }
@@ -91,9 +92,9 @@ namespace AudioBand.ViewModels
             get => Model.HoveredImagePath;
             set
             {
-                if (SetProperty(nameof(Model.HoveredImagePath), value))
+                if (SetProperty(nameof(Model.HoveredImagePath), value) && ContentType == ButtonContentType.Image)
                 {
-                    HoveredImage = GetHoveredImage();
+                    HoveredImage = LoadDrawingImage(value);
                 }
             }
         }
@@ -107,9 +108,9 @@ namespace AudioBand.ViewModels
             get => Model.ClickedImagePath;
             set
             {
-                if (SetProperty(nameof(Model.ClickedImagePath), value))
+                if (SetProperty(nameof(Model.ClickedImagePath), value) && ContentType == ButtonContentType.Image)
                 {
-                    ClickedImage = GetClickedImage();
+                    ClickedImage = LoadDrawingImage(value);
                 }
             }
         }
@@ -199,13 +200,24 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Gets the button content types.
+        /// </summary>
+        public IEnumerable<ButtonContentType> ButtonContentTypes => ContentTypes;
+
+        /// <summary>
         /// Gets or sets the content type for the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlaybackButtonBase.ContentType))]
         public ButtonContentType ContentType
         {
             get => Model.ContentType;
-            set => SetProperty(nameof(Model.ContentType), value);
+            set
+            {
+                if (SetProperty(nameof(Model.ContentType), value))
+                {
+                    UpdateImages();
+                }
+            }
         }
 
         /// <summary>
@@ -215,7 +227,13 @@ namespace AudioBand.ViewModels
         public string TextFontFamily
         {
             get => Model.TextFontFamily;
-            set => SetProperty(nameof(Model.TextFontFamily), value);
+            set
+            {
+                if (SetProperty(nameof(Model.TextFontFamily), value) && ContentType == ButtonContentType.Text)
+                {
+                    UpdateImages();
+                }
+            }
         }
 
         /// <summary>
@@ -225,7 +243,61 @@ namespace AudioBand.ViewModels
         public string Text
         {
             get => Model.Text;
-            set => SetProperty(nameof(Model.Text), value);
+            set
+            {
+                if (SetProperty(nameof(Model.Text), value) && ContentType == ButtonContentType.Text)
+                {
+                    UpdateImages();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the text color.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.TextColor))]
+        public Color TextColor
+        {
+            get => Model.TextColor;
+            set
+            {
+                if (SetProperty(nameof(Model.TextColor), value) && ContentType == ButtonContentType.Text)
+                {
+                    Image = new TextImage(Text, TextFontFamily, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the text hovered color.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.TextHoveredColor))]
+        public Color TextHoveredColor
+        {
+            get => Model.TextHoveredColor;
+            set
+            {
+                if (SetProperty(nameof(Model.TextHoveredColor), value) && ContentType == ButtonContentType.Text)
+                {
+                    HoveredImage = new TextImage(Text, TextFontFamily, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the text clicked color.
+        /// </summary>
+        [PropertyChangeBinding(nameof(PlaybackButtonBase.TextClickedColor))]
+        public Color TextClickedColor
+        {
+            get => Model.TextClickedColor;
+            set
+            {
+                if (SetProperty(nameof(Model.TextClickedColor), value) && ContentType == ButtonContentType.Text)
+                {
+                    ClickedImage = new TextImage(Text, TextFontFamily, value);
+                }
+            }
         }
 
         /// <summary>
@@ -259,14 +331,14 @@ namespace AudioBand.ViewModels
         protected override void OnReset()
         {
             base.OnReset();
-            Image = GetDefaultImage();
+            UpdateImages();
         }
 
         /// <inheritdoc/>
         protected override void OnCancelEdit()
         {
             base.OnCancelEdit();
-            Image = GetDefaultImage();
+            UpdateImages();
         }
 
         /// <summary>
@@ -276,27 +348,36 @@ namespace AudioBand.ViewModels
         protected abstract TButton GetReplacementModel();
 
         /// <summary>
-        /// Gets the default image.
+        /// Gets the default drawing image.
         /// </summary>
         /// <returns>The default image.</returns>
-        protected abstract IImage GetDefaultImage();
-
-        /// <summary>
-        /// Gets the hovered image.
-        /// </summary>
-        /// <returns>The hovered image.</returns>
-        protected abstract IImage GetHoveredImage();
-
-        /// <summary>
-        /// Gets the clicked image.
-        /// </summary>
-        /// <returns>The clicked image.</returns>
-        protected abstract IImage GetClickedImage();
+        protected abstract IImage GetDefaultDrawingImage();
 
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
             ReplaceModel(GetReplacementModel());
+        }
+
+        private IImage LoadDrawingImage(string path)
+        {
+            return ResourceLoader.TryLoadImageFromPath(path, GetDefaultDrawingImage());
+        }
+
+        private void UpdateImages()
+        {
+            if (ContentType == ButtonContentType.Image)
+            {
+                Image = LoadDrawingImage(ImagePath);
+                HoveredImage = LoadDrawingImage(HoveredImagePath);
+                ClickedImage = LoadDrawingImage(ClickedImagePath);
+            }
+            else
+            {
+                Image = new TextImage(Text, TextFontFamily, TextColor);
+                HoveredImage = new TextImage(Text, TextFontFamily, TextHoveredColor);
+                ClickedImage = new TextImage(Text, TextFontFamily, TextClickedColor);
+            }
         }
     }
 }

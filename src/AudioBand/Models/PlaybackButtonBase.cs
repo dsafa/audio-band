@@ -21,6 +21,9 @@ namespace AudioBand.Models
         private ButtonContentType _contentType = ButtonContentType.Image;
         private string _textFontFamily = "Segoe MDL2 Assets";
         private string _text;
+        private Color _textColor = Color.White;
+        private Color _textHoveredColor = Color.White;
+        private Color _textClickedColor = Color.White;
 
         /// <summary>
         /// Gets or sets the path of the button image.
@@ -146,6 +149,33 @@ namespace AudioBand.Models
         {
             get => _text;
             set => SetProperty(ref _text, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color.
+        /// </summary>
+        public Color TextColor
+        {
+            get => _textColor;
+            set => SetProperty(ref _textColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color when hovered.
+        /// </summary>
+        public Color TextHoveredColor
+        {
+            get => _textHoveredColor;
+            set => SetProperty(ref _textHoveredColor, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text color when clicked.
+        /// </summary>
+        public Color TextClickedColor
+        {
+            get => _textClickedColor;
+            set => SetProperty(ref _textClickedColor, value);
         }
     }
 }
