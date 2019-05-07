@@ -37,7 +37,10 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.ContentType, opt => opt.MapFrom(source => ButtonContentType.Image))
                     .ForMember(dest => dest.TextFontFamily, opt => opt.Ignore())
-                    .ForMember(dest => dest.Text, opt => opt.Ignore());
+                    .ForMember(dest => dest.Text, opt => opt.Ignore())
+                    .ForMember(dest => dest.TextColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.TextHoveredColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.TextClickedColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.PreviousButtonSettings, PreviousButton>()
                     .ForMember(dest => dest.HoveredImagePath, opt => opt.MapFrom(source => source.ImagePath))
                     .ForMember(dest => dest.ClickedImagePath, opt => opt.MapFrom(source => source.ImagePath))
@@ -46,7 +49,10 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.ContentType, opt => opt.MapFrom(source => ButtonContentType.Image))
                     .ForMember(dest => dest.TextFontFamily, opt => opt.Ignore())
-                    .ForMember(dest => dest.Text, opt => opt.Ignore());
+                    .ForMember(dest => dest.Text, opt => opt.Ignore())
+                    .ForMember(dest => dest.TextColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.TextHoveredColor, opt => opt.Ignore())
+                    .ForMember(dest => dest.TextClickedColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.PlayPauseButtonSettings, PlayPauseButton>()
                     .ForMember(dest => dest.DefaultBackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.HoveredBackgroundColor, opt => opt.Ignore())

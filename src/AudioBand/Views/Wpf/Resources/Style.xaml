@@ -538,6 +538,7 @@
             </Style>
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                 <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
+                <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
             </Style>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
