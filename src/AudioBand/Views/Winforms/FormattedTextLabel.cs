@@ -47,7 +47,7 @@ namespace AudioBand.Views.Winforms
         /// <param name="alignment">The text alignment.</param>
         public FormattedTextLabel(string format, Color defaultColor, float fontSize, string fontFamily, TextAlignment alignment)
         {
-            DoubleBuffered = true;
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
             _renderer = new FormattedTextRenderer(format, defaultColor, fontSize, fontFamily, alignment);
             _scrollingTimer.Tick += ScrollingTimerOnTick;
         }

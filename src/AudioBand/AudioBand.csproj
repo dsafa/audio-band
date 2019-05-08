@@ -214,6 +214,7 @@
     </Compile>
     <Compile Include="Views\Winforms\FormattedTextRenderer.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
+    <Compile Include="Views\Winforms\TextFormatting\ITextFormatter.cs" />
     <Compile Include="Views\Wpf\Behaviours\AppUserModelID.cs" />
     <Compile Include="Views\Wpf\Behaviours\NumericInputType.cs" />
     <Compile Include="Views\Wpf\Behaviours\PasswordBehaviour.cs" />
