@@ -29,7 +29,7 @@ namespace AudioBand.Views.Winforms
         private const string TimeFormat = @"m\:ss";
         private const string Styles = BoldStyle + ItalicsStyle + UnderlineStyle;
         private const string Tags = ArtistPlaceholder + "|" + SongNamePlaceholder + "|" + AlbumNamePlaceholder + "|" + CurrentTimePlaceholder + "|" + SongLengthPlaceholder;
-        private static readonly Regex PlaceholderPattern = new Regex($@"(?<style>[{Styles}])?(?<tag>({Tags}))(:(?<color>#[A-Fa-f0-9]{{6}}))?", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private static readonly Regex PlaceholderPattern = new Regex($@"(?<style>[{Styles}])*(?<tag>({Tags}))(:(?<color>#[A-Fa-f0-9]{{6}}))?", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 
         private string _format;
         private string _artist;
@@ -359,19 +359,21 @@ namespace AudioBand.Views.Winforms
 
             if (match.Groups["style"].Success)
             {
-                switch (match.Groups["style"].Value)
+                var styleGroup = match.Groups["style"];
+                for (int i = 0; i < styleGroup.Captures.Count; i++)
                 {
-                    case BoldStyle:
-                        format |= TextFormat.Bold;
-                        break;
-                    case ItalicsStyle:
-                        format |= TextFormat.Italic;
-                        break;
-                    case UnderlineStyle:
-                        format |= TextFormat.Underline;
-                        break;
-                    default:
-                        break;
+                    switch (styleGroup.Captures[i].Value)
+                    {
+                        case BoldStyle:
+                            format |= TextFormat.Bold;
+                            break;
+                        case ItalicsStyle:
+                            format |= TextFormat.Italic;
+                            break;
+                        case UnderlineStyle:
+                            format |= TextFormat.Underline;
+                            break;
+                    }
                 }
             }
 
