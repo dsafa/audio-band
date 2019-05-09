@@ -16,7 +16,6 @@ namespace AudioBand.Test
     [TestClass]
     public class CustomLabelsViewModelTests
     {
-        private Mock<ICustomLabelService> _labelServiceMock;
         private Mock<IDialogService> _dialogMock;
         private Mock<IAppSettings> _appSettingsMock;
         private CustomLabel _label;
@@ -25,12 +24,11 @@ namespace AudioBand.Test
         [TestInitialize]
         public void Init()
         {
-            _labelServiceMock = new Mock<ICustomLabelService>();
             _dialogMock = new Mock<IDialogService>();
             _appSettingsMock = new Mock<IAppSettings>();
             _appSettingsMock.Setup(x => x.CustomLabels).Returns(new List<CustomLabel>());
             _label = new CustomLabel();
-            _vm = new CustomLabelsVM(_appSettingsMock.Object, _labelServiceMock.Object, _dialogMock.Object);
+            _vm = new CustomLabelsVM(_appSettingsMock.Object, _dialogMock.Object);
         }
 
         [TestMethod]
@@ -39,7 +37,6 @@ namespace AudioBand.Test
             _vm.AddLabelCommand.Execute(null);
             
             Assert.AreEqual(1, _vm.CustomLabels.Count);
-            _labelServiceMock.Verify(o => o.AddCustomTextLabel(It.IsAny<CustomLabelVM>()), Times.Once);
         }
 
         [TestMethod]
@@ -51,7 +48,6 @@ namespace AudioBand.Test
             _vm.RemoveLabelCommand.Execute(newLabel);
 
             Assert.AreEqual(0, _vm.CustomLabels.Count);
-            _labelServiceMock.Verify(o => o.RemoveCustomTextLabel(newLabel), Times.Once);
             _dialogMock.Verify(o => o.ShowConfirmationDialog(
                 It.Is<ConfirmationDialogType>(type => type == ConfirmationDialogType.DeleteLabel),
                 It.Is<object[]>(data => data.Length == 1)), 
@@ -67,7 +63,6 @@ namespace AudioBand.Test
             _vm.RemoveLabelCommand.Execute(newLabel);
 
             Assert.AreEqual(1, _vm.CustomLabels.Count);
-            _labelServiceMock.Verify(o => o.RemoveCustomTextLabel(newLabel), Times.Never);
             _dialogMock.Verify(o => o.ShowConfirmationDialog(
                 It.Is<ConfirmationDialogType>(type => type == ConfirmationDialogType.DeleteLabel),
                 It.Is<object[]>(data => data.Length == 1)),
@@ -83,8 +78,6 @@ namespace AudioBand.Test
             _vm.CancelEdit();
 
             Assert.AreEqual(0, _vm.CustomLabels.Count);
-            _labelServiceMock.Verify(o => o.AddCustomTextLabel(It.IsAny<CustomLabelVM>()), Times.Once);
-            _labelServiceMock.Verify(o => o.RemoveCustomTextLabel(newLabel), Times.Once);
         }
 
         [TestMethod]
@@ -92,7 +85,7 @@ namespace AudioBand.Test
         {
             _appSettingsMock.SetupGet(x => x.CustomLabels).Returns(new List<CustomLabel> { new CustomLabel() });
             _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(true);
-            _vm = new CustomLabelsVM(_appSettingsMock.Object, _labelServiceMock.Object, _dialogMock.Object);
+            _vm = new CustomLabelsVM(_appSettingsMock.Object, _dialogMock.Object);
             _vm.BeginEdit();
             var label = _vm.CustomLabels[0];
             _vm.RemoveLabelCommand.Execute(label);
@@ -100,7 +93,6 @@ namespace AudioBand.Test
 
             Assert.AreEqual(1, _vm.CustomLabels.Count);
             Assert.AreEqual(label, _vm.CustomLabels[0]);
-            _labelServiceMock.Verify(o => o.RemoveCustomTextLabel(label), Times.Once);
         }
 
         [TestMethod]
@@ -114,8 +106,6 @@ namespace AudioBand.Test
             _vm.CancelEdit();
 
             Assert.AreEqual(0, _vm.CustomLabels.Count);
-            _labelServiceMock.Verify(o => o.AddCustomTextLabel(It.IsAny<CustomLabelVM>()), Times.Once);
-            _labelServiceMock.Verify(o => o.RemoveCustomTextLabel(newLabel), Times.Once);
         }
 
         [TestMethod, Ignore("Issue with verifying invocation")]
@@ -124,13 +114,10 @@ namespace AudioBand.Test
 
             var settingsMock = new Mock<IAppSettings>();
             settingsMock.SetupGet(m => m.CustomLabels).Returns(new List<CustomLabel> {new CustomLabel()});
-            var labelServiceMock = new Mock<ICustomLabelService>();
 
-            var vm = new CustomLabelsVM(settingsMock.Object, labelServiceMock.Object, new Mock<IDialogService>().Object);
+            var vm = new CustomLabelsVM(settingsMock.Object, new Mock<IDialogService>().Object);
             Assert.AreEqual(1, vm.CustomLabels.Count);
             _appSettingsMock.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
-            labelServiceMock.Verify(m => m.ClearCustomLabels(), Times.Once);
-            labelServiceMock.Verify(m => m.AddCustomTextLabel(It.IsAny<CustomLabelVM>()), Times.Exactly(2)); // Add one in the beginning then one after profile switch
         }
     }
 }

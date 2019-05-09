@@ -1,5 +1,8 @@
-﻿using AudioBand.Models;
-using AudioBand.Resources;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
+using AudioBand.AudioSource;
+using AudioBand.Commands;
+using AudioBand.Models;
 using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
@@ -9,16 +12,31 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class PreviousButtonVM : PlaybackButtonVMBase<PreviousButton>
     {
+        private IAudioSource _audioSource;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PreviousButtonVM"/> class.
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
-        /// <param name="resourceLoader">The resource loader.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public PreviousButtonVM(IAppSettings appSettings, IResourceLoader resourceLoader, IDialogService dialogService)
-            : base(appSettings, resourceLoader, dialogService, appSettings.PreviousButton)
+        public PreviousButtonVM(IAppSettings appSettings, IDialogService dialogService)
+            : base(appSettings, dialogService, appSettings.PreviousButton)
         {
+            PreviousTrackCommand = new AsyncRelayCommand<object>(PreviousTrackCommandOnExecute);
         }
+
+        /// <summary>
+        /// Sets the audio source.
+        /// </summary>
+        public IAudioSource AudioSource
+        {
+            set => UpdateAudioSource(value);
+        }
+
+        /// <summary>
+        /// Gets the previous track command.
+        /// </summary>
+        public ICommand PreviousTrackCommand { get; }
 
         /// <inheritdoc />
         protected override PreviousButton GetReplacementModel()
@@ -26,10 +44,19 @@ namespace AudioBand.ViewModels
             return AppSettings.PreviousButton;
         }
 
-        /// <inheritdoc />
-        protected override IImage GetDefaultDrawingImage()
+        private void UpdateAudioSource(IAudioSource audioSource)
         {
-            return ResourceLoader.DefaultPreviousImage;
+            _audioSource = audioSource;
+        }
+
+        private async Task PreviousTrackCommandOnExecute(object arg)
+        {
+            if (_audioSource == null)
+            {
+                return;
+            }
+
+            await _audioSource.NextTrackAsync();
         }
     }
 }

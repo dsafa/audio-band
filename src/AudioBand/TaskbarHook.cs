@@ -62,12 +62,6 @@ namespace AudioBand
             }
 
             var info = Marshal.PtrToStructure<NativeMethods.CWPSTRUCT>(lParam);
-            if (info.Message == WmDpiChanged && info.Hwnd == _taskBarHwnd)
-            {
-                var newDpi = HiWord(info.WParam);
-                _messageBus.Publish(new DpiChangedMessage(newDpi));
-            }
-
             return NativeMethods.CallNextHook(IntPtr.Zero, nCode, wParam, lParam);
         }
     }

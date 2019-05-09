@@ -31,7 +31,7 @@ namespace AudioBand.Test
             _appSettings.SetupSequence(m => m.AlbumArtPopup)
                 .Returns(first)
                 .Returns(second);
-            var vm = new AlbumArtPopupVM(_appSettings.Object, new Track());
+            var vm = new AlbumArtPopupVM(_appSettings.Object);
             bool raise = false;
             vm.PropertyChanged += (_, __) => raise = true;
 

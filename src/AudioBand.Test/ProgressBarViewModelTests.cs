@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Drawing;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Windows.Media;
 
 namespace AudioBand.Test
 {
@@ -16,13 +16,13 @@ namespace AudioBand.Test
         {
             var settingsMock = new Mock<IAppSettings>();
 
-            var first = new ProgressBar() {BackgroundColor = Color.AliceBlue};
-            var second = new ProgressBar() {BackgroundColor = Color.Aqua};
+            var first = new ProgressBar() {BackgroundColor = Colors.AliceBlue};
+            var second = new ProgressBar() {BackgroundColor = Colors.Aqua};
             settingsMock.SetupSequence(m => m.ProgressBar)
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new ProgressBarVM(settingsMock.Object, new Mock<IDialogService>().Object, new Track());
+            var vm = new ProgressBarVM(settingsMock.Object, new Mock<IDialogService>().Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 

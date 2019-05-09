@@ -4,12 +4,14 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows.Media;
 using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
 using AudioBand.Settings.Models.v3;
 using Nett;
 using NLog;
+using Color = System.Windows.Media.Color;
 
 namespace AudioBand.Settings
 {

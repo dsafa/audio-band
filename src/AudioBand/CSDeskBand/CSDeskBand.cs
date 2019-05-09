@@ -2,6 +2,9 @@
 // Define the symbol DESKBAND_WINFORMS for winforms or DESKBAND_WPF for wpf
 // VERSION 3.1
 // LICENSE: https://raw.githubusercontent.com/dsafa/CSDeskBand/master/LICENSE
+
+using System.Diagnostics;
+
 #pragma warning disable 1591
 namespace CSDeskBand
 {
@@ -1045,6 +1048,7 @@ namespace CSDeskBand
         /// <param name="lparam"></param>
         /// <param name="handled"></param>
         /// <returns></returns>
+        [DebuggerStepThrough]
         protected virtual IntPtr HwndSourceHook(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled)
         {
             switch (msg)

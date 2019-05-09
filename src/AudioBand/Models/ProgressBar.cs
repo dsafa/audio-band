@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Windows.Media;
 
 namespace AudioBand.Models
 {
@@ -7,9 +7,9 @@ namespace AudioBand.Models
     /// </summary>
     public class ProgressBar : ModelBase
     {
-        private Color _foregroundColor = Color.DodgerBlue;
-        private Color _backgroundColor = Color.Black;
-        private Color _hoverColor = Color.DeepSkyBlue;
+        private Color _foregroundColor = Colors.DodgerBlue;
+        private Color _backgroundColor = Colors.Black;
+        private Color _hoverColor = Colors.DeepSkyBlue;
         private bool _isVisible = true;
         private int _xPosition = 30;
         private int _yPosition = 28;

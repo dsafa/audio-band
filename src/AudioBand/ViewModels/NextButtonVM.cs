@@ -1,5 +1,8 @@
-﻿using AudioBand.Models;
-using AudioBand.Resources;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
+using AudioBand.AudioSource;
+using AudioBand.Commands;
+using AudioBand.Models;
 using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
@@ -9,16 +12,31 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class NextButtonVM : PlaybackButtonVMBase<NextButton>
     {
+        private IAudioSource _audioSource;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NextButtonVM"/> class.
         /// </summary>
         /// <param name="appSettings">The appSettings.</param>
-        /// <param name="resourceLoader">The resource loader.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public NextButtonVM(IAppSettings appSettings, IResourceLoader resourceLoader, IDialogService dialogService)
-            : base(appSettings, resourceLoader, dialogService, appSettings.NextButton)
+        public NextButtonVM(IAppSettings appSettings, IDialogService dialogService)
+            : base(appSettings, dialogService, appSettings.NextButton)
         {
+            NextTrackCommand = new AsyncRelayCommand<object>(NextTrackCommandOnExecute);
         }
+
+        /// <summary>
+        /// Sets the audio source.
+        /// </summary>
+        public IAudioSource AudioSource
+        {
+            set => UpdateAudioSource(value);
+        }
+
+        /// <summary>
+        /// Gets the next track command.
+        /// </summary>
+        public ICommand NextTrackCommand { get; }
 
         /// <inheritdoc />
         protected override NextButton GetReplacementModel()
@@ -26,10 +44,19 @@ namespace AudioBand.ViewModels
             return AppSettings.NextButton;
         }
 
-        /// <inheritdoc />
-        protected override IImage GetDefaultDrawingImage()
+        private void UpdateAudioSource(IAudioSource audioSource)
         {
-            return ResourceLoader.DefaultNextImage;
+            _audioSource = audioSource;
+        }
+
+        private async Task NextTrackCommandOnExecute(object arg)
+        {
+            if (_audioSource == null)
+            {
+                return;
+            }
+
+            await _audioSource.NextTrackAsync();
         }
     }
 }

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Runtime;
+using System.Windows.Media;
 using AudioBand.Models;
-using AudioBand.Resources;
 using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
@@ -18,53 +16,20 @@ namespace AudioBand.ViewModels
         where TButton : PlaybackButtonBase, new()
     {
         private static readonly List<ButtonContentType> ContentTypes = Enum.GetValues(typeof(ButtonContentType)).Cast<ButtonContentType>().ToList();
-        private IImage _image;
-        private IImage _hoveredImage;
-        private IImage _clickedImage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaybackButtonVMBase{TButton}"/> class.
         /// </summary>
         /// <param name="appSettings">The appSettings.</param>
-        /// <param name="resourceLoader">The resource loader.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="buttonModel">The button model.</param>
-        protected PlaybackButtonVMBase(IAppSettings appSettings, IResourceLoader resourceLoader, IDialogService dialogService, TButton buttonModel)
+        protected PlaybackButtonVMBase(IAppSettings appSettings, IDialogService dialogService, TButton buttonModel)
             : base(buttonModel)
         {
             DialogService = dialogService;
             AppSettings = appSettings;
-            ResourceLoader = resourceLoader;
 
             AppSettings.ProfileChanged += AppsSettingsOnProfileChanged;
-            UpdateImages();
-        }
-
-        /// <summary>
-        /// Gets or sets the default image.
-        /// </summary>
-        public IImage Image
-        {
-            get => _image;
-            set => SetProperty(ref _image, value, trackChanges: false);
-        }
-
-        /// <summary>
-        /// Gets or sets the hovered image.
-        /// </summary>
-        public IImage HoveredImage
-        {
-            get => _hoveredImage;
-            set => SetProperty(ref _hoveredImage, value, trackChanges: false);
-        }
-
-        /// <summary>
-        /// Gets or sets the clicked image.
-        /// </summary>
-        public IImage ClickedImage
-        {
-            get => _clickedImage;
-            set => SetProperty(ref _clickedImage, value, trackChanges: false);
         }
 
         /// <summary>
@@ -74,13 +39,7 @@ namespace AudioBand.ViewModels
         public string ImagePath
         {
             get => Model.ImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.ImagePath), value) && ContentType == ButtonContentType.Image)
-                {
-                    Image = LoadDrawingImage(value);
-                }
-            }
+            set => SetProperty(nameof(Model.ImagePath), value);
         }
 
         /// <summary>
@@ -90,13 +49,7 @@ namespace AudioBand.ViewModels
         public string HoveredImagePath
         {
             get => Model.HoveredImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.HoveredImagePath), value) && ContentType == ButtonContentType.Image)
-                {
-                    HoveredImage = LoadDrawingImage(value);
-                }
-            }
+            set => SetProperty(nameof(Model.HoveredImagePath), value);
         }
 
         /// <summary>
@@ -106,13 +59,7 @@ namespace AudioBand.ViewModels
         public string ClickedImagePath
         {
             get => Model.ClickedImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.ClickedImagePath), value) && ContentType == ButtonContentType.Image)
-                {
-                    ClickedImage = LoadDrawingImage(value);
-                }
-            }
+            set => SetProperty(nameof(Model.ClickedImagePath), value);
         }
 
         /// <summary>
@@ -129,7 +76,6 @@ namespace AudioBand.ViewModels
         /// Gets or sets the width of the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlaybackButtonBase.Width))]
-        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
@@ -140,7 +86,6 @@ namespace AudioBand.ViewModels
         /// Gets or sets the height of the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlaybackButtonBase.Height))]
-        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
@@ -151,7 +96,6 @@ namespace AudioBand.ViewModels
         /// Gets or sets the x position of the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlaybackButtonBase.XPosition))]
-        [AlsoNotify(nameof(Location))]
         public int XPosition
         {
             get => Model.XPosition;
@@ -162,7 +106,6 @@ namespace AudioBand.ViewModels
         /// Gets or sets the y position of the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlaybackButtonBase.YPosition))]
-        [AlsoNotify(nameof(Location))]
         public int YPosition
         {
             get => Model.YPosition;
@@ -211,13 +154,7 @@ namespace AudioBand.ViewModels
         public ButtonContentType ContentType
         {
             get => Model.ContentType;
-            set
-            {
-                if (SetProperty(nameof(Model.ContentType), value))
-                {
-                    UpdateImages();
-                }
-            }
+            set => SetProperty(nameof(Model.ContentType), value);
         }
 
         /// <summary>
@@ -227,13 +164,7 @@ namespace AudioBand.ViewModels
         public string TextFontFamily
         {
             get => Model.TextFontFamily;
-            set
-            {
-                if (SetProperty(nameof(Model.TextFontFamily), value) && ContentType == ButtonContentType.Text)
-                {
-                    UpdateImages();
-                }
-            }
+            set => SetProperty(nameof(Model.TextFontFamily), value);
         }
 
         /// <summary>
@@ -243,13 +174,7 @@ namespace AudioBand.ViewModels
         public string Text
         {
             get => Model.Text;
-            set
-            {
-                if (SetProperty(nameof(Model.Text), value) && ContentType == ButtonContentType.Text)
-                {
-                    UpdateImages();
-                }
-            }
+            set => SetProperty(nameof(Model.Text), value);
         }
 
         /// <summary>
@@ -259,13 +184,7 @@ namespace AudioBand.ViewModels
         public Color TextColor
         {
             get => Model.TextColor;
-            set
-            {
-                if (SetProperty(nameof(Model.TextColor), value) && ContentType == ButtonContentType.Text)
-                {
-                    Image = new TextImage(Text, TextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.TextColor), value);
         }
 
         /// <summary>
@@ -275,13 +194,7 @@ namespace AudioBand.ViewModels
         public Color TextHoveredColor
         {
             get => Model.TextHoveredColor;
-            set
-            {
-                if (SetProperty(nameof(Model.TextHoveredColor), value) && ContentType == ButtonContentType.Text)
-                {
-                    HoveredImage = new TextImage(Text, TextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.TextHoveredColor), value);
         }
 
         /// <summary>
@@ -291,26 +204,8 @@ namespace AudioBand.ViewModels
         public Color TextClickedColor
         {
             get => Model.TextClickedColor;
-            set
-            {
-                if (SetProperty(nameof(Model.TextClickedColor), value) && ContentType == ButtonContentType.Text)
-                {
-                    ClickedImage = new TextImage(Text, TextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.TextClickedColor), value);
         }
-
-        /// <summary>
-        /// Gets the location of the button.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Point Location => new Point(Model.XPosition, Model.YPosition);
-
-        /// <summary>
-        /// Gets the size of the button.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Size Size => new Size(Width, Height);
 
         /// <summary>
         /// Gets the dialog service.
@@ -323,61 +218,15 @@ namespace AudioBand.ViewModels
         protected IAppSettings AppSettings { get; }
 
         /// <summary>
-        /// Gets the resource loader.
-        /// </summary>
-        protected IResourceLoader ResourceLoader { get; }
-
-        /// <inheritdoc/>
-        protected override void OnReset()
-        {
-            base.OnReset();
-            UpdateImages();
-        }
-
-        /// <inheritdoc/>
-        protected override void OnCancelEdit()
-        {
-            base.OnCancelEdit();
-            UpdateImages();
-        }
-
-        /// <summary>
         /// Gets the button model when profile changes.
         /// </summary>
         /// <returns>The new button model.</returns>
         protected abstract TButton GetReplacementModel();
 
-        /// <summary>
-        /// Gets the default drawing image.
-        /// </summary>
-        /// <returns>The default image.</returns>
-        protected abstract IImage GetDefaultDrawingImage();
-
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
             ReplaceModel(GetReplacementModel());
-        }
-
-        private IImage LoadDrawingImage(string path)
-        {
-            return ResourceLoader.TryLoadImageFromPath(path, GetDefaultDrawingImage());
-        }
-
-        private void UpdateImages()
-        {
-            if (ContentType == ButtonContentType.Image)
-            {
-                Image = LoadDrawingImage(ImagePath);
-                HoveredImage = LoadDrawingImage(HoveredImagePath);
-                ClickedImage = LoadDrawingImage(ClickedImagePath);
-            }
-            else
-            {
-                Image = new TextImage(Text, TextFontFamily, TextColor);
-                HoveredImage = new TextImage(Text, TextFontFamily, TextHoveredColor);
-                ClickedImage = new TextImage(Text, TextFontFamily, TextClickedColor);
-            }
         }
     }
 }

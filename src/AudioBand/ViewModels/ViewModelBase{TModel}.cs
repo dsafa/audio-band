@@ -197,6 +197,7 @@ namespace AudioBand.ViewModels
             foreach (var propertyName in propertyNames)
             {
                 RaisePropertyChanged(propertyName);
+                OnModelPropertyChanged(propertyName);
 
                 if (!AlsoNotifyMap.TryGetValue(propertyName, out var alsoNotfify))
                 {
@@ -207,8 +208,6 @@ namespace AudioBand.ViewModels
                 {
                     RaisePropertyChanged(name);
                 }
-
-                OnModelPropertyChanged(propertyName);
             }
         }
     }

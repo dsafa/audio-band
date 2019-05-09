@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AudioBand.AudioSource
 {
@@ -8,13 +9,9 @@ namespace AudioBand.AudioSource
     public interface IAudioSourceManager
     {
         /// <summary>
-        /// Gets the list of audio sources available.
-        /// </summary>
-        ObservableCollection<IInternalAudioSource> AudioSources { get; }
-
-        /// <summary>
         /// Load all audio sources.
         /// </summary>
-        void LoadAudioSources();
+        /// <returns>The initial list of audio sources.</returns>
+        Task<IEnumerable<IInternalAudioSource>> LoadAudioSourcesAsync();
     }
 }
