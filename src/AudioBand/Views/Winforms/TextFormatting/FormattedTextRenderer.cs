@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Windows.Media.Animation;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
 namespace AudioBand.Views.Winforms.TextFormatting
@@ -183,21 +185,33 @@ namespace AudioBand.Views.Winforms.TextFormatting
         /// <summary>
         /// Draws the formatted text with the current values.
         /// </summary>
-        /// <param name="scaling">The scaling factor.</param>
         /// <returns>A bitmap of the rendered text.</returns>
-        public Bitmap Draw(double scaling)
+        public Bitmap Draw(double dpi)
         {
-            var size = Measure(scaling);
+            SizeF size = default(SizeF);
+            using (var temp = new Bitmap(1, 1))
+            {
+                temp.SetResolution((float)dpi, (float)dpi);
+                using (var measureGraphics = Graphics.FromImage(temp))
+                {
+                    size = Measure(measureGraphics);
+                }
+            }
+
             if (size.Width < 1 || size.Height < 1)
             {
                 return new Bitmap(100, 20);
             }
 
-            var bitmap = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
+            var width = (int)Math.Ceiling(size.Width);
+            var height = (int)Math.Ceiling(size.Height);
+            var bitmap = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
+            bitmap.SetResolution((float)dpi, (float)dpi);
             using (var graphics = Graphics.FromImage(bitmap))
             {
-                graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-                Draw(graphics, false, scaling);
+                graphics.CompositingMode = CompositingMode.SourceOver;
+                graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                Draw(graphics, false);
             }
 
             return bitmap;
@@ -208,9 +222,9 @@ namespace AudioBand.Views.Winforms.TextFormatting
         /// </summary>
         /// <param name="scaling">The scaling factor.</param>
         /// <returns>The bounds of the text.</returns>
-        public Size Measure(double scaling)
+        public SizeF Measure(Graphics measureGraphics)
         {
-            return Draw(null, true, scaling);
+            return Draw(measureGraphics, true);
         }
 
         private void Parse()
@@ -365,28 +379,21 @@ namespace AudioBand.Views.Winforms.TextFormatting
             }
         }
 
-        private Size Draw(Graphics graphics, bool measure, double scaling)
+        private SizeF Draw(Graphics graphics, bool measure)
         {
-            var totalTextSize = default(Size);
-            var x = 0;
+            var totalTextSize = default(SizeF);
+            var x = 0f;
 
             if (Chunks?.Count == 0)
             {
                 return totalTextSize;
             }
 
-            // Add a chunk at the end for padding because the last character is being cut off
-            AddChunk(new StringBuilder(" ", 1), false);
             foreach (var textChunk in Chunks)
             {
-                var fontSize = (float)(FontSize * scaling);
+                var fontSize = FontSize;
                 var font = new Font(FontFamily, fontSize, GetFontStyle(textChunk.Type), GraphicsUnit.Point);
-                var textSize = TextRenderer.MeasureText(textChunk.Text, font, new Size(1000, 1000), TextFormatFlags.NoPrefix);
-                if (textSize.Width > 0)
-                {
-                    // remove padding between items
-                    textSize.Width -= MeasurePadding(font);
-                }
+                var textSize = graphics.MeasureString(textChunk.Text, font, new SizeF(1000, 1000), StringFormat.GenericTypographic);
 
                 if (!measure)
                 {
@@ -397,8 +404,6 @@ namespace AudioBand.Views.Winforms.TextFormatting
                 totalTextSize.Height = textSize.Height;
                 x += textSize.Width;
             }
-
-            Chunks.RemoveAt(Chunks.Count - 1);
 
             return totalTextSize;
         }

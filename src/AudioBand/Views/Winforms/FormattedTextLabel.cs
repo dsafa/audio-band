@@ -241,8 +241,13 @@ namespace AudioBand.Views.Winforms
         /// <inheritdoc/>
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (_renderedText == null)
+            {
+                return;
+            }
+
             // measure
-            _textWidth = _renderer.Measure(ScalingFactor).Width;
+            _textWidth = _renderedText.Width;
             var textTooLong = _textWidth > ClientRectangle.Width - WidthPadding; // extra padding in case
 
             // to long and not scrolling -> start scrolling
@@ -329,7 +334,8 @@ namespace AudioBand.Views.Winforms
 
         private void Redraw()
         {
-            _renderedText = _renderer.Draw(ScalingFactor);
+            _renderedText?.Dispose();
+            _renderedText = _renderer.Draw(Dpi);
             InvokeRefresh();
         }
 
