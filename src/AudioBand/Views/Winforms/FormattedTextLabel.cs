@@ -334,7 +334,6 @@ namespace AudioBand.Views.Winforms
 
         private void Redraw()
         {
-            _renderedText?.Dispose();
             _renderedText = _renderer.Draw(Dpi);
             InvokeRefresh();
         }

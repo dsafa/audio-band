@@ -19,9 +19,9 @@ namespace AudioBand.Test
             var format = "hello";
             var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual("hello", r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Normal));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual("hello", r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Normal));
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace AudioBand.Test
             var format = "";
             var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
-            Assert.AreEqual(0, r.Chunks.Count);
+            Assert.AreEqual(0, r.TextSegments.Count);
         }
 
         [TestMethod]
@@ -43,9 +43,9 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual(artist, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual(artist, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Artist));
         }
 
         [TestMethod]
@@ -58,13 +58,13 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(2, r.Chunks.Count);
+            Assert.AreEqual(2, r.TextSegments.Count);
 
-            Assert.AreEqual(artist, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.AreEqual(artist, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Artist));
 
-            Assert.AreEqual(" song", r.Chunks[1].Text);
-            Assert.IsTrue(r.Chunks[1].Type.HasFlag(FormattedTextFlags.Normal));
+            Assert.AreEqual(" song", r.TextSegments[1].Text);
+            Assert.IsTrue(r.TextSegments[1].Type.HasFlag(FormattedTextFlags.Normal));
         }
 
         [TestMethod]
@@ -77,13 +77,13 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(2, r.Chunks.Count);
+            Assert.AreEqual(2, r.TextSegments.Count);
 
-            Assert.AreEqual("by ", r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Normal));
+            Assert.AreEqual("by ", r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Normal));
 
-            Assert.AreEqual(artist, r.Chunks[1].Text);
-            Assert.IsTrue(r.Chunks[1].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.AreEqual(artist, r.TextSegments[1].Text);
+            Assert.IsTrue(r.TextSegments[1].Type.HasFlag(FormattedTextFlags.Artist));
         }
 
         [TestMethod]
@@ -92,9 +92,9 @@ namespace AudioBand.Test
             var format = "{artist";
             var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual("{artist", r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Normal));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual("{artist", r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Normal));
         }
 
         [TestMethod]
@@ -103,9 +103,9 @@ namespace AudioBand.Test
             var format = "}";
             var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual("}", r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Normal));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual("}", r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Normal));
         }
 
         [TestMethod]
@@ -118,16 +118,16 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(3, r.Chunks.Count);
+            Assert.AreEqual(3, r.TextSegments.Count);
 
-            Assert.AreEqual("this is ", r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Normal));
+            Assert.AreEqual("this is ", r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Normal));
 
-            Assert.AreEqual(artist, r.Chunks[1].Text);
-            Assert.IsTrue(r.Chunks[1].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.AreEqual(artist, r.TextSegments[1].Text);
+            Assert.IsTrue(r.TextSegments[1].Type.HasFlag(FormattedTextFlags.Artist));
 
-            Assert.AreEqual(" and ", r.Chunks[2].Text);
-            Assert.IsTrue(r.Chunks[2].Type.HasFlag(FormattedTextFlags.Normal));
+            Assert.AreEqual(" and ", r.TextSegments[2].Text);
+            Assert.IsTrue(r.TextSegments[2].Type.HasFlag(FormattedTextFlags.Normal));
         }
 
         [TestMethod]
@@ -136,10 +136,10 @@ namespace AudioBand.Test
             var format = "{something}";
             var r = new FormattedTextRenderer(format, Color.Black, 8.5f, "Arial", CustomLabel.TextAlignment.Left);
 
-            Assert.AreEqual(1, r.Chunks.Count);
+            Assert.AreEqual(1, r.TextSegments.Count);
 
-            Assert.AreEqual("! invalid format !", r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Normal));
+            Assert.AreEqual("! invalid format !", r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Normal));
         }
 
         [TestMethod]
@@ -152,9 +152,9 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual(artist, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual(artist, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Artist));
         }
 
         [TestMethod]
@@ -167,9 +167,9 @@ namespace AudioBand.Test
                 SongName = song
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual(song, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Song));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual(song, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Song));
         }
 
         [TestMethod]
@@ -182,9 +182,9 @@ namespace AudioBand.Test
                 AlbumName = album
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual(album, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Album));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual(album, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Album));
         }
 
         [TestMethod]
@@ -197,9 +197,9 @@ namespace AudioBand.Test
                 SongProgress = time,
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual("0:40", r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.CurrentTime));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual("0:40", r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.CurrentTime));
         }
 
         [TestMethod]
@@ -212,9 +212,9 @@ namespace AudioBand.Test
                 SongLength = time,
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual("1:20", r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.SongLength));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual("1:20", r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.SongLength));
         }
 
         [TestMethod]
@@ -227,10 +227,10 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual(artist, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Artist));
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Bold));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual(artist, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Bold));
         }
 
         [TestMethod]
@@ -243,10 +243,10 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual(artist, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Artist));
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Italic));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual(artist, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Italic));
         }
 
         [TestMethod]
@@ -259,10 +259,10 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual(artist, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Artist));
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Underline));
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual(artist, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Underline));
         }
 
         [TestMethod]
@@ -275,11 +275,11 @@ namespace AudioBand.Test
                 Artist = artist
             };
 
-            Assert.AreEqual(1, r.Chunks.Count);
-            Assert.AreEqual(artist, r.Chunks[0].Text);
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Artist));
-            Assert.IsTrue(r.Chunks[0].Type.HasFlag(FormattedTextFlags.Underline));
-            Assert.AreEqual(ColorTranslator.FromHtml("#ff00ff"), r.Chunks[0].Color);
+            Assert.AreEqual(1, r.TextSegments.Count);
+            Assert.AreEqual(artist, r.TextSegments[0].Text);
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Artist));
+            Assert.IsTrue(r.TextSegments[0].Type.HasFlag(FormattedTextFlags.Underline));
+            Assert.AreEqual(ColorTranslator.FromHtml("#ff00ff"), r.TextSegments[0].Color);
         }
     }
 }

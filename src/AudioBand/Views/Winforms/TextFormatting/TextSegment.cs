@@ -5,16 +5,16 @@ namespace AudioBand.Views.Winforms.TextFormatting
     /// <summary>
     /// A chunk of text that has its own custom rendering.
     /// </summary>
-    public class TextChunk
+    public class TextSegment
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TextChunk"/> class
+        /// Initializes a new instance of the <see cref="TextSegment"/> class
         /// with text, color and type.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="type">The text type.</param>
         /// <param name="color">The text color.</param>
-        public TextChunk(string text, FormattedTextFlags type, Color color)
+        public TextSegment(string text, FormattedTextFlags type, Color color)
         {
             Text = text;
             Type = type;
