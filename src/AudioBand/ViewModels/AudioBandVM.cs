@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using AudioBand.Settings;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -25,7 +24,6 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Models.AudioBand.Width))]
-        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
@@ -33,18 +31,11 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Models.AudioBand.Height))]
-        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
             set => SetProperty(nameof(Model.Height), value);
         }
-
-        /// <summary>
-        /// Gets the size of the toolbar.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Size Size => new Size(Width, Height);
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {

@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Windows.Media;
 
 namespace AudioBand.Models
 {
@@ -14,7 +14,7 @@ namespace AudioBand.Models
         private int _yPosition = 0;
         private string _fontFamily = "Segoe UI";
         private float _fontSize = 8.5f;
-        private Color _color = Color.White;
+        private Color _color = Colors.White;
         private string _formatString = "{artist} - {song}";
         private TextAlignment _alignment = TextAlignment.Center;
         private string _name = "Now Playing";

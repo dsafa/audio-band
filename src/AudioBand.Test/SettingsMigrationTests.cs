@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
+using System.Windows.Media;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.Settings.Migrations;
@@ -228,8 +228,8 @@ namespace AudioBand.Test
                 XPosition = 3,
                 IsVisible = false,
                 YPosition = 5,
-                BackgroundColor = Color.White,
-                ForegroundColor = Color.Red,
+                BackgroundColor = Colors.White,
+                ForegroundColor = Colors.Red,
             };
 
             var v1 = new V1Settings {ProgressBarAppearance = setting};
@@ -249,7 +249,7 @@ namespace AudioBand.Test
         {
             var text1 = new TextAppearance
             {
-                Color = Color.Red,
+                Color = Colors.Red,
                 Width = 1,
                 Height = 2,
                 Name = "test",
@@ -419,9 +419,9 @@ Value = ""secret""
 ";
             var settings = TomlSettings.Create(cfg =>
             {
-                cfg.ConfigureType<Color>(type => type.WithConversionFor<TomlString>(convert => convert
-                    .ToToml(ColorTranslator.ToHtml)
-                    .FromToml(tomlString => ColorTranslator.FromHtml(tomlString.Value))));
+                cfg.ConfigureType<System.Windows.Media.Color>(type => type.WithConversionFor<TomlString>(convert => convert
+                    .ToToml(SerializationConversions.ColorToString)
+                    .FromToml(tomlString => SerializationConversions.StringToColor(tomlString.Value))));
                 cfg.ConfigureType<CustomLabel.TextAlignment>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(SerializationConversions.EnumToString)
                     .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));

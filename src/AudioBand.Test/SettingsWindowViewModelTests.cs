@@ -32,8 +32,7 @@ namespace AudioBand.Test
             _appSettings.SetupGet(m => m.CustomLabels).Returns(new List<CustomLabel>());
             _dialog = new Mock<IDialogService>();
             _container = new Mock<IViewModelContainer>();
-            _container.SetupGet(m => m.CustomLabelsVM).Returns(new CustomLabelsVM(_appSettings.Object,
-                new Mock<ICustomLabelService>().Object, _dialog.Object));
+            _container.SetupGet(m => m.CustomLabelsVM).Returns(new CustomLabelsVM(_appSettings.Object, _dialog.Object));
             _messageBus = new Mock<IMessageBus>();
         }
 

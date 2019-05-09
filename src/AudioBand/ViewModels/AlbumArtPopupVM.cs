@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using AudioBand.Models;
-using AudioBand.Resources;
 using AudioBand.Settings;
-using AutoMapper;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
@@ -15,19 +12,15 @@ namespace AudioBand.ViewModels
     public class AlbumArtPopupVM : ViewModelBase<AlbumArtPopup>
     {
         private readonly IAppSettings _appSettings;
-        private readonly Track _track;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlbumArtPopupVM"/> class.
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
-        /// <param name="track">The track mode.</param>
-        public AlbumArtPopupVM(IAppSettings appSettings, Track track)
+        public AlbumArtPopupVM(IAppSettings appSettings)
             : base(appSettings.AlbumArtPopup)
         {
             _appSettings = appSettings;
-            _track = track;
-            SetupModelBindings(_track);
             appSettings.ProfileChanged += AppSettingsOnProfileChanged;
         }
 
@@ -39,7 +32,6 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.Width))]
-        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
@@ -47,7 +39,6 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.Height))]
-        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
@@ -67,15 +58,6 @@ namespace AudioBand.ViewModels
             get => Model.Margin;
             set => SetProperty(nameof(Model.Margin), value);
         }
-
-        [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public IImage AlbumArt => _track.AlbumArt;
-
-        /// <summary>
-        /// Gets the size of the popup.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Size Size => new Size(Width, Height);
 
         private void AppSettingsOnProfileChanged(object sender, EventArgs e)
         {

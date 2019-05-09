@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AudioBand.Models;
-using AudioBand.Resources;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,7 +17,6 @@ namespace AudioBand.Test
     public class AlbumArtViewModelTests
     {
         private Mock<IAppSettings> _appSettings;
-        private Mock<IResourceLoader> _loader;
         private Mock<IDialogService> _dialog;
 
         [TestInitialize]
@@ -26,20 +24,7 @@ namespace AudioBand.Test
         {
             _appSettings = new Mock<IAppSettings>();
             _appSettings.SetupGet(m => m.AlbumArt).Returns(new AlbumArt());
-            _loader = new Mock<IResourceLoader>();
-            _loader.SetupGet(m => m.DefaultPlaceholderAlbumImage).Returns(new DrawingImage(new Bitmap(1, 1)));
-            _loader.Setup(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<IImage>()))
-                .Returns(new DrawingImage(new Bitmap(1, 1)));
             _dialog = new Mock<IDialogService>();
-        }
-
-        [TestMethod]
-        public void LoadsDefaultImage()
-        {
-            var vm = new AlbumArtVM(_appSettings.Object, _loader.Object, _dialog.Object, new Track());
-
-            _loader.Verify(m => m.DefaultPlaceholderAlbumImage, Times.Once);
-            _loader.Verify(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<IImage>()));
         }
 
         [TestMethod]
@@ -50,7 +35,7 @@ namespace AudioBand.Test
             _appSettings.SetupSequence(m => m.AlbumArt)
                 .Returns(first)
                 .Returns(second);
-            var vm = new AlbumArtVM(_appSettings.Object, _loader.Object, _dialog.Object, new Track());
+            var vm = new AlbumArtVM(_appSettings.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (sender, e) => raised = true;
 

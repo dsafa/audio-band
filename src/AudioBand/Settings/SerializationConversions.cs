@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
 
 namespace AudioBand.Settings
 {
@@ -12,27 +12,6 @@ namespace AudioBand.Settings
     {
         private static readonly Regex ColorStringRegex =
             new Regex(@"#(?<a>[0-9a-fA-F]{2})(?<r>[0-9a-fA-F]{2})(?<g>[0-9a-fA-F]{2})(?<b>[0-9a-fA-F]{2})", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-
-        /// <summary>
-        /// Convert a font to a string representation.
-        /// </summary>
-        /// <param name="font">Font to convert.</param>
-        /// <returns>The font serialized as a string.</returns>
-        public static string FontToString(Font font)
-        {
-            return string.Join(";", font.Name, font.Size.ToString(), font.Style.ToString(), font.Unit.ToString());
-        }
-
-        /// <summary>
-        /// Converts the string from <see cref="FontToString(Font)"/> back to a <see cref="Font"/>.
-        /// </summary>
-        /// <param name="fontString">String representation of the font.</param>
-        /// <returns>The font.</returns>
-        public static Font StringToFont(string fontString)
-        {
-            var vals = fontString.Split(';');
-            return new Font(vals[0], float.Parse(vals[1]), StringToEnum<FontStyle>(vals[2]), StringToEnum<GraphicsUnit>(vals[3]));
-        }
 
         /// <summary>
         /// Converts a string to an enum.
@@ -93,8 +72,7 @@ namespace AudioBand.Settings
                 return Color.FromArgb(a, r, g, b);
             }
 
-            // It is using the form which comes from the color translator
-            return ColorTranslator.FromHtml(s);
+            return Colors.White;
         }
 
         private static byte ParseHexFromGroup(Group g)

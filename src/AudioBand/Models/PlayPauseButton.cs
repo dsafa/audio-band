@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Windows.Media;
 
 namespace AudioBand.Models
 {
@@ -18,7 +18,7 @@ namespace AudioBand.Models
         private int _width = 73;
         private int _height = 12;
         private bool _isVisible = true;
-        private Color _defaultBackgroundColor = Color.Transparent;
+        private Color _defaultBackgroundColor = Colors.Transparent;
         private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
         private Color _clickedBackgroundColor = Color.FromArgb(15, 255, 255, 255);
         private ButtonContentType _playButtonContentType = ButtonContentType.Image;
@@ -27,12 +27,12 @@ namespace AudioBand.Models
         private string _pauseButtonTextFontFamily = "Segoe MDL2 Assets";
         private string _playButtonText = "";
         private string _pauseButtonText = "";
-        private Color _playButtonTextColor = Color.White;
-        private Color _playButtonTextHoverColor = Color.White;
-        private Color _playButtonTextClickedColor = Color.White;
-        private Color _pauseButtonTextColor = Color.White;
-        private Color _pauseButtonTextHoverColor = Color.White;
-        private Color _pauseButtonTextClickedColor = Color.White;
+        private Color _playButtonTextColor = Colors.White;
+        private Color _playButtonTextHoverColor = Colors.White;
+        private Color _playButtonTextClickedColor = Colors.White;
+        private Color _pauseButtonTextColor = Colors.White;
+        private Color _pauseButtonTextHoverColor = Colors.White;
+        private Color _pauseButtonTextClickedColor = Colors.White;
 
         /// <summary>
         /// Gets or sets the path for the play image.

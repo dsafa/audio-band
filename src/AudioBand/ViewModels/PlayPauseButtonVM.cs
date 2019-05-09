@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Media;
+using AudioBand.AudioSource;
+using AudioBand.Commands;
 using AudioBand.Models;
-using AudioBand.Resources;
 using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
@@ -16,63 +19,22 @@ namespace AudioBand.ViewModels
     {
         private static readonly List<ButtonContentType> ContentTypes = Enum.GetValues(typeof(ButtonContentType)).Cast<ButtonContentType>().ToList();
         private readonly IAppSettings _appsettings;
-        private readonly Track _track;
-        private readonly IResourceLoader _resourceLoader;
-        private IImage _playImage;
-        private IImage _pauseImage;
-        private IImage _playHoveredImage;
-        private IImage _playClickedImage;
-        private IImage _pauseHoveredImage;
-        private IImage _pauseClickedImage;
+        private bool _isPlaying;
+        private IAudioSource _audioSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayPauseButtonVM"/> class.
         /// </summary>
         /// <param name="appsettings">App settings.</param>
-        /// <param name="resourceLoader">Resource loader.</param>
         /// <param name="dialogService">The dialog service.</param>
-        /// <param name="track">The track.</param>
-        public PlayPauseButtonVM(IAppSettings appsettings, IResourceLoader resourceLoader, IDialogService dialogService, Track track)
+        public PlayPauseButtonVM(IAppSettings appsettings, IDialogService dialogService)
             : base(appsettings.PlayPauseButton)
         {
             DialogService = dialogService;
             _appsettings = appsettings;
-            _track = track;
-            SetupModelBindings(_track);
-            _resourceLoader = resourceLoader;
-            LoadImages();
+            PlayPauseTrackCommand = new AsyncRelayCommand<object>(PlayPauseTrackCommandOnExecute);
 
             _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
-        }
-
-        /// <summary>
-        /// Gets or sets the play image.
-        /// </summary>
-        [AlsoNotify(nameof(Image))]
-        public IImage PlayImage
-        {
-            get => _playImage;
-            set => SetProperty(ref _playImage, value, trackChanges: false);
-        }
-
-        /// <summary>
-        /// Gets or sets the play image when hovered.
-        /// </summary>
-        [AlsoNotify(nameof(HoveredImage))]
-        public IImage PlayHoveredImage
-        {
-            get => _playHoveredImage;
-            set => SetProperty(ref _playHoveredImage, value, trackChanges: false);
-        }
-
-        /// <summary>
-        /// Gets or sets the play image when clicked.
-        /// </summary>
-        [AlsoNotify(nameof(ClickedImage))]
-        public IImage PlayClickedImage
-        {
-            get => _playClickedImage;
-            set => SetProperty(ref _playClickedImage, value, trackChanges: false);
         }
 
         /// <summary>
@@ -82,13 +44,7 @@ namespace AudioBand.ViewModels
         public string PlayImagePath
         {
             get => Model.PlayButtonImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonImagePath), value) && PlayButtonContentType == ButtonContentType.Image)
-                {
-                    PlayImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPlayImage);
-                }
-            }
+            set => SetProperty(nameof(Model.PlayButtonImagePath), value);
         }
 
         /// <summary>
@@ -98,13 +54,7 @@ namespace AudioBand.ViewModels
         public string PlayHoveredImagePath
         {
             get => Model.PlayButtonHoveredImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonHoveredImagePath), value) && PlayButtonContentType == ButtonContentType.Image)
-                {
-                    PlayHoveredImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPlayImage);
-                }
-            }
+            set => SetProperty(nameof(Model.PlayButtonHoveredImagePath), value);
         }
 
         /// <summary>
@@ -114,43 +64,7 @@ namespace AudioBand.ViewModels
         public string PlayClickedImagePath
         {
             get => Model.PlayButtonClickedImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonClickedImagePath), value) && PlayButtonContentType == ButtonContentType.Image)
-                {
-                    PlayClickedImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPlayImage);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the pause image.
-        /// </summary>
-        [AlsoNotify(nameof(Image))]
-        public IImage PauseImage
-        {
-            get => _pauseImage;
-            set => SetProperty(ref _pauseImage, value, trackChanges: false);
-        }
-
-        /// <summary>
-        /// Gets or sets the pause image when hovered.
-        /// </summary>
-        [AlsoNotify(nameof(HoveredImage))]
-        public IImage PauseHoveredImage
-        {
-            get => _pauseHoveredImage;
-            set => SetProperty(ref _pauseHoveredImage, value, trackChanges: false);
-        }
-
-        /// <summary>
-        /// Gets or sets the pause image when clicked.
-        /// </summary>
-        [AlsoNotify(nameof(ClickedImage))]
-        public IImage PauseClickedImage
-        {
-            get => _pauseClickedImage;
-            set => SetProperty(ref _pauseClickedImage, value, trackChanges: false);
+            set => SetProperty(nameof(Model.PlayButtonClickedImagePath), value);
         }
 
         /// <summary>
@@ -160,13 +74,7 @@ namespace AudioBand.ViewModels
         public string PauseImagePath
         {
             get => Model.PauseButtonImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.PauseButtonImagePath), value))
-                {
-                    PauseImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPauseImage);
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonImagePath), value);
         }
 
         /// <summary>
@@ -176,13 +84,7 @@ namespace AudioBand.ViewModels
         public string PauseHoveredImagePath
         {
             get => Model.PauseButtonHoveredImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.PauseButtonHoveredImagePath), value))
-                {
-                    PauseHoveredImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPauseImage);
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonHoveredImagePath), value);
         }
 
         /// <summary>
@@ -192,13 +94,7 @@ namespace AudioBand.ViewModels
         public string PauseClickedImagePath
         {
             get => Model.PauseButtonClickedImagePath;
-            set
-            {
-                if (SetProperty(nameof(Model.PauseButtonClickedImagePath), value))
-                {
-                    PauseClickedImage = _resourceLoader.TryLoadImageFromPath(value, _resourceLoader.DefaultPauseImage);
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonClickedImagePath), value);
         }
 
         /// <summary>
@@ -215,7 +111,6 @@ namespace AudioBand.ViewModels
         /// Gets or sets the width of the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.Width))]
-        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
@@ -226,7 +121,6 @@ namespace AudioBand.ViewModels
         /// Gets or sets the height of the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.Height))]
-        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
@@ -237,7 +131,6 @@ namespace AudioBand.ViewModels
         /// Gets or sets the x position.
         /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.XPosition))]
-        [AlsoNotify(nameof(Location))]
         public int XPosition
         {
             get => Model.XPosition;
@@ -248,30 +141,11 @@ namespace AudioBand.ViewModels
         /// Gets or sets the y position.
         /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.YPosition))]
-        [AlsoNotify(nameof(Location))]
         public int YPosition
         {
             get => Model.YPosition;
             set => SetProperty(nameof(Model.YPosition), value);
         }
-
-        /// <summary>
-        /// Gets the current image.
-        /// </summary>
-        [PropertyChangeBinding(nameof(Track.IsPlaying))]
-        public IImage Image => _track.IsPlaying ? PauseImage : PlayImage;
-
-        /// <summary>
-        /// Gets the current hovered image.
-        /// </summary>
-        [PropertyChangeBinding(nameof(Track.IsPlaying))]
-        public IImage HoveredImage => _track.IsPlaying ? PauseHoveredImage : PlayHoveredImage;
-
-        /// <summary>
-        /// Gets the current clicked image.
-        /// </summary>
-        [PropertyChangeBinding(nameof(Track.IsPlaying))]
-        public IImage ClickedImage => _track.IsPlaying ? PauseClickedImage : PlayClickedImage;
 
         /// <summary>
         /// Gets or sets the default background color.
@@ -304,18 +178,6 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Gets the location of the button.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Point Location => new Point(Model.XPosition, Model.YPosition);
-
-        /// <summary>
-        /// Gets the size of the button.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Size Size => new Size(Width, Height);
-
-        /// <summary>
         /// Gets the dialog service.
         /// </summary>
         public IDialogService DialogService { get; }
@@ -327,13 +189,7 @@ namespace AudioBand.ViewModels
         public ButtonContentType PlayButtonContentType
         {
             get => Model.PlayButtonContentType;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonContentType), value))
-                {
-                    UpdateCurrentPlayImage();
-                }
-            }
+            set => SetProperty(nameof(Model.PlayButtonContentType), value);
         }
 
         /// <summary>
@@ -343,13 +199,7 @@ namespace AudioBand.ViewModels
         public ButtonContentType PauseButtonContentType
         {
             get => Model.PauseButtonContentType;
-            set
-            {
-                if (SetProperty(nameof(Model.PauseButtonContentType), value))
-                {
-                    UpdateCurrentPauseImage();
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonContentType), value);
         }
 
         /// <summary>
@@ -359,13 +209,7 @@ namespace AudioBand.ViewModels
         public string PlayButtonTextFontFamily
         {
             get => Model.PlayButtonTextFontFamily;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonTextFontFamily), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    UpdateCurrentPlayImage();
-                }
-            }
+            set => SetProperty(nameof(Model.PlayButtonTextFontFamily), value);
         }
 
         /// <summary>
@@ -375,13 +219,7 @@ namespace AudioBand.ViewModels
         public string PauseButtonTextFontFamily
         {
             get => Model.PauseButtonTextFontFamily;
-            set
-            {
-                if (SetProperty(nameof(Model.PauseButtonTextFontFamily), value) && PauseButtonContentType == ButtonContentType.Text)
-                {
-                    UpdateCurrentPauseImage();
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonTextFontFamily), value);
         }
 
         /// <summary>
@@ -391,13 +229,7 @@ namespace AudioBand.ViewModels
         public string PlayButtonText
         {
             get => Model.PlayButtonText;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonText), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    UpdateCurrentPlayImage();
-                }
-            }
+            set => SetProperty(nameof(Model.PlayButtonText), value);
         }
 
         /// <summary>
@@ -407,29 +239,17 @@ namespace AudioBand.ViewModels
         public string PauseButtonText
         {
             get => Model.PauseButtonText;
-            set
-            {
-                if (SetProperty(nameof(Model.PauseButtonText), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    UpdateCurrentPauseImage();
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonText), value);
         }
 
         /// <summary>
         /// Gets or sets the text color for the play button.
         /// </summary>
-        [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonTextHoverColor))]
+        [PropertyChangeBinding(nameof(PlayPauseButton.PlayButtonTextColor))]
         public Color PlayButtonTextColor
         {
             get => Model.PlayButtonTextColor;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonTextColor), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    PlayImage = new TextImage(PlayButtonText, PlayButtonTextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.PlayButtonTextColor), value);
         }
 
         /// <summary>
@@ -439,13 +259,7 @@ namespace AudioBand.ViewModels
         public Color PlayButtonTextHoverColor
         {
             get => Model.PlayButtonTextHoverColor;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonTextClickedColor), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    PlayHoveredImage = new TextImage(PlayButtonText, PlayButtonTextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.PlayButtonTextHoverColor), value);
         }
 
         /// <summary>
@@ -455,13 +269,7 @@ namespace AudioBand.ViewModels
         public Color PlayButtonTextClickedColor
         {
             get => Model.PlayButtonTextClickedColor;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonTextClickedColor), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    PlayClickedImage = new TextImage(PlayButtonText, PlayButtonTextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.PlayButtonTextClickedColor), value);
         }
 
         /// <summary>
@@ -471,13 +279,7 @@ namespace AudioBand.ViewModels
         public Color PauseButtonTextColor
         {
             get => Model.PauseButtonTextColor;
-            set
-            {
-                if (SetProperty(nameof(Model.PauseButtonTextColor), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    PauseImage = new TextImage(PauseButtonText, PauseButtonTextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonTextColor), value);
         }
 
         /// <summary>
@@ -487,13 +289,7 @@ namespace AudioBand.ViewModels
         public Color PauseButtonTextHoverColor
         {
             get => Model.PauseButtonTextHoverColor;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonTextHoverColor), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    PauseHoveredImage = new TextImage(PauseButtonText, PauseButtonTextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonTextHoverColor), value);
         }
 
         /// <summary>
@@ -503,39 +299,41 @@ namespace AudioBand.ViewModels
         public Color PauseButtonTextClickedColor
         {
             get => Model.PauseButtonTextClickedColor;
-            set
-            {
-                if (SetProperty(nameof(Model.PlayButtonTextClickedColor), value) && PlayButtonContentType == ButtonContentType.Text)
-                {
-                    PauseClickedImage = new TextImage(PauseButtonText, PauseButtonTextFontFamily, value);
-                }
-            }
+            set => SetProperty(nameof(Model.PauseButtonTextClickedColor), value);
         }
+
+        /// <summary>
+        /// Sets the audio source.
+        /// </summary>
+        public IAudioSource AudioSource
+        {
+            set => UpdateAudioSource(value);
+        }
+
+        /// <summary>
+        /// Gets the play pause command.
+        /// </summary>
+        public ICommand PlayPauseTrackCommand { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether a track is playing.
+        /// </summary>
+        [AlsoNotify(nameof(IsPlayButtonShown))]
+        public bool IsPlaying
+        {
+            get => _isPlaying;
+            private set => SetProperty(ref _isPlaying, value, false);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the button is playing.
+        /// </summary>
+        public bool IsPlayButtonShown => !_isPlaying;
 
         /// <summary>
         /// Gets the button content types.
         /// </summary>
         public IEnumerable<ButtonContentType> ButtonContentTypes => ContentTypes;
-
-        /// <inheritdoc/>
-        protected override void OnReset()
-        {
-            base.OnReset();
-            LoadImages();
-        }
-
-        /// <inheritdoc/>
-        protected override void OnCancelEdit()
-        {
-            base.OnCancelEdit();
-            LoadImages();
-        }
-
-        private void LoadImages()
-        {
-            UpdateCurrentPlayImage();
-            UpdateCurrentPauseImage();
-        }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
@@ -543,35 +341,42 @@ namespace AudioBand.ViewModels
             ReplaceModel(_appsettings.PlayPauseButton);
         }
 
-        private void UpdateCurrentPlayImage()
+        private void UpdateAudioSource(IAudioSource audioSource)
         {
-            if (PlayButtonContentType == ButtonContentType.Image)
+            if (_audioSource != null)
             {
-                PlayImage = _resourceLoader.TryLoadImageFromPath(PlayImagePath, _resourceLoader.DefaultPlayImage);
-                PlayHoveredImage = _resourceLoader.TryLoadImageFromPath(PlayHoveredImagePath, _resourceLoader.DefaultPlayImage);
-                PlayClickedImage = _resourceLoader.TryLoadImageFromPath(PlayClickedImagePath, _resourceLoader.DefaultPlayImage);
+                _audioSource.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
             }
-            else
+
+            _audioSource = audioSource;
+            if (_audioSource == null)
             {
-                PlayImage = new TextImage(PlayButtonText, PlayButtonTextFontFamily, PlayButtonTextColor);
-                PlayHoveredImage = new TextImage(PlayButtonText, PlayButtonTextFontFamily, PlayButtonTextHoverColor);
-                PlayClickedImage = new TextImage(PlayButtonText, PlayButtonTextFontFamily, PlayButtonTextClickedColor);
+                IsPlaying = false;
+                return;
             }
+
+            _audioSource.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
         }
 
-        private void UpdateCurrentPauseImage()
+        private void AudioSourceOnIsPlayingChanged(object sender, bool e)
         {
-            if (PauseButtonContentType == ButtonContentType.Image)
+            IsPlaying = e;
+        }
+
+        private async Task PlayPauseTrackCommandOnExecute(object arg)
+        {
+            if (_audioSource == null)
             {
-                PauseImage = _resourceLoader.TryLoadImageFromPath(PauseImagePath, _resourceLoader.DefaultPauseImage);
-                PauseHoveredImage = _resourceLoader.TryLoadImageFromPath(PauseHoveredImagePath, _resourceLoader.DefaultPauseImage);
-                PauseClickedImage = _resourceLoader.TryLoadImageFromPath(PauseClickedImagePath, _resourceLoader.DefaultPauseImage);
+                return;
+            }
+
+            if (IsPlaying)
+            {
+                await _audioSource.PauseTrackAsync();
             }
             else
             {
-                PauseImage = new TextImage(PauseButtonText, PauseButtonTextFontFamily, PauseButtonTextColor);
-                PauseHoveredImage = new TextImage(PauseButtonText, PauseButtonTextFontFamily, PauseButtonTextHoverColor);
-                PauseClickedImage = new TextImage(PauseButtonText, PauseButtonTextFontFamily, PauseButtonTextClickedColor);
+                await _audioSource.PlayTrackAsync();
             }
         }
     }

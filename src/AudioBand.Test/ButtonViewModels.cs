@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using AudioBand.Models;
-using AudioBand.Resources;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,16 +13,12 @@ namespace AudioBand.Test
     public class ButtonViewModels
     {
         private Mock<IAppSettings> _appSettings;
-        private Mock<IResourceLoader> _resourceLoader;
         private Mock<IDialogService> _dialog;
 
         [TestInitialize]
         public void TestInit()
         {
             _appSettings = new Mock<IAppSettings>();
-            _resourceLoader = new Mock<IResourceLoader>();
-            _resourceLoader.Setup(m => m.TryLoadImageFromPath(It.IsAny<string>(), It.IsAny<IImage>()))
-                .Returns(new Mock<IImage>().Object);
             _dialog = new Mock<IDialogService>();
         }
 
@@ -36,7 +31,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new NextButtonVM(_appSettings.Object, _resourceLoader.Object, _dialog.Object);
+            var vm = new NextButtonVM(_appSettings.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
@@ -57,7 +52,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new PlayPauseButtonVM(_appSettings.Object, _resourceLoader.Object, _dialog.Object, new Track());
+            var vm = new PlayPauseButtonVM(_appSettings.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
@@ -78,7 +73,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new PreviousButtonVM(_appSettings.Object, _resourceLoader.Object, _dialog.Object);
+            var vm = new PreviousButtonVM(_appSettings.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 

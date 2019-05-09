@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using AudioBand.Logging;
 using NLog;
 
@@ -15,32 +16,32 @@ namespace AudioBand.AudioSource
         private const string PluginFolderName = "AudioSources";
         private static readonly string PluginFolderPath = Path.Combine(DirectoryHelper.BaseDirectory, PluginFolderName);
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioSourceManager>();
-        private static readonly object _audioSourcesLock = new object();
-        private readonly List<AudioSourceProxy> _uninitializedProxies = new List<AudioSourceProxy>();
 
-        /// <summary>
-        /// Gets the list of audio sources available.
-        /// </summary>
-        public ObservableCollection<IInternalAudioSource> AudioSources { get; private set; } = new ObservableCollection<IInternalAudioSource>();
-
-        /// <summary>
-        /// Load all audio sources.
-        /// </summary>
-        public void LoadAudioSources()
+        /// <inheritdoc />
+        public async Task<IEnumerable<IInternalAudioSource>> LoadAudioSourcesAsync()
         {
             Logger.Debug("Loading audio sources as {path}", PluginFolderPath);
+
+            var audioSources = new List<IInternalAudioSource>();
             foreach (var dir in Directory.EnumerateDirectories(PluginFolderPath))
             {
                 try
                 {
-                    var proxy = new AudioSourceProxy(dir);
-                    AudioSources.Add(proxy);
+                    var proxy = await CreateProxy(dir);
+                    audioSources.Add(proxy);
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e, "Error creating proxy for audiosource in {path}", dir);
                 }
             }
+
+            return audioSources;
+        }
+
+        private async Task<AudioSourceProxy> CreateProxy(string dir)
+        {
+            return await Task.Run(() => new AudioSourceProxy(dir));
         }
     }
 }

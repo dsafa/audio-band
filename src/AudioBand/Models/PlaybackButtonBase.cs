@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Windows.Media;
 
 namespace AudioBand.Models
 {
@@ -15,15 +15,15 @@ namespace AudioBand.Models
         private int _height;
         private int _xPosition;
         private int _yPosition;
-        private Color _backgroundColor = Color.Transparent;
+        private Color _backgroundColor = Colors.Transparent;
         private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
         private Color _clickedBackgroundColor = Color.FromArgb(15, 255, 255, 255);
         private ButtonContentType _contentType = ButtonContentType.Image;
         private string _textFontFamily = "Segoe MDL2 Assets";
         private string _text;
-        private Color _textColor = Color.White;
-        private Color _textHoveredColor = Color.White;
-        private Color _textClickedColor = Color.White;
+        private Color _textColor = Colors.White;
+        private Color _textHoveredColor = Colors.White;
+        private Color _textClickedColor = Colors.White;
 
         /// <summary>
         /// Gets or sets the path of the button image.

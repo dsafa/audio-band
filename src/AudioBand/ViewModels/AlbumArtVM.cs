@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
+using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using AudioBand.AudioSource;
+using AudioBand.Extensions;
 using AudioBand.Models;
-using AudioBand.Resources;
 using AudioBand.Settings;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -14,25 +17,19 @@ namespace AudioBand.ViewModels
     public class AlbumArtVM : ViewModelBase<AlbumArt>
     {
         private readonly IAppSettings _appsettings;
-        private readonly Track _track;
-        private readonly IResourceLoader _resourceLoader;
+        private IAudioSource _audioSource;
+        private ImageSource _albumArt;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlbumArtVM"/> class.
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
-        /// <param name="resourceLoader">The resource loader.</param>
         /// <param name="dialogService">The dialog service.</param>
-        /// <param name="track">The track model.</param>
-        public AlbumArtVM(IAppSettings appsettings, IResourceLoader resourceLoader, IDialogService dialogService, Track track)
+        public AlbumArtVM(IAppSettings appsettings, IDialogService dialogService)
             : base(appsettings.AlbumArt)
         {
             DialogService = dialogService;
             _appsettings = appsettings;
-            _track = track;
-            SetupModelBindings(_track);
-            _resourceLoader = resourceLoader;
-            LoadAlbumArtPlaceholder();
 
             appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
@@ -45,7 +42,6 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.Width))]
-        [AlsoNotify(nameof(Size))]
         public int Width
         {
             get => Model.Width;
@@ -53,7 +49,6 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.Height))]
-        [AlsoNotify(nameof(Size))]
         public int Height
         {
             get => Model.Height;
@@ -61,7 +56,6 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.XPosition))]
-        [AlsoNotify(nameof(Location))]
         public int XPosition
         {
             get => Model.XPosition;
@@ -69,7 +63,6 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.YPosition))]
-        [AlsoNotify(nameof(Location))]
         public int YPosition
         {
             get => Model.YPosition;
@@ -80,58 +73,69 @@ namespace AudioBand.ViewModels
         public string PlaceholderPath
         {
             get => Model.PlaceholderPath;
-            set
-            {
-                if (SetProperty(nameof(Model.PlaceholderPath), value))
-                {
-                    LoadAlbumArtPlaceholder();
-                }
-            }
+            set => SetProperty(nameof(Model.PlaceholderPath), value);
         }
 
-        [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public IImage AlbumArt => _track.AlbumArt;
+        public ImageSource AlbumArt
+        {
+            get => _albumArt;
+            private set => SetProperty(ref _albumArt, value, false);
+        }
 
         /// <summary>
-        /// Gets the location of the album art.
+        /// Sets the audio source.
         /// </summary>
-        /// <remarks>This property is exists so the designer can bind to it.</remarks>
-        public Point Location => new Point(Model.XPosition, Model.YPosition);
-
-        /// <summary>
-        /// Gets the size of the album art.
-        /// </summary>
-        /// <remarks>This property exists so that designer can bind to it.</remarks>
-        public Size Size => new Size(Width, Height);
+        public IAudioSource AudioSource
+        {
+            set => UpdateAudioSource(value);
+        }
 
         /// <summary>
         /// Gets the dialog service.
         /// </summary>
         public IDialogService DialogService { get; }
 
-        /// <inheritdoc/>
-        protected override void OnReset()
-        {
-            base.OnReset();
-            LoadAlbumArtPlaceholder();
-        }
-
-        /// <inheritdoc/>
-        protected override void OnCancelEdit()
-        {
-            base.OnCancelEdit();
-            LoadAlbumArtPlaceholder();
-        }
-
-        private void LoadAlbumArtPlaceholder()
-        {
-            _track.PlaceHolderImage = _resourceLoader.TryLoadImageFromPath(Model.PlaceholderPath, _resourceLoader.DefaultPlaceholderAlbumImage);
-        }
-
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
             ReplaceModel(_appsettings.AlbumArt);
+        }
+
+        private void UpdateAudioSource(IAudioSource audioSource)
+        {
+            if (_audioSource != null)
+            {
+                AlbumArt = null;
+                _audioSource.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
+            }
+
+            _audioSource = audioSource;
+            if (_audioSource == null)
+            {
+                AlbumArt = null;
+                return;
+            }
+
+            _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
+        }
+
+        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
+        {
+            if (e.AlbumArt == null)
+            {
+                try
+                {
+                    AlbumArt = new BitmapImage(new Uri(PlaceholderPath));
+                }
+                catch
+                {
+                    AlbumArt = null;
+                }
+
+                return;
+            }
+
+            AlbumArt = e.AlbumArt.ToImageSource();
         }
     }
 }
