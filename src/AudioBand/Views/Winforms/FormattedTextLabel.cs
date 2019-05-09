@@ -140,7 +140,7 @@ namespace AudioBand.Views.Winforms
                 _artist = value;
                 _renderer.Artist = value;
 
-                if (_renderer.Flagses.HasFlag(FormattedTextFlags.Artist))
+                if (_renderer.Flags.HasFlag(FormattedTextFlags.Artist))
                 {
                     Redraw();
                 }
@@ -159,7 +159,7 @@ namespace AudioBand.Views.Winforms
                 _songName = value;
                 _renderer.SongName = value;
 
-                if (_renderer.Flagses.HasFlag(FormattedTextFlags.Song))
+                if (_renderer.Flags.HasFlag(FormattedTextFlags.Song))
                 {
                     Redraw();
                 }
@@ -178,7 +178,7 @@ namespace AudioBand.Views.Winforms
                 _albumName = value;
                 _renderer.AlbumName = value;
 
-                if (_renderer.Flagses.HasFlag(FormattedTextFlags.Album))
+                if (_renderer.Flags.HasFlag(FormattedTextFlags.Album))
                 {
                     Redraw();
                 }
@@ -197,7 +197,7 @@ namespace AudioBand.Views.Winforms
                 _songProgress = value;
                 _renderer.SongProgress = value;
 
-                if (_renderer.Flagses.HasFlag(FormattedTextFlags.CurrentTime))
+                if (_renderer.Flags.HasFlag(FormattedTextFlags.CurrentTime))
                 {
                     Redraw();
                 }
@@ -216,7 +216,7 @@ namespace AudioBand.Views.Winforms
                 _songLength = value;
                 _renderer.SongLength = value;
 
-                if (_renderer.Flagses.HasFlag(FormattedTextFlags.SongLength))
+                if (_renderer.Flags.HasFlag(FormattedTextFlags.SongLength))
                 {
                     Redraw();
                 }

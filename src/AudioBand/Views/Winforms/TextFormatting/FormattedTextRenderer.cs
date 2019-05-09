@@ -7,7 +7,7 @@ using System.Drawing.Text;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Windows.Media.Animation;
+using AudioBand.Extensions;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
 namespace AudioBand.Views.Winforms.TextFormatting
@@ -28,7 +28,6 @@ namespace AudioBand.Views.Winforms.TextFormatting
         private const string ItalicsStyle = "&";
         private const string UnderlineStyle = "_";
 
-        private const string TimeFormat = @"m\:ss";
         private const string Styles = BoldStyle + ItalicsStyle + UnderlineStyle;
         private const string Tags = ArtistPlaceholder + "|" + SongNamePlaceholder + "|" + AlbumNamePlaceholder + "|" + CurrentTimePlaceholder + "|" + SongLengthPlaceholder;
         private static readonly Regex PlaceholderPattern = new Regex($@"(?<style>[{Styles}])*(?<tag>({Tags}))(:(?<color>#[A-Fa-f0-9]{{6}}))?", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
@@ -126,7 +125,7 @@ namespace AudioBand.Views.Winforms.TextFormatting
             set
             {
                 _songProgress = value;
-                UpdatePlaceholderValue(FormattedTextFlags.CurrentTime, value.ToString(TimeFormat));
+                UpdatePlaceholderValue(FormattedTextFlags.CurrentTime, value.Format());
             }
         }
 
@@ -139,7 +138,7 @@ namespace AudioBand.Views.Winforms.TextFormatting
             set
             {
                 _songLength = value;
-                UpdatePlaceholderValue(FormattedTextFlags.SongLength, value.ToString(TimeFormat));
+                UpdatePlaceholderValue(FormattedTextFlags.SongLength, value.Format());
             }
         }
 
@@ -180,11 +179,12 @@ namespace AudioBand.Views.Winforms.TextFormatting
         /// <summary>
         /// Gets the format flags.
         /// </summary>
-        public FormattedTextFlags Flagses { get; private set; }
+        public FormattedTextFlags Flags { get; private set; }
 
         /// <summary>
         /// Draws the formatted text with the current values.
         /// </summary>
+        /// <param name="dpi">The dpi to use.</param>
         /// <returns>A bitmap of the rendered text.</returns>
         public Bitmap Draw(double dpi)
         {
@@ -220,7 +220,7 @@ namespace AudioBand.Views.Winforms.TextFormatting
         /// <summary>
         /// Measures the size that the text would be.
         /// </summary>
-        /// <param name="scaling">The scaling factor.</param>
+        /// <param name="measureGraphics">The graphics used to measure.</param>
         /// <returns>The bounds of the text.</returns>
         public SizeF Measure(Graphics measureGraphics)
         {
@@ -291,7 +291,7 @@ namespace AudioBand.Views.Winforms.TextFormatting
             {
                 ParsePlaceholder(text.ToString(), out string value, out FormattedTextFlags type, out Color c);
                 Chunks.Add(new TextChunk(value, type, c));
-                Flagses |= type;
+                Flags |= type;
             }
             else
             {
@@ -349,11 +349,11 @@ namespace AudioBand.Views.Winforms.TextFormatting
                     flags |= FormattedTextFlags.Album;
                     break;
                 case CurrentTimePlaceholder:
-                    value = SongProgress.ToString(TimeFormat);
+                    value = SongProgress.Format();
                     flags |= FormattedTextFlags.CurrentTime;
                     break;
                 case SongLengthPlaceholder:
-                    value = SongLength.ToString(TimeFormat);
+                    value = SongLength.Format();
                     flags |= FormattedTextFlags.SongLength;
                     break;
                 default:
