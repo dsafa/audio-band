@@ -118,6 +118,7 @@
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\SvgExtensions.cs" />
+    <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MainControl.Bindings.cs">
       <DependentUpon>MainControl.cs</DependentUpon>

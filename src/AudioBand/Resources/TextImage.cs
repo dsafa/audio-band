@@ -6,7 +6,7 @@ using AudioBand.Extensions;
 namespace AudioBand.Resources
 {
     /// <summary>
-    /// An image that contains text
+    /// An image that contains text.
     /// </summary>
     public class TextImage : IImage
     {
