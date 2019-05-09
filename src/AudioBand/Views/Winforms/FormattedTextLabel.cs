@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using AudioBand.Views.Winforms.TextFormatting;
 using TextAlignment= AudioBand.Models.CustomLabel.TextAlignment;
 using Timer = System.Windows.Forms.Timer;
 
@@ -139,7 +140,7 @@ namespace AudioBand.Views.Winforms
                 _artist = value;
                 _renderer.Artist = value;
 
-                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.Artist))
+                if (_renderer.Flagses.HasFlag(FormattedTextFlags.Artist))
                 {
                     Redraw();
                 }
@@ -158,7 +159,7 @@ namespace AudioBand.Views.Winforms
                 _songName = value;
                 _renderer.SongName = value;
 
-                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.Song))
+                if (_renderer.Flagses.HasFlag(FormattedTextFlags.Song))
                 {
                     Redraw();
                 }
@@ -177,7 +178,7 @@ namespace AudioBand.Views.Winforms
                 _albumName = value;
                 _renderer.AlbumName = value;
 
-                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.Album))
+                if (_renderer.Flagses.HasFlag(FormattedTextFlags.Album))
                 {
                     Redraw();
                 }
@@ -196,7 +197,7 @@ namespace AudioBand.Views.Winforms
                 _songProgress = value;
                 _renderer.SongProgress = value;
 
-                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.CurrentTime))
+                if (_renderer.Flagses.HasFlag(FormattedTextFlags.CurrentTime))
                 {
                     Redraw();
                 }
@@ -215,7 +216,7 @@ namespace AudioBand.Views.Winforms
                 _songLength = value;
                 _renderer.SongLength = value;
 
-                if (_renderer.Formats.HasFlag(FormattedTextRenderer.TextFormat.SongLength))
+                if (_renderer.Flagses.HasFlag(FormattedTextFlags.SongLength))
                 {
                     Redraw();
                 }

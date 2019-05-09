@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
-namespace AudioBand.Views.Winforms
+namespace AudioBand.Views.Winforms.TextFormatting
 {
     /// <summary>
     /// Renders formatted text.
@@ -59,63 +59,6 @@ namespace AudioBand.Views.Winforms
         }
 
         /// <summary>
-        /// Flags for what the text contains.
-        /// </summary>
-        [Flags]
-        public enum TextFormat
-        {
-            /// <summary>
-            /// Normal text
-            /// </summary>
-            Normal = 0,
-
-            /// <summary>
-            /// Displays the artist
-            /// </summary>
-            Artist = 1,
-
-            /// <summary>
-            /// Displays the song.
-            /// </summary>
-            Song = 2,
-
-            /// <summary>
-            /// Displays the album
-            /// </summary>
-            Album = 4,
-
-            /// <summary>
-            /// Displays the current time.
-            /// </summary>
-            CurrentTime = 8,
-
-            /// <summary>
-            /// Displays the song length.
-            /// </summary>
-            SongLength = 16,
-
-            /// <summary>
-            /// Text is colored.
-            /// </summary>
-            Colored = 32,
-
-            /// <summary>
-            /// Text is bolded.
-            /// </summary>
-            Bold = 64,
-
-            /// <summary>
-            /// Text is italicised.
-            /// </summary>
-            Italic = 128,
-
-            /// <summary>
-            /// Text is underlined.
-            /// </summary>
-            Underline = 256,
-        }
-
-        /// <summary>
         /// Gets or sets the list of text chunks.
         /// </summary>
         public List<TextChunk> Chunks { get; set; }
@@ -142,7 +85,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _artist = value;
-                UpdatePlaceholderValue(TextFormat.Artist, value);
+                UpdatePlaceholderValue(FormattedTextFlags.Artist, value);
             }
         }
 
@@ -155,7 +98,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _songName = value;
-                UpdatePlaceholderValue(TextFormat.Song, value);
+                UpdatePlaceholderValue(FormattedTextFlags.Song, value);
             }
         }
 
@@ -168,7 +111,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _albumName = value;
-                UpdatePlaceholderValue(TextFormat.Album, value);
+                UpdatePlaceholderValue(FormattedTextFlags.Album, value);
             }
         }
 
@@ -181,7 +124,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _songProgress = value;
-                UpdatePlaceholderValue(TextFormat.CurrentTime, value.ToString(TimeFormat));
+                UpdatePlaceholderValue(FormattedTextFlags.CurrentTime, value.ToString(TimeFormat));
             }
         }
 
@@ -194,7 +137,7 @@ namespace AudioBand.Views.Winforms
             set
             {
                 _songLength = value;
-                UpdatePlaceholderValue(TextFormat.SongLength, value.ToString(TimeFormat));
+                UpdatePlaceholderValue(FormattedTextFlags.SongLength, value.ToString(TimeFormat));
             }
         }
 
@@ -209,7 +152,7 @@ namespace AudioBand.Views.Winforms
                 _defaultColor = value;
                 foreach (var textChunk in Chunks)
                 {
-                    if (!textChunk.Type.HasFlag(TextFormat.Colored))
+                    if (!textChunk.Type.HasFlag(FormattedTextFlags.Colored))
                     {
                         textChunk.Color = value;
                     }
@@ -235,7 +178,7 @@ namespace AudioBand.Views.Winforms
         /// <summary>
         /// Gets the format flags.
         /// </summary>
-        public TextFormat Formats { get; private set; }
+        public FormattedTextFlags Flagses { get; private set; }
 
         /// <summary>
         /// Draws the formatted text with the current values.
@@ -332,27 +275,27 @@ namespace AudioBand.Views.Winforms
 
             if (placeholder)
             {
-                ParsePlaceholder(text.ToString(), out string value, out TextFormat type, out Color c);
+                ParsePlaceholder(text.ToString(), out string value, out FormattedTextFlags type, out Color c);
                 Chunks.Add(new TextChunk(value, type, c));
-                Formats |= type;
+                Flagses |= type;
             }
             else
             {
-                Chunks.Add(new TextChunk(text.ToString(), TextFormat.Normal, DefaultColor));
+                Chunks.Add(new TextChunk(text.ToString(), FormattedTextFlags.Normal, DefaultColor));
             }
 
             text.Clear();
         }
 
-        private void ParsePlaceholder(string formatString, out string value, out TextFormat format, out Color color)
+        private void ParsePlaceholder(string formatString, out string value, out FormattedTextFlags flags, out Color color)
         {
             var match = PlaceholderPattern.Match(formatString);
-            format = TextFormat.Normal;
+            flags = FormattedTextFlags.Normal;
 
             if (!match.Success)
             {
                 value = "! invalid format !";
-                format = TextFormat.Normal;
+                flags = FormattedTextFlags.Normal;
                 color = DefaultColor;
                 return;
             }
@@ -365,13 +308,13 @@ namespace AudioBand.Views.Winforms
                     switch (styleGroup.Captures[i].Value)
                     {
                         case BoldStyle:
-                            format |= TextFormat.Bold;
+                            flags |= FormattedTextFlags.Bold;
                             break;
                         case ItalicsStyle:
-                            format |= TextFormat.Italic;
+                            flags |= FormattedTextFlags.Italic;
                             break;
                         case UnderlineStyle:
-                            format |= TextFormat.Underline;
+                            flags |= FormattedTextFlags.Underline;
                             break;
                     }
                 }
@@ -381,23 +324,23 @@ namespace AudioBand.Views.Winforms
             {
                 case ArtistPlaceholder:
                     value = Artist;
-                    format |= TextFormat.Artist;
+                    flags |= FormattedTextFlags.Artist;
                     break;
                 case SongNamePlaceholder:
                     value = SongName;
-                    format |= TextFormat.Song;
+                    flags |= FormattedTextFlags.Song;
                     break;
                 case AlbumNamePlaceholder:
                     value = AlbumName;
-                    format |= TextFormat.Album;
+                    flags |= FormattedTextFlags.Album;
                     break;
                 case CurrentTimePlaceholder:
                     value = SongProgress.ToString(TimeFormat);
-                    format |= TextFormat.CurrentTime;
+                    flags |= FormattedTextFlags.CurrentTime;
                     break;
                 case SongLengthPlaceholder:
                     value = SongLength.ToString(TimeFormat);
-                    format |= TextFormat.SongLength;
+                    flags |= FormattedTextFlags.SongLength;
                     break;
                 default:
                     value = "invalid";
@@ -409,7 +352,7 @@ namespace AudioBand.Views.Winforms
                 try
                 {
                     color = ColorTranslator.FromHtml(match.Groups["color"].Value);
-                    format |= TextFormat.Colored;
+                    flags |= FormattedTextFlags.Colored;
                 }
                 catch (Exception)
                 {
@@ -460,20 +403,20 @@ namespace AudioBand.Views.Winforms
             return totalTextSize;
         }
 
-        private FontStyle GetFontStyle(TextFormat textFormat)
+        private FontStyle GetFontStyle(FormattedTextFlags formattedTextFlags)
         {
             var fontStyle = FontStyle.Regular;
-            if (textFormat.HasFlag(TextFormat.Bold))
+            if (formattedTextFlags.HasFlag(FormattedTextFlags.Bold))
             {
                 fontStyle |= FontStyle.Bold;
             }
 
-            if (textFormat.HasFlag(TextFormat.Italic))
+            if (formattedTextFlags.HasFlag(FormattedTextFlags.Italic))
             {
                 fontStyle |= FontStyle.Italic;
             }
 
-            if (textFormat.HasFlag(TextFormat.Underline))
+            if (formattedTextFlags.HasFlag(FormattedTextFlags.Underline))
             {
                 fontStyle |= FontStyle.Underline;
             }
@@ -497,7 +440,7 @@ namespace AudioBand.Views.Winforms
             return padding;
         }
 
-        private void UpdatePlaceholderValue(TextFormat type, string value)
+        private void UpdatePlaceholderValue(FormattedTextFlags type, string value)
         {
             foreach (var textChunk in Chunks)
             {
@@ -505,53 +448,6 @@ namespace AudioBand.Views.Winforms
                 {
                     textChunk.Text = value;
                 }
-            }
-        }
-
-        /// <summary>
-        /// A chunk of text that has its own custom rendering.
-        /// </summary>
-        public class TextChunk
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="TextChunk"/> class
-            /// with text, color and type.
-            /// </summary>
-            /// <param name="text">The text.</param>
-            /// <param name="type">The text type.</param>
-            /// <param name="color">The text color.</param>
-            public TextChunk(string text, TextFormat type, Color color)
-            {
-                Text = text;
-                Type = type;
-                Color = color;
-            }
-
-            /// <summary>
-            /// Gets or sets the text.
-            /// </summary>
-            public string Text { get; set; }
-
-            /// <summary>
-            /// Gets the text type.
-            /// </summary>
-            public TextFormat Type { get; }
-
-            /// <summary>
-            /// Gets or sets the chunk color.
-            /// </summary>
-            public Color Color { get; set; }
-
-            /// <summary>
-            /// Draws the chunk onto the graphics.
-            /// </summary>
-            /// <param name="g">The graphics to draw on.</param>
-            /// <param name="font">The font.</param>
-            /// <param name="x">The x position of the text.</param>
-            /// <param name="y">The y position of the text.</param>
-            public void Draw(Graphics g, Font font, int x, int y)
-            {
-                TextRenderer.DrawText(g, Text, font, new Point(x, y), Color, TextFormatFlags.NoPrefix);
             }
         }
     }
