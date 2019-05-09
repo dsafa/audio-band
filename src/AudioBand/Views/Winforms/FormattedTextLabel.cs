@@ -15,7 +15,7 @@ namespace AudioBand.Views.Winforms
     {
         private const int TickRateMs = 20;
         private const int TickPerS = 1000 / TickRateMs;
-        private const int TextMargin = 60; // Spacing between scrolling text
+        private const float TextMargin = 60; // Spacing between scrolling text
         private const int WidthPadding = 4;
         private readonly Timer _scrollingTimer = new Timer { Interval = TickRateMs };
         private readonly FormattedTextRenderer _renderer;
@@ -62,6 +62,11 @@ namespace AudioBand.Views.Winforms
             get => _format;
             set
             {
+                if (value == _format)
+                {
+                    return;
+                }
+
                 _format = value;
                 _renderer.Format = value;
                 Redraw();
@@ -77,6 +82,11 @@ namespace AudioBand.Views.Winforms
             get => _defaultColor;
             set
             {
+                if (value == _defaultColor)
+                {
+                    return;
+                }
+
                 _defaultColor = value;
                 _renderer.DefaultColor = value;
                 Redraw();
@@ -92,6 +102,11 @@ namespace AudioBand.Views.Winforms
             get => _fontSize;
             set
             {
+                if (value == _fontSize)
+                {
+                    return;
+                }
+
                 _fontSize = value;
                 _renderer.FontSize = value;
                 Redraw();
@@ -107,6 +122,11 @@ namespace AudioBand.Views.Winforms
             get => _fontFamily;
             set
             {
+                if (value == _fontFamily)
+                {
+                    return;
+                }
+
                 _fontFamily = value;
                 _renderer.FontFamily = value;
                 Redraw();
@@ -122,6 +142,11 @@ namespace AudioBand.Views.Winforms
             get => _alignment;
             set
             {
+                if (value == Alignment)
+                {
+                    return;
+                }
+
                 _alignment = value;
                 _renderer.Alignment = value;
                 Redraw();
@@ -137,6 +162,11 @@ namespace AudioBand.Views.Winforms
             get => _artist;
             set
             {
+                if (value == _artist)
+                {
+                    return;
+                }
+
                 _artist = value;
                 _renderer.Artist = value;
 
@@ -156,6 +186,11 @@ namespace AudioBand.Views.Winforms
             get => _songName;
             set
             {
+                if (value == _songName)
+                {
+                    return;
+                }
+
                 _songName = value;
                 _renderer.SongName = value;
 
@@ -175,6 +210,11 @@ namespace AudioBand.Views.Winforms
             get => _albumName;
             set
             {
+                if (value == _albumName)
+                {
+                    return;
+                }
+
                 _albumName = value;
                 _renderer.AlbumName = value;
 
@@ -194,6 +234,11 @@ namespace AudioBand.Views.Winforms
             get => _songProgress;
             set
             {
+                if (value == SongProgress)
+                {
+                    return;
+                }
+
                 _songProgress = value;
                 _renderer.SongProgress = value;
 
@@ -213,6 +258,11 @@ namespace AudioBand.Views.Winforms
             get => _songLength;
             set
             {
+                if (value == _songLength)
+                {
+                    return;
+                }
+
                 _songLength = value;
                 _renderer.SongLength = value;
 
@@ -232,6 +282,11 @@ namespace AudioBand.Views.Winforms
             get => _scrollSpeed;
             set
             {
+                if (value == _scrollSpeed)
+                {
+                    return;
+                }
+
                 _scrollSpeed = value;
                 _scrollDelta = (float)_scrollSpeed / TickPerS;
                 InvokeRefresh();
@@ -260,7 +315,6 @@ namespace AudioBand.Views.Winforms
             {
                 // text no longer too long -> stop scrolling
                 _scrollingTimer.Stop();
-                _textXPos = GetNormalTextPos();
             }
 
             // if not scrolling get the x position for the text based on alignment
@@ -269,11 +323,11 @@ namespace AudioBand.Views.Winforms
                 _textXPos = GetNormalTextPos();
             }
 
-            Draw(e.Graphics, (int)_textXPos);
+            Draw(e.Graphics, _textXPos);
 
             if (_scrollingTimer.Enabled)
             {
-                Draw(e.Graphics, (int)_duplicateXPos);
+                Draw(e.Graphics, _duplicateXPos);
             }
         }
 
@@ -335,13 +389,15 @@ namespace AudioBand.Views.Winforms
         private void Redraw()
         {
             _renderedText = _renderer.Draw(Dpi);
+
+            _textXPos = GetNormalTextPos();
+            _duplicateXPos = _textXPos + _renderedText.Width + TextMargin;
+
             InvokeRefresh();
         }
 
-        private void Draw(Graphics g, int xpos)
+        private void Draw(Graphics g, float xpos)
         {
-            var rect = ClientRectangle;
-            rect.X = xpos;
             g.DrawImage(_renderedText, xpos, 0, _renderedText.Width, _renderedText.Height);
         }
     }
