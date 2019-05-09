@@ -39,6 +39,7 @@ namespace AudioBand.Views.Winforms.TextFormatting
         private TimeSpan _songProgress;
         private TimeSpan _songLength;
         private Color _defaultColor;
+        private object _textSegmentLock = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormattedTextRenderer"/> class.
@@ -60,9 +61,9 @@ namespace AudioBand.Views.Winforms.TextFormatting
         }
 
         /// <summary>
-        /// Gets or sets the list of text chunks.
+        /// Gets or sets the list of text segments.
         /// </summary>
-        public List<TextChunk> Chunks { get; set; }
+        public List<TextSegment> TextSegments { get; set; }
 
         /// <summary>
         /// Gets or sets the text format.
@@ -151,7 +152,7 @@ namespace AudioBand.Views.Winforms.TextFormatting
             set
             {
                 _defaultColor = value;
-                foreach (var textChunk in Chunks)
+                foreach (var textChunk in TextSegments)
                 {
                     if (!textChunk.Type.HasFlag(FormattedTextFlags.Colored))
                     {
@@ -211,6 +212,8 @@ namespace AudioBand.Views.Winforms.TextFormatting
             {
                 graphics.CompositingMode = CompositingMode.SourceOver;
                 graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
                 Draw(graphics, false);
             }
 
@@ -229,8 +232,8 @@ namespace AudioBand.Views.Winforms.TextFormatting
 
         private void Parse()
         {
-            // Build up chunks, each chunk is a sparately formatted piece of text
-            Chunks = new List<TextChunk>();
+            // Build up segments, each chunk is a sparately formatted piece of text
+            var segments = new List<TextSegment>();
             var currentText = new StringBuilder();
 
             if (Format == null)
@@ -238,7 +241,7 @@ namespace AudioBand.Views.Winforms.TextFormatting
                 return;
             }
 
-            // go through building up chunks character by character
+            // go through building up segments character by character
             for (int i = 0; i < Format.Length; i++)
             {
                 switch (Format[i])
@@ -246,7 +249,7 @@ namespace AudioBand.Views.Winforms.TextFormatting
                     // If we see the start of the format, get a chunk until the end token
                     case PlaceholderStartToken:
                         // Add what we have so far
-                        AddChunk(currentText, false);
+                        AddSegment(segments, currentText, false);
 
                         // Skip the start token
                         i++;
@@ -262,12 +265,12 @@ namespace AudioBand.Views.Winforms.TextFormatting
                         if (i == Format.Length)
                         {
                             currentText.Insert(0, PlaceholderStartToken);
-                            AddChunk(currentText, false);
+                            AddSegment(segments, currentText, false);
                         }
                         else
                         {
                             // Full placeholder
-                            AddChunk(currentText, true);
+                            AddSegment(segments, currentText, true);
                         }
 
                         break;
@@ -277,10 +280,15 @@ namespace AudioBand.Views.Winforms.TextFormatting
                 }
             }
 
-            AddChunk(currentText, false);
+            AddSegment(segments, currentText, false);
+
+            lock (_textSegmentLock)
+            {
+                TextSegments = segments;
+            }
         }
 
-        private void AddChunk(StringBuilder text, bool placeholder)
+        private void AddSegment(List<TextSegment> segments, StringBuilder text, bool placeholder)
         {
             if (text.Length == 0)
             {
@@ -290,12 +298,12 @@ namespace AudioBand.Views.Winforms.TextFormatting
             if (placeholder)
             {
                 ParsePlaceholder(text.ToString(), out string value, out FormattedTextFlags type, out Color c);
-                Chunks.Add(new TextChunk(value, type, c));
+                segments.Add(new TextSegment(value, type, c));
                 Flags |= type;
             }
             else
             {
-                Chunks.Add(new TextChunk(text.ToString(), FormattedTextFlags.Normal, DefaultColor));
+                segments.Add(new TextSegment(text.ToString(), FormattedTextFlags.Normal, DefaultColor));
             }
 
             text.Clear();
@@ -384,12 +392,19 @@ namespace AudioBand.Views.Winforms.TextFormatting
             var totalTextSize = default(SizeF);
             var x = 0f;
 
-            if (Chunks?.Count == 0)
+            if (TextSegments?.Count == 0)
             {
                 return totalTextSize;
             }
 
-            foreach (var textChunk in Chunks)
+            TextSegment[] copy = null;
+            lock (_textSegmentLock)
+            {
+                copy = new TextSegment[TextSegments.Count];
+                TextSegments.CopyTo(copy);
+            }
+
+            foreach (var textChunk in copy)
             {
                 var fontSize = FontSize;
                 var font = new Font(FontFamily, fontSize, GetFontStyle(textChunk.Type), GraphicsUnit.Point);
@@ -447,11 +462,14 @@ namespace AudioBand.Views.Winforms.TextFormatting
 
         private void UpdatePlaceholderValue(FormattedTextFlags type, string value)
         {
-            foreach (var textChunk in Chunks)
+            lock (_textSegmentLock)
             {
-                if (textChunk.Type.HasFlag(type))
+                foreach (var textChunk in TextSegments)
                 {
-                    textChunk.Text = value;
+                    if (textChunk.Type.HasFlag(type))
+                    {
+                        textChunk.Text = value;
+                    }
                 }
             }
         }
