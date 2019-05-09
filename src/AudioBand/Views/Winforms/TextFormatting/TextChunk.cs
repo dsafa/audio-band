@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Drawing;
 
 namespace AudioBand.Views.Winforms.TextFormatting
 {
@@ -49,9 +43,12 @@ namespace AudioBand.Views.Winforms.TextFormatting
         /// <param name="font">The font.</param>
         /// <param name="x">The x position of the text.</param>
         /// <param name="y">The y position of the text.</param>
-        public void Draw(Graphics g, Font font, int x, int y)
+        public void Draw(Graphics g, Font font, float x, float y)
         {
-            TextRenderer.DrawText(g, Text, font, new Point(x, y), Color, TextFormatFlags.NoPrefix);
+            using (var brush = new SolidBrush(Color))
+            {
+                g.DrawString(Text, font, brush, x, y, StringFormat.GenericTypographic);
+            }
         }
     }
 }
