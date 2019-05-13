@@ -9,7 +9,6 @@ using AudioBand.Settings;
 using AudioBand.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Svg;
 
 namespace AudioBand.Test
 {
