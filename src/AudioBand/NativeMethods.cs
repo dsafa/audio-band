@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace AudioBand
 {
@@ -33,6 +35,9 @@ namespace AudioBand
         [DllImport("shell32")]
         public static extern int SHGetPropertyStoreForWindow(IntPtr hwnd, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IPropertyStore ppv);
 
+        [DllImport("user32.dll")]
+        internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
         /// <summary>
         /// Sets the application user model id for the window.
         /// </summary>
@@ -45,6 +50,32 @@ namespace AudioBand
             var appid = new PROPVARIANT(appId);
             propertyStore.SetValue(ref PropertyKey.SystemAppUserModelIDPropertyKey, appid);
             PROPVARIANT.ClearProp(appid);
+        }
+
+        // Fix blur in windows 1903 causing lag by falling back to old blur behind.
+        public static void FixWindowComposition(Window w)
+        {
+            var win1903 = new Version(10, 0, 18362);
+            if (Environment.OSVersion.Version < win1903)
+            {
+                return;
+            }
+
+            var accent = default(AccentPolicy);
+            accent.AccentFlags = 2;
+            accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
+
+            var accentStructSize = Marshal.SizeOf(accent);
+            var accentPtr = Marshal.AllocHGlobal(accentStructSize);
+            Marshal.StructureToPtr(accent, accentPtr, false);
+
+            var data = default(WindowCompositionAttributeData);
+            data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
+            data.SizeOfData = accentStructSize;
+            data.Data = accentPtr;
+
+            SetWindowCompositionAttribute(new WindowInteropHelper(w).Handle, ref data);
+            Marshal.FreeHGlobal(accentPtr);
         }
 
         // From pinvoke.net
@@ -124,6 +155,39 @@ namespace AudioBand
                     Marshal.FreeCoTaskMem(p.pwszVal);
                 }
             }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct WindowCompositionAttributeData
+        {
+            public WindowCompositionAttribute Attribute;
+            public IntPtr Data;
+            public int SizeOfData;
+        }
+
+        internal enum WindowCompositionAttribute
+        {
+            WCA_ACCENT_POLICY = 19
+        }
+
+        internal enum AccentState
+        {
+            ACCENT_DISABLED = 0,
+            ACCENT_ENABLE_GRADIENT = 1,
+            ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
+            ACCENT_ENABLE_BLURBEHIND = 3,
+            ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
+            ACCENT_ENABLE_HOSTBACKDROP = 5,
+            ACCENT_INVALID_STATE = 6,
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct AccentPolicy
+        {
+            public AccentState AccentState;
+            public int AccentFlags;
+            public uint GradientColor;
+            public int AnimationId;
         }
     }
 #pragma warning restore SA1600 // Elements must be documented
