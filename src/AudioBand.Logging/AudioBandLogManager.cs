@@ -1,28 +1,41 @@
-﻿using NLog;
+﻿using System.IO;
+using System.Reflection;
+using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
-using System.IO;
-using System.Reflection;
 
 namespace AudioBand.Logging
 {
     /// <summary>
-    /// Log mananger for audioband loggers
+    /// Log mangaer for audioband loggers.
     /// </summary>
     public static class AudioBandLogManager
     {
-        private static LogFactory LogFactory = new LogFactory();
+        private static readonly LogFactory LogFactory = new LogFactory();
 
+        /// <summary>
+        /// Gets a logger instance.
+        /// </summary>
+        /// <param name="name">The name of the logger.</param>
+        /// <returns>A logger.</returns>
         public static ILogger GetLogger(string name)
         {
             return LogFactory.GetLogger(name);
         }
 
+        /// <summary>
+        /// Gets a logger instance.
+        /// </summary>
+        /// <typeparam name="T">The type used to name the logger.</typeparam>
+        /// <returns>A logger.</returns>
         public static ILogger GetLogger<T>()
         {
             return LogFactory.GetLogger(typeof(T).FullName);
         }
 
+        /// <summary>
+        /// Initializes the log manager.
+        /// </summary>
         public static void Initialize()
         {
             LayoutRenderer.Register<AudioBandExceptionLayoutRenderer>("audioband-exception");

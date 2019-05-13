@@ -32,6 +32,7 @@ namespace AudioSourceHost
             _tcs.SetException(e);
         }
 
+        /// <inheritdoc />
         public override object InitializeLifetimeService()
         {
             return null;

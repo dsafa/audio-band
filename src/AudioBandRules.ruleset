@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Rules for AudioBand" Description="Ruleset for AudioBand" ToolsVersion="15.0">
+<RuleSet Name="Rules for AudioBand" Description="Ruleset for AudioBand" ToolsVersion="16.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1000" Action="Warning" />
   </Rules>
@@ -7,6 +7,7 @@
     <Rule Id="SA1101" Action="None" />
     <Rule Id="SA1122" Action="None" />
     <Rule Id="SA1124" Action="None" />
+    <Rule Id="SA1200" Action="None" />
     <Rule Id="SA1309" Action="None" />
     <Rule Id="SA1633" Action="None" />
     <Rule Id="SA1634" Action="None" />
