@@ -35,6 +35,7 @@ namespace AudioBand.Views.Settings
 
             Activated += OnActivated;
             Closing += OnClosing;
+            Loaded += OnLoaded;
             vm.PropertyChanged += ViewModelOnPropertyChanged;
         }
 
@@ -100,6 +101,11 @@ namespace AudioBand.Views.Settings
             }
 
             ContentScrollView.ScrollToTop();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            NativeMethods.FixWindowComposition(this);
         }
     }
 }
