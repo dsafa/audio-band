@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -7,6 +8,7 @@ using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
+using NLog.Fluent;
 
 namespace AudioBand.ViewModels
 {
@@ -130,22 +132,40 @@ namespace AudioBand.ViewModels
             if (SelectedAudioSource != null)
             {
                 Logger.Debug("Deactivating current audio source {audiosource}", SelectedAudioSource.Name);
-                await SelectedAudioSource.DeactivateAsync();
+                try
+                {
+                    await SelectedAudioSource.DeactivateAsync();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, "Error deactivating audio source");
+                }
             }
 
             if (audioSource == null || audioSource == SelectedAudioSource)
             {
                 SelectedAudioSource = null;
+                _appSettings.Save();
                 return;
             }
 
             UpdateViewModels(audioSource);
 
             Logger.Debug("Activating new audio source {audiosource}", audioSource.Name);
-            await audioSource.ActivateAsync();
-            SelectedAudioSource = audioSource;
-
-            _appSettings.Save();
+            try
+            {
+                await audioSource.ActivateAsync();
+                SelectedAudioSource = audioSource;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Error activating audio source");
+                SelectedAudioSource = null;
+            }
+            finally
+            {
+                _appSettings.Save();
+            }
         }
 
         private void UpdateViewModels(IAudioSource audioSource)
