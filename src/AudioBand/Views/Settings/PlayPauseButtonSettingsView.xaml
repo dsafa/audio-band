@@ -31,12 +31,9 @@
             </UniformGrid>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <TextBlock Text="{StaticResource DefaultColorLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <local:ColorPicker Color="{Binding DefaultBackgroundColor}" DialogService="{Binding DialogService}"/>
-            <TextBlock Text="{StaticResource HoverColorLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}"/>
-            <TextBlock Text="{StaticResource ClickedColorLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <local:ColorPicker Color="{Binding ClickedBackgroundColor}" DialogService="{Binding DialogService}"/>
+            <local:ColorPicker Color="{Binding DefaultBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource DefaultColorLabelText}"/>
+            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource HoverColorLabelText}"/>
+            <local:ColorPicker Color="{Binding ClickedBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ClickedColorLabelText}"/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PlayButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
             <TextBlock Text="{StaticResource PlayButtonContentTypeDescription}" Style="{StaticResource DescriptionTextBlock}"/>
@@ -76,12 +73,9 @@
                           ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}" Width="400"/>
                 <TextBlock Text="{StaticResource PlayButtonTextDescription}" Style="{StaticResource DescriptionTextBlock}"/>
                 <TextBox Text="{Binding PlayButtonText}" FontFamily="{Binding PlayButtonTextFontFamily}" Width="100"/>
-                <TextBlock Text="{StaticResource ButtonTextColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding PlayButtonTextColor}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource ButtonTextHoverColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding PlayButtonTextHoverColor}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource ButtonTextClickedColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding PlayButtonTextClickedColor}" DialogService="{Binding DialogService}"/>
+                <local:ColorPicker Color="{Binding PlayButtonTextColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextColorDescription}"/>
+                <local:ColorPicker Color="{Binding PlayButtonTextHoverColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextHoverColorDescription}"/>
+                <local:ColorPicker Color="{Binding PlayButtonTextClickedColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextClickedColorDescription}"/>
             </ItemsControl>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PauseButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
@@ -122,12 +116,9 @@
                           ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}" Width="400"/>
                 <TextBlock Text="{StaticResource PauseButtonTextDescription}" Style="{StaticResource DescriptionTextBlock}"/>
                 <TextBox Text="{Binding PauseButtonText}" FontFamily="{Binding PauseButtonTextFontFamily}" Width="100"/>
-                <TextBlock Text="{StaticResource ButtonTextColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding PauseButtonTextColor}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource ButtonTextHoverColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding PauseButtonTextHoverColor}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource ButtonTextClickedColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding PauseButtonTextClickedColor}" DialogService="{Binding DialogService}"/>
+                <local:ColorPicker Color="{Binding PauseButtonTextColor}" DialogService="{Binding DialogService}" Title="{StaticResource  ButtonTextColorDescription}"/>
+                <local:ColorPicker Color="{Binding PauseButtonTextHoverColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextHoverColorDescription}"/>
+                <local:ColorPicker Color="{Binding PauseButtonTextClickedColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextClickedColorDescription}"/>
             </ItemsControl>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>

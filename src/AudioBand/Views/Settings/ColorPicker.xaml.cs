@@ -21,6 +21,11 @@ namespace AudioBand.Views.Settings
         public static readonly DependencyProperty DialogServiceProperty = DependencyProperty.Register(nameof(DialogService), typeof(IDialogService), typeof(ColorPicker));
 
         /// <summary>
+        /// Dependency property for <see cref="Title"/>.
+        /// </summary>
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(ColorPicker));
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ColorPicker"/> class.
         /// </summary>
         public ColorPicker()
@@ -35,6 +40,15 @@ namespace AudioBand.Views.Settings
         {
             get => (Color)GetValue(ColorProperty);
             set => SetValue(ColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the title property.
+        /// </summary>
+        public string Title
+        {
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
 
         /// <summary>

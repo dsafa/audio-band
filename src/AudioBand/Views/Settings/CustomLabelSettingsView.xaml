@@ -89,19 +89,15 @@
             </Popup>
 
             <TextBlock Text="{StaticResource CustomLabelFontSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <TextBlock Text="{StaticResource CustomLabelAlignmentDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <ComboBox IsEditable="False" ItemsSource="{Binding TextAlignValues}" SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
             <TextBlock Text="{StaticResource CustomLabelFontFamilyDescription}" Style="{StaticResource DescriptionTextBlock}"/>
             <ComboBox IsEditable="True" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" 
                       ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}" Width="400"
                       SelectedValue="{Binding FontFamily}" SelectedValuePath="Source"/>
-
             <TextBlock Text="{StaticResource CustomLabelFontSizeDescription}" Style="{StaticResource DescriptionTextBlock}"/>
             <metro:NumericUpDown behaviors:NumericInput.Type="FontSize" Value="{Binding FontSize, Mode=TwoWay}"/>
-
-            <TextBlock Text="{StaticResource CustomLabelFontColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-            <local:ColorPicker DialogService="{Binding Path=DialogService}" Color="{Binding Path=Color, Mode=TwoWay}"/>
-
-            <TextBlock Text="{StaticResource CustomLabelAlignmentDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-            <ComboBox IsEditable="False" ItemsSource="{Binding TextAlignValues}" SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
+            <local:ColorPicker DialogService="{Binding Path=DialogService}" Color="{Binding Path=Color}" Title="{StaticResource CustomLabelFontColorDescription}"/>
 
             <TextBlock Text="{StaticResource CustomLabelOverflowSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
             <TextBlock Text="{StaticResource CustomLabelOverflowDescription}" Style="{StaticResource DescriptionTextBlock}"/>
