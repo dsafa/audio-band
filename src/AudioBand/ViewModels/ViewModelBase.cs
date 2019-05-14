@@ -31,7 +31,7 @@ namespace AudioBand.ViewModels
         protected ViewModelBase()
         {
             Logger = AudioBandLogManager.GetLogger(GetType().FullName);
-            Accessor = TypeAccessor.Create(GetType());
+            Accessor = TypeAccessor.Create(GetType(), true);
 
             BeginEditCommand = new RelayCommand(o => BeginEdit());
             EndEditCommand = new RelayCommand(o => EndEdit());

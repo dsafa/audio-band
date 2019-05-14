@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interactivity;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using AudioBand.Models;
 
 namespace AudioBand.Behaviors
 {
@@ -28,9 +30,28 @@ namespace AudioBand.Behaviors
         /// Dependency property for <see cref="DuplicateChild"/>.
         /// </summary>
         public static readonly DependencyProperty DuplicateChildProperty
-            = DependencyProperty.Register(nameof(DuplicateChild), typeof(FrameworkElement), typeof(MarqueeContainer));
+            = DependencyProperty.Register(nameof(DuplicateChild), typeof(FrameworkElement), typeof(MarqueeContainer), new PropertyMetadata(DuplicateChildPropertyChangedCallback));
+
+        /// <summary>
+        /// Dependency property for <see cref="TextOverflow"/>.
+        /// </summary>
+        public static readonly DependencyProperty TextOverflowProperty
+            = DependencyProperty.Register(nameof(TextOverflow), typeof(TextOverflow), typeof(MarqueeContainer), new PropertyMetadata(Models.TextOverflow.Truncate, TextOverflowPropertyChangedCallback));
+
+        /// <summary>
+        /// Dependency property for <see cref="ScrollBehavior"/>.
+        /// </summary>
+        public static readonly DependencyProperty ScrollBehaviorProperty
+            = DependencyProperty.Register(nameof(ScrollBehavior), typeof(ScrollBehavior), typeof(MarqueeContainer), new PropertyMetadata(ScrollBehavior.Always, ScrollBehaviorPropertyChangedCallback));
+
+        /// <summary>
+        /// Dependency property for <see cref="IsPlaying"/>.
+        /// </summary>
+        public static readonly DependencyProperty IsPlayingProperty
+            = DependencyProperty.Register(nameof(IsPlaying), typeof(bool), typeof(MarqueeContainer), new PropertyMetadata(false, IsPlayingPropertyChangedCallback));
 
         private const double ChildMargin = 100;
+        private bool _mouseOver;
 
         /// <summary>
         /// Gets or sets the target child of the marquee animation.
@@ -59,11 +80,40 @@ namespace AudioBand.Behaviors
             set => SetValue(ScrollDurationProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets the text overflow.
+        /// </summary>
+        public TextOverflow TextOverflow
+        {
+            get => (TextOverflow)GetValue(TextOverflowProperty);
+            set => SetValue(TextOverflowProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the scroll behavior.
+        /// </summary>
+        public ScrollBehavior ScrollBehavior
+        {
+            get => (ScrollBehavior)GetValue(ScrollBehaviorProperty);
+            set => SetValue(ScrollBehaviorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a track is playing.
+        /// </summary>
+        public bool IsPlaying
+        {
+            get => (bool)GetValue(IsPlayingProperty);
+            set => SetValue(IsPlayingProperty, value);
+        }
+
         /// <inheritdoc />
         protected override void OnAttached()
         {
             base.OnAttached();
             AssociatedObject.SizeChanged += AssociatedObjectOnSizeChanged;
+            AssociatedObject.MouseEnter += AssociatedObjectOnMouseEnter;
+            AssociatedObject.MouseLeave += AssociatedObjectOnMouseLeave;
         }
 
         /// <inheritdoc />
@@ -71,28 +121,66 @@ namespace AudioBand.Behaviors
         {
             base.OnDetaching();
             AssociatedObject.SizeChanged -= AssociatedObjectOnSizeChanged;
-        }
-
-        private static void ScrollDurationPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var marquee = (MarqueeContainer)d;
-            marquee.UpdateAnimation();
+            AssociatedObject.MouseEnter -= AssociatedObjectOnMouseEnter;
+            AssociatedObject.MouseLeave -= AssociatedObjectOnMouseLeave;
         }
 
         private static void TargetChildPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var marque = (MarqueeContainer)d;
+            var marquee = (MarqueeContainer)d;
+            ((FrameworkElement)e.NewValue).RenderTransform = new TranslateTransform(0, 0);
 
             if (e.OldValue != null)
             {
-                ((FrameworkElement)e.OldValue).SizeChanged -= marque.TargetChildOnSizeChanged;
-                marque.UpdateAnimation();
+                ((FrameworkElement)e.OldValue).SizeChanged -= marquee.TargetChildOnSizeChanged;
             }
 
             if (e.NewValue != null)
             {
-                ((FrameworkElement)e.NewValue).SizeChanged += marque.TargetChildOnSizeChanged;
-                marque.UpdateAnimation();
+                ((FrameworkElement)e.NewValue).SizeChanged += marquee.TargetChildOnSizeChanged;
+            }
+        }
+
+        private static void DuplicateChildPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((FrameworkElement)e.NewValue).RenderTransform = new TranslateTransform(0, 0);
+        }
+
+        private static void ScrollDurationPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((MarqueeContainer)d).UpdateAnimation();
+        }
+
+        private static void ScrollBehaviorPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((MarqueeContainer)d).UpdateAnimation();
+        }
+
+        private static void TextOverflowPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((MarqueeContainer)d).UpdateAnimation();
+        }
+
+        private static void IsPlayingPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((MarqueeContainer)d).UpdateAnimation();
+        }
+
+        private void AssociatedObjectOnMouseEnter(object sender, MouseEventArgs e)
+        {
+            _mouseOver = true;
+            if (ScrollBehavior == ScrollBehavior.OnlyWhenMouseOver)
+            {
+                UpdateAnimation();
+            }
+        }
+
+        private void AssociatedObjectOnMouseLeave(object sender, MouseEventArgs e)
+        {
+            _mouseOver = false;
+            if (ScrollBehavior == ScrollBehavior.OnlyWhenMouseOver)
+            {
+                UpdateAnimation();
             }
         }
 
@@ -108,73 +196,88 @@ namespace AudioBand.Behaviors
 
         private void UpdateAnimation()
         {
-            if (TargetChild == null)
+            if (TargetChild == null || DuplicateChild == null)
             {
                 return;
             }
 
-            StopAnimation(TargetChild);
-            StopAnimation(DuplicateChild);
-
-            if (TargetChild.ActualWidth <= AssociatedObject.Width || ScrollDuration == TimeSpan.Zero)
+            var shouldScroll = false;
+            if (TextOverflow == TextOverflow.Scroll)
             {
-                if (DuplicateChild != null)
+                switch (ScrollBehavior)
                 {
-                    DuplicateChild.Opacity = 0;
+                    case ScrollBehavior.OnlyWhenMouseOver when _mouseOver:
+                    case ScrollBehavior.OnlyWhenTrackPlaying when IsPlaying:
+                    case ScrollBehavior.Always:
+                        shouldScroll = true;
+                        break;
                 }
+            }
 
+            if (TargetChild.ActualWidth <= AssociatedObject.Width || ScrollDuration == TimeSpan.Zero || !shouldScroll)
+            {
+                StopTargetChildAnimation();
+                StopDuplicateChildAnimation();
                 return;
             }
 
-            StartAnimation(TargetChild);
-
-            if (DuplicateChild != null)
-            {
-                DuplicateChild.Opacity = 1;
-            }
-
-            StartAnimation(DuplicateChild, TimeSpan.FromMilliseconds(ScrollDuration.TotalMilliseconds / 2));
+            StartTargetChildAnimation();
+            StartDuplicateChildAnimation();
             AssociatedObject.InvalidateVisual();
         }
 
-        private void StartAnimation(FrameworkElement child, TimeSpan? offset = null)
+        private void StartTargetChildAnimation()
         {
-            if (child == null)
-            {
-                return;
-            }
+            var animation = CreateAnimation();
 
-            var translateTransform = new TranslateTransform(TargetChild.ActualWidth, 0);
-            child.RenderTransform = translateTransform;
-            var animation = new DoubleAnimation
-            {
-                From = TargetChild.ActualWidth,
-                To = -TargetChild.ActualWidth - ChildMargin,
-                RepeatBehavior = RepeatBehavior.Forever,
-                Duration = new Duration(ScrollDuration),
-            };
-
-            if (offset.HasValue)
-            {
-                animation.BeginTime = offset.Value;
-            }
-
-            translateTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+            TargetChild.RenderTransform = new TranslateTransform(AssociatedObject.Width, 0);
+            TargetChild.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
         }
 
-        private void StopAnimation(FrameworkElement child)
+        private void StartDuplicateChildAnimation()
         {
-            if (child == null)
+            var animation = CreateAnimation();
+            animation.BeginTime = TimeSpan.FromMilliseconds(CalculateTimeToScroll().TotalMilliseconds / 2);
+
+            DuplicateChild.Opacity = 1;
+            DuplicateChild.RenderTransform = new TranslateTransform(AssociatedObject.Width, 0);
+            DuplicateChild.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+        }
+
+        private void StopTargetChildAnimation()
+        {
+            TargetChild.RenderTransform.BeginAnimation(TranslateTransform.XProperty, null);
+            TargetChild.RenderTransform = new TranslateTransform();
+        }
+
+        private void StopDuplicateChildAnimation()
+        {
+            DuplicateChild.Opacity = 0;
+            DuplicateChild.RenderTransform.BeginAnimation(TranslateTransform.XProperty, null);
+        }
+
+        private DoubleAnimation CreateAnimation()
+        {
+            return new DoubleAnimation(AssociatedObject.ActualWidth, -TargetChild.ActualWidth - ChildMargin, CalculateTimeToScroll())
             {
-                return;
+                FillBehavior = FillBehavior.Stop,
+                RepeatBehavior = RepeatBehavior.Forever,
+            };
+        }
+
+        private TimeSpan CalculateTimeToScroll()
+        {
+            // Calculate time to scroll based on the target time to scroll across the panel.
+            if (ScrollDuration.TotalMilliseconds == 0)
+            {
+                return TimeSpan.Zero;
             }
 
-            if (child.RenderTransform is TranslateTransform transform)
-            {
-                transform.BeginAnimation(TranslateTransform.XProperty, null);
-            }
+            var velocity = AssociatedObject.ActualWidth / ScrollDuration.TotalMilliseconds;
+            var childScrollDistance = TargetChild.ActualWidth + AssociatedObject.ActualWidth;
+            var scrollTime = childScrollDistance / velocity;
 
-            child.RenderTransform = Transform.Identity;
+            return TimeSpan.FromMilliseconds(scrollTime);
         }
     }
 }

@@ -18,7 +18,7 @@
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}" d:DataContext="{d:DesignInstance viewmodels:NextButtonVM}">
-            <TextBlock Text="{StaticResource ArrangementSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
             <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
             <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}"
                             IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
