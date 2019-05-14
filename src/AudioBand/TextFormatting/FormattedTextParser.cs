@@ -5,14 +5,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using AudioBand.Extensions;
-using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
 namespace AudioBand.TextFormatting
 {
     /// <summary>
     /// Renders formatted text.
     /// </summary>
-    internal class FormattedTextRenderer
+    internal class FormattedTextParser
     {
         private const char PlaceholderStartToken = '{';
         private const char PlaceholderEndToken = '}';
@@ -27,7 +26,7 @@ namespace AudioBand.TextFormatting
 
         private const string Styles = BoldStyle + ItalicsStyle + UnderlineStyle;
         private const string Tags = ArtistPlaceholder + "|" + SongNamePlaceholder + "|" + AlbumNamePlaceholder + "|" + CurrentTimePlaceholder + "|" + SongLengthPlaceholder;
-        private static readonly Regex PlaceholderPattern = new Regex($@"(?<style>[{Styles}])*(?<tag>({Tags}))(:(?<color>#[A-Fa-f0-9]{{6}}))?", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+        private static readonly Regex PlaceholderPattern = new Regex($@"(?<style>[{Styles}])*(?<tag>({Tags}))(:(?<color>#[A-Fa-f0-9]{{6,8}}))?", RegexOptions.Compiled | RegexOptions.ExplicitCapture);
         private static readonly ColorConverter ColorConverter = new ColorConverter();
 
         private readonly object _textSegmentLock = new object();
@@ -40,11 +39,11 @@ namespace AudioBand.TextFormatting
         private Color _defaultColor;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FormattedTextRenderer"/> class.
+        /// Initializes a new instance of the <see cref="FormattedTextParser"/> class.
         /// </summary>
         /// <param name="format">The text format.</param>
         /// <param name="defaultColor">The default color.</param>
-        public FormattedTextRenderer(string format, Color defaultColor)
+        public FormattedTextParser(string format, Color defaultColor)
         {
             Format = format;
             DefaultColor = defaultColor;

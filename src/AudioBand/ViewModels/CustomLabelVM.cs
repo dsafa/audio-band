@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Media;
 using AudioBand.AudioSource;
 using AudioBand.Extensions;
@@ -18,7 +17,7 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class CustomLabelVM : ViewModelBase<CustomLabel>
     {
-        private readonly FormattedTextRenderer _renderer;
+        private readonly FormattedTextParser _parser;
         private IAudioSource _audioSource;
         private bool _isPlaying;
 
@@ -31,7 +30,7 @@ namespace AudioBand.ViewModels
             : base(model)
         {
             DialogService = dialogService;
-            _renderer = new FormattedTextRenderer(FormatString, Color);
+            _parser = new FormattedTextParser(FormatString, Color);
         }
 
         [PropertyChangeBinding(nameof(CustomLabel.Name))]
@@ -142,7 +141,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the text segments.
         /// </summary>
-        public IEnumerable<TextSegment> TextSegments => _renderer.TextSegments;
+        public IEnumerable<TextSegment> TextSegments => _parser.TextSegments;
 
         /// <summary>
         /// Gets the values of <see cref="CustomLabel.TextAlignment"/>.
@@ -188,10 +187,10 @@ namespace AudioBand.ViewModels
             switch (propertyName)
             {
                 case nameof(Model.Color):
-                    _renderer.DefaultColor = Model.Color;
+                    _parser.DefaultColor = Model.Color;
                     break;
                 case nameof(Model.FormatString):
-                    _renderer.Format = Model.FormatString;
+                    _parser.Format = Model.FormatString;
                     break;
             }
         }
@@ -225,24 +224,24 @@ namespace AudioBand.ViewModels
 
         private void AudioSourceOnTrackProgressChanged(object sender, TimeSpan e)
         {
-            _renderer.SongProgress = e;
+            _parser.SongProgress = e;
         }
 
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
         {
-            _renderer.Artist = e.Artist;
-            _renderer.AlbumName = e.Album;
-            _renderer.SongLength = e.TrackLength;
-            _renderer.SongName = e.TrackName;
+            _parser.Artist = e.Artist;
+            _parser.AlbumName = e.Album;
+            _parser.SongLength = e.TrackLength;
+            _parser.SongName = e.TrackName;
         }
 
         private void Clear()
         {
-            _renderer.Artist = null;
-            _renderer.AlbumName = null;
-            _renderer.SongName = null;
-            _renderer.SongLength = TimeSpan.Zero;
-            _renderer.SongProgress = TimeSpan.Zero;
+            _parser.Artist = null;
+            _parser.AlbumName = null;
+            _parser.SongName = null;
+            _parser.SongLength = TimeSpan.Zero;
+            _parser.SongProgress = TimeSpan.Zero;
         }
     }
 }
