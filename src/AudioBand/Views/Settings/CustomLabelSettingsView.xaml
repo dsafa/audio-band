@@ -5,121 +5,128 @@
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
-             xmlns:converters="clr-namespace:AudioBand.ValueConverters">
+             xmlns:converters="clr-namespace:AudioBand.ValueConverters"
+             xmlns:models="clr-namespace:AudioBand.Models">
     <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="../../Resources/Shared.xaml"/>
                     <ResourceDictionary Source="../../Resources/Strings.xaml"/>
+                    <ResourceDictionary Source="../../Resources/Style.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="{StaticResource CustomNameLabelText}" />
-            <TextBox Grid.Row="0" Grid.Column="1" 
-                 metro:TextBoxHelper.ClearTextButton="True"
-                 Text="{Binding Name, Mode=TwoWay}"/>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{StaticResource CustomLabelNameDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <TextBox metro:TextBoxHelper.ClearTextButton="True" Text="{Binding Name, Mode=TwoWay}" Width="150"/>
+            <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+            <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}"
+                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
+            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
+                <TextBlock Text="{StaticResource WidthLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
+                <TextBlock Text="{StaticResource XPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <TextBlock Text="{StaticResource YPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
+            </UniformGrid>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="{StaticResource VisibilityLabelText}" />
-            <metro:ToggleSwitch Grid.Row="1" Grid.Column="1"
-                            OnLabel="{StaticResource StatusVisible}"
-                            OffLabel="{StaticResource StatusHidden}"
-                            IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-
-            <Label Grid.Row="2" Grid.Column="0" Content="{StaticResource WidthLabelText}" />
-            <metro:NumericUpDown Grid.Row="2" Grid.Column="1" 
-                             behaviors:NumericInput.Type="Size" 
-                             Value="{Binding Width, Mode=TwoWay}"/>
-
-            <Label Grid.Row="3" Grid.Column="0" Content="{StaticResource HeightLabelText}" />
-            <metro:NumericUpDown Grid.Row="3" Grid.Column="1" 
-                             behaviors:NumericInput.Type="Size" 
-                             Value="{Binding Height, Mode=TwoWay}"/>
-
-            <Label Grid.Row="4" Grid.Column="0" Content="{StaticResource XPositionLabelText}" />
-            <metro:NumericUpDown Grid.Row="4" Grid.Column="1"
-                             behaviors:NumericInput.Type="Position" 
-                             Value="{Binding XPosition, Mode=TwoWay}"/>
-
-            <Label Grid.Row="5" Grid.Column="0" Content="{StaticResource YPositionLabelText}" />
-            <metro:NumericUpDown Grid.Row="5" Grid.Column="1" 
-                             behaviors:NumericInput.Type="Position"
-                             Value="{Binding YPosition, Mode=TwoWay}"/>
-
-            <Label Grid.Row="6" Grid.Column="0" Content="{StaticResource FontFamilyLabelText}" />
-            <ComboBox Grid.Row="6" Grid.Column="1" IsEditable="True"
-                  ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}"
-                  SelectedItem="{Binding FontFamily, Mode=TwoWay, Converter={x:Static converters:Converters.StringToFontFamily}}"/>
-
-            <Label Grid.Row="7" Grid.Column="0" Content="{StaticResource FontSizeLabelText}" />
-            <metro:NumericUpDown Grid.Row="7" Grid.Column="1" 
-                            behaviors:NumericInput.Type="FontSize"
-                            Value="{Binding FontSize, Mode=TwoWay}"/>
-
-            <Label Grid.Row="8" Grid.Column="0" Content="{StaticResource FontColorLabelText}" />
-            <local:ColorPicker Grid.Row="8" Grid.Column="1"
-                           DialogService="{Binding Path=DialogService}"
-                           Color="{Binding Path=Color, Mode=TwoWay}"/>
-
-            <Label Grid.Row="9" Grid.Column="0" Content="Alignment" />
-            <ComboBox Grid.Row="9" Grid.Column="1" IsEditable="False"
-                  ItemsSource="{Binding TextAlignValues}"
-                  SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
-
-            <Label Grid.Row="10" Grid.Column="0" Content="{StaticResource ScrollSpeedLabelText}" />
-            <metro:NumericUpDown Grid.Row="10" Grid.Column="1" 
-                             behaviors:NumericInput.Type="WholeNumber"
-                             Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static converters:Converters.TimeSpanToMs}}"/>
-
-            <StackPanel Grid.Row="11" Grid.Column="0" Orientation="Horizontal"
-                    ToolTipService.ShowDuration="60000" ToolTipService.InitialShowDelay="500"
-                    Background="#01FFFFFF">
-                <Label Content="{StaticResource TextFormatLabelText}"/>
-                <iconPacks:PackIconMaterial Kind="HelpCircleOutline" Width="10" Height="10" Margin="-10, 4, 0, 0"/>
-                <StackPanel.ToolTip>
-                    <TextBlock>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpText}"/><LineBreak/>
-                    <Bold>Tags</Bold> <LineBreak/>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextTags}"/><LineBreak/>
-                    <Bold>Styles</Bold> <LineBreak/>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextStyles}"/><LineBreak/>
-                    <Bold>Colors</Bold> <LineBreak/>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextColors}"/><LineBreak/>
-                    <Bold>Example formats</Bold> <LineBreak/>
-                    <TextBlock Text="{StaticResource CustomLabelFormatHelpTextExamples}"/><LineBreak/>
+            <TextBlock Text="{StaticResource CustomLabelFormatSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" x:Name="CustomLabelFormatHelpLink" Focusable="False">
+                <Run Text="{StaticResource CustomLabelTextFormatDescription}"/>.
+                <TextBlock>
+                    <Hyperlink>
+                        <Run Text="{StaticResource CustomLabelTextFormatHelpLink}"/>
+                    </Hyperlink>
+                    <TextBlock.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.GotFocus">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="FormatHelpPopup"
+                                                                        Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="FrameworkElement.LostFocus">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="FormatHelpPopup"
+                                                                        Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </TextBlock.Triggers>
                 </TextBlock>
-                </StackPanel.ToolTip>
-            </StackPanel>
+            </TextBlock>
+            <TextBox metro:TextBoxHelper.ClearTextButton="True" Text="{Binding FormatString, Mode=TwoWay}" Width="400"/>
+            <Popup x:Name="FormatHelpPopup" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Slide"
+                     PlacementTarget="{x:Reference CustomLabelFormatHelpLink}" Placement="Top">
+                <Border Background="White" BorderBrush="Gray" BorderThickness="1" Padding="4">
+                    <TextBlock>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpText}"/><LineBreak/>
+                        <Bold>Tags</Bold> <LineBreak/>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextTags}"/><LineBreak/>
+                        <Bold>Styles</Bold> <LineBreak/>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextStyles}"/><LineBreak/>
+                        <Bold>Colors</Bold> <LineBreak/>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextColors}"/><LineBreak/>
+                        <Bold>Example formats</Bold> <LineBreak/>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextExamples}"/><LineBreak/>
+                    </TextBlock>
+                </Border>
+            </Popup>
 
-            <TextBox Grid.Row="11" Grid.Column="1" 
-                 metro:TextBoxHelper.ClearTextButton="True"
-                 Text="{Binding FormatString, Mode=TwoWay}"/>
+            <TextBlock Text="{StaticResource CustomLabelFontSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <TextBlock Text="{StaticResource CustomLabelFontFamilyDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <ComboBox IsEditable="True" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" 
+                      ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}" Width="400"
+                      SelectedValue="{Binding FontFamily}" SelectedValuePath="Source"/>
 
-            <Button Grid.Row="12" Grid.Column="0" HorizontalAlignment="Left" 
-                Content="{StaticResource ResetButtonText}"
-                Command="{Binding ResetCommand}"/>
-        </Grid>
+            <TextBlock Text="{StaticResource CustomLabelFontSizeDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <metro:NumericUpDown behaviors:NumericInput.Type="FontSize" Value="{Binding FontSize, Mode=TwoWay}"/>
+
+            <TextBlock Text="{StaticResource CustomLabelFontColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <local:ColorPicker DialogService="{Binding Path=DialogService}" Color="{Binding Path=Color, Mode=TwoWay}"/>
+
+            <TextBlock Text="{StaticResource CustomLabelAlignmentDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <ComboBox IsEditable="False" ItemsSource="{Binding TextAlignValues}" SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
+
+            <TextBlock Text="{StaticResource CustomLabelOverflowSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <TextBlock Text="{StaticResource CustomLabelOverflowDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <ComboBox ItemsSource="{Binding TextOverflowValues}" ItemTemplate="{StaticResource EnumDescriptorItemTemplate}"
+                      SelectedValue="{Binding TextOverflow}" SelectedValuePath="Value"/>
+            <ItemsControl>
+                <ItemsControl.Style>
+                    <Style TargetType="{x:Type ItemsControl}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding TextOverflow}" Value="{x:Static models:TextOverflow.Scroll}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.Style>
+                <TextBlock Text="{StaticResource CustomLabelScrollBehaviorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+                <ComboBox ItemsSource="{Binding ScrollBehaviorValues}" ItemTemplate="{StaticResource EnumDescriptorItemTemplate}" Width="300"
+                          SelectedValue="{Binding ScrollBehavior}" SelectedValuePath="Value"/>
+                <TextBlock Text="{StaticResource CustomLabelScrollSpeedDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="WholeNumber" Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static converters:Converters.TimeSpanToMs}}"/>
+            </ItemsControl>
+
+            <TextBlock Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <Button HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}" Command="{Binding ResetCommand}"/>
+        </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

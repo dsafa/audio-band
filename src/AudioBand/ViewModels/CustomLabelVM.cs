@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using AudioBand.AudioSource;
+using AudioBand.Extensions;
 using AudioBand.Models;
 using AudioBand.TextFormatting;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
@@ -19,6 +20,7 @@ namespace AudioBand.ViewModels
     {
         private readonly FormattedTextRenderer _renderer;
         private IAudioSource _audioSource;
+        private bool _isPlaying;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomLabelVM"/> class.
@@ -118,6 +120,26 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the text overflow.
+        /// </summary>
+        [PropertyChangeBinding(nameof(CustomLabel.TextOverflow))]
+        public TextOverflow TextOverflow
+        {
+            get => Model.TextOverflow;
+            set => SetProperty(nameof(Model.TextOverflow), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the scroll behavior.
+        /// </summary>
+        [PropertyChangeBinding(nameof(CustomLabel.ScrollBehavior))]
+        public ScrollBehavior ScrollBehavior
+        {
+            get => Model.ScrollBehavior;
+            set => SetProperty(nameof(Model.ScrollBehavior), value);
+        }
+
+        /// <summary>
         /// Gets the text segments.
         /// </summary>
         public IEnumerable<TextSegment> TextSegments => _renderer.TextSegments;
@@ -126,6 +148,16 @@ namespace AudioBand.ViewModels
         /// Gets the values of <see cref="CustomLabel.TextAlignment"/>.
         /// </summary>
         public IEnumerable<TextAlignment> TextAlignValues { get; } = Enum.GetValues(typeof(TextAlignment)).Cast<TextAlignment>();
+
+        /// <summary>
+        /// Gets the values of the <see cref="ScrollBehavior"/> enum.
+        /// </summary>
+        public IEnumerable<EnumDescriptor<ScrollBehavior>> ScrollBehaviorValues { get; } = typeof(ScrollBehavior).GetEnumDescriptors<ScrollBehavior>();
+
+        /// <summary>
+        /// Gets the values of the <see cref="TextOverflow"/> enum.
+        /// </summary>
+        public IEnumerable<EnumDescriptor<TextOverflow>> TextOverflowValues { get; } = typeof(TextOverflow).GetEnumDescriptors<TextOverflow>();
 
         /// <summary>
         /// Gets the dialog service.
@@ -138,6 +170,16 @@ namespace AudioBand.ViewModels
         public IAudioSource AudioSource
         {
             set => UpdateAudioSource(value);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a track is playing.
+        /// </summary>
+        /// <remarks>Public so that bindings are set up correctly.</remarks>
+        public bool IsPlaying
+        {
+            get => _isPlaying;
+            set => SetProperty(ref _isPlaying, value, false);
         }
 
         /// <inheritdoc/>
@@ -161,6 +203,7 @@ namespace AudioBand.ViewModels
                 Clear();
                 _audioSource.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
                 _audioSource.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
+                _audioSource.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
             }
 
             _audioSource = audioSource;
@@ -172,6 +215,12 @@ namespace AudioBand.ViewModels
 
             _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
             _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
+            _audioSource.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
+        }
+
+        private void AudioSourceOnIsPlayingChanged(object sender, bool e)
+        {
+            IsPlaying = e;
         }
 
         private void AudioSourceOnTrackProgressChanged(object sender, TimeSpan e)

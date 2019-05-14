@@ -15,8 +15,13 @@
     <sys:String x:Key="ButtonTextColorDescription">Normal text color</sys:String>
     <sys:String x:Key="ButtonTextHoverColorDescription">Text color when hovered</sys:String>
     <sys:String x:Key="ButtonTextClickedColorDescription">Text color when clicked</sys:String>
+    <sys:String x:Key="DisplaySectionText">Display</sys:String>
+    <sys:String x:Key="BackgroundColorSectionText">Background Colors</sys:String>
+    <sys:String x:Key="OtherSectionText">Other</sys:String>
 
     <!-- Play/pause button settings -->
+    <sys:String x:Key="PlayImageSectionText">Play Image</sys:String>
+    <sys:String x:Key="PauseImageSectionText">Pause Image</sys:String>
     <sys:String x:Key="PlayButtonImageLabelText">Play image</sys:String>
     <sys:String x:Key="PlayButtonHoveredImageLabelText">Play image when hovered</sys:String>
     <sys:String x:Key="PlayButtonClickedImageLabelText">Play image when clicked</sys:String>
@@ -40,22 +45,39 @@
     <sys:String x:Key="PlaybackButtonContentTypeDescription">Select the content type for the button</sys:String>
     <sys:String x:Key="PlaybackButtonFontFamilyDescription">Select the font family for the button text</sys:String>
     <sys:String x:Key="PlaybackButtonTextDescription">Button text</sys:String>
+    <sys:String x:Key="ImageSectionText">Image</sys:String>
 
-    <sys:String x:Key="CustomNameLabelText">Name</sys:String>
-    <sys:String x:Key="FontFamilyLabelText">Font Family</sys:String>
-    <sys:String x:Key="FontSizeLabelText">Font Size</sys:String>
-    <sys:String x:Key="AlignmentLabelText">Alignment</sys:String>
-    <sys:String x:Key="FontColorLabelText">Font Color</sys:String>
-    <sys:String x:Key="TextFormatLabelText">Text Format</sys:String>
-    <sys:String x:Key="ScrollSpeedLabelText">Scroll Speed</sys:String>
-    <sys:String x:Key="BackgroundColorLabelText">Background Color</sys:String>
-    <sys:String x:Key="ForegroundColorLabelText">Foreground Color</sys:String>
-    <sys:String x:Key="PlaceholderImageLabelText">Placeholder Image</sys:String>
-    <sys:String x:Key="YOffsetLabelText">Margin</sys:String>
-    <sys:String x:Key="AboutTitle">About AudioBand</sys:String>
-    <sys:String x:Key="RememberSettingLabelText">Remember</sys:String>
-    <sys:String x:Key="DefaultProfileItemText">Default Profile</sys:String>
+    <!-- Custom text label settings -->
+    <sys:String x:Key="CustomLabelNameDescription">Choose a name for the label</sys:String>
+    <sys:String x:Key="CustomLabelFontFamilyDescription">Font Family</sys:String>
+    <sys:String x:Key="CustomLabelFontSizeDescription">Font Size</sys:String>
+    <sys:String x:Key="CustomLabelAlignmentDescription">Alignment</sys:String>
+    <sys:String x:Key="CustomLabelFontColorDescription">Font Color</sys:String>
+    <sys:String x:Key="CustomLabelScrollSpeedDescription">Change the number of milliseconds it takes for the text to scroll</sys:String>
+    <sys:String x:Key="CustomLabelFontSectionText">Font settings</sys:String>
+    <sys:String x:Key="CustomLabelFormatSectionText">Text format</sys:String>
+    <sys:String x:Key="CustomLabelTextFormatDescription">Customize the text format for this label</sys:String>
+    <sys:String x:Key="CustomLabelTextFormatHelpLink">Click here for formatting help.</sys:String>
+    <sys:String x:Key="CustomLabelOverflowSectionText">Overflow options</sys:String>
+    <sys:String x:Key="CustomLabelOverflowDescription">Choose what happens when the text is too long</sys:String>
+    <sys:String x:Key="CustomLabelScrollBehaviorDescription">Text scrolling behavior</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpText" xml:space="preserve">Format for the text that is displayed which can include placeholders.
+Placeholders will be substituted with their corresponding values. Placeholders are in the format {[style]&lt;tag&gt;:[color]}.</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpTextTags" xml:space="preserve">&#8226; artist - Artist for the current song
+&#8226; song - The title of the current song
+&#8226; album - Album name for the current song
+&#8226; time - Current playback time for the current song
+&#8226; length - Total length of the current song</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpTextStyles" xml:space="preserve">&#8226; * - Bolds the placeholder
+&#8226; &amp; - Italicizes the placeholder
+&#8226; _ - Underlines the placeholder</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpTextColors" xml:space="preserve">Use an html color code in the format #RRGGBB</sys:String>
+    <sys:String x:Key="CustomLabelFormatHelpTextExamples" xml:space="preserve">Normal label showing the song and artist : {song} by {artist}
+Showing the album name in bold : {*album}
+Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9}
+Using style and color : {*artist:#a9a9a9}</sys:String>
 
+    <!-- Navigation pane -->
     <sys:String x:Key="GeneralSettingsTab">General</sys:String>
     <sys:String x:Key="PlaybackControlsTab">Playback Controls</sys:String>
     <sys:String x:Key="PlayPauseButtonTab">Play/Pause Button</sys:String>
@@ -66,7 +88,12 @@
     <sys:String x:Key="AlbumArtTab">Album Art</sys:String>
     <sys:String x:Key="AlbumArtPopupTab">Album Art Popup</sys:String>
     <sys:String x:Key="AudioSourceSettingsTab">Audiosource Settings</sys:String>
+    <sys:String x:Key="LabelsViewHeaderFormat">{0} Label</sys:String>
+    <sys:String x:Key="AudioSourceViewHeaderFormat">{0} Audio Source</sys:String>
+    <sys:String x:Key="AddNewLabelHelpText">Add a new label</sys:String>
+    <sys:String x:Key="DeleteLabelHelpText">Delete this label</sys:String>
 
+    <!-- Common button text -->
     <sys:String x:Key="ResetButtonText">Reset Settings</sys:String>
     <sys:String x:Key="BrowseButtonText">Browse</sys:String>
     <sys:String x:Key="DefaultButtonText">Default</sys:String>
@@ -83,27 +110,20 @@
 
     <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
     <sys:String x:Key="DefaultImageHelpText">Reset image to its default.</sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpText" xml:space="preserve">Format for the text that is displayed which can include placeholders.
-Placeholders will be substituted with their corresponding values. Placeholders are in the format {[style]&lt;tag&gt;:[color]}.</sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpTextTags" xml:space="preserve">&#8226; artist - Artist for the current song
-&#8226; song - The title of the current song
-&#8226; album - Album name for the current song
-&#8226; time - Current playback time for the current song
-&#8226; length - Total length of the current song</sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpTextStyles" xml:space="preserve">&#8226; * - Bolds the placeholder
-&#8226; &amp; - Italicizes the placeholder
-&#8226; _ - Underlines the placeholder</sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpTextColors" xml:space="preserve">Use an html color code in the format #RRGGBB</sys:String>
-    <sys:String x:Key="CustomLabelFormatHelpTextExamples" xml:space="preserve">Normal label showing the song and artist : {song} by {artist}
-Showing the album name in bold : {*album}
-Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9}
-Using style and color : {*artist:#a9a9a9}</sys:String>
-    <sys:String x:Key="AddNewLabelHelpText">Add a new label</sys:String>
-    <sys:String x:Key="DeleteLabelHelpText">Delete this label</sys:String>
+    
     <sys:String x:Key="ChooseColorHelpText">Choose a color</sys:String>
     <sys:String x:Key="MarginHelpText">Sets the distance between the popup and the toolbar</sys:String>
     <sys:String x:Key="SensitiveSettingsWarning">This setting is stored locally and unsecured.</sys:String>
     <sys:String x:Key="RememberHelpText">This setting will be saved. Are you sure?</sys:String>
+    <sys:String x:Key="RememberSettingLabelText">Remember</sys:String>
+
+    <sys:String x:Key="BackgroundColorLabelText">Background Color</sys:String>
+    <sys:String x:Key="ForegroundColorLabelText">Foreground Color</sys:String>
+    <sys:String x:Key="PlaceholderImageLabelText">Placeholder Image</sys:String>
+    <sys:String x:Key="YOffsetLabelText">Margin</sys:String>
+
+    <!-- Dialogs -->
+    <sys:String x:Key="AboutTitle">About AudioBand</sys:String>
     <sys:String x:Key="DeleteLabelDialogTitle">Delete label</sys:String>
     <sys:String x:Key="DeleteLabelDialogBody">Are you sure you want to delete the label '{0}'?</sys:String>
     <sys:String x:Key="DiscardChangesDialogTitle">Discard changes</sys:String>
@@ -115,18 +135,12 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="RenameProfileDialogTitle">Renaming profile {0}</sys:String>
     <sys:String x:Key="DeleteProfileDialogTitle">Delete profile</sys:String>
     <sys:String x:Key="DeleteProfileDialogBody">Are you sure you want to delete the profile '{0}'</sys:String>
-    <sys:String x:Key="LabelsViewHeaderFormat">{0} Label</sys:String>
-    <sys:String x:Key="AudioSourceViewHeaderFormat">{0} Audio Source</sys:String>
-    <sys:String x:Key="ArrangementSectionText">Arrangement</sys:String>
-    <sys:String x:Key="PlayImageSectionText">Play Image</sys:String>
-    <sys:String x:Key="PauseImageSectionText">Pause Image</sys:String>
-    <sys:String x:Key="AppearanceSectionText">Appearance</sys:String>
-    <sys:String x:Key="BackgroundColorSectionText">Background Colors</sys:String>
-    <sys:String x:Key="OtherSectionText">Other</sys:String>
-    <sys:String x:Key="ImageSectionText">Image</sys:String>
+
+    <!-- Profiles -->
     <sys:String x:Key="NewProfileHelpText">New profile</sys:String>
     <sys:String x:Key="DeleteProfileHelpText">Delete the current profile</sys:String>
     <sys:String x:Key="RenameProfileHelpText">Rename the current profile</sys:String>
     <sys:String x:Key="ImportProfilesHelpText">Import profiles</sys:String>
     <sys:String x:Key="ExportProfilesHelpText">Export profiles</sys:String>
+    <sys:String x:Key="DefaultProfileItemText">Default Profile</sys:String>
 </ResourceDictionary>

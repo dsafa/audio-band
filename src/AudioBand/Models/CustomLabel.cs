@@ -18,7 +18,9 @@ namespace AudioBand.Models
         private string _formatString = "{artist} - {song}";
         private TextAlignment _alignment = TextAlignment.Center;
         private string _name = "Now Playing";
-        private int _scrollSpeed = 50;
+        private int _scrollSpeed = 5000;
+        private TextOverflow _textOverflow = TextOverflow.Scroll;
+        private ScrollBehavior _scrollBehavior = ScrollBehavior.Always;
 
         /// <summary>
         /// Specifies the alignment of the text in the label.
@@ -141,12 +143,30 @@ namespace AudioBand.Models
         }
 
         /// <summary>
-        /// Gets or sets the scollspeed of the label.
+        /// Gets or sets the number to milliseconds to scroll across.
         /// </summary>
         public int ScrollSpeed
         {
             get => _scrollSpeed;
             set => SetProperty(ref _scrollSpeed, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text overflow behavior.
+        /// </summary>
+        public TextOverflow TextOverflow
+        {
+            get => _textOverflow;
+            set => SetProperty(ref _textOverflow, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the scroll behavior.
+        /// </summary>
+        public ScrollBehavior ScrollBehavior
+        {
+            get => _scrollBehavior;
+            set => SetProperty(ref _scrollBehavior, value);
         }
     }
 }

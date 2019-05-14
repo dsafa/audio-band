@@ -6,7 +6,8 @@
                     xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
                     xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
                     xmlns:settings="clr-namespace:AudioBand.Views.Settings"
-                    xmlns:valueConverters="clr-namespace:AudioBand.ValueConverters">
+                    xmlns:valueConverters="clr-namespace:AudioBand.ValueConverters"
+                    xmlns:extensions="clr-namespace:AudioBand.Extensions">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.ToggleSwitch.xaml" />
@@ -520,19 +521,21 @@
     </Style>
     <Style x:Key="SettingsStackPanel" TargetType="{x:Type StackPanel}">
         <Style.Resources>
+            <sys:Double x:Key="InputHeight">32</sys:Double>
             <Thickness x:Key="DefaultControlMargin" Left="0" Top="4" Right="0" Bottom="0"/>
             <Style TargetType="{x:Type metro:ToggleSwitch}" BasedOn="{StaticResource {x:Type metro:ToggleSwitch}}">
                 <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
                 <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
-                <Setter Property="Height" Value="32"/>
+                <Setter Property="Height" Value="{StaticResource InputHeight}"/>
                 <Setter Property="Width" Value="200"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
             </Style>
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                 <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
                 <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
+                <Setter Property="Padding" Value="2"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
             </Style>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
@@ -590,5 +593,8 @@
             <Run Text="  "/>
             <Run Text="{Binding Path=.}" FontFamily="{Binding Path=.}"/>
         </TextBlock>
+    </DataTemplate>
+    <DataTemplate x:Key="EnumDescriptorItemTemplate">
+        <TextBlock Text="{Binding Description}"/>
     </DataTemplate>
 </ResourceDictionary>

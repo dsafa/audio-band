@@ -208,7 +208,7 @@
                 <behaviors:SliderClickAndDrag/>
             </i:Interaction.Behaviors>
         </Slider>
-        <ItemsControl x:Name="CustomLabels" ItemsSource="{Binding ViewModels.CustomLabelsVM.CustomLabels}" IsHitTestVisible="False">
+        <ItemsControl x:Name="CustomLabels" ItemsSource="{Binding ViewModels.CustomLabelsVM.CustomLabels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -222,11 +222,14 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModels:CustomLabelVM}">
-                    <Canvas Width="{Binding Width}" Height="{Binding Height}" ClipToBounds="True">
+                    <Canvas Width="{Binding Width}" Height="{Binding Height}" ClipToBounds="True" Background="Transparent">
                         <i:Interaction.Behaviors>
                             <behaviors:MarqueeContainer ScrollDuration="{Binding ScrollSpeed}" 
                                                         TargetChild="{Binding ElementName=TextBlock1}"
-                                                        DuplicateChild="{Binding ElementName=TextBlock2}"/>
+                                                        DuplicateChild="{Binding ElementName=TextBlock2}"
+                                                        TextOverflow="{Binding TextOverflow}"
+                                                        ScrollBehavior="{Binding ScrollBehavior}"
+                                                        IsPlaying="{Binding IsPlaying}"/>
                         </i:Interaction.Behaviors>
                         <TextBlock x:Name="TextBlock1" behaviors:TextBlockTextSegments.TextSegments="{Binding TextSegments}"
                                    MinWidth="{Binding Width}" MinHeight="{Binding Height}"

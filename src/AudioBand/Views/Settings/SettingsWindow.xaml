@@ -284,7 +284,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <ScrollViewer x:Name="ContentScrollView" VerticalScrollBarVisibility="Auto" IsTabStop="False" Focusable="False" Grid.Row="2">
+            <ScrollViewer x:Name="ContentScrollView" VerticalScrollBarVisibility="Auto" IsTabStop="False" Grid.Row="2" FocusVisualStyle="{x:Null}">
                 <ContentControl Content="{Binding SelectedViewModel}" BorderThickness="0" IsTabStop="False" Margin="20">
                 <ContentControl.Resources>
                     <ResourceDictionary>
