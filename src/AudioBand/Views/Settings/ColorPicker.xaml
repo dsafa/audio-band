@@ -13,20 +13,33 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Resources/Strings.xaml"/>
+                <ResourceDictionary Source="../../Resources/Shared.xaml"/>
+                <ResourceDictionary Source="../../Resources/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Orientation="Horizontal">
-        <Rectangle VerticalAlignment="Stretch" Stroke="Black"
-                   Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-                   Fill="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8, 0" MinWidth="100" TextAlignment="Center"
-                   Text="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={x:Static converters:Converters.ColorToName}}" />
-        <Button Click="OpenColorPickerOnClick"
-                Content="{StaticResource PickColorButtonText}">
-            <Button.ToolTip>
-                <TextBlock Text="{StaticResource ChooseColorHelpText}"/>
-            </Button.ToolTip>
-        </Button>
-    </StackPanel>
+    <Button Style="{StaticResource ContainerButtonStyle}" Click="OpenColorPickerOnClick">
+        <Grid HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                       VerticalAlignment="Stretch" Stroke="Black"
+                       Width="40" Height="40" Margin="0, 0, 10, 0"
+                       Fill="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={x:Static converters:Converters.ColorToBrush}}"/>
+            <TextBlock Grid.Row="0" Grid.Column="1"
+                       Foreground="Black" FontSize="14"
+                       VerticalAlignment="Top"
+                       Text="{Binding Title, ElementName=ColorPickerControl}"/>
+            <TextBlock Grid.Row="1" Grid.Column="1"
+                       VerticalAlignment="Bottom"
+                       Foreground="{StaticResource SecondaryTextColorBrush}" FontSize="14"
+                       Text="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={x:Static converters:Converters.ColorToName}}" />
+        </Grid>
+    </Button>
 </UserControl>

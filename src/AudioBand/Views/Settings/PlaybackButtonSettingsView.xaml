@@ -34,18 +34,13 @@
             </UniformGrid>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <TextBlock Text="{StaticResource DefaultColorLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <local:ColorPicker Color="{Binding BackgroundColor}" DialogService="{Binding DialogService}"/>
-            <TextBlock Text="{StaticResource HoverColorLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}"/>
-            <TextBlock Text="{StaticResource ClickedColorLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <local:ColorPicker Color="{Binding ClickedBackgroundColor}" DialogService="{Binding DialogService}"/>
-
+            <local:ColorPicker Color="{Binding BackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource DefaultColorLabelText}"/>
+            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource HoverColorLabelText}"/>
+            <local:ColorPicker Color="{Binding ClickedBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ClickedColorLabelText}"/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PlaybackButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
             <TextBlock Text="{StaticResource PlaybackButtonContentTypeDescription}" Style="{StaticResource DescriptionTextBlock}"/>
             <ComboBox ItemsSource="{Binding ButtonContentTypes}" SelectedItem="{Binding ContentType}"/>
-
             <ItemsControl>
                 <ItemsControl.Style>
                     <Style TargetType="{x:Type ItemsControl}">
@@ -64,7 +59,6 @@
                 <TextBlock Text="{StaticResource ButtonClickedImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
                 <local:ImagePicker ImagePath="{Binding ClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
             </ItemsControl>
-
             <ItemsControl>
                 <ItemsControl.Style>
                     <Style TargetType="{x:Type ItemsControl}">
@@ -82,12 +76,9 @@
                           ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}" Width="400"/>
                 <TextBlock Text="{StaticResource PlaybackButtonTextDescription}" Style="{StaticResource DescriptionTextBlock}"/>
                 <TextBox Text="{Binding Text}" FontFamily="{Binding TextFontFamily}" Width="100"/>
-                <TextBlock Text="{StaticResource ButtonTextColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding TextColor}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource ButtonTextHoverColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding TextHoveredColor}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource ButtonTextClickedColorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ColorPicker Color="{Binding TextClickedColor}" DialogService="{Binding DialogService}"/>
+                <local:ColorPicker Color="{Binding TextColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextColorDescription}"/>
+                <local:ColorPicker Color="{Binding TextHoveredColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextHoverColorDescription}"/>
+                <local:ColorPicker Color="{Binding TextClickedColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextClickedColorDescription}"/>
             </ItemsControl>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
