@@ -31,7 +31,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;DESKBAND_WINFORMS</DefineConstants>
+    <DefineConstants>TRACE;DESKBAND_WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
@@ -46,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Test\</OutputPath>
-    <DefineConstants>CODE_ANALYSIS;TRACE;DEBUG;DESKBAND_WINFORMS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DESKBAND_WPF</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugType>full</DebugType>
@@ -155,7 +155,7 @@
     <Compile Include="ViewModels\ViewModelContainer.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
-    <Compile Include="TextFormatting\FormattedTextRenderer.cs" />
+    <Compile Include="TextFormatting\FormattedTextParser.cs" />
     <Compile Include="ViewModels\IResettableObject.cs" />
     <Compile Include="TextFormatting\FormattedTextFlags.cs" />
     <Compile Include="TextFormatting\TextSegment.cs" />

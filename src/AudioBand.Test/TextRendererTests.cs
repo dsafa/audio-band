@@ -12,7 +12,7 @@ namespace AudioBand.Test
         public void ParseNormal()
         {
             var format = "hello";
-            var r = new FormattedTextRenderer(format, Colors.Black);
+            var r = new FormattedTextParser(format, Colors.Black);
 
             Assert.AreEqual(1, r.TextSegments.Count);
             Assert.AreEqual("hello", r.TextSegments[0].Text);
@@ -23,7 +23,7 @@ namespace AudioBand.Test
         public void ParseEmpty()
         {
             var format = "";
-            var r = new FormattedTextRenderer(format, Colors.Black);
+            var r = new FormattedTextParser(format, Colors.Black);
 
             Assert.AreEqual(0, r.TextSegments.Count);
         }
@@ -33,7 +33,7 @@ namespace AudioBand.Test
         {
             var format = "{artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -48,7 +48,7 @@ namespace AudioBand.Test
         {
             var format = "{artist} song";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -67,7 +67,7 @@ namespace AudioBand.Test
         {
             var format = "by {artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -85,7 +85,7 @@ namespace AudioBand.Test
         public void ParseUnclosed()
         {
             var format = "{artist";
-            var r = new FormattedTextRenderer(format, Colors.Black);
+            var r = new FormattedTextParser(format, Colors.Black);
 
             Assert.AreEqual(1, r.TextSegments.Count);
             Assert.AreEqual("{artist", r.TextSegments[0].Text);
@@ -96,7 +96,7 @@ namespace AudioBand.Test
         public void ParseOnlyClosing()
         {
             var format = "}";
-            var r = new FormattedTextRenderer(format, Colors.Black);
+            var r = new FormattedTextParser(format, Colors.Black);
 
             Assert.AreEqual(1, r.TextSegments.Count);
             Assert.AreEqual("}", r.TextSegments[0].Text);
@@ -108,7 +108,7 @@ namespace AudioBand.Test
         {
             var format = "this is {artist} and ";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -129,7 +129,7 @@ namespace AudioBand.Test
         public void ParseInvalidFormat()
         {
             var format = "{something}";
-            var r = new FormattedTextRenderer(format, Colors.Black);
+            var r = new FormattedTextParser(format, Colors.Black);
 
             Assert.AreEqual(1, r.TextSegments.Count);
 
@@ -142,7 +142,7 @@ namespace AudioBand.Test
         {
             var format = "{artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -157,7 +157,7 @@ namespace AudioBand.Test
         {
             var format = "{song}";
             var song = "the song";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 SongName = song
             };
@@ -172,7 +172,7 @@ namespace AudioBand.Test
         {
             var format = "{album}";
             var album = "the album";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 AlbumName = album
             };
@@ -187,7 +187,7 @@ namespace AudioBand.Test
         {
             var format = "{time}";
             var time = TimeSpan.FromSeconds(40);
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 SongProgress = time,
             };
@@ -202,7 +202,7 @@ namespace AudioBand.Test
         {
             var format = "{length}";
             var time = TimeSpan.FromSeconds(80);
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 SongLength = time,
             };
@@ -217,7 +217,7 @@ namespace AudioBand.Test
         {
             var format = "{*artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -233,7 +233,7 @@ namespace AudioBand.Test
         {
             var format = "{&artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -249,7 +249,7 @@ namespace AudioBand.Test
         {
             var format = "{_artist}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -265,7 +265,7 @@ namespace AudioBand.Test
         {
             var format = "{_artist:#ff00ff}";
             var artist = "123";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist
             };
@@ -282,7 +282,7 @@ namespace AudioBand.Test
         {
             var format = "{*_artist}";
             var artist = "test";
-            var r = new FormattedTextRenderer(format, Colors.Black)
+            var r = new FormattedTextParser(format, Colors.Black)
             {
                 Artist = artist,
             };
