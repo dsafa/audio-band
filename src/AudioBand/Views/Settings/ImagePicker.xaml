@@ -12,31 +12,70 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../Resources/Strings.xaml"/>
                 <ResourceDictionary Source="../../Resources/Shared.xaml"/>
+                <ResourceDictionary Source="../../Resources/Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-        <TextBlock Text="{Binding ImagePath, ElementName=ImagePickerControl, Mode=OneWay}" Foreground="{StaticResource SecondaryTextColorBrush}"
-                   VerticalAlignment="Center" Margin="0, 0, 0, 2"
-                   Visibility="{Binding ImagePath, ElementName=ImagePickerControl, Converter={x:Static converters:Converters.StringToVisibility}}">
-            <TextBlock.ToolTip>
-                <TextBlock Text="{Binding ImagePath, ElementName=ImagePickerControl, Mode=OneWay}"/>
-            </TextBlock.ToolTip>
-        </TextBlock>
-        <StackPanel Orientation="Horizontal">
-            <Button Content="{StaticResource DefaultButtonText}" Margin="0"
-                    Command="{Binding ResetImageCommand, ElementName=ImagePickerControl}">
-                <Button.ToolTip>
-                    <TextBlock Text="{StaticResource DefaultImageHelpText}" />
-                </Button.ToolTip>
-            </Button>
-            <Button Margin="4, 0"
-                    Content="{StaticResource BrowseButtonText}"
-                    Command="{Binding BrowseForImageCommand, ElementName=ImagePickerControl}">
-                <Button.ToolTip>
-                    <TextBlock Text="{StaticResource BrowseImageHelpText}"/>
-                </Button.ToolTip>
-            </Button>
-        </StackPanel>
-    </StackPanel>
+    <Button Style="{StaticResource ContainerButtonStyle}" Command="{Binding BrowseForImageCommand, ElementName=ImagePickerControl}">
+        <Grid HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="DefaultImage" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                       Width="40" Height="40" Foreground="Black"
+                       Margin="0, 0, 10, 0"
+                       FontFamily="Segoe MDL2 Assets" FontSize="40" Text="&#xEB9F;">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ImagePath, ElementName=ImagePickerControl}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ImagePath, ElementName=ImagePickerControl}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Viewbox x:Name="ImageDisplay" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                     Width="40" Height="40" Margin="0, 0, 10, 0"
+                     Visibility="{Binding ImagePath, ElementName=ImagePickerControl, Converter={x:Static converters:Converters.StringToVisibility}}">
+                <Image x:Name="Image" Source="{Binding ImagePath, ElementName=ImagePickerControl, Converter={x:Static converters:Converters.PathToImageSource}}"/>
+            </Viewbox>
+            <TextBlock Grid.Column="1" Grid.Row="0"
+                       Foreground="Black" FontSize="14"
+                       VerticalAlignment="Top">
+                <Run Text="{Binding Title, ElementName=ImagePickerControl}"/>
+                <TextBlock Visibility="{Binding ImagePath, ElementName=ImagePickerControl, Converter={x:Static converters:Converters.StringToVisibility}}"
+                           HorizontalAlignment="Right">
+                    <Hyperlink Command="{Binding ResetImageCommand, ElementName=ImagePickerControl}">
+                        <Run Text="{StaticResource ImagePickerResetText}"/>
+                    </Hyperlink>
+                </TextBlock>
+            </TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" FontSize="14"
+                       Foreground="{StaticResource SecondaryTextColorBrush}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Text" Value="{Binding ImagePath, ElementName=ImagePickerControl}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ImagePath, ElementName=ImagePickerControl}" Value="">
+                                <Setter Property="Text" Value="{StaticResource ImagePickerNoImageText}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ImagePath, ElementName=ImagePickerControl}" Value="{x:Null}">
+                                <Setter Property="Text" Value="{StaticResource ImagePickerNoImageText}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </Button>
 </UserControl>

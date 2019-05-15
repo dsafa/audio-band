@@ -24,6 +24,11 @@ namespace AudioBand.Views.Settings
             DependencyProperty.Register(nameof(DialogService), typeof(IDialogService), typeof(ImagePicker));
 
         /// <summary>
+        /// Dependency property for <see cref="Title"/>.
+        /// </summary>
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(ImagePicker));
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ImagePicker"/> class.
         /// </summary>
         public ImagePicker()
@@ -50,6 +55,15 @@ namespace AudioBand.Views.Settings
         {
             get => (IDialogService)GetValue(DialogServiceProperty);
             set => SetValue(DialogServiceProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the title property.
+        /// </summary>
+        public string Title
+        {
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
 
         /// <summary>
