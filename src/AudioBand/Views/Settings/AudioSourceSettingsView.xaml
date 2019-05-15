@@ -79,13 +79,14 @@
                                 </DataTemplate>
                                 <DataTemplate x:Key="SensitiveLabelTemplate">
                                     <DockPanel LastChildFill="True">
-                                        <iconPacks:PackIconMaterial DockPanel.Dock="Right" Kind="Alert" Margin="0, 0, 4, 0"
-                                                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                                            Foreground="{DynamicResource ValidationBrush5}">
-                                            <iconPacks:PackIconMaterial.ToolTip>
+                                        <TextBlock DockPanel.Dock="Right" Margin="0, 0, 4, 0"
+                                                            VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                                                            Foreground="{DynamicResource ValidationBrush5}"
+                                                            FontFamily="Segoe MDL2 Assets" Text="&#xE7BA;">
+                                            <FrameworkElement.ToolTip>
                                                 <TextBlock Text="{StaticResource SensitiveSettingsWarning}"/>
-                                            </iconPacks:PackIconMaterial.ToolTip>
-                                        </iconPacks:PackIconMaterial>
+                                            </FrameworkElement.ToolTip>
+                                        </TextBlock>
                                         <Label ToolTipService.IsEnabled="{Binding Description, Converter={x:Static converters:Converters.EmptyStringToBool}}">
                                             <Label.ToolTip>
                                                 <TextBlock Text="{Binding Description}"/>
