@@ -1,0 +1,55 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AudioBand.Resources"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+                    xmlns:behaviors="clr-namespace:AudioBand.Behaviors">
+    <ResourceDictionary.MergedDictionaries>
+        <local:SharedDictionary Source="Shared.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <Style TargetType="{x:Type metro:NumericUpDown}" BasedOn="{StaticResource {x:Type metro:NumericUpDown}}">
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderDefaultColorBrush}"/>
+        <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
+        <Setter Property="metro:ControlsHelper.MouseOverBorderBrush" Value="{StaticResource BorderHoverColorBrush}"/>
+        <Setter Property="metro:ControlsHelper.FocusBorderBrush" Value="{StaticResource BorderFocusedColorBrush}"/>
+        <Setter Property="Padding" Value="8,0,0,0"/>
+        <Setter Property="metro:TextBoxHelper.ButtonWidth" Value="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=ActualHeight}"/>
+        <Style.Resources>
+            <SolidColorBrush x:Key="AccentColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
+            <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource BorderHoverColor}"/>
+        </Style.Resources>
+        <Style.Triggers>
+            <Trigger Property="behaviors:NumericInput.Type" Value="Size">
+                <Setter Property="NumericInputMode" Value="Numbers"/>
+                <Setter Property="Minimum" Value="1"/>
+                <Setter Property="Interval" Value="1"/>
+            </Trigger>
+            <Trigger Property="behaviors:NumericInput.Type" Value="Position">
+                <Setter Property="NumericInputMode" Value="Numbers"/>
+                <Setter Property="Interval" Value="1"/>
+            </Trigger>
+            <Trigger Property="behaviors:NumericInput.Type" Value="FontSize">
+                <Setter Property="NumericInputMode" Value="Decimal"/>
+                <Setter Property="Minimum" Value="0.5"/>
+                <Setter Property="Interval" Value="0.5"/>
+            </Trigger>
+            <Trigger Property="behaviors:NumericInput.Type" Value="Positive">
+                <Setter Property="NumericInputMode" Value="Numbers"/>
+                <Setter Property="Minimum" Value="0"/>
+                <Setter Property="Interval" Value="1"/>
+            </Trigger>
+            <Trigger Property="behaviors:NumericInput.Type" Value="Integer">
+                <Setter Property="NumericInputMode" Value="Numbers"/>
+                <Setter Property="Interval" Value="1"/>
+            </Trigger>
+            <Trigger Property="behaviors:NumericInput.Type" Value="WholeNumber">
+                <Setter Property="NumericInputMode" Value="Numbers"/>
+                <Setter Property="Minimum" Value="0"/>
+                <Setter Property="Interval" Value="1"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

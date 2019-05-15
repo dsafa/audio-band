@@ -7,20 +7,13 @@
                     xmlns:converters="clr-namespace:AudioBand.ValueConverters"
                     xmlns:models="clr-namespace:AudioBand.Models"
                     mc:Ignorable="d">
+    <Pen x:Key="ButtonImagePen" Brush="#FFFFFF" Thickness="30" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
     <DrawingImage x:Key="PauseButtonDefault">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
                 <DrawingGroup Opacity="1">
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M88,0L88,256">
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#FFFFFF" Thickness="16" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M184,0L184,256">
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#FFFFFF" Thickness="16" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M88,0L88,256" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M184,0L184,256" Pen="{StaticResource ButtonImagePen}"/>
                 </DrawingGroup>
             </DrawingGroup>
         </DrawingImage.Drawing>
@@ -29,11 +22,8 @@
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
                 <DrawingGroup Opacity="1" Transform="-0.85326308,0,0,-1.0497388,255.09891,262.36656">
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M60.365532,128.00001L153.18276,74.411943 245.99999,20.823889 246,128 246,235.17611 153.18276,181.58806z">
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#FFFFFF" Thickness="16.90588188" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M60.365532,128.00001L153.18276,74.411943 245.99999,20.823889 246,128 246,235.17611 153.18276,181.58806z"
+                                     Pen="{StaticResource ButtonImagePen}"/>
                 </DrawingGroup>
             </DrawingGroup>
         </DrawingImage.Drawing>
@@ -42,17 +32,10 @@
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
                 <DrawingGroup Opacity="1">
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M248,6.8750015E-08L248,256">
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#ffffff" Thickness="16" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M248,6.8750015E-08L248,256" Pen="{StaticResource ButtonImagePen}"/>
                     <DrawingGroup Transform="-0.85326308,0,0,-1.0497388,217.1153,262.36656">
-                        <GeometryDrawing Geometry="F1 M256,256z M0,0z M60.365532,128.00001L153.18276,74.411943 245.99999,20.823889 246,128 246,235.17611 153.18276,181.58806z">
-                            <GeometryDrawing.Pen>
-                                <Pen Brush="#ffffff" Thickness="16.90588384" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-                            </GeometryDrawing.Pen>
-                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M256,256z M0,0z M60.365532,128.00001L153.18276,74.411943 245.99999,20.823889 246,128 246,235.17611 153.18276,181.58806z"
+                                         Pen="{StaticResource ButtonImagePen}"/>
                     </DrawingGroup>
                 </DrawingGroup>
             </DrawingGroup>
@@ -62,17 +45,10 @@
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
                 <DrawingGroup Opacity="1">
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M8,1.65E-06L8,256">
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#ffffff" Thickness="16" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M8,1.65E-06L8,256" Pen="{StaticResource ButtonImagePen}"/>
                     <DrawingGroup Transform="0.85326308,0,0,-1.0497388,38.884699,262.36656">
-                        <GeometryDrawing Geometry="F1 M256,256z M0,0z M60.365532,128.00001L153.18276,74.411943 245.99999,20.823889 246,128 246,235.17611 153.18276,181.58806z">
-                            <GeometryDrawing.Pen>
-                                <Pen Brush="#ffffff" Thickness="16.90588384" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-                            </GeometryDrawing.Pen>
-                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M256,256z M0,0z M60.365532,128.00001L153.18276,74.411943 245.99999,20.823889 246,128 246,235.17611 153.18276,181.58806z"
+                                         Pen="{StaticResource ButtonImagePen}"/>
                     </DrawingGroup>
                 </DrawingGroup>
             </DrawingGroup>
@@ -189,7 +165,7 @@
                 <MultiDataTrigger.Setters>
                     <Setter Property="Content">
                         <Setter.Value>
-                            <Viewbox>
+                            <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="2">
                                 <Image Source="{Binding PlayImagePath, 
                                                         Converter={x:Static converters:Converters.PathToImageSource}, 
                                                         FallbackValue={StaticResource PlayButtonDefault}, 
@@ -224,7 +200,7 @@
                 <MultiDataTrigger.Setters>
                     <Setter Property="Content">
                         <Setter.Value>
-                            <Viewbox>
+                            <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="2">
                                 <Image Source="{Binding PauseImagePath, 
                                                         Converter={x:Static converters:Converters.PathToImageSource},
                                                         FallbackValue={StaticResource PauseButtonDefault}, 
@@ -275,7 +251,7 @@
             <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ButtonContentType.Image}">
                 <Setter Property="Content">
                     <Setter.Value>
-                        <Viewbox>
+                        <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="2">
                             <Image Source="{Binding ImagePath,
                                                     Converter={x:Static converters:Converters.PathToImageSource},
                                                     FallbackValue={StaticResource NextButtonDefault}, 
@@ -325,7 +301,7 @@
             <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ButtonContentType.Image}">
                 <Setter Property="Content">
                     <Setter.Value>
-                        <Viewbox>
+                        <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="2">
                             <Image Source="{Binding ImagePath,
                                                     Converter={x:Static converters:Converters.PathToImageSource},
                                                     FallbackValue={StaticResource PreviousButtonDefault}, 

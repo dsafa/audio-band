@@ -103,6 +103,7 @@
     <Compile Include="Models\ScrollBehavior.cs" />
     <Compile Include="Models\TextOverflow.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="Resources\SharedDictionary.cs" />
     <Compile Include="Settings\IAppSettings.cs" />
     <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
     <Compile Include="Settings\Migrations\Migration.cs" />
@@ -234,14 +235,6 @@
     <None Include="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtPopupVM.datasource" />
-    <None Include="Properties\DataSources\AudioBand.ViewModels.AlbumArtVM.datasource" />
-    <None Include="Properties\DataSources\AudioBand.ViewModels.AudioBandVM.datasource" />
-    <None Include="Properties\DataSources\AudioBand.ViewModels.CustomLabelVM.datasource" />
-    <None Include="Properties\DataSources\AudioBand.ViewModels.NextButtonVM.datasource" />
-    <None Include="Properties\DataSources\AudioBand.ViewModels.PlayPauseButtonVM.datasource" />
-    <None Include="Properties\DataSources\AudioBand.ViewModels.PreviousButtonVM.datasource" />
-    <None Include="Properties\DataSources\AudioBand.ViewModels.ProgressBarVM.datasource" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="audioband.ico" />
@@ -261,6 +254,34 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ComboBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\NavigationPaneStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\NumericInputStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\PasswordBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\TextBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\TextStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Settings\AlbumArtSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -345,7 +366,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Style.xaml">
+    <Page Include="Resources\SettingsWindowStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

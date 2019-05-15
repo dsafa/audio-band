@@ -113,10 +113,15 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="RememberHelpText">This setting will be saved. Are you sure?</sys:String>
     <sys:String x:Key="RememberSettingLabelText">Remember</sys:String>
 
-    <sys:String x:Key="BackgroundColorLabelText">Background Color</sys:String>
-    <sys:String x:Key="ForegroundColorLabelText">Foreground Color</sys:String>
-    <sys:String x:Key="PlaceholderImageLabelText">Placeholder Image</sys:String>
-    <sys:String x:Key="YOffsetLabelText">Margin</sys:String>
+    <!-- Progress bar settings text -->
+    <sys:String x:Key="ProgressBarColorsSectionText">Colors</sys:String>
+    <sys:String x:Key="ProgressBarForegroundColorDescription">Foreground color</sys:String>
+    <sys:String x:Key="ProgressBarBackgroundColorDescription">Background color</sys:String>
+    <sys:String x:Key="ProgressBarHoverColorDescription">Background color when hovered</sys:String>
+
+    <!-- Album art settings text -->
+    <sys:String x:Key="AlbumArtPlaceholderSectionText">Image</sys:String>
+    <sys:String x:Key="AlbumArtPlaceholderDescription">Placeholder image</sys:String>
 
     <!-- Dialogs -->
     <sys:String x:Key="AboutTitle">About AudioBand</sys:String>

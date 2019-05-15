@@ -4,13 +4,14 @@
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:models="clr-namespace:AudioBand.Models"
-             xmlns:behaviors="clr-namespace:AudioBand.Behaviors">
+             xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+             xmlns:resources="clr-namespace:AudioBand.Resources">
     <DataTemplate DataType="{x:Type viewmodels:PlayPauseButtonVM}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="../../Resources/Style.xaml"/>
-                    <ResourceDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
@@ -32,7 +33,7 @@
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
             <local:ColorPicker Color="{Binding DefaultBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource DefaultColorLabelText}"/>
-            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource HoverColorLabelText}"/>
+            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ProgressBarHoverColorDescription}"/>
             <local:ColorPicker Color="{Binding ClickedBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ClickedColorLabelText}"/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PlayButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>

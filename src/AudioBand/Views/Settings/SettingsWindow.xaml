@@ -9,6 +9,7 @@
             xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
             xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+            xmlns:resources="clr-namespace:AudioBand.Resources"
             x:Class="AudioBand.Views.Settings.SettingsWindow"
             mc:Ignorable="d" 
             x:Name="Window"
@@ -36,9 +37,9 @@
     <fw:AcrylicWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Resources/Style.xaml"/>
-                <ResourceDictionary Source="../../Resources/Strings.xaml"/>
-                <ResourceDictionary Source="../../Resources/Icons.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </fw:AcrylicWindow.Resources>

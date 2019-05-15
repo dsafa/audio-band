@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+        xmlns:resources="clr-namespace:AudioBand.Resources"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/AudioBand;component/audioband.ico"
@@ -20,8 +21,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Resources/Style.xaml"/>
-                <ResourceDictionary Source="../../Resources/Strings.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/Style.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

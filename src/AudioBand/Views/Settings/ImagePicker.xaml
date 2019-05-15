@@ -4,15 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:AudioBand.ValueConverters"
+             xmlns:resources="clr-namespace:AudioBand.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="500"
              x:Name="ImagePickerControl">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../Resources/Strings.xaml"/>
-                <ResourceDictionary Source="../../Resources/Shared.xaml"/>
-                <ResourceDictionary Source="../../Resources/Style.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/Shared.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -45,7 +46,7 @@
                 </TextBlock.Style>
             </TextBlock>
             <Viewbox x:Name="ImageDisplay" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
-                     Width="40" Height="40" Margin="0, 0, 10, 0"
+                     Width="40" Height="40" Margin="0, 0, 10, 0" RenderOptions.BitmapScalingMode="Fant"
                      Visibility="{Binding ImagePath, ElementName=ImagePickerControl, Converter={x:Static converters:Converters.StringToVisibility}}">
                 <Image x:Name="Image" Source="{Binding ImagePath, ElementName=ImagePickerControl, Converter={x:Static converters:Converters.PathToImageSource}}"/>
             </Viewbox>

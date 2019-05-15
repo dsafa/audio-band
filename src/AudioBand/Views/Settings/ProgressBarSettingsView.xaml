@@ -3,75 +3,40 @@
              xmlns:local="clr-namespace:AudioBand.Views.Settings"
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:behaviors="clr-namespace:AudioBand.Behaviors">
+             xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+             xmlns:resources="clr-namespace:AudioBand.Resources">
     <DataTemplate DataType="{x:Type viewmodels:ProgressBarVM}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="../../Resources/Shared.xaml"/>
-                    <ResourceDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Shared.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="{StaticResource DefaultControlHeight}" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="{StaticResource VisibilityLabelText}" />
-            <metro:ToggleSwitch Grid.Row="0" Grid.Column="1"
-                            OnLabel="{StaticResource StatusVisible}" 
-                            OffLabel="{StaticResource StatusHidden}"
-                            IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+            <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}" IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
+            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
+                <TextBlock Text="{StaticResource WidthLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
+                <TextBlock Text="{StaticResource XPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <TextBlock Text="{StaticResource YPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
+            </UniformGrid>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="{StaticResource WidthLabelText}" />
-            <metro:NumericUpDown Grid.Row="1" Grid.Column="1"
-                             behaviors:NumericInput.Type="Size"
-                             Value="{Binding Width, Mode=TwoWay}"/>
+            <TextBlock Text="{StaticResource ProgressBarColorsSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <local:ColorPicker DialogService="{Binding DialogService}" Color="{Binding ForegroundColor}" Title="{StaticResource ProgressBarForegroundColorDescription}"/>
+            <local:ColorPicker DialogService="{Binding DialogService}" Color="{Binding BackgroundColor}" Title="{StaticResource ProgressBarBackgroundColorDescription}"/>
+            <local:ColorPicker DialogService="{Binding DialogService}" Color="{Binding HoverColor}" Title="{StaticResource ProgressBarHoverColorDescription}"/>
 
-            <Label Grid.Row="2" Grid.Column="0" Content="{StaticResource HeightLabelText}" />
-            <metro:NumericUpDown Grid.Row="2" Grid.Column="1"
-                             behaviors:NumericInput.Type="Size"
-                             Value="{Binding Height, Mode=TwoWay}"/>
-
-            <Label Grid.Row="3" Grid.Column="0" Content="{StaticResource XPositionLabelText}" />
-            <metro:NumericUpDown Grid.Row="3" Grid.Column="1"
-                             behaviors:NumericInput.Type="Position"
-                             Value="{Binding XPosition, Mode=TwoWay}"/>
-
-            <Label Grid.Row="4" Grid.Column="0" Content="{StaticResource YPositionLabelText}" />
-            <metro:NumericUpDown Grid.Row="4" Grid.Column="1" 
-                             behaviors:NumericInput.Type="Position"
-                             Value="{Binding YPosition, Mode=TwoWay}"/>
-
-            <Label Grid.Row="5" Grid.Column="0" Content="{StaticResource BackgroundColorLabelText}" />
-            <local:ColorPicker Grid.Row="5" Grid.Column="1"
-                           DialogService="{Binding DialogService}"
-                        Color="{Binding BackgroundColor, Mode=TwoWay}"/>
-
-            <Label Grid.Row="6" Grid.Column="0" Content="{StaticResource ForegroundColorLabelText}" />
-            <local:ColorPicker Grid.Row="6" Grid.Column="1"
-                           DialogService="{Binding DialogService}"
-                        Color="{Binding ForegroundColor, Mode=TwoWay}"/>
-
-            <Label Grid.Row="7" Grid.Column="0" Content="{StaticResource HoverColorLabelText}"/>
-            <local:ColorPicker Grid.Row="7" Grid.Column="1" DialogService="{Binding DialogService}"
-                           Color="{Binding HoverColor, Mode=TwoWay}"/>
-
-            <Button Grid.Row="8" Grid.Column="0" HorizontalAlignment="Left" 
-                Content="{StaticResource ResetButtonText}"
-                Command="{Binding ResetCommand}"/>
-        </Grid>
+            <TextBlock Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <Button HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}" Command="{Binding ResetCommand}"/>
+        </StackPanel>
     </DataTemplate>
 </ResourceDictionary>
