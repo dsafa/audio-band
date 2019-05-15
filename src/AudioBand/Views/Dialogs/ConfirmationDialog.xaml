@@ -21,7 +21,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <resources:SharedDictionary Source="../../Resources/Style.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
                 <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

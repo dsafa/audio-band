@@ -40,23 +40,22 @@
                             <ScaleTransform ScaleX="1" ScaleY="1"/>
                         </Grid.RenderTransform>
                         <Rectangle x:Name="RevealHoverLightLayer"
-                                   Opacity="0"
+                                   Opacity="0" StrokeThickness="0"
                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                    Fill="{StaticResource RevealHoverLightBrush}"/>
                         <Border x:Name="Border" BorderBrush="{fluentWpf:RevealBrush Color={StaticResource ButtonRevealColor}, Size=50}"
-                                BorderThickness="0,1,1,1" SnapsToDevicePixels="True" Background="Transparent">
-                            <DockPanel LastChildFill="True">
-                                <Rectangle DockPanel.Dock="Left" Fill="{x:Static fluentWpf:AccentColors.ImmersiveSystemAccentBrush}" Width="5" Height="25"
+                                BorderThickness="0,1,1,1" Background="{TemplateBinding Background}"/>
+                        <DockPanel LastChildFill="True">
+                            <Rectangle DockPanel.Dock="Left" Fill="{x:Static fluentWpf:AccentColors.ImmersiveSystemAccentBrush}" Width="5" Height="25"
                                            Visibility="{TemplateBinding IsChecked, Converter={x:Static valueConverters:Converters.BoolToVisibility}, ConverterParameter=False}" VerticalAlignment="Center"/>
-                                <ContentPresenter Margin="15, 0, 0, 0" VerticalAlignment="Center"/>
-                            </DockPanel>
-                        </Border>
+                            <ContentPresenter Margin="15, 0, 0, 0" VerticalAlignment="Center"/>
+                        </DockPanel>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                        <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
                                                         To="{StaticResource NavigationPaneHoverBackgroundColor}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
                                                          To="1" Duration="0"/>
@@ -64,7 +63,7 @@
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                        <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
                                                         To="{StaticResource NavigationPaneClickBackgroundColor}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
                                                          To="1" Duration="0"/>
@@ -88,9 +87,11 @@
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid Background="{TemplateBinding Background}">
                         <Rectangle x:Name="RevealHoverLightLayer"
-                                   Opacity="0"
+                                   Opacity="0" StrokeThickness="0"
                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                    Fill="{StaticResource RevealHoverLightBrush}"/>
+                        <Border BorderBrush="{fluentWpf:RevealBrush Color={StaticResource ButtonRevealColor}, Size=50}"
+                                Background="{TemplateBinding Background}" BorderThickness="1"/>
                         <DockPanel>
                             <TextBlock x:Name="ExpanderIcon" DockPanel.Dock="Left"
                                        Margin="20, 0, 0, 0"
