@@ -108,9 +108,6 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="CloseButtonText">Close</sys:String>
     <sys:String x:Key="ApplyButtonText">Apply</sys:String>
 
-    <sys:String x:Key="BrowseImageHelpText">Browse the system for an image to use.</sys:String>
-    <sys:String x:Key="DefaultImageHelpText">Reset image to its default.</sys:String>
-
     <sys:String x:Key="MarginHelpText">Sets the distance between the popup and the toolbar</sys:String>
     <sys:String x:Key="SensitiveSettingsWarning">This setting is stored locally and unsecured.</sys:String>
     <sys:String x:Key="RememberHelpText">This setting will be saved. Are you sure?</sys:String>
@@ -142,4 +139,8 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="ImportProfilesHelpText">Import profiles</sys:String>
     <sys:String x:Key="ExportProfilesHelpText">Export profiles</sys:String>
     <sys:String x:Key="DefaultProfileItemText">Default Profile</sys:String>
+
+    <!-- Image picker -->
+    <sys:String x:Key="ImagePickerResetText">Click here to reset</sys:String>
+    <sys:String x:Key="ImagePickerNoImageText">No image selected</sys:String>
 </ResourceDictionary>

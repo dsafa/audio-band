@@ -52,12 +52,9 @@
                         </Style.Triggers>
                     </Style>
                 </ItemsControl.Style>
-                <TextBlock Text="{StaticResource ButtonImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding ImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource ButtonHoveredImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding HoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource ButtonClickedImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding ClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+                <local:ImagePicker ImagePath="{Binding ImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonImageLabelText}"/>
+                <local:ImagePicker ImagePath="{Binding HoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonHoveredImageLabelText}"/>
+                <local:ImagePicker ImagePath="{Binding ClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonClickedImageLabelText}"/>
             </ItemsControl>
             <ItemsControl>
                 <ItemsControl.Style>

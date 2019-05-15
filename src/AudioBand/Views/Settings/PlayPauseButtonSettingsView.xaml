@@ -49,12 +49,9 @@
                         </Style.Triggers>
                     </Style>
                 </ItemsControl.Style>
-                <TextBlock Text="{StaticResource PlayButtonImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding PlayImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
-                <TextBlock Text="{StaticResource PlayButtonHoveredImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding PlayHoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
-                <TextBlock Text="{StaticResource PlayButtonClickedImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding PlayClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" />
+                <local:ImagePicker ImagePath="{Binding PlayImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PlayButtonImageLabelText}"/>
+                <local:ImagePicker ImagePath="{Binding PlayHoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"  Title="{StaticResource PlayButtonHoveredImageLabelText}"/>
+                <local:ImagePicker ImagePath="{Binding PlayClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PlayButtonClickedImageLabelText}"/>
             </ItemsControl>
             <ItemsControl>
                 <ItemsControl.Style>
@@ -92,12 +89,9 @@
                         </Style.Triggers>
                     </Style>
                 </ItemsControl.Style>
-                <TextBlock Text="{StaticResource PauseButtonImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding PauseImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource PauseButtonHoveredImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding PauseHoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
-                <TextBlock Text="{StaticResource PauseButtonClickedImageLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <local:ImagePicker ImagePath="{Binding PauseClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"/>
+                <local:ImagePicker ImagePath="{Binding PauseImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PauseButtonImageLabelText}"/>
+                <local:ImagePicker ImagePath="{Binding PauseHoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PauseButtonHoveredImageLabelText}"/>
+                <local:ImagePicker ImagePath="{Binding PauseClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PauseButtonClickedImageLabelText}"/>
             </ItemsControl>
             <ItemsControl>
                 <ItemsControl.Style>
