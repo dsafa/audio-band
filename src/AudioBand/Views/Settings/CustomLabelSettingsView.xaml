@@ -6,14 +6,15 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
              xmlns:converters="clr-namespace:AudioBand.ValueConverters"
-             xmlns:models="clr-namespace:AudioBand.Models">
+             xmlns:models="clr-namespace:AudioBand.Models"
+             xmlns:resources="clr-namespace:AudioBand.Resources">
     <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="../../Resources/Shared.xaml"/>
-                    <ResourceDictionary Source="../../Resources/Strings.xaml"/>
-                    <ResourceDictionary Source="../../Resources/Style.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Shared.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>

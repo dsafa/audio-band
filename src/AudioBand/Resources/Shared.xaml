@@ -2,7 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF">
+                    xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+                    xmlns:resources="clr-namespace:AudioBand.Resources">
+    <ResourceDictionary.MergedDictionaries>
+        <resources:SharedDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
+    </ResourceDictionary.MergedDictionaries>
     <Thickness x:Key="InputSpacing" Left="4" Top="0" Right="4" Bottom="0"/>
     <Thickness x:Key="BorderThickness">2</Thickness>
     <Thickness x:Key="SectionMargin" Top="16"/>
@@ -12,7 +16,9 @@
     <Color x:Key="NavigationPaneHoverBackgroundColor">#44444444</Color>
     <Color x:Key="NavigationPaneClickBackgroundColor">#DD888888</Color>
     <Color x:Key="SecondaryTextColor">#555555</Color>
-    <GridLength x:Key="DefaultControlHeight">35</GridLength>
+    <Color x:Key="ButtonRevealColor">#88AAAAAA</Color>
+    <GridLength x:Key="DefaultControlHeightLength">35</GridLength>
+    <system:Double x:Key="DefaultControlHeight">35</system:Double>
     <system:Double x:Key="NavigationPaneItemHeight">42</system:Double>
     <system:Double x:Key="NavigationPaneItemFontSize">22</system:Double>
     <system:Double x:Key="BodyFontSize">14</system:Double>
@@ -30,4 +36,22 @@
     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchBrush.Win10" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchMouseOverBrush.Win10" Color="{x:Static fw:AccentColors.ImmersiveSystemAccentLight1}" />
     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10" Color="White" o:Freeze="True"/>
+    <RadialGradientBrush x:Shared="False" x:Key="RevealHoverLightBrush" MappingMode="Absolute" RadiusX="200" RadiusY="200">
+        <RadialGradientBrush.Center>
+            <MultiBinding Converter="{StaticResource relativePositionConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Rectangle}}" Path="(fw:PointerTracker.RootObject)"/>
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Rectangle}}"/>
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Rectangle}}" Path="(fw:PointerTracker.Position)" />
+            </MultiBinding>
+        </RadialGradientBrush.Center>
+        <RadialGradientBrush.GradientOrigin>
+            <MultiBinding Converter="{StaticResource relativePositionConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Rectangle}}" Path="(fw:PointerTracker.RootObject)"/>
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Rectangle}}"/>
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Rectangle}}" Path="(fw:PointerTracker.Position)" />
+            </MultiBinding>
+        </RadialGradientBrush.GradientOrigin>
+        <GradientStop Color="#88FFFFFF" Offset="0"/>
+        <GradientStop Color="Transparent" Offset="0.8"/>
+    </RadialGradientBrush>
 </ResourceDictionary>

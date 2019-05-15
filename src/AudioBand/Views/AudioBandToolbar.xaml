@@ -9,6 +9,7 @@
              xmlns:audioSource="clr-namespace:AudioBand.AudioSource;assembly=AudioBand.AudioSource"
              xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+             xmlns:resources="clr-namespace:AudioBand.Resources"
              mc:Ignorable="d"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
              Background="Transparent"
@@ -17,9 +18,9 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Resources/ToolbarButtonStyles.xaml"/>
-                <ResourceDictionary Source="../Resources/ToolbarProgressBarStyle.xaml"/>
-                <ResourceDictionary Source="../Resources/ToolbarContextMenuStyles.xaml"/>
+                <resources:SharedDictionary Source="../Resources/ToolbarButtonStyles.xaml"/>
+                <resources:SharedDictionary Source="../Resources/ToolbarProgressBarStyle.xaml"/>
+                <resources:SharedDictionary Source="../Resources/ToolbarContextMenuStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <DrawingImage x:Key="AlbumArtFallback">
                 <DrawingImage.Drawing>
@@ -116,7 +117,8 @@
                      Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                      Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                      ToolTipService.InitialShowDelay="500" ToolTipService.ShowDuration="999999"
-                     ToolTipService.HasDropShadow="True">
+                     ToolTipService.HasDropShadow="True"
+                     RenderOptions.BitmapScalingMode="Fant">
             <Image>
                 <Image.Style>
                     <Style TargetType="{x:Type Image}">

@@ -7,13 +7,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="clr-namespace:AudioBand.Models"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+             xmlns:resources="clr-namespace:AudioBand.Resources"
              mc:Ignorable="d">
     <DataTemplate x:Key="PlaybackButtonContent">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="../../Resources/Style.xaml"/>
-                    <ResourceDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
@@ -35,7 +36,7 @@
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
             <local:ColorPicker Color="{Binding BackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource DefaultColorLabelText}"/>
-            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource HoverColorLabelText}"/>
+            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ProgressBarHoverColorDescription}"/>
             <local:ColorPicker Color="{Binding ClickedBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ClickedColorLabelText}"/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PlaybackButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
