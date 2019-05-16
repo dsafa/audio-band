@@ -10,7 +10,7 @@ namespace AudioBand.Models
         private bool _isVisible = true;
         private double _width = 220;
         private double _height = 15;
-        private double _xPosition = 30;
+        private double _xPosition = 0;
         private double _yPosition = 0;
         private string _fontFamily = "Segoe UI";
         private float _fontSize = 8.5f;

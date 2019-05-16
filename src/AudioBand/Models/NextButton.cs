@@ -12,10 +12,10 @@
         {
             ImagePath = "";
             IsVisible = true;
-            Width = 73;
-            Height = 12;
-            XPosition = 176;
-            YPosition = 15;
+            Width = 40;
+            Height = 15;
+            XPosition = 410;
+            YPosition = 3;
             Text = "";
         }
     }

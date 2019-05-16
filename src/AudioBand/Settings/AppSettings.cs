@@ -288,6 +288,7 @@ namespace AudioBand.Settings
                 AudioSource = null,
                 AudioSourceSettings = new List<AudioSourceSettings>(),
                 Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, CreateProfileModel() } },
+                CurrentProfileName = SettingsV3.DefaultProfileName,
             };
             Save();
         }
@@ -303,7 +304,57 @@ namespace AudioBand.Settings
                 NextButtonSettings = new NextButton(),
                 PreviousButtonSettings = new PreviousButton(),
                 ProgressBarSettings = new ProgressBar(),
-                CustomLabelSettings = new List<CustomLabel> { new CustomLabel() },
+                CustomLabelSettings = new List<CustomLabel>
+                {
+                    new CustomLabel
+                    {
+                        Name = "Song Length",
+                        Width = 40,
+                        Height = 15,
+                        FontSize = 12,
+                        XPosition = 460,
+                        YPosition = 14,
+                        FormatString = "{length}",
+                        Color = Color.FromRgb(195, 195, 195),
+                        Alignment = CustomLabel.TextAlignment.Right,
+                    },
+                    new CustomLabel
+                    {
+                        Name = "Song Progress",
+                        Width = 40,
+                        Height = 15,
+                        FontSize = 12,
+                        XPosition = 280,
+                        YPosition = 14,
+                        FormatString = "{time}",
+                        Color = Color.FromRgb(195, 195, 195),
+                        Alignment = CustomLabel.TextAlignment.Left,
+                    },
+                    new CustomLabel
+                    {
+                        Name = "Song Name",
+                        Width = 240,
+                        Height = 20,
+                        XPosition = 0,
+                        YPosition = -2,
+                        FontSize = 14,
+                        FormatString = "{song}",
+                        Color = Colors.White,
+                        Alignment = CustomLabel.TextAlignment.Right,
+                    },
+                    new CustomLabel
+                    {
+                        Name = "Artist",
+                        Width = 240,
+                        Height = 20,
+                        XPosition = 0,
+                        YPosition = 13,
+                        FontSize = 12,
+                        FormatString = "{artist}",
+                        Color = Color.FromRgb(170, 170, 170),
+                        Alignment = CustomLabel.TextAlignment.Right,
+                    },
+                },
             };
         }
 

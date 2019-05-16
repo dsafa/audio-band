@@ -5,7 +5,7 @@
     /// </summary>
     public class AudioBand : ModelBase
     {
-        private double _width = 250;
+        private double _width = 500;
         private double _height = 30;
 
         /// <summary>
