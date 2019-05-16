@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace AudioBand.Test
 {
     [TestClass]
-    public class AudioSourceSettingsViewModelsTests
+    public class AudioSourceSettingsCollectionTests
     {
         private Mock<IInternalAudioSource> _audioSourceMock;
 
@@ -28,8 +28,9 @@ namespace AudioBand.Test
         public void NoMatchingSettings()
         {
             _audioSourceMock.SetupGet(s => s.Settings).Returns(new List<AudioSourceSettingAttribute>());
-
             var name = "test";
+            _audioSourceMock.SetupGet(x => x.Name).Returns(name);
+
             var keyVals = new List<AudioSourceSetting>
             {
                 new AudioSourceSetting { Name = "key1", Value = "val1" },
@@ -37,9 +38,9 @@ namespace AudioBand.Test
             };
             var settings = new AudioSourceSettings { AudioSourceName = name, Settings = keyVals };
 
-            var vm = new AudioSourceSettingsVM(settings, _audioSourceMock.Object);
+            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings);
 
-            Assert.AreEqual(0, vm.Settings.Count);
+            Assert.AreEqual(0, vm.SettingsList.Count);
             Assert.AreEqual(name, vm.AudioSourceName);
         }
 
@@ -69,14 +70,14 @@ namespace AudioBand.Test
             };
 
             var settings = new AudioSourceSettings { Settings = settingModels };
-            var vm = new AudioSourceSettingsVM(settings, _audioSourceMock.Object);
+            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings);
 
-            Assert.AreEqual(settingModels.Count, vm.Settings.Count);
-            Assert.AreEqual(settingModels[0].Name, vm.Settings[0].Name);
-            Assert.AreEqual(settingModels[1].Name, vm.Settings[1].Name);
+            Assert.AreEqual(settingModels.Count, vm.SettingsList.Count);
+            Assert.AreEqual(settingModels[0].Name, vm.SettingsList[0].Name);
+            Assert.AreEqual(settingModels[1].Name, vm.SettingsList[1].Name);
 
-            Assert.AreEqual(settingModels[0].Value, vm.Settings[0].Value);
-            Assert.AreEqual(settingModels[1].Value, vm.Settings[1].Value);
+            Assert.AreEqual(settingModels[0].Value, vm.SettingsList[0].Value);
+            Assert.AreEqual(settingModels[1].Value, vm.SettingsList[1].Value);
         }
 
         [TestMethod]
@@ -91,7 +92,7 @@ namespace AudioBand.Test
                 Settings = new List<AudioSourceSetting> { settingModel }
             };
 
-            var vm = new AudioSourceSettingsVM(settings, _audioSourceMock.Object);
+            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings);
 
             object newSettingValue = 1;
             _audioSourceMock.SetupGet(s => s[It.Is<string>(x => x == setting)]).Returns(newSettingValue);
@@ -125,7 +126,7 @@ namespace AudioBand.Test
             _audioSourceMock.InSequence(s).SetupSet(source => source[It.Is<string>(x => x == setting1.Name)] = null);
             _audioSourceMock.InSequence(s).SetupSet(source => source[It.Is<string>(x => x == setting2.Name)] = null);
 
-            var vm = new AudioSourceSettingsVM(settings, _audioSourceMock.Object);
+            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings);
 
             _audioSourceMock.VerifySet(source => source[setting3.Name] = null);
             _audioSourceMock.VerifySet(source => source[setting1.Name] = null);

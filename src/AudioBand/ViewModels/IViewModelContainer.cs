@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-
-namespace AudioBand.ViewModels
+﻿namespace AudioBand.ViewModels
 {
     /// <summary>
     /// Interface for a settings window.
@@ -51,6 +48,6 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the collection for view models for the audio source settings.
         /// </summary>
-        ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM { get; }
+        AudioSourceSettingsVM AudioSourceSettingsVm { get; }
     }
 }

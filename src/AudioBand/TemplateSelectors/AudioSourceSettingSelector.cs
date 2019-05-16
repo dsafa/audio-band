@@ -8,32 +8,11 @@ using NLog;
 namespace AudioBand.TemplateSelectors
 {
     /// <summary>
-    /// Template selector for <see cref="AudioSourceSettingVM"/>. Used to format the setting label or change the type of setting input.
+    /// Template selector for <see cref="AudioSourceSettingKeyValue"/>. Used to format the setting label or change the type of setting input.
     /// </summary>
     internal class AudioSourceSettingSelector : DataTemplateSelector
     {
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioSourceSettingSelector>();
-
-        /// <summary>
-        /// The type of template to select.
-        /// </summary>
-        public enum SettingTemplateType
-        {
-            /// <summary>
-            /// Template for the setting key.
-            /// </summary>
-            Key,
-
-            /// <summary>
-            /// Template for the setting value.
-            /// </summary>
-            Value,
-        }
-
-        /// <summary>
-        /// Gets or sets the type of the template.
-        /// </summary>
-        public SettingTemplateType TemplateType { get; set; }
 
         /// <summary>
         /// Gets or sets the string template.
@@ -58,38 +37,28 @@ namespace AudioBand.TemplateSelectors
         /// <summary>
         /// Gets or sets the sensitive text template.
         /// </summary>
-        public DataTemplate SensitiveTemplate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the normal label template.
-        /// </summary>
-        public DataTemplate NormalLabelTemplate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the sensitive label template.
-        /// </summary>
-        public DataTemplate SensitiveLabelTemplate { get; set; }
+        public DataTemplate PasswordStringTemplate { get; set; }
 
         /// <inheritdoc/>
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            var setting = item as AudioSourceSettingVM;
+            var setting = item as AudioSourceSettingKeyValue;
             if (setting == null)
             {
                 throw new ArgumentException(nameof(item));
             }
 
-            var type = setting.SettingType;
-            return TemplateType == SettingTemplateType.Value ? SelectValueTemplate(type, setting) : SelectKeyTemplate(setting);
+            return SelectValueTemplate(setting);
         }
 
-        private DataTemplate SelectValueTemplate(Type type, AudioSourceSettingVM setting)
+        private DataTemplate SelectValueTemplate(AudioSourceSettingKeyValue setting)
         {
+            var type = setting.SettingType;
             Logger.Debug("Selecting value template for setting {name}, type {type}", setting.Name, type);
 
             if (type == typeof(string))
             {
-                return setting.Sensitive ? SensitiveTemplate : StringTemplate;
+                return setting.Sensitive ? PasswordStringTemplate : StringTemplate;
             }
 
             if (type == typeof(bool))
@@ -107,12 +76,7 @@ namespace AudioBand.TemplateSelectors
                 return UIntTemplate;
             }
 
-            throw new ArgumentException("No matching value template for `{type}`");
-        }
-
-        private DataTemplate SelectKeyTemplate(AudioSourceSettingVM setting)
-        {
-            return setting.Sensitive ? SensitiveLabelTemplate : NormalLabelTemplate;
+            throw new ArgumentException($"No matching value template for `{type}`");
         }
     }
 }

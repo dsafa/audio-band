@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
@@ -67,7 +65,11 @@ namespace AudioBand.Settings
                 LoadSettingsFromPath(SettingsFilePath);
             }
 
-            AudioSourceSettings = _settings.AudioSourceSettings ?? new List<AudioSourceSettings>();
+            if (_settings.AudioSourceSettings == null)
+            {
+                _settings.AudioSourceSettings = new List<AudioSourceSettings>();
+            }
+
             SelectProfile(_settings.CurrentProfileName);
         }
 
@@ -128,7 +130,7 @@ namespace AudioBand.Settings
         /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
-        public List<AudioSourceSettings> AudioSourceSettings { get; private set; } = new List<AudioSourceSettings>();
+        public List<AudioSourceSettings> AudioSourceSettings => _settings.AudioSourceSettings;
 
         /// <summary>
         /// Gets or sets the current profile.

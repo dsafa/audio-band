@@ -16,7 +16,6 @@
         <Setter Property="Padding" Value="{StaticResource InputSpacing}"/>
         <Setter Property="mah:ControlsHelper.MouseOverBorderBrush" Value="{StaticResource BorderHoverColorBrush}"/>
         <Setter Property="mah:ControlsHelper.FocusBorderBrush" Value="{StaticResource BorderFocusedColorBrush}"/>
-        <Setter Property="mah:TextBoxHelper.ButtonWidth" Value="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=ActualHeight}"/>
         <Style.Resources>
             <SolidColorBrush x:Key="AccentColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
             <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource BorderHoverColor}"/>

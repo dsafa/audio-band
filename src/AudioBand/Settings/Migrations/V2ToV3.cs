@@ -75,8 +75,6 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.PauseButtonTextColor, opt => opt.Ignore())
                     .ForMember(dest => dest.PauseButtonTextHoverColor, opt => opt.Ignore())
                     .ForMember(dest => dest.PauseButtonTextClickedColor, opt => opt.Ignore());
-                cfg.CreateMap<Models.V2.AudioSourceSetting, AudioSourceSetting>()
-                    .ForMember(dest => dest.Remember, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.ProgressBarSettings, ProgressBar>()
                     .ForMember(dest => dest.HoverColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.Settings, ProfileV3>()

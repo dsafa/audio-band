@@ -8,20 +8,19 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for <see cref="AudioSourceSetting"/>. Represents one key-value pair.
     /// </summary>
-    public class AudioSourceSettingVM : ViewModelBase<AudioSourceSetting>
+    public class AudioSourceSettingKeyValue : ViewModelBase<AudioSourceSetting>
     {
         private readonly AudioSourceSettingAttribute _settingAttribute;
         private readonly IInternalAudioSource _audioSource;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AudioSourceSettingVM"/> class
+        /// Initializes a new instance of the <see cref="AudioSourceSettingKeyValue"/> class
         /// with the model, setting information and if it was saved.
         /// </summary>
         /// <param name="audioSource">The associated <see cref="IInternalAudioSource"/>.</param>
-        /// <param name="model">The <see cref="AudioSource"/>.</param>
+        /// <param name="model">The setting model.</param>
         /// <param name="settingAttribute">The <see cref="AudioSourceSettingAttribute"/>.</param>
-        /// <param name="saved">If this setting was saved.</param>
-        public AudioSourceSettingVM(IInternalAudioSource audioSource, AudioSourceSetting model, AudioSourceSettingAttribute settingAttribute, bool saved = true)
+        public AudioSourceSettingKeyValue(IInternalAudioSource audioSource, AudioSourceSetting model, AudioSourceSettingAttribute settingAttribute)
             : base(model)
         {
             _settingAttribute = settingAttribute;
@@ -29,12 +28,6 @@ namespace AudioBand.ViewModels
 
             // Model value was deserialized from string maybe so change to correct type
             model.Value = TypeConvertHelper.ConvertToType(model.Value, SettingType);
-
-            // If sensitive data and was not saved from before, don't automatically remember it
-            if (Sensitive && !saved)
-            {
-                Remember = false;
-            }
         }
 
         /// <summary>
@@ -51,16 +44,6 @@ namespace AudioBand.ViewModels
         {
             get => Model.Value;
             set => SetProperty(nameof(Model.Value), value);
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether gets whether or not to save the data.
-        /// </summary>
-        [PropertyChangeBinding(nameof(AudioSourceSetting.Remember))]
-        public bool Remember
-        {
-            get => Model.Remember;
-            private set => SetProperty(nameof(Model.Remember), value);
         }
 
         /// <summary>
@@ -96,7 +79,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Applies the value to the audio source.
         /// </summary>
-        public void ApplyChanges()
+        public void PropagateSettingToAudioSource()
         {
             try
             {
@@ -108,14 +91,6 @@ namespace AudioBand.ViewModels
             }
         }
 
-        /// <summary>
-        /// Notify that the value of the setting was changed by the audio source so we have to update the model.
-        /// </summary>
-        public void ValueChanged()
-        {
-            Model.Value = _audioSource[Name];
-        }
-
         /// <inheritdoc/>
         protected override void OnEndEdit()
         {
@@ -125,7 +100,7 @@ namespace AudioBand.ViewModels
                 return;
             }
 
-            ApplyChanges();
+            PropagateSettingToAudioSource();
         }
     }
 }

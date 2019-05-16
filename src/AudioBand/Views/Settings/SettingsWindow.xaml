@@ -161,7 +161,7 @@
                         <Expander.Header>
                             <TextBlock Padding="0, 0, 10, 0" FontWeight="Normal" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"/>
                         </Expander.Header>
-                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsVM}"
+                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsVm.AudioSourcesSettings}"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
                             <i:Interaction.Behaviors>
                                 <behaviors:RedirectScrolling/>
@@ -265,8 +265,8 @@
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AudioBandVM}">
                                 <Setter Property="Text" Value="{StaticResource GeneralSettingsTab}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AudioSourceSettingsVM}">
-                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:AudioSourceSettingsVM.AudioSourceName), 
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AudioSourceSettingsCollectionViewModel}">
+                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:AudioSourceSettingsCollectionViewModel.AudioSourceName), 
                                                                         Converter={x:Static converters:Converters.StringFormat}, 
                                                                         ConverterParameter={StaticResource AudioSourceViewHeaderFormat}}"/>
                             </DataTrigger>

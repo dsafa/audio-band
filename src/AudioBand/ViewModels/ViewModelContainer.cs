@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace AudioBand.ViewModels
+﻿namespace AudioBand.ViewModels
 {
     /// <summary>
     /// Container for all the view models.
@@ -18,6 +16,7 @@ namespace AudioBand.ViewModels
         /// <param name="playPauseButtonVm">Play pause button view model.</param>
         /// <param name="previousButtonVm">Previous button view model.</param>
         /// <param name="progressBarVm">Progress bar view model.</param>
+        /// <param name="audioSourceSettingsVm">Audio source settings view model.</param>
         public ViewModelContainer(
             AudioBandVM audioBandVm,
             AlbumArtPopupVM albumArtPopupVm,
@@ -26,7 +25,8 @@ namespace AudioBand.ViewModels
             NextButtonVM nextButtonVm,
             PlayPauseButtonVM playPauseButtonVm,
             PreviousButtonVM previousButtonVm,
-            ProgressBarVM progressBarVm)
+            ProgressBarVM progressBarVm,
+            AudioSourceSettingsVM audioSourceSettingsVm)
         {
             AudioBandVM = audioBandVm;
             AlbumArtPopupVM = albumArtPopupVm;
@@ -36,6 +36,7 @@ namespace AudioBand.ViewModels
             PlayPauseButtonVM = playPauseButtonVm;
             PreviousButtonVM = previousButtonVm;
             ProgressBarVM = progressBarVm;
+            AudioSourceSettingsVm = audioSourceSettingsVm;
         }
 
         /// <inheritdoc />
@@ -63,6 +64,6 @@ namespace AudioBand.ViewModels
         public ProgressBarVM ProgressBarVM { get; }
 
         /// <inheritdoc />
-        public ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM { get; } = new ObservableCollection<AudioSourceSettingsVM>();
+        public AudioSourceSettingsVM AudioSourceSettingsVm { get; }
     }
 }
