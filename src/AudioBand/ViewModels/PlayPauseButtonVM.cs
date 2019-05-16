@@ -111,7 +111,7 @@ namespace AudioBand.ViewModels
         /// Gets or sets the width of the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.Width))]
-        public int Width
+        public double Width
         {
             get => Model.Width;
             set => SetProperty(nameof(Model.Width), value);
@@ -121,7 +121,7 @@ namespace AudioBand.ViewModels
         /// Gets or sets the height of the button.
         /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.Height))]
-        public int Height
+        public double Height
         {
             get => Model.Height;
             set => SetProperty(nameof(Model.Height), value);
@@ -131,7 +131,7 @@ namespace AudioBand.ViewModels
         /// Gets or sets the x position.
         /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.XPosition))]
-        public int XPosition
+        public double XPosition
         {
             get => Model.XPosition;
             set => SetProperty(nameof(Model.XPosition), value);
@@ -141,7 +141,7 @@ namespace AudioBand.ViewModels
         /// Gets or sets the y position.
         /// </summary>
         [PropertyChangeBinding(nameof(PlayPauseButton.YPosition))]
-        public int YPosition
+        public double YPosition
         {
             get => Model.YPosition;
             set => SetProperty(nameof(Model.YPosition), value);

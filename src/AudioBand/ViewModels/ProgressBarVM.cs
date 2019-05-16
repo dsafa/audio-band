@@ -80,7 +80,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         [PropertyChangeBinding(nameof(ProgressBar.Width))]
         [AlsoNotify(nameof(Size))]
-        public int Width
+        public double Width
         {
             get => Model.Width;
             set => SetProperty(nameof(Model.Width), value);
@@ -91,7 +91,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         [PropertyChangeBinding(nameof(ProgressBar.Height))]
         [AlsoNotify(nameof(Size))]
-        public int Height
+        public double Height
         {
             get => Model.Height;
             set => SetProperty(nameof(Model.Height), value);
@@ -101,7 +101,7 @@ namespace AudioBand.ViewModels
         /// Gets or sets the x position.
         /// </summary>
         [PropertyChangeBinding(nameof(ProgressBar.XPosition))]
-        public int XPosition
+        public double XPosition
         {
             get => Model.XPosition;
             set => SetProperty(nameof(Model.XPosition), value);
@@ -111,7 +111,7 @@ namespace AudioBand.ViewModels
         /// Gets or sets the y position.
         /// </summary>
         [PropertyChangeBinding(nameof(ProgressBar.YPosition))]
-        public int YPosition
+        public double YPosition
         {
             get => Model.YPosition;
             set => SetProperty(nameof(Model.YPosition), value);

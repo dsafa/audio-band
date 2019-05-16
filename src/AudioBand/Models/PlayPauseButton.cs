@@ -13,10 +13,10 @@ namespace AudioBand.Models
         private string _pauseButtonImagePath = "";
         private string _pauseButtonHoveredImagePath = "";
         private string _pauseButtonClickedImagePath = "";
-        private int _xPosition = 103;
-        private int _yPosition = 15;
-        private int _width = 73;
-        private int _height = 12;
+        private double _xPosition = 103;
+        private double _yPosition = 15;
+        private double _width = 73;
+        private double _height = 12;
         private bool _isVisible = true;
         private Color _defaultBackgroundColor = Colors.Transparent;
         private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
@@ -100,7 +100,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the width of the button.
         /// </summary>
-        public int Width
+        public double Width
         {
             get => _width;
             set => SetProperty(ref _width, value);
@@ -109,7 +109,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the height of the button.
         /// </summary>
-        public int Height
+        public double Height
         {
             get => _height;
             set => SetProperty(ref _height, value);
@@ -118,7 +118,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the x position of the button.
         /// </summary>
-        public int XPosition
+        public double XPosition
         {
             get => _xPosition;
             set => SetProperty(ref _xPosition, value);
@@ -127,7 +127,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the y position of the button.
         /// </summary>
-        public int YPosition
+        public double YPosition
         {
             get => _yPosition;
             set => SetProperty(ref _yPosition, value);

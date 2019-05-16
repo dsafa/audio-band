@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
@@ -48,6 +49,8 @@ namespace AudioBand.Settings
                 cfg.ConfigureType<CustomLabel.TextAlignment>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(SerializationConversions.EnumToString)
                     .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
+                cfg.ConfigureType<double>(type => type.WithConversionFor<TomlInt>(c => c
+                    .FromToml(tml => tml.Value)));
             });
 
             if (!Directory.Exists(SettingsDirectory))

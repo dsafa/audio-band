@@ -24,14 +24,14 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Models.AudioBand.Width))]
-        public int Width
+        public double Width
         {
             get => Model.Width;
             set => SetProperty(nameof(Model.Width), value);
         }
 
         [PropertyChangeBinding(nameof(Models.AudioBand.Height))]
-        public int Height
+        public double Height
         {
             get => Model.Height;
             set => SetProperty(nameof(Model.Height), value);
