@@ -425,6 +425,8 @@ Value = ""secret""
                 cfg.ConfigureType<CustomLabel.TextAlignment>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(SerializationConversions.EnumToString)
                     .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
+                cfg.ConfigureType<double>(type => type.WithConversionFor<TomlInt>(c => c
+                    .FromToml(tml => tml.Value)));
             });
 
             var v2 = Toml.ReadString<V2Settings>(settingsFile, settings);

@@ -8,10 +8,10 @@ namespace AudioBand.Models
     public class CustomLabel : ModelBase
     {
         private bool _isVisible = true;
-        private int _width = 220;
-        private int _height = 15;
-        private int _xPosition = 30;
-        private int _yPosition = 0;
+        private double _width = 220;
+        private double _height = 15;
+        private double _xPosition = 30;
+        private double _yPosition = 0;
         private string _fontFamily = "Segoe UI";
         private float _fontSize = 8.5f;
         private Color _color = Colors.White;
@@ -55,7 +55,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the width of the label.
         /// </summary>
-        public int Width
+        public double Width
         {
             get => _width;
             set => SetProperty(ref _width, value);
@@ -64,7 +64,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the height of the label.
         /// </summary>
-        public int Height
+        public double Height
         {
             get => _height;
             set => SetProperty(ref _height, value);
@@ -73,7 +73,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the x position of the label.
         /// </summary>
-        public int XPosition
+        public double XPosition
         {
             get => _xPosition;
             set => SetProperty(ref _xPosition, value);
@@ -82,7 +82,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the y position of the label.
         /// </summary>
-        public int YPosition
+        public double YPosition
         {
             get => _yPosition;
             set => SetProperty(ref _yPosition, value);

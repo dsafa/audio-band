@@ -11,10 +11,10 @@ namespace AudioBand.Models
         private Color _backgroundColor = Colors.Black;
         private Color _hoverColor = Colors.DeepSkyBlue;
         private bool _isVisible = true;
-        private int _xPosition = 30;
-        private int _yPosition = 28;
-        private int _width = 220;
-        private int _height = 2;
+        private double _xPosition = 30;
+        private double _yPosition = 28;
+        private double _width = 220;
+        private double _height = 2;
 
         /// <summary>
         /// Gets or sets the foreground color.
@@ -55,7 +55,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the width of the progress bar.
         /// </summary>
-        public int Width
+        public double Width
         {
             get => _width;
             set => SetProperty(ref _width, value);
@@ -64,7 +64,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the height of the progress bar.
         /// </summary>
-        public int Height
+        public double Height
         {
             get => _height;
             set => SetProperty(ref _height, value);
@@ -73,7 +73,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the x position of the progress bar.
         /// </summary>
-        public int XPosition
+        public double XPosition
         {
             get => _xPosition;
             set => SetProperty(ref _xPosition, value);
@@ -82,7 +82,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the y position of the progress bar.
         /// </summary>
-        public int YPosition
+        public double YPosition
         {
             get => _yPosition;
             set => SetProperty(ref _yPosition, value);

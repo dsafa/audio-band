@@ -11,10 +11,10 @@ namespace AudioBand.Models
         private string _hoveredImagePath = "";
         private string _clickedImagePath = "";
         private bool _isVisible = true;
-        private int _width;
-        private int _height;
-        private int _xPosition;
-        private int _yPosition;
+        private double _width;
+        private double _height;
+        private double _xPosition;
+        private double _yPosition;
         private Color _backgroundColor = Colors.Transparent;
         private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
         private Color _clickedBackgroundColor = Color.FromArgb(15, 255, 255, 255);
@@ -64,7 +64,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the width of the button.
         /// </summary>
-        public int Width
+        public double Width
         {
             get => _width;
             set => SetProperty(ref _width, value);
@@ -73,7 +73,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the height of the button.
         /// </summary>
-        public int Height
+        public double Height
         {
             get => _height;
             set => SetProperty(ref _height, value);
@@ -82,7 +82,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the x position of the button.
         /// </summary>
-        public int XPosition
+        public double XPosition
         {
             get => _xPosition;
             set => SetProperty(ref _xPosition, value);
@@ -91,7 +91,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the y position of the button.
         /// </summary>
-        public int YPosition
+        public double YPosition
         {
             get => _yPosition;
             set => SetProperty(ref _yPosition, value);

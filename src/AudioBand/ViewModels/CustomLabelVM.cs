@@ -84,28 +84,28 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(CustomLabel.Width))]
-        public int Width
+        public double Width
         {
             get => Model.Width;
             set => SetProperty(nameof(Model.Width), value);
         }
 
         [PropertyChangeBinding(nameof(CustomLabel.Height))]
-        public int Height
+        public double Height
         {
             get => Model.Height;
             set => SetProperty(nameof(Model.Height), value);
         }
 
         [PropertyChangeBinding(nameof(CustomLabel.XPosition))]
-        public int XPosition
+        public double XPosition
         {
             get => Model.XPosition;
             set => SetProperty(nameof(Model.XPosition), value);
         }
 
         [PropertyChangeBinding(nameof(CustomLabel.YPosition))]
-        public int YPosition
+        public double YPosition
         {
             get => Model.YPosition;
             set => SetProperty(nameof(Model.YPosition), value);

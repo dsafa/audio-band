@@ -42,28 +42,28 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.Width))]
-        public int Width
+        public double Width
         {
             get => Model.Width;
             set => SetProperty(nameof(Model.Width), value);
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.Height))]
-        public int Height
+        public double Height
         {
             get => Model.Height;
             set => SetProperty(nameof(Model.Height), value);
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.XPosition))]
-        public int XPosition
+        public double XPosition
         {
             get => Model.XPosition;
             set => SetProperty(nameof(Model.XPosition), value);
         }
 
         [PropertyChangeBinding(nameof(Models.AlbumArt.YPosition))]
-        public int YPosition
+        public double YPosition
         {
             get => Model.YPosition;
             set => SetProperty(nameof(Model.YPosition), value);

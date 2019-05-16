@@ -16,23 +16,22 @@
         <Setter Property="metro:ControlsHelper.MouseOverBorderBrush" Value="{StaticResource BorderHoverColorBrush}"/>
         <Setter Property="metro:ControlsHelper.FocusBorderBrush" Value="{StaticResource BorderFocusedColorBrush}"/>
         <Setter Property="Padding" Value="8,0,0,0"/>
-        <Setter Property="metro:TextBoxHelper.ButtonWidth" Value="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=ActualHeight}"/>
         <Style.Resources>
             <SolidColorBrush x:Key="AccentColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
             <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource BorderHoverColor}"/>
         </Style.Resources>
         <Style.Triggers>
             <Trigger Property="behaviors:NumericInput.Type" Value="Size">
-                <Setter Property="NumericInputMode" Value="Numbers"/>
+                <Setter Property="NumericInputMode" Value="All"/>
                 <Setter Property="Minimum" Value="1"/>
-                <Setter Property="Interval" Value="1"/>
+                <Setter Property="Interval" Value="0.5"/>
             </Trigger>
             <Trigger Property="behaviors:NumericInput.Type" Value="Position">
-                <Setter Property="NumericInputMode" Value="Numbers"/>
-                <Setter Property="Interval" Value="1"/>
+                <Setter Property="NumericInputMode" Value="All"/>
+                <Setter Property="Interval" Value="0.5"/>
             </Trigger>
             <Trigger Property="behaviors:NumericInput.Type" Value="FontSize">
-                <Setter Property="NumericInputMode" Value="Decimal"/>
+                <Setter Property="NumericInputMode" Value="All"/>
                 <Setter Property="Minimum" Value="0.5"/>
                 <Setter Property="Interval" Value="0.5"/>
             </Trigger>
