@@ -8,7 +8,7 @@
              xmlns:templateSelectors="clr-namespace:AudioBand.TemplateSelectors"
              xmlns:converters="clr-namespace:AudioBand.ValueConverters"
              xmlns:resources="clr-namespace:AudioBand.Resources">
-    <DataTemplate DataType="{x:Type viewmodels:AudioSourceSettingsVM}">
+    <DataTemplate DataType="{x:Type viewmodels:AudioSourceSettingsCollectionViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -18,98 +18,62 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
-        <ItemsControl ItemsSource="{Binding Settings}" Grid.IsSharedSizeScope="True">
+        <ItemsControl ItemsSource="{Binding SettingsList}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="0, 4">
-                        <Grid Visibility="{Binding Visible, Converter={x:Static converters:Converters.BoolToVisibility}}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="{StaticResource DefaultControlHeightLength}"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="SettingName"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.Resources>
+                        <StackPanel Visibility="{Binding Visible, Converter={x:Static converters:Converters.BoolToVisibility}}">
+                            <FrameworkElement.Resources>
                                 <DataTemplate x:Key="String">
-                                    <TextBox DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
-                                     TextWrapping="Wrap"
-                                     IsReadOnly="{Binding ReadOnly}"
-                                     metro:TextBoxHelper.ClearTextButton="True"
-                                     Text="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"/>
+                                    <TextBox TextWrapping="Wrap" IsReadOnly="{Binding ReadOnly}" metro:TextBoxHelper.ClearTextButton="True"
+                                             Height="{StaticResource DefaultControlHeight}"
+                                             Text="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"/>
                                 </DataTemplate>
                                 <DataTemplate x:Key="Int">
-                                    <metro:NumericUpDown DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
-                                                 Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
-                                                 behaviors:NumericInput.Type="Integer"/>
+                                    <metro:NumericUpDown Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" behaviors:NumericInput.Type="Integer"
+                                                         Height="{StaticResource DefaultControlHeight}"/>
                                 </DataTemplate>
                                 <DataTemplate x:Key="UInt">
-                                    <metro:NumericUpDown DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
-                                                 Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static converters:Converters.CoerceNumber}}"
-                                                 behaviors:NumericInput.Type="Positive"/>
+                                    <metro:NumericUpDown Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static converters:Converters.CoerceNumber}}"
+                                                         behaviors:NumericInput.Type="Positive" Height="{StaticResource DefaultControlHeight}"/>
                                 </DataTemplate>
                                 <DataTemplate x:Key="Bool">
-                                    <metro:ToggleSwitch DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
-                                                IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static converters:Converters.CoerceNumber}}"
-                                                OnLabel="" OffLabel=""/>
+                                    <metro:ToggleSwitch IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static converters:Converters.CoerceNumber}}"
+                                                        OnLabel="" OffLabel="" Height="{StaticResource DefaultControlHeight}"/>
                                 </DataTemplate>
-                                <DataTemplate x:Key="Sensitive">
-                                    <DockPanel LastChildFill="True">
-                                        <Label DockPanel.Dock="Right" Content="{StaticResource RememberSettingLabelText}" Margin="-2, 0, 0, 0" VerticalAlignment="Center">
-                                            <Label.ToolTip>
-                                                <TextBlock Text="{StaticResource RememberHelpText}"/>
-                                            </Label.ToolTip>
-                                        </Label>
-                                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Remember}" Margin="4, 0, 0, 0"/>
-                                        <PasswordBox DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}">
+                                <DataTemplate x:Key="Password">
+                                    <Grid Height="{StaticResource DefaultControlHeight}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <PasswordBox Grid.Column="0">
                                             <i:Interaction.Behaviors>
                                                 <behaviors:PasswordBehaviour Password="{Binding Value, Mode=TwoWay}"/>
                                             </i:Interaction.Behaviors>
                                         </PasswordBox>
-                                    </DockPanel>
-                                </DataTemplate>
-                                <DataTemplate x:Key="NormalLabel">
-                                    <Label ToolTipService.IsEnabled="{Binding Description, Converter={x:Static converters:Converters.EmptyStringToBool}}">
-                                        <Label.ToolTip>
-                                            <TextBlock Text="{Binding Description}"/>
-                                        </Label.ToolTip>
-                                        <AccessText TextWrapping="Wrap" Text="{Binding Name}"/>
-                                        <!-- for text wrapping -->
-                                    </Label>
-                                </DataTemplate>
-                                <DataTemplate x:Key="SensitiveLabelTemplate">
-                                    <DockPanel LastChildFill="True">
-                                        <TextBlock DockPanel.Dock="Right" Margin="0, 0, 4, 0"
-                                                            VerticalAlignment="Center" HorizontalAlignment="Stretch"
-                                                            Foreground="{DynamicResource ValidationBrush5}"
-                                                            FontFamily="Segoe MDL2 Assets" Text="&#xE7BA;">
+                                        <TextBlock Margin="4, 0" Grid.Column="1"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                                                   Foreground="{DynamicResource ValidationBrush5}"
+                                                   FontFamily="Segoe MDL2 Assets" Text="&#xE7BA;" FontSize="20">
                                             <FrameworkElement.ToolTip>
                                                 <TextBlock Text="{StaticResource SensitiveSettingsWarning}"/>
                                             </FrameworkElement.ToolTip>
                                         </TextBlock>
-                                        <Label ToolTipService.IsEnabled="{Binding Description, Converter={x:Static converters:Converters.EmptyStringToBool}}">
-                                            <Label.ToolTip>
-                                                <TextBlock Text="{Binding Description}"/>
-                                            </Label.ToolTip>
-                                            <AccessText TextWrapping="Wrap" Text="{Binding Name}"/>
-                                        </Label>
-                                    </DockPanel>
+                                    </Grid>
                                 </DataTemplate>
                                 <templateSelectors:AudioSourceSettingSelector x:Key="ValueTemplateSelector"
-                                    TemplateType="Value"
-                                    StringTemplate="{StaticResource String}"
-                                    BoolTemplate="{StaticResource Bool}"
-                                    IntTemplate="{StaticResource Int}"
-                                    UIntTemplate="{StaticResource UInt}"
-                                    SensitiveTemplate="{StaticResource Sensitive}"/>
-                                <templateSelectors:AudioSourceSettingSelector x:Key="KeyTemplateSelector"
-                                    TemplateType="Key"
-                                    NormalLabelTemplate="{StaticResource NormalLabel}"
-                                    SensitiveLabelTemplate="{StaticResource SensitiveLabelTemplate}"/>
-                            </Grid.Resources>
-                            <ContentControl Grid.Column="0" Content="{Binding}" ContentTemplateSelector="{StaticResource KeyTemplateSelector}"/>
-                            <ContentControl Grid.Column="1" Content="{Binding}" ContentTemplateSelector="{StaticResource ValueTemplateSelector}"/>
-                        </Grid>
+                                                                              StringTemplate="{StaticResource String}"
+                                                                              BoolTemplate="{StaticResource Bool}"
+                                                                              IntTemplate="{StaticResource Int}"
+                                                                              UIntTemplate="{StaticResource UInt}"
+                                                                              PasswordStringTemplate="{StaticResource Password}"/>
+                            </FrameworkElement.Resources>
+                            <TextBlock Text="{Binding Name}" FontSize="16"/>
+                            <TextBlock Text="{Binding Description}" FontSize="{StaticResource BodyFontSize}" Foreground="{StaticResource SecondaryTextColorBrush}"
+                                       Visibility="{Binding Description, Converter={x:Static converters:Converters.StringToVisibility}}"/>
+                            <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource ValueTemplateSelector}" Margin="0, 4, 0, 0"/>
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

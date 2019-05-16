@@ -9,7 +9,6 @@ namespace AudioBand.Models
     {
         private string _name;
         private object _value;
-        private bool _remember = true;
 
         /// <summary>
         /// Gets or sets the name of the setting provided by the <see cref="IAudioSource"/>.
@@ -31,19 +30,6 @@ namespace AudioBand.Models
         {
             get => _value;
             set => SetProperty(ref _value, value);
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether or not to save this setting.
-        /// </summary>
-        /// <value>
-        /// <see langword="true"/> if the setting should be saved; otherwise <see langword="false"/>.
-        /// The default value is <see langword="true"/>.
-        /// </value>
-        public bool Remember
-        {
-            get => _remember;
-            set => SetProperty(ref _remember, value);
         }
     }
 }

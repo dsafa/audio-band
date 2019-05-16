@@ -68,7 +68,7 @@
     <Compile Include="AudioBandViewModelTests.cs" />
     <Compile Include="CustomLabelsViewModelTests.cs" />
     <Compile Include="SettingsMigrationTests.cs" />
-    <Compile Include="AudioSourceSettingsViewModelsTests.cs" />
+    <Compile Include="AudioSourceSettingsCollectionTests.cs" />
     <Compile Include="SettingsWindowViewModelTests.cs" />
     <Compile Include="TextRendererTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

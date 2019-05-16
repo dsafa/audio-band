@@ -72,38 +72,13 @@ namespace AudioBand.ViewModels
         public IAudioSource SelectedAudioSource
         {
             get => _selectedAudioSource;
-            set => SetProperty(ref _selectedAudioSource, value, false);
-        }
-
-        private void AddNewAudioSource(IInternalAudioSource audioSource)
-        {
-            var settings = audioSource.Settings;
-            if (settings.Count > 0)
+            set
             {
-                // check if the settings were saved previously and reuse them
-                var matchingSetting = _appSettings.AudioSourceSettings.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
-                if (matchingSetting != null)
+                if (SetProperty(ref _selectedAudioSource, value, false))
                 {
-                    var viewModel = new AudioSourceSettingsVM(matchingSetting, audioSource);
-                    ViewModels.AudioSourceSettingsVM.Add(viewModel);
-                }
-                else
-                {
-                    var newSettingsModel = new AudioSourceSettings { AudioSourceName = audioSource.Name };
-                    _appSettings.AudioSourceSettings.Add(newSettingsModel);
-                    var newViewModel = new AudioSourceSettingsVM(newSettingsModel, audioSource);
-                    ViewModels.AudioSourceSettingsVM.Add(newViewModel);
+                    _appSettings.AudioSource = value?.Name;
                 }
             }
-
-            // If user was using this audio source last, then automatically activate it
-            var savedAudioSourceName = _appSettings.AudioSource;
-            if (savedAudioSourceName == null || audioSource.Name != savedAudioSourceName)
-            {
-                return;
-            }
-
-            SelectAudioSourceCommand.Execute(audioSource);
         }
 
         private void ShowSettingsWindowCommandOnExecute(object obj)
@@ -117,13 +92,23 @@ namespace AudioBand.ViewModels
 
             var audioSources = await _audioSourceManager.LoadAudioSourcesAsync();
             AudioSources = new ObservableCollection<IInternalAudioSource>(audioSources);
-            foreach (var source in audioSources)
+
+            foreach (var audioSource in audioSources)
             {
-                AddNewAudioSource(source);
+                ViewModels.AudioSourceSettingsVm.CreateViewModelForAudioSource(audioSource);
+
+                // If user was using this audio source last, then automatically activate it
+                var savedAudioSourceName = _appSettings.AudioSource;
+                if (savedAudioSourceName == null || audioSource.Name != savedAudioSourceName)
+                {
+                    continue;
+                }
+
+                SelectAudioSourceCommand.Execute(audioSource);
             }
 
+            // Raise property changed after everything is set up so audio source settings can't be changed by the user in the middle.
             RaisePropertyChanged(nameof(AudioSources));
-
             Logger.Debug("Audio sources loaded. Loaded {num} sources", AudioSources.Count);
         }
 
@@ -134,7 +119,7 @@ namespace AudioBand.ViewModels
                 Logger.Debug("Deactivating current audio source {audiosource}", SelectedAudioSource.Name);
                 try
                 {
-                    await SelectedAudioSource.DeactivateAsync();
+                    await SelectedAudioSource.DeactivateAsync().ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

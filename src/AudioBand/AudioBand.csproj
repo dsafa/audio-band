@@ -141,7 +141,8 @@
     <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
     <Compile Include="ViewModels\AlsoNotifyAttribute.cs" />
     <Compile Include="ViewModels\AudioBandToolbarViewModel.cs" />
-    <Compile Include="ViewModels\AudioSourceSettingVM.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingKeyValue.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingsCollectionViewModel.cs" />
     <Compile Include="ViewModels\ConfirmationDialogType.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\AboutVM.cs" />
