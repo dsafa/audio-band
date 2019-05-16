@@ -8,7 +8,7 @@
         private bool _isVisible = true;
         private double _width = 30;
         private double _height = 30;
-        private double _xPosition = 0;
+        private double _xPosition = 245;
         private double _yPosition = 0;
         private string _placeholderPath = "";
 

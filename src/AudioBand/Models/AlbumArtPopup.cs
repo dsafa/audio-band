@@ -8,8 +8,8 @@
         private bool _isVisible = true;
         private double _width = 250;
         private double _height = 250;
-        private double _xPosition = 0;
-        private double _margin = 4;
+        private double _xPosition = -110;
+        private double _margin = -4;
 
         /// <summary>
         /// Gets or sets a value indicating whether the album art popup is visible.

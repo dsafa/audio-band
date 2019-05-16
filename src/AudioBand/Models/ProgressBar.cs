@@ -8,13 +8,13 @@ namespace AudioBand.Models
     public class ProgressBar : ModelBase
     {
         private Color _foregroundColor = Colors.DodgerBlue;
-        private Color _backgroundColor = Colors.Black;
+        private Color _backgroundColor = Colors.DimGray;
         private Color _hoverColor = Colors.DeepSkyBlue;
         private bool _isVisible = true;
-        private double _xPosition = 30;
-        private double _yPosition = 28;
-        private double _width = 220;
-        private double _height = 2;
+        private double _xPosition = 325;
+        private double _yPosition = 22;
+        private double _width = 130;
+        private double _height = 4;
 
         /// <summary>
         /// Gets or sets the foreground color.

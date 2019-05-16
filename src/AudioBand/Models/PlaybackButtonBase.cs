@@ -18,7 +18,7 @@ namespace AudioBand.Models
         private Color _backgroundColor = Colors.Transparent;
         private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
         private Color _clickedBackgroundColor = Color.FromArgb(15, 255, 255, 255);
-        private ButtonContentType _contentType = ButtonContentType.Image;
+        private ButtonContentType _contentType = ButtonContentType.Text;
         private string _textFontFamily = "Segoe MDL2 Assets";
         private string _text;
         private Color _textColor = Colors.White;
