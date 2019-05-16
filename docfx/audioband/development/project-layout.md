@@ -1,5 +1,7 @@
 # Project layout
 
+Last commit at this time of writing: `f2d140a`
+
 Here are the main projects in the solution:
 - **AudioBand**: The is the "main" project where audioband lives
 - **AudioBand.Logging**: This project contains shared logging facilities
@@ -10,39 +12,26 @@ Here are the main projects in the solution:
 # AudioBand project
 
 ## Entry point
-The entry point for audioband can be found in the `Deskband.cs` file. This is where the main control `MainControl.cs` gets initialized and also the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling `Application.Run()`, we just instantiate the control directly.
+The entry point for audioband can be found in the `Deskband.cs` file. This is the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling `Application.Run()`, the user control is instantiated directly. The toolbar is implemented as a WPF usercontrol in `Views/AudioBandToolbar.xaml`
 
-Main steps:
-1. Create `MainControl`
-2. Load settings
-   1. Load saved models
-   2. Create viewmodels using the models
-   3. Setup databinding for winforms (wpf is done through xaml but winforms is manual)
-3. Load Audio sources
-
-## MainControl.cs
-This is the top level user control, equivalent to the main window in wpf or main form in winforms. Note that the file also has 2 other partial classes `MainControl.Bindings.cs` and `MainControl.EventHandlers.cs`. These are the dependencies:
-- CSDeskBandOptions: the object that contains deskband settings such as the context menu
-- TaskbarInfo: To check the orientation of the taskbar. not currently used
-- Track: The track model instance that is shared between the viewmodels that depend on it
-- IAppSettings: Contains saving/retrieving the models
-- IAudioSourceMananger: Loads the audio sources
-- ISettingsWindow: The interface for accessing the settings windows and also the view models for those settings.
-- ICustomLabelService: Provides notifications for new/deleting custom labels since they are dynamically generated and not hardcoded in like the other controls.
-
-AudioBand uses Winforms controls for the toolbar and Wpf for the settings window.
+## AudioBandToolbar.xaml
+This is the top level user control, equivalent to the main window in wpf or main form in winforms.
+### Codebehind
+The codebehind listens to size changes and notifies windows to update the deskband size.
+### ViewModel
+The viewmodel for the toolbar can be found in `ViewModels/AudioBandToolbarViewModel`. It handles the context menu, loading the audio sources, and updating other view models when the audio source changes.
 
 ## Audio source loading
-Audio source loading is done by the `AudioSource/AudioSourceManager` class. Each audio source is loaded in their own app domain using the `AudioSourceHost` project. The creation and communication with the app domain is done through the `AudioSource/AudioSourceProxy` class. Audio sources are added to the `IAudioSourceManager.AudioSources` collection and audioband subscribes to the `ObservableCollection.CollectionChanged` event. When new audio sources are added, these steps are performed:
-1. Add a new entry to the context menu
+Audio source loading is done by the `AudioSource/AudioSourceManager` class. Each audio source is loaded in their own app domain using the `AudioSourceHost` project. The creation and communication with the app domain is done through the `AudioSource/AudioSourceProxy` class. Currently, all audio sources are loaded at the start by the toolbar viewmodel, and there is no file system monitoring for new sources. When new audio sources are added, these steps are performed:
+1. Add to the observable collection for the context menu
 2. Merge settings.
    1. If there are already saved settings for the audio source, then the settings are applied to the audio source
-   2. If there are no previously saved settings, then the default setting values are extracted and saved.
-   3. Viewmodels for these settings are built and added to the `ISettingsWindow.AudioSourceSettings` collection.
+   2. If there are no previously saved settings, then the default setting values are extracted and saved
+   3. Viewmodels for these settings are built and added so they can be manipulated by the settings window
 3. If the audio source is selected in the settings, then it is activated.
 
 ## App settings loading
-App settings are loaded by the `Settings/AppSettings` class. It is just simple serialization in the `toml` format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, which is not as readable with toml but it is still workable.
+App settings are loaded by the `Settings/AppSettings` class. It is just simple serialization in the `toml` format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, it is less readable with toml but it is still workable.
 
 There is also a `Migrations` subfolder that contains code to settings migrations. These classes update old configuration files to the latest format.
 
@@ -77,8 +66,7 @@ public int Width
     set => SetProperty(nameof(Model.Width), value); // Set the value in the model
 }
 ```
-- `IResettable`: When calling reset, the model is automatically reset.
-- Undo: Automatic support to undoing changes to the model.
+- `BeginEdit`,`EndEdit` and `CancelEdit` commands and methods. Calling begin edit will automatically create a backup of the backing `model` using automapper. Calling cancel edit will automatically reset the `model` by using automapper to map from the backup.
 
-## Winforms controls
-Winforms controls are used for the toolbar. The class are under the `Views/Winforms` directory. The controls, including the main control derive from `AudioBandControl` which is a usercontrol that contains support for DPI aware scaling. It exposes two properties `LogicalSize` and `LogicalLocation`. By using those properties, it can automatically scale the `Size` and `Location` properties.
+## Message bus
+Under the `Messages` folder there is a simple `IMessageBus` interface. Messages are used sparingly for communicating between the settings window <-> toolbar and between view models.

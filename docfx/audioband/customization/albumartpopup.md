@@ -10,7 +10,7 @@ Width of the popup
 Height of the popup
 
 ## X Position
-The x position of the popup
+The x position of the popup. It is relative to the top left corner of the album art.
 
-## Margin
-The gap between the popup and the taskbar
+## Y Position
+The y position of the popup. It is relative to the top left corner of the album art.

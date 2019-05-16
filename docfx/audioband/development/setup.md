@@ -16,4 +16,4 @@ To test the local version of audioband, it needs to be installed as a toolbar. T
 ## Debugging
 There are 2 ways you can use a debugger on audioband.
 - Attach the debugger: In visual studio, open the `attach to process` menu (ctrl + alt + p). Select `explorer.exe` and click attach.
-- Insert the statement `System.Diagnostics.Debugger.Launch();` will allow you to attach a debugger at place in the code. This is useful if you need the debugger at the start.
+- Inserting the statement `System.Diagnostics.Debugger.Launch();` will allow you to attach a debugger at any place in the code. This is useful if you need the debugger at the start.
