@@ -8,7 +8,7 @@
     <title>Project layout </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Project layout ">
-    <meta name="generator" content="docfx 2.41.0.0">
+    <meta name="generator" content="docfx 2.42.3.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -79,6 +79,7 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="project-layout">Project layout</h1>
 
+<p>Last commit at this time of writing: <code>f2d140a</code></p>
 <p>Here are the main projects in the solution:</p>
 <ul>
 <li><strong>AudioBand</strong>: The is the &quot;main&quot; project where audioband lives</li>
@@ -89,46 +90,28 @@
 </ul>
 <h1 id="audioband-project">AudioBand project</h1>
 <h2 id="entry-point">Entry point</h2>
-<p>The entry point for audioband can be found in the <code>Deskband.cs</code> file. This is where the main control <code>MainControl.cs</code> gets initialized and also the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling <code>Application.Run()</code>, we just instantiate the control directly.</p>
-<p>Main steps:</p>
-<ol>
-<li>Create <code>MainControl</code></li>
-<li>Load settings
-<ol>
-<li>Load saved models</li>
-<li>Create viewmodels using the models</li>
-<li>Setup databinding for winforms (wpf is done through xaml but winforms is manual)</li>
-</ol>
-</li>
-<li>Load Audio sources</li>
-</ol>
-<h2 id="maincontrolcs">MainControl.cs</h2>
-<p>This is the top level user control, equivalent to the main window in wpf or main form in winforms. Note that the file also has 2 other partial classes <code>MainControl.Bindings.cs</code> and <code>MainControl.EventHandlers.cs</code>. These are the dependencies:</p>
-<ul>
-<li>CSDeskBandOptions: the object that contains deskband settings such as the context menu</li>
-<li>TaskbarInfo: To check the orientation of the taskbar. not currently used</li>
-<li>Track: The track model instance that is shared between the viewmodels that depend on it</li>
-<li>IAppSettings: Contains saving/retrieving the models</li>
-<li>IAudioSourceMananger: Loads the audio sources</li>
-<li>ISettingsWindow: The interface for accessing the settings windows and also the view models for those settings.</li>
-<li>ICustomLabelService: Provides notifications for new/deleting custom labels since they are dynamically generated and not hardcoded in like the other controls.</li>
-</ul>
-<p>AudioBand uses Winforms controls for the toolbar and Wpf for the settings window.</p>
+<p>The entry point for audioband can be found in the <code>Deskband.cs</code> file. This is the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling <code>Application.Run()</code>, the user control is instantiated directly. The toolbar is implemented as a WPF usercontrol in <code>Views/AudioBandToolbar.xaml</code></p>
+<h2 id="audiobandtoolbarxaml">AudioBandToolbar.xaml</h2>
+<p>This is the top level user control, equivalent to the main window in wpf or main form in winforms.</p>
+<h3 id="codebehind">Codebehind</h3>
+<p>The codebehind listens to size changes and notifies windows to update the deskband size.</p>
+<h3 id="viewmodel">ViewModel</h3>
+<p>The viewmodel for the toolbar can be found in <code>ViewModels/AudioBandToolbarViewModel</code>. It handles the context menu, loading the audio sources, and updating other view models when the audio source changes.</p>
 <h2 id="audio-source-loading">Audio source loading</h2>
-<p>Audio source loading is done by the <code>AudioSource/AudioSourceManager</code> class. Each audio source is loaded in their own app domain using the <code>AudioSourceHost</code> project. The creation and communication with the app domain is done through the <code>AudioSource/AudioSourceProxy</code> class. Audio sources are added to the <code>IAudioSourceManager.AudioSources</code> collection and audioband subscribes to the <code>ObservableCollection.CollectionChanged</code> event. When new audio sources are added, these steps are performed:</p>
+<p>Audio source loading is done by the <code>AudioSource/AudioSourceManager</code> class. Each audio source is loaded in their own app domain using the <code>AudioSourceHost</code> project. The creation and communication with the app domain is done through the <code>AudioSource/AudioSourceProxy</code> class. Currently, all audio sources are loaded at the start by the toolbar viewmodel, and there is no file system monitoring for new sources. When new audio sources are added, these steps are performed:</p>
 <ol>
-<li>Add a new entry to the context menu</li>
+<li>Add to the observable collection for the context menu</li>
 <li>Merge settings.
 <ol>
 <li>If there are already saved settings for the audio source, then the settings are applied to the audio source</li>
-<li>If there are no previously saved settings, then the default setting values are extracted and saved.</li>
-<li>Viewmodels for these settings are built and added to the <code>ISettingsWindow.AudioSourceSettings</code> collection.</li>
+<li>If there are no previously saved settings, then the default setting values are extracted and saved</li>
+<li>Viewmodels for these settings are built and added so they can be manipulated by the settings window</li>
 </ol>
 </li>
 <li>If the audio source is selected in the settings, then it is activated.</li>
 </ol>
 <h2 id="app-settings-loading">App settings loading</h2>
-<p>App settings are loaded by the <code>Settings/AppSettings</code> class. It is just simple serialization in the <code>toml</code> format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, which is not as readable with toml but it is still workable.</p>
+<p>App settings are loaded by the <code>Settings/AppSettings</code> class. It is just simple serialization in the <code>toml</code> format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, it is less readable with toml but it is still workable.</p>
 <p>There is also a <code>Migrations</code> subfolder that contains code to settings migrations. These classes update old configuration files to the latest format.</p>
 <h2 id="viewmodels">ViewModels</h2>
 <p>There are two base classes for view models: <code>ViewModels/ViewModelBase.cs</code> and <code>ViewModels/ViewModelBase{TModel}.cs</code>. Viewmodels participate in databinding for both Winforms and Wpf controls.</p>
@@ -164,11 +147,10 @@ public int Width
 }
 </code></pre>
 <ul>
-<li><code>IResettable</code>: When calling reset, the model is automatically reset.</li>
-<li>Undo: Automatic support to undoing changes to the model.</li>
+<li><code>BeginEdit</code>,<code>EndEdit</code> and <code>CancelEdit</code> commands and methods. Calling begin edit will automatically create a backup of the backing <code>model</code> using automapper. Calling cancel edit will automatically reset the <code>model</code> by using automapper to map from the backup.</li>
 </ul>
-<h2 id="winforms-controls">Winforms controls</h2>
-<p>Winforms controls are used for the toolbar. The class are under the <code>Views/Winforms</code> directory. The controls, including the main control derive from <code>AudioBandControl</code> which is a usercontrol that contains support for DPI aware scaling. It exposes two properties <code>LogicalSize</code> and <code>LogicalLocation</code>. By using those properties, it can automatically scale the <code>Size</code> and <code>Location</code> properties.</p>
+<h2 id="message-bus">Message bus</h2>
+<p>Under the <code>Messages</code> folder there is a simple <code>IMessageBus</code> interface. Messages are used sparingly for communicating between the settings window &lt;-&gt; toolbar and between view models.</p>
 </article>
           </div>
           
