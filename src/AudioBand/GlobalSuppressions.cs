@@ -124,3 +124,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1502:Element must not be on a single line", Justification = "Ignore", Scope = "member", Target = "~M:AudioBand.ViewModels.ViewModelBase.OnBeginEdit")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1502:Element must not be on a single line", Justification = "Ignore", Scope = "member", Target = "~M:AudioBand.ViewModels.ViewModelBase`1.OnModelPropertyChanged(System.String)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1502:Element must not be on a single line", Justification = "Ignore", Scope = "member", Target = "~M:AudioBand.AudioSource.AudioSourceManager.IsAlive")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter must not span multiple lines", Justification = "Long parameters", Scope = "member", Target = "~M:AudioBand.Settings.AppSettings.CreateProfile(System.String)")]

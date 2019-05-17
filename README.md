@@ -1,3 +1,6 @@
+<div align="center"><img src="logo/logotype_cover.svg"/></div>
+<br/><br/>
+
 |Branch|Build Status|
 |---|---|
 |Master (development)|[![Build Status](https://dsafa.visualstudio.com/AudioBand/_apis/build/status/AudioBand%20Dev%20CI?branchName=master)](https://dsafa.visualstudio.com/AudioBand/_build/latest?definitionId=3&branchName=master)|
@@ -6,7 +9,7 @@
 # Audio Band
 Audio Band allows you to display song information in the taskbar.
 
-![Demo](./screenshots/demo.gif)
+<img align="right" src="screenshots/demo.gif"/>
 
 ## Features
 - Displays song information - album art, artist, title, progress
@@ -21,19 +24,15 @@ Audio Band allows you to display song information in the taskbar.
 
 ![](screenshots/custom-2.png)
 
-## Quick Start
-[Check the full documentation to get started](https://dsafa.github.io/audio-band/audioband/index.html)
-
-1. Download from the [releases](https://github.com/dsafa/audio-band/releases) page.
-2. Run `install.cmd`
-3. Right click the taskbar > toolbars > Audio band
-4. Right click the toolbar and select an audio source
+## Getting started
+[Click here to get started](https://dsafa.github.io/audio-band/audioband/index.html)
 
 ## Audiosource development
+Audio sources are the plugins that allow AudioBand to interface with different music players.
 [Click here for the documentation](https://dsafa.github.io/audio-band/audiosource-docs/index.html)
 
-## Building
-This project uses C# 7 features so a compatible compiler is required.
+## Building and development
+[Developer documentation can be found here](https://dsafa.github.io/audio-band/audioband/development/setup.html) including instructions for setting up the local development environment and an overview of the architecture.
 
 ## Contributing
 Help is appreciated
@@ -45,3 +44,5 @@ Help is appreciated
 [LICENSE](https://github.com/dsafa/audio-band/blob/master/LICENSE)
 
 [THIRD PARTY](https://github.com/dsafa/audio-band/blob/master/LICENSE-3RD-PARTY)
+
+Logo by @mirzazulfan

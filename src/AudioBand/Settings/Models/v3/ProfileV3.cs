@@ -1,0 +1,51 @@
+﻿using System.Collections.Generic;
+using AudioBand.Models;
+
+namespace AudioBand.Settings.Models.v3
+{
+    /// <summary>
+    /// Represents a profile which is the arrangement of ui controls.
+    /// </summary>
+    public class ProfileV3
+    {
+        /// <summary>
+        /// Gets or sets the audio band settings.
+        /// </summary>
+        public AudioBand.Models.AudioBand AudioBandSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the previous button settings.
+        /// </summary>
+        public PreviousButton PreviousButtonSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the play pause button settings.
+        /// </summary>
+        public PlayPauseButton PlayPauseButtonSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the next button settings.
+        /// </summary>
+        public NextButton NextButtonSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the progressbar settings.
+        /// </summary>
+        public ProgressBar ProgressBarSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the album art settings.
+        /// </summary>
+        public AlbumArt AlbumArtSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the album art popup settings.
+        /// </summary>
+        public AlbumArtPopup AlbumArtPopupSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom label settings.
+        /// </summary>
+        public List<CustomLabel> CustomLabelSettings { get; set; }
+    }
+}

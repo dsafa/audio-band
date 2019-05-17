@@ -3,7 +3,7 @@
 namespace AudioBand.AudioSource
 {
     /// <summary>
-    /// Represents a setting that is exposed to the user to modify
+    /// Represents a setting that is exposed to the user to modify.
     /// </summary>
     /// <inheritdoc cref="Attribute"/>
     [AttributeUsage(AttributeTargets.Property)]

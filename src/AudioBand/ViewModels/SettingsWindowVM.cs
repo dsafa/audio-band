@@ -1,98 +1,329 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using AudioBand.Commands;
+using AudioBand.Messages;
+using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the settings window.
     /// </summary>
-    internal class SettingsWindowVM : ViewModelBase
+    public class SettingsWindowVM : ViewModelBase
     {
-        private object _selectedVM;
+        private readonly IAppSettings _appSettings;
+        private readonly IDialogService _dialogService;
+        private readonly IMessageBus _messageBus;
+        private readonly List<ViewModelBase> _dirtyViewModels = new List<ViewModelBase>();
+        private ViewModelBase _selectedViewModel;
+        private string _selectedProfileName;
+        private bool _hasUnsavedChanges;
+        private string _selectedViewHeader;
 
-        public AudioBandVM AudioBandVM { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsWindowVM"/> class.
+        /// </summary>
+        /// <param name="appSettings">The app settings.</param>
+        /// <param name="dialogService">The dialog service.</param>
+        /// <param name="viewModels">The view models.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public SettingsWindowVM(IAppSettings appSettings, IDialogService dialogService, IViewModelContainer viewModels, IMessageBus messageBus)
+        {
+            _appSettings = appSettings;
+            _dialogService = dialogService;
+            _messageBus = messageBus;
+            ViewModels = viewModels;
+            _selectedProfileName = appSettings.CurrentProfile;
+            Profiles = new ObservableCollection<string>(appSettings.Profiles);
 
-        public AlbumArtPopupVM AlbumArtPopupVM { get; set; }
+            SelectViewModelCommand = new RelayCommand<ViewModelBase>(SelectViewModelOnExecute);
+            DeleteProfileCommand = new RelayCommand<string>(DeleteProfileCommandOnExecute, DeleteProfileCommandCanExecute);
+            DeleteProfileCommand.Observe(Profiles);
+            AddProfileCommand = new RelayCommand(AddProfileCommandOnExecute);
+            RenameProfileCommand = new RelayCommand(RenameProfileCommandOnExecute);
+            SaveCommand = new RelayCommand(SaveCommandOnExecute, SaveCommandCanExecute);
+            SaveCommand.Observe(this, nameof(HasUnsavedChanges));
+            CloseCommand = new RelayCommand(CloseCommandOnExecute);
+            ImportProfilesCommand = new RelayCommand(ImportProfilesCommandOnExecute);
+            ExportProfilesCommand = new RelayCommand(ExportProfilesCommandOnExecute);
 
-        public AlbumArtVM AlbumArtVM { get; set; }
+            ViewModels.CustomLabelsVM.PropertyChanged += ViewModelOnEditChanged;
+        }
 
-        public CustomLabelsVM CustomLabelsVM { get; set; }
-
-        public AboutVM AboutVm { get; set; }
-
-        public NextButtonVM NextButtonVM { get; set; }
-
-        public PlayPauseButtonVM PlayPauseButtonVM { get; set; }
-
-        public PreviousButtonVM PreviousButtonVM { get; set; }
-
-        public ProgressBarVM ProgressBarVM { get; set; }
-
-        public ObservableCollection<AudioSourceSettingsVM> AudioSourceSettingsVM { get; set; }
+        /// <summary>
+        /// Gets the view models.
+        /// </summary>
+        public IViewModelContainer ViewModels { get; }
 
         /// <summary>
         /// Gets or sets the currently selected view model.
         /// </summary>
-        public object SelectedVM
+        public ViewModelBase SelectedViewModel
         {
-            get => _selectedVM;
-            set => SetProperty(ref _selectedVM, value);
-        }
-
-        /// <inheritdoc/>
-        protected override void OnBeginEdit()
-        {
-            base.OnBeginEdit();
-
-            AudioBandVM.BeginEdit();
-            AlbumArtPopupVM.BeginEdit();
-            AlbumArtVM.BeginEdit();
-            CustomLabelsVM.BeginEdit();
-            NextButtonVM.BeginEdit();
-            PlayPauseButtonVM.BeginEdit();
-            PreviousButtonVM.BeginEdit();
-            ProgressBarVM.BeginEdit();
-            foreach (var audioSourceSettingsVm in AudioSourceSettingsVM)
+            get => _selectedViewModel;
+            set
             {
-                audioSourceSettingsVm.BeginEdit();
+                var old = _selectedViewModel;
+                if (SetProperty(ref _selectedViewModel, value, trackChanges: false))
+                {
+                    if (old != null)
+                    {
+                        old.PropertyChanged -= ViewModelOnEditChanged;
+                    }
+
+                    if (value != null)
+                    {
+                        value.PropertyChanged += ViewModelOnEditChanged;
+                        if (value.IsEditing)
+                        {
+                            HandleViewModelEditing(value);
+                        }
+                    }
+                }
             }
         }
 
-        /// <inheritdoc/>
-        protected override void OnCancelEdit()
+        /// <summary>
+        /// Gets or sets the selected profile name.
+        /// </summary>
+        public string SelectedProfileName
         {
-            base.OnCancelEdit();
-
-            AudioBandVM.CancelEdit();
-            AlbumArtPopupVM.CancelEdit();
-            AlbumArtVM.CancelEdit();
-            CustomLabelsVM.CancelEdit();
-            NextButtonVM.CancelEdit();
-            PlayPauseButtonVM.CancelEdit();
-            PreviousButtonVM.CancelEdit();
-            ProgressBarVM.CancelEdit();
-            foreach (var audioSourceSettingsVm in AudioSourceSettingsVM)
+            get => _selectedProfileName;
+            set
             {
-                audioSourceSettingsVm.CancelEdit();
+                if (SetProperty(ref _selectedProfileName, value, trackChanges: false))
+                {
+                    EndEdits();
+                    _appSettings.CurrentProfile = value;
+                }
             }
         }
 
-        /// <inheritdoc/>
-        protected override void OnEndEdit()
+        /// <summary>
+        /// Gets or sets the current title of the view.
+        /// </summary>
+        public string SelectedViewHeader
         {
-            base.OnEndEdit();
+            get => _selectedViewHeader;
+            set => SetProperty(ref _selectedViewHeader, value, trackChanges: false);
+        }
 
-            AudioBandVM.EndEdit();
-            AlbumArtPopupVM.EndEdit();
-            AlbumArtVM.EndEdit();
-            CustomLabelsVM.EndEdit();
-            NextButtonVM.EndEdit();
-            PlayPauseButtonVM.EndEdit();
-            PreviousButtonVM.EndEdit();
-            ProgressBarVM.EndEdit();
-            foreach (var audioSourceSettingsVm in AudioSourceSettingsVM)
+        /// <summary>
+        /// Gets or sets a value indicating whether there are unsaved changes.
+        /// </summary>
+        public bool HasUnsavedChanges
+        {
+            get => _hasUnsavedChanges;
+            set => SetProperty(ref _hasUnsavedChanges, value, trackChanges: false);
+        }
+
+        /// <summary>
+        /// Gets the list of profiles.
+        /// </summary>
+        public ObservableCollection<string> Profiles { get; }
+
+        /// <summary>
+        /// Gets the command to select the view model.
+        /// </summary>
+        public RelayCommand<ViewModelBase> SelectViewModelCommand { get; }
+
+        /// <summary>
+        /// Gets the command to delete a profile.
+        /// </summary>
+        public RelayCommand<string> DeleteProfileCommand { get; }
+
+        /// <summary>
+        /// Gets the command to add a profile.
+        /// </summary>
+        public RelayCommand AddProfileCommand { get; }
+
+        /// <summary>
+        /// Gets the command to rename the current profile.
+        /// </summary>
+        public RelayCommand RenameProfileCommand { get; }
+
+        /// <summary>
+        /// Gets the command to save settings.
+        /// </summary>
+        public RelayCommand SaveCommand { get; }
+
+        /// <summary>
+        /// Gets the command to close the settings editor.
+        /// </summary>
+        public RelayCommand CloseCommand { get; }
+
+        /// <summary>
+        /// Gets the command to import profiles.
+        /// </summary>
+        public RelayCommand ImportProfilesCommand { get; }
+
+        /// <summary>
+        /// Gets the command to export profiles.
+        /// </summary>
+        public RelayCommand ExportProfilesCommand { get; }
+
+        private void SelectViewModelOnExecute(ViewModelBase viewModel)
+        {
+            SelectedViewModel = viewModel;
+        }
+
+        private void DeleteProfileCommandOnExecute(string profileName)
+        {
+            Debug.Assert(Profiles.Count > 1, "Should not be able to delete profiles if there is only one");
+
+            var deleteConfirmed = _dialogService.ShowConfirmationDialog(ConfirmationDialogType.DeleteProfile, profileName);
+            if (!deleteConfirmed)
             {
-                audioSourceSettingsVm.EndEdit();
+                return;
+            }
+
+            _appSettings.DeleteProfile(profileName);
+            Profiles.Remove(profileName);
+
+            _appSettings.CurrentProfile = Profiles[0];
+            SelectedProfileName = Profiles[0];
+            _appSettings.Save();
+        }
+
+        private bool DeleteProfileCommandCanExecute(string obj)
+        {
+            return Profiles.Count > 1;
+        }
+
+        private void AddProfileCommandOnExecute(object o)
+        {
+            const string NewProfileName = "New Profile";
+            string newprofile = NewProfileName;
+            int count = 1;
+            while (Profiles.Contains(newprofile))
+            {
+                newprofile = $"{NewProfileName} {count++}";
+            }
+
+            _appSettings.CreateProfile(newprofile);
+            Profiles.Add(newprofile);
+        }
+
+        private void RenameProfileCommandOnExecute(object obj)
+        {
+            string newProfileName = _dialogService.ShowRenameDialog(SelectedProfileName, Profiles.ToList());
+            if (newProfileName == null || newProfileName == SelectedProfileName)
+            {
+                return;
+            }
+
+            _appSettings.RenameCurrentProfile(newProfileName);
+            var index = Profiles.IndexOf(SelectedProfileName);
+            Profiles[index] = newProfileName;
+            SelectedProfileName = newProfileName;
+        }
+
+        private void CloseCommandOnExecute(object obj)
+        {
+            if (!HasUnsavedChanges)
+            {
+                _messageBus.Publish(SettingsWindowMessage.CloseWindow);
+                return;
+            }
+
+            var discardChanges = _dialogService.ShowConfirmationDialog(ConfirmationDialogType.DiscardChanges);
+            if (discardChanges)
+            {
+                CancelEdits();
+                _messageBus.Publish(SettingsWindowMessage.CloseWindow);
+            }
+        }
+
+        private void SaveCommandOnExecute(object obj)
+        {
+            _appSettings.Save();
+            EndEdits();
+        }
+
+        private bool SaveCommandCanExecute(object obj)
+        {
+            return HasUnsavedChanges;
+        }
+
+        private void EndEdits()
+        {
+            foreach (var dirtyViewModel in _dirtyViewModels)
+            {
+                dirtyViewModel.EndEdit();
+            }
+
+            _dirtyViewModels.Clear();
+            HasUnsavedChanges = false;
+        }
+
+        private void CancelEdits()
+        {
+            foreach (var dirtyViewModel in _dirtyViewModels)
+            {
+                dirtyViewModel.CancelEdit();
+            }
+
+            _dirtyViewModels.Clear();
+            HasUnsavedChanges = false;
+        }
+
+        private void ViewModelOnEditChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(IsEditing))
+            {
+                return;
+            }
+
+            var vm = (ViewModelBase)sender;
+            if (vm.IsEditing)
+            {
+                HandleViewModelEditing(vm);
+            }
+        }
+
+        private void HandleViewModelEditing(ViewModelBase vm)
+        {
+            HasUnsavedChanges = true;
+            _dirtyViewModels.Add(vm);
+        }
+
+        private void ExportProfilesCommandOnExecute(object obj)
+        {
+            var exportPath = _dialogService.ShowExportProfilesDialog();
+            if (exportPath == null)
+            {
+                return;
+            }
+
+            _appSettings.ExportProfilesToPath(exportPath);
+        }
+
+        private void ImportProfilesCommandOnExecute(object obj)
+        {
+            try
+            {
+                var profilesPath = _dialogService.ShowImportProfilesDialog();
+                if (profilesPath == null)
+                {
+                    return;
+                }
+
+                _appSettings.ImportProfilesFromPath(profilesPath);
+                foreach (var newProfile in _appSettings.Profiles.Where(p => !Profiles.Contains(p)))
+                {
+                    // Should not be too slow unless a lot of profiles.
+                    Profiles.Add(newProfile);
+                }
+
+                _appSettings.Save();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Error with importing profiles");
             }
         }
     }

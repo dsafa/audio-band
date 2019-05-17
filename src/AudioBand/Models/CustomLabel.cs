@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Windows.Media;
 
 namespace AudioBand.Models
 {
@@ -8,17 +8,19 @@ namespace AudioBand.Models
     public class CustomLabel : ModelBase
     {
         private bool _isVisible = true;
-        private int _width = 220;
-        private int _height = 15;
-        private int _xPosition = 30;
-        private int _yPosition = 0;
+        private double _width = 220;
+        private double _height = 15;
+        private double _xPosition = 0;
+        private double _yPosition = 0;
         private string _fontFamily = "Segoe UI";
         private float _fontSize = 8.5f;
-        private Color _color = Color.White;
+        private Color _color = Colors.White;
         private string _formatString = "{artist} - {song}";
         private TextAlignment _alignment = TextAlignment.Center;
         private string _name = "Now Playing";
-        private int _scrollSpeed = 50;
+        private int _scrollSpeed = 5000;
+        private TextOverflow _textOverflow = TextOverflow.Scroll;
+        private ScrollBehavior _scrollBehavior = ScrollBehavior.Always;
 
         /// <summary>
         /// Specifies the alignment of the text in the label.
@@ -38,7 +40,7 @@ namespace AudioBand.Models
             /// <summary>
             /// Align the text in the center.
             /// </summary>
-            Center
+            Center,
         }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the width of the label.
         /// </summary>
-        public int Width
+        public double Width
         {
             get => _width;
             set => SetProperty(ref _width, value);
@@ -62,7 +64,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the height of the label.
         /// </summary>
-        public int Height
+        public double Height
         {
             get => _height;
             set => SetProperty(ref _height, value);
@@ -71,7 +73,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the x position of the label.
         /// </summary>
-        public int XPosition
+        public double XPosition
         {
             get => _xPosition;
             set => SetProperty(ref _xPosition, value);
@@ -80,7 +82,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the y position of the label.
         /// </summary>
-        public int YPosition
+        public double YPosition
         {
             get => _yPosition;
             set => SetProperty(ref _yPosition, value);
@@ -141,12 +143,30 @@ namespace AudioBand.Models
         }
 
         /// <summary>
-        /// Gets or sets the scollspeed of the label.
+        /// Gets or sets the number to milliseconds to scroll across.
         /// </summary>
         public int ScrollSpeed
         {
             get => _scrollSpeed;
             set => SetProperty(ref _scrollSpeed, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text overflow behavior.
+        /// </summary>
+        public TextOverflow TextOverflow
+        {
+            get => _textOverflow;
+            set => SetProperty(ref _textOverflow, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the scroll behavior.
+        /// </summary>
+        public ScrollBehavior ScrollBehavior
+        {
+            get => _scrollBehavior;
+            set => SetProperty(ref _scrollBehavior, value);
         }
     }
 }

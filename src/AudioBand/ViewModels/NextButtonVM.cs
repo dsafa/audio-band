@@ -1,112 +1,62 @@
-﻿using System.Drawing;
-using System.IO;
-using AudioBand.Extensions;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
+using AudioBand.AudioSource;
+using AudioBand.Commands;
 using AudioBand.Models;
-using Svg;
+using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the next button.
     /// </summary>
-    internal class NextButtonVM : ViewModelBase<NextButton>
+    public class NextButtonVM : PlaybackButtonVMBase<NextButton>
     {
-        private static readonly SvgDocument DefaultNextButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.next));
-        private Image _image;
+        private IAudioSource _audioSource;
 
-        public NextButtonVM(NextButton model)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NextButtonVM"/> class.
+        /// </summary>
+        /// <param name="appSettings">The appSettings.</param>
+        /// <param name="dialogService">The dialog service.</param>
+        public NextButtonVM(IAppSettings appSettings, IDialogService dialogService)
+            : base(appSettings, dialogService, appSettings.NextButton)
         {
-            LoadImage();
+            NextTrackCommand = new AsyncRelayCommand<object>(NextTrackCommandOnExecute);
         }
 
-        public Image Image
+        /// <summary>
+        /// Sets the audio source.
+        /// </summary>
+        public IAudioSource AudioSource
         {
-            get => _image;
-            set => SetProperty(ref _image, value);
+            set => UpdateAudioSource(value);
         }
 
-        [PropertyChangeBinding(nameof(NextButton.ImagePath))]
-        public string ImagePath
+        /// <summary>
+        /// Gets the next track command.
+        /// </summary>
+        public ICommand NextTrackCommand { get; }
+
+        /// <inheritdoc />
+        protected override NextButton GetReplacementModel()
         {
-            get => Model.ImagePath;
-            set
+            return AppSettings.NextButton;
+        }
+
+        private void UpdateAudioSource(IAudioSource audioSource)
+        {
+            _audioSource = audioSource;
+        }
+
+        private async Task NextTrackCommandOnExecute(object arg)
+        {
+            if (_audioSource == null)
             {
-                if (SetProperty(nameof(Model.ImagePath), value))
-                {
-                    Image = LoadImage(value, DefaultNextButtonSvg.ToBitmap());
-                }
+                return;
             }
-        }
 
-        [PropertyChangeBinding(nameof(NextButton.IsVisible))]
-        public bool IsVisible
-        {
-            get => Model.IsVisible;
-            set => SetProperty(nameof(Model.IsVisible), value);
-        }
-
-        [PropertyChangeBinding(nameof(NextButton.Width))]
-        [AlsoNotify(nameof(Size))]
-        public int Width
-        {
-            get => Model.Width;
-            set => SetProperty(nameof(Model.Width), value);
-        }
-
-        [PropertyChangeBinding(nameof(NextButton.Height))]
-        [AlsoNotify(nameof(Size))]
-        public int Height
-        {
-            get => Model.Height;
-            set => SetProperty(nameof(Model.Height), value);
-        }
-
-        [PropertyChangeBinding(nameof(NextButton.XPosition))]
-        [AlsoNotify(nameof(Location))]
-        public int XPosition
-        {
-            get => Model.XPosition;
-            set => SetProperty(nameof(Model.XPosition), value);
-        }
-
-        [PropertyChangeBinding(nameof(NextButton.YPosition))]
-        [AlsoNotify(nameof(Location))]
-        public int YPosition
-        {
-            get => Model.YPosition;
-            set => SetProperty(nameof(Model.YPosition), value);
-        }
-
-        /// <summary>
-        /// Gets the location of the next button.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Point Location => new Point(Model.XPosition, Model.YPosition);
-
-        /// <summary>
-        /// Gets the size of the next button.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Size Size => new Size(Width, Height);
-
-        /// <inheritdoc/>
-        protected override void OnReset()
-        {
-            base.OnReset();
-            LoadImage();
-        }
-
-        /// <inheritdoc/>
-        protected override void OnCancelEdit()
-        {
-            base.OnCancelEdit();
-            LoadImage();
-        }
-
-        private void LoadImage()
-        {
-            Image = LoadImage(ImagePath, DefaultNextButtonSvg.ToBitmap());
+            await _audioSource.NextTrackAsync();
         }
     }
 }

@@ -1,34 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Windows.Media;
 using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
-using AudioBand.Settings.Models.V2;
+using AudioBand.Settings.Models.v3;
 using Nett;
 using NLog;
-using AudioSourceSettings = AudioBand.Models.AudioSourceSettings;
+using Color = System.Windows.Media.Color;
 
 namespace AudioBand.Settings
 {
     /// <summary>
     /// Manages application settings.
     /// </summary>
-    internal class AppSettings
+    public class AppSettings : IAppSettings
     {
         private static readonly Dictionary<string, Type> SettingsTable = new Dictionary<string, Type>()
         {
-            { "0.1", typeof(Settings.Models.V1.AudioBandSettings) },
-            { "2", typeof(Settings.Models.V2.Settings) }
+            { "0.1", typeof(AudioBand.Settings.Models.V1.AudioBandSettings) },
+            { "2", typeof(AudioBand.Settings.Models.V2.Settings) },
+            { "3", typeof(SettingsV3) },
         };
 
-        private static readonly string CurrentVersion = "2";
+        private static readonly string CurrentVersion = "3";
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AppSettings>();
         private readonly TomlSettings _tomlSettings;
-        private Models.V2.Settings _settings;
+        private SettingsV3 _settings;
+        private ProfileV3 _currentProfile;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSettings"/> class.
@@ -38,11 +42,13 @@ namespace AudioBand.Settings
             _tomlSettings = TomlSettings.Create(cfg =>
             {
                 cfg.ConfigureType<Color>(type => type.WithConversionFor<TomlString>(convert => convert
-                    .ToToml(ColorTranslator.ToHtml)
-                    .FromToml(tomlString => ColorTranslator.FromHtml(tomlString.Value))));
+                    .ToToml(SerializationConversions.ColorToString)
+                    .FromToml(tomlString => SerializationConversions.StringToColor(tomlString.Value))));
                 cfg.ConfigureType<CustomLabel.TextAlignment>(type => type.WithConversionFor<TomlString>(convert => convert
                     .ToToml(SerializationConversions.EnumToString)
                     .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
+                cfg.ConfigureType<double>(type => type.WithConversionFor<TomlInt>(c => c
+                    .FromToml(tml => tml.Value)));
             });
 
             if (!Directory.Exists(SettingsDirectory))
@@ -52,16 +58,25 @@ namespace AudioBand.Settings
 
             if (!File.Exists(SettingsFilePath))
             {
-                CreateDefault();
-                Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
+                CreateDefaultSettingsFile();
             }
             else
             {
-                LoadSettings();
+                LoadSettingsFromPath(SettingsFilePath);
             }
 
-            GetModels();
+            if (_settings.AudioSourceSettings == null)
+            {
+                _settings.AudioSourceSettings = new List<AudioSourceSettings>();
+            }
+
+            SelectProfile(_settings.CurrentProfileName);
         }
+
+        /// <summary>
+        /// Occurs when the current profile changes
+        /// </summary>
+        public event EventHandler ProfileChanged;
 
         /// <summary>
         /// Gets or sets the name of the current audio source.
@@ -75,47 +90,139 @@ namespace AudioBand.Settings
         /// <summary>
         /// Gets the saved album art popup model.
         /// </summary>
-        public AlbumArtPopup AlbumArtPopup { get; private set; }
+        public AlbumArtPopup AlbumArtPopup { get; private set; } = new AlbumArtPopup();
 
         /// <summary>
         /// Gets the saved album art model.
         /// </summary>
-        public AlbumArt AlbumArt { get; private set; }
+        public AlbumArt AlbumArt { get; private set; } = new AlbumArt();
 
         /// <summary>
         /// Gets the saved audio band model.
         /// </summary>
-        public AudioBand.Models.AudioBand AudioBand { get; private set; }
+        public AudioBand.Models.AudioBand AudioBand { get; private set; } = new AudioBand.Models.AudioBand();
 
         /// <summary>
         /// Gets the saved labels.
         /// </summary>
-        public List<CustomLabel> CustomLabels { get; private set; }
+        public List<CustomLabel> CustomLabels { get; private set; } = new List<CustomLabel>();
 
         /// <summary>
         /// Gets the saved button model.
         /// </summary>
-        public NextButton NextButton { get; private set; }
+        public NextButton NextButton { get; private set; } = new NextButton();
 
         /// <summary>
         /// Gets the saved previous button model.
         /// </summary>
-        public PreviousButton PreviousButton { get; private set; }
+        public PreviousButton PreviousButton { get; private set; } = new PreviousButton();
 
         /// <summary>
         /// Gets the saved play pause button model.
         /// </summary>
-        public PlayPauseButton PlayPauseButton { get; private set; }
+        public PlayPauseButton PlayPauseButton { get; private set; } = new PlayPauseButton();
 
         /// <summary>
         /// Gets the saved progress bar model.
         /// </summary>
-        public ProgressBar ProgressBar { get; private set; }
+        public ProgressBar ProgressBar { get; private set; } = new ProgressBar();
 
         /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
-        public List<AudioSourceSettings> AudioSourceSettings { get; private set; }
+        public List<AudioSourceSettings> AudioSourceSettings => _settings.AudioSourceSettings;
+
+        /// <summary>
+        /// Gets or sets the current profile.
+        /// </summary>
+        public string CurrentProfile
+        {
+            get => _settings.CurrentProfileName;
+            set
+            {
+                if (value == _settings.CurrentProfileName)
+                {
+                    return;
+                }
+
+                _settings.CurrentProfileName = value;
+                SelectProfile(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of available profiles.
+        /// </summary>
+        public List<string> Profiles => _settings.Profiles.Keys.ToList();
+
+        /// <summary>
+        /// Creates a new profile.
+        /// </summary>
+        /// <param name="profileName">The name of the new profile.</param>
+        public void CreateProfile(string profileName)
+        {
+            if (profileName == null)
+            {
+                throw new ArgumentNullException(nameof(profileName));
+            }
+
+            if (_settings.Profiles.ContainsKey(profileName))
+            {
+                throw new ArgumentException("Profile name already exists", nameof(profileName));
+            }
+
+            _settings.Profiles.Add(profileName, CreateProfileModel());
+        }
+
+        /// <summary>
+        /// Deletes the profile.
+        /// </summary>
+        /// <param name="profileName">The name of the profile to delete.</param>
+        public void DeleteProfile(string profileName)
+        {
+            if (profileName == null)
+            {
+                throw new ArgumentNullException(nameof(profileName));
+            }
+
+            if (_settings.Profiles.Count == 1)
+            {
+                throw new InvalidOperationException("Must have at least one profile");
+            }
+
+            if (!_settings.Profiles.ContainsKey(profileName))
+            {
+                throw new ArgumentException($"Profile {profileName} does not exist", nameof(profileName));
+            }
+
+            _settings.Profiles.Remove(profileName);
+        }
+
+        /// <summary>
+        /// Renames the current profile.
+        /// </summary>
+        /// <param name="newProfileName">The new profile name.</param>
+        public void RenameCurrentProfile(string newProfileName)
+        {
+            if (newProfileName == null)
+            {
+                throw new ArgumentNullException(nameof(newProfileName));
+            }
+
+            if (_currentProfile == null)
+            {
+                throw new InvalidOperationException("No profile selected. Current profile is null");
+            }
+
+            if (_settings.Profiles.ContainsKey(newProfileName))
+            {
+                throw new ArgumentException("Profile already exists", nameof(newProfileName));
+            }
+
+            _settings.Profiles.Remove(_settings.CurrentProfileName);
+            _settings.CurrentProfileName = newProfileName;
+            _settings.Profiles.Add(newProfileName, _currentProfile);
+        }
 
         /// <summary>
         /// Save the settings.
@@ -124,15 +231,6 @@ namespace AudioBand.Settings
         {
             try
             {
-                _settings.AlbumArtPopupSettings = ToSetting<AlbumArtPopupSettings>(AlbumArtPopup);
-                _settings.AlbumArtSettings = ToSetting<AlbumArtSettings>(AlbumArt);
-                _settings.AudioBandSettings = ToSetting<AudioBandSettings>(AudioBand);
-                _settings.CustomLabelSettings = ToSetting<List<CustomLabelSettings>>(CustomLabels);
-                _settings.NextButtonSettings = ToSetting<NextButtonSettings>(NextButton);
-                _settings.PreviousButtonSettings = ToSetting<PreviousButtonSettings>(PreviousButton);
-                _settings.PlayPauseButtonSettings = ToSetting<PlayPauseButtonSettings>(PlayPauseButton);
-                _settings.ProgressBarSettings = ToSetting<ProgressBarSettings>(ProgressBar);
-                _settings.AudioSourceSettings = ToSetting<List<Models.V2.AudioSourceSettings>>(AudioSourceSettings);
                 Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
             }
             catch (Exception e)
@@ -141,31 +239,42 @@ namespace AudioBand.Settings
             }
         }
 
-        private void GetModels()
+        /// <inheritdoc />
+        public void ImportProfilesFromPath(string path)
         {
-            AlbumArtPopup = ToModel<AlbumArtPopup>(_settings.AlbumArtPopupSettings);
-            AlbumArt = ToModel<AlbumArt>(_settings.AlbumArtSettings);
-            AudioBand = ToModel<AudioBand.Models.AudioBand>(_settings.AudioBandSettings);
-            CustomLabels = ToModel<List<CustomLabel>>(_settings.CustomLabelSettings);
-            NextButton = ToModel<NextButton>(_settings.NextButtonSettings);
-            PreviousButton = ToModel<PreviousButton>(_settings.PreviousButtonSettings);
-            PlayPauseButton = ToModel<PlayPauseButton>(_settings.PlayPauseButtonSettings);
-            ProgressBar = ToModel<ProgressBar>(_settings.ProgressBarSettings);
-            AudioSourceSettings = ToModel<List<AudioSourceSettings>>(_settings.AudioSourceSettings) ?? new List<AudioSourceSettings>();
+            var profilesToImport = Toml.ReadFile<ProfileExportV3>(path, _tomlSettings);
+            foreach (var keyVal in profilesToImport.Profiles)
+            {
+                var key = GetUniqueProfileName(keyVal.Key);
+                _settings.Profiles[key] = keyVal.Value;
+            }
         }
 
-        private void LoadSettings()
+        /// <inheritdoc />
+        public void ExportProfilesToPath(string path)
+        {
+            var exportObject = new ProfileExportV3 { Profiles = _settings.Profiles };
+            Toml.WriteFile(exportObject, path, _tomlSettings);
+        }
+
+        private void LoadSettingsFromPath(string path)
         {
             try
             {
-                var file = Toml.ReadFile(SettingsFilePath, _tomlSettings);
-                var version = file["Version"].Get<string>();
+                var tomlFile = Toml.ReadFile(path, _tomlSettings);
+                var version = tomlFile["Version"].Get<string>();
+
+                // Create backup
                 if (version != CurrentVersion)
                 {
-                    Toml.WriteFile(file, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
+                    Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
+                    _settings = Migration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
+                    Save();
                 }
-
-                _settings = Migration.MigrateSettings<Settings.Models.V2.Settings>(file.Get(SettingsTable[version]), version, CurrentVersion);
+                else
+                {
+                    _settings = tomlFile.Get<SettingsV3>();
+                }
             }
             catch (Exception e)
             {
@@ -174,47 +283,112 @@ namespace AudioBand.Settings
             }
         }
 
-        private TModel ToModel<TModel>(object setting)
+        private void CreateDefaultSettingsFile()
         {
-            try
+            _settings = new SettingsV3()
             {
-                return SettingsMapper.ToModel<TModel>(setting);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "Cannot convert setting {name} to model of type {type}", setting, typeof(TModel));
-                throw;
-            }
-        }
-
-        private T ToSetting<T>(object model)
-        {
-            try
-            {
-                return SettingsMapper.ToModel<T>(model);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "Cannot convert model {@model} to setting of type {type}", model, typeof(T));
-                throw;
-            }
-        }
-
-        private void CreateDefault()
-        {
-            _settings = new Models.V2.Settings
-            {
-                AudioSourceSettings = new List<Models.V2.AudioSourceSettings>(),
-                AudioBandSettings = ToSetting<Models.V2.AudioBandSettings>(new AudioBand.Models.AudioBand()),
-                AlbumArtSettings = ToSetting<AlbumArtSettings>(new AlbumArt()),
                 AudioSource = null,
-                AlbumArtPopupSettings = ToSetting<AlbumArtPopupSettings>(new AlbumArtPopup()),
-                PlayPauseButtonSettings = ToSetting<PlayPauseButtonSettings>(new PlayPauseButton()),
-                NextButtonSettings = ToSetting<NextButtonSettings>(new NextButton()),
-                PreviousButtonSettings = ToSetting<PreviousButtonSettings>(new PreviousButton()),
-                ProgressBarSettings = ToSetting<ProgressBarSettings>(new ProgressBar()),
-                CustomLabelSettings = new List<CustomLabelSettings> { ToSetting<CustomLabelSettings>(new CustomLabel()) }
+                AudioSourceSettings = new List<AudioSourceSettings>(),
+                Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, CreateProfileModel() } },
+                CurrentProfileName = SettingsV3.DefaultProfileName,
             };
+            Save();
+        }
+
+        private ProfileV3 CreateProfileModel()
+        {
+            return new ProfileV3
+            {
+                AudioBandSettings = new AudioBand.Models.AudioBand(),
+                AlbumArtSettings = new AlbumArt(),
+                AlbumArtPopupSettings = new AlbumArtPopup(),
+                PlayPauseButtonSettings = new PlayPauseButton(),
+                NextButtonSettings = new NextButton(),
+                PreviousButtonSettings = new PreviousButton(),
+                ProgressBarSettings = new ProgressBar(),
+                CustomLabelSettings = new List<CustomLabel>
+                {
+                    new CustomLabel
+                    {
+                        Name = "Song Length",
+                        Width = 40,
+                        Height = 15,
+                        FontSize = 12,
+                        XPosition = 460,
+                        YPosition = 14,
+                        FormatString = "{length}",
+                        Color = Color.FromRgb(195, 195, 195),
+                        Alignment = CustomLabel.TextAlignment.Right,
+                    },
+                    new CustomLabel
+                    {
+                        Name = "Song Progress",
+                        Width = 40,
+                        Height = 15,
+                        FontSize = 12,
+                        XPosition = 280,
+                        YPosition = 14,
+                        FormatString = "{time}",
+                        Color = Color.FromRgb(195, 195, 195),
+                        Alignment = CustomLabel.TextAlignment.Left,
+                    },
+                    new CustomLabel
+                    {
+                        Name = "Song Name",
+                        Width = 240,
+                        Height = 20,
+                        XPosition = 0,
+                        YPosition = -2,
+                        FontSize = 14,
+                        FormatString = "{song}",
+                        Color = Colors.White,
+                        Alignment = CustomLabel.TextAlignment.Right,
+                    },
+                    new CustomLabel
+                    {
+                        Name = "Artist",
+                        Width = 240,
+                        Height = 20,
+                        XPosition = 0,
+                        YPosition = 13,
+                        FontSize = 12,
+                        FormatString = "{artist}",
+                        Color = Color.FromRgb(170, 170, 170),
+                        Alignment = CustomLabel.TextAlignment.Right,
+                    },
+                },
+            };
+        }
+
+        private void SelectProfile(string profileName)
+        {
+            Debug.Assert(_settings.Profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}");
+
+            // Get new profile. Map to the app settings properties to trigger notification changes
+            _currentProfile = _settings.Profiles[profileName];
+
+            AlbumArtPopup = _currentProfile.AlbumArtPopupSettings;
+            AlbumArt = _currentProfile.AlbumArtSettings;
+            AudioBand = _currentProfile.AudioBandSettings;
+            CustomLabels = _currentProfile.CustomLabelSettings;
+            NextButton = _currentProfile.NextButtonSettings;
+            PreviousButton = _currentProfile.PreviousButtonSettings;
+            PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
+            ProgressBar = _currentProfile.ProgressBarSettings;
+
+            ProfileChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private string GetUniqueProfileName(string name)
+        {
+            string newName = name;
+            int count = 0;
+            while (_settings.Profiles.ContainsKey(newName))
+            {
+                newName += count;
+            }
+
+            return newName;
         }
     }
 }

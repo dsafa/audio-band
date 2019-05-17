@@ -18,6 +18,6 @@
         /// <summary>
         /// The song has a negative rating.
         /// </summary>
-        Negative
+        Negative,
     }
 }

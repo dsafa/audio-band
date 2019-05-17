@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using AudioBand.Models;
+﻿using AudioBand.Models;
+using Color = System.Windows.Media.Color;
 
 namespace AudioBand.Settings.Models.V1
 {

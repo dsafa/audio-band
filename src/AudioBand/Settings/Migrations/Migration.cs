@@ -7,13 +7,14 @@ using NLog;
 namespace AudioBand.Settings.Migrations
 {
     /// <summary>
-    /// Migrate settings from one version to another
+    /// Migrate settings from one version to another.
     /// </summary>
     internal static class Migration
     {
         private static readonly Dictionary<(string From, string To), ISettingsMigrator> SupportedMigrations = new Dictionary<(string From, string To), ISettingsMigrator>()
         {
-            { ("0.1", "2"), new V1ToV2() }
+            { ("0.1", "2"), new V1ToV2() },
+            { ("2", "3"), new V2ToV3() },
         };
 
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger(typeof(Migration).FullName);

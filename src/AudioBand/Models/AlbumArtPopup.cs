@@ -6,10 +6,10 @@
     public class AlbumArtPopup : ModelBase
     {
         private bool _isVisible = true;
-        private int _width = 250;
-        private int _height = 250;
-        private int _xPosition = 0;
-        private int _margin = 4;
+        private double _width = 250;
+        private double _height = 250;
+        private double _xPosition = -110;
+        private double _margin = -4;
 
         /// <summary>
         /// Gets or sets a value indicating whether the album art popup is visible.
@@ -21,9 +21,9 @@
         }
 
         /// <summary>
-        /// Gets or sets the width of the album art popup
+        /// Gets or sets the width of the album art popup.
         /// </summary>
-        public int Width
+        public double Width
         {
             get => _width;
             set => SetProperty(ref _width, value);
@@ -32,7 +32,7 @@
         /// <summary>
         /// Gets or sets the height of the album art popup.
         /// </summary>
-        public int Height
+        public double Height
         {
             get => _height;
             set => SetProperty(ref _height, value);
@@ -41,7 +41,7 @@
         /// <summary>
         /// Gets or sets the x position of the album art popup.
         /// </summary>
-        public int XPosition
+        public double XPosition
         {
             get => _xPosition;
             set => SetProperty(ref _xPosition, value);
@@ -50,7 +50,7 @@
         /// <summary>
         /// Gets or sets the margin between the album art popup and the taskbar.
         /// </summary>
-        public int Margin
+        public double Margin
         {
             get => _margin;
             set => SetProperty(ref _margin, value);

@@ -5,13 +5,13 @@
     /// </summary>
     public class AudioBand : ModelBase
     {
-        private int _width = 250;
-        private int _height = 30;
+        private double _width = 500;
+        private double _height = 30;
 
         /// <summary>
         /// Gets or sets the width of the toolbar.
         /// </summary>
-        public int Width
+        public double Width
         {
             get => _width;
             set => SetProperty(ref _width, value);
@@ -20,7 +20,7 @@
         /// <summary>
         /// Gets or sets the height of the toolbar.
         /// </summary>
-        public int Height
+        public double Height
         {
             get => _height;
             set => SetProperty(ref _height, value);

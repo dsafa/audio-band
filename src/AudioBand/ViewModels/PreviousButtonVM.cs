@@ -1,110 +1,62 @@
-﻿using System.Drawing;
-using System.IO;
-using AudioBand.Extensions;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
+using AudioBand.AudioSource;
+using AudioBand.Commands;
 using AudioBand.Models;
-using Svg;
+using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the previous button.
     /// </summary>
-    internal class PreviousButtonVM : ViewModelBase<PreviousButton>
+    public class PreviousButtonVM : PlaybackButtonVMBase<PreviousButton>
     {
-        private static readonly SvgDocument DefaultPreviousButtonSvg = SvgDocument.Open<SvgDocument>(new MemoryStream(Properties.Resources.previous));
-        private Image _image;
+        private IAudioSource _audioSource;
 
-        public PreviousButtonVM(PreviousButton model)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PreviousButtonVM"/> class.
+        /// </summary>
+        /// <param name="appSettings">The app settings.</param>
+        /// <param name="dialogService">The dialog service.</param>
+        public PreviousButtonVM(IAppSettings appSettings, IDialogService dialogService)
+            : base(appSettings, dialogService, appSettings.PreviousButton)
         {
-            LoadImage();
+            PreviousTrackCommand = new AsyncRelayCommand<object>(PreviousTrackCommandOnExecute);
         }
 
-        public Image Image
+        /// <summary>
+        /// Sets the audio source.
+        /// </summary>
+        public IAudioSource AudioSource
         {
-            get => _image;
-            set => SetProperty(ref _image, value);
+            set => UpdateAudioSource(value);
         }
 
-        [PropertyChangeBinding(nameof(PreviousButton.ImagePath))]
-        public string ImagePath
+        /// <summary>
+        /// Gets the previous track command.
+        /// </summary>
+        public ICommand PreviousTrackCommand { get; }
+
+        /// <inheritdoc />
+        protected override PreviousButton GetReplacementModel()
         {
-            get => Model.ImagePath;
-            set
+            return AppSettings.PreviousButton;
+        }
+
+        private void UpdateAudioSource(IAudioSource audioSource)
+        {
+            _audioSource = audioSource;
+        }
+
+        private async Task PreviousTrackCommandOnExecute(object arg)
+        {
+            if (_audioSource == null)
             {
-                if (SetProperty(nameof(Model.ImagePath), value))
-                {
-                    Image = LoadImage(value, DefaultPreviousButtonSvg.ToBitmap());
-                }
+                return;
             }
-        }
 
-        [PropertyChangeBinding(nameof(PreviousButton.IsVisible))]
-        public bool IsVisible
-        {
-            get => Model.IsVisible;
-            set => SetProperty(nameof(Model.IsVisible), value);
-        }
-
-        [PropertyChangeBinding(nameof(PreviousButton.Width))]
-        [AlsoNotify(nameof(Size))]
-        public int Width
-        {
-            get => Model.Width;
-            set => SetProperty(nameof(Model.Width), value);
-        }
-
-        [PropertyChangeBinding(nameof(PreviousButton.Height))]
-        [AlsoNotify(nameof(Size))]
-        public int Height
-        {
-            get => Model.Height;
-            set => SetProperty(nameof(Model.Height), value);
-        }
-
-        [PropertyChangeBinding(nameof(PreviousButton.XPosition))]
-        [AlsoNotify(nameof(Location))]
-        public int XPosition
-        {
-            get => Model.XPosition;
-            set => SetProperty(nameof(Model.XPosition), value);
-        }
-
-        [PropertyChangeBinding(nameof(PreviousButton.YPosition))]
-        [AlsoNotify(nameof(Location))]
-        public int YPosition
-        {
-            get => Model.YPosition;
-            set => SetProperty(nameof(Model.YPosition), value);
-        }
-
-        /// <summary>
-        /// Gets the location of the button.
-        /// </summary>
-        public Point Location => new Point(Model.XPosition, Model.YPosition);
-
-        /// <summary>
-        /// Gets the size of the button.
-        /// </summary>
-        public Size Size => new Size(Width, Height);
-
-        /// <inheritdoc/>
-        protected override void OnReset()
-        {
-            base.OnReset();
-            LoadImage();
-        }
-
-        /// <inheritdoc/>
-        protected override void OnCancelEdit()
-        {
-            base.OnCancelEdit();
-            LoadImage();
-        }
-
-        private void LoadImage()
-        {
-            Image = LoadImage(ImagePath, DefaultPreviousButtonSvg.ToBitmap());
+            await _audioSource.NextTrackAsync();
         }
     }
 }

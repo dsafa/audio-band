@@ -3,6 +3,9 @@ using System.ComponentModel;
 
 namespace AudioSourceHost
 {
+    /// <summary>
+    /// Contains methods to help with type conversion.
+    /// </summary>
     public static class TypeConvertHelper
     {
         /// <summary>

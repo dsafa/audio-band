@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using AudioBand.Commands;
 using AudioBand.Logging;
+using AudioBand.Messages;
 using AutoMapper;
 using FastMember;
 using NLog;
@@ -14,11 +15,15 @@ namespace AudioBand.ViewModels
 {
     /// <summary>
     /// Base class for view models with automatic support for
-    /// <see cref="INotifyPropertyChanged"/>, <see cref="IEditableObject"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and commands.
+    /// <see cref="INotifyPropertyChanged"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and commands.
     /// </summary>
-    public abstract class ViewModelBase : INotifyPropertyChanged, IEditableObject, IResettableObject, INotifyDataErrorInfo
+    /// <remarks>
+    /// <see cref="IEditableObject"/> is implemented explicitly through methods instead of the interface because of issues with the methods being automatically called.
+    /// </remarks>
+    public abstract class ViewModelBase : INotifyPropertyChanged, IResettableObject, INotifyDataErrorInfo
     {
         private readonly Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
+        private bool _isEditing;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
@@ -26,7 +31,7 @@ namespace AudioBand.ViewModels
         protected ViewModelBase()
         {
             Logger = AudioBandLogManager.GetLogger(GetType().FullName);
-            Accessor = TypeAccessor.Create(GetType());
+            Accessor = TypeAccessor.Create(GetType(), true);
 
             BeginEditCommand = new RelayCommand(o => BeginEdit());
             EndEditCommand = new RelayCommand(o => EndEdit());
@@ -66,12 +71,21 @@ namespace AudioBand.ViewModels
         public RelayCommand ResetCommand { get; }
 
         /// <summary>
-        /// Gets the map from [model property name] to [other vm property names]
+        /// Gets a value indicating whether the current object is being edited.
+        /// </summary>
+        public bool IsEditing
+        {
+            get => _isEditing;
+            private set => SetProperty(ref _isEditing, value, trackChanges: false);
+        }
+
+        /// <summary>
+        /// Gets the map from [model property name] to [other vm property names].
         /// </summary>
         protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
 
         /// <summary>
-        /// Gets the logger for the view model
+        /// Gets the logger for the view model.
         /// </summary>
         protected ILogger Logger { get; }
 
@@ -91,22 +105,49 @@ namespace AudioBand.ViewModels
             return null;
         }
 
-        /// <inheritdoc cref="IEditableObject.BeginEdit"/>
+        /// <summary>
+        /// Begins editing on this object.
+        /// </summary>
         public void BeginEdit()
         {
+            if (IsEditing)
+            {
+                return;
+            }
+
+            Logger.Debug("Starting edit");
             OnBeginEdit();
+            IsEditing = true;
         }
 
-        /// <inheritdoc cref="IEditableObject.EndEdit"/>
+        /// <summary>
+        /// Ends and commits the changes to this object since the last <see cref="BeginEdit"/>.
+        /// </summary>
         public void EndEdit()
         {
+            if (!IsEditing)
+            {
+                return;
+            }
+
+            Logger.Debug("Ending edit");
             OnEndEdit();
+            IsEditing = false;
         }
 
-        /// <inheritdoc cref="IEditableObject.CancelEdit"/>
+        /// <summary>
+        /// Cancels all changes to this object since the last <see cref="BeginEdit"/>.
+        /// </summary>
         public void CancelEdit()
         {
+            if (!IsEditing)
+            {
+                return;
+            }
+
+            Logger.Debug("Cancelling edit");
             OnCancelEdit();
+            IsEditing = false;
         }
 
         /// <inheritdoc cref="IResettableObject.Reset"/>
@@ -122,6 +163,14 @@ namespace AudioBand.ViewModels
         protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Notifies all properties changed.
+        /// </summary>
+        protected void RaisePropertyChangedAll()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
 
         /// <summary>
@@ -162,13 +211,19 @@ namespace AudioBand.ViewModels
         /// <typeparam name="TValue">Type of the value.</typeparam>
         /// <param name="field">Field to set.</param>
         /// <param name="newValue">New value of the field.</param>
+        /// <param name="trackChanges">True if <see cref="BeginEdit"/> should be called if the value changes.</param>
         /// <param name="propertyName">Name of the property to notify with.</param>
-        /// <returns>Returns true if new value was set</returns>
-        protected bool SetProperty<TValue>(ref TValue field, TValue newValue, [CallerMemberName] string propertyName = null)
+        /// <returns>Returns true if new value was set.</returns>
+        protected bool SetProperty<TValue>(ref TValue field, TValue newValue, bool trackChanges = true, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<TValue>.Default.Equals(field, newValue))
             {
                 return false;
+            }
+
+            if (trackChanges)
+            {
+                BeginEdit();
             }
 
             field = newValue;
@@ -215,6 +270,25 @@ namespace AudioBand.ViewModels
         protected void RaiseValidationError(Exception e, [CallerMemberName] string propertyName = null)
         {
             RaiseValidationError(e.ToString(), propertyName);
+        }
+
+        /// <summary>
+        /// Clears validation errors.
+        /// </summary>
+        protected void ClearErrors()
+        {
+            _propertyErrors.Clear();
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(string.Empty));
+        }
+
+        /// <summary>
+        /// Clears errors for a property.
+        /// </summary>
+        /// <param name="propertyName">The property to clear.</param>
+        protected void ClearError(string propertyName)
+        {
+            _propertyErrors.Remove(propertyName);
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
         private void SetupAlsoNotify()

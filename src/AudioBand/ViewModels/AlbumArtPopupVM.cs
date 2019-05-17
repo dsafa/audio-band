@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
 using AudioBand.Models;
+using AudioBand.Settings;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
@@ -9,13 +11,17 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class AlbumArtPopupVM : ViewModelBase<AlbumArtPopup>
     {
-        private readonly Track _track;
+        private readonly IAppSettings _appSettings;
 
-        public AlbumArtPopupVM(AlbumArtPopup model, Track track)
-            : base(model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AlbumArtPopupVM"/> class.
+        /// </summary>
+        /// <param name="appSettings">The app settings.</param>
+        public AlbumArtPopupVM(IAppSettings appSettings)
+            : base(appSettings.AlbumArtPopup)
         {
-            _track = track;
-            SetupModelBindings(_track);
+            _appSettings = appSettings;
+            appSettings.ProfileChanged += AppSettingsOnProfileChanged;
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.IsVisible))]
@@ -26,43 +32,38 @@ namespace AudioBand.ViewModels
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.Width))]
-        [AlsoNotify(nameof(Size))]
-        public int Width
+        public double Width
         {
             get => Model.Width;
             set => SetProperty(nameof(Model.Width), value);
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.Height))]
-        [AlsoNotify(nameof(Size))]
-        public int Height
+        public double Height
         {
             get => Model.Height;
             set => SetProperty(nameof(Model.Height), value);
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.XPosition))]
-        public int XPosition
+        public double XPosition
         {
             get => Model.XPosition;
             set => SetProperty(nameof(Model.XPosition), value);
         }
 
         [PropertyChangeBinding(nameof(AlbumArtPopup.Margin))]
-        public int Margin
+        public double Margin
         {
             get => Model.Margin;
             set => SetProperty(nameof(Model.Margin), value);
         }
 
-        [PropertyChangeBinding(nameof(Track.AlbumArt))]
-        public Image AlbumArt => _track.AlbumArt;
-
-        /// <summary>
-        /// Gets the size of the popup.
-        /// </summary>
-        /// <remarks>This property exists so the designer can bind to it.</remarks>
-        public Size Size => new Size(Width, Height);
+        private void AppSettingsOnProfileChanged(object sender, EventArgs e)
+        {
+            Debug.Assert(IsEditing == false, "Should not be editing");
+            ReplaceModel(_appSettings.AlbumArtPopup);
+        }
     }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

@@ -5,7 +5,7 @@ namespace AudioSourceHost
     /// <summary>
     /// Event handler wrapper for cross app domain callbacks.
     /// </summary>
-    /// <typeparam name="T">Type of the event args</typeparam>
+    /// <typeparam name="T">Type of the event args.</typeparam>
     public class MarshaledEventHandler<T> : MarshalByRefObject
     {
         private readonly Action<T> _handler;
@@ -30,6 +30,7 @@ namespace AudioSourceHost
             _handler(args);
         }
 
+        /// <inheritdoc />
         public override object InitializeLifetimeService()
         {
             return null;

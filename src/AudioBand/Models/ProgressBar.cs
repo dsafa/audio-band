@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.Windows.Media;
 
 namespace AudioBand.Models
 {
@@ -7,13 +7,14 @@ namespace AudioBand.Models
     /// </summary>
     public class ProgressBar : ModelBase
     {
-        private Color _foregroundColor = Color.DodgerBlue;
-        private Color _backgroundColor = Color.Black;
+        private Color _foregroundColor = Colors.DodgerBlue;
+        private Color _backgroundColor = Colors.DimGray;
+        private Color _hoverColor = Colors.DeepSkyBlue;
         private bool _isVisible = true;
-        private int _xPosition = 30;
-        private int _yPosition = 28;
-        private int _width = 220;
-        private int _height = 2;
+        private double _xPosition = 325;
+        private double _yPosition = 22;
+        private double _width = 130;
+        private double _height = 4;
 
         /// <summary>
         /// Gets or sets the foreground color.
@@ -34,6 +35,15 @@ namespace AudioBand.Models
         }
 
         /// <summary>
+        /// Gets or sets the hover color.
+        /// </summary>
+        public Color HoverColor
+        {
+            get => _hoverColor;
+            set => SetProperty(ref _hoverColor, value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the progress bar is visible.
         /// </summary>
         public bool IsVisible
@@ -45,7 +55,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the width of the progress bar.
         /// </summary>
-        public int Width
+        public double Width
         {
             get => _width;
             set => SetProperty(ref _width, value);
@@ -54,7 +64,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the height of the progress bar.
         /// </summary>
-        public int Height
+        public double Height
         {
             get => _height;
             set => SetProperty(ref _height, value);
@@ -63,7 +73,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the x position of the progress bar.
         /// </summary>
-        public int XPosition
+        public double XPosition
         {
             get => _xPosition;
             set => SetProperty(ref _xPosition, value);
@@ -72,7 +82,7 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the y position of the progress bar.
         /// </summary>
-        public int YPosition
+        public double YPosition
         {
             get => _yPosition;
             set => SetProperty(ref _yPosition, value);

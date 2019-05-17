@@ -19,79 +19,158 @@ namespace AudioSourceHost
         private IAudioSource _audioSource;
         private List<AudioSourceSetting> _audioSourceSettingsList; // so we can keep the order of the settings.
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioSourceWrapper"/> class.
+        /// </summary>
         public AudioSourceWrapper()
         {
             AudioBandLogManager.Initialize();
         }
 
+        /// <summary>
+        /// Wrapper for <see cref="IAudioSource.SettingChanged"/>.
+        /// </summary>
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
+        /// <summary>
+        /// Wrapper for <see cref="IAudioSource.TrackInfoChanged"/>.
+        /// </summary>
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
+        /// <summary>
+        /// Wrapper for <see cref="IAudioSource.IsPlayingChanged"/>.
+        /// </summary>
         public event EventHandler<bool> IsPlayingChanged;
 
+        /// <summary>
+        /// Wrapper for <see cref="IAudioSource.TrackProgressChanged"/>.
+        /// </summary>
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
+        /// <summary>
+        /// Wrapper for <see cref="IAudioSource.VolumeChanged"/>.
+        /// </summary>
         public event EventHandler<float> VolumeChanged;
 
+        /// <summary>
+        /// Wrapper for <see cref="IAudioSource.ShuffleChanged"/>.
+        /// </summary>
         public event EventHandler<bool> ShuffleChanged;
 
+        /// <summary>
+        /// Wrapper for <see cref="IAudioSource.RepeatModeChanged"/>.
+        /// </summary>
         public event EventHandler<RepeatMode> RepeatModeChanged;
 
+        /// <summary>
+        /// Gets the name of the audio source.
+        /// </summary>
         public string Name => _audioSource.Name;
 
+        /// <summary>
+        /// Gets the list of audio source settings.
+        /// </summary>
         public List<AudioSourceSettingAttribute> Settings => _audioSourceSettingsList.Select(s => s.Attribute).ToList();
 
+        /// <summary>
+        /// Activates the audio source.
+        /// </summary>
+        /// <param name="tcs">The task completion source.</param>
         public void Activate(MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.ActivateAsync, tcs);
         }
 
+        /// <summary>
+        /// Deactivates the audio source.
+        /// </summary>
+        /// <param name="tcs">The task completion source.</param>
         public void Deactivate(MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.DeactivateAsync, tcs);
         }
 
+        /// <summary>
+        /// Seeks to next track.
+        /// </summary>
+        /// <param name="tcs">The task completion source.</param>
         public void NextTrack(MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.NextTrackAsync, tcs);
         }
 
+        /// <summary>
+        /// Pauses the track.
+        /// </summary>
+        /// <param name="tcs">The task completion source.</param>
         public void PauseTrack(MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.PauseTrackAsync, tcs);
         }
 
+        /// <summary>
+        /// Plays the track.
+        /// </summary>
+        /// <param name="tcs">The task completion source.</param>
         public void PlayTrack(MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.PlayTrackAsync, tcs);
         }
 
+        /// <summary>
+        /// Seeks to the previous track.
+        /// </summary>
+        /// <param name="tcs">The task completion source.</param>
         public void PreviousTrack(MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.PreviousTrackAsync, tcs);
         }
 
+        /// <summary>
+        /// Sets the volume.
+        /// </summary>
+        /// <param name="newVolume">The new volume.</param>
+        /// <param name="tcs">The task completion source.</param>
         public void SetVolume(float newVolume, MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.SetVolumeAsync, newVolume, tcs);
         }
 
+        /// <summary>
+        /// Sets the playback progress.
+        /// </summary>
+        /// <param name="newProgress">The new progress.</param>
+        /// <param name="tcs">The task completion source.</param>
         public void SetPlayback(TimeSpan newProgress, MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.SetPlaybackProgressAsync, newProgress, tcs);
         }
 
+        /// <summary>
+        /// Sets the shuffle mode.
+        /// </summary>
+        /// <param name="shuffle">The shuffle.</param>
+        /// <param name="tcs">The task completion source.</param>
         public void SetShuffle(bool shuffle, MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.SetShuffleAsync, shuffle, tcs);
         }
 
+        /// <summary>
+        /// Sets the repeat mode.
+        /// </summary>
+        /// <param name="repeatMode">The repeat mode.</param>
+        /// <param name="tcs">The task completion source.</param>
         public void SetRepeatMode(RepeatMode repeatMode, MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.SetRepeatModeAsync, repeatMode, tcs);
         }
 
+        /// <summary>
+        /// Initializes the wrapper.
+        /// </summary>
+        /// <param name="audioSourceDirectory">The directory of the audio source.</param>
+        /// <returns>True if successful.</returns>
         public bool Initialize(string audioSourceDirectory)
         {
             try
@@ -128,6 +207,11 @@ namespace AudioSourceHost
             }
         }
 
+        /// <summary>
+        /// Updates an audio source setting.
+        /// </summary>
+        /// <param name="settingName">The name of the setting.</param>
+        /// <param name="value">The value.</param>
         public void UpdateSetting(string settingName, object value)
         {
             try
@@ -140,6 +224,11 @@ namespace AudioSourceHost
             }
         }
 
+        /// <summary>
+        /// Gets the value of an audio source setting.
+        /// </summary>
+        /// <param name="settingName">The setting name.</param>
+        /// <returns>The value of the setting.</returns>
         public object GetSettingValue(string settingName)
         {
             try
@@ -153,11 +242,18 @@ namespace AudioSourceHost
             }
         }
 
+        /// <summary>
+        /// Gets the type of a setting.
+        /// </summary>
+        /// <param name="settingName">The setting name.</param>
+        /// <returns>The type of the setting.</returns>
         public Type GetSettingType(string settingName)
         {
             return _audioSourceSettings[settingName].SettingType;
         }
 
+        /// <inheritdoc />
+        /// Prevent gc.
         public override object InitializeLifetimeService()
         {
             return null;

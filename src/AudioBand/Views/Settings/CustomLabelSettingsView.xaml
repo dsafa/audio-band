@@ -1,0 +1,129 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:local="clr-namespace:AudioBand.Views.Settings"
+             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+             xmlns:converters="clr-namespace:AudioBand.ValueConverters"
+             xmlns:models="clr-namespace:AudioBand.Models"
+             xmlns:resources="clr-namespace:AudioBand.Resources">
+    <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <resources:SharedDictionary Source="../../Resources/Shared.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{StaticResource CustomLabelNameDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <TextBox metro:TextBoxHelper.ClearTextButton="True" Text="{Binding Name, Mode=TwoWay}" Width="150"/>
+            <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+            <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}"
+                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
+            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
+                <TextBlock Text="{StaticResource WidthLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
+                <TextBlock Text="{StaticResource XPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <TextBlock Text="{StaticResource YPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
+            </UniformGrid>
+
+            <TextBlock Text="{StaticResource CustomLabelFormatSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" x:Name="CustomLabelFormatHelpLink" Focusable="False">
+                <Run Text="{StaticResource CustomLabelTextFormatDescription}"/>.
+                <TextBlock>
+                    <Hyperlink>
+                        <Run Text="{StaticResource CustomLabelTextFormatHelpLink}"/>
+                    </Hyperlink>
+                    <TextBlock.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.GotFocus">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="FormatHelpPopup"
+                                                                        Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="FrameworkElement.LostFocus">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="FormatHelpPopup"
+                                                                        Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </TextBlock.Triggers>
+                </TextBlock>
+            </TextBlock>
+            <TextBox metro:TextBoxHelper.ClearTextButton="True" Text="{Binding FormatString, Mode=TwoWay}" Width="400"/>
+            <Popup x:Name="FormatHelpPopup" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Slide"
+                     PlacementTarget="{x:Reference CustomLabelFormatHelpLink}" Placement="Top">
+                <Border Background="White" BorderBrush="Gray" BorderThickness="1" Padding="4">
+                    <TextBlock>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpText}"/><LineBreak/>
+                        <Bold>Tags</Bold> <LineBreak/>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextTags}"/><LineBreak/>
+                        <Bold>Styles</Bold> <LineBreak/>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextStyles}"/><LineBreak/>
+                        <Bold>Colors</Bold> <LineBreak/>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextColors}"/><LineBreak/>
+                        <Bold>Example formats</Bold> <LineBreak/>
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextExamples}"/><LineBreak/>
+                    </TextBlock>
+                </Border>
+            </Popup>
+
+            <TextBlock Text="{StaticResource CustomLabelFontSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <TextBlock Text="{StaticResource CustomLabelAlignmentDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <ComboBox IsEditable="False" ItemsSource="{Binding TextAlignValues}" SelectedItem="{Binding TextAlignment, Mode=TwoWay}"/>
+            <TextBlock Text="{StaticResource CustomLabelFontFamilyDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <ComboBox IsEditable="True" ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" 
+                      ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}" Width="400"
+                      SelectedValue="{Binding FontFamily}" SelectedValuePath="Source"/>
+            <TextBlock Text="{StaticResource CustomLabelFontSizeDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <metro:NumericUpDown behaviors:NumericInput.Type="FontSize" Value="{Binding FontSize, Mode=TwoWay}"/>
+            <local:ColorPicker DialogService="{Binding Path=DialogService}" Color="{Binding Path=Color}" Title="{StaticResource CustomLabelFontColorDescription}"/>
+
+            <TextBlock Text="{StaticResource CustomLabelOverflowSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <TextBlock Text="{StaticResource CustomLabelOverflowDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <ComboBox ItemsSource="{Binding TextOverflowValues}" ItemTemplate="{StaticResource EnumDescriptorItemTemplate}"
+                      SelectedValue="{Binding TextOverflow}" SelectedValuePath="Value"/>
+            <ItemsControl>
+                <ItemsControl.Style>
+                    <Style TargetType="{x:Type ItemsControl}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding TextOverflow}" Value="{x:Static models:TextOverflow.Scroll}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.Style>
+                <TextBlock Text="{StaticResource CustomLabelScrollBehaviorDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+                <ComboBox ItemsSource="{Binding ScrollBehaviorValues}" ItemTemplate="{StaticResource EnumDescriptorItemTemplate}" Width="300"
+                          SelectedValue="{Binding ScrollBehavior}" SelectedValuePath="Value"/>
+                <TextBlock Text="{StaticResource CustomLabelScrollSpeedDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="WholeNumber" Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static converters:Converters.TimeSpanToMs}}"/>
+            </ItemsControl>
+
+            <TextBlock Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <Button HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}" Command="{Binding ResetCommand}"/>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

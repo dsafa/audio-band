@@ -1,102 +1,61 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using AudioBand.AudioSource;
 using AudioBand.Models;
+using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// View model for all audio source settings
+    /// View model for ALL audio source settings.
     /// </summary>
-    internal class AudioSourceSettingsVM : ViewModelBase<AudioSourceSettings>
+    public class AudioSourceSettingsVM : ViewModelBase
     {
+        private readonly IAppSettings _appSettings;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceSettingsVM"/> class
-        /// with the settings and the audio source.
+        /// with the settings.
         /// </summary>
-        /// <param name="settings">Settings for the audio source.</param>
+        /// <param name="appSettings">The app settings.</param>
+        public AudioSourceSettingsVM(IAppSettings appSettings)
+        {
+            _appSettings = appSettings;
+        }
+
+        /// <summary>
+        /// Gets all the audio sources and their settings.
+        /// </summary>
+        public ObservableCollection<AudioSourceSettingsCollectionViewModel> AudioSourcesSettings { get; } = new ObservableCollection<AudioSourceSettingsCollectionViewModel>();
+
+        /// <summary>
+        /// Creates a settings view model for the new audio source.
+        /// </summary>
         /// <param name="audioSource">The audio source.</param>
-        public AudioSourceSettingsVM(AudioSourceSettings settings, IInternalAudioSource audioSource)
-            : base(settings)
+        public void CreateViewModelForAudioSource(IInternalAudioSource audioSource)
         {
-            Settings = CreateSettingViewModels(Model, audioSource);
-            audioSource.SettingChanged += AudioSourceOnSettingChanged;
-        }
-
-        /// <summary>
-        /// Gets the name of the audio source.
-        /// </summary>
-        public string AudioSourceName => Model.AudioSourceName;
-
-        /// <summary>
-        /// Gets a <see cref="List{T}"/> of <see cref="AudioSourceSettingVM"/> belonging to this audio source.
-        /// </summary>
-        public List<AudioSourceSettingVM> Settings { get; }
-
-        /// <inheritdoc/>
-        protected override void OnCancelEdit()
-        {
-            base.OnCancelEdit();
-            foreach (var audioSourceSettingVm in Settings)
+            var settings = audioSource.Settings;
+            if (settings.Count == 0)
             {
-                audioSourceSettingVm.CancelEdit();
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void OnEndEdit()
-        {
-            base.OnEndEdit();
-            foreach (var audioSourceSettingVm in Settings.OrderByDescending(s => s.Priority))
-            {
-                audioSourceSettingVm.EndEdit();
-            }
-        }
-
-        /// <inheritdoc/>
-        protected override void OnBeginEdit()
-        {
-            base.OnBeginEdit();
-            foreach (var audioSourceSettingVm in Settings)
-            {
-                audioSourceSettingVm.BeginEdit();
-            }
-        }
-
-        private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
-        {
-            Settings.FirstOrDefault(s => s.Name == e.SettingName)?.ValueChanged();
-        }
-
-        private List<AudioSourceSettingVM> CreateSettingViewModels(AudioSourceSettings existingSettings, IInternalAudioSource source)
-        {
-            var viewmodels = new List<AudioSourceSettingVM>();
-            var settingAttributes = source.Settings;
-
-            foreach (var settingAttribute in settingAttributes)
-            {
-                var matchingSetting = existingSettings.Settings.FirstOrDefault(s => s.Name == settingAttribute.Name);
-                if (matchingSetting != null)
-                {
-                    viewmodels.Add(new AudioSourceSettingVM(source, matchingSetting, settingAttribute));
-                }
-                else
-                {
-                    var name = settingAttribute.Name;
-                    var defaultValue = source[name];
-                    var newSetting = new AudioSourceSetting { Name = name, Value = defaultValue };
-                    Model.Settings.Add(newSetting);
-                    viewmodels.Add(new AudioSourceSettingVM(source, newSetting, settingAttribute, false));
-                }
+                return;
             }
 
-            // apply changes in priority
-            foreach (var viewModel in viewmodels.OrderByDescending(vm => vm.Priority))
+            // check if the settings were saved previously and reuse them
+            var matchingSetting = _appSettings.AudioSourceSettings.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
+            if (matchingSetting != null)
             {
-                viewModel.ApplyChanges();
+                var viewModel = new AudioSourceSettingsCollectionViewModel(audioSource, matchingSetting);
+                AudioSourcesSettings.Add(viewModel);
+            }
+            else
+            {
+                var newSettingsModel = new AudioSourceSettings { AudioSourceName = audioSource.Name };
+                _appSettings.AudioSourceSettings.Add(newSettingsModel);
+                var newViewModel = new AudioSourceSettingsCollectionViewModel(audioSource, newSettingsModel);
+                AudioSourcesSettings.Add(newViewModel);
             }
 
-            return viewmodels;
+            _appSettings.Save();
         }
     }
 }

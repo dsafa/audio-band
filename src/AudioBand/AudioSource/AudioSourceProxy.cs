@@ -114,7 +114,7 @@ namespace AudioBand.AudioSource
         /// <summary>
         /// Get or set a setting.
         /// </summary>
-        /// <param name="settingName">Name of the setting</param>
+        /// <param name="settingName">Name of the setting.</param>
         /// <returns>The setting value.</returns>
         public object this[string settingName]
         {
@@ -267,7 +267,13 @@ namespace AudioBand.AudioSource
         // Use load from context
         private static Assembly AssemblyResolve(object sender, ResolveEventArgs e)
         {
-            string shortName = e.Name.Substring(0, e.Name.IndexOf(','));
+            int commaIndex = e.Name.IndexOf(',');
+            if (commaIndex == -1)
+            {
+                return null;
+            }
+
+            string shortName = e.Name.Substring(0, commaIndex);
             string fileName = Path.Combine(DirectoryHelper.BaseDirectory, shortName + ".dll");
             return File.Exists(fileName) ? Assembly.LoadFrom(fileName) : null;
         }

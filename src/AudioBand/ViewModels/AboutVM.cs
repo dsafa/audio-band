@@ -1,63 +1,50 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using AudioBand.Commands;
-using AudioBand.Views.Wpf;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the `about audioband` view.
     /// </summary>
-    internal class AboutVM
+    public class AboutVM : ViewModelBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AboutVM"/> class.
         /// </summary>
         public AboutVM()
         {
-            OpenProjectLink = new RelayCommand(OpenProjectLinkOnExecute);
-            ShowHelp = new RelayCommand<IAboutView>(Execute);
-        }
-
-        /// <summary>
-        /// Represents the view for the about dialog.
-        /// </summary>
-        internal interface IAboutView
-        {
-            /// <summary>
-            /// Show the about dialong.
-            /// </summary>
-            void Show();
+            OpenLinkCommand = new RelayCommand<string>(OpenLinkCommandOnExecute);
         }
 
         /// <summary>
         /// Gets the current audioband version.
         /// </summary>
-        public string Version => "AudioBand " + typeof(SettingsWindow).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        public string Version => GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
         /// <summary>
-        /// Gets the link to the project
+        /// Gets the link to the project.
         /// </summary>
-        public string ProjectLink => @"https://github.com/dsafa/audio-band";
+        public string ProjectLink => "https://github.com/dsafa/audio-band";
 
         /// <summary>
-        /// Gets the command to show the help dialog.
+        /// Gets the license link.
         /// </summary>
-        public RelayCommand<IAboutView> ShowHelp { get; }
+        public string LicenseLink => "https://github.com/dsafa/audio-band/blob/master/LICENSE";
+
+        /// <summary>
+        /// Gets the third party licenses link.
+        /// </summary>
+        public string ThirdPartyLicenseLink => "https://github.com/dsafa/audio-band/blob/master/LICENSE-3RD-PARTY";
 
         /// <summary>
         /// Gets the command to open the link to the project.
         /// </summary>
-        public RelayCommand OpenProjectLink { get; }
+        public RelayCommand<string> OpenLinkCommand { get; }
 
-        private void Execute(IAboutView helpView)
+        private void OpenLinkCommandOnExecute(string link)
         {
-            helpView?.Show();
-        }
-
-        private void OpenProjectLinkOnExecute(object o)
-        {
-            Process.Start(ProjectLink);
+            Process.Start(link);
         }
     }
 }
