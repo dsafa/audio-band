@@ -50,7 +50,7 @@ namespace AudioBand.Behaviors
         public static readonly DependencyProperty IsPlayingProperty
             = DependencyProperty.Register(nameof(IsPlaying), typeof(bool), typeof(MarqueeContainer), new PropertyMetadata(false, IsPlayingPropertyChangedCallback));
 
-        private const double ChildMargin = 100;
+        private const double ChildMargin = 50;
         private bool _mouseOver;
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace AudioBand.Behaviors
         private void StartDuplicateChildAnimation()
         {
             var animation = CreateAnimation();
-            animation.BeginTime = TimeSpan.FromMilliseconds(CalculateTimeToScroll().TotalMilliseconds / 2);
+            animation.BeginTime = CalculateAnimationOffsetTime();
 
             DuplicateChild.Opacity = 1;
             DuplicateChild.RenderTransform = new TranslateTransform(AssociatedObject.Width, 0);
@@ -258,14 +258,16 @@ namespace AudioBand.Behaviors
 
         private DoubleAnimation CreateAnimation()
         {
-            return new DoubleAnimation(AssociatedObject.ActualWidth, -TargetChild.ActualWidth - ChildMargin, CalculateTimeToScroll())
+            return new DoubleAnimation
             {
-                FillBehavior = FillBehavior.Stop,
+                From = AssociatedObject.ActualWidth,
+                By = -2 * (TargetChild.ActualWidth + ChildMargin),
+                Duration = CalculateTimeToFullyScroll(),
                 RepeatBehavior = RepeatBehavior.Forever,
             };
         }
 
-        private TimeSpan CalculateTimeToScroll()
+        private TimeSpan CalculateTimeToScroll(double scrollDistance)
         {
             // Calculate time to scroll based on the target time to scroll across the panel.
             if (ScrollDuration.TotalMilliseconds == 0)
@@ -274,10 +276,20 @@ namespace AudioBand.Behaviors
             }
 
             var velocity = AssociatedObject.ActualWidth / ScrollDuration.TotalMilliseconds;
-            var childScrollDistance = TargetChild.ActualWidth + AssociatedObject.ActualWidth;
+            var childScrollDistance = scrollDistance;
             var scrollTime = childScrollDistance / velocity;
 
             return TimeSpan.FromMilliseconds(scrollTime);
+        }
+
+        private TimeSpan CalculateTimeToFullyScroll()
+        {
+            return CalculateTimeToScroll(2 * (TargetChild.ActualWidth + ChildMargin));
+        }
+
+        private TimeSpan CalculateAnimationOffsetTime()
+        {
+            return TimeSpan.FromMilliseconds(CalculateTimeToFullyScroll().TotalMilliseconds / 2);
         }
     }
 }
