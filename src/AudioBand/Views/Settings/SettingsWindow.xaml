@@ -5,11 +5,11 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:converters="clr-namespace:AudioBand.ValueConverters"
             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-            xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
             xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
             xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
             xmlns:resources="clr-namespace:AudioBand.Resources"
+            xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
             x:Class="AudioBand.Views.Settings.SettingsWindow"
             mc:Ignorable="d" 
             x:Name="Window"
@@ -19,12 +19,15 @@
             Icon="pack://application:,,,/AudioBand;component/audioband.ico"
             Height="700"
             Width="930"
-            TintOpacity="0.95"
-            TintColor="#DDDDDD"
+            TintOpacity="0"
+            TintColor="Transparent"
+            FallbackColor="Transparent"
             NoiseOpacity="0.01"
             fw:PointerTracker.Enabled="True"
             ExtendViewIntoTitleBar="True"
-            WindowStartupLocation="CenterScreen">
+            WindowStartupLocation="CenterScreen"
+            Foreground="{theme:ThemeResource SystemBaseHighColor}"
+            BorderBrush="{theme:ThemeResource SystemAccentColor}">
     <i:Interaction.Behaviors>
         <behaviors:AppUserModelID/>
         <behaviors:DpiScaling/>
@@ -50,6 +53,18 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
+            <Border x:Name="CustomFallback" Grid.RowSpan="3" Background="{theme:ThemeResource SystemChromeMediumColor}">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="Opacity" Value="0.8"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=Window, Path=IsActive}" Value="False">
+                                <Setter Property="Opacity" Value="1"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
             <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" IsTabStop="False" Width="300" WindowChrome.IsHitTestVisibleInChrome="True">
                 <StackPanel DockPanel.Dock="Left" Background="Transparent" x:Name="NavigationPane">
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
@@ -109,12 +124,12 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{StaticResource CustomLabelsTab}" Style="{StaticResource NavigationPaneTextBlock}"
-                                           VerticalAlignment="Center" FontWeight="Normal">
+                                           VerticalAlignment="Center" FontWeight="Normal" Foreground="{theme:ThemeResource SystemBaseHighColor}">
                                 </TextBlock>
                                 <Button Grid.Column="1" Style="{StaticResource RevealButton}"
                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
                                         Command="{Binding Path=ViewModels.CustomLabelsVM.AddLabelCommand}">
-                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" Foreground="Black" FontSize="17"/>
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" FontSize="17"/>
                                     <Button.ToolTip>
                                         <TextBlock Text="{StaticResource AddNewLabelHelpText}"/>
                                     </Button.ToolTip>
@@ -140,13 +155,13 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <Image Grid.Column="0" Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource TextLabels}"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding Name}" 
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}"
                                                         HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                                             <Button Grid.Column="2" Style="{StaticResource RevealButton}"
                                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
                                                         Command="{Binding ElementName=Window, Path=DataContext.ViewModels.CustomLabelsVM.RemoveLabelCommand}"
                                                         CommandParameter="{Binding}">
-                                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" Foreground="Black" FontSize="18"/>
+                                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="18"/>
                                                 <Button.ToolTip>
                                                     <TextBlock Text="{StaticResource DeleteLabelHelpText}"/>
                                                 </Button.ToolTip>
@@ -159,7 +174,8 @@
                     </Expander>
                     <Expander Style="{StaticResource NavigationPaneExpander}">
                         <Expander.Header>
-                            <TextBlock Padding="0, 0, 10, 0" FontWeight="Normal" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"/>
+                            <TextBlock Padding="0, 0, 10, 0" FontWeight="Normal" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"
+                                       Foreground="{theme:ThemeResource SystemBaseHighColor}"/>
                         </Expander.Header>
                         <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsVm.AudioSourcesSettings}"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
@@ -231,13 +247,13 @@
         </Grid>
         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft"
                     DockPanel.Dock="Bottom" HorizontalAlignment="Stretch"
-                    SnapsToDevicePixels="True" Background="White">
+                    SnapsToDevicePixels="True" Background="{theme:ThemeResource SystemAltHighColor}">
             <Button Content="{StaticResource CloseButtonText}" IsCancel="True" Width="80" Margin="8"
                     Command="{Binding CloseCommand}"/>
             <Button Content="{StaticResource ApplyButtonText}" Width="80" Margin="8"
                     Command="{Binding SaveCommand}"/>
         </StackPanel>
-        <Grid Background="White" SnapsToDevicePixels="True">
+        <Grid SnapsToDevicePixels="True" Background="{theme:ThemeResource SystemAltHighColor}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

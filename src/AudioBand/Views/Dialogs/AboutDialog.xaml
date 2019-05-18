@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-             xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+             xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
              xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
@@ -14,7 +14,9 @@
              Icon="pack://application:,,,/AudioBand;component/audioband.ico"
              Width="600" Height="500"
              WindowStartupLocation="CenterScreen"
-             Title="About Audio Band">
+             Title="About Audio Band"
+             Foreground="{theme:ThemeResource SystemBaseHighColor}"
+             Background="{theme:ThemeResource SystemAltHighColor}">
     <i:Interaction.Behaviors>
         <behaviors:AppUserModelID/>
         <behaviors:DpiScaling/>
@@ -54,7 +56,7 @@
             <TextBlock HorizontalAlignment="Center" FontSize="{StaticResource HeaderFontSize}" Text="Audio Band" FontWeight="Bold"/>
             <TextBlock HorizontalAlignment="Center" Margin="0, 10" FontSize="14" Text="{Binding Version}"/>
         </StackPanel>
-        <Grid Grid.Column="1" Background="#AAFFFFFF">
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>

@@ -3,7 +3,7 @@
                     xmlns:local="clr-namespace:AudioBand.Resources"
                     xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
                     xmlns:valueConverters="clr-namespace:AudioBand.ValueConverters"
-                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+                    xmlns:theme="clr-namespace:AudioBand.Resources.Theming">
     <ResourceDictionary.MergedDictionaries>
         <local:SharedDictionary Source="Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
@@ -29,6 +29,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseHighColor}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
@@ -46,7 +47,7 @@
                         <Border x:Name="Border" BorderBrush="{fluentWpf:RevealBrush Color={StaticResource ButtonRevealColor}, Size=50}"
                                 BorderThickness="0,1,1,1" Background="{TemplateBinding Background}"/>
                         <DockPanel LastChildFill="True">
-                            <Rectangle DockPanel.Dock="Left" Fill="{x:Static fluentWpf:AccentColors.ImmersiveSystemAccentBrush}" Width="5" Height="25"
+                            <Rectangle DockPanel.Dock="Left" Fill="{theme:ThemeResource SystemAccentColor}" Width="5" Height="25"
                                            Visibility="{TemplateBinding IsChecked, Converter={x:Static valueConverters:Converters.BoolToVisibility}, ConverterParameter=False}" VerticalAlignment="Center"/>
                             <ContentPresenter Margin="15, 0, 0, 0" VerticalAlignment="Center"/>
                         </DockPanel>
@@ -55,16 +56,12 @@
                                 <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource NavigationPaneHoverBackgroundColor}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
                                                          To="1" Duration="0"/>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource NavigationPaneClickBackgroundColor}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
                                                          To="1" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
@@ -79,9 +76,18 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{theme:ThemeResource SystemListLowColor}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{theme:ThemeResource SystemListMediumColor}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     <Style x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseHighColor}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -109,8 +115,6 @@
                                 <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource NavigationPaneHoverBackgroundColor}" Duration="0"/>
                                         <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer" Storyboard.TargetProperty="Opacity"
                                                          To="1" Duration="0"/>
                                     </Storyboard>
@@ -143,6 +147,14 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{theme:ThemeResource SystemListLowColor}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{theme:ThemeResource SystemListMediumColor}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     <Style x:Key="NavigationPaneExpander" TargetType="{x:Type Expander}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>

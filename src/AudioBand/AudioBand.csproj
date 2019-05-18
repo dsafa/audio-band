@@ -104,7 +104,13 @@
     <Compile Include="Models\ScrollBehavior.cs" />
     <Compile Include="Models\TextOverflow.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="Resources\Theming\DarkThemeDictionary.cs" />
+    <Compile Include="Resources\Theming\IThemeDictionary.cs" />
+    <Compile Include="Resources\Theming\LightThemeDictionary.cs" />
     <Compile Include="Resources\SharedDictionary.cs" />
+    <Compile Include="Resources\Theming\ThemeResource.cs" />
+    <Compile Include="Resources\Theming\ThemeDictionary.cs" />
+    <Compile Include="Resources\Theming\ThemeResourceKey.cs" />
     <Compile Include="Settings\IAppSettings.cs" />
     <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
     <Compile Include="Settings\Migrations\Migration.cs" />
@@ -389,6 +395,9 @@
     <PackageReference Include="MahApps.Metro">
       <Version>1.6.5</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts">
+      <Version>10.0.17134.1000-preview</Version>
+    </PackageReference>
     <PackageReference Include="Nett">
       <Version>0.11.0</Version>
     </PackageReference>
@@ -407,6 +416,7 @@
       <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if "$(ConfigurationName)" == "Debug" (

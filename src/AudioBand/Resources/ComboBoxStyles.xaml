@@ -2,8 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AudioBand.Resources"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
-                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+                    xmlns:theme="clr-namespace:AudioBand.Resources.Theming">
     <ResourceDictionary.MergedDictionaries>
         <local:SharedDictionary Source="Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
@@ -13,7 +12,6 @@
         </Style.Resources>
         <Setter Property="Height" Value="{StaticResource ComboBoxItemHeight}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
@@ -25,10 +23,10 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{x:Static fw:AccentColors.ImmersiveSystemAccentLight3Brush}"/>
+                <Setter Property="Background" Value="{theme:ThemeResource SystemAccentColorLow}"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationPaneHoverBackgroundBrush}"/>
+                <Setter Property="Background" Value="{theme:ThemeResource SystemListMediumColor}"/>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
@@ -36,7 +34,7 @@
                     <Condition Property="IsMouseOver" Value="True"/>
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
-                    <Setter Property="Background" Value="{x:Static fw:AccentColors.ImmersiveSystemAccentBrush}"/>
+                    <Setter Property="Background" Value="{theme:ThemeResource SystemAccentColorHigh}"/>
                 </MultiTrigger.Setters>
             </MultiTrigger>
         </Style.Triggers>
@@ -46,7 +44,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{TemplateBinding Background}">
-                        <TextBlock Foreground="{StaticResource IconColorBrush}"
+                        <TextBlock Foreground="{theme:ThemeResource SystemBaseMediumColor}"
                                    HorizontalAlignment="Right" VerticalAlignment="Center"
                                    Margin="8, 0"
                                    TextAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="&#xE70D;" FontSize="16"/>
@@ -60,9 +58,9 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderDefaultColorBrush}"/>
+        <Setter Property="BorderBrush" Value="{theme:ThemeResource SystemBaseLowColor}"/>
         <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="Background" Value="{theme:ThemeResource SystemAltHighColor}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
@@ -87,7 +85,7 @@
                             <TextBox x:Name="PART_EditableTextBox" Grid.Column="0" Style="{x:Null}"
                                      BorderThickness="0" Padding="{StaticResource InputSpacing}"
                                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                     VerticalContentAlignment="Center"
+                                     VerticalContentAlignment="Center" Foreground="{TemplateBinding Foreground}"
                                      Focusable="True" Background="Transparent"
                                      Visibility="Hidden"
                                      IsReadOnly="{TemplateBinding IsReadOnly}"/>
@@ -95,10 +93,10 @@
                                    IsOpen="{TemplateBinding IsDropDownOpen}" PlacementTarget="{Binding ElementName=Border}"
                                    Focusable="False" PopupAnimation="Fade">
                                 <Border BorderThickness="1" Margin="8"
-                                        BorderBrush="{StaticResource BorderDefaultColorBrush}"
+                                        BorderBrush="{theme:ThemeResource SystemChromeHighColor}"
                                         MinWidth="{TemplateBinding ActualWidth}"
                                         MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                        Background="#EEEEEE">
+                                        Background="{theme:ThemeResource SystemChromeMediumColor}">
                                     <Border.Effect>
                                         <DropShadowEffect BlurRadius="10" Opacity="0.4" ShadowDepth="0"/>
                                     </Border.Effect>
@@ -119,13 +117,13 @@
                             <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BorderFocusedColorBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemAccentColor}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BorderFocusedColorBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemAccentColor}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BorderHoverColorBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

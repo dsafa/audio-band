@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
                     xmlns:settings="clr-namespace:AudioBand.Views.Settings"
                     xmlns:resources="clr-namespace:AudioBand.Resources">
     <ResourceDictionary.MergedDictionaries>
