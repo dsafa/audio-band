@@ -2,8 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AudioBand.Resources"
                     xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
-                    xmlns:animations="clr-namespace:SourceChord.FluentWPF.Animations;assembly=FluentWPF"
-                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls">
+                    xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:converters="clr-namespace:AudioBand.ValueConverters">
     <ResourceDictionary.MergedDictionaries>
         <local:SharedDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml"/>
         <local:SharedDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.ToggleSwitch.xaml" />
@@ -13,9 +14,9 @@
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="{StaticResource BorderDefaultColorBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderDefaultColorBrush}"/>
+        <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseHighColor}"/>
+        <Setter Property="Background" Value="{theme:ThemeResource SystemBaseLowColor}"/>
+        <Setter Property="BorderBrush" Value="{theme:ThemeResource SystemBaseLowColor}"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Height" Value="{StaticResource DefaultButtonHeight}"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -36,31 +37,12 @@
                                     <VisualTransition GeneratedDuration="0:0:0.01" />
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal"/>
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
-                                                        To="{StaticResource BorderHoverColor}" Duration="0:0:0.1"/>
-                                    </Storyboard>
-                                </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
-                                                        To="{StaticResource BorderHoverColor}" Duration="0:0:0.01"/>
-                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource BorderHoverColor}" Duration="0:0:0.01"/>
                                         <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
                                                          To="0.98" Duration="0:0:0.01"/>
                                         <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
                                                          To="0.98" Duration="0:0:0.01"/>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="FocusStates">
-                                <VisualState x:Name="Unfocused"/>
-                                <VisualState x:Name="Focused">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)"
-                                                        To="{StaticResource BorderHoverColor}" Duration="0:0:0.1"/>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -71,10 +53,20 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsDefault" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource BorderFocusedColorBrush}"/>
+                <Setter Property="BorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource ButtonDisabledColorBrush}"/>
+                <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseMediumLowColor}"/>
+                <Setter Property="Background" Value="{theme:ThemeResource SystemBaseLowColor}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -82,6 +74,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseHighColor}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -139,13 +132,14 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource ButtonDisabledColorBrush}"/>
+                <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseMediumLowColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="ContainerButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseHighColor}"/>
         <Setter Property="Margin" Value="-6, 0, 0, 0"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -163,16 +157,8 @@
                                     <VisualTransition GeneratedDuration="0:0:0.01" />
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal"/>
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="#22888888" Duration="0:0:0.1"/>
-                                    </Storyboard>
-                                </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
-                                                        To="#44888888" Duration="0:0:0.01"/>
                                         <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
                                                          To="0.98" Duration="0:0:0.01"/>
                                         <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
@@ -185,23 +171,124 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{theme:ThemeResource SystemChromeMediumColor}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{theme:ThemeResource SystemChromeHighColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="Win10ToggleSwitch"
+           BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitchButton}"
+           TargetType="{x:Type metro:ToggleSwitchButton}">
+        <Setter Property="Height" Value="20" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="ThumbIndicatorWidth" Value="10" />
+        <Setter Property="Width" Value="44" />
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type metro:ToggleSwitchButton}">
+                    <Grid>
+                        <Grid x:Name="PART_SwitchTrack">
+                            <Border x:Name="PART_SwitchBrushBorder"
+                                    Opacity="0"
+                                    Width="{TemplateBinding Width}"
+                                    Height="{TemplateBinding Height}"
+                                    CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Height, Converter={x:Static converters:Converters.DoubleToCornerRadius}, Mode=OneWay}"
+                                    Background="{theme:ThemeResource SystemAccentColor}"/>
+                            <Border x:Name="PART_SwitchBrushOuterBorder"
+                                    Opacity="1"
+                                    Width="{TemplateBinding Width}"
+                                    Height="{TemplateBinding Height}"
+                                    CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Height, Converter={x:Static converters:Converters.DoubleToCornerRadius}, Mode=OneWay}"
+                                    BorderThickness="2" BorderBrush="{theme:ThemeResource SystemBaseHighColor}"/>
+                            <Border x:Name="PART_ThumbIndicator"
+                                  Width="{TemplateBinding Height}"
+                                  Height="{TemplateBinding Height}"
+                                  HorizontalAlignment="Left">
+                                <FrameworkElement.RenderTransform>
+                                    <TranslateTransform x:Name="PART_ThumbTranslate" />
+                                </FrameworkElement.RenderTransform>
+                                <Ellipse x:Name="PART_ThumbIndicatorInner"
+                                         Width="{TemplateBinding ThumbIndicatorWidth}"
+                                         Height="{TemplateBinding ThumbIndicatorWidth}"
+                                         Fill="{theme:ThemeResource SystemBaseHighColor}"/>
+                            </Border>
+                        </Grid>
+                        <Thumb x:Name="PART_DraggingThumb">
+                            <Thumb.Template>
+                                <ControlTemplate>
+                                    <Rectangle Fill="Transparent" />
+                                </ControlTemplate>
+                            </Thumb.Template>
+                        </Thumb>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Disabled" />
+                                <VisualState x:Name="MouseOver" />
+                                <VisualState x:Name="Pressed" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!--  Checked  -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="PART_SwitchBrushBorder" Property="Opacity" Value="1" />
+                            <Setter TargetName="PART_SwitchBrushOuterBorder" Property="Opacity" Value="0" />
+                            <Setter TargetName="PART_ThumbIndicatorInner" Property="Fill" Value="White"/>
+                        </Trigger>
+                        <!--  MouseOver  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsChecked" Value="False" />
+                                <Condition Property="IsEnabled" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_SwitchBrushOuterBorder" Property="BorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsChecked" Value="True" />
+                                <Condition Property="IsEnabled" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_SwitchBrushBorder" Property="Background" Value="{theme:ThemeResource SystemAccentColorMedium}"/>
+                        </MultiTrigger>
+                        <!--  Pressed  -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="PART_SwitchBrushBorder" Property="Background" Value="{theme:ThemeResource SystemChromeHighColor}" />
+                            <Setter TargetName="PART_SwitchBrushBorder" Property="Opacity" Value="1" />
+                            <Setter TargetName="PART_SwitchBrushOuterBorder" Property="Opacity" Value="0" />
+                            <Setter TargetName="PART_ThumbIndicatorInner" Property="Fill" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style TargetType="{x:Type metro:ToggleSwitch}" BasedOn="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}">
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
+        <Setter Property="ContentDirection" Value="RightToLeft" />
+        <Setter Property="ToggleSwitchButtonStyle" Value="{StaticResource Win10ToggleSwitch}"/>
     </Style>
 
     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderDefaultColorBrush}"/>
-        <Setter Property="metro:ControlsHelper.MouseOverBorderBrush" Value="{StaticResource BorderHoverColorBrush}"/>
-        <Setter Property="metro:ControlsHelper.FocusBorderBrush" Value="{StaticResource BorderFocusedColorBrush}"/>
+        <Setter Property="BorderBrush" Value="{theme:ThemeResource SystemBaseLowColor}"/>
+        <Setter Property="metro:ControlsHelper.MouseOverBorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
+        <Setter Property="metro:ControlsHelper.FocusBorderBrush" Value="{theme:ThemeResource SystemAccentColor}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="{x:Static fluentWpf:AccentColors.ImmersiveSystemAccentBrush}"/>
+                <Setter Property="Background" Value="{theme:ThemeResource SystemAccentColor}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

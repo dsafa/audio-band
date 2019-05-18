@@ -3,7 +3,7 @@
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
              xmlns:templateSelectors="clr-namespace:AudioBand.TemplateSelectors"
              xmlns:converters="clr-namespace:AudioBand.ValueConverters"
@@ -70,7 +70,7 @@
                                                                               PasswordStringTemplate="{StaticResource Password}"/>
                             </FrameworkElement.Resources>
                             <TextBlock Text="{Binding Name}" FontSize="16"/>
-                            <TextBlock Text="{Binding Description}" FontSize="{StaticResource BodyFontSize}" Foreground="{StaticResource SecondaryTextColorBrush}"
+                            <TextBlock Text="{Binding Description}" FontSize="{StaticResource BodyFontSize}" Foreground="{theme:ThemeResource SystemBaseMediumColor}"
                                        Visibility="{Binding Description, Converter={x:Static converters:Converters.StringToVisibility}}"/>
                             <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource ValueTemplateSelector}" Margin="0, 4, 0, 0"/>
                         </StackPanel>

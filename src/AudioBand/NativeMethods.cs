@@ -6,9 +6,7 @@ using System.Windows.Interop;
 
 namespace AudioBand
 {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-#pragma warning disable SA1600 // Elements must be documented
-#pragma warning disable SA1201
+#pragma warning disable
     public static class NativeMethods
     {
         public delegate IntPtr CallWndProc(int nCode, IntPtr wParam, IntPtr lParam);
@@ -190,7 +188,5 @@ namespace AudioBand
             public int AnimationId;
         }
     }
-#pragma warning restore SA1600 // Elements must be documented
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-#pragma warning restore SA1201
+#pragma warning restore
 }

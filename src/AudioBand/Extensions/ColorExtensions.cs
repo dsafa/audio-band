@@ -29,5 +29,15 @@ namespace AudioBand.Extensions
             var matchingColorNames = _colors.Where(x => Color.AreClose(x.color, color)).Select(x => x.name);
             return matchingColorNames.FirstOrDefault() ?? new ColorConverter().ConvertToString(color);
         }
+
+        /// <summary>
+        /// Converts a windows ui color to a wpf color.
+        /// </summary>
+        /// <param name="color">The windows color.</param>
+        /// <returns>The wpf color.</returns>
+        public static Color ToWpfColor(this Windows.UI.Color color)
+        {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
     }
 }
