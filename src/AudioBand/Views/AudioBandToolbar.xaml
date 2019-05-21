@@ -228,7 +228,7 @@
                         <i:Interaction.Behaviors>
                             <behaviors:MarqueeContainer ScrollDuration="{Binding ScrollSpeed}" 
                                                         TargetChild="{Binding ElementName=TextBlock1}"
-                                                        DuplicateChild="{Binding ElementName=TextBlock2}"
+                                                        TargetCopy="{Binding ElementName=TextBlockCopy}"
                                                         TextOverflow="{Binding TextOverflow}"
                                                         ScrollBehavior="{Binding ScrollBehavior}"
                                                         IsPlaying="{Binding IsPlaying}"/>
@@ -241,12 +241,12 @@
                                    VerticalAlignment="Center" TextTrimming="None" TextWrapping="NoWrap"
                                    TextAlignment="{Binding TextAlignment, Converter={x:Static converters:Converters.TextAlignment}}">
                         </TextBlock>
-                        <TextBlock x:Name="TextBlock2" behaviors:TextBlockTextSegments.TextSegments="{Binding TextSegments}"
-                                   MinWidth="{Binding Width}" MinHeight="{Binding Height}" Opacity="0"
+                        <TextBlock x:Name="TextBlockCopy" behaviors:TextBlockTextSegments.TextSegments="{Binding TextSegments}"
+                                   MinWidth="{Binding Width}" MinHeight="{Binding Height}"
                                    Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                                    Foreground="{Binding Color, Converter={x:Static converters:Converters.ColorToBrush}}"
                                    FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}"
-                                   VerticalAlignment="Center" TextTrimming="None" TextWrapping="NoWrap"
+                                   VerticalAlignment="Center" TextTrimming="None" TextWrapping="NoWrap" Opacity="0"
                                    TextAlignment="{Binding TextAlignment, Converter={x:Static converters:Converters.TextAlignment}}">
                         </TextBlock>
                     </Canvas>

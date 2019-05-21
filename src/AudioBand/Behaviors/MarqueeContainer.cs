@@ -27,10 +27,10 @@ namespace AudioBand.Behaviors
             = DependencyProperty.Register(nameof(TargetChild), typeof(FrameworkElement), typeof(MarqueeContainer), new PropertyMetadata(TargetChildPropertyChangedCallback));
 
         /// <summary>
-        /// Dependency property for <see cref="DuplicateChild"/>.
+        /// Dependency property for <see cref="TargetCopy"/>.
         /// </summary>
-        public static readonly DependencyProperty DuplicateChildProperty
-            = DependencyProperty.Register(nameof(DuplicateChild), typeof(FrameworkElement), typeof(MarqueeContainer), new PropertyMetadata(DuplicateChildPropertyChangedCallback));
+        public static readonly DependencyProperty TargetCopyProperty
+            = DependencyProperty.Register(nameof(TargetCopy), typeof(FrameworkElement), typeof(MarqueeContainer), new PropertyMetadata(TargetCopyPropertyChangedCallback));
 
         /// <summary>
         /// Dependency property for <see cref="TextOverflow"/>.
@@ -52,6 +52,7 @@ namespace AudioBand.Behaviors
 
         private const double ChildMargin = 50;
         private bool _mouseOver;
+        private Storyboard _storyBoard;
 
         /// <summary>
         /// Gets or sets the target child of the marquee animation.
@@ -65,10 +66,11 @@ namespace AudioBand.Behaviors
         /// <summary>
         /// Gets or sets the duplicate child.
         /// </summary>
-        public FrameworkElement DuplicateChild
+        /// <remarks>Tried to use visual brush for copying but had alignment issues.</remarks>
+        public FrameworkElement TargetCopy
         {
-            get => (FrameworkElement)GetValue(DuplicateChildProperty);
-            set => SetValue(DuplicateChildProperty, value);
+            get => (FrameworkElement)GetValue(TargetCopyProperty);
+            set => SetValue(TargetCopyProperty, value);
         }
 
         /// <summary>
@@ -116,34 +118,19 @@ namespace AudioBand.Behaviors
             AssociatedObject.MouseLeave += AssociatedObjectOnMouseLeave;
         }
 
-        /// <inheritdoc />
-        protected override void OnDetaching()
-        {
-            base.OnDetaching();
-            AssociatedObject.SizeChanged -= AssociatedObjectOnSizeChanged;
-            AssociatedObject.MouseEnter -= AssociatedObjectOnMouseEnter;
-            AssociatedObject.MouseLeave -= AssociatedObjectOnMouseLeave;
-        }
-
         private static void TargetChildPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var marquee = (MarqueeContainer)d;
-            ((FrameworkElement)e.NewValue).RenderTransform = new TranslateTransform(0, 0);
-
-            if (e.OldValue != null)
-            {
-                ((FrameworkElement)e.OldValue).SizeChanged -= marquee.TargetChildOnSizeChanged;
-            }
-
-            if (e.NewValue != null)
-            {
-                ((FrameworkElement)e.NewValue).SizeChanged += marquee.TargetChildOnSizeChanged;
-            }
+            var targetChild = (FrameworkElement)e.NewValue;
+            targetChild.RenderTransform = new TranslateTransform();
+            targetChild.SizeChanged += marquee.TargetChildOnSizeChanged;
         }
 
-        private static void DuplicateChildPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void TargetCopyPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FrameworkElement)e.NewValue).RenderTransform = new TranslateTransform(0, 0);
+            var copy = (FrameworkElement)e.NewValue;
+            copy.Opacity = 0;
+            copy.RenderTransform = new TranslateTransform();
         }
 
         private static void ScrollDurationPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -163,7 +150,11 @@ namespace AudioBand.Behaviors
 
         private static void IsPlayingPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((MarqueeContainer)d).UpdateAnimation();
+            var container = (MarqueeContainer)d;
+            if (container.ScrollBehavior == ScrollBehavior.OnlyWhenTrackPlaying)
+            {
+                container.UpdateAnimation();
+            }
         }
 
         private void AssociatedObjectOnMouseEnter(object sender, MouseEventArgs e)
@@ -196,7 +187,7 @@ namespace AudioBand.Behaviors
 
         private void UpdateAnimation()
         {
-            if (TargetChild == null || DuplicateChild == null)
+            if (TargetChild == null || TargetCopy == null)
             {
                 return;
             }
@@ -216,51 +207,58 @@ namespace AudioBand.Behaviors
 
             if (TargetChild.ActualWidth <= AssociatedObject.Width || ScrollDuration == TimeSpan.Zero || !shouldScroll)
             {
-                StopTargetChildAnimation();
-                StopDuplicateChildAnimation();
+                StopAnimation();
                 return;
             }
 
-            StartTargetChildAnimation();
-            StartDuplicateChildAnimation();
+            StartAnimation();
             AssociatedObject.InvalidateVisual();
         }
 
-        private void StartTargetChildAnimation()
+        private void StopAnimation()
         {
-            var animation = CreateAnimation();
-
-            TargetChild.RenderTransform = new TranslateTransform(AssociatedObject.Width, 0);
-            TargetChild.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+            _storyBoard?.Stop();
+            TargetCopy.Opacity = 0;
+            TargetCopy.RenderTransform.BeginAnimation(TranslateTransform.XProperty, null);
         }
 
-        private void StartDuplicateChildAnimation()
+        private void StartAnimation()
         {
-            var animation = CreateAnimation();
-            animation.BeginTime = CalculateAnimationOffsetTime();
+            // Create animation to scroll from current to left, then a second animation that scrolls from right to left forever
+            var firstAnimation = new DoubleAnimation
+            {
+                From = 0,
+                By = -TargetChild.ActualWidth - ChildMargin,
+                Duration = CalculateTimeToScroll(TargetChild.ActualWidth + ChildMargin),
+            };
 
-            DuplicateChild.Opacity = 1;
-            DuplicateChild.RenderTransform = new TranslateTransform(AssociatedObject.Width, 0);
-            DuplicateChild.RenderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
-        }
+            Storyboard.SetTarget(firstAnimation, TargetChild);
+            Storyboard.SetTargetProperty(firstAnimation, new PropertyPath("RenderTransform.(TranslateTransform.X)"));
 
-        private void StopTargetChildAnimation()
-        {
-            TargetChild.RenderTransform.BeginAnimation(TranslateTransform.XProperty, null);
+            var secondAnimation = CreateFullScrollAnimation();
+            secondAnimation.BeginTime = firstAnimation.Duration.TimeSpan;
+
+            Storyboard.SetTarget(secondAnimation, TargetChild);
+            Storyboard.SetTargetProperty(secondAnimation, new PropertyPath("RenderTransform.(TranslateTransform.X)"));
+
+            _storyBoard = new Storyboard();
+            _storyBoard.Children.Add(firstAnimation);
+            _storyBoard.Children.Add(secondAnimation);
+
+            var copyAnimation = CreateFullScrollAnimation();
+            TargetCopy.Opacity = 1;
+            TargetCopy.RenderTransform = new TranslateTransform(TargetChild.ActualWidth + ChildMargin, 0);
             TargetChild.RenderTransform = new TranslateTransform();
+
+            _storyBoard.Begin();
+            TargetCopy.RenderTransform.BeginAnimation(TranslateTransform.XProperty, copyAnimation);
         }
 
-        private void StopDuplicateChildAnimation()
-        {
-            DuplicateChild.Opacity = 0;
-            DuplicateChild.RenderTransform.BeginAnimation(TranslateTransform.XProperty, null);
-        }
-
-        private DoubleAnimation CreateAnimation()
+        private DoubleAnimation CreateFullScrollAnimation()
         {
             return new DoubleAnimation
             {
-                From = AssociatedObject.ActualWidth,
+                From = TargetChild.ActualWidth + ChildMargin,
                 By = -2 * (TargetChild.ActualWidth + ChildMargin),
                 Duration = CalculateTimeToFullyScroll(),
                 RepeatBehavior = RepeatBehavior.Forever,
@@ -276,8 +274,7 @@ namespace AudioBand.Behaviors
             }
 
             var velocity = AssociatedObject.ActualWidth / ScrollDuration.TotalMilliseconds;
-            var childScrollDistance = scrollDistance;
-            var scrollTime = childScrollDistance / velocity;
+            var scrollTime = scrollDistance / velocity;
 
             return TimeSpan.FromMilliseconds(scrollTime);
         }
@@ -285,11 +282,6 @@ namespace AudioBand.Behaviors
         private TimeSpan CalculateTimeToFullyScroll()
         {
             return CalculateTimeToScroll(2 * (TargetChild.ActualWidth + ChildMargin));
-        }
-
-        private TimeSpan CalculateAnimationOffsetTime()
-        {
-            return TimeSpan.FromMilliseconds(CalculateTimeToFullyScroll().TotalMilliseconds / 2);
         }
     }
 }
