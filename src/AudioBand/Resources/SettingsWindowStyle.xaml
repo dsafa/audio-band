@@ -67,6 +67,9 @@
             <Style TargetType="{x:Type settings:ImagePicker}">
                 <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
+            <Style TargetType="{x:Type metro:RangeSlider}">
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
+            </Style>
         </Style.Resources>
     </Style>
     <Style x:Key="ArrangementGridStyle" TargetType="{x:Type UniformGrid}">

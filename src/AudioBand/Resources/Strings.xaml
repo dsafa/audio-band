@@ -61,6 +61,9 @@
     <sys:String x:Key="CustomLabelOverflowSectionText">Overflow options</sys:String>
     <sys:String x:Key="CustomLabelOverflowDescription">Choose what happens when the text is too long</sys:String>
     <sys:String x:Key="CustomLabelScrollBehaviorDescription">Text scrolling behavior</sys:String>
+    <sys:String x:Key="CustomLabelEffectsSectionText">Effects</sys:String>
+    <sys:String x:Key="CustomLabelTextEffectDescription">Fade text at the edges</sys:String>
+    <sys:String x:Key="CustomLabelTextFadeDescription">Change the range of the fade effect</sys:String>
     <sys:String x:Key="CustomLabelFormatHelpText" xml:space="preserve">Format for the text that is displayed which can include placeholders.
 Placeholders will be substituted with their corresponding values. Placeholders are in the format {[style]&lt;tag&gt;:[color]}.</sys:String>
     <sys:String x:Key="CustomLabelFormatHelpTextTags" xml:space="preserve">&#8226; artist - Artist for the current song

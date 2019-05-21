@@ -21,6 +21,9 @@ namespace AudioBand.Models
         private int _scrollSpeed = 5000;
         private TextOverflow _textOverflow = TextOverflow.Scroll;
         private ScrollBehavior _scrollBehavior = ScrollBehavior.Always;
+        private TextFadeEffect _textFadeEffect = TextFadeEffect.OnlyWhenScrolling;
+        private double _leftFadeOffset = 0.1;
+        private double _rightFadeOffset = 0.9;
 
         /// <summary>
         /// Specifies the alignment of the text in the label.
@@ -167,6 +170,33 @@ namespace AudioBand.Models
         {
             get => _scrollBehavior;
             set => SetProperty(ref _scrollBehavior, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the fade effect.
+        /// </summary>
+        public TextFadeEffect FadeEffect
+        {
+            get => _textFadeEffect;
+            set => SetProperty(ref _textFadeEffect, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the fade offset for the left side.
+        /// </summary>
+        public double LeftFadeOffset
+        {
+            get => _leftFadeOffset;
+            set => SetProperty(ref _leftFadeOffset, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the fade offset for the right side.
+        /// </summary>
+        public double RightFadeOffset
+        {
+            get => _rightFadeOffset;
+            set => SetProperty(ref _rightFadeOffset, value);
         }
     }
 }

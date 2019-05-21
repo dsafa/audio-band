@@ -139,6 +139,36 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the fade effect.
+        /// </summary>
+        [PropertyChangeBinding(nameof(CustomLabel.FadeEffect))]
+        public TextFadeEffect FadeEffect
+        {
+            get => Model.FadeEffect;
+            set => SetProperty(nameof(Model.FadeEffect), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the left offset for the text fade gradient.
+        /// </summary>
+        [PropertyChangeBinding(nameof(CustomLabel.LeftFadeOffset))]
+        public double LeftFadeOffset
+        {
+            get => Model.LeftFadeOffset;
+            set => SetProperty(nameof(Model.LeftFadeOffset), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the right offset for the text fade gradient.
+        /// </summary>
+        [PropertyChangeBinding(nameof(CustomLabel.RightFadeOffset))]
+        public double RightFadeOffset
+        {
+            get => Model.RightFadeOffset;
+            set => SetProperty(nameof(Model.RightFadeOffset), value);
+        }
+
+        /// <summary>
         /// Gets the text segments.
         /// </summary>
         public IEnumerable<TextSegment> TextSegments => _parser.TextSegments;
@@ -157,6 +187,11 @@ namespace AudioBand.ViewModels
         /// Gets the values of the <see cref="TextOverflow"/> enum.
         /// </summary>
         public IEnumerable<EnumDescriptor<TextOverflow>> TextOverflowValues { get; } = typeof(TextOverflow).GetEnumDescriptors<TextOverflow>();
+
+        /// <summary>
+        /// Gets the values of the <see cref="TextFadeEffect"/> enum.
+        /// </summary>
+        public IEnumerable<EnumDescriptor<TextFadeEffect>> FadeEffectValues { get; } = typeof(TextFadeEffect).GetEnumDescriptors<TextFadeEffect>();
 
         /// <summary>
         /// Gets the dialog service.

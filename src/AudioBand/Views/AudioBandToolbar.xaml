@@ -10,6 +10,8 @@
              xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
              xmlns:resources="clr-namespace:AudioBand.Resources"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:models="clr-namespace:AudioBand.Models"
              mc:Ignorable="d"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
              Background="Transparent"
@@ -249,6 +251,41 @@
                                    VerticalAlignment="Center" TextTrimming="None" TextWrapping="NoWrap" Opacity="0"
                                    TextAlignment="{Binding TextAlignment, Converter={x:Static converters:Converters.TextAlignment}}">
                         </TextBlock>
+                        <Canvas.Style>
+                            <Style TargetType="{x:Type Canvas}">
+                                <Style.Resources>
+                                    <LinearGradientBrush x:Key="Mask" StartPoint="0,0" MappingMode="Absolute">
+                                        <!-- Use mapping mode absolute because relative mode is relative to the child text instead of the canvas -->
+                                        <LinearGradientBrush.EndPoint>
+                                            <MultiBinding Converter="{x:Static converters:MultiConverters.Point}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Canvas}}" Path="ActualWidth"/>
+                                                <Binding>
+                                                    <Binding.Source>0.0</Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </LinearGradientBrush.EndPoint>
+                                        <LinearGradientBrush.GradientStops>
+                                            <GradientStop Color="Transparent" Offset="0"/>
+                                            <GradientStop Color="Black" Offset="{Binding LeftFadeOffset}"/>
+                                            <GradientStop Color="Black" Offset="{Binding RightFadeOffset}"/>
+                                            <GradientStop Color="Transparent" Offset="1"/>
+                                        </LinearGradientBrush.GradientStops>
+                                    </LinearGradientBrush>
+                                </Style.Resources>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding FadeEffect}" Value="{x:Static models:TextFadeEffect.Always}">
+                                        <Setter Property="OpacityMask" Value="{StaticResource Mask}"/>
+                                    </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding FadeEffect}" Value="{x:Static models:TextFadeEffect.OnlyWhenScrolling}"/>
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(behaviors:MarqueeContainer.IsScrolling)}" Value="True"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="OpacityMask" Value="{StaticResource Mask}"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Canvas.Style>
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
