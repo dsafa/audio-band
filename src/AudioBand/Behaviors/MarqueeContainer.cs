@@ -50,6 +50,12 @@ namespace AudioBand.Behaviors
         public static readonly DependencyProperty IsPlayingProperty
             = DependencyProperty.Register(nameof(IsPlaying), typeof(bool), typeof(MarqueeContainer), new PropertyMetadata(false, IsPlayingPropertyChangedCallback));
 
+        /// <summary>
+        /// Attached dependency property for IsScrolling.
+        /// </summary>
+        public static readonly DependencyProperty IsScrollingProperty
+            = DependencyProperty.RegisterAttached("IsScrolling", typeof(bool), typeof(MarqueeContainer), new PropertyMetadata(false));
+
         private const double ChildMargin = 50;
         private bool _mouseOver;
         private Storyboard _storyBoard;
@@ -101,6 +107,26 @@ namespace AudioBand.Behaviors
         }
 
         /// <summary>
+        /// Gets the <see cref="IsScrollingProperty"/>.
+        /// </summary>
+        /// <param name="panel">The element to get the value from.</param>
+        /// <returns>The value of the property.</returns>
+        public static bool GetIsScrolling(Panel panel)
+        {
+            return (bool)panel.GetValue(IsScrollingProperty);
+        }
+
+        /// <summary>
+        /// Sets the <see cref="IsScrollingProperty"/>.
+        /// </summary>
+        /// <param name="panel">The element to set the value on.</param>
+        /// <param name="value">The value of the property.</param>
+        public static void SetIsScrolling(Panel panel, bool value)
+        {
+            panel.SetValue(IsScrollingProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether a track is playing.
         /// </summary>
         public bool IsPlaying
@@ -116,6 +142,7 @@ namespace AudioBand.Behaviors
             AssociatedObject.SizeChanged += AssociatedObjectOnSizeChanged;
             AssociatedObject.MouseEnter += AssociatedObjectOnMouseEnter;
             AssociatedObject.MouseLeave += AssociatedObjectOnMouseLeave;
+            SetIsScrolling(AssociatedObject, false);
         }
 
         private static void TargetChildPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -220,6 +247,7 @@ namespace AudioBand.Behaviors
             _storyBoard?.Stop();
             TargetCopy.Opacity = 0;
             TargetCopy.RenderTransform.BeginAnimation(TranslateTransform.XProperty, null);
+            SetIsScrolling(AssociatedObject, false);
         }
 
         private void StartAnimation()
@@ -252,6 +280,7 @@ namespace AudioBand.Behaviors
 
             _storyBoard.Begin();
             TargetCopy.RenderTransform.BeginAnimation(TranslateTransform.XProperty, copyAnimation);
+            SetIsScrolling(AssociatedObject, true);
         }
 
         private DoubleAnimation CreateFullScrollAnimation()

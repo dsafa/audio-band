@@ -29,7 +29,10 @@ namespace AudioBand.Settings.Migrations
             {
                 cfg.CreateMap<Models.V2.CustomLabelSettings, CustomLabel>()
                     .ForMember(dest => dest.ScrollBehavior, opt => opt.Ignore())
-                    .ForMember(dest => dest.TextOverflow, opt => opt.Ignore());
+                    .ForMember(dest => dest.TextOverflow, opt => opt.Ignore())
+                    .ForMember(dest => dest.LeftFadeOffset, opt => opt.Ignore())
+                    .ForMember(dest => dest.RightFadeOffset, opt => opt.Ignore())
+                    .ForMember(dest => dest.FadeEffect, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.AudioSourceSettings, AudioSourceSettings>();
                 cfg.CreateMap<Models.V2.NextButtonSettings, NextButton>()
                     .ForMember(dest => dest.HoveredImagePath, opt => opt.MapFrom(source => source.ImagePath))
