@@ -89,19 +89,22 @@
                                      Focusable="True" Background="Transparent"
                                      Visibility="Hidden"
                                      IsReadOnly="{TemplateBinding IsReadOnly}"/>
-                            <Popup x:Name="PART_Popup" Grid.Column="0" Placement="Bottom" AllowsTransparency="True"
+                            <Popup x:Name="PART_Popup" Grid.Column="0" Placement="Center" AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsDropDownOpen}" PlacementTarget="{Binding ElementName=Border}"
                                    Focusable="False" PopupAnimation="Fade">
-                                <Border BorderThickness="1" Margin="8"
+                                <Border BorderThickness="1" Margin="8" RenderTransformOrigin="0.5, 0.5"
                                         BorderBrush="{theme:ThemeResource SystemChromeHighColor}"
                                         MinWidth="{TemplateBinding ActualWidth}"
                                         MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                        Background="{theme:ThemeResource SystemChromeMediumColor}">
+                                        Background="{theme:ThemeResource SystemChromeMediumLowColor}">
                                     <Border.Effect>
-                                        <DropShadowEffect BlurRadius="10" Opacity="0.4" ShadowDepth="0"/>
+                                        <DropShadowEffect x:Name="PopupEffect" BlurRadius="15" Opacity="0" ShadowDepth="0"/>
                                     </Border.Effect>
+                                    <FrameworkElement.RenderTransform>
+                                        <ScaleTransform x:Name="PopupTransform"/>
+                                    </FrameworkElement.RenderTransform>
                                     <ScrollViewer Margin="0, 4" VerticalScrollBarVisibility="Auto">
-                                        <VirtualizingStackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        <VirtualizingStackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                                     </ScrollViewer>
                                 </Border>
                             </Popup>
@@ -124,6 +127,46 @@
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsDropDownOpen" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PopupTransform" Storyboard.TargetProperty="ScaleX"
+                                                         From="0.8" To="1" Duration="0:0:0.1">
+                                            <DoubleAnimation.EasingFunction>
+                                                <BackEase EasingMode="EaseOut" Amplitude="0.1"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="PopupTransform" Storyboard.TargetProperty="ScaleY"
+                                                         From="0.5" To="1" Duration="0:0:0.1">
+                                            <DoubleAnimation.EasingFunction>
+                                                <BackEase EasingMode="EaseOut" Amplitude="0.1"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="PopupEffect" Storyboard.TargetProperty="Opacity"
+                                                         From="0" To="0.4" Duration="0:0:0.4">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="PopupEffect" Storyboard.TargetProperty="ShadowDepth"
+                                                         From="10" To="2" Duration="0:0:0.4">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PopupEffect" Storyboard.TargetProperty="Opacity"
+                                                         From="0" Duration="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
