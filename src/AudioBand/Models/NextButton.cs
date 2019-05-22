@@ -3,20 +3,26 @@
     /// <summary>
     /// Model for the next button.
     /// </summary>
-    public class NextButton : PlaybackButtonBase
+    public class NextButton : ButtonModelBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NextButton"/> class.
         /// </summary>
         public NextButton()
         {
-            ImagePath = "";
             IsVisible = true;
             Width = 40;
             Height = 15;
             XPosition = 410;
             YPosition = 3;
-            Text = "";
         }
+
+        /// <summary>
+        /// Gets or sets the content for the button.
+        /// </summary>
+        public ButtonContent Content { get; set; } = new ButtonContent
+        {
+            Text = "",
+        };
     }
 }

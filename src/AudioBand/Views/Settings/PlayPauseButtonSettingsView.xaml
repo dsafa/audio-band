@@ -6,115 +6,25 @@
              xmlns:models="clr-namespace:AudioBand.Models"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
              xmlns:resources="clr-namespace:AudioBand.Resources">
-    <DataTemplate DataType="{x:Type viewmodels:PlayPauseButtonVM}">
+    <DataTemplate DataType="{x:Type viewmodels:PlayPauseButtonViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
                     <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="ButtonBaseTemplate.xaml"/>
+                    <resources:SharedDictionary Source="ButtonContentTemplate.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
-
-            <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}" IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
-                <TextBlock Text="{StaticResource WidthLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
-                <TextBlock Text="{StaticResource XPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource YPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
-            </UniformGrid>
-
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <local:ColorPicker Color="{Binding DefaultBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource DefaultColorLabelText}"/>
-            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ProgressBarHoverColorDescription}"/>
-            <local:ColorPicker Color="{Binding ClickedBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ClickedColorLabelText}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource ButtonBaseTemplate}"/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PlayButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <TextBlock Text="{StaticResource PlayButtonContentTypeDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-            <ComboBox ItemsSource="{Binding ButtonContentTypes}" SelectedItem="{Binding PlayButtonContentType}"/>
-            <ItemsControl>
-                <ItemsControl.Style>
-                    <Style TargetType="{x:Type ItemsControl}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding PlayButtonContentType}" Value="{x:Static models:ButtonContentType.Image}">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ItemsControl.Style>
-                <local:ImagePicker ImagePath="{Binding PlayImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PlayButtonImageLabelText}"/>
-                <local:ImagePicker ImagePath="{Binding PlayHoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}"  Title="{StaticResource PlayButtonHoveredImageLabelText}"/>
-                <local:ImagePicker ImagePath="{Binding PlayClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PlayButtonClickedImageLabelText}"/>
-            </ItemsControl>
-            <ItemsControl>
-                <ItemsControl.Style>
-                    <Style TargetType="{x:Type ItemsControl}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding PlayButtonContentType}" Value="{x:Static models:ButtonContentType.Text}">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ItemsControl.Style>
-                <TextBlock Text="{StaticResource PlayButtonFontFamilyDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <ComboBox ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" IsEditable="True"
-                          SelectedValue="{Binding PlayButtonTextFontFamily}" SelectedValuePath="Source"
-                          ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}" Width="400"/>
-                <TextBlock Text="{StaticResource PlayButtonTextDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBox Text="{Binding PlayButtonText}" FontFamily="{Binding PlayButtonTextFontFamily}" Width="100"/>
-                <local:ColorPicker Color="{Binding PlayButtonTextColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextColorDescription}"/>
-                <local:ColorPicker Color="{Binding PlayButtonTextHoverColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextHoverColorDescription}"/>
-                <local:ColorPicker Color="{Binding PlayButtonTextClickedColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextClickedColorDescription}"/>
-            </ItemsControl>
+            <ContentPresenter Content="{Binding PlayContent}" ContentTemplate="{StaticResource ButtonContentTemplate}"/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PauseButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <TextBlock Text="{StaticResource PauseButtonContentSectionText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <ComboBox ItemsSource="{Binding ButtonContentTypes}" SelectedItem="{Binding PauseButtonContentType}"/>
-            <ItemsControl>
-                <ItemsControl.Style>
-                    <Style TargetType="{x:Type ItemsControl}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding PauseButtonContentType}" Value="{x:Static models:ButtonContentType.Image}">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ItemsControl.Style>
-                <local:ImagePicker ImagePath="{Binding PauseImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PauseButtonImageLabelText}"/>
-                <local:ImagePicker ImagePath="{Binding PauseHoveredImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PauseButtonHoveredImageLabelText}"/>
-                <local:ImagePicker ImagePath="{Binding PauseClickedImagePath, Mode=TwoWay}" DialogService="{Binding DialogService}" Title="{StaticResource PauseButtonClickedImageLabelText}"/>
-            </ItemsControl>
-            <ItemsControl>
-                <ItemsControl.Style>
-                    <Style TargetType="{x:Type ItemsControl}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding PauseButtonContentType}" Value="{x:Static models:ButtonContentType.Text}">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ItemsControl.Style>
-                <TextBlock Text="{StaticResource PauseButtonFontFamilyDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <ComboBox ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}" IsEditable="True"
-                          SelectedValue="{Binding PauseButtonTextFontFamily}" SelectedValuePath="Source"
-                          ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}" Width="400"/>
-                <TextBlock Text="{StaticResource PauseButtonTextDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBox Text="{Binding PauseButtonText}" FontFamily="{Binding PauseButtonTextFontFamily}" Width="100"/>
-                <local:ColorPicker Color="{Binding PauseButtonTextColor}" DialogService="{Binding DialogService}" Title="{StaticResource  ButtonTextColorDescription}"/>
-                <local:ColorPicker Color="{Binding PauseButtonTextHoverColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextHoverColorDescription}"/>
-                <local:ColorPicker Color="{Binding PauseButtonTextClickedColor}" DialogService="{Binding DialogService}" Title="{StaticResource ButtonTextClickedColorDescription}"/>
-            </ItemsControl>
+            <ContentPresenter Content="{Binding PauseContent}" ContentTemplate="{StaticResource ButtonContentTemplate}"/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
             <Button HorizontalAlignment="Left"

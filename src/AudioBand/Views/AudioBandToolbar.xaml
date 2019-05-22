@@ -180,7 +180,7 @@
                 </ToolTip>
             </Viewbox.ToolTip>
         </Viewbox>
-        <Button x:Name="PlayPauseButton" DataContext="{Binding ViewModels.PlayPauseButtonVM}"
+        <Button x:Name="PlayPauseButton" DataContext="{Binding ViewModels.PlayPauseButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"

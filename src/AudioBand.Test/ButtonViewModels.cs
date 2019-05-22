@@ -53,7 +53,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new PlayPauseButtonVM(_appSettings.Object, _dialog.Object);
+            var vm = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 

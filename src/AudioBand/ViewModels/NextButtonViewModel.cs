@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
@@ -10,8 +12,9 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the next button.
     /// </summary>
-    public class NextButtonViewModel : PlaybackButtonViewModelBase<NextButton>
+    public class NextButtonViewModel : ButtonViewModelBase<NextButton>
     {
+        private readonly IAppSettings _appSettings;
         private IAudioSource _audioSource;
 
         /// <summary>
@@ -20,10 +23,19 @@ namespace AudioBand.ViewModels
         /// <param name="appSettings">The appSettings.</param>
         /// <param name="dialogService">The dialog service.</param>
         public NextButtonViewModel(IAppSettings appSettings, IDialogService dialogService)
-            : base(appSettings, dialogService, appSettings.NextButton)
+            : base(appSettings.NextButton, dialogService)
         {
+            _appSettings = appSettings;
+            _appSettings.ProfileChanged += AppsSettingsOnProfileChanged;
             NextTrackCommand = new AsyncRelayCommand<object>(NextTrackCommandOnExecute);
+            Content = new ButtonContentViewModel(Model.Content, new NextButton().Content, dialogService);
+            TrackContentViewModel(Content);
         }
+
+        /// <summary>
+        /// Gets the button content.
+        /// </summary>
+        public ButtonContentViewModel Content { get; }
 
         /// <summary>
         /// Sets the audio source.
@@ -36,13 +48,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the next track command.
         /// </summary>
-        public ICommand NextTrackCommand { get; }
-
-        /// <inheritdoc />
-        protected override NextButton GetReplacementModel()
-        {
-            return AppSettings.NextButton;
-        }
+        public IAsyncCommand NextTrackCommand { get; }
 
         private void UpdateAudioSource(IAudioSource audioSource)
         {
@@ -57,6 +63,12 @@ namespace AudioBand.ViewModels
             }
 
             await _audioSource.NextTrackAsync();
+        }
+
+        private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
+        {
+            Debug.Assert(IsEditing == false, "Should not be editing");
+            ReplaceModel(_appSettings.NextButton);
         }
     }
 }

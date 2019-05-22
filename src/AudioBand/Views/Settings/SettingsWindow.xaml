@@ -75,7 +75,7 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.PlayPauseButtonVM}">
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.PlayPauseButtonViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Play}"/>
                             <TextBlock Text="{StaticResource PlayPauseButtonTab}"/>
@@ -298,7 +298,7 @@
                                                                         Converter={x:Static converters:Converters.StringFormat},
                                                                         ConverterParameter={StaticResource LabelsViewHeaderFormat}}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:PlayPauseButtonVM}">
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:PlayPauseButtonViewModel}">
                                 <Setter Property="Text" Value="{StaticResource PlayPauseButtonTab}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:NextButtonViewModel}">
