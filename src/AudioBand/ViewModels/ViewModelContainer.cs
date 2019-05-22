@@ -14,6 +14,7 @@
         /// <param name="customLabelsVm">Custom labels view model.</param>
         /// <param name="nextButtonVm">Next button view model.</param>
         /// <param name="playPauseButtonVm">Play pause button view model.</param>
+        /// <param name="repeatModeButtonViewModel">Repeat mode button view model.</param>
         /// <param name="previousButtonVm">Previous button view model.</param>
         /// <param name="progressBarVm">Progress bar view model.</param>
         /// <param name="audioSourceSettingsVm">Audio source settings view model.</param>
@@ -24,6 +25,7 @@
             CustomLabelsVM customLabelsVm,
             NextButtonVM nextButtonVm,
             PlayPauseButtonVM playPauseButtonVm,
+            RepeatModeButtonViewModel repeatModeButtonViewModel,
             PreviousButtonVM previousButtonVm,
             ProgressBarVM progressBarVm,
             AudioSourceSettingsVM audioSourceSettingsVm)
@@ -34,6 +36,7 @@
             CustomLabelsVM = customLabelsVm;
             NextButtonVM = nextButtonVm;
             PlayPauseButtonVM = playPauseButtonVm;
+            RepeatModeButtonViewModel = repeatModeButtonViewModel;
             PreviousButtonVM = previousButtonVm;
             ProgressBarVM = progressBarVm;
             AudioSourceSettingsVm = audioSourceSettingsVm;
@@ -59,6 +62,9 @@
 
         /// <inheritdoc />
         public PreviousButtonVM PreviousButtonVM { get; }
+
+        /// <inheritdoc />
+        public RepeatModeButtonViewModel RepeatModeButtonViewModel { get; }
 
         /// <inheritdoc />
         public ProgressBarVM ProgressBarVM { get; }

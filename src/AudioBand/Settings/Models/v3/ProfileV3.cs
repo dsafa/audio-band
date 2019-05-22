@@ -29,6 +29,11 @@ namespace AudioBand.Settings.Models.v3
         public NextButton NextButtonSettings { get; set; }
 
         /// <summary>
+        /// Gets or sets the repeat mode button settings.
+        /// </summary>
+        public RepeatModeButton RepeatModeButtonSettings { get; set; }
+
+        /// <summary>
         /// Gets or sets the progressbar settings.
         /// </summary>
         public ProgressBar ProgressBarSettings { get; set; }

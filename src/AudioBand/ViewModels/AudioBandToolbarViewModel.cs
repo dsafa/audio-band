@@ -160,6 +160,7 @@ namespace AudioBand.ViewModels
             ViewModels.PreviousButtonVM.AudioSource = audioSource;
             ViewModels.PlayPauseButtonVM.AudioSource = audioSource;
             ViewModels.ProgressBarVM.AudioSource = audioSource;
+            ViewModels.RepeatModeButtonViewModel.AudioSource = audioSource;
             foreach (var customLabelVm in ViewModels.CustomLabelsVM.CustomLabels)
             {
                 customLabelVm.AudioSource = audioSource;

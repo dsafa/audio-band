@@ -71,6 +71,7 @@
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
     <Compile Include="AudioSource\IAudioSourceManager.cs" />
     <Compile Include="AudioSource\IInternalAudioSource.cs" />
+    <Compile Include="Behaviors\Fallback.cs" />
     <Compile Include="Behaviors\RedirectScrolling.cs" />
     <Compile Include="Behaviors\SliderClickAndDrag.cs" />
     <Compile Include="Behaviors\TrackOffsetFix.cs" />
@@ -93,7 +94,9 @@
     <Compile Include="Models\AlbumArt.cs" />
     <Compile Include="Models\AlbumArtPopup.cs" />
     <Compile Include="Models\AudioBand.cs" />
+    <Compile Include="Models\ButtonContent.cs" />
     <Compile Include="Models\ButtonContentType.cs" />
+    <Compile Include="Models\ButtonModelBase.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NextButton.cs" />
     <Compile Include="Models\PlaybackButtonBase.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="Models\PreviousButton.cs" />
     <Compile Include="Models\ProgressBar.cs" />
     <Compile Include="Models\CustomLabel.cs" />
+    <Compile Include="Models\RepeatModeButton.cs" />
     <Compile Include="Models\ScrollBehavior.cs" />
     <Compile Include="Models\TextFadeEffect.cs" />
     <Compile Include="Models\TextOverflow.cs" />
@@ -141,6 +145,7 @@
     <Compile Include="Settings\Models\v3\ProfileExportV3.cs" />
     <Compile Include="Settings\Models\v3\ProfileV3.cs" />
     <Compile Include="Settings\Models\v3\SettingsV3.cs" />
+    <Compile Include="Settings\Profiles\SettingsV3Profile.cs" />
     <Compile Include="TaskbarHook.cs" />
     <Compile Include="ValueConverters\Converters.cs" />
     <Compile Include="ValueConverters\MultiConverters.cs" />
@@ -151,6 +156,8 @@
     <Compile Include="ViewModels\AudioBandToolbarViewModel.cs" />
     <Compile Include="ViewModels\AudioSourceSettingKeyValue.cs" />
     <Compile Include="ViewModels\AudioSourceSettingsCollectionViewModel.cs" />
+    <Compile Include="ViewModels\ButtonContentViewModel.cs" />
+    <Compile Include="ViewModels\ButtonViewModelBase.cs" />
     <Compile Include="ViewModels\ConfirmationDialogType.cs" />
     <Compile Include="ViewModels\CustomLabelsVM.cs" />
     <Compile Include="ViewModels\AboutVM.cs" />
@@ -160,6 +167,7 @@
     <Compile Include="ViewModels\PreviousButtonVM.cs" />
     <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
     <Compile Include="ViewModels\RenameProfileDialogVM.cs" />
+    <Compile Include="ViewModels\RepeatModeButtonViewModel.cs" />
     <Compile Include="ViewModels\SettingsWindowVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
@@ -312,6 +320,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Settings\ButtonBaseTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\ButtonContentTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Settings\ColorPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -373,6 +389,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\ToolbarProgressBarStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\RepeatModeButtonSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

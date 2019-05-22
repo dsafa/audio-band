@@ -8,6 +8,8 @@ using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
 using AudioBand.Settings.Models.v3;
+using AudioBand.Settings.Profiles;
+using AutoMapper;
 using Nett;
 using NLog;
 using Color = System.Windows.Media.Color;
@@ -121,6 +123,11 @@ namespace AudioBand.Settings
         /// Gets the saved play pause button model.
         /// </summary>
         public PlayPauseButton PlayPauseButton { get; private set; } = new PlayPauseButton();
+
+        /// <summary>
+        /// Gets the saved repeat mode button model.
+        /// </summary>
+        public RepeatModeButton RepeatModeButton { get; private set; } = new RepeatModeButton();
 
         /// <summary>
         /// Gets the saved progress bar model.
@@ -259,27 +266,23 @@ namespace AudioBand.Settings
 
         private void LoadSettingsFromPath(string path)
         {
-            try
-            {
-                var tomlFile = Toml.ReadFile(path, _tomlSettings);
-                var version = tomlFile["Version"].Get<string>();
+            var tomlFile = Toml.ReadFile(path, _tomlSettings);
+            var version = tomlFile["Version"].Get<string>();
 
-                // Create backup
-                if (version != CurrentVersion)
-                {
-                    Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
-                    _settings = Migration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
-                    Save();
-                }
-                else
-                {
-                    _settings = tomlFile.Get<SettingsV3>();
-                }
-            }
-            catch (Exception e)
+            // Create backup
+            if (version != CurrentVersion)
             {
-                Logger.Error(e, "Error loading settings");
-                throw;
+                Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
+                _settings = Migration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
+                Save();
+            }
+            else
+            {
+                // Check for new settings that were added to the current configuration version.
+                var initial = new SettingsV3();
+                var settings = tomlFile.Get<SettingsV3>();
+                new MapperConfiguration(cfg => cfg.AddProfile<SettingsV3Profile>()).CreateMapper().Map(settings, initial);
+                _settings = initial;
             }
         }
 
@@ -305,6 +308,7 @@ namespace AudioBand.Settings
                 PlayPauseButtonSettings = new PlayPauseButton(),
                 NextButtonSettings = new NextButton(),
                 PreviousButtonSettings = new PreviousButton(),
+                RepeatModeButtonSettings = new RepeatModeButton(),
                 ProgressBarSettings = new ProgressBar(),
                 CustomLabelSettings = new List<CustomLabel>
                 {
@@ -375,6 +379,7 @@ namespace AudioBand.Settings
             PreviousButton = _currentProfile.PreviousButtonSettings;
             PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
             ProgressBar = _currentProfile.ProgressBarSettings;
+            RepeatModeButton = _currentProfile.RepeatModeButtonSettings;
 
             ProfileChanged?.Invoke(this, EventArgs.Empty);
         }

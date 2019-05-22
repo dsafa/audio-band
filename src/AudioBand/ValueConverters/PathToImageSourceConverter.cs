@@ -10,10 +10,10 @@ using SharpVectors.Renderers.Wpf;
 namespace AudioBand.ValueConverters
 {
     /// <summary>
-    /// Converts a path to an image source.
+    /// Converts a path to an image source. Multivalue version allows the fallback to be bound.
     /// </summary>
     [ValueConversion(typeof(string), typeof(ImageSource))]
-    public class PathToImageSourceConverter : IValueConverter
+    public class PathToImageSourceConverter : IValueConverter, IMultiValueConverter
     {
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -48,6 +48,18 @@ namespace AudioBand.ValueConverters
 
         /// <inheritdoc />
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Convert(values[0], targetType, parameter, culture) ?? values[1];
+        }
+
+        /// <inheritdoc />
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

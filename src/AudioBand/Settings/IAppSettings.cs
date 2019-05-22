@@ -55,6 +55,11 @@ namespace AudioBand.Settings
         PlayPauseButton PlayPauseButton { get; }
 
         /// <summary>
+        /// Gets the repeat mode button model.
+        /// </summary>
+        RepeatModeButton RepeatModeButton { get; }
+
+        /// <summary>
         /// Gets the saved progress bar model.
         /// </summary>
         ProgressBar ProgressBar { get; }

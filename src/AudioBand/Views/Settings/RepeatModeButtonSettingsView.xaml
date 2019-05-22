@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AudioBand.Views.Settings"
+                    xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
+                    xmlns:resources="clr-namespace:AudioBand.Resources">
+    <DataTemplate DataType="{x:Type viewmodels:RepeatModeButtonViewModel}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="ButtonBaseTemplate.xaml"/>
+                    <resources:SharedDictionary Source="ButtonContentTemplate.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource ButtonBaseTemplate}" Focusable="False"/>
+
+            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource RepeatModeButtonOffContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <ContentPresenter Content="{Binding RepeatOffContent}" ContentTemplate="{StaticResource ButtonContentTemplate}" Focusable="False"/>
+
+            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource RepeatModeButtonContextContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <ContentPresenter Content="{Binding RepeatContextContent}" ContentTemplate="{StaticResource ButtonContentTemplate}" Focusable="False"/>
+
+            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource RepeatModeButtonTrackContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <ContentPresenter Content="{Binding RepeatTrackContent}" ContentTemplate="{StaticResource ButtonContentTemplate}" Focusable="False"/>
+
+            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <Button HorizontalAlignment="Left"
+                    Content="{StaticResource ResetButtonText}"
+                    Command="{Binding ResetCommand}"/>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

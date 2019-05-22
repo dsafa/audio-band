@@ -96,6 +96,13 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.RepeatModeButtonViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource RepeatModeIcon}"/>
+                            <TextBlock Text="{StaticResource RepeatModeButtonTab}"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
                                  Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.ProgressBarVM}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Progress}"/>
@@ -303,6 +310,9 @@
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:ProgressBarVM}">
                                 <Setter Property="Text" Value="{StaticResource ProgressBarTab}"/>
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:RepeatModeButtonViewModel}">
+                                <Setter Property="Text" Value="{StaticResource RepeatModeButtonTab}"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
@@ -312,14 +322,15 @@
                 <ContentControl.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="AlbumArtSettingsView.xaml"/>
-                            <ResourceDictionary Source="AlbumPopupSettingsView.xaml"/>
-                            <ResourceDictionary Source="AudioSourceSettingsView.xaml"/>
-                            <ResourceDictionary Source="CustomLabelSettingsView.xaml"/>
-                            <ResourceDictionary Source="GeneralSettingsView.xaml"/>
-                            <ResourceDictionary Source="PlaybackButtonSettingsView.xaml"/>
-                            <ResourceDictionary Source="PlayPauseButtonSettingsView.xaml"/>
-                            <ResourceDictionary Source="ProgressBarSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="AlbumArtSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="AlbumPopupSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="AudioSourceSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="CustomLabelSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="GeneralSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="PlaybackButtonSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="PlayPauseButtonSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="ProgressBarSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="RepeatModeButtonSettingsView.xaml"/>
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </ContentControl.Resources>
