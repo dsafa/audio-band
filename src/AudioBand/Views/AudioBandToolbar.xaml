@@ -110,11 +110,11 @@
             </MenuItem>
         </fluentWpf:AcrylicContextMenu>
     </UserControl.ContextMenu>
-    <Canvas Width="{Binding ViewModels.AudioBandVM.Width}" Height="{Binding ViewModels.AudioBandVM.Height}">
+    <Canvas Width="{Binding ViewModels.AudioBandViewModel.Width}" Height="{Binding ViewModels.AudioBandViewModel.Height}">
         <Canvas.Resources>
             <behaviors:BindingProxy x:Key="DataContextProxy" Value="{Binding .}"/>
         </Canvas.Resources>
-        <Viewbox x:Name="AlbumArt" DataContext="{Binding ViewModels.AlbumArtVM}"
+        <Viewbox x:Name="AlbumArt" DataContext="{Binding ViewModels.AlbumArtViewModel}"
                      Width="{Binding Width}" Height="{Binding Height}"
                      Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                      Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
@@ -187,14 +187,14 @@
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                 Style="{StaticResource ToolbarPlayPauseButtonStyle}"
                 Command="{Binding PlayPauseTrackCommand}"/>
-        <Button x:Name="NextButton" DataContext="{Binding ViewModels.NextButtonVM}"
+        <Button x:Name="NextButton" DataContext="{Binding ViewModels.NextButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                 Style="{StaticResource ToolbarNextButtonStyle}"
                 Command="{Binding NextTrackCommand}"/>
-        <Button x:Name="PreviousButton" DataContext="{Binding ViewModels.PreviousButtonVM}"
+        <Button x:Name="PreviousButton" DataContext="{Binding ViewModels.PreviousButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
@@ -208,7 +208,7 @@
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                 Style="{StaticResource ToolbarRepeatModeButtonStyle}"
                 Command="{Binding CycleRepeatModeCommand}"/>
-        <Slider x:Name="ProgressBar" DataContext="{Binding ViewModels.ProgressBarVM}"
+        <Slider x:Name="ProgressBar" DataContext="{Binding ViewModels.ProgressBarViewModel}"
                 Width="{Binding Width}" Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
@@ -219,7 +219,7 @@
                 <behaviors:SliderClickAndDrag/>
             </i:Interaction.Behaviors>
         </Slider>
-        <ItemsControl x:Name="CustomLabels" ItemsSource="{Binding ViewModels.CustomLabelsVM.CustomLabels}">
+        <ItemsControl x:Name="CustomLabels" ItemsSource="{Binding ViewModels.CustomLabelsViewModel.CustomLabels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -232,7 +232,7 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type viewModels:CustomLabelVM}">
+                <DataTemplate DataType="{x:Type viewModels:CustomLabelViewModel}">
                     <Canvas Width="{Binding Width}" Height="{Binding Height}" ClipToBounds="True" Background="Transparent">
                         <i:Interaction.Behaviors>
                             <behaviors:MarqueeContainer ScrollDuration="{Binding ScrollSpeed}" 

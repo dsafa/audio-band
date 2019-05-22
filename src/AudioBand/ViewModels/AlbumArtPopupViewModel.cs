@@ -9,15 +9,15 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the album art popup.
     /// </summary>
-    public class AlbumArtPopupVM : ViewModelBase<AlbumArtPopup>
+    public class AlbumArtPopupViewModel : ViewModelBase<AlbumArtPopup>
     {
         private readonly IAppSettings _appSettings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AlbumArtPopupVM"/> class.
+        /// Initializes a new instance of the <see cref="AlbumArtPopupViewModel"/> class.
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
-        public AlbumArtPopupVM(IAppSettings appSettings)
+        public AlbumArtPopupViewModel(IAppSettings appSettings)
             : base(appSettings.AlbumArtPopup)
         {
             _appSettings = appSettings;

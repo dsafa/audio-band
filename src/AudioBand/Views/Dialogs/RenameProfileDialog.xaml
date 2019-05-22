@@ -15,7 +15,7 @@
         Height="200" Width="450"
         Title="RenameProfileDialog"
         WindowStartupLocation="CenterScreen"
-        d:DataContext="{d:DesignInstance viewModels:RenameProfileDialogVM, IsDesignTimeCreatable=True}"
+        d:DataContext="{d:DesignInstance viewModels:RenameProfileDialogViewModel, IsDesignTimeCreatable=True}"
         Foreground="{theme:ThemeResource SystemBaseHighColor}"
         Background="{theme:ThemeResource SystemAltHighColor}">
     <i:Interaction.Behaviors>

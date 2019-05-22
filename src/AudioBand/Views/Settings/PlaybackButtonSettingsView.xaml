@@ -18,7 +18,7 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
-        <StackPanel Style="{StaticResource SettingsStackPanel}" d:DataContext="{d:DesignInstance viewmodels:NextButtonVM}">
+        <StackPanel Style="{StaticResource SettingsStackPanel}" d:DataContext="{d:DesignInstance viewmodels:NextButtonViewModel}">
             <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
             <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
             <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}"
@@ -85,10 +85,10 @@
                 Command="{Binding ResetCommand}"/>
         </StackPanel>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewmodels:NextButtonVM}">
+    <DataTemplate DataType="{x:Type viewmodels:NextButtonViewModel}">
         <ContentControl ContentTemplate="{StaticResource PlaybackButtonContent}" Content="{Binding}"/>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewmodels:PreviousButtonVM}">
+    <DataTemplate DataType="{x:Type viewmodels:PreviousButtonViewModel}">
         <ContentControl ContentTemplate="{StaticResource PlaybackButtonContent}" Content="{Binding}"/>
     </DataTemplate>
 </ResourceDictionary>

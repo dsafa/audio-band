@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:AudioBand.ValueConverters"
              xmlns:models="clr-namespace:AudioBand.Models"
              xmlns:resources="clr-namespace:AudioBand.Resources">
-    <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
+    <DataTemplate DataType="{x:Type viewmodels:CustomLabelViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>

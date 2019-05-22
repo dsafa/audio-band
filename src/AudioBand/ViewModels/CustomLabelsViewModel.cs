@@ -12,34 +12,34 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// Viewmodel for all the custom labels.
     /// </summary>
-    public class CustomLabelsVM : ViewModelBase
+    public class CustomLabelsViewModel : ViewModelBase
     {
-        private readonly HashSet<CustomLabelVM> _added = new HashSet<CustomLabelVM>();
-        private readonly HashSet<CustomLabelVM> _removed = new HashSet<CustomLabelVM>();
+        private readonly HashSet<CustomLabelViewModel> _added = new HashSet<CustomLabelViewModel>();
+        private readonly HashSet<CustomLabelViewModel> _removed = new HashSet<CustomLabelViewModel>();
         private readonly IAppSettings _appsettings;
         private readonly IDialogService _dialogService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomLabelsVM"/> class
+        /// Initializes a new instance of the <see cref="CustomLabelsViewModel"/> class
         /// with the list of custom labels and a label host.
         /// </summary>
         /// <param name="appsettings">The app setings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CustomLabelsVM(IAppSettings appsettings, IDialogService dialogService)
+        public CustomLabelsViewModel(IAppSettings appsettings, IDialogService dialogService)
         {
             _appsettings = appsettings;
             _dialogService = dialogService;
             SetupLabels();
 
             AddLabelCommand = new RelayCommand(AddLabelCommandOnExecute);
-            RemoveLabelCommand = new RelayCommand<CustomLabelVM>(RemoveLabelCommandOnExecute);
+            RemoveLabelCommand = new RelayCommand<CustomLabelViewModel>(RemoveLabelCommandOnExecute);
             _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
         /// <summary>
         /// Gets the collection of custom label viewmodels.
         /// </summary>
-        public ObservableCollection<CustomLabelVM> CustomLabels { get; } = new ObservableCollection<CustomLabelVM>();
+        public ObservableCollection<CustomLabelViewModel> CustomLabels { get; } = new ObservableCollection<CustomLabelViewModel>();
 
         /// <summary>
         /// Gets the command to add a new label.
@@ -49,7 +49,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the command to remove a label.
         /// </summary>
-        public RelayCommand<CustomLabelVM> RemoveLabelCommand { get; }
+        public RelayCommand<CustomLabelViewModel> RemoveLabelCommand { get; }
 
         /// <inheritdoc/>
         protected override void OnBeginEdit()
@@ -93,34 +93,34 @@ namespace AudioBand.ViewModels
         {
             BeginEdit();
 
-            var newLabel = new CustomLabelVM(new CustomLabel(), _dialogService) { Name = "New Label" };
+            var newLabel = new CustomLabelViewModel(new CustomLabel(), _dialogService) { Name = "New Label" };
             CustomLabels.Add(newLabel);
 
             _added.Add(newLabel);
         }
 
-        private void RemoveLabelCommandOnExecute(CustomLabelVM labelVm)
+        private void RemoveLabelCommandOnExecute(CustomLabelViewModel labelViewModel)
         {
             BeginEdit();
 
-            if (!_dialogService.ShowConfirmationDialog(ConfirmationDialogType.DeleteLabel, labelVm.Name))
+            if (!_dialogService.ShowConfirmationDialog(ConfirmationDialogType.DeleteLabel, labelViewModel.Name))
             {
                 return;
             }
 
-            CustomLabels.Remove(labelVm);
+            CustomLabels.Remove(labelViewModel);
 
             // Only add to removed if not a new label
-            if (!_added.Remove(labelVm))
+            if (!_added.Remove(labelViewModel))
             {
-                _removed.Add(labelVm);
+                _removed.Add(labelViewModel);
             }
         }
 
         private void SetupLabels()
         {
             CustomLabels.Clear();
-            foreach (var customLabelVm in _appsettings.CustomLabels.Select(customLabel => new CustomLabelVM(customLabel, _dialogService)))
+            foreach (var customLabelVm in _appsettings.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService)))
             {
                 CustomLabels.Add(customLabelVm);
             }

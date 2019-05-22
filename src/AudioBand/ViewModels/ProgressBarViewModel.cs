@@ -14,7 +14,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the progress bar.
     /// </summary>
-    public class ProgressBarVM : ViewModelBase<ProgressBar>
+    public class ProgressBarViewModel : ViewModelBase<ProgressBar>
     {
         private readonly IAppSettings _appsettings;
         private IAudioSource _audioSource;
@@ -22,11 +22,11 @@ namespace AudioBand.ViewModels
         private TimeSpan _trackLength;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProgressBarVM"/> class.
+        /// Initializes a new instance of the <see cref="ProgressBarViewModel"/> class.
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public ProgressBarVM(IAppSettings appsettings, IDialogService dialogService)
+        public ProgressBarViewModel(IAppSettings appsettings, IDialogService dialogService)
             : base(appsettings.ProgressBar)
         {
             _appsettings = appsettings;

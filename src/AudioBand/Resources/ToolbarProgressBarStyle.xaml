@@ -11,7 +11,7 @@
                     mc:Ignorable="d">
     <Style x:Key="ProgressBarStyle" TargetType="{x:Type Slider}">
         <d:Style.DataContext>
-            <x:Type Type="viewmodels:ProgressBarVM"/>
+            <x:Type Type="viewmodels:ProgressBarViewModel"/>
         </d:Style.DataContext>
         <Style.Resources>
             <PopupAnimation x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">Fade</PopupAnimation>

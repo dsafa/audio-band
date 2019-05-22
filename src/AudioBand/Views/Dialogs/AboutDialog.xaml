@@ -30,7 +30,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Window.DataContext>
-        <viewmodels:AboutVM/>
+        <viewmodels:AboutDialogViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>

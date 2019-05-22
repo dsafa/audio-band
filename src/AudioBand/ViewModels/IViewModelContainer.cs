@@ -8,27 +8,27 @@
         /// <summary>
         /// Gets the viewmodel for audioband toolbar.
         /// </summary>
-        AudioBandVM AudioBandVM { get; }
+        AudioBandViewModel AudioBandViewModel { get; }
 
         /// <summary>
         /// Gets the viewmodel for the album art popup.
         /// </summary>
-        AlbumArtPopupVM AlbumArtPopupVM { get; }
+        AlbumArtPopupViewModel AlbumArtPopupViewModel { get; }
 
         /// <summary>
         /// Gets the viewmodel for the album art.
         /// </summary>
-        AlbumArtVM AlbumArtVM { get; }
+        AlbumArtViewModel AlbumArtViewModel { get; }
 
         /// <summary>
         /// Gets the viewmodel for custom labels collection.
         /// </summary>
-        CustomLabelsVM CustomLabelsVM { get; }
+        CustomLabelsViewModel CustomLabelsViewModel { get; }
 
         /// <summary>
         /// Gets the view model for the next button.
         /// </summary>
-        NextButtonVM NextButtonVM { get; }
+        NextButtonViewModel NextButtonViewModel { get; }
 
         /// <summary>
         /// Gets the view model for the play/pause button.
@@ -38,7 +38,7 @@
         /// <summary>
         /// Gets the view model for the previous button.
         /// </summary>
-        PreviousButtonVM PreviousButtonVM { get; }
+        PreviousButtonViewModel PreviousButtonViewModel { get; }
 
         /// <summary>
         /// Gets the view model for the repeat mode button.
@@ -48,11 +48,11 @@
         /// <summary>
         /// Gets the view model for the progress bar.
         /// </summary>
-        ProgressBarVM ProgressBarVM { get; }
+        ProgressBarViewModel ProgressBarViewModel { get; }
 
         /// <summary>
         /// Gets the collection for view models for the audio source settings.
         /// </summary>
-        AudioSourceSettingsVM AudioSourceSettingsVm { get; }
+        AudioSourceSettingsViewModel AudioSourceSettingsViewModel { get; }
     }
 }

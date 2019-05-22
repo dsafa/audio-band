@@ -152,7 +152,7 @@
     <Compile Include="ValueConverters\MultiConverters.cs" />
     <Compile Include="ValueConverters\PathToImageSourceConverter.cs" />
     <Compile Include="ValueConverters\PointConverter.cs" />
-    <Compile Include="ViewModels\AlbumArtPopupVM.cs" />
+    <Compile Include="ViewModels\AlbumArtPopupViewModel.cs" />
     <Compile Include="ViewModels\AlsoNotifyAttribute.cs" />
     <Compile Include="ViewModels\AudioBandToolbarViewModel.cs" />
     <Compile Include="ViewModels\AudioSourceSettingKeyValue.cs" />
@@ -160,16 +160,16 @@
     <Compile Include="ViewModels\ButtonContentViewModel.cs" />
     <Compile Include="ViewModels\ButtonViewModelBase.cs" />
     <Compile Include="ViewModels\ConfirmationDialogType.cs" />
-    <Compile Include="ViewModels\CustomLabelsVM.cs" />
-    <Compile Include="ViewModels\AboutVM.cs" />
+    <Compile Include="ViewModels\CustomLabelsViewModel.cs" />
+    <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
-    <Compile Include="ViewModels\PlaybackButtonVMBase.cs" />
+    <Compile Include="ViewModels\PlaybackButtonViewModelBase.cs" />
     <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
-    <Compile Include="ViewModels\PreviousButtonVM.cs" />
+    <Compile Include="ViewModels\PreviousButtonViewModel.cs" />
     <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
-    <Compile Include="ViewModels\RenameProfileDialogVM.cs" />
+    <Compile Include="ViewModels\RenameProfileDialogViewModel.cs" />
     <Compile Include="ViewModels\RepeatModeButtonViewModel.cs" />
-    <Compile Include="ViewModels\SettingsWindowVM.cs" />
+    <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
     <Compile Include="ViewModels\ViewModelContainer.cs" />
@@ -229,18 +229,18 @@
     <Compile Include="ValueConverters\StringToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\TextAlignmentConverter.cs" />
     <Compile Include="ValueConverters\TimeSpanToMsConverter.cs" />
-    <Compile Include="ViewModels\AlbumArtVM.cs" />
+    <Compile Include="ViewModels\AlbumArtViewModel.cs" />
     <Compile Include="DirectoryHelper.cs" />
-    <Compile Include="ViewModels\AudioBandVM.cs" />
-    <Compile Include="ViewModels\AudioSourceSettingsVM.cs" />
-    <Compile Include="ViewModels\NextButtonVM.cs" />
+    <Compile Include="ViewModels\AudioBandViewModel.cs" />
+    <Compile Include="ViewModels\AudioSourceSettingsViewModel.cs" />
+    <Compile Include="ViewModels\NextButtonViewModel.cs" />
     <Compile Include="AudioSource\AudioSourceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\Models\v2\Settings.cs" />
     <Compile Include="Settings\SerializationConversions.cs" />
     <Compile Include="Settings\AppSettings.cs" />
-    <Compile Include="ViewModels\ProgressBarVM.cs" />
-    <Compile Include="ViewModels\CustomLabelVM.cs" />
+    <Compile Include="ViewModels\ProgressBarViewModel.cs" />
+    <Compile Include="ViewModels\CustomLabelViewModel.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>

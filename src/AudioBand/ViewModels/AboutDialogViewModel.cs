@@ -7,12 +7,12 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the `about audioband` view.
     /// </summary>
-    public class AboutVM : ViewModelBase
+    public class AboutDialogViewModel : ViewModelBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AboutVM"/> class.
+        /// Initializes a new instance of the <see cref="AboutDialogViewModel"/> class.
         /// </summary>
-        public AboutVM()
+        public AboutDialogViewModel()
         {
             OpenLinkCommand = new RelayCommand<string>(OpenLinkCommandOnExecute);
         }

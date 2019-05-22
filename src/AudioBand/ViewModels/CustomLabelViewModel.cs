@@ -15,18 +15,18 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// The view model for a custom label.
     /// </summary>
-    public class CustomLabelVM : ViewModelBase<CustomLabel>
+    public class CustomLabelViewModel : ViewModelBase<CustomLabel>
     {
         private readonly FormattedTextParser _parser;
         private IAudioSource _audioSource;
         private bool _isPlaying;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomLabelVM"/> class.
+        /// Initializes a new instance of the <see cref="CustomLabelViewModel"/> class.
         /// </summary>
         /// <param name="model">The custom label.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CustomLabelVM(CustomLabel model, IDialogService dialogService)
+        public CustomLabelViewModel(CustomLabel model, IDialogService dialogService)
             : base(model)
         {
             DialogService = dialogService;

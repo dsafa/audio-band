@@ -12,18 +12,18 @@ namespace AudioBand.ViewModels
     /// View model base for playback button.
     /// </summary>
     /// <typeparam name="TButton">The playback button model.</typeparam>
-    public abstract class PlaybackButtonVMBase<TButton> : ViewModelBase<TButton>
+    public abstract class PlaybackButtonViewModelBase<TButton> : ViewModelBase<TButton>
         where TButton : PlaybackButtonBase, new()
     {
         private static readonly List<ButtonContentType> ContentTypes = Enum.GetValues(typeof(ButtonContentType)).Cast<ButtonContentType>().ToList();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlaybackButtonVMBase{TButton}"/> class.
+        /// Initializes a new instance of the <see cref="PlaybackButtonViewModelBase{TButton}"/> class.
         /// </summary>
         /// <param name="appSettings">The appSettings.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="buttonModel">The button model.</param>
-        protected PlaybackButtonVMBase(IAppSettings appSettings, IDialogService dialogService, TButton buttonModel)
+        protected PlaybackButtonViewModelBase(IAppSettings appSettings, IDialogService dialogService, TButton buttonModel)
             : base(buttonModel)
         {
             DialogService = dialogService;

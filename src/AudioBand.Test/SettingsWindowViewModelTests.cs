@@ -32,13 +32,13 @@ namespace AudioBand.Test
             _appSettings.SetupGet(m => m.CustomLabels).Returns(new List<CustomLabel>());
             _dialog = new Mock<IDialogService>();
             _container = new Mock<IViewModelContainer>();
-            _container.SetupGet(m => m.CustomLabelsVM).Returns(new CustomLabelsVM(_appSettings.Object, _dialog.Object));
+            _container.SetupGet(m => m.CustomLabelsViewModel).Returns(new CustomLabelsViewModel(_appSettings.Object, _dialog.Object));
             _messageBus = new Mock<IMessageBus>();
         }
 
-        private SettingsWindowVM CreateVm()
+        private SettingsWindowViewModel CreateVm()
         {
-            return new SettingsWindowVM(_appSettings.Object, _dialog.Object, _container.Object, _messageBus.Object);
+            return new SettingsWindowViewModel(_appSettings.Object, _dialog.Object, _container.Object, _messageBus.Object);
         }
 
         private class TestViewmodel : ViewModelBase
