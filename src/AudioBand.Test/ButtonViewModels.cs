@@ -44,6 +44,20 @@ namespace AudioBand.Test
             Assert.AreEqual(second.Height, vm.Height);
         }
 
+
+        [TestMethod]
+        public async Task NextButtonCommandCallsNextTrack()
+        {
+            _appSettings.SetupGet(m => m.NextButton).Returns(new NextButton());
+            var vm = new NextButtonViewModel(_appSettings.Object, _dialog.Object);
+            var audioSourceMock = new Mock<IAudioSource>();
+            audioSourceMock.Setup(m => m.NextTrackAsync()).Returns(Task.CompletedTask);
+            vm.AudioSource = audioSourceMock.Object;
+
+            await vm.NextTrackCommand.ExecuteAsync(null);
+            audioSourceMock.Verify(m => m.NextTrackAsync());
+        }
+
         [TestMethod]
         public void PlayPauseButtonListensForProfileChanges()
         {
@@ -66,6 +80,63 @@ namespace AudioBand.Test
         }
 
         [TestMethod]
+        public void PlayPauseButtonMarkedAsEditingWhenContentIsEdited()
+        {
+            _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
+            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object);
+
+            viewModel.PlayContent.Text = "";
+            Assert.IsTrue(viewModel.PlayContent.IsEditing);
+            Assert.IsTrue(viewModel.IsEditing);
+            
+            viewModel.EndEdit();
+            Assert.IsFalse(viewModel.IsEditing);
+            Assert.IsFalse(viewModel.PlayContent.IsEditing);
+
+            viewModel.PauseContent.Text = "";
+            Assert.IsTrue(viewModel.IsEditing);
+            Assert.IsTrue(viewModel.PauseContent.IsEditing);
+        }
+
+        [TestMethod]
+        public void PlayPauseButtonListensToAudioSource()
+        {
+            _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
+            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object);
+            var audioSourceMock = new Mock<IAudioSource>();
+
+            viewModel.AudioSource = audioSourceMock.Object;
+
+            audioSourceMock.Raise(m => m.IsPlayingChanged += null, null, true);
+            Assert.IsTrue(viewModel.IsPlaying);
+            Assert.IsFalse(viewModel.IsPlayButtonShown);
+
+            audioSourceMock.Raise(m => m.IsPlayingChanged += null, null, false);
+            Assert.IsFalse(viewModel.IsPlaying);
+            Assert.IsTrue(viewModel.IsPlayButtonShown);
+        }
+
+        [TestMethod]
+        public async Task PlayPauseButtonPlayAndPauseCommandWorks()
+        {
+            _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
+            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object);
+            var audioSourceMock = new Mock<IAudioSource>();
+            var isPlayingSequence = new[] {true, false};
+            var index = 0;
+            audioSourceMock.Setup(m => m.PlayTrackAsync())
+                .Callback(() => Assert.AreEqual(isPlayingSequence[index++], true))
+                .Returns(Task.CompletedTask);
+            audioSourceMock.Setup(m => m.PauseTrackAsync())
+                .Callback(() => Assert.AreEqual(isPlayingSequence[index++], false))
+                .Returns(Task.CompletedTask);
+
+            await viewModel.PlayPauseTrackCommand.ExecuteAsync(null);
+            audioSourceMock.Raise(m => m.IsPlayingChanged += null, null, true);
+            await viewModel.PlayPauseTrackCommand.ExecuteAsync(null);
+        }
+
+        [TestMethod]
         public void PreviousButtonListensForProfileChanges()
         {
             var first = new PreviousButton() { Height = 1 };
@@ -84,6 +155,19 @@ namespace AudioBand.Test
             Assert.IsFalse(vm.IsEditing);
             Assert.IsTrue(raised);
             Assert.AreEqual(second.Height, vm.Height);
+        }
+
+        [TestMethod]
+        public async Task PreviousButtonCommandCallsPreviousTrack()
+        {
+            _appSettings.SetupGet(m => m.PreviousButton).Returns(new PreviousButton());
+            var vm = new PreviousButtonViewModel(_appSettings.Object, _dialog.Object);
+            var audioSourceMock = new Mock<IAudioSource>();
+            audioSourceMock.Setup(m => m.PreviousTrackAsync()).Returns(Task.CompletedTask);
+            vm.AudioSource = audioSourceMock.Object;
+
+            await vm.PreviousTrackCommand.ExecuteAsync(null);
+            audioSourceMock.Verify(m => m.PreviousTrackAsync());
         }
 
         [TestMethod]

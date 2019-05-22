@@ -62,7 +62,7 @@ namespace AudioBand.ViewModels
                 return;
             }
 
-            await _audioSource.NextTrackAsync();
+            await _audioSource.PreviousTrackAsync();
         }
 
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
