@@ -244,4 +244,22 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+    <DrawingImage x:Key="RepeatModeIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M142.19071,79.195957L178.96026,42.426407 142.19071,5.656854 M98.960267,42.426407L178.96026,42.426407 M34.618799,188.81415A90.992584,85.751953,0,0,1,14.894088,95.362512A90.992584,85.751953,0,0,1,98.960277,42.426411">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="{theme:ThemeResource SystemBaseHighColor}" Thickness="{StaticResource IconPenThickness}" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M113.80929,176.80405L77.03974,213.5736 113.80929,250.34315 M157.03974,213.5736L77.03974,213.5736 M221.3812,67.185856A90.992584,85.751953,0,0,1,241.10591,160.6375A90.992584,85.751953,0,0,1,157.03973,213.5736">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="{theme:ThemeResource SystemBaseHighColor}" Thickness="{StaticResource IconPenThickness}" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

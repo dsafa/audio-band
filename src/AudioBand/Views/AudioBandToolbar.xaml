@@ -201,6 +201,13 @@
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                 Style="{StaticResource ToolbarPreviousButtonStyle}"
                 Command="{Binding PreviousTrackCommand}"/>
+        <Button x:Name="RepeatModeButton" DataContext="{Binding ViewModels.RepeatModeButtonViewModel}"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
+                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                Style="{StaticResource ToolbarRepeatModeButtonStyle}"
+                Command="{Binding CycleRepeatModeCommand}"/>
         <Slider x:Name="ProgressBar" DataContext="{Binding ViewModels.ProgressBarVM}"
                 Width="{Binding Width}" Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"

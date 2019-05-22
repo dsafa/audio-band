@@ -41,6 +41,11 @@
         PreviousButtonVM PreviousButtonVM { get; }
 
         /// <summary>
+        /// Gets the view model for the repeat mode button.
+        /// </summary>
+        RepeatModeButtonViewModel RepeatModeButtonViewModel { get; }
+
+        /// <summary>
         /// Gets the view model for the progress bar.
         /// </summary>
         ProgressBarVM ProgressBarVM { get; }

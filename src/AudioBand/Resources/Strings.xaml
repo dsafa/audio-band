@@ -47,6 +47,17 @@
     <sys:String x:Key="PlaybackButtonTextDescription">Button text</sys:String>
     <sys:String x:Key="ImageSectionText">Image</sys:String>
 
+    <!-- Button content settings -->
+    <sys:String x:Key="ButtonContentSectionText">Button content</sys:String>
+    <sys:String x:Key="ButtonContentTypeDescription">Select the content type</sys:String>
+    <sys:String x:Key="ButtonFontFamilyDescription">Select the font family for the text</sys:String>
+    <sys:String x:Key="ButtonTextDescription">Button text</sys:String>
+
+    <!-- Repeat mode button settings -->
+    <sys:String x:Key="RepeatModeButtonOffContentSectionText">Repeat off button content</sys:String>
+    <sys:String x:Key="RepeatModeButtonContextContentSectionText">Repeat on button content</sys:String>
+    <sys:String x:Key="RepeatModeButtonTrackContentSectionText">Repeat track button content</sys:String>
+
     <!-- Custom text label settings -->
     <sys:String x:Key="CustomLabelNameDescription">Choose a name for the label</sys:String>
     <sys:String x:Key="CustomLabelFontFamilyDescription">Font Family</sys:String>
@@ -86,6 +97,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="PlayPauseButtonTab">Play/Pause Button</sys:String>
     <sys:String x:Key="PrevButtonTab">Previous Track Button</sys:String>
     <sys:String x:Key="NextButtonTab">Next Track Button</sys:String>
+    <sys:String x:Key="RepeatModeButtonTab">Repeat Mode Button</sys:String>
     <sys:String x:Key="ProgressBarTab">Progress Bar</sys:String>
     <sys:String x:Key="CustomLabelsTab">Text Labels</sys:String>
     <sys:String x:Key="AlbumArtTab">Album Art</sys:String>

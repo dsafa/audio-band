@@ -117,6 +117,7 @@ namespace AudioBand
                 _container.Register<ProgressBarVM>(Lifestyle.Singleton);
                 _container.Register<SettingsWindowVM>(Lifestyle.Singleton);
                 _container.Register<AudioSourceSettingsVM>(Lifestyle.Singleton);
+                _container.Register<RepeatModeButtonViewModel>(Lifestyle.Singleton);
 
                 _container.Verify();
             }
