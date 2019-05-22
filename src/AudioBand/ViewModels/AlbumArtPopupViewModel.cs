@@ -3,7 +3,6 @@ using System.Diagnostics;
 using AudioBand.Models;
 using AudioBand.Settings;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
@@ -24,6 +23,9 @@ namespace AudioBand.ViewModels
             appSettings.ProfileChanged += AppSettingsOnProfileChanged;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether it is visible.
+        /// </summary>
         [PropertyChangeBinding(nameof(AlbumArtPopup.IsVisible))]
         public bool IsVisible
         {
@@ -31,6 +33,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.IsVisible), value);
         }
 
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
         [PropertyChangeBinding(nameof(AlbumArtPopup.Width))]
         public double Width
         {
@@ -38,6 +43,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Width), value);
         }
 
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
         [PropertyChangeBinding(nameof(AlbumArtPopup.Height))]
         public double Height
         {
@@ -45,6 +53,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Height), value);
         }
 
+        /// <summary>
+        /// Gets or sets the x position.
+        /// </summary>
         [PropertyChangeBinding(nameof(AlbumArtPopup.XPosition))]
         public double XPosition
         {
@@ -52,6 +63,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.XPosition), value);
         }
 
+        /// <summary>
+        /// Gets or sets the margin.
+        /// </summary>
         [PropertyChangeBinding(nameof(AlbumArtPopup.Margin))]
         public double Margin
         {
@@ -66,4 +80,3 @@ namespace AudioBand.ViewModels
         }
     }
 }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

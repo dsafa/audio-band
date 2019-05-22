@@ -1,4 +1,5 @@
-﻿using AudioBand.Models;
+﻿#pragma warning disable
+using AudioBand.Models;
 using Color = System.Windows.Media.Color;
 
 namespace AudioBand.Settings.Models.V2

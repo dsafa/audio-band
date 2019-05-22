@@ -19,7 +19,9 @@ namespace AudioBand.Commands
         /// </summary>
         /// <param name="execute">Action to execute.</param>
         public AsyncRelayCommand(Func<T, Task> execute)
-            : this(execute, null) { }
+            : this(execute, null)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AsyncRelayCommand{T}"/> class

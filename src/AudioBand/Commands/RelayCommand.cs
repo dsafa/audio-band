@@ -11,7 +11,9 @@ namespace AudioBand.Commands
         /// </summary>
         /// <param name="execute">Action to execute.</param>
         public RelayCommand(Action<object> execute)
-            : base(execute) { }
+            : base(execute)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelayCommand"/> class.
@@ -20,6 +22,8 @@ namespace AudioBand.Commands
         /// <param name="execute">Action to execute.</param>
         /// <param name="canExecute">Predicate to check if the command can be executed.</param>
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
-            : base(execute, canExecute) { }
+            : base(execute, canExecute)
+        {
+        }
     }
 }

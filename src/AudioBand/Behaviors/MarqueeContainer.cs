@@ -107,6 +107,15 @@ namespace AudioBand.Behaviors
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether a track is playing.
+        /// </summary>
+        public bool IsPlaying
+        {
+            get => (bool)GetValue(IsPlayingProperty);
+            set => SetValue(IsPlayingProperty, value);
+        }
+
+        /// <summary>
         /// Gets the <see cref="IsScrollingProperty"/>.
         /// </summary>
         /// <param name="panel">The element to get the value from.</param>
@@ -124,15 +133,6 @@ namespace AudioBand.Behaviors
         public static void SetIsScrolling(Panel panel, bool value)
         {
             panel.SetValue(IsScrollingProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether a track is playing.
-        /// </summary>
-        public bool IsPlaying
-        {
-            get => (bool)GetValue(IsPlayingProperty);
-            set => SetValue(IsPlayingProperty, value);
         }
 
         /// <inheritdoc />
