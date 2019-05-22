@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using AudioBand.Settings;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
@@ -23,6 +22,9 @@ namespace AudioBand.ViewModels
             appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
         [PropertyChangeBinding(nameof(Models.AudioBand.Width))]
         public double Width
         {
@@ -30,6 +32,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Width), value);
         }
 
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
         [PropertyChangeBinding(nameof(Models.AudioBand.Height))]
         public double Height
         {
@@ -44,4 +49,3 @@ namespace AudioBand.ViewModels
         }
     }
 }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

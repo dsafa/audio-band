@@ -179,7 +179,9 @@ namespace AudioBand.ViewModels
         /// Called when a model property changes.
         /// </summary>
         /// <param name="propertyName">Name of the property that changed.</param>
-        protected virtual void OnModelPropertyChanged(string propertyName) { }
+        protected virtual void OnModelPropertyChanged(string propertyName)
+        {
+        }
 
         /// <summary>
         /// When a model property changes, raise <see cref="INotifyPropertyChanged.PropertyChanged"/> for the corresponding property marked with <see cref="PropertyChangeBindingAttribute"/>

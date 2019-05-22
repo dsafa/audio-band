@@ -7,7 +7,7 @@ using System.Windows.Data;
 namespace AudioBand.ValueConverters
 {
     /// <summary>
-    /// Multi value converter to convert an x and y into a point
+    /// Multi value converter to convert an x and y into a point.
     /// </summary>
     public class PointConverter : IMultiValueConverter
     {
