@@ -137,7 +137,7 @@
                 </Image.Style>
             </Image>
             <Viewbox.ToolTip>
-                <ToolTip DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtPopupVM}"
+                <ToolTip DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtPopupViewModel}"
                          Background="Black" BorderThickness="0" Padding="0" HasDropShadow="True" PlacementTarget="{Binding ElementName=AlbumArt}"
                          Placement="RelativePoint" HorizontalOffset="{Binding XPosition}" VerticalOffset="{Binding Margin}"
                          x:Name="AlbumArtTooltip">
@@ -145,17 +145,17 @@
                         <behaviors:DpiScaling/>
                     </i:Interaction.Behaviors>
                     <Viewbox Width="{Binding Width}" Height="{Binding Height}" 
-                                     Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}">
-                        <Image DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtVM}">
+                                         Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}">
+                        <Image DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtViewModel}">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Setter Property="Source" Value="{Binding AlbumArt, FallbackValue={StaticResource AlbumArtFallback}}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding AlbumArt}" Value="{x:Null}">
                                             <Setter Property="Source" Value="{Binding PlaceholderPath,               
-                                                Converter={x:Static converters:Converters.PathToImageSource},
-                                                FallbackValue={StaticResource AlbumArtFallback},
-                                                TargetNullValue={StaticResource AlbumArtFallback}}"/>
+                                                    Converter={x:Static converters:Converters.PathToImageSource},
+                                                    FallbackValue={StaticResource AlbumArtFallback},
+                                                    TargetNullValue={StaticResource AlbumArtFallback}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
