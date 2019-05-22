@@ -76,6 +76,7 @@
     <Compile Include="Behaviors\SliderClickAndDrag.cs" />
     <Compile Include="Behaviors\TrackOffsetFix.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
+    <Compile Include="Commands\IAsyncCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\RelayCommand{T}.cs" />
     <Compile Include="CSDeskBand\CSDeskBand.cs" />

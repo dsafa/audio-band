@@ -58,7 +58,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the command to change the repeat mode.
         /// </summary>
-        public ICommand CycleRepeatModeCommand { get; }
+        public IAsyncCommand CycleRepeatModeCommand { get; }
 
         /// <summary>
         /// Gets the current repeat mode.
