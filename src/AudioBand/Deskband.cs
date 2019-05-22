@@ -112,7 +112,7 @@ namespace AudioBand
                 _container.Register<AudioBandViewModel>(Lifestyle.Singleton);
                 _container.Register<CustomLabelsViewModel>(Lifestyle.Singleton);
                 _container.Register<NextButtonViewModel>(Lifestyle.Singleton);
-                _container.Register<PlayPauseButtonVM>(Lifestyle.Singleton);
+                _container.Register<PlayPauseButtonViewModel>(Lifestyle.Singleton);
                 _container.Register<PreviousButtonViewModel>(Lifestyle.Singleton);
                 _container.Register<ProgressBarViewModel>(Lifestyle.Singleton);
                 _container.Register<SettingsWindowViewModel>(Lifestyle.Singleton);

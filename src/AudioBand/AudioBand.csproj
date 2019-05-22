@@ -99,7 +99,6 @@
     <Compile Include="Models\ButtonModelBase.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NextButton.cs" />
-    <Compile Include="Models\PlaybackButtonBase.cs" />
     <Compile Include="Models\PlayPauseButton.cs" />
     <Compile Include="Models\PreviousButton.cs" />
     <Compile Include="Models\ProgressBar.cs" />
@@ -162,8 +161,7 @@
     <Compile Include="ViewModels\CustomLabelsViewModel.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
-    <Compile Include="ViewModels\PlaybackButtonViewModelBase.cs" />
-    <Compile Include="ViewModels\PlayPauseButtonVM.cs" />
+    <Compile Include="ViewModels\PlayPauseButtonViewModel.cs" />
     <Compile Include="ViewModels\PreviousButtonViewModel.cs" />
     <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
     <Compile Include="ViewModels\RenameProfileDialogViewModel.cs" />

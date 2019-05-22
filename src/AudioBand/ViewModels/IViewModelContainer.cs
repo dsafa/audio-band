@@ -33,7 +33,7 @@
         /// <summary>
         /// Gets the view model for the play/pause button.
         /// </summary>
-        PlayPauseButtonVM PlayPauseButtonVM { get; }
+        PlayPauseButtonViewModel PlayPauseButtonViewModel { get; }
 
         /// <summary>
         /// Gets the view model for the previous button.

@@ -158,7 +158,7 @@ namespace AudioBand.ViewModels
             ViewModels.AlbumArtViewModel.AudioSource = audioSource;
             ViewModels.NextButtonViewModel.AudioSource = audioSource;
             ViewModels.PreviousButtonViewModel.AudioSource = audioSource;
-            ViewModels.PlayPauseButtonVM.AudioSource = audioSource;
+            ViewModels.PlayPauseButtonViewModel.AudioSource = audioSource;
             ViewModels.ProgressBarViewModel.AudioSource = audioSource;
             ViewModels.RepeatModeButtonViewModel.AudioSource = audioSource;
             foreach (var customLabelVm in ViewModels.CustomLabelsViewModel.CustomLabels)

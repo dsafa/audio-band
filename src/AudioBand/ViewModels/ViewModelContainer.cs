@@ -13,7 +13,7 @@
         /// <param name="albumArtViewModel">Album art view model.</param>
         /// <param name="customLabelsViewModel">Custom labels view model.</param>
         /// <param name="nextButtonViewModel">Next button view model.</param>
-        /// <param name="playPauseButtonVm">Play pause button view model.</param>
+        /// <param name="playPauseButtonViewModel">Play pause button view model.</param>
         /// <param name="repeatModeButtonViewModel">Repeat mode button view model.</param>
         /// <param name="previousButtonViewModel">Previous button view model.</param>
         /// <param name="progressBarViewModel">Progress bar view model.</param>
@@ -24,7 +24,7 @@
             AlbumArtViewModel albumArtViewModel,
             CustomLabelsViewModel customLabelsViewModel,
             NextButtonViewModel nextButtonViewModel,
-            PlayPauseButtonVM playPauseButtonVm,
+            PlayPauseButtonViewModel playPauseButtonViewModel,
             RepeatModeButtonViewModel repeatModeButtonViewModel,
             PreviousButtonViewModel previousButtonViewModel,
             ProgressBarViewModel progressBarViewModel,
@@ -35,7 +35,7 @@
             AlbumArtViewModel = albumArtViewModel;
             CustomLabelsViewModel = customLabelsViewModel;
             NextButtonViewModel = nextButtonViewModel;
-            PlayPauseButtonVM = playPauseButtonVm;
+            PlayPauseButtonViewModel = playPauseButtonViewModel;
             RepeatModeButtonViewModel = repeatModeButtonViewModel;
             PreviousButtonViewModel = previousButtonViewModel;
             ProgressBarViewModel = progressBarViewModel;
@@ -58,7 +58,7 @@
         public NextButtonViewModel NextButtonViewModel { get; }
 
         /// <inheritdoc />
-        public PlayPauseButtonVM PlayPauseButtonVM { get; }
+        public PlayPauseButtonViewModel PlayPauseButtonViewModel { get; }
 
         /// <inheritdoc />
         public PreviousButtonViewModel PreviousButtonViewModel { get; }
