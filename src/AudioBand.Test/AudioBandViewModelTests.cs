@@ -29,7 +29,7 @@ namespace AudioBand.Test
             _appSettings.SetupSequence(m => m.AudioBand)
                 .Returns(first)
                 .Returns(second);
-            var vm = new AudioBandVM(_appSettings.Object);
+            var vm = new AudioBandViewModel(_appSettings.Object);
 
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;

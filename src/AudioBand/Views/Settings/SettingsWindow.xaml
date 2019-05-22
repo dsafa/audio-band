@@ -14,7 +14,7 @@
             mc:Ignorable="d" 
             x:Name="Window"
             d:DesignHeight="600" d:DesignWidth="400"
-            d:DataContext="{d:DesignInstance viewmodels:SettingsWindowVM, IsDesignTimeCreatable=True}"
+            d:DataContext="{d:DesignInstance viewmodels:SettingsWindowViewModel, IsDesignTimeCreatable=True}"
             Title="Audio Band Settings"
             Icon="pack://application:,,,/AudioBand;component/audioband.ico"
             Height="700"
@@ -68,7 +68,7 @@
             <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" IsTabStop="False" Width="300" WindowChrome.IsHitTestVisibleInChrome="True">
                 <StackPanel DockPanel.Dock="Left" Background="Transparent" x:Name="NavigationPane">
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AudioBandVM}">
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AudioBandViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Gear}"/>
                             <TextBlock Text="{StaticResource GeneralSettingsTab}"/>
@@ -82,14 +82,14 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" 
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.NextButtonVM}">
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.NextButtonViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Next}"/>
                             <TextBlock Text="{StaticResource NextButtonTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.PreviousButtonVM}">
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.PreviousButtonViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Previous}"/>
                             <TextBlock Text="{StaticResource PrevButtonTab}"/>
@@ -103,21 +103,21 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.ProgressBarVM}">
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.ProgressBarViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Progress}"/>
                             <TextBlock Text="{StaticResource ProgressBarTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AlbumArtVM}">
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AlbumArtViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Album}"/>
                             <TextBlock Text="{StaticResource AlbumArtTab}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AlbumArtPopupVM}">
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AlbumArtPopupViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource AlbumPopup}"/>
                             <TextBlock Text="{StaticResource AlbumArtPopupTab}"/>
@@ -135,7 +135,7 @@
                                 </TextBlock>
                                 <Button Grid.Column="1" Style="{StaticResource RevealButton}"
                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
-                                        Command="{Binding Path=ViewModels.CustomLabelsVM.AddLabelCommand}">
+                                        Command="{Binding Path=ViewModels.CustomLabelsViewModel.AddLabelCommand}">
                                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" FontSize="17"/>
                                     <Button.ToolTip>
                                         <TextBlock Text="{StaticResource AddNewLabelHelpText}"/>
@@ -143,7 +143,7 @@
                                 </Button>
                             </Grid>
                         </Expander.Header>
-                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.CustomLabelsVM.CustomLabels}"
+                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.CustomLabelsViewModel.CustomLabels}"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}"
                                  KeyboardNavigation.TabNavigation="Local">
                             <i:Interaction.Behaviors>
@@ -166,7 +166,7 @@
                                                         HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                                             <Button Grid.Column="2" Style="{StaticResource RevealButton}"
                                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
-                                                        Command="{Binding ElementName=Window, Path=DataContext.ViewModels.CustomLabelsVM.RemoveLabelCommand}"
+                                                        Command="{Binding ElementName=Window, Path=DataContext.ViewModels.CustomLabelsViewModel.RemoveLabelCommand}"
                                                         CommandParameter="{Binding}">
                                                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="18"/>
                                                 <Button.ToolTip>
@@ -184,7 +184,7 @@
                             <TextBlock Padding="0, 0, 10, 0" FontWeight="Normal" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"
                                        Foreground="{theme:ThemeResource SystemBaseHighColor}"/>
                         </Expander.Header>
-                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsVm.AudioSourcesSettings}"
+                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsViewModel.AudioSourcesSettings}"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
                             <i:Interaction.Behaviors>
                                 <behaviors:RedirectScrolling/>
@@ -279,13 +279,13 @@
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AlbumArtVM}">
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AlbumArtViewModel}">
                                 <Setter Property="Text" Value="{StaticResource AlbumArtTab}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AlbumArtPopupVM}">
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AlbumArtPopupViewModel}">
                                 <Setter Property="Text" Value="{StaticResource AlbumArtPopupTab}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AudioBandVM}">
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AudioBandViewModel}">
                                 <Setter Property="Text" Value="{StaticResource GeneralSettingsTab}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AudioSourceSettingsCollectionViewModel}">
@@ -293,21 +293,21 @@
                                                                         Converter={x:Static converters:Converters.StringFormat}, 
                                                                         ConverterParameter={StaticResource AudioSourceViewHeaderFormat}}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:CustomLabelVM}">
-                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:CustomLabelVM.Name),
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:CustomLabelViewModel}">
+                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:CustomLabelViewModel.Name),
                                                                         Converter={x:Static converters:Converters.StringFormat},
                                                                         ConverterParameter={StaticResource LabelsViewHeaderFormat}}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:PlayPauseButtonVM}">
                                 <Setter Property="Text" Value="{StaticResource PlayPauseButtonTab}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:NextButtonVM}">
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:NextButtonViewModel}">
                                 <Setter Property="Text" Value="{StaticResource NextButtonTab}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:PreviousButtonVM}">
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:PreviousButtonViewModel}">
                                 <Setter Property="Text" Value="{StaticResource PrevButtonTab}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:ProgressBarVM}">
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:ProgressBarViewModel}">
                                 <Setter Property="Text" Value="{StaticResource ProgressBarTab}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:RepeatModeButtonViewModel}">

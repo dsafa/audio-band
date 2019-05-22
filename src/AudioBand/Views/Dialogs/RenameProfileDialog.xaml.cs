@@ -11,14 +11,14 @@ namespace AudioBand.Views.Dialogs
         /// <summary>
         /// Initializes a new instance of the <see cref="RenameProfileDialog"/> class.
         /// </summary>
-        /// <param name="vm">The view model.</param>
-        public RenameProfileDialog(RenameProfileDialogVM vm)
+        /// <param name="viewModel">The view model.</param>
+        public RenameProfileDialog(RenameProfileDialogViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = vm;
+            DataContext = viewModel;
 
-            vm.Accepted += Accepted;
-            vm.Canceled += Canceled;
+            viewModel.Accepted += Accepted;
+            viewModel.Canceled += Canceled;
         }
 
         private void Canceled(object sender, EventArgs e)

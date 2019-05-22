@@ -22,7 +22,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new ProgressBarVM(settingsMock.Object, new Mock<IDialogService>().Object);
+            var vm = new ProgressBarViewModel(settingsMock.Object, new Mock<IDialogService>().Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 

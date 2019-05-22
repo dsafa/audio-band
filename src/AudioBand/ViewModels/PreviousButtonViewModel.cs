@@ -8,21 +8,21 @@ using AudioBand.Settings;
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// View model for the next button.
+    /// View model for the previous button.
     /// </summary>
-    public class NextButtonVM : PlaybackButtonVMBase<NextButton>
+    public class PreviousButtonViewModel : PlaybackButtonViewModelBase<PreviousButton>
     {
         private IAudioSource _audioSource;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NextButtonVM"/> class.
+        /// Initializes a new instance of the <see cref="PreviousButtonViewModel"/> class.
         /// </summary>
-        /// <param name="appSettings">The appSettings.</param>
+        /// <param name="appSettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public NextButtonVM(IAppSettings appSettings, IDialogService dialogService)
-            : base(appSettings, dialogService, appSettings.NextButton)
+        public PreviousButtonViewModel(IAppSettings appSettings, IDialogService dialogService)
+            : base(appSettings, dialogService, appSettings.PreviousButton)
         {
-            NextTrackCommand = new AsyncRelayCommand<object>(NextTrackCommandOnExecute);
+            PreviousTrackCommand = new AsyncRelayCommand<object>(PreviousTrackCommandOnExecute);
         }
 
         /// <summary>
@@ -34,14 +34,14 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Gets the next track command.
+        /// Gets the previous track command.
         /// </summary>
-        public ICommand NextTrackCommand { get; }
+        public ICommand PreviousTrackCommand { get; }
 
         /// <inheritdoc />
-        protected override NextButton GetReplacementModel()
+        protected override PreviousButton GetReplacementModel()
         {
-            return AppSettings.NextButton;
+            return AppSettings.PreviousButton;
         }
 
         private void UpdateAudioSource(IAudioSource audioSource)
@@ -49,7 +49,7 @@ namespace AudioBand.ViewModels
             _audioSource = audioSource;
         }
 
-        private async Task NextTrackCommandOnExecute(object arg)
+        private async Task PreviousTrackCommandOnExecute(object arg)
         {
             if (_audioSource == null)
             {

@@ -34,7 +34,7 @@ namespace AudioBand.Test
             _appSettings.SetupSequence(m => m.AlbumArt)
                 .Returns(first)
                 .Returns(second);
-            var vm = new AlbumArtVM(_appSettings.Object, _dialog.Object);
+            var vm = new AlbumArtViewModel(_appSettings.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (sender, e) => raised = true;
 

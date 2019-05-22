@@ -75,7 +75,7 @@ namespace AudioBand.Views.Dialogs
         /// <inheritdoc />
         public string ShowRenameDialog(string currentName, IEnumerable<string> profiles)
         {
-            var vm = new RenameProfileDialogVM(currentName, profiles);
+            var vm = new RenameProfileDialogViewModel(currentName, profiles);
             var dialog = new RenameProfileDialog(vm);
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)

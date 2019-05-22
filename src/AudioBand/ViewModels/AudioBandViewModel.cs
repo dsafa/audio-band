@@ -8,15 +8,15 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the general application.
     /// </summary>
-    public class AudioBandVM : ViewModelBase<Models.AudioBand>
+    public class AudioBandViewModel : ViewModelBase<Models.AudioBand>
     {
         private readonly IAppSettings _appsettings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AudioBandVM"/> class.
+        /// Initializes a new instance of the <see cref="AudioBandViewModel"/> class.
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
-        public AudioBandVM(IAppSettings appsettings)
+        public AudioBandViewModel(IAppSettings appsettings)
             : base(appsettings.AudioBand)
         {
             _appsettings = appsettings;

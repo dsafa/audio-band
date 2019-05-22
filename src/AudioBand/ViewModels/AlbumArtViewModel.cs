@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AudioBand.AudioSource;
@@ -14,18 +13,18 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the album art.
     /// </summary>
-    public class AlbumArtVM : ViewModelBase<AlbumArt>
+    public class AlbumArtViewModel : ViewModelBase<AlbumArt>
     {
         private readonly IAppSettings _appsettings;
         private IAudioSource _audioSource;
         private ImageSource _albumArt;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AlbumArtVM"/> class.
+        /// Initializes a new instance of the <see cref="AlbumArtViewModel"/> class.
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public AlbumArtVM(IAppSettings appsettings, IDialogService dialogService)
+        public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService)
             : base(appsettings.AlbumArt)
         {
             DialogService = dialogService;

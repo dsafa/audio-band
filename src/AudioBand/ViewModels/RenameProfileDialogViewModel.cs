@@ -8,18 +8,18 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the rename profile dialog.
     /// </summary>
-    public class RenameProfileDialogVM : ViewModelBase
+    public class RenameProfileDialogViewModel : ViewModelBase
     {
         private readonly IEnumerable<string> _profileNames;
         private string _currentName;
         private string _newProfileName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RenameProfileDialogVM"/> class.
+        /// Initializes a new instance of the <see cref="RenameProfileDialogViewModel"/> class.
         /// </summary>
         /// <param name="currentName">The current profile name.</param>
         /// <param name="profileNames">The list of existing profile names.</param>
-        public RenameProfileDialogVM(string currentName, IEnumerable<string> profileNames)
+        public RenameProfileDialogViewModel(string currentName, IEnumerable<string> profileNames)
         {
             _currentName = currentName;
             _newProfileName = currentName;

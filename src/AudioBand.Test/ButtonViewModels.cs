@@ -32,7 +32,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new NextButtonVM(_appSettings.Object, _dialog.Object);
+            var vm = new NextButtonViewModel(_appSettings.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
@@ -74,7 +74,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new PreviousButtonVM(_appSettings.Object, _dialog.Object);
+            var vm = new PreviousButtonViewModel(_appSettings.Object, _dialog.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 

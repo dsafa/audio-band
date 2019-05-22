@@ -106,17 +106,17 @@ namespace AudioBand
                 _container.Register<IDialogService, DialogService>(Lifestyle.Singleton);
                 _container.Register<IViewModelContainer, ViewModelContainer>(Lifestyle.Singleton);
 
-                _container.Register<AboutVM>(Lifestyle.Singleton);
-                _container.Register<AlbumArtVM>(Lifestyle.Singleton);
-                _container.Register<AlbumArtPopupVM>(Lifestyle.Singleton);
-                _container.Register<AudioBandVM>(Lifestyle.Singleton);
-                _container.Register<CustomLabelsVM>(Lifestyle.Singleton);
-                _container.Register<NextButtonVM>(Lifestyle.Singleton);
+                _container.Register<AboutDialogViewModel>(Lifestyle.Singleton);
+                _container.Register<AlbumArtViewModel>(Lifestyle.Singleton);
+                _container.Register<AlbumArtPopupViewModel>(Lifestyle.Singleton);
+                _container.Register<AudioBandViewModel>(Lifestyle.Singleton);
+                _container.Register<CustomLabelsViewModel>(Lifestyle.Singleton);
+                _container.Register<NextButtonViewModel>(Lifestyle.Singleton);
                 _container.Register<PlayPauseButtonVM>(Lifestyle.Singleton);
-                _container.Register<PreviousButtonVM>(Lifestyle.Singleton);
-                _container.Register<ProgressBarVM>(Lifestyle.Singleton);
-                _container.Register<SettingsWindowVM>(Lifestyle.Singleton);
-                _container.Register<AudioSourceSettingsVM>(Lifestyle.Singleton);
+                _container.Register<PreviousButtonViewModel>(Lifestyle.Singleton);
+                _container.Register<ProgressBarViewModel>(Lifestyle.Singleton);
+                _container.Register<SettingsWindowViewModel>(Lifestyle.Singleton);
+                _container.Register<AudioSourceSettingsViewModel>(Lifestyle.Singleton);
                 _container.Register<RepeatModeButtonViewModel>(Lifestyle.Singleton);
 
                 _container.Verify();
