@@ -10,6 +10,7 @@
                     xmlns:audioSource="clr-namespace:AudioBand.AudioSource;assembly=AudioBand.AudioSource"
                     mc:Ignorable="d">
     <Pen x:Key="ButtonImagePen" Brush="#FFFFFF" Thickness="30" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+    <Pen x:Key="ButtonImagePenDim" Brush="#888888" Thickness="30" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
     <DrawingImage x:Key="PauseButtonDefault">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
@@ -61,9 +62,9 @@
             <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
                 <DrawingGroup Opacity="1">
                     <GeometryDrawing Geometry="F1 M256,256z M0,0z M142.19071,79.195957L178.96026,42.426407 142.19071,5.656854 M98.960267,42.426407L178.96026,42.426407 M34.618799,188.81415A90.992584,85.751953,0,0,1,14.894088,95.362512A90.992584,85.751953,0,0,1,98.960277,42.426411"
-                                     Pen="{StaticResource ButtonImagePen}"/>
+                                     Pen="{StaticResource ButtonImagePenDim}"/>
                     <GeometryDrawing Geometry="F1 M256,256z M0,0z M113.80929,176.80405L77.03974,213.5736 113.80929,250.34315 M157.03974,213.5736L77.03974,213.5736 M221.3812,67.185856A90.992584,85.751953,0,0,1,241.10591,160.6375A90.992584,85.751953,0,0,1,157.03973,213.5736"
-                                     Pen="{StaticResource ButtonImagePen}"/>
+                                     Pen="{StaticResource ButtonImagePenDim}"/>
                 </DrawingGroup>
             </DrawingGroup>
         </DrawingImage.Drawing>
@@ -100,6 +101,40 @@
                             </GlyphRunDrawing.GlyphRun>
                         </GlyphRunDrawing>
                     </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="ShuffleOffDefault">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M197.50773,230.15227L238.93436,191.00532 199.81815,149.54615" Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M133.67526,152.01873C171.72829,193.16201,238.93436,191.00532,238.93436,191.00532" Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.3320683,66.254193C1.3320683,66.254193,56.25668,65.309776,98.133769,105.46534" Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M202.25421,25.672407L242.54219,65.992049 202.25421,106.3117" Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.4633263,183.87359C1.4633263,183.87359 81.058783,187.52905 123.66156,118.0149 158.6725,60.888179 242.54219,65.992049 242.54219,65.992049" Pen="{StaticResource ButtonImagePenDim}"/>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="ShuffleOnDefault">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M197.50773,230.15227L238.93436,191.00532 199.81815,149.54615" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M133.67526,152.01873C171.72829,193.16201,238.93436,191.00532,238.93436,191.00532" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.3320683,66.254193C1.3320683,66.254193,56.25668,65.309776,98.133769,105.46534" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M202.25421,25.672407L242.54219,65.992049 202.25421,106.3117" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.4633263,183.87359C1.4633263,183.87359 81.058783,187.52905 123.66156,118.0149 158.6725,60.888179 242.54219,65.992049 242.54219,65.992049" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing>
+                        <GeometryDrawing.Brush>
+                            <SolidColorBrush Color="White" />
+                        </GeometryDrawing.Brush>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="20" RadiusY="20" Center="128,236" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
                 </DrawingGroup>
             </DrawingGroup>
         </DrawingImage.Drawing>
@@ -229,6 +264,23 @@
             <DataTrigger Binding="{Binding RepeatMode}" Value="{x:Static audioSource:RepeatMode.RepeatTrack}">
                 <Setter Property="Content" Value="{Binding RepeatTrackContent}"/>
                 <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource RepeatOneDefault}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ToolbarShuffleModeButtonStyle" TargetType="{x:Type Button}">
+        <d:Style.DataContext>
+            <x:Type Type="viewmodels:ShuffleModeButtonViewModel"/>
+        </d:Style.DataContext>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsShuffleOn}" Value="True">
+                <Setter Property="Content" Value="{Binding ShuffleOnContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource ShuffleOnDefault}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsShuffleOn}" Value="False">
+                <Setter Property="Content" Value="{Binding ShuffleOffContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource ShuffleOffDefault}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

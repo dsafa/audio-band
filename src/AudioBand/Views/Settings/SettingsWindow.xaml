@@ -103,6 +103,13 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
+                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.ShuffleModeButtonViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource ShuffleModeIcon}"/>
+                            <TextBlock Text="{StaticResource ShuffleModeButtonTab}"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
                                  Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.ProgressBarViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Progress}"/>
@@ -313,6 +320,9 @@
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:RepeatModeButtonViewModel}">
                                 <Setter Property="Text" Value="{StaticResource RepeatModeButtonTab}"/>
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:ShuffleModeButtonViewModel}">
+                                <Setter Property="Text" Value="{StaticResource ShuffleModeButtonTab}"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
@@ -331,6 +341,7 @@
                             <resources:SharedDictionary Source="PlayPauseButtonSettingsView.xaml"/>
                             <resources:SharedDictionary Source="ProgressBarSettingsView.xaml"/>
                             <resources:SharedDictionary Source="RepeatModeButtonSettingsView.xaml"/>
+                            <resources:SharedDictionary Source="ShuffleModeButtonSettingsView.xaml"/>
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
                 </ContentControl.Resources>

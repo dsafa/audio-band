@@ -107,6 +107,11 @@ namespace AudioBand.ViewModels
 
         private async Task CycleRepeatModeCommandOnExecute(object obj)
         {
+            if (_audioSource == null)
+            {
+                return;
+            }
+
             var nextRepeatMode = RepeatMode;
             switch (RepeatMode)
             {

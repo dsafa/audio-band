@@ -60,6 +60,11 @@ namespace AudioBand.Settings
         RepeatModeButton RepeatModeButton { get; }
 
         /// <summary>
+        /// Gets the shuffle mode button model.
+        /// </summary>
+        ShuffleModeButton ShuffleModeButton { get; }
+
+        /// <summary>
         /// Gets the saved progress bar model.
         /// </summary>
         ProgressBar ProgressBar { get; }

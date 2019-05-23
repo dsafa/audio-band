@@ -97,7 +97,8 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.PlayPauseButtonSettings, opt => opt.MapFrom(source => source.PlayPauseButtonSettings))
                     .ForMember(dest => dest.PreviousButtonSettings, opt => opt.MapFrom(source => source.PreviousButtonSettings))
                     .ForMember(dest => dest.ProgressBarSettings, opt => opt.MapFrom(source => source.ProgressBarSettings))
-                    .ForMember(dest => dest.RepeatModeButtonSettings, opt => opt.MapFrom(source => new RepeatModeButton()));
+                    .ForMember(dest => dest.RepeatModeButtonSettings, opt => opt.MapFrom(source => new RepeatModeButton()))
+                    .ForMember(dest => dest.ShuffleModeButtonSettings, opt => opt.MapFrom(source => new ShuffleModeButton()));
                 cfg.CreateMap<Models.V2.Settings, Dictionary<string, ProfileV3>>().ConvertUsing<ProfilesConverter>();
                 cfg.CreateMap<Models.V2.Settings, SettingsV3>()
                     .ForMember(dest => dest.Version, opt => opt.Ignore())
