@@ -144,8 +144,8 @@
                     <i:Interaction.Behaviors>
                         <behaviors:DpiScaling/>
                     </i:Interaction.Behaviors>
-                    <Viewbox Width="{Binding Width}" Height="{Binding Height}" 
-                                         Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}">
+                    <Viewbox Width="{Binding Width}" Height="{Binding Height}" RenderOptions.BitmapScalingMode="Fant"
+                             Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}">
                         <Image DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtViewModel}">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
