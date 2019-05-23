@@ -12,10 +12,10 @@ namespace AudioBand.Resources.Theming
     /// <summary>
     /// Contains standard theme brushes.
     /// </summary>
-    public class ThemeDictionary : INotifyPropertyChanged
+    public class ThemeDictionary : IThemeDictionary
     {
-        private static readonly Dictionary<string, Brush> LightThemeResources = BuildDictionary(new LightThemeDictionary());
-        private static readonly Dictionary<string, Brush> DarkThemeResources = BuildDictionary(new DarkThemeDictionary());
+        private static readonly Dictionary<string, Brush> LightThemeResources = BuildDictionary(new LightThemeResources());
+        private static readonly Dictionary<string, Brush> DarkThemeResources = BuildDictionary(new DarkThemeResources());
         private static readonly IEnumerable<UIColorType> ColorTypes = Enum.GetValues(typeof(UIColorType)).Cast<UIColorType>().Where(t => t != UIColorType.Complement);
         private static readonly Dictionary<UIColorType, string> ColorTypeToBrushName = new Dictionary<UIColorType, string>
         {
@@ -34,7 +34,10 @@ namespace AudioBand.Resources.Theming
         private readonly UISettings _uiSettings = new UISettings();
         private Color _currentAccentColor;
 
-        private ThemeDictionary()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ThemeDictionary"/> class.
+        /// </summary>
+        public ThemeDictionary()
         {
             _uiSettings.ColorValuesChanged += UiSettingsOnColorValuesChanged;
             UpdateColors();
@@ -42,11 +45,6 @@ namespace AudioBand.Resources.Theming
 
         /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Gets the instance of the theme dictionary.
-        /// </summary>
-        public static ThemeDictionary Instance { get; } = new ThemeDictionary();
 
         /// <summary>
         /// Gets the resource from the key.
