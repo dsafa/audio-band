@@ -20,32 +20,29 @@
     <sys:String x:Key="OtherSectionText">Other</sys:String>
 
     <!-- Play/pause button settings -->
-    <sys:String x:Key="PlayImageSectionText">Play Image</sys:String>
-    <sys:String x:Key="PauseImageSectionText">Pause Image</sys:String>
-    <sys:String x:Key="PlayButtonImageLabelText">Play image</sys:String>
-    <sys:String x:Key="PlayButtonHoveredImageLabelText">Play image when hovered</sys:String>
-    <sys:String x:Key="PlayButtonClickedImageLabelText">Play image when clicked</sys:String>
-    <sys:String x:Key="PauseButtonImageLabelText">Pause image</sys:String>
-    <sys:String x:Key="PauseButtonHoveredImageLabelText">Pause image when hovered</sys:String>
-    <sys:String x:Key="PauseButtonClickedImageLabelText">Pause image when clicked</sys:String>
     <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
     <sys:String x:Key="PauseButtonContentSectionText">Pause button content</sys:String>
-    <sys:String x:Key="PlayButtonContentTypeDescription">Select the content type for the play button</sys:String>
-    <sys:String x:Key="PlayButtonFontFamilyDescription">Select the font family for the play button text</sys:String>
-    <sys:String x:Key="PlayButtonTextDescription">Play button text</sys:String>
-    <sys:String x:Key="PauseButtonContentTypeDescription">Select the content type for the pause button</sys:String>
-    <sys:String x:Key="PauseButtonFontFamilyDescription">Select the font family for the pause button text</sys:String>
-    <sys:String x:Key="PauseButtonTextDescription">Pause button text</sys:String>
 
     <!-- Playback button settings -->
+    <sys:String x:Key="PlaybackButtonContentSectionText">Button content</sys:String>
+
+    <!-- Button content settings -->
     <sys:String x:Key="ButtonImageLabelText">Button Image</sys:String>
     <sys:String x:Key="ButtonHoveredImageLabelText">Button image when hovered</sys:String>
     <sys:String x:Key="ButtonClickedImageLabelText">Button image when clicked</sys:String>
-    <sys:String x:Key="PlaybackButtonContentSectionText">Button content</sys:String>
-    <sys:String x:Key="PlaybackButtonContentTypeDescription">Select the content type for the button</sys:String>
-    <sys:String x:Key="PlaybackButtonFontFamilyDescription">Select the font family for the button text</sys:String>
-    <sys:String x:Key="PlaybackButtonTextDescription">Button text</sys:String>
-    <sys:String x:Key="ImageSectionText">Image</sys:String>
+    <sys:String x:Key="ButtonContentSectionText">Button content</sys:String>
+    <sys:String x:Key="ButtonContentTypeDescription">Select the content type</sys:String>
+    <sys:String x:Key="ButtonFontFamilyDescription">Select the font family for the text</sys:String>
+    <sys:String x:Key="ButtonTextDescription">Button text</sys:String>
+
+    <!-- Repeat mode button settings -->
+    <sys:String x:Key="RepeatModeButtonOffContentSectionText">Repeat off button content</sys:String>
+    <sys:String x:Key="RepeatModeButtonContextContentSectionText">Repeat on button content</sys:String>
+    <sys:String x:Key="RepeatModeButtonTrackContentSectionText">Repeat track button content</sys:String>
+
+    <!-- Shuffle mode button settings -->
+    <sys:String x:Key="ShuffleModeButtonOffContentSectionText">Shuffle off button content</sys:String>
+    <sys:String x:Key="ShuffleModeButtonOnContentSectionText">Shuffle on button content</sys:String>
 
     <!-- Custom text label settings -->
     <sys:String x:Key="CustomLabelNameDescription">Choose a name for the label</sys:String>
@@ -61,6 +58,9 @@
     <sys:String x:Key="CustomLabelOverflowSectionText">Overflow options</sys:String>
     <sys:String x:Key="CustomLabelOverflowDescription">Choose what happens when the text is too long</sys:String>
     <sys:String x:Key="CustomLabelScrollBehaviorDescription">Text scrolling behavior</sys:String>
+    <sys:String x:Key="CustomLabelEffectsSectionText">Effects</sys:String>
+    <sys:String x:Key="CustomLabelTextEffectDescription">Fade text at the edges</sys:String>
+    <sys:String x:Key="CustomLabelTextFadeDescription">Change the range of the fade effect</sys:String>
     <sys:String x:Key="CustomLabelFormatHelpText" xml:space="preserve">Format for the text that is displayed which can include placeholders.
 Placeholders will be substituted with their corresponding values. Placeholders are in the format {[style]&lt;tag&gt;:[color]}.</sys:String>
     <sys:String x:Key="CustomLabelFormatHelpTextTags" xml:space="preserve">&#8226; artist - Artist for the current song
@@ -83,6 +83,8 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="PlayPauseButtonTab">Play/Pause Button</sys:String>
     <sys:String x:Key="PrevButtonTab">Previous Track Button</sys:String>
     <sys:String x:Key="NextButtonTab">Next Track Button</sys:String>
+    <sys:String x:Key="RepeatModeButtonTab">Repeat Mode Button</sys:String>
+    <sys:String x:Key="ShuffleModeButtonTab">Shuffle Mode Button</sys:String>
     <sys:String x:Key="ProgressBarTab">Progress Bar</sys:String>
     <sys:String x:Key="CustomLabelsTab">Text Labels</sys:String>
     <sys:String x:Key="AlbumArtTab">Album Art</sys:String>

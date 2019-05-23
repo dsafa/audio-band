@@ -1,4 +1,5 @@
-﻿namespace AudioBand.Settings.Models.V2
+﻿#pragma warning disable
+namespace AudioBand.Settings.Models.V2
 {
     internal class AlbumArtSettings
     {

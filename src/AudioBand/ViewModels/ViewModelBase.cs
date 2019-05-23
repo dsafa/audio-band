@@ -186,24 +186,44 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Resets an object to its default state using the given state.
+        /// </summary>
+        /// <typeparam name="T">Object type.</typeparam>
+        /// <param name="initialState">The objects initial state.</param>
+        /// <param name="obj">Object to reset.</param>
+        protected void ResetObject<T>(T initialState, T obj)
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
+            mapper.Map<T, T>(initialState, obj);
+        }
+
+        /// <summary>
         /// Called when <see cref="Reset"/> is called.
         /// </summary>
-        protected virtual void OnReset() { }
+        protected virtual void OnReset()
+        {
+        }
 
         /// <summary>
         /// Called when <see cref="CancelEdit"/> is called.
         /// </summary>
-        protected virtual void OnCancelEdit() { }
+        protected virtual void OnCancelEdit()
+        {
+        }
 
         /// <summary>
         /// Called when <see cref="EndEdit"/> is called.
         /// </summary>
-        protected virtual void OnEndEdit() { }
+        protected virtual void OnEndEdit()
+        {
+        }
 
         /// <summary>
         /// Called when <see cref="BeginEdit"/> is called.
         /// </summary>
-        protected virtual void OnBeginEdit() { }
+        protected virtual void OnBeginEdit()
+        {
+        }
 
         /// <summary>
         /// Sets the <paramref name="field"/> and calls property changed for it and any others given with a <see cref="AlsoNotifyAttribute"/>.

@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:theme="clr-namespace:AudioBand.Resources.Theming">
+    <Style x:Key="RangeSliderStyle" TargetType="{x:Type mah:RangeSlider}">
+        <Setter Property="mah:SliderHelper.TrackFillBrush" Value="{theme:ThemeResource SystemBaseLowColor}"/>
+        <Setter Property="mah:SliderHelper.TrackFillHoverBrush" Value="{theme:ThemeResource SystemBaseLowColor}"/>
+        <Setter Property="mah:SliderHelper.TrackFillPressedBrush" Value="{theme:ThemeResource SystemBaseLowColor}"/>
+        <Setter Property="mah:SliderHelper.TrackValueFillBrush" Value="{theme:ThemeResource SystemAccentColor}"/>
+        <Setter Property="mah:SliderHelper.TrackValueFillHoverBrush" Value="{theme:ThemeResource SystemAccentColorMedium}"/>
+        <Setter Property="mah:SliderHelper.TrackValueFillPressedBrush" Value="{theme:ThemeResource SystemAccentColorHigh}"/>
+        <Setter Property="mah:SliderHelper.ThumbFillBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
+        <Setter Property="mah:SliderHelper.ThumbFillHoverBrush" Value="{theme:ThemeResource SystemBaseMediumLowColor}"/>
+        <Setter Property="mah:SliderHelper.ThumbFillPressedBrush" Value="{theme:ThemeResource SystemBaseMediumHighColor}"/>
+        <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseHighColor}"/>
+        <Setter Property="Background" Value="{theme:ThemeResource SystemAltHighColor}"/>
+    </Style>
+</ResourceDictionary>

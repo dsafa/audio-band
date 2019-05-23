@@ -10,6 +10,8 @@
              xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
              xmlns:resources="clr-namespace:AudioBand.Resources"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:models="clr-namespace:AudioBand.Models"
              mc:Ignorable="d"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
              Background="Transparent"
@@ -108,11 +110,11 @@
             </MenuItem>
         </fluentWpf:AcrylicContextMenu>
     </UserControl.ContextMenu>
-    <Canvas Width="{Binding ViewModels.AudioBandVM.Width}" Height="{Binding ViewModels.AudioBandVM.Height}">
+    <Canvas Width="{Binding ViewModels.AudioBandViewModel.Width}" Height="{Binding ViewModels.AudioBandViewModel.Height}">
         <Canvas.Resources>
             <behaviors:BindingProxy x:Key="DataContextProxy" Value="{Binding .}"/>
         </Canvas.Resources>
-        <Viewbox x:Name="AlbumArt" DataContext="{Binding ViewModels.AlbumArtVM}"
+        <Viewbox x:Name="AlbumArt" DataContext="{Binding ViewModels.AlbumArtViewModel}"
                      Width="{Binding Width}" Height="{Binding Height}"
                      Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                      Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
@@ -135,25 +137,25 @@
                 </Image.Style>
             </Image>
             <Viewbox.ToolTip>
-                <ToolTip DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtPopupVM}"
+                <ToolTip DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtPopupViewModel}"
                          Background="Black" BorderThickness="0" Padding="0" HasDropShadow="True" PlacementTarget="{Binding ElementName=AlbumArt}"
                          Placement="RelativePoint" HorizontalOffset="{Binding XPosition}" VerticalOffset="{Binding Margin}"
                          x:Name="AlbumArtTooltip">
                     <i:Interaction.Behaviors>
                         <behaviors:DpiScaling/>
                     </i:Interaction.Behaviors>
-                    <Viewbox Width="{Binding Width}" Height="{Binding Height}" 
-                                     Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}">
-                        <Image DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtVM}">
+                    <Viewbox Width="{Binding Width}" Height="{Binding Height}" RenderOptions.BitmapScalingMode="Fant"
+                             Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}">
+                        <Image DataContext="{Binding Source={StaticResource DataContextProxy}, Path=Value.ViewModels.AlbumArtViewModel}">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Setter Property="Source" Value="{Binding AlbumArt, FallbackValue={StaticResource AlbumArtFallback}}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding AlbumArt}" Value="{x:Null}">
                                             <Setter Property="Source" Value="{Binding PlaceholderPath,               
-                                                Converter={x:Static converters:Converters.PathToImageSource},
-                                                FallbackValue={StaticResource AlbumArtFallback},
-                                                TargetNullValue={StaticResource AlbumArtFallback}}"/>
+                                                    Converter={x:Static converters:Converters.PathToImageSource},
+                                                    FallbackValue={StaticResource AlbumArtFallback},
+                                                    TargetNullValue={StaticResource AlbumArtFallback}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -178,28 +180,42 @@
                 </ToolTip>
             </Viewbox.ToolTip>
         </Viewbox>
-        <Button x:Name="PlayPauseButton" DataContext="{Binding ViewModels.PlayPauseButtonVM}"
+        <Button x:Name="PlayPauseButton" DataContext="{Binding ViewModels.PlayPauseButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                 Style="{StaticResource ToolbarPlayPauseButtonStyle}"
                 Command="{Binding PlayPauseTrackCommand}"/>
-        <Button x:Name="NextButton" DataContext="{Binding ViewModels.NextButtonVM}"
+        <Button x:Name="NextButton" DataContext="{Binding ViewModels.NextButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                 Style="{StaticResource ToolbarNextButtonStyle}"
                 Command="{Binding NextTrackCommand}"/>
-        <Button x:Name="PreviousButton" DataContext="{Binding ViewModels.PreviousButtonVM}"
+        <Button x:Name="PreviousButton" DataContext="{Binding ViewModels.PreviousButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                 Style="{StaticResource ToolbarPreviousButtonStyle}"
                 Command="{Binding PreviousTrackCommand}"/>
-        <Slider x:Name="ProgressBar" DataContext="{Binding ViewModels.ProgressBarVM}"
+        <Button x:Name="RepeatModeButton" DataContext="{Binding ViewModels.RepeatModeButtonViewModel}"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
+                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                Style="{StaticResource ToolbarRepeatModeButtonStyle}"
+                Command="{Binding CycleRepeatModeCommand}"/>
+        <Button x:Name="ShuffleModeButton" DataContext="{Binding ViewModels.ShuffleModeButtonViewModel}"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
+                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                Style="{StaticResource ToolbarShuffleModeButtonStyle}"
+                Command="{Binding ToggleShuffleCommand}"/>
+        <Slider x:Name="ProgressBar" DataContext="{Binding ViewModels.ProgressBarViewModel}"
                 Width="{Binding Width}" Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
@@ -210,7 +226,7 @@
                 <behaviors:SliderClickAndDrag/>
             </i:Interaction.Behaviors>
         </Slider>
-        <ItemsControl x:Name="CustomLabels" ItemsSource="{Binding ViewModels.CustomLabelsVM.CustomLabels}">
+        <ItemsControl x:Name="CustomLabels" ItemsSource="{Binding ViewModels.CustomLabelsViewModel.CustomLabels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -223,12 +239,12 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type viewModels:CustomLabelVM}">
+                <DataTemplate DataType="{x:Type viewModels:CustomLabelViewModel}">
                     <Canvas Width="{Binding Width}" Height="{Binding Height}" ClipToBounds="True" Background="Transparent">
                         <i:Interaction.Behaviors>
                             <behaviors:MarqueeContainer ScrollDuration="{Binding ScrollSpeed}" 
                                                         TargetChild="{Binding ElementName=TextBlock1}"
-                                                        DuplicateChild="{Binding ElementName=TextBlock2}"
+                                                        TargetCopy="{Binding ElementName=TextBlockCopy}"
                                                         TextOverflow="{Binding TextOverflow}"
                                                         ScrollBehavior="{Binding ScrollBehavior}"
                                                         IsPlaying="{Binding IsPlaying}"/>
@@ -241,14 +257,49 @@
                                    VerticalAlignment="Center" TextTrimming="None" TextWrapping="NoWrap"
                                    TextAlignment="{Binding TextAlignment, Converter={x:Static converters:Converters.TextAlignment}}">
                         </TextBlock>
-                        <TextBlock x:Name="TextBlock2" behaviors:TextBlockTextSegments.TextSegments="{Binding TextSegments}"
-                                   MinWidth="{Binding Width}" MinHeight="{Binding Height}" Opacity="0"
+                        <TextBlock x:Name="TextBlockCopy" behaviors:TextBlockTextSegments.TextSegments="{Binding TextSegments}"
+                                   MinWidth="{Binding Width}" MinHeight="{Binding Height}"
                                    Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                                    Foreground="{Binding Color, Converter={x:Static converters:Converters.ColorToBrush}}"
                                    FontSize="{Binding FontSize}" FontFamily="{Binding FontFamily}"
-                                   VerticalAlignment="Center" TextTrimming="None" TextWrapping="NoWrap"
+                                   VerticalAlignment="Center" TextTrimming="None" TextWrapping="NoWrap" Opacity="0"
                                    TextAlignment="{Binding TextAlignment, Converter={x:Static converters:Converters.TextAlignment}}">
                         </TextBlock>
+                        <Canvas.Style>
+                            <Style TargetType="{x:Type Canvas}">
+                                <Style.Resources>
+                                    <LinearGradientBrush x:Key="Mask" StartPoint="0,0" MappingMode="Absolute">
+                                        <!-- Use mapping mode absolute because relative mode is relative to the child text instead of the canvas -->
+                                        <LinearGradientBrush.EndPoint>
+                                            <MultiBinding Converter="{x:Static converters:MultiConverters.Point}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Canvas}}" Path="ActualWidth"/>
+                                                <Binding>
+                                                    <Binding.Source>0.0</Binding.Source>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </LinearGradientBrush.EndPoint>
+                                        <LinearGradientBrush.GradientStops>
+                                            <GradientStop Color="Transparent" Offset="0"/>
+                                            <GradientStop Color="Black" Offset="{Binding LeftFadeOffset}"/>
+                                            <GradientStop Color="Black" Offset="{Binding RightFadeOffset}"/>
+                                            <GradientStop Color="Transparent" Offset="1"/>
+                                        </LinearGradientBrush.GradientStops>
+                                    </LinearGradientBrush>
+                                </Style.Resources>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding FadeEffect}" Value="{x:Static models:TextFadeEffect.Always}">
+                                        <Setter Property="OpacityMask" Value="{StaticResource Mask}"/>
+                                    </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding FadeEffect}" Value="{x:Static models:TextFadeEffect.OnlyWhenScrolling}"/>
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(behaviors:MarqueeContainer.IsScrolling)}" Value="True"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="OpacityMask" Value="{StaticResource Mask}"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Canvas.Style>
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

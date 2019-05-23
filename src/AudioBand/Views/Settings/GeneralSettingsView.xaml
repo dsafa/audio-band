@@ -4,7 +4,7 @@
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
              xmlns:resources="clr-namespace:AudioBand.Resources">
-    <DataTemplate DataType="{x:Type viewmodels:AudioBandVM}">
+    <DataTemplate DataType="{x:Type viewmodels:AudioBandViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>

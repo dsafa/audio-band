@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable SA1300
+using System.Collections.Generic;
 using AudioBand.Models;
 
 namespace AudioBand.Settings.Models.v3
@@ -27,6 +28,16 @@ namespace AudioBand.Settings.Models.v3
         /// Gets or sets the next button settings.
         /// </summary>
         public NextButton NextButtonSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repeat mode button settings.
+        /// </summary>
+        public RepeatModeButton RepeatModeButtonSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shuffle button settings.
+        /// </summary>
+        public ShuffleModeButton ShuffleModeButtonSettings { get; set; }
 
         /// <summary>
         /// Gets or sets the progressbar settings.

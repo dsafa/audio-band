@@ -6,8 +6,11 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:converters="clr-namespace:AudioBand.ValueConverters"
                     xmlns:models="clr-namespace:AudioBand.Models"
+                    xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+                    xmlns:audioSource="clr-namespace:AudioBand.AudioSource;assembly=AudioBand.AudioSource"
                     mc:Ignorable="d">
     <Pen x:Key="ButtonImagePen" Brush="#FFFFFF" Thickness="30" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+    <Pen x:Key="ButtonImagePenDim" Brush="#888888" Thickness="30" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
     <DrawingImage x:Key="PauseButtonDefault">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
@@ -54,261 +57,230 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+    <DrawingImage x:Key="RepeatOffDefault">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M142.19071,79.195957L178.96026,42.426407 142.19071,5.656854 M98.960267,42.426407L178.96026,42.426407 M34.618799,188.81415A90.992584,85.751953,0,0,1,14.894088,95.362512A90.992584,85.751953,0,0,1,98.960277,42.426411"
+                                     Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M113.80929,176.80405L77.03974,213.5736 113.80929,250.34315 M157.03974,213.5736L77.03974,213.5736 M221.3812,67.185856A90.992584,85.751953,0,0,1,241.10591,160.6375A90.992584,85.751953,0,0,1,157.03973,213.5736"
+                                     Pen="{StaticResource ButtonImagePenDim}"/>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="RepeatContextDefault">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Pen="{StaticResource ButtonImagePen}" Geometry="F1 M256,256z M0,0z M142.19071,79.195957L178.96026,42.426407 142.19071,5.656854 M98.960267,42.426407L178.96026,42.426407 M34.618799,188.81415A90.992584,85.751953,0,0,1,14.894088,95.362512A90.992584,85.751953,0,0,1,98.960277,42.426411"/>
+                    <GeometryDrawing Pen="{StaticResource ButtonImagePen}" Geometry="F1 M256,256z M0,0z M113.80929,176.80405L77.03974,213.5736 113.80929,250.34315 M157.03974,213.5736L77.03974,213.5736 M221.3812,67.185856A90.992584,85.751953,0,0,1,241.10591,160.6375A90.992584,85.751953,0,0,1,157.03973,213.5736"/>
+                    <GeometryDrawing Pen="{StaticResource ButtonImagePen}">
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="22" RadiusY="22" Center="128,128" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="RepeatOneDefault">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Pen="{StaticResource ButtonImagePen}" Geometry="F1 M256,256z M0,0z M142.19071,79.195957L178.96026,42.426407 142.19071,5.656854 M98.960267,42.426407L178.96026,42.426407 M34.618799,188.81415A90.992584,85.751953,0,0,1,14.894088,95.362512A90.992584,85.751953,0,0,1,98.960277,42.426411"/>
+                    <GeometryDrawing Pen="{StaticResource ButtonImagePen}" Geometry="F1 M256,256z M0,0z M113.80929,176.80405L77.03974,213.5736 113.80929,250.34315 M157.03974,213.5736L77.03974,213.5736 M221.3812,67.185856A90.992584,85.751953,0,0,1,241.10591,160.6375A90.992584,85.751953,0,0,1,157.03973,213.5736"/>
+                    <DrawingGroup>
+                        <GlyphRunDrawing ForegroundBrush="White">
+                            <GlyphRunDrawing.GlyphRun>
+                                <GlyphRun PixelsPerDip="1" BaselineOrigin="94.079124,170.94922" FontRenderingEmSize="120" BidiLevel="0" IsSideways="False" CaretStops="1 1" ClusterMap="0" Characters="1" GlyphIndices="20" AdvanceWidths="64.6866666666667" GlyphOffsets="0,0" Language="en-us">
+                                    <GlyphRun.GlyphTypeface>
+                                        <GlyphTypeface FontUri="C:\WINDOWS\FONTS\SEGOEUI.TTF" StyleSimulations="None" />
+                                    </GlyphRun.GlyphTypeface>
+                                </GlyphRun>
+                            </GlyphRunDrawing.GlyphRun>
+                        </GlyphRunDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="ShuffleOffDefault">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M197.50773,230.15227L238.93436,191.00532 199.81815,149.54615" Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M133.67526,152.01873C171.72829,193.16201,238.93436,191.00532,238.93436,191.00532" Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.3320683,66.254193C1.3320683,66.254193,56.25668,65.309776,98.133769,105.46534" Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M202.25421,25.672407L242.54219,65.992049 202.25421,106.3117" Pen="{StaticResource ButtonImagePenDim}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.4633263,183.87359C1.4633263,183.87359 81.058783,187.52905 123.66156,118.0149 158.6725,60.888179 242.54219,65.992049 242.54219,65.992049" Pen="{StaticResource ButtonImagePenDim}"/>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="ShuffleOnDefault">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M197.50773,230.15227L238.93436,191.00532 199.81815,149.54615" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M133.67526,152.01873C171.72829,193.16201,238.93436,191.00532,238.93436,191.00532" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.3320683,66.254193C1.3320683,66.254193,56.25668,65.309776,98.133769,105.46534" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M202.25421,25.672407L242.54219,65.992049 202.25421,106.3117" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.4633263,183.87359C1.4633263,183.87359 81.058783,187.52905 123.66156,118.0149 158.6725,60.888179 242.54219,65.992049 242.54219,65.992049" Pen="{StaticResource ButtonImagePen}"/>
+                    <GeometryDrawing>
+                        <GeometryDrawing.Brush>
+                            <SolidColorBrush Color="White" />
+                        </GeometryDrawing.Brush>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="20" RadiusY="20" Center="128,236" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
     <Duration x:Key="ButtonAnimationDuration">0:0:0.1</Duration>
-    <Style x:Key="ToolbarPlayPauseButtonStyle" TargetType="{x:Type Button}">
-        <d:Style.DataContext>
-            <x:Type Type="viewmodels:PlayPauseButtonVM"/>
-        </d:Style.DataContext>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Background" Value="{Binding DefaultBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid>
-                        <Border x:Name="ButtonBackground" Background="{TemplateBinding Background}"/>
-                        <ContentPresenter x:Name="ButtonContent" Content="{TemplateBinding Content}" 
-                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
+    <DataTemplate x:Key="ToolbarButtonContentImageTemplate" DataType="viewmodels:ButtonContentViewModel">
+        <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="1">
+            <Image x:Name="Image">
+                <Image.Source>
+                    <MultiBinding Converter="{x:Static converters:MultiConverters.PathToImageSource}">
+                        <Binding Path="ImagePath"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type Button}}" Path="(behaviors:Fallback.FallbackImageSource)"/>
+                    </MultiBinding>
+                </Image.Source>
+            </Image>
+        </Viewbox>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=IsMouseOver}" Value="True">
+                <Setter TargetName="Image" Property="Source">
+                    <Setter.Value>
+                        <MultiBinding Converter="{x:Static converters:MultiConverters.PathToImageSource}">
+                            <Binding Path="HoveredImagePath"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType={x:Type Button}}" Path="(behaviors:Fallback.FallbackImageSource)"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=IsPressed}" Value="True">
+                <Setter TargetName="Image" Property="Source">
+                    <Setter.Value>
+                        <MultiBinding Converter="{x:Static converters:MultiConverters.PathToImageSource}">
+                            <Binding Path="ClickedImagePath"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType={x:Type Button}}" Path="(behaviors:Fallback.FallbackImageSource)"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    <DataTemplate x:Key="ToolbarButtonContentTextTemplate" DataType="viewmodels:ButtonContentViewModel">
+        <Viewbox>
+            <TextBlock x:Name="Text" Text="{Binding Text}" FontFamily="{Binding FontFamily}" 
+                       Foreground="{Binding TextColor, Converter={x:Static converters:Converters.ColorToBrush}}" FontSize="72"/>
+        </Viewbox>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=IsMouseOver}" Value="True">
+                <Setter TargetName="Text" Property="Foreground" Value="{Binding HoveredTextColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=IsPressed}" Value="True">
+                <Setter TargetName="Text" Property="Foreground" Value="{Binding ClickedTextColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    <ControlTemplate x:Key="ToolbarButtonControlTemplate" TargetType="{x:Type Button}">
+        <Grid>
+            <Border x:Name="ButtonBackground" Background="{Binding BackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
+            <ContentPresenter x:Name="ButtonContent" Content="{TemplateBinding Content}"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </Grid>
+        <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{Binding HoveredBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
+                <Setter TargetName="ButtonBackground" Property="Background" Value="{Binding HoveredBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{Binding ClickedBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
+                <Setter TargetName="ButtonBackground" Property="Background" Value="{Binding ClickedBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
             </Trigger>
-            <!-- Play button text color when normal -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False"/>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="True"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Foreground" Value="{Binding PlayButtonTextColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Pause button text color when normal -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False"/>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="False"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Foreground" Value="{Binding PauseButtonTextColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Play button text color when hovered -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="True"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Foreground" Value="{Binding PlayButtonTextHoverColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Pause button text color when hovered -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="False"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Foreground" Value="{Binding PauseButtonTextHoverColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Play button text color when clicked -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True"/>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="True"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Foreground" Value="{Binding PlayButtonTextClickedColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Pause button text color when clicked -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True"/>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="False"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Foreground" Value="{Binding PauseButtonTextClickedColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Play button text content -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="True"/>
-                    <Condition Binding="{Binding PlayButtonContentType}" Value="{x:Static models:ButtonContentType.Text}"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Content">
-                        <Setter.Value>
-                            <Viewbox>
-                                <TextBlock Text="{Binding PlayButtonText}" FontFamily="{Binding PlayButtonTextFontFamily}" FontSize="72"/>
-                            </Viewbox>
-                        </Setter.Value>
-                    </Setter>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Play button image content -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="True"/>
-                    <Condition Binding="{Binding PlayButtonContentType}" Value="{x:Static models:ButtonContentType.Image}"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Content">
-                        <Setter.Value>
-                            <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="2">
-                                <Image Source="{Binding PlayImagePath, 
-                                                        Converter={x:Static converters:Converters.PathToImageSource}, 
-                                                        FallbackValue={StaticResource PlayButtonDefault}, 
-                                                        TargetNullValue={StaticResource PlayButtonDefault}}"/>
-                            </Viewbox>
-                        </Setter.Value>
-                    </Setter>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Pause button text content -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="False"/>
-                    <Condition Binding="{Binding PauseButtonContentType}" Value="{x:Static models:ButtonContentType.Text}"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Content">
-                        <Setter.Value>
-                            <Viewbox>
-                                <TextBlock Text="{Binding PauseButtonText}" FontFamily="{Binding PauseButtonTextFontFamily}" FontSize="72"/>
-                            </Viewbox>
-                        </Setter.Value>
-                    </Setter>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
-            <!-- Pause button image content -->
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsPlayButtonShown}" Value="False"/>
-                    <Condition Binding="{Binding PauseButtonContentType}" Value="{x:Static models:ButtonContentType.Image}"/>
-                </MultiDataTrigger.Conditions>
-                <MultiDataTrigger.Setters>
-                    <Setter Property="Content">
-                        <Setter.Value>
-                            <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="2">
-                                <Image Source="{Binding PauseImagePath, 
-                                                        Converter={x:Static converters:Converters.PathToImageSource},
-                                                        FallbackValue={StaticResource PauseButtonDefault}, 
-                                                        TargetNullValue={StaticResource PauseButtonDefault}}"/>
-                            </Viewbox>
-                        </Setter.Value>
-                    </Setter>
-                </MultiDataTrigger.Setters>
-            </MultiDataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ButtonContent, Path=Content.(viewmodels:ButtonContentViewModel.ContentType)}" Value="{x:Static models:ButtonContentType.Text}">
+                <Setter TargetName="ButtonContent" Property="ContentTemplate" Value="{StaticResource ToolbarButtonContentTextTemplate}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ButtonContent, Path=Content.(viewmodels:ButtonContentViewModel.ContentType)}" Value="{x:Static models:ButtonContentType.Image}">
+                <Setter TargetName="ButtonContent" Property="ContentTemplate" Value="{StaticResource ToolbarButtonContentImageTemplate}"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Button styles -->
+    <Style x:Key="ToolbarPlayPauseButtonStyle" TargetType="{x:Type Button}">
+        <d:Style.DataContext>
+            <x:Type Type="viewmodels:PlayPauseButtonViewModel"/>
+        </d:Style.DataContext>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsPlayButtonShown}" Value="True">
+                <Setter Property="Content" Value="{Binding PlayContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource PlayButtonDefault}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsPlayButtonShown}" Value="False">
+                <Setter Property="Content" Value="{Binding PauseContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource PauseButtonDefault}"/>
+            </DataTrigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="ToolbarNextButtonStyle" TargetType="{x:Type Button}">
         <d:Style.DataContext>
-            <x:Type Type="viewmodels:NextButtonVM"/>
+            <x:Type Type="viewmodels:NextButtonViewModel"/>
         </d:Style.DataContext>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Background" Value="{Binding BackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-        <Setter Property="Foreground" Value="{Binding TextColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid>
-                        <Border x:Name="ButtonBackground" Background="{TemplateBinding Background}"/>
-                        <ContentPresenter x:Name="ButtonContent" Content="{TemplateBinding Content}" 
-                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{Binding HoveredBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                <Setter Property="Foreground" Value="{Binding TextHoveredColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{Binding ClickedBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                <Setter Property="Foreground" Value="{Binding TextClickedColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-            </Trigger>
-            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ButtonContentType.Text}">
-                <Setter Property="Content">
-                    <Setter.Value>
-                        <Viewbox>
-                            <TextBlock Text="{Binding Text}" FontFamily="{Binding TextFontFamily}" FontSize="72"/>
-                        </Viewbox>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ButtonContentType.Image}">
-                <Setter Property="Content">
-                    <Setter.Value>
-                        <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="2">
-                            <Image Source="{Binding ImagePath,
-                                                    Converter={x:Static converters:Converters.PathToImageSource},
-                                                    FallbackValue={StaticResource NextButtonDefault}, 
-                                                    TargetNullValue={StaticResource NextButtonDefault}}"/>
-                        </Viewbox>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-        </Style.Triggers>
+        <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource NextButtonDefault}"/>
+        <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}"/>
+        <Setter Property="Content" Value="{Binding Content}"/>
     </Style>
     <Style x:Key="ToolbarPreviousButtonStyle" TargetType="{x:Type Button}">
         <d:Style.DataContext>
-            <x:Type Type="viewmodels:PreviousButtonVM"/>
+            <x:Type Type="viewmodels:PreviousButtonViewModel"/>
         </d:Style.DataContext>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Background" Value="{Binding BackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-        <Setter Property="Foreground" Value="{Binding TextColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid>
-                        <Border x:Name="ButtonBackground" Background="{TemplateBinding Background}"/>
-                        <ContentPresenter x:Name="ButtonContent" Content="{TemplateBinding Content}" 
-                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource PreviousButtonDefault}"/>
+        <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}"/>
+        <Setter Property="Content" Value="{Binding Content}"/>
+    </Style>
+    <Style x:Key="ToolbarRepeatModeButtonStyle" TargetType="{x:Type Button}">
+        <d:Style.DataContext>
+            <x:Type Type="viewmodels:RepeatModeButtonViewModel"/>
+        </d:Style.DataContext>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}"/>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{Binding HoveredBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                <Setter Property="Foreground" Value="{Binding TextHoveredColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{Binding ClickedBackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-                <Setter Property="Foreground" Value="{Binding TextClickedColor, Converter={x:Static converters:Converters.ColorToBrush}}"/>
-            </Trigger>
-            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ButtonContentType.Text}">
-                <Setter Property="Content">
-                    <Setter.Value>
-                        <Viewbox>
-                            <TextBlock Text="{Binding Text}" FontFamily="{Binding TextFontFamily}" FontSize="72"/>
-                        </Viewbox>
-                    </Setter.Value>
-                </Setter>
+            <DataTrigger Binding="{Binding RepeatMode}" Value="{x:Static audioSource:RepeatMode.Off}">
+                <Setter Property="Content" Value="{Binding RepeatOffContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource RepeatOffDefault}"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding ContentType}" Value="{x:Static models:ButtonContentType.Image}">
-                <Setter Property="Content">
-                    <Setter.Value>
-                        <Viewbox RenderOptions.BitmapScalingMode="Fant" Margin="2">
-                            <Image Source="{Binding ImagePath,
-                                                    Converter={x:Static converters:Converters.PathToImageSource},
-                                                    FallbackValue={StaticResource PreviousButtonDefault}, 
-                                                    TargetNullValue={StaticResource PreviousButtonDefault}}"/>
-                        </Viewbox>
-                    </Setter.Value>
-                </Setter>
+            <DataTrigger Binding="{Binding RepeatMode}" Value="{x:Static audioSource:RepeatMode.RepeatContext}">
+                <Setter Property="Content" Value="{Binding RepeatContextContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource RepeatContextDefault}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RepeatMode}" Value="{x:Static audioSource:RepeatMode.RepeatTrack}">
+                <Setter Property="Content" Value="{Binding RepeatTrackContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource RepeatOneDefault}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ToolbarShuffleModeButtonStyle" TargetType="{x:Type Button}">
+        <d:Style.DataContext>
+            <x:Type Type="viewmodels:ShuffleModeButtonViewModel"/>
+        </d:Style.DataContext>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsShuffleOn}" Value="True">
+                <Setter Property="Content" Value="{Binding ShuffleOnContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource ShuffleOnDefault}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsShuffleOn}" Value="False">
+                <Setter Property="Content" Value="{Binding ShuffleOffContent}"/>
+                <Setter Property="behaviors:Fallback.FallbackImageSource" Value="{StaticResource ShuffleOffDefault}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

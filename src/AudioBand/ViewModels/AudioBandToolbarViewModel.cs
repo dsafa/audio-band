@@ -95,7 +95,7 @@ namespace AudioBand.ViewModels
 
             foreach (var audioSource in audioSources)
             {
-                ViewModels.AudioSourceSettingsVm.CreateViewModelForAudioSource(audioSource);
+                ViewModels.AudioSourceSettingsViewModel.CreateViewModelForAudioSource(audioSource);
 
                 // If user was using this audio source last, then automatically activate it
                 var savedAudioSourceName = _appSettings.AudioSource;
@@ -155,12 +155,14 @@ namespace AudioBand.ViewModels
 
         private void UpdateViewModels(IAudioSource audioSource)
         {
-            ViewModels.AlbumArtVM.AudioSource = audioSource;
-            ViewModels.NextButtonVM.AudioSource = audioSource;
-            ViewModels.PreviousButtonVM.AudioSource = audioSource;
-            ViewModels.PlayPauseButtonVM.AudioSource = audioSource;
-            ViewModels.ProgressBarVM.AudioSource = audioSource;
-            foreach (var customLabelVm in ViewModels.CustomLabelsVM.CustomLabels)
+            ViewModels.AlbumArtViewModel.AudioSource = audioSource;
+            ViewModels.NextButtonViewModel.AudioSource = audioSource;
+            ViewModels.PreviousButtonViewModel.AudioSource = audioSource;
+            ViewModels.PlayPauseButtonViewModel.AudioSource = audioSource;
+            ViewModels.ProgressBarViewModel.AudioSource = audioSource;
+            ViewModels.RepeatModeButtonViewModel.AudioSource = audioSource;
+            ViewModels.ShuffleModeButtonViewModel.AudioSource = audioSource;
+            foreach (var customLabelVm in ViewModels.CustomLabelsViewModel.CustomLabels)
             {
                 customLabelVm.AudioSource = audioSource;
             }

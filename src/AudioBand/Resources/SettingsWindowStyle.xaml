@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
                     xmlns:settings="clr-namespace:AudioBand.Views.Settings"
                     xmlns:resources="clr-namespace:AudioBand.Resources">
     <ResourceDictionary.MergedDictionaries>
@@ -18,12 +17,20 @@
         <resources:SharedDictionary Source="PasswordBoxStyles.xaml"/>
         <resources:SharedDictionary Source="NumericInputStyles.xaml"/>
         <resources:SharedDictionary Source="ComboBoxStyles.xaml"/>
+        <resources:SharedDictionary Source="ScrollbarStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
         <Setter Property="IsMoveToPointEnabled" Value="True"/>
     </Style>
     <Style TargetType="{x:Type ListBox}">
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <ItemsPresenter Margin="0,0,1,0"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="SettingsStackPanel" TargetType="{x:Type StackPanel}">
@@ -66,6 +73,9 @@
                 <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
             <Style TargetType="{x:Type settings:ImagePicker}">
+                <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
+            </Style>
+            <Style TargetType="{x:Type metro:RangeSlider}">
                 <Setter Property="Margin" Value="{StaticResource DefaultControlMargin}"/>
             </Style>
         </Style.Resources>

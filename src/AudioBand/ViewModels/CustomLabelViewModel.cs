@@ -8,31 +8,32 @@ using AudioBand.Models;
 using AudioBand.TextFormatting;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
-#pragma warning disable 1591
-
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// The view model for a custom label.
     /// </summary>
-    public class CustomLabelVM : ViewModelBase<CustomLabel>
+    public class CustomLabelViewModel : ViewModelBase<CustomLabel>
     {
         private readonly FormattedTextParser _parser;
         private IAudioSource _audioSource;
         private bool _isPlaying;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomLabelVM"/> class.
+        /// Initializes a new instance of the <see cref="CustomLabelViewModel"/> class.
         /// </summary>
         /// <param name="model">The custom label.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CustomLabelVM(CustomLabel model, IDialogService dialogService)
+        public CustomLabelViewModel(CustomLabel model, IDialogService dialogService)
             : base(model)
         {
             DialogService = dialogService;
             _parser = new FormattedTextParser(FormatString, Color);
         }
 
+        /// <summary>
+        /// Gets or sets the name of the label.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.Name))]
         public string Name
         {
@@ -40,6 +41,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Name), value);
         }
 
+        /// <summary>
+        /// Gets or sets the font family.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.FontFamily))]
         public string FontFamily
         {
@@ -47,6 +51,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.FontFamily), value);
         }
 
+        /// <summary>
+        /// Gets or sets the font size.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.FontSize))]
         public float FontSize
         {
@@ -54,6 +61,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.FontSize), value);
         }
 
+        /// <summary>
+        /// Gets or sets the font color.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.Color))]
         public Color Color
         {
@@ -61,6 +71,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Color), value);
         }
 
+        /// <summary>
+        /// Gets or sets the format string.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.FormatString))]
         [AlsoNotify(nameof(TextSegments))]
         public string FormatString
@@ -69,6 +82,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.FormatString), value);
         }
 
+        /// <summary>
+        /// Gets or sets the text alignment.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.Alignment))]
         public TextAlignment TextAlignment
         {
@@ -76,6 +92,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Alignment), value);
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the text is visible.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.IsVisible))]
         public bool IsVisible
         {
@@ -83,6 +102,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.IsVisible), value);
         }
 
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.Width))]
         public double Width
         {
@@ -90,6 +112,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Width), value);
         }
 
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.Height))]
         public double Height
         {
@@ -97,6 +122,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Height), value);
         }
 
+        /// <summary>
+        /// Gets or sets the x position.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.XPosition))]
         public double XPosition
         {
@@ -104,6 +132,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.XPosition), value);
         }
 
+        /// <summary>
+        /// Gets or sets the y position.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.YPosition))]
         public double YPosition
         {
@@ -111,6 +142,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.YPosition), value);
         }
 
+        /// <summary>
+        /// Gets or sets the scroll speed.
+        /// </summary>
         [PropertyChangeBinding(nameof(CustomLabel.ScrollSpeed))]
         public TimeSpan ScrollSpeed
         {
@@ -139,6 +173,36 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the fade effect.
+        /// </summary>
+        [PropertyChangeBinding(nameof(CustomLabel.FadeEffect))]
+        public TextFadeEffect FadeEffect
+        {
+            get => Model.FadeEffect;
+            set => SetProperty(nameof(Model.FadeEffect), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the left offset for the text fade gradient.
+        /// </summary>
+        [PropertyChangeBinding(nameof(CustomLabel.LeftFadeOffset))]
+        public double LeftFadeOffset
+        {
+            get => Model.LeftFadeOffset;
+            set => SetProperty(nameof(Model.LeftFadeOffset), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the right offset for the text fade gradient.
+        /// </summary>
+        [PropertyChangeBinding(nameof(CustomLabel.RightFadeOffset))]
+        public double RightFadeOffset
+        {
+            get => Model.RightFadeOffset;
+            set => SetProperty(nameof(Model.RightFadeOffset), value);
+        }
+
+        /// <summary>
         /// Gets the text segments.
         /// </summary>
         public IEnumerable<TextSegment> TextSegments => _parser.TextSegments;
@@ -157,6 +221,11 @@ namespace AudioBand.ViewModels
         /// Gets the values of the <see cref="TextOverflow"/> enum.
         /// </summary>
         public IEnumerable<EnumDescriptor<TextOverflow>> TextOverflowValues { get; } = typeof(TextOverflow).GetEnumDescriptors<TextOverflow>();
+
+        /// <summary>
+        /// Gets the values of the <see cref="TextFadeEffect"/> enum.
+        /// </summary>
+        public IEnumerable<EnumDescriptor<TextFadeEffect>> FadeEffectValues { get; } = typeof(TextFadeEffect).GetEnumDescriptors<TextFadeEffect>();
 
         /// <summary>
         /// Gets the dialog service.
@@ -245,4 +314,3 @@ namespace AudioBand.ViewModels
         }
     }
 }
-#pragma warning restore 1591

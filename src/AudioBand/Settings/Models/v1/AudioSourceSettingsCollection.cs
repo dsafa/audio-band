@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable
+using System.Collections.Generic;
 
 namespace AudioBand.Settings.Models.V1
 {

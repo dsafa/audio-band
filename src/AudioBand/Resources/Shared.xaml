@@ -10,12 +10,6 @@
     <Thickness x:Key="InputSpacing" Left="4" Top="0" Right="4" Bottom="0"/>
     <Thickness x:Key="BorderThickness">2</Thickness>
     <Thickness x:Key="SectionMargin" Top="16"/>
-    <Color x:Key="BorderDefaultColor">#CCCCCC</Color>
-    <Color x:Key="BorderHoverColor">#7A7A7A</Color>
-    <Color x:Key="ButtonDisabledColor">#888888</Color>
-    <Color x:Key="NavigationPaneHoverBackgroundColor">#44444444</Color>
-    <Color x:Key="NavigationPaneClickBackgroundColor">#DD888888</Color>
-    <Color x:Key="SecondaryTextColor">#555555</Color>
     <Color x:Key="ButtonRevealColor">#88FFFFFF</Color>
     <GridLength x:Key="DefaultControlHeightLength">32</GridLength>
     <system:Double x:Key="DefaultControlHeight">32</system:Double>
@@ -26,16 +20,6 @@
     <system:Double x:Key="HeaderFontSize">34</system:Double>
     <system:Double x:Key="DefaultButtonHeight">30</system:Double>
     <system:Double x:Key="NavigationPaneIconLength">18</system:Double>
-    <SolidColorBrush x:Key="SecondaryTextColorBrush" Color="{StaticResource SecondaryTextColor}" o:Freeze="True"/>
-    <SolidColorBrush x:Key="BorderDefaultColorBrush" Color="{StaticResource BorderDefaultColor}" o:Freeze="True"/>
-    <SolidColorBrush x:Key="BorderHoverColorBrush" Color="{StaticResource BorderHoverColor}" o:Freeze="True"/>
-    <SolidColorBrush x:Key="BorderFocusedColorBrush" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
-    <SolidColorBrush x:Key="NavigationPaneHoverBackgroundBrush" Color="{StaticResource NavigationPaneHoverBackgroundColor}" o:Freeze="True"/>
-    <SolidColorBrush x:Key="IconColorBrush" Color="#999999" o:Freeze="True"/>
-    <SolidColorBrush x:Key="ButtonDisabledColorBrush" Color="{StaticResource ButtonDisabledColor}" o:Freeze="True"/>
-    <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchBrush.Win10" Color="{x:Static fw:AccentColors.ImmersiveSystemAccent}"/>
-    <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchMouseOverBrush.Win10" Color="{x:Static fw:AccentColors.ImmersiveSystemAccentLight1}" />
-    <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10" Color="White" o:Freeze="True"/>
     <RadialGradientBrush x:Shared="False" x:Key="RevealHoverLightBrush" MappingMode="Absolute" RadiusX="200" RadiusY="200">
         <RadialGradientBrush.Center>
             <MultiBinding Converter="{StaticResource relativePositionConverter}">
@@ -51,7 +35,7 @@
                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Rectangle}}" Path="(fw:PointerTracker.Position)" />
             </MultiBinding>
         </RadialGradientBrush.GradientOrigin>
-        <GradientStop Color="#88FFFFFF" Offset="0"/>
+        <GradientStop Color="#44FFFFFF" Offset="0"/>
         <GradientStop Color="Transparent" Offset="0.8"/>
     </RadialGradientBrush>
 </ResourceDictionary>

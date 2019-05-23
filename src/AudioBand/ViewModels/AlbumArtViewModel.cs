@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AudioBand.AudioSource;
@@ -8,24 +7,23 @@ using AudioBand.Extensions;
 using AudioBand.Models;
 using AudioBand.Settings;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for the album art.
     /// </summary>
-    public class AlbumArtVM : ViewModelBase<AlbumArt>
+    public class AlbumArtViewModel : ViewModelBase<AlbumArt>
     {
         private readonly IAppSettings _appsettings;
         private IAudioSource _audioSource;
         private ImageSource _albumArt;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AlbumArtVM"/> class.
+        /// Initializes a new instance of the <see cref="AlbumArtViewModel"/> class.
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public AlbumArtVM(IAppSettings appsettings, IDialogService dialogService)
+        public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService)
             : base(appsettings.AlbumArt)
         {
             DialogService = dialogService;
@@ -34,6 +32,9 @@ namespace AudioBand.ViewModels
             appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether it is visible.
+        /// </summary>
         [PropertyChangeBinding(nameof(Models.AlbumArt.IsVisible))]
         public bool IsVisible
         {
@@ -41,6 +42,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.IsVisible), value);
         }
 
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
         [PropertyChangeBinding(nameof(Models.AlbumArt.Width))]
         public double Width
         {
@@ -48,6 +52,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Width), value);
         }
 
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
         [PropertyChangeBinding(nameof(Models.AlbumArt.Height))]
         public double Height
         {
@@ -55,6 +62,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.Height), value);
         }
 
+        /// <summary>
+        /// Gets or sets the x position.
+        /// </summary>
         [PropertyChangeBinding(nameof(Models.AlbumArt.XPosition))]
         public double XPosition
         {
@@ -62,6 +72,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.XPosition), value);
         }
 
+        /// <summary>
+        /// Gets or sets the y position.
+        /// </summary>
         [PropertyChangeBinding(nameof(Models.AlbumArt.YPosition))]
         public double YPosition
         {
@@ -69,6 +82,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.YPosition), value);
         }
 
+        /// <summary>
+        /// Gets or sets the placeholder path.
+        /// </summary>
         [PropertyChangeBinding(nameof(Models.AlbumArt.PlaceholderPath))]
         public string PlaceholderPath
         {
@@ -76,6 +92,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.PlaceholderPath), value);
         }
 
+        /// <summary>
+        /// Gets the current album art image.
+        /// </summary>
         public ImageSource AlbumArt
         {
             get => _albumArt;
@@ -139,4 +158,3 @@ namespace AudioBand.ViewModels
         }
     }
 }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

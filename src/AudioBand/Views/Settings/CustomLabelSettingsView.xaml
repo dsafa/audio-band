@@ -8,13 +8,14 @@
              xmlns:converters="clr-namespace:AudioBand.ValueConverters"
              xmlns:models="clr-namespace:AudioBand.Models"
              xmlns:resources="clr-namespace:AudioBand.Resources">
-    <DataTemplate DataType="{x:Type viewmodels:CustomLabelVM}">
+    <DataTemplate DataType="{x:Type viewmodels:CustomLabelViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <resources:SharedDictionary Source="../../Resources/Shared.xaml"/>
                     <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
                     <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/RangeSliderStyles.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
@@ -121,6 +122,17 @@
                 <TextBlock Text="{StaticResource CustomLabelScrollSpeedDescription}" Style="{StaticResource DescriptionTextBlock}"/>
                 <metro:NumericUpDown behaviors:NumericInput.Type="WholeNumber" Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static converters:Converters.TimeSpanToMs}}"/>
             </ItemsControl>
+
+            <TextBlock Text="{StaticResource CustomLabelEffectsSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
+            <TextBlock Text="{StaticResource CustomLabelTextEffectDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <ComboBox ItemsSource="{Binding FadeEffectValues}" ItemTemplate="{StaticResource EnumDescriptorItemTemplate}"
+                      SelectedValue="{Binding FadeEffect}" SelectedValuePath="Value"/>
+            <TextBlock Text="{StaticResource CustomLabelTextFadeDescription}" Style="{StaticResource DescriptionTextBlock}"/>
+            <metro:RangeSlider MinRange="0" MinRangeWidth="0" Minimum="0.0" Maximum="1.0" Style="{StaticResource RangeSliderStyle}"
+                               LowerValue="{Binding LeftFadeOffset}" UpperValue="{Binding RightFadeOffset}"
+                               AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="2" IsMoveToPointEnabled="True"
+                               Width="400" HorizontalAlignment="Left"
+                               TickFrequency="0.1" TickPlacement="BottomRight"/>
 
             <TextBlock Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
             <Button HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}" Command="{Binding ResetCommand}"/>

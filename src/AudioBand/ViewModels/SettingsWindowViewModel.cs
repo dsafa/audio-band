@@ -13,7 +13,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the settings window.
     /// </summary>
-    public class SettingsWindowVM : ViewModelBase
+    public class SettingsWindowViewModel : ViewModelBase
     {
         private readonly IAppSettings _appSettings;
         private readonly IDialogService _dialogService;
@@ -25,13 +25,13 @@ namespace AudioBand.ViewModels
         private string _selectedViewHeader;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SettingsWindowVM"/> class.
+        /// Initializes a new instance of the <see cref="SettingsWindowViewModel"/> class.
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="viewModels">The view models.</param>
         /// <param name="messageBus">The message bus.</param>
-        public SettingsWindowVM(IAppSettings appSettings, IDialogService dialogService, IViewModelContainer viewModels, IMessageBus messageBus)
+        public SettingsWindowViewModel(IAppSettings appSettings, IDialogService dialogService, IViewModelContainer viewModels, IMessageBus messageBus)
         {
             _appSettings = appSettings;
             _dialogService = dialogService;
@@ -51,7 +51,7 @@ namespace AudioBand.ViewModels
             ImportProfilesCommand = new RelayCommand(ImportProfilesCommandOnExecute);
             ExportProfilesCommand = new RelayCommand(ExportProfilesCommandOnExecute);
 
-            ViewModels.CustomLabelsVM.PropertyChanged += ViewModelOnEditChanged;
+            ViewModels.CustomLabelsViewModel.PropertyChanged += ViewModelOnEditChanged;
         }
 
         /// <summary>

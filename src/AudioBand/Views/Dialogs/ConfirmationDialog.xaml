@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
         xmlns:resources="clr-namespace:AudioBand.Resources"
+        xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/AudioBand;component/audioband.ico"
@@ -13,7 +14,9 @@
         x:Name="ConfirmationDialogWindow"
         MinHeight="200" MinWidth="300"
         Height="250" Width="450"
-        SizeToContent="Height">
+        SizeToContent="Height"
+        Foreground="{theme:ThemeResource SystemBaseHighColor}"
+        Background="{theme:ThemeResource SystemAltHighColor}">
     <i:Interaction.Behaviors>
         <behaviors:AppUserModelID/>
         <behaviors:DpiScaling/>

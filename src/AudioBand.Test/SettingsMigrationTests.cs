@@ -456,7 +456,7 @@ Value = ""secret""
             Assert.AreEqual(v2.NextButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.IsVisible);
             Assert.AreEqual(v2.NextButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.XPosition);
             Assert.AreEqual(v2.NextButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.YPosition);
-            Assert.AreEqual(v2.NextButtonSettings.ImagePath, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.ImagePath);
+            Assert.AreEqual(v2.NextButtonSettings.ImagePath, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Content.ImagePath);
 
             Assert.AreEqual(v2.AudioSourceSettings.Count, v3.AudioSourceSettings.Count);
             Assert.AreEqual(v2.AudioSourceSettings[0].AudioSourceName, v3.AudioSourceSettings[0].AudioSourceName);
@@ -469,15 +469,15 @@ Value = ""secret""
             Assert.AreEqual(v2.PlayPauseButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.XPosition);
             Assert.AreEqual(v2.PlayPauseButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.YPosition);
             Assert.AreEqual(v2.PlayPauseButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.IsVisible);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.PauseButtonImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.PauseButtonImagePath);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.PlayButtonImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.PlayButtonImagePath);
+            Assert.AreEqual(v2.PlayPauseButtonSettings.PauseButtonImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.PauseContent.ImagePath);
+            Assert.AreEqual(v2.PlayPauseButtonSettings.PlayButtonImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.PlayContent.ImagePath);
 
             Assert.AreEqual(v2.PreviousButtonSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Height);
             Assert.AreEqual(v2.PreviousButtonSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Width);
             Assert.AreEqual(v2.PreviousButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.XPosition);
             Assert.AreEqual(v2.PreviousButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.YPosition);
             Assert.AreEqual(v2.PreviousButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.IsVisible);
-            Assert.AreEqual(v2.PreviousButtonSettings.ImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.ImagePath);
+            Assert.AreEqual(v2.PreviousButtonSettings.ImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Content.ImagePath);
 
             Assert.AreEqual(v2.ProgressBarSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.Width);
             Assert.AreEqual(v2.ProgressBarSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.Height);

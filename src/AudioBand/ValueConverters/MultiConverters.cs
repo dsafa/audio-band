@@ -14,5 +14,15 @@
         /// Gets a <see cref="MultiplierConverter"/>.
         /// </summary>
         public static MultiplierConverter Multiply { get; } = new MultiplierConverter();
+
+        /// <summary>
+        /// Gets a <see cref="PointConverter"/>.
+        /// </summary>
+        public static PointConverter Point { get; } = new PointConverter();
+
+        /// <summary>
+        /// Gets a <see cref="PathToImageSource"/> multi converter.
+        /// </summary>
+        public static PathToImageSourceConverter PathToImageSource { get; } = new PathToImageSourceConverter();
     }
 }

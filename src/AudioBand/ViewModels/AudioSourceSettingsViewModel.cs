@@ -9,16 +9,16 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for ALL audio source settings.
     /// </summary>
-    public class AudioSourceSettingsVM : ViewModelBase
+    public class AudioSourceSettingsViewModel : ViewModelBase
     {
         private readonly IAppSettings _appSettings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AudioSourceSettingsVM"/> class
+        /// Initializes a new instance of the <see cref="AudioSourceSettingsViewModel"/> class
         /// with the settings.
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
-        public AudioSourceSettingsVM(IAppSettings appSettings)
+        public AudioSourceSettingsViewModel(IAppSettings appSettings)
         {
             _appSettings = appSettings;
         }

@@ -20,15 +20,15 @@ namespace AudioBand.Views.Settings
         /// Initializes a new instance of the <see cref="SettingsWindow"/> class
         /// with the settings viewmodel.
         /// </summary>
-        /// <param name="vm">The settings window viewmodel.</param>
+        /// <param name="viewModel">The settings window viewmodel.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="messageBus">The message bus.</param>
-        public SettingsWindow(SettingsWindowVM vm, IDialogService dialogService, IMessageBus messageBus)
+        public SettingsWindow(SettingsWindowViewModel viewModel, IDialogService dialogService, IMessageBus messageBus)
         {
             OpenAboutDialogCommand = new RelayCommand(OpenAboutCommandOnExecute);
 
             InitializeComponent();
-            DataContext = vm;
+            DataContext = viewModel;
             _dialogService = dialogService;
             _messageBus = messageBus;
             _messageBus.Subscribe<SettingsWindowMessage>(SettingsWindowMessageHandler);
@@ -36,7 +36,7 @@ namespace AudioBand.Views.Settings
             Activated += OnActivated;
             Closing += OnClosing;
             Loaded += OnLoaded;
-            vm.PropertyChanged += ViewModelOnPropertyChanged;
+            viewModel.PropertyChanged += ViewModelOnPropertyChanged;
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace AudioBand.Views.Settings
 
         private void ViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != nameof(SettingsWindowVM.SelectedViewModel))
+            if (e.PropertyName != nameof(SettingsWindowViewModel.SelectedViewModel))
             {
                 return;
             }

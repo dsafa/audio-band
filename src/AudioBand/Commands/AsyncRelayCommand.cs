@@ -8,7 +8,7 @@ namespace AudioBand.Commands
     /// Basic async command.
     /// </summary>
     /// <typeparam name="T">Type of the command parameter.</typeparam>
-    public class AsyncRelayCommand<T> : ICommand
+    public class AsyncRelayCommand<T> : IAsyncCommand
     {
         private readonly Func<T, Task> _execute;
         private readonly Predicate<T> _canExecute;
@@ -19,7 +19,9 @@ namespace AudioBand.Commands
         /// </summary>
         /// <param name="execute">Action to execute.</param>
         public AsyncRelayCommand(Func<T, Task> execute)
-            : this(execute, null) { }
+            : this(execute, null)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AsyncRelayCommand{T}"/> class
@@ -49,7 +51,7 @@ namespace AudioBand.Commands
         /// <inheritdoc cref="ICommand.Execute"/>
         public async void Execute(object parameter)
         {
-            await _execute((T)parameter);
+            await ExecuteAsync(parameter);
         }
 
         /// <summary>

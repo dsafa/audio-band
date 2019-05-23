@@ -17,7 +17,9 @@ namespace AudioBand.Commands
         /// </summary>
         /// <param name="execute">Action to execute.</param>
         public RelayCommand(Action<T> execute)
-            : this(execute, null) { }
+            : this(execute, null)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelayCommand{T}"/> class.
