@@ -239,5 +239,78 @@ namespace AudioBand.Test
             audiosourceMock.Raise(m => m.RepeatModeChanged += null, null, RepeatMode.RepeatTrack);
             await viewModel.CycleRepeatModeCommand.ExecuteAsync(null);
         }
+
+        [TestMethod]
+        public void ShuffleModeButtonListensForProfileChanges()
+        {
+            var first = new ShuffleModeButton() { Height = 1 };
+            var second = new ShuffleModeButton() { Height = 2 };
+            _appSettings.SetupSequence(m => m.ShuffleModeButton)
+                .Returns(first)
+                .Returns(second);
+
+            var vm = new ShuffleModeButtonViewModel(_appSettings.Object, _dialog.Object);
+            bool raised = false;
+            vm.PropertyChanged += (_, __) => raised = true;
+
+            Assert.AreEqual(first.Height, vm.Height);
+            _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
+
+            Assert.IsFalse(vm.IsEditing);
+            Assert.IsTrue(raised);
+            Assert.AreEqual(second.Height, vm.Height);
+        }
+
+        [TestMethod]
+        public void ShuffleModeButtonMarkedAsEditingWhenContentIsEdited()
+        {
+            _appSettings.SetupGet(m => m.ShuffleModeButton).Returns(new ShuffleModeButton());
+            var vm = new ShuffleModeButtonViewModel(_appSettings.Object, _dialog.Object);
+
+            vm.ShuffleOnContent.Text = "A";
+            Assert.IsTrue(vm.ShuffleOnContent.IsEditing);
+            Assert.IsTrue(vm.IsEditing);
+
+            vm.EndEdit();
+            Assert.IsFalse(vm.ShuffleOnContent.IsEditing);
+            Assert.IsFalse(vm.IsEditing);
+
+            vm.ShuffleOffContent.Text = "...";
+            Assert.IsTrue(vm.ShuffleOffContent.IsEditing);
+            Assert.IsTrue(vm.IsEditing);
+        }
+
+        [TestMethod]
+        public void ShuffleModeButtonSubscribesToAudioSource()
+        {
+            _appSettings.SetupGet(m => m.ShuffleModeButton).Returns(new ShuffleModeButton());
+            var vm = new ShuffleModeButtonViewModel(_appSettings.Object, _dialog.Object);
+            var audioSourceMock = new Mock<IAudioSource>();
+            vm.AudioSource = audioSourceMock.Object;
+
+            audioSourceMock.Raise(m => m.ShuffleChanged += null, null, true);
+            Assert.IsTrue(vm.IsShuffleOn);
+
+            audioSourceMock.Raise(m => m.ShuffleChanged += null, null, false);
+            Assert.IsFalse(vm.IsShuffleOn);
+        }
+
+        [TestMethod]
+        public async Task ShuffleModeButtonCommandTogglesShuffle()
+        {
+            _appSettings.SetupGet(m => m.ShuffleModeButton).Returns(new ShuffleModeButton());
+            var vm = new ShuffleModeButtonViewModel(_appSettings.Object, _dialog.Object);
+            var audioSourceMock = new Mock<IAudioSource>();
+            var sequence = new[] {true, false};
+            var index = 0;
+            audioSourceMock.Setup(m => m.SetShuffleAsync(It.IsAny<bool>()))
+                .Callback((bool shuffle) => Assert.AreEqual(sequence[index++], shuffle))
+                .Returns(Task.CompletedTask);
+
+            vm.AudioSource = audioSourceMock.Object;
+            await vm.ToggleShuffleCommand.ExecuteAsync(null);
+            audioSourceMock.Raise(m => m.ShuffleChanged += null, null, true);
+            await vm.ToggleShuffleCommand.ExecuteAsync(null);
+        }
     }
 }
