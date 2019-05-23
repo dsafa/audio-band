@@ -46,6 +46,11 @@
         RepeatModeButtonViewModel RepeatModeButtonViewModel { get; }
 
         /// <summary>
+        /// Gets the view model for the shuffle mode button.
+        /// </summary>
+        ShuffleModeButtonViewModel ShuffleModeButtonViewModel { get; }
+
+        /// <summary>
         /// Gets the view model for the progress bar.
         /// </summary>
         ProgressBarViewModel ProgressBarViewModel { get; }

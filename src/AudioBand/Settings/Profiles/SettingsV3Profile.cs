@@ -16,7 +16,8 @@ namespace AudioBand.Settings.Profiles
         {
             CreateMap<SettingsV3, SettingsV3>();
             CreateMap<ProfileV3, ProfileV3>()
-                .ForMember(dest => dest.RepeatModeButtonSettings, opt => opt.NullSubstitute(new RepeatModeButton())); // Repeat mode button was added after
+                .ForMember(dest => dest.RepeatModeButtonSettings, opt => opt.NullSubstitute(new RepeatModeButton())) // Repeat mode button was added after
+                .ForMember(dest => dest.ShuffleModeButtonSettings, opt => opt.NullSubstitute(new ShuffleModeButton()));
         }
     }
 }

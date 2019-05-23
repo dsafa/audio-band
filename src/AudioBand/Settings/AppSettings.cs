@@ -130,6 +130,11 @@ namespace AudioBand.Settings
         public RepeatModeButton RepeatModeButton { get; private set; } = new RepeatModeButton();
 
         /// <summary>
+        /// Gets the saved shuffle mode button model.
+        /// </summary>
+        public ShuffleModeButton ShuffleModeButton { get; private set; } = new ShuffleModeButton();
+
+        /// <summary>
         /// Gets the saved progress bar model.
         /// </summary>
         public ProgressBar ProgressBar { get; private set; } = new ProgressBar();
@@ -309,6 +314,7 @@ namespace AudioBand.Settings
                 NextButtonSettings = new NextButton(),
                 PreviousButtonSettings = new PreviousButton(),
                 RepeatModeButtonSettings = new RepeatModeButton(),
+                ShuffleModeButtonSettings = new ShuffleModeButton(),
                 ProgressBarSettings = new ProgressBar(),
                 CustomLabelSettings = new List<CustomLabel>
                 {
@@ -380,6 +386,7 @@ namespace AudioBand.Settings
             PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
             ProgressBar = _currentProfile.ProgressBarSettings;
             RepeatModeButton = _currentProfile.RepeatModeButtonSettings;
+            ShuffleModeButton = _currentProfile.ShuffleModeButtonSettings;
 
             ProfileChanged?.Invoke(this, EventArgs.Empty);
         }

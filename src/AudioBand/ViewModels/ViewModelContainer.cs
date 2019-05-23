@@ -15,6 +15,7 @@
         /// <param name="nextButtonViewModel">Next button view model.</param>
         /// <param name="playPauseButtonViewModel">Play pause button view model.</param>
         /// <param name="repeatModeButtonViewModel">Repeat mode button view model.</param>
+        /// <param name="shuffleModeButtonViewModel">Shuffle mode button view model.</param>
         /// <param name="previousButtonViewModel">Previous button view model.</param>
         /// <param name="progressBarViewModel">Progress bar view model.</param>
         /// <param name="audioSourceSettingsViewModel">Audio source settings view model.</param>
@@ -26,6 +27,7 @@
             NextButtonViewModel nextButtonViewModel,
             PlayPauseButtonViewModel playPauseButtonViewModel,
             RepeatModeButtonViewModel repeatModeButtonViewModel,
+            ShuffleModeButtonViewModel shuffleModeButtonViewModel,
             PreviousButtonViewModel previousButtonViewModel,
             ProgressBarViewModel progressBarViewModel,
             AudioSourceSettingsViewModel audioSourceSettingsViewModel)
@@ -37,6 +39,7 @@
             NextButtonViewModel = nextButtonViewModel;
             PlayPauseButtonViewModel = playPauseButtonViewModel;
             RepeatModeButtonViewModel = repeatModeButtonViewModel;
+            ShuffleModeButtonViewModel = shuffleModeButtonViewModel;
             PreviousButtonViewModel = previousButtonViewModel;
             ProgressBarViewModel = progressBarViewModel;
             AudioSourceSettingsViewModel = audioSourceSettingsViewModel;
@@ -65,6 +68,9 @@
 
         /// <inheritdoc />
         public RepeatModeButtonViewModel RepeatModeButtonViewModel { get; }
+
+        /// <inheritdoc />
+        public ShuffleModeButtonViewModel ShuffleModeButtonViewModel { get; }
 
         /// <inheritdoc />
         public ProgressBarViewModel ProgressBarViewModel { get; }

@@ -208,6 +208,13 @@
                 Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                 Style="{StaticResource ToolbarRepeatModeButtonStyle}"
                 Command="{Binding CycleRepeatModeCommand}"/>
+        <Button x:Name="ShuffleModeButton" DataContext="{Binding ViewModels.ShuffleModeButtonViewModel}"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
+                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                Style="{StaticResource ToolbarShuffleModeButtonStyle}"
+                Command="{Binding ToggleShuffleCommand}"/>
         <Slider x:Name="ProgressBar" DataContext="{Binding ViewModels.ProgressBarViewModel}"
                 Width="{Binding Width}" Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"

@@ -105,6 +105,7 @@
     <Compile Include="Models\CustomLabel.cs" />
     <Compile Include="Models\RepeatModeButton.cs" />
     <Compile Include="Models\ScrollBehavior.cs" />
+    <Compile Include="Models\ShuffleModeButton.cs" />
     <Compile Include="Models\TextFadeEffect.cs" />
     <Compile Include="Models\TextOverflow.cs" />
     <Compile Include="NativeMethods.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="ViewModels\RenameProfileDialogViewModel.cs" />
     <Compile Include="ViewModels\RepeatModeButtonViewModel.cs" />
     <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
+    <Compile Include="ViewModels\ShuffleModeButtonViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
     <Compile Include="ViewModels\ViewModelContainer.cs" />
@@ -399,6 +401,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\SettingsWindowStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\ShuffleModeButtonSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -35,6 +35,11 @@ namespace AudioBand.Settings.Models.v3
         public RepeatModeButton RepeatModeButtonSettings { get; set; }
 
         /// <summary>
+        /// Gets or sets the shuffle button settings.
+        /// </summary>
+        public ShuffleModeButton ShuffleModeButtonSettings { get; set; }
+
+        /// <summary>
         /// Gets or sets the progressbar settings.
         /// </summary>
         public ProgressBar ProgressBarSettings { get; set; }

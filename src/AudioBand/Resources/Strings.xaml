@@ -40,6 +40,10 @@
     <sys:String x:Key="RepeatModeButtonContextContentSectionText">Repeat on button content</sys:String>
     <sys:String x:Key="RepeatModeButtonTrackContentSectionText">Repeat track button content</sys:String>
 
+    <!-- Shuffle mode button settings -->
+    <sys:String x:Key="ShuffleModeButtonOffContentSectionText">Shuffle off button content</sys:String>
+    <sys:String x:Key="ShuffleModeButtonOnContentSectionText">Shuffle on button content</sys:String>
+
     <!-- Custom text label settings -->
     <sys:String x:Key="CustomLabelNameDescription">Choose a name for the label</sys:String>
     <sys:String x:Key="CustomLabelFontFamilyDescription">Font Family</sys:String>
@@ -80,6 +84,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="PrevButtonTab">Previous Track Button</sys:String>
     <sys:String x:Key="NextButtonTab">Next Track Button</sys:String>
     <sys:String x:Key="RepeatModeButtonTab">Repeat Mode Button</sys:String>
+    <sys:String x:Key="ShuffleModeButtonTab">Shuffle Mode Button</sys:String>
     <sys:String x:Key="ProgressBarTab">Progress Bar</sys:String>
     <sys:String x:Key="CustomLabelsTab">Text Labels</sys:String>
     <sys:String x:Key="AlbumArtTab">Album Art</sys:String>
