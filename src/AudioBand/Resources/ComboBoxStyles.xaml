@@ -5,6 +5,7 @@
                     xmlns:theme="clr-namespace:AudioBand.Resources.Theming">
     <ResourceDictionary.MergedDictionaries>
         <local:SharedDictionary Source="Shared.xaml"/>
+        <local:SharedDictionary Source="ScrollbarStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
         <Style.Resources>
