@@ -6,9 +6,9 @@ namespace AudioBand.Resources.Theming
     /// Dark theme resources.
     /// </summary>
 #pragma warning disable
-    public class DarkThemeDictionary : IThemeDictionary
+    public class DarkThemeResources : IThemeResources
     {
-        public DarkThemeDictionary()
+        public DarkThemeResources()
         {
             foreach (var propertyInfo in GetType().GetProperties())
             {

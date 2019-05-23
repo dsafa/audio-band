@@ -6,9 +6,9 @@ namespace AudioBand.Resources.Theming
     /// Light theme colors.
     /// </summary>
 #pragma warning disable
-    public class LightThemeDictionary : IThemeDictionary
+    public class LightThemeResources : IThemeResources
     {
-        public LightThemeDictionary()
+        public LightThemeResources()
         {
             foreach (var propertyInfo in GetType().GetProperties())
             {

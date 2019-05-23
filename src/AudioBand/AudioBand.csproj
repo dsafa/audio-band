@@ -109,9 +109,11 @@
     <Compile Include="Models\TextFadeEffect.cs" />
     <Compile Include="Models\TextOverflow.cs" />
     <Compile Include="NativeMethods.cs" />
-    <Compile Include="Resources\Theming\DarkThemeDictionary.cs" />
+    <Compile Include="Resources\Theming\DarkThemeResources.cs" />
+    <Compile Include="Resources\Theming\FallbackThemeDictionary.cs" />
     <Compile Include="Resources\Theming\IThemeDictionary.cs" />
-    <Compile Include="Resources\Theming\LightThemeDictionary.cs" />
+    <Compile Include="Resources\Theming\IThemeResources.cs" />
+    <Compile Include="Resources\Theming\LightThemeResources.cs" />
     <Compile Include="Resources\SharedDictionary.cs" />
     <Compile Include="Resources\Theming\ThemeResource.cs" />
     <Compile Include="Resources\Theming\ThemeDictionary.cs" />
