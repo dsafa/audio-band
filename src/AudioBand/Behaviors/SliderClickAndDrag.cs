@@ -14,28 +14,34 @@ namespace AudioBand.Behaviors
     {
         private Thumb _thumb;
 
+        private Thumb Thumb
+        {
+            get
+            {
+                if (_thumb == null)
+                {
+                    _thumb = ((Track)AssociatedObject.Template.FindName("PART_Track", AssociatedObject))?.Thumb;
+                }
+
+                return _thumb;
+            }
+        }
+
         /// <inheritdoc />
         protected override void OnAttached()
         {
-            AssociatedObject.Loaded += AssociatedObjectOnLoaded;
+            AssociatedObject.MouseMove += OnMouseMove;
         }
 
         /// <inheritdoc />
         protected override void OnDetaching()
         {
             AssociatedObject.MouseMove -= OnMouseMove;
-            AssociatedObject.Loaded -= AssociatedObjectOnLoaded;
-        }
-
-        private void AssociatedObjectOnLoaded(object sender, RoutedEventArgs e)
-        {
-            _thumb = ((Track)AssociatedObject.Template.FindName("PART_Track", AssociatedObject)).Thumb;
-            AssociatedObject.MouseMove += OnMouseMove;
         }
 
         private void OnMouseMove(object sender, MouseEventArgs args)
         {
-            if (args.LeftButton == MouseButtonState.Released || _thumb.IsDragging || !_thumb.IsMouseOver)
+            if (args.LeftButton == MouseButtonState.Released || Thumb.IsDragging || !Thumb.IsMouseOver)
             {
                 return;
             }
