@@ -17,6 +17,7 @@
         <resources:SharedDictionary Source="PasswordBoxStyles.xaml"/>
         <resources:SharedDictionary Source="NumericInputStyles.xaml"/>
         <resources:SharedDictionary Source="ComboBoxStyles.xaml"/>
+        <resources:SharedDictionary Source="ScrollbarStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
         <Setter Property="IsMoveToPointEnabled" Value="True"/>
