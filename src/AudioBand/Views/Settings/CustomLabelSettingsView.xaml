@@ -120,7 +120,7 @@
                 <ComboBox ItemsSource="{Binding ScrollBehaviorValues}" ItemTemplate="{StaticResource EnumDescriptorItemTemplate}" Width="300"
                           SelectedValue="{Binding ScrollBehavior}" SelectedValuePath="Value"/>
                 <TextBlock Text="{StaticResource CustomLabelScrollSpeedDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="WholeNumber" Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static converters:Converters.TimeSpanToMs}}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="WholeNumber" Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static converters:Converters.TimeSpanToMs}, Delay=700}"/>
             </ItemsControl>
 
             <TextBlock Text="{StaticResource CustomLabelEffectsSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
