@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
+                    xmlns:resources="clr-namespace:AudioBand.Resources">
+    <ResourceDictionary.MergedDictionaries>
+        <resources:SharedDictionary Source="Shared.xaml"/> 
+    </ResourceDictionary.MergedDictionaries>
+    <Style TargetType="{x:Type ToolTip}">
+        <Setter Property="Background" Value="{theme:ThemeResource SystemChromeMediumColor}"/>
+        <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseHighColor}"/>
+        <Setter Property="TextElement.FontSize" Value="{StaticResource BodyFontSize}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToolTip}">
+                    <Border BorderThickness="1" BorderBrush="{theme:ThemeResource SystemChromeHighColor}" Margin="4" Padding="4"
+                            Background="{TemplateBinding Background}">
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="0" Opacity="0.3"/>
+                        </Border.Effect>
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
