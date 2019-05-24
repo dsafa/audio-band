@@ -7,7 +7,8 @@
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
              xmlns:converters="clr-namespace:AudioBand.ValueConverters"
              xmlns:models="clr-namespace:AudioBand.Models"
-             xmlns:resources="clr-namespace:AudioBand.Resources">
+             xmlns:resources="clr-namespace:AudioBand.Resources"
+             xmlns:theming="clr-namespace:AudioBand.Resources.Theming">
     <DataTemplate DataType="{x:Type viewmodels:CustomLabelViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
@@ -75,8 +76,12 @@
             <TextBox metro:TextBoxHelper.ClearTextButton="True" Text="{Binding FormatString, Mode=TwoWay}" Width="400"/>
             <Popup x:Name="FormatHelpPopup" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Slide"
                      PlacementTarget="{x:Reference CustomLabelFormatHelpLink}" Placement="Top">
-                <Border Background="White" BorderBrush="Gray" BorderThickness="1" Padding="4">
-                    <TextBlock>
+                <Border BorderThickness="1" BorderBrush="{theming:ThemeResource SystemChromeHighColor}" Margin="4" Padding="4"
+                        Background="{theming:ThemeResource SystemChromeMediumColor}">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" Opacity="0.3"/>
+                    </Border.Effect>
+                    <TextBlock Foreground="{theming:ThemeResource SystemBaseHighColor}" FontSize="{StaticResource BodyFontSize}">
                         <TextBlock Text="{StaticResource CustomLabelFormatHelpText}"/><LineBreak/>
                         <Bold>Tags</Bold> <LineBreak/>
                         <TextBlock Text="{StaticResource CustomLabelFormatHelpTextTags}"/><LineBreak/>
