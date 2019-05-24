@@ -89,7 +89,27 @@
                                      VerticalContentAlignment="Center" Foreground="{TemplateBinding Foreground}"
                                      Focusable="True" Background="Transparent"
                                      Visibility="Hidden"
-                                     IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                                     IsReadOnly="{TemplateBinding IsReadOnly}">
+                                <TextBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Command="ApplicationCommands.Cut">
+                                            <MenuItem.Icon>
+                                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8C6;"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Command="ApplicationCommands.Copy">
+                                            <MenuItem.Icon>
+                                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8C8;"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Command="ApplicationCommands.Paste">
+                                            <MenuItem.Icon>
+                                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE77F;"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </TextBox.ContextMenu>
+                            </TextBox>
                             <Popup x:Name="PART_Popup" Grid.Column="0" Placement="Center" AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsDropDownOpen}" PlacementTarget="{Binding ElementName=Border}"
                                    Focusable="False" PopupAnimation="Fade">
