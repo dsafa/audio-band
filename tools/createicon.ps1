@@ -1,5 +1,9 @@
+param (
+    [string]$source
+)
+
 $sizes = 16, 32, 48, 128, 256
-$image = [System.IO.Path]::GetFullPath($args[0])
+$image = [System.IO.Path]::GetFullPath($source)
 if (!$image) {
     Write-Error "Missing image argument"
     exit

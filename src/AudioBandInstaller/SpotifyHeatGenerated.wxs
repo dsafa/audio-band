@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="AUDIOSOURCESFOLDER">
+            <Directory Id="dir37D279D43B23E2FBE632A7EABEFADC4A" Name="spotify">
+                <Component Id="cmp13CD9A516D482783DCEE145C3A91A813" Guid="*">
+                    <File Id="fil1B67C3C9BEA3166FF30935A74654BB56" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\AudioSource.manifest" />
+                </Component>
+                <Component Id="cmpD7B2F83B39AC597C22037C1FF27999E2" Guid="*">
+                    <File Id="fil60D84CD80C66A4F955DDF5607DC5DDDE" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\Newtonsoft.Json.dll" />
+                </Component>
+                <Component Id="cmp6763E89523372478E954E093D19D1B95" Guid="*">
+                    <File Id="filDBE6FF58DA1D8DD576E4E2210844F123" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\Newtonsoft.Json.pdb" />
+                </Component>
+                <Component Id="cmp403FB772E56437F479E5229D05066D9B" Guid="*">
+                    <File Id="fil0195DBC59F485BC71660CC4252214E0A" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\SpotifyAPI.Web.Auth.dll" />
+                </Component>
+                <Component Id="cmp8FA7D0738070110741AE6F859944B074" Guid="*">
+                    <File Id="filE656901FC352AC29D573D60F33446CC7" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\SpotifyAPI.Web.dll" />
+                </Component>
+                <Component Id="cmp83D49B469B36822D0A7D53DF379A4FA2" Guid="*">
+                    <File Id="filC4A2AE30CC1B9D7EEFEB6C2A8DC93776" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\SpotifyAudioSource.dll" />
+                </Component>
+                <Component Id="cmpFF7C65FD6BA3901208FCA8D47140D10C" Guid="*">
+                    <File Id="fil07789AFBCAC93C1F7B6ED8D58DA41A62" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\SpotifyAudioSource.dll.config" />
+                </Component>
+                <Component Id="cmpDA9CAACF36AD27231E5D24260390BFC4" Guid="*">
+                    <File Id="filC7922A87CC3EF421AB59C0F7622A6CB1" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\SpotifyAudioSource.pdb" />
+                </Component>
+                <Component Id="cmp819FF0E7B7947E48B78CAE3787FF01D3" Guid="*">
+                    <File Id="fil024D7A25FFBEBA5AC48A5BBC14795327" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\System.ValueTuple.dll" />
+                </Component>
+                <Component Id="cmp942586283C0E0A0D2B97BFEA562A78E0" Guid="*">
+                    <File Id="fil7942B9CF7FECBC026F50854F705892D9" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\Unosquare.Labs.EmbedIO.dll" />
+                </Component>
+                <Component Id="cmpB636D2516105F4FD45A61C9D02B31C22" Guid="*">
+                    <File Id="filEBF102FF8E67DA8697747A547FBB208D" KeyPath="yes" Source="$(var.SpotifyHarvestPath)\Unosquare.Swan.Lite.dll" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="SpotifyFiles">
+            <ComponentRef Id="cmp13CD9A516D482783DCEE145C3A91A813" />
+            <ComponentRef Id="cmpD7B2F83B39AC597C22037C1FF27999E2" />
+            <ComponentRef Id="cmp6763E89523372478E954E093D19D1B95" />
+            <ComponentRef Id="cmp403FB772E56437F479E5229D05066D9B" />
+            <ComponentRef Id="cmp8FA7D0738070110741AE6F859944B074" />
+            <ComponentRef Id="cmp83D49B469B36822D0A7D53DF379A4FA2" />
+            <ComponentRef Id="cmpFF7C65FD6BA3901208FCA8D47140D10C" />
+            <ComponentRef Id="cmpDA9CAACF36AD27231E5D24260390BFC4" />
+            <ComponentRef Id="cmp819FF0E7B7947E48B78CAE3787FF01D3" />
+            <ComponentRef Id="cmp942586283C0E0A0D2B97BFEA562A78E0" />
+            <ComponentRef Id="cmpB636D2516105F4FD45A61C9D02B31C22" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
