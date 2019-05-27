@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="AUDIOSOURCESFOLDER">
+            <Directory Id="dir7B1B12CBC9F3A3CC16C49A1F4C1AE9AD" Name="iTunes">
+                <Component Id="cmpEE80B0ECC04341000535E1D9E77253A5" Guid="*">
+                    <File Id="fil02FE0CC6DC859542D2E457542DFE8C0D" KeyPath="yes" Source="$(var.ITunesHarvestPath)\AudioSource.manifest" />
+                </Component>
+                <Component Id="cmpFF5E0E6A587D5483E7AF7FB735E044F5" Guid="*">
+                    <File Id="filACA63DC147502F702DF7810BA1E27164" KeyPath="yes" Source="$(var.ITunesHarvestPath)\iTunesAudioSource.dll" />
+                </Component>
+                <Component Id="cmpBAD1B884B666A139D8CE9E3362A0AF3F" Guid="*">
+                    <File Id="filE5C988DE97ACB4872EB6E3247AAA52E5" KeyPath="yes" Source="$(var.ITunesHarvestPath)\iTunesAudioSource.pdb" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="iTunesFiles">
+            <ComponentRef Id="cmpEE80B0ECC04341000535E1D9E77253A5" />
+            <ComponentRef Id="cmpFF5E0E6A587D5483E7AF7FB735E044F5" />
+            <ComponentRef Id="cmpBAD1B884B666A139D8CE9E3362A0AF3F" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

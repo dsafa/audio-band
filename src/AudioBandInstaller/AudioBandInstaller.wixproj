@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProductVersion>3.10</ProductVersion>
+    <ProjectGuid>4e9eee47-23f6-45b7-9ddb-a34731d6ae4a</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>AudioBand</OutputName>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="InstallerUI.wxs" />
+    <Compile Include="Product.wxs" />
+    <Compile Include="AudioBandHeatGenerated.wxs" />
+    <Compile Include="iTunesHeatGenerated.wxs" />
+    <Compile Include="MusicBeeHeatGenerated.wxs" />
+    <Compile Include="SpotifyHeatGenerated.wxs" />
+    <Compile Include="AudioBandCOM.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixToolPath)WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixToolPath)WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AudioBand.AudioSource\AudioBand.AudioSource.csproj">
+      <Name>AudioBand.AudioSource</Name>
+      <Project>{30f2bfea-788a-494d-88e7-f2070528ebea}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\AudioBand.Logging\AudioBand.Logging.csproj">
+      <Name>AudioBand.Logging</Name>
+      <Project>{d8e1d3e5-d0ab-43c4-8af6-60c14c5c6843}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\AudioBand\AudioBand.csproj">
+      <Name>AudioBand</Name>
+      <Project>{b69832ad-8373-47ac-a52a-183238903896}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\AudioSourceHost\AudioSourceHost.csproj">
+      <Name>AudioSourceHost</Name>
+      <Project>{d3f92c3e-e546-4a6b-ada2-facd95e229f7}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\iTunesAudioSource\iTunesAudioSource.csproj">
+      <Name>iTunesAudioSource</Name>
+      <Project>{6d881b7b-3f3f-4613-a83f-75e31eea5252}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>AudioSourcesFolder</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\MusicBeeAudioSource\MusicBeeAudioSource.csproj">
+      <Name>MusicBeeAudioSource</Name>
+      <Project>{741db79c-921d-4d91-85f1-cd10c746f46e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>AudioSourcesFolder</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SpotifyAudioSource\SpotifyAudioSource.csproj">
+      <Name>SpotifyAudioSource</Name>
+      <Project>{43b57d81-7fae-40d0-921e-e29f7e848288}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>AudioSourcesFolder</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="audioband.ico" />
+    <Content Include="AudioBandHeatXsl.xslt" />
+    <Content Include="AudioSourcesXsl.xslt" />
+    <Content Include="installer_background.bmp" />
+    <Content Include="installer_banner.bmp" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  </Target>
+  <PropertyGroup>
+    <DefineConstants>AudioBandHarvestPath=..\Audioband\bin\$(Configuration);ITunesHarvestPath=..\iTunesAudioSource\bin\$(Configuration)\iTunes;MusicBeeHarvestPath=..\MusicBeeAudioSource\bin\$(Configuration)\MusicBee;SpotifyHarvestPath=..\SpotifyAudioSource\bin\$(Configuration)\spotify</DefineConstants>
+  </PropertyGroup>
+  <Target Name="AfterResolveReferences">
+    <HeatDirectory Directory="..\Audioband\bin\$(Configuration)" PreprocessorVariable="var.AudioBandHarvestPath" OutputFile="$(ProjectDir)\AudioBandHeatGenerated.wxs" ComponentGroupName="AudioBandFiles" DirectoryRefId="AUDIOBANDINSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" Transforms="$(ProjectDir)\AudioBandHeatXsl.xslt" />
+    <HeatFile File="..\Audioband\bin\$(Configuration)\AudioBand.dll" PreprocessorVariable="var.AudioBandHarvestPath" OutputFile="$(ProjectDir)\AudioBandCOM.wxs" ComponentGroupName="AudioBandCOM" DirectoryRefId="AUDIOBANDINSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressRootDirectory="true" GenerateGuidsNow="true" SuppressFragments="true" />
+    <HeatDirectory Directory="..\iTunesAudioSource\bin\$(Configuration)\iTunes" PreprocessorVariable="var.ITunesHarvestPath" OutputFile="$(ProjectDir)\iTunesHeatGenerated.wxs" ComponentGroupName="iTunesFiles" DirectoryRefId="AUDIOSOURCESFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="false" Transforms="$(ProjectDir)\AudioSourcesXsl.xslt" />
+    <HeatDirectory Directory="..\MusicBeeAudioSource\bin\$(Configuration)\MusicBee" PreprocessorVariable="var.MusicBeeHarvestPath" OutputFile="$(ProjectDir)\MusicBeeHeatGenerated.wxs" ComponentGroupName="MusicBeeFiles" DirectoryRefId="AUDIOSOURCESFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="false" Transforms="$(ProjectDir)\AudioSourcesXsl.xslt" />
+    <HeatDirectory Directory="..\SpotifyAudioSource\bin\$(Configuration)\spotify" PreprocessorVariable="var.SpotifyHarvestPath" OutputFile="$(ProjectDir)\SpotifyHeatGenerated.wxs" ComponentGroupName="SpotifyFiles" DirectoryRefId="AUDIOSOURCESFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="false" Transforms="$(ProjectDir)\AudioSourcesXsl.xslt" />
+  </Target>
+</Project>

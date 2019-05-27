@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="AUDIOSOURCESFOLDER">
+            <Directory Id="dirB3717EE2D376795D5DC9C1D4202A368A" Name="MusicBee">
+                <Component Id="cmpED484274D43886D57AE5304CF039AB85" Guid="*">
+                    <File Id="filEDA8B89B048B5C58FA0A5727B7143E63" KeyPath="yes" Source="$(var.MusicBeeHarvestPath)\AudioSource.manifest" />
+                </Component>
+                <Component Id="cmp11D70B1D230623938B8B02215BE22BB3" Guid="*">
+                    <File Id="fil089C7580B25BC836A9D13F8CF7755D0A" KeyPath="yes" Source="$(var.MusicBeeHarvestPath)\MusicBeeAudioSource.dll" />
+                </Component>
+                <Component Id="cmp11813CC3FBB0108B4ED40E111A6A9E9A" Guid="*">
+                    <File Id="filA3714B2A0C8873E3EC1C9F1661210A99" KeyPath="yes" Source="$(var.MusicBeeHarvestPath)\MusicBeeAudioSource.pdb" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="MusicBeeFiles">
+            <ComponentRef Id="cmpED484274D43886D57AE5304CF039AB85" />
+            <ComponentRef Id="cmp11D70B1D230623938B8B02215BE22BB3" />
+            <ComponentRef Id="cmp11813CC3FBB0108B4ED40E111A6A9E9A" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
