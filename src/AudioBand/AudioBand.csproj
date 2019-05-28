@@ -128,6 +128,7 @@
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NextButton.cs" />
     <Compile Include="Models\PlayPauseButton.cs" />
+    <Compile Include="Models\PositionAnchor.cs" />
     <Compile Include="Models\PreviousButton.cs" />
     <Compile Include="Models\ProgressBar.cs" />
     <Compile Include="Models\CustomLabel.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Settings\Models\v3\SettingsV3.cs" />
     <Compile Include="Settings\Profiles\SettingsV3Profile.cs" />
     <Compile Include="TaskbarHook.cs" />
+    <Compile Include="ValueConverters\FlagToBoolConverter.cs" />
     <Compile Include="ValueConverters\Converters.cs" />
     <Compile Include="ValueConverters\MultiConverters.cs" />
     <Compile Include="ValueConverters\PathToImageSourceConverter.cs" />
@@ -221,6 +223,9 @@
     <Compile Include="Behaviors\SliderThrottle.cs" />
     <Compile Include="Behaviors\TextBlockTextSegments.cs" />
     <Compile Include="Views\CustomTrack.cs" />
+    <Compile Include="Views\Settings\AnchorSelector.xaml.cs">
+      <DependentUpon>AnchorSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
@@ -355,6 +360,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AudioBandToolbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\AnchorSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -33,6 +33,7 @@
                 <mah:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
                 <mah:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
             </UniformGrid>
+            <local:AnchorSelector/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
             <local:ColorPicker Color="{Binding BackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource DefaultColorLabelText}"/>

@@ -30,7 +30,8 @@
                         <Border.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1"/>
                         </Border.RenderTransform>
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4" TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="4" TextBlock.Foreground="{TemplateBinding Foreground}"/>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>

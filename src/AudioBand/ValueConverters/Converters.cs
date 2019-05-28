@@ -76,5 +76,10 @@ namespace AudioBand.ValueConverters
         /// Gets a brush to color converter.
         /// </summary>
         public static IValueConverter BrushToColor { get; } = new ReverseConverter(new ColorToBrushConverter());
+
+        /// <summary>
+        /// Gets a <see cref="FlagToBoolConverter"/>.
+        /// </summary>
+        public static FlagToBoolConverter HasFlag { get; } = new FlagToBoolConverter();
     }
 }
