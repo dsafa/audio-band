@@ -29,7 +29,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
-                    <ItemsPresenter Margin="0,0,1,0"/>
+                    <ItemsPresenter/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

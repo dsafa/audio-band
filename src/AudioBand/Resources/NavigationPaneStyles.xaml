@@ -44,7 +44,7 @@
                                    Opacity="0" StrokeThickness="0"
                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                    Fill="{StaticResource RevealHoverLightBrush}"/>
-                        <Border x:Name="Border" BorderBrush="{fluentWpf:RevealBrush Color={StaticResource ButtonRevealColor}, Size=50}"
+                        <Border x:Name="Border" BorderBrush="{StaticResource RevealBorderBrush}"
                                 BorderThickness="0,1,1,1" Background="{TemplateBinding Background}"/>
                         <DockPanel LastChildFill="True">
                             <Rectangle DockPanel.Dock="Left" Fill="{theme:ThemeResource SystemAccentColor}" Width="5" Height="25"
@@ -96,7 +96,7 @@
                                    Opacity="0" StrokeThickness="0"
                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                    Fill="{StaticResource RevealHoverLightBrush}"/>
-                        <Border BorderBrush="{fluentWpf:RevealBrush Color={StaticResource ButtonRevealColor}, Size=50}"
+                        <Border BorderBrush="{StaticResource RevealBorderBrush}"
                                 Background="{TemplateBinding Background}" BorderThickness="1"/>
                         <DockPanel>
                             <TextBlock x:Name="ExpanderIcon" DockPanel.Dock="Left"

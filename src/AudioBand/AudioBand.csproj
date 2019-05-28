@@ -143,7 +143,7 @@
     <Compile Include="Resources\Theming\IThemeResources.cs" />
     <Compile Include="Resources\Theming\LightThemeResources.cs" />
     <Compile Include="Resources\SharedDictionary.cs" />
-    <Compile Include="Resources\Theming\ThemeResource.cs" />
+    <Compile Include="Resources\Theming\ThemeResourceExtension.cs" />
     <Compile Include="Resources\Theming\ThemeDictionary.cs" />
     <Compile Include="Resources\Theming\ThemeResourceKey.cs" />
     <Compile Include="Settings\IAppSettings.cs" />

@@ -50,27 +50,35 @@ namespace AudioBand
             PROPVARIANT.ClearProp(appid);
         }
 
-        // Fix blur in windows 1903 causing lag by falling back to old blur behind.
-        public static void FixWindowComposition(Window w)
+        public static void DisableAcrylic(Window w)
         {
-            var win1903 = new Version(10, 0, 18362);
-            if (Environment.OSVersion.Version < win1903)
-            {
-                return;
-            }
+            ChangeComposition(w, AccentState.ACCENT_ENABLE_BLURBEHIND);
+        }
 
-            var accent = default(AccentPolicy);
-            accent.AccentFlags = 2;
-            accent.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
+        public static void EnableAcrylic(Window w)
+        {
+            ChangeComposition(w, AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND);
+        }
+
+        private static void ChangeComposition(Window w, AccentState state)
+        {
+            var accent = new AccentPolicy
+            {
+                AccentState = state,
+                AccentFlags = 2,
+                GradientColor = 0x00FFFFFF,
+            };
 
             var accentStructSize = Marshal.SizeOf(accent);
             var accentPtr = Marshal.AllocHGlobal(accentStructSize);
             Marshal.StructureToPtr(accent, accentPtr, false);
 
-            var data = default(WindowCompositionAttributeData);
-            data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
-            data.SizeOfData = accentStructSize;
-            data.Data = accentPtr;
+            var data = new WindowCompositionAttributeData
+            {
+                Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY,
+                SizeOfData = accentStructSize,
+                Data = accentPtr,
+            };
 
             SetWindowCompositionAttribute(new WindowInteropHelper(w).Handle, ref data);
             Marshal.FreeHGlobal(accentPtr);

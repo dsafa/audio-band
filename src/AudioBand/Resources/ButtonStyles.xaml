@@ -85,8 +85,8 @@
                         <Rectangle x:Name="RevealHoverLightLayer" Opacity="0"
                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                    Fill="{StaticResource RevealHoverLightBrush}"/>
-                        <Border x:Name="Border" BorderBrush="{fluentWpf:RevealBrush Color={StaticResource ButtonRevealColor}, Size=70}"
-                                BorderThickness="1" Background="Transparent">
+                        <Border x:Name="Border" BorderBrush="{StaticResource RevealBorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
                             <ContentPresenter x:Name="Content" Focusable="False"
                                               HorizontalAlignment="Center" VerticalAlignment="Center"
                                               Margin="{TemplateBinding Padding}"/>
@@ -145,7 +145,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="Border" Background="{TemplateBinding Background}" Padding="6" RenderTransformOrigin="0.5,0.5"
-                            BorderBrush="{fluentWpf:RevealBrush Color={StaticResource ButtonRevealColor}, Size=50}"
+                            BorderBrush="{StaticResource RevealBorderBrush}"
                             BorderThickness="1">
                         <Border.RenderTransform>
                             <ScaleTransform/>

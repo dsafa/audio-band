@@ -1,4 +1,6 @@
-﻿namespace AudioBand.ValueConverters
+﻿using System.Windows.Data;
+
+namespace AudioBand.ValueConverters
 {
     /// <summary>
     /// Static class that contains converts.
@@ -69,5 +71,10 @@
         /// Gets a <see cref="EmptyStringToBoolConverter"/>.
         /// </summary>
         public static EmptyStringToBoolConverter EmptyStringToBool { get; } = new EmptyStringToBoolConverter();
+
+        /// <summary>
+        /// Gets a brush to color converter.
+        /// </summary>
+        public static IValueConverter BrushToColor { get; } = new ReverseConverter(new ColorToBrushConverter());
     }
 }

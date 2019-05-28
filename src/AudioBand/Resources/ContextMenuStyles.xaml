@@ -19,11 +19,11 @@
         <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="Placement" Value="Relative"/>
-        <Setter Property="Background" Value="{theme:ThemeResource SystemChromeMediumColor}"/>
+        <Setter Property="Background" Value="{theme:ThemeResource SystemChromeMediumLowColor}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border Padding="0, 8" Background="{TemplateBinding Background}" Margin="4" Effect="{StaticResource DropShadowEffect}"
+                    <Border Padding="0, 8" Background="{TemplateBinding Background}" Margin="8" Effect="{StaticResource DropShadowEffect}"
                             BorderThickness="1" BorderBrush="{theme:ThemeResource SystemChromeHighColor}"
                             RenderTransformOrigin="0.5, 1">
                         <StackPanel Orientation="Vertical" IsItemsHost="True" Style="{StaticResource ContextStackPanelStyle}"/>
@@ -72,7 +72,7 @@
                         <Popup Grid.Column="0" x:Name="Popup" Placement="Right" HorizontalOffset="-4" IsOpen="{TemplateBinding IsSubmenuOpen}"
                                AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
                             <Border Padding="0, 8" Effect="{StaticResource DropShadowEffect}"
-                                    Background="{theme:ThemeResource SystemChromeMediumColor}">
+                                    Background="{theme:ThemeResource SystemChromeMediumLowColor}">
                                 <StackPanel IsItemsHost="True" Style="{StaticResource ContextStackPanelStyle}"/>
                             </Border>
                         </Popup>
