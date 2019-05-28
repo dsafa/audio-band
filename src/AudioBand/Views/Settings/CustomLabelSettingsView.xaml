@@ -77,7 +77,7 @@
             <Popup x:Name="FormatHelpPopup" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Slide"
                      PlacementTarget="{x:Reference CustomLabelFormatHelpLink}" Placement="Top">
                 <Border BorderThickness="1" BorderBrush="{theming:ThemeResource SystemChromeHighColor}" Margin="4" Padding="4"
-                        Background="{theming:ThemeResource SystemChromeMediumColor}">
+                        Background="{theming:ThemeResource SystemChromeMediumLowColor}">
                     <Border.Effect>
                         <DropShadowEffect ShadowDepth="0" Opacity="0.3"/>
                     </Border.Effect>

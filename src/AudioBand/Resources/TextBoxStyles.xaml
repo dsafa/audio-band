@@ -21,27 +21,7 @@
         <Setter Property="mah:ControlsHelper.FocusBorderBrush" Value="{theme:ThemeResource SystemAccentColor}"/>
         <Setter Property="SelectionBrush" Value="{theme:ThemeResource SystemAccentColorMedium}"/>
         <Setter Property="CaretBrush" Value="{theme:ThemeResource SystemBaseHighColor}"/>
-        <Setter Property="ContextMenu">
-            <Setter.Value>
-                <ContextMenu>
-                    <MenuItem Command="ApplicationCommands.Cut">
-                        <MenuItem.Icon>
-                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8C6;"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="ApplicationCommands.Copy">
-                        <MenuItem.Icon>
-                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8C8;"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="ApplicationCommands.Paste">
-                        <MenuItem.Icon>
-                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE77F;"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="ContextMenu" Value="{StaticResource StandardInputContextMenu}"/>
         <Style.Resources>
             <Style x:Key="ChromelessButtonStyle" TargetType="{x:Type Button}">
                 <Setter Property="OverridesDefaultStyle" Value="True"/>

@@ -6,7 +6,7 @@
         <resources:SharedDictionary Source="Shared.xaml"/> 
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type ToolTip}">
-        <Setter Property="Background" Value="{theme:ThemeResource SystemChromeMediumColor}"/>
+        <Setter Property="Background" Value="{theme:ThemeResource SystemChromeMediumLowColor}"/>
         <Setter Property="Foreground" Value="{theme:ThemeResource SystemBaseHighColor}"/>
         <Setter Property="TextElement.FontSize" Value="{StaticResource BodyFontSize}"/>
         <Setter Property="Template">

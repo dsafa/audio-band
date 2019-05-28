@@ -12,21 +12,27 @@ namespace AudioBand.ValueConverters
     [ContentProperty("Converter")]
     public class ReverseConverter : IValueConverter
     {
+        private readonly IValueConverter _converter;
+
         /// <summary>
-        /// Gets or sets he converter to revrse.
+        /// Initializes a new instance of the <see cref="ReverseConverter"/> class with the converter to reverse.
         /// </summary>
-        public IValueConverter Converter { get; set; }
+        /// <param name="converter">The converter to reverse.</param>
+        public ReverseConverter(IValueConverter converter)
+        {
+            _converter = converter;
+        }
 
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Converter.ConvertBack(value, targetType, parameter, culture);
+            return _converter.ConvertBack(value, targetType, parameter, culture);
         }
 
         /// <inheritdoc/>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Converter.Convert(value, targetType, parameter, culture);
+            return _converter.Convert(value, targetType, parameter, culture);
         }
     }
 }
