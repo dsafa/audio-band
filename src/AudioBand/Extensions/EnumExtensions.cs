@@ -27,6 +27,7 @@ namespace AudioBand.Extensions
 
             return enumType
                 .GetFields(BindingFlags.Static | BindingFlags.Public)
+                .Where(field => field.GetCustomAttribute<DescriptorIgnoreAttribute>() == null)
                 .Select(field => new EnumDescriptor<T>((T)field.GetValue(null), GetDescription(field)));
         }
     }

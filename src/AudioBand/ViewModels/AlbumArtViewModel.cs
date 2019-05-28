@@ -12,7 +12,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the album art.
     /// </summary>
-    public class AlbumArtViewModel : ViewModelBase<AlbumArt>
+    public class AlbumArtViewModel : LayoutViewModelBase<AlbumArt>
     {
         private readonly IAppSettings _appsettings;
         private IAudioSource _audioSource;
@@ -30,56 +30,6 @@ namespace AudioBand.ViewModels
             _appsettings = appsettings;
 
             appsettings.ProfileChanged += AppsettingsOnProfileChanged;
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether it is visible.
-        /// </summary>
-        [PropertyChangeBinding(nameof(Models.AlbumArt.IsVisible))]
-        public bool IsVisible
-        {
-            get => Model.IsVisible;
-            set => SetProperty(nameof(Model.IsVisible), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        [PropertyChangeBinding(nameof(Models.AlbumArt.Width))]
-        public double Width
-        {
-            get => Model.Width;
-            set => SetProperty(nameof(Model.Width), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        [PropertyChangeBinding(nameof(Models.AlbumArt.Height))]
-        public double Height
-        {
-            get => Model.Height;
-            set => SetProperty(nameof(Model.Height), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the x position.
-        /// </summary>
-        [PropertyChangeBinding(nameof(Models.AlbumArt.XPosition))]
-        public double XPosition
-        {
-            get => Model.XPosition;
-            set => SetProperty(nameof(Model.XPosition), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the y position.
-        /// </summary>
-        [PropertyChangeBinding(nameof(Models.AlbumArt.YPosition))]
-        public double YPosition
-        {
-            get => Model.YPosition;
-            set => SetProperty(nameof(Model.YPosition), value);
         }
 
         /// <summary>

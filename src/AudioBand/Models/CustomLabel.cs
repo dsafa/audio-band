@@ -5,13 +5,8 @@ namespace AudioBand.Models
     /// <summary>
     /// Model for a custom label.
     /// </summary>
-    public class CustomLabel : ModelBase
+    public class CustomLabel : LayoutModelBase
     {
-        private bool _isVisible = true;
-        private double _width = 220;
-        private double _height = 15;
-        private double _xPosition = 0;
-        private double _yPosition = 0;
         private string _fontFamily = "Segoe UI";
         private float _fontSize = 8.5f;
         private Color _color = Colors.White;
@@ -24,6 +19,17 @@ namespace AudioBand.Models
         private TextFadeEffect _textFadeEffect = TextFadeEffect.OnlyWhenScrolling;
         private double _leftFadeOffset = 0.1;
         private double _rightFadeOffset = 0.9;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomLabel"/> class.
+        /// </summary>
+        public CustomLabel()
+        {
+            Width = 220;
+            Height = 15;
+            YPosition = 0;
+            XPosition = 0;
+        }
 
         /// <summary>
         /// Specifies the alignment of the text in the label.
@@ -44,51 +50,6 @@ namespace AudioBand.Models
             /// Align the text in the center.
             /// </summary>
             Center,
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether if the label is visible.
-        /// </summary>
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => SetProperty(ref _isVisible, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the width of the label.
-        /// </summary>
-        public double Width
-        {
-            get => _width;
-            set => SetProperty(ref _width, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the height of the label.
-        /// </summary>
-        public double Height
-        {
-            get => _height;
-            set => SetProperty(ref _height, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the x position of the label.
-        /// </summary>
-        public double XPosition
-        {
-            get => _xPosition;
-            set => SetProperty(ref _xPosition, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the y position of the label.
-        /// </summary>
-        public double YPosition
-        {
-            get => _yPosition;
-            set => SetProperty(ref _yPosition, value);
         }
 
         /// <summary>
