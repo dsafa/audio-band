@@ -19,6 +19,7 @@
     <sys:String x:Key="BackgroundColorSectionText">Background Colors</sys:String>
     <sys:String x:Key="OtherSectionText">Other</sys:String>
     <sys:String x:Key="BackgroundColorDescription">Background color</sys:String>
+    <sys:String x:Key="PositionAnchorDescription">Change the relative positioning of the control</sys:String>
 
     <!-- Play/pause button settings -->
     <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
@@ -46,6 +47,7 @@
     <sys:String x:Key="ShuffleModeButtonOnContentSectionText">Shuffle on button content</sys:String>
 
     <!-- Custom text label settings -->
+    <sys:String x:Key="CustomLabelNameSectionText">Label name</sys:String>
     <sys:String x:Key="CustomLabelNameDescription">Choose a name for the label</sys:String>
     <sys:String x:Key="CustomLabelFontFamilyDescription">Font Family</sys:String>
     <sys:String x:Key="CustomLabelFontSizeDescription">Font Size</sys:String>

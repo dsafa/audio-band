@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using AudioBand.AudioSource;
-using AudioBand.Commands;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -14,7 +10,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the progress bar.
     /// </summary>
-    public class ProgressBarViewModel : ViewModelBase<ProgressBar>
+    public class ProgressBarViewModel : LayoutViewModelBase<ProgressBar>
     {
         private readonly IAppSettings _appsettings;
         private IAudioSource _audioSource;
@@ -63,58 +59,6 @@ namespace AudioBand.ViewModels
         {
             get => Model.HoverColor;
             set => SetProperty(nameof(Model.HoverColor), value);
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the bar is visible.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.IsVisible))]
-        public bool IsVisible
-        {
-            get => Model.IsVisible;
-            set => SetProperty(nameof(Model.IsVisible), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.Width))]
-        [AlsoNotify(nameof(Size))]
-        public double Width
-        {
-            get => Model.Width;
-            set => SetProperty(nameof(Model.Width), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.Height))]
-        [AlsoNotify(nameof(Size))]
-        public double Height
-        {
-            get => Model.Height;
-            set => SetProperty(nameof(Model.Height), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the x position.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.XPosition))]
-        public double XPosition
-        {
-            get => Model.XPosition;
-            set => SetProperty(nameof(Model.XPosition), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the y position.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.YPosition))]
-        public double YPosition
-        {
-            get => Model.YPosition;
-            set => SetProperty(nameof(Model.YPosition), value);
         }
 
         /// <summary>

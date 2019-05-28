@@ -10,7 +10,7 @@ namespace AudioBand.ViewModels
     /// Base view model for buttons.
     /// </summary>
     /// <typeparam name="TButton">The button model.</typeparam>
-    public class ButtonViewModelBase<TButton> : ViewModelBase<TButton>
+    public class ButtonViewModelBase<TButton> : LayoutViewModelBase<TButton>
         where TButton : ButtonModelBase, new()
     {
         private readonly List<ButtonContentViewModel> _contentViewModels = new List<ButtonContentViewModel>();
@@ -24,56 +24,6 @@ namespace AudioBand.ViewModels
             : base(model)
         {
             DialogService = dialogService;
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the button is visible.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ButtonModelBase.IsVisible))]
-        public bool IsVisible
-        {
-            get => Model.IsVisible;
-            set => SetProperty(nameof(Model.IsVisible), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ButtonModelBase.Width))]
-        public double Width
-        {
-            get => Model.Width;
-            set => SetProperty(nameof(Model.Width), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ButtonModelBase.Height))]
-        public double Height
-        {
-            get => Model.Height;
-            set => SetProperty(nameof(Model.Height), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the x position.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ButtonModelBase.XPosition))]
-        public double XPosition
-        {
-            get => Model.XPosition;
-            set => SetProperty(nameof(Model.XPosition), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the y position.
-        /// </summary>
-        [PropertyChangeBinding(nameof(ButtonModelBase.YPosition))]
-        public double YPosition
-        {
-            get => Model.YPosition;
-            set => SetProperty(nameof(Model.YPosition), value);
         }
 
         /// <summary>

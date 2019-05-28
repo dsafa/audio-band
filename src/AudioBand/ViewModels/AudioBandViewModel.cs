@@ -56,7 +56,7 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Gets the dialog service
+        /// Gets the dialog service.
         /// </summary>
         public IDialogService DialogService { get; }
 

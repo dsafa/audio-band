@@ -110,6 +110,7 @@
     <Compile Include="CSDeskBand\CSDeskBand.cs" />
     <Compile Include="Deskband.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\DescriptorIgnoreAttribute.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
@@ -125,10 +126,12 @@
     <Compile Include="Models\ButtonContent.cs" />
     <Compile Include="Models\ButtonContentType.cs" />
     <Compile Include="Models\ButtonModelBase.cs" />
+    <Compile Include="Models\LayoutModelBase.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NextButton.cs" />
     <Compile Include="Models\PlayPauseButton.cs" />
     <Compile Include="Models\PositionAnchor.cs" />
+    <Compile Include="Models\PositionAnchors.cs" />
     <Compile Include="Models\PreviousButton.cs" />
     <Compile Include="Models\ProgressBar.cs" />
     <Compile Include="Models\CustomLabel.cs" />
@@ -194,6 +197,7 @@
     <Compile Include="ViewModels\CustomLabelsViewModel.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
+    <Compile Include="ViewModels\LayoutViewModelBase.cs" />
     <Compile Include="ViewModels\PlayPauseButtonViewModel.cs" />
     <Compile Include="ViewModels\PreviousButtonViewModel.cs" />
     <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
@@ -223,9 +227,6 @@
     <Compile Include="Behaviors\SliderThrottle.cs" />
     <Compile Include="Behaviors\TextBlockTextSegments.cs" />
     <Compile Include="Views\CustomTrack.cs" />
-    <Compile Include="Views\Settings\AnchorSelector.xaml.cs">
-      <DependentUpon>AnchorSelector.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Settings\ColorPicker.xaml.cs">
       <DependentUpon>ColorPicker.xaml</DependentUpon>
     </Compile>
@@ -363,10 +364,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Settings\AnchorSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Settings\AudioSourceSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -400,6 +397,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\ConfirmationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\LayoutSettingsTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
