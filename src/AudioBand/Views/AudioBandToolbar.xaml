@@ -14,7 +14,7 @@
              xmlns:models="clr-namespace:AudioBand.Models"
              mc:Ignorable="d"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-             Background="Transparent"
+             Background="{Binding ViewModels.AudioBandViewModel.BackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance viewModels:AudioBandToolbarViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>

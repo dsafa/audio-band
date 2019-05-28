@@ -1,4 +1,6 @@
-﻿namespace AudioBand.Models
+﻿using System.Windows.Media;
+
+namespace AudioBand.Models
 {
     /// <summary>
     /// The model for the toolbar.
@@ -7,6 +9,7 @@
     {
         private double _width = 500;
         private double _height = 30;
+        private Color _backgroundColor = Colors.Transparent;
 
         /// <summary>
         /// Gets or sets the width of the toolbar.
@@ -24,6 +27,15 @@
         {
             get => _height;
             set => SetProperty(ref _height, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the background color of the toolbar.
+        /// </summary>
+        public Color BackgroundColor
+        {
+            get => _backgroundColor;
+            set => SetProperty(ref _backgroundColor, value);
         }
     }
 }

@@ -88,6 +88,8 @@ namespace AudioBand.Settings.Migrations
                     .ForPath(dest => dest.PauseContent.ClickedTextColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.ProgressBarSettings, ProgressBar>()
                     .ForMember(dest => dest.HoverColor, opt => opt.Ignore());
+                cfg.CreateMap<Models.V2.AudioBandSettings, AudioBand.Models.AudioBand>()
+                    .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.Settings, ProfileV3>()
                     .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.MapFrom(source => source.AlbumArtPopupSettings))
                     .ForMember(dest => dest.AlbumArtSettings, opt => opt.MapFrom(source => source.AlbumArtSettings))
