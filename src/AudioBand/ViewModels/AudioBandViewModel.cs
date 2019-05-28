@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows.Media;
 using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
@@ -15,9 +16,11 @@ namespace AudioBand.ViewModels
         /// Initializes a new instance of the <see cref="AudioBandViewModel"/> class.
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
-        public AudioBandViewModel(IAppSettings appsettings)
+        /// <param name="dialogService">The dialog service.</param>
+        public AudioBandViewModel(IAppSettings appsettings, IDialogService dialogService)
             : base(appsettings.AudioBand)
         {
+            DialogService = dialogService;
             _appsettings = appsettings;
             appsettings.ProfileChanged += AppsettingsOnProfileChanged;
         }
@@ -41,6 +44,21 @@ namespace AudioBand.ViewModels
             get => Model.Height;
             set => SetProperty(nameof(Model.Height), value);
         }
+
+        /// <summary>
+        /// Gets or sets the background color.
+        /// </summary>
+        [PropertyChangeBinding(nameof(Models.AudioBand.BackgroundColor))]
+        public Color BackgroundColor
+        {
+            get => Model.BackgroundColor;
+            set => SetProperty(nameof(Model.BackgroundColor), value);
+        }
+
+        /// <summary>
+        /// Gets the dialog service
+        /// </summary>
+        public IDialogService DialogService { get; }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
