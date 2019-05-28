@@ -283,7 +283,7 @@ namespace AudioBand.Settings
             }
             else
             {
-                // Check for new settings that were added to the current configuration version.
+                // Fix any null values
                 var initial = new SettingsV3();
                 var settings = tomlFile.Get<SettingsV3>();
                 new MapperConfiguration(cfg => cfg.AddProfile<SettingsV3Profile>()).CreateMapper().Map(settings, initial);
