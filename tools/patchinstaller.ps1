@@ -17,5 +17,4 @@ $targetFile = $PSScriptRoot + '/../src/AudioBandInstaller/Product.wxs'
 $versionReplace = "<?define ProductVersion = '$newVersion'?>"
 $guidReplace = "<?define ProductId = '$newGuid'?>"
 
-(Get-Content -Encoding UTF8 "$targetFile").replace("$productVersionToken", "$versionReplace") | Set-Content -Encoding Unicode "$targetFile"
-(Get-Content -Encoding UTF8 "$targetFile").replace("$productIdToken", "$guidReplace") | Set-Content -Encoding Unicode "$targetFile"
+(Get-Content "$targetFile").replace("$productVersionToken", "$versionReplace").replace("$productIdToken", "$guidReplace") | Set-Content -Encoding UTF8 "$targetFile"
