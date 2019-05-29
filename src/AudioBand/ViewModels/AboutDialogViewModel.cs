@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Windows.Input;
 using AudioBand.Commands;
 
 namespace AudioBand.ViewModels
@@ -9,14 +12,6 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class AboutDialogViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AboutDialogViewModel"/> class.
-        /// </summary>
-        public AboutDialogViewModel()
-        {
-            OpenLinkCommand = new RelayCommand<string>(OpenLinkCommandOnExecute);
-        }
-
         /// <summary>
         /// Gets the current audioband version.
         /// </summary>
@@ -40,9 +35,29 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the command to open the link to the project.
         /// </summary>
-        public RelayCommand<string> OpenLinkCommand { get; }
+        public ICommand OpenLinkCommand { get; } = new RelayCommand<string>(OpenLinkCommandOnExecute);
 
-        private void OpenLinkCommandOnExecute(string link)
+        /// <summary>
+        /// Gets the command to open the settings folder.
+        /// </summary>
+        public ICommand OpenSettingsFolderCommand { get; } = new RelayCommand(OpenSettingsFolderCommandOnExecute);
+
+        /// <summary>
+        /// Gets the command to open the audioband logs.
+        /// </summary>
+        public ICommand OpenLog { get; } = new RelayCommand(OpenLogCommandOnExecute);
+
+        private static void OpenLogCommandOnExecute(object obj)
+        {
+            Process.Start(Path.Combine(Path.GetTempPath(), "AudioBand.log"));
+        }
+
+        private static void OpenSettingsFolderCommandOnExecute(object obj)
+        {
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand"));
+        }
+
+        private static void OpenLinkCommandOnExecute(string link)
         {
             Process.Start(link);
         }
