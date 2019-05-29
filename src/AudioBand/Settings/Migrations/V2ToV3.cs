@@ -28,6 +28,7 @@ namespace AudioBand.Settings.Migrations
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Models.V2.CustomLabelSettings, CustomLabel>()
+                    .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft))
                     .ForMember(dest => dest.ScrollBehavior, opt => opt.Ignore())
                     .ForMember(dest => dest.TextOverflow, opt => opt.Ignore())
                     .ForMember(dest => dest.LeftFadeOffset, opt => opt.Ignore())
@@ -35,6 +36,7 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.FadeEffect, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.AudioSourceSettings, AudioSourceSettings>();
                 cfg.CreateMap<Models.V2.NextButtonSettings, NextButton>()
+                    .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft))
                     .ForMember(dest => dest.Content, opt => opt.MapFrom(source => new ButtonContent()))
                     .ForPath(dest => dest.Content.ImagePath, opt => opt.MapFrom(source => source.ImagePath))
                     .ForPath(dest => dest.Content.HoveredImagePath, opt => opt.MapFrom(source => source.ImagePath))
@@ -49,6 +51,7 @@ namespace AudioBand.Settings.Migrations
                     .ForPath(dest => dest.Content.HoveredTextColor, opt => opt.Ignore())
                     .ForPath(dest => dest.Content.ClickedTextColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.PreviousButtonSettings, PreviousButton>()
+                    .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft))
                     .ForMember(dest => dest.Content, opt => opt.MapFrom(source => new ButtonContent()))
                     .ForPath(dest => dest.Content.ImagePath, opt => opt.MapFrom(source => source.ImagePath))
                     .ForPath(dest => dest.Content.HoveredImagePath, opt => opt.MapFrom(source => source.ImagePath))
@@ -63,6 +66,7 @@ namespace AudioBand.Settings.Migrations
                     .ForPath(dest => dest.Content.HoveredTextColor, opt => opt.Ignore())
                     .ForPath(dest => dest.Content.ClickedTextColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.PlayPauseButtonSettings, PlayPauseButton>()
+                    .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft))
                     .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.HoveredBackgroundColor, opt => opt.Ignore())
                     .ForMember(dest => dest.ClickedBackgroundColor, opt => opt.Ignore())
@@ -87,9 +91,12 @@ namespace AudioBand.Settings.Migrations
                     .ForPath(dest => dest.PauseContent.HoveredTextColor, opt => opt.Ignore())
                     .ForPath(dest => dest.PauseContent.ClickedTextColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.ProgressBarSettings, ProgressBar>()
+                    .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft))
                     .ForMember(dest => dest.HoverColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.AudioBandSettings, AudioBand.Models.AudioBand>()
                     .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore());
+                cfg.CreateMap<Models.V2.AlbumArtSettings, AlbumArt>()
+                    .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft));
                 cfg.CreateMap<Models.V2.Settings, ProfileV3>()
                     .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.MapFrom(source => source.AlbumArtPopupSettings))
                     .ForMember(dest => dest.AlbumArtSettings, opt => opt.MapFrom(source => source.AlbumArtSettings))
