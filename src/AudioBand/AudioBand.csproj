@@ -99,6 +99,7 @@
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
     <Compile Include="AudioSource\IAudioSourceManager.cs" />
     <Compile Include="AudioSource\IInternalAudioSource.cs" />
+    <Compile Include="Behaviors\CanvasPositioning.cs" />
     <Compile Include="Behaviors\Fallback.cs" />
     <Compile Include="Behaviors\RedirectScrolling.cs" />
     <Compile Include="Behaviors\SliderClickAndDrag.cs" />

@@ -2,9 +2,17 @@
 
 namespace AudioBand.ViewModels
 {
+    /// <summary>
+    /// Base view model for <see cref="LayoutModelBase"/>.
+    /// </summary>
+    /// <typeparam name="TModel">A <see cref="LayoutModelBase"/> object.</typeparam>
     public class LayoutViewModelBase<TModel> : ViewModelBase<TModel>
         where TModel : LayoutModelBase, new()
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LayoutViewModelBase{TModel}"/> class.
+        /// </summary>
+        /// <param name="model">The model.</param>
         public LayoutViewModelBase(TModel model)
             : base(model)
         {
@@ -60,6 +68,9 @@ namespace AudioBand.ViewModels
             set => SetProperty(nameof(Model.YPosition), value);
         }
 
+        /// <summary>
+        /// Gets or sets the relative positioning.
+        /// </summary>
         [PropertyChangeBinding(nameof(LayoutModelBase.Anchor))]
         public PositionAnchor Anchor
         {
