@@ -12,6 +12,7 @@
              xmlns:resources="clr-namespace:AudioBand.Resources"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:models="clr-namespace:AudioBand.Models"
+             xmlns:views="clr-namespace:AudioBand.Views"
              mc:Ignorable="d"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
              Background="{Binding ViewModels.AudioBandViewModel.BackgroundColor, Converter={x:Static converters:Converters.ColorToBrush}}"
@@ -116,11 +117,13 @@
         </Canvas.Resources>
         <Viewbox x:Name="AlbumArt" DataContext="{Binding ViewModels.AlbumArtViewModel}"
                      Width="{Binding Width}" Height="{Binding Height}"
-                     Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
                      Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                      ToolTipService.InitialShowDelay="500" ToolTipService.ShowDuration="999999"
                      ToolTipService.HasDropShadow="True"
-                     RenderOptions.BitmapScalingMode="Fant">
+                     RenderOptions.BitmapScalingMode="Fant"
+                     behaviors:CanvasPositioning.Anchor="{Binding Anchor}"
+                     behaviors:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                     behaviors:CanvasPositioning.AnchorYDistance="{Binding YPosition}">
             <Image>
                 <Image.Style>
                     <Style TargetType="{x:Type Image}">
@@ -183,7 +186,9 @@
         <Button x:Name="PlayPauseButton" DataContext="{Binding ViewModels.PlayPauseButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
-                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                behaviors:CanvasPositioning.Anchor="{Binding Anchor}"
+                behaviors:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                behaviors:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
                 Style="{StaticResource ToolbarPlayPauseButtonStyle}"
                 Command="{Binding PlayPauseTrackCommand}"/>
@@ -191,34 +196,44 @@
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
-                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                behaviors:CanvasPositioning.Anchor="{Binding Anchor}"
+                behaviors:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                behaviors:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
                 Style="{StaticResource ToolbarNextButtonStyle}"
                 Command="{Binding NextTrackCommand}"/>
         <Button x:Name="PreviousButton" DataContext="{Binding ViewModels.PreviousButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
-                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                behaviors:CanvasPositioning.Anchor="{Binding Anchor}"
+                behaviors:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                behaviors:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
                 Style="{StaticResource ToolbarPreviousButtonStyle}"
                 Command="{Binding PreviousTrackCommand}"/>
         <Button x:Name="RepeatModeButton" DataContext="{Binding ViewModels.RepeatModeButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
-                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                behaviors:CanvasPositioning.Anchor="{Binding Anchor}"
+                behaviors:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                behaviors:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
                 Style="{StaticResource ToolbarRepeatModeButtonStyle}"
                 Command="{Binding CycleRepeatModeCommand}"/>
         <Button x:Name="ShuffleModeButton" DataContext="{Binding ViewModels.ShuffleModeButtonViewModel}"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
-                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                behaviors:CanvasPositioning.Anchor="{Binding Anchor}"
+                behaviors:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                behaviors:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
                 Style="{StaticResource ToolbarShuffleModeButtonStyle}"
                 Command="{Binding ToggleShuffleCommand}"/>
         <Slider x:Name="ProgressBar" DataContext="{Binding ViewModels.ProgressBarViewModel}"
                 Width="{Binding Width}" Height="{Binding Height}"
                 Visibility="{Binding IsVisible, Converter={x:Static converters:Converters.BoolToVisibility}}"
-                Canvas.Left="{Binding XPosition}" Canvas.Top="{Binding YPosition}"
+                behaviors:CanvasPositioning.Anchor="{Binding Anchor}"
+                behaviors:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                behaviors:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
                 Style="{StaticResource ProgressBarStyle}"
                 Minimum="0" Maximum="{Binding TrackLength, Converter={x:Static converters:Converters.TimeSpanToMs}, Mode=OneWay}">
             <i:Interaction.Behaviors>
@@ -226,7 +241,8 @@
                 <behaviors:SliderClickAndDrag/>
             </i:Interaction.Behaviors>
         </Slider>
-        <ItemsControl x:Name="CustomLabels" ItemsSource="{Binding ViewModels.CustomLabelsViewModel.CustomLabels}">
+        <ItemsControl x:Name="CustomLabels" ItemsSource="{Binding ViewModels.CustomLabelsViewModel.CustomLabels}"
+                                        Width="{Binding ViewModels.AudioBandViewModel.Width}" Height="{Binding ViewModels.AudioBandViewModel.Height}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -234,8 +250,9 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="ContentPresenter">
-                    <Setter Property="Canvas.Left" Value="{Binding XPosition}" />
-                    <Setter Property="Canvas.Top" Value="{Binding YPosition}" />
+                    <Setter Property="behaviors:CanvasPositioning.Anchor" Value="{Binding Anchor}"/>
+                    <Setter Property="behaviors:CanvasPositioning.AnchorXDistance" Value="{Binding XPosition}" />
+                    <Setter Property="behaviors:CanvasPositioning.AnchorYDistance" Value="{Binding YPosition}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
