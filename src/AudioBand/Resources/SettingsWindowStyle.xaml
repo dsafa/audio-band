@@ -10,6 +10,8 @@
         <resources:SharedDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
         <resources:SharedDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
         <resources:SharedDictionary Source="Shared.xaml"/>
+        <resources:SharedDictionary Source="Tooltips.xaml"/>
+        <resources:SharedDictionary Source="ContextMenuStyles.xaml"/>
         <resources:SharedDictionary Source="ButtonStyles.xaml"/>
         <resources:SharedDictionary Source="NavigationPaneStyles.xaml"/>
         <resources:SharedDictionary Source="TextStyles.xaml"/>
@@ -27,7 +29,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
-                    <ItemsPresenter Margin="0,0,1,0"/>
+                    <ItemsPresenter/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

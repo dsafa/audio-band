@@ -2,10 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AudioBand.Views.Settings"
                     xmlns:resources="clr-namespace:AudioBand.Resources"
-                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                    xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
-                    xmlns:models="clr-namespace:AudioBand.Models"
-                    xmlns:viewModels="clr-namespace:AudioBand.ViewModels"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     mc:Ignorable="d">
@@ -15,24 +11,12 @@
                 <ResourceDictionary.MergedDictionaries>
                     <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
                     <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
+                    <resources:SharedDictionary Source="LayoutSettingsTemplate.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}" KeyboardNavigation.IsTabStop="False">
-            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <mah:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}"
-                            IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
-                <TextBlock Text="{StaticResource WidthLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <mah:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
-                <mah:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
-                <TextBlock Text="{StaticResource XPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource YPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <mah:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
-                <mah:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
-            </UniformGrid>
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource LayoutSettingsTemplate}"/>
 
             <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
             <local:ColorPicker Color="{Binding BackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource DefaultColorLabelText}"/>

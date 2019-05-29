@@ -13,7 +13,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// The view model for a custom label.
     /// </summary>
-    public class CustomLabelViewModel : ViewModelBase<CustomLabel>
+    public class CustomLabelViewModel : LayoutViewModelBase<CustomLabel>
     {
         private readonly FormattedTextParser _parser;
         private IAudioSource _audioSource;
@@ -90,56 +90,6 @@ namespace AudioBand.ViewModels
         {
             get => Model.Alignment;
             set => SetProperty(nameof(Model.Alignment), value);
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the text is visible.
-        /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.IsVisible))]
-        public bool IsVisible
-        {
-            get => Model.IsVisible;
-            set => SetProperty(nameof(Model.IsVisible), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the width.
-        /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.Width))]
-        public double Width
-        {
-            get => Model.Width;
-            set => SetProperty(nameof(Model.Width), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the height.
-        /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.Height))]
-        public double Height
-        {
-            get => Model.Height;
-            set => SetProperty(nameof(Model.Height), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the x position.
-        /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.XPosition))]
-        public double XPosition
-        {
-            get => Model.XPosition;
-            set => SetProperty(nameof(Model.XPosition), value);
-        }
-
-        /// <summary>
-        /// Gets or sets the y position.
-        /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.YPosition))]
-        public double YPosition
-        {
-            get => Model.YPosition;
-            set => SetProperty(nameof(Model.YPosition), value);
         }
 
         /// <summary>

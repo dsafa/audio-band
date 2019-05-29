@@ -3,6 +3,7 @@
                     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+                    xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
                     xmlns:resources="clr-namespace:AudioBand.Resources">
     <ResourceDictionary.MergedDictionaries>
         <resources:SharedDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml" />
@@ -37,5 +38,45 @@
         </RadialGradientBrush.GradientOrigin>
         <GradientStop Color="#44FFFFFF" Offset="0"/>
         <GradientStop Color="Transparent" Offset="0.8"/>
+    </RadialGradientBrush>
+    <ContextMenu x:Key="StandardInputContextMenu">
+        <MenuItem Command="ApplicationCommands.Cut">
+            <MenuItem.Icon>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8C6;"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Command="ApplicationCommands.Copy">
+            <MenuItem.Icon>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8C8;"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Command="ApplicationCommands.Paste">
+            <MenuItem.Icon>
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE77F;"/>
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+    <fw:OpacityConverter x:Key="RevealOpacityConverter"/>
+    <system:Double x:Key="RevealOpacity">0.6</system:Double>
+    <RadialGradientBrush x:Key="RevealBorderBrush" MappingMode="Absolute" RadiusX="70" RadiusY="70" x:Shared="False"
+                         Opacity="{Binding RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}, Path=(fw:PointerTracker.IsEnter), Converter={StaticResource RevealOpacityConverter}, ConverterParameter={StaticResource RevealOpacity}}">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Color="{theme:ThemeResource SystemBaseMediumColor}"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+        </RadialGradientBrush.GradientStops>
+        <RadialGradientBrush.Center>
+            <MultiBinding Converter="{StaticResource relativePositionConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type FrameworkElement}}" Path="(fw:PointerTracker.RootObject)"/>
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type FrameworkElement}}"/>
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type FrameworkElement}}" Path="(fw:PointerTracker.Position)" />
+            </MultiBinding>
+        </RadialGradientBrush.Center>
+        <RadialGradientBrush.GradientOrigin>
+            <MultiBinding Converter="{StaticResource relativePositionConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type FrameworkElement}}" Path="(fw:PointerTracker.RootObject)"/>
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type FrameworkElement}}"/>
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type FrameworkElement}}" Path="(fw:PointerTracker.Position)" />
+            </MultiBinding>
+        </RadialGradientBrush.GradientOrigin>
     </RadialGradientBrush>
 </ResourceDictionary>

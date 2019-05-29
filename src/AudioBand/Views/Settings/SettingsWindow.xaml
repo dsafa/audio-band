@@ -56,10 +56,23 @@
             <Border x:Name="CustomFallback" Grid.RowSpan="3" Background="{theme:ThemeResource SystemChromeMediumColor}">
                 <Border.Style>
                     <Style TargetType="{x:Type Border}">
-                        <Setter Property="Opacity" Value="0.8"/>
+                        <Setter Property="Opacity" Value="0.6"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=Window, Path=IsActive}" Value="False">
-                                <Setter Property="Opacity" Value="1"/>
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.6" Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -132,7 +145,7 @@
                     </RadioButton>
                     <Expander Style="{StaticResource NavigationPaneExpander}">
                         <Expander.Header>
-                            <Grid Margin="1,0">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -140,7 +153,7 @@
                                 <TextBlock Grid.Column="0" Text="{StaticResource CustomLabelsTab}" Style="{StaticResource NavigationPaneTextBlock}"
                                            VerticalAlignment="Center" FontWeight="Normal" Foreground="{theme:ThemeResource SystemBaseHighColor}">
                                 </TextBlock>
-                                <Button Grid.Column="1" Style="{StaticResource RevealButton}"
+                                <Button Grid.Column="1" Style="{StaticResource RevealButton}" BorderThickness="1,0,0,0"
                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
                                         Command="{Binding Path=ViewModels.CustomLabelsViewModel.AddLabelCommand}">
                                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" FontSize="17"/>
@@ -171,7 +184,7 @@
                                             <Image Grid.Column="0" Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource TextLabels}"/>
                                             <TextBlock Grid.Column="1" Text="{Binding Name}"
                                                         HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                                            <Button Grid.Column="2" Style="{StaticResource RevealButton}"
+                                            <Button Grid.Column="2" Style="{StaticResource RevealButton}" BorderThickness="1,0,0,0"
                                                         Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
                                                         Command="{Binding ElementName=Window, Path=DataContext.ViewModels.CustomLabelsViewModel.RemoveLabelCommand}"
                                                         CommandParameter="{Binding}">
@@ -350,10 +363,3 @@
         </Grid>
     </DockPanel>
 </fw:AcrylicWindow>
-
-
-
-
-
-
-

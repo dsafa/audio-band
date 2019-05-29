@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.ViewModels;
@@ -105,7 +106,32 @@ namespace AudioBand.Views.Settings
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            NativeMethods.FixWindowComposition(this);
+            // Windows 10 1903 acrylic fix
+            var win1903 = new Version(10, 0, 18362);
+            if (Environment.OSVersion.Version < win1903)
+            {
+                return;
+            }
+
+            ((HwndSource)PresentationSource.FromVisual(this)).AddHook(Hook);
+        }
+
+        private IntPtr Hook(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled)
+        {
+            const int WM_ENTERSIZEMOVE = 0x0231;
+            const int WM_EXITSIZEMOVE = 0x0232;
+
+            switch (msg)
+            {
+                case WM_ENTERSIZEMOVE:
+                    NativeMethods.DisableAcrylic(this);
+                    break;
+                case WM_EXITSIZEMOVE:
+                    NativeMethods.EnableAcrylic(this);
+                    break;
+            }
+
+            return IntPtr.Zero;
         }
     }
 }

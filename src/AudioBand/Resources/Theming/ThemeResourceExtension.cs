@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
+using System.Windows.Media;
+using AudioBand.ValueConverters;
 
 namespace AudioBand.Resources.Theming
 {
@@ -9,7 +11,7 @@ namespace AudioBand.Resources.Theming
     /// Markup extension for theme resources.
     /// </summary>
     [MarkupExtensionReturnType(typeof(BindingExpression))]
-    public class ThemeResource : MarkupExtension
+    public class ThemeResourceExtension : MarkupExtension
     {
         private static readonly Lazy<ThemeDictionary> ThemeDictionaryInstance = new Lazy<ThemeDictionary>();
         private static readonly Lazy<FallbackThemeDictionary> FallbackInstance = new Lazy<FallbackThemeDictionary>();
@@ -18,19 +20,19 @@ namespace AudioBand.Resources.Theming
         private readonly ThemeResourceKey _themeKey;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ThemeResource"/> class.
+        /// Initializes a new instance of the <see cref="ThemeResourceExtension"/> class.
         /// </summary>
         /// <param name="key">The resource key.</param>
-        public ThemeResource(string key)
+        public ThemeResourceExtension(string key)
         {
             _key = key;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ThemeResource"/> class.
+        /// Initializes a new instance of the <see cref="ThemeResourceExtension"/> class.
         /// </summary>
         /// <param name="key">The resource key.</param>
-        public ThemeResource(ThemeResourceKey key)
+        public ThemeResourceExtension(ThemeResourceKey key)
         {
             _themeKey = key;
         }
@@ -49,6 +51,13 @@ namespace AudioBand.Resources.Theming
                 Mode = BindingMode.OneWay,
                 Path = new PropertyPath($"[{_key ?? _themeKey.ToString()}]"),
             };
+
+            var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
+            var property = target?.TargetProperty as DependencyProperty;
+            if (property?.PropertyType == typeof(Color))
+            {
+                binding.Converter = Converters.BrushToColor;
+            }
 
             return binding.ProvideValue(serviceProvider);
         }

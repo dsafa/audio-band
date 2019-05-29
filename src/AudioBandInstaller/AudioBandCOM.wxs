@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="AUDIOBANDINSTALLFOLDER">
+            <Component Id="cmpA061ABA0545D00747466BC45748B0A5B" Guid="*">
+                <Class Id="{957D8782-5B07-4126-9B24-1E917BAAAD64}" Context="InprocServer32" Description="Audio Band" ThreadingModel="both" ForeignServer="mscoree.dll">
+                    <ProgId Id="AudioBand.Deskband" Description="AudioBand.Deskband" />
+                </Class>
+                <File Id="fil156C3D28E6AA0B19E3597B0E7D9FC3C1" KeyPath="yes" Source="$(var.AudioBandHarvestPath)\AudioBand.dll" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\Implemented Categories\{00021492-0000-0000-c000-000000000046}" Value="" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\InprocServer32\1.0.0.0" Name="Class" Value="AudioBand.Deskband" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\InprocServer32\1.0.0.0" Name="Assembly" Value="AudioBand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\InprocServer32\1.0.0.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\InprocServer32\1.0.0.0" Name="CodeBase" Value="file:///[#fil156C3D28E6AA0B19E3597B0E7D9FC3C1]" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\InprocServer32" Name="Class" Value="AudioBand.Deskband" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\InprocServer32" Name="Assembly" Value="AudioBand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                <RegistryValue Root="HKCR" Key="CLSID\{957D8782-5B07-4126-9B24-1E917BAAAD64}\InprocServer32" Name="CodeBase" Value="file:///[#fil156C3D28E6AA0B19E3597B0E7D9FC3C1]" Type="string" Action="write" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="AudioBandCOM">
+            <ComponentRef Id="cmpA061ABA0545D00747466BC45748B0A5B" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

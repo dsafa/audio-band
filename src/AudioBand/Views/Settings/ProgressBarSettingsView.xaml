@@ -12,23 +12,12 @@
                     <resources:SharedDictionary Source="../../Resources/Shared.xaml"/>
                     <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
                     <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
+                    <resources:SharedDictionary Source="LayoutSettingsTemplate.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}" IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
-                <TextBlock Text="{StaticResource WidthLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
-                <TextBlock Text="{StaticResource XPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource YPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
-            </UniformGrid>
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource LayoutSettingsTemplate}"/>
 
             <TextBlock Text="{StaticResource ProgressBarColorsSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
             <local:ColorPicker DialogService="{Binding DialogService}" Color="{Binding ForegroundColor}" Title="{StaticResource ProgressBarForegroundColorDescription}"/>

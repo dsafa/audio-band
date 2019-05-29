@@ -3,7 +3,8 @@
              xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
              xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
-             xmlns:resources="clr-namespace:AudioBand.Resources">
+             xmlns:resources="clr-namespace:AudioBand.Resources"
+             xmlns:settings="clr-namespace:AudioBand.Views.Settings">
     <DataTemplate DataType="{x:Type viewmodels:AudioBandViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
@@ -20,6 +21,7 @@
             <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
             <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
             <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
+            <settings:ColorPicker DialogService="{Binding DialogService}" Title="{StaticResource BackgroundColorDescription}" Color="{Binding BackgroundColor}"/>
 
             <TextBlock Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
             <Button HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}" Command="{Binding ResetCommand}"/>

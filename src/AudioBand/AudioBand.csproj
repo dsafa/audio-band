@@ -55,6 +55,34 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>..\AudioBandRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DESKBAND_WPF</DefineConstants>
+    <DocumentationFile>bin\Debug\AudioBand.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\AudioBandRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;DESKBAND_WPF</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\AudioBandRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Test\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DESKBAND_WPF</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>..\AudioBandRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -71,6 +99,7 @@
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
     <Compile Include="AudioSource\IAudioSourceManager.cs" />
     <Compile Include="AudioSource\IInternalAudioSource.cs" />
+    <Compile Include="Behaviors\CanvasPositioning.cs" />
     <Compile Include="Behaviors\Fallback.cs" />
     <Compile Include="Behaviors\RedirectScrolling.cs" />
     <Compile Include="Behaviors\SliderClickAndDrag.cs" />
@@ -82,6 +111,7 @@
     <Compile Include="CSDeskBand\CSDeskBand.cs" />
     <Compile Include="Deskband.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\DescriptorIgnoreAttribute.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
@@ -97,9 +127,12 @@
     <Compile Include="Models\ButtonContent.cs" />
     <Compile Include="Models\ButtonContentType.cs" />
     <Compile Include="Models\ButtonModelBase.cs" />
+    <Compile Include="Models\LayoutModelBase.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NextButton.cs" />
     <Compile Include="Models\PlayPauseButton.cs" />
+    <Compile Include="Models\PositionAnchor.cs" />
+    <Compile Include="Models\PositionAnchors.cs" />
     <Compile Include="Models\PreviousButton.cs" />
     <Compile Include="Models\ProgressBar.cs" />
     <Compile Include="Models\CustomLabel.cs" />
@@ -115,7 +148,7 @@
     <Compile Include="Resources\Theming\IThemeResources.cs" />
     <Compile Include="Resources\Theming\LightThemeResources.cs" />
     <Compile Include="Resources\SharedDictionary.cs" />
-    <Compile Include="Resources\Theming\ThemeResource.cs" />
+    <Compile Include="Resources\Theming\ThemeResourceExtension.cs" />
     <Compile Include="Resources\Theming\ThemeDictionary.cs" />
     <Compile Include="Resources\Theming\ThemeResourceKey.cs" />
     <Compile Include="Settings\IAppSettings.cs" />
@@ -149,6 +182,7 @@
     <Compile Include="Settings\Models\v3\SettingsV3.cs" />
     <Compile Include="Settings\Profiles\SettingsV3Profile.cs" />
     <Compile Include="TaskbarHook.cs" />
+    <Compile Include="ValueConverters\FlagToBoolConverter.cs" />
     <Compile Include="ValueConverters\Converters.cs" />
     <Compile Include="ValueConverters\MultiConverters.cs" />
     <Compile Include="ValueConverters\PathToImageSourceConverter.cs" />
@@ -164,6 +198,7 @@
     <Compile Include="ViewModels\CustomLabelsViewModel.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\IDialogService.cs" />
+    <Compile Include="ViewModels\LayoutViewModelBase.cs" />
     <Compile Include="ViewModels\PlayPauseButtonViewModel.cs" />
     <Compile Include="ViewModels\PreviousButtonViewModel.cs" />
     <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
@@ -282,6 +317,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\ContextMenuStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\NavigationPaneStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -307,6 +346,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\TextStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Tooltips.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -355,6 +398,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\ConfirmationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\LayoutSettingsTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

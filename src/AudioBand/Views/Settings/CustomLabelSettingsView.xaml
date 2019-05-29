@@ -7,7 +7,8 @@
              xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
              xmlns:converters="clr-namespace:AudioBand.ValueConverters"
              xmlns:models="clr-namespace:AudioBand.Models"
-             xmlns:resources="clr-namespace:AudioBand.Resources">
+             xmlns:resources="clr-namespace:AudioBand.Resources"
+             xmlns:theming="clr-namespace:AudioBand.Resources.Theming">
     <DataTemplate DataType="{x:Type viewmodels:CustomLabelViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
@@ -16,26 +17,15 @@
                     <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
                     <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
                     <resources:SharedDictionary Source="../../Resources/RangeSliderStyles.xaml"/>
+                    <resources:SharedDictionary Source="LayoutSettingsTemplate.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Text="{StaticResource CustomLabelNameSectionText}" Style="{StaticResource TitleTextBlock}"/>
             <TextBlock Text="{StaticResource CustomLabelNameDescription}" Style="{StaticResource DescriptionTextBlock}"/>
             <TextBox metro:TextBoxHelper.ClearTextButton="True" Text="{Binding Name, Mode=TwoWay}" Width="150"/>
-            <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}"
-                                IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
-                <TextBlock Text="{StaticResource WidthLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
-                <TextBlock Text="{StaticResource XPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource YPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}"/>
-            </UniformGrid>
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource LayoutSettingsTemplate}" Margin="{StaticResource SectionMargin}"/>
 
             <TextBlock Text="{StaticResource CustomLabelFormatSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
             <TextBlock Style="{StaticResource DescriptionTextBlock}" x:Name="CustomLabelFormatHelpLink" Focusable="False">
@@ -75,8 +65,12 @@
             <TextBox metro:TextBoxHelper.ClearTextButton="True" Text="{Binding FormatString, Mode=TwoWay}" Width="400"/>
             <Popup x:Name="FormatHelpPopup" StaysOpen="False" AllowsTransparency="True" PopupAnimation="Slide"
                      PlacementTarget="{x:Reference CustomLabelFormatHelpLink}" Placement="Top">
-                <Border Background="White" BorderBrush="Gray" BorderThickness="1" Padding="4">
-                    <TextBlock>
+                <Border BorderThickness="1" BorderBrush="{theming:ThemeResource SystemChromeHighColor}" Margin="4" Padding="4"
+                        Background="{theming:ThemeResource SystemChromeMediumLowColor}">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" Opacity="0.3"/>
+                    </Border.Effect>
+                    <TextBlock Foreground="{theming:ThemeResource SystemBaseHighColor}" FontSize="{StaticResource BodyFontSize}">
                         <TextBlock Text="{StaticResource CustomLabelFormatHelpText}"/><LineBreak/>
                         <Bold>Tags</Bold> <LineBreak/>
                         <TextBlock Text="{StaticResource CustomLabelFormatHelpTextTags}"/><LineBreak/>
@@ -120,7 +114,7 @@
                 <ComboBox ItemsSource="{Binding ScrollBehaviorValues}" ItemTemplate="{StaticResource EnumDescriptorItemTemplate}" Width="300"
                           SelectedValue="{Binding ScrollBehavior}" SelectedValuePath="Value"/>
                 <TextBlock Text="{StaticResource CustomLabelScrollSpeedDescription}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="WholeNumber" Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static converters:Converters.TimeSpanToMs}}"/>
+                <metro:NumericUpDown behaviors:NumericInput.Type="WholeNumber" Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static converters:Converters.TimeSpanToMs}, Delay=700}"/>
             </ItemsControl>
 
             <TextBlock Text="{StaticResource CustomLabelEffectsSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
