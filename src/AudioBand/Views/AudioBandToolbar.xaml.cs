@@ -33,6 +33,7 @@ namespace AudioBand.Views
             var deskbandSize = new DeskBandSize((int)Math.Round(ActualWidth * scale), (int)Math.Round(ActualHeight * scale));
             _options.MinHorizontalSize = deskbandSize;
             _options.HorizontalSize = deskbandSize;
+            _options.MaxHorizontalHeight = deskbandSize.Height;
         }
     }
 }
