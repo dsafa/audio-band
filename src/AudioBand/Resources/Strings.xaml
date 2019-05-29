@@ -138,6 +138,8 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="AudioBandAboutDialogProjectPre">Check out the project site to report issues and get more help</sys:String>
     <sys:String x:Key="AudioBandAboutDialogLicenseLinkText">License</sys:String>
     <sys:String x:Key="AudioBandAboutDialogThirdPartyLicenseLink">Third party licenses</sys:String>
+    <sys:String x:Key="AudioBandAboutDialogSettingsLinkText">AudioBand settings folder</sys:String>
+    <sys:String x:Key="AudioBandAboutDialogLogsLink">AudioBand log</sys:String>
     <sys:String x:Key="RenameProfileDialogTitle">Renaming profile {0}</sys:String>
     <sys:String x:Key="DeleteProfileDialogTitle">Delete profile</sys:String>
     <sys:String x:Key="DeleteProfileDialogBody">Are you sure you want to delete the profile '{0}'</sys:String>
