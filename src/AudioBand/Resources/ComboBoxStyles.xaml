@@ -106,7 +106,7 @@
                                     <FrameworkElement.RenderTransform>
                                         <ScaleTransform x:Name="PopupTransform"/>
                                     </FrameworkElement.RenderTransform>
-                                    <ScrollViewer Margin="0, 4" VerticalScrollBarVisibility="Auto">
+                                    <ScrollViewer Margin="0, 4" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
                                         <VirtualizingStackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                                     </ScrollViewer>
                                 </Border>
