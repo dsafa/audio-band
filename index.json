@@ -1,18 +1,53 @@
 {
+  "audiosource-api/AudioBand.AudioSource.SettingOptions.html": {
+    "href": "audiosource-api/AudioBand.AudioSource.SettingOptions.html",
+    "title": "Enum SettingOptions",
+    "keywords": "Enum SettingOptions Flags for audio source settings. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax [Flags] public enum SettingOptions Fields Name Description Hidden Setting is invisible to the user. ReadOnly Setting cannot be modified by the user. Sensitive Indicates a sensitive setting such as a password, causing a warning to be given."
+  },
   "audiosource-api/AudioBand.AudioSource.RepeatMode.html": {
     "href": "audiosource-api/AudioBand.AudioSource.RepeatMode.html",
     "title": "Enum RepeatMode",
     "keywords": "Enum RepeatMode Specifies the repeat mode of the audio source. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax public enum RepeatMode Fields Name Description Off No repeat. RepeatContext Repeat the current context. RepeatTrack Repeat the current track."
   },
-  "audiosource-api/AudioBand.AudioSource.ISupportsRatings.html": {
-    "href": "audiosource-api/AudioBand.AudioSource.ISupportsRatings.html",
-    "title": "Interface ISupportsRatings",
-    "keywords": "Interface ISupportsRatings Indicates that this audio source supports ratings on tracks. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax public interface ISupportsRatings Methods | Improve this Doc View Source SetTrackRatingAsync(TrackRating) Called when a new rating is being set. Declaration Task SetTrackRatingAsync(TrackRating newRating) Parameters Type Name Description TrackRating newRating The new rating of the track. Returns Type Description Task A Task representing the asynchronous set rating operation. Events | Improve this Doc View Source TrackRatingChanged Occurs when the the track's rating has changed. Declaration event EventHandler<TrackRating> TrackRatingChanged Event Type Type Description EventHandler < TrackRating >"
-  },
   "audiosource-api/AudioBand.AudioSource.IAudioSource.html": {
     "href": "audiosource-api/AudioBand.AudioSource.IAudioSource.html",
     "title": "Interface IAudioSource",
     "keywords": "Interface IAudioSource Provides information and notifies changes from an audio source and exposes playback controls. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax [InheritedExport(typeof(IAudioSource))] public interface IAudioSource Properties | Improve this Doc View Source Logger Gets or sets the IAudioSourceLogger used for logging. Declaration IAudioSourceLogger Logger { get; set; } Property Value Type Description IAudioSourceLogger Audio source logger that will be injected. | Improve this Doc View Source Name Gets the name of the audio source. Declaration string Name { get; } Property Value Type Description String The name of the audio source. Methods | Improve this Doc View Source ActivateAsync() Called when the audio source becomes active. Declaration Task ActivateAsync() Returns Type Description Task A Task representing the asynchronous activate operation. | Improve this Doc View Source DeactivateAsync() Called when the audio source is no longer active. Declaration Task DeactivateAsync() Returns Type Description Task A Task representing the asynchronous deactivate operation. | Improve this Doc View Source NextTrackAsync() Called when there is a request to skip to the next track. Declaration Task NextTrackAsync() Returns Type Description Task A Task representing the asynchronous skip to next track operation. | Improve this Doc View Source PauseTrackAsync() Called when there is a request to stop playback. Declaration Task PauseTrackAsync() Returns Type Description Task A Task representing the asynchronous pause operation. | Improve this Doc View Source PlayTrackAsync() Called when there is a request to start playback. Declaration Task PlayTrackAsync() Returns Type Description Task A Task representing the asynchronous play operation. | Improve this Doc View Source PreviousTrackAsync() Called when there is a request to skip to the previous track. Declaration Task PreviousTrackAsync() Returns Type Description Task A Task representing the asynchronous skip to previous track operation. | Improve this Doc View Source SetPlaybackProgressAsync(TimeSpan) Called when there is a request to change to current playback progress. Declaration Task SetPlaybackProgressAsync(TimeSpan newProgress) Parameters Type Name Description TimeSpan newProgress The new time to seek to. Returns Type Description Task A Task representing the asynchronous set playback progress operation. | Improve this Doc View Source SetRepeatModeAsync(RepeatMode) Called when there is a request to change the repeat mode. Declaration Task SetRepeatModeAsync(RepeatMode newRepeatMode) Parameters Type Name Description RepeatMode newRepeatMode The new RepeatMode . Returns Type Description Task A Task representing the asynchronous set repeat mode operation. | Improve this Doc View Source SetShuffleAsync(Boolean) Called when there is a request to change the shuffle state. Declaration Task SetShuffleAsync(bool shuffleOn) Parameters Type Name Description Boolean shuffleOn The new shuffle state, true if shuffle should be on; false otherwise. Returns Type Description Task A Task representing the asynchronous set shuffle operation. | Improve this Doc View Source SetVolumeAsync(Single) Called when there is a request to change the volume. Declaration Task SetVolumeAsync(float newVolume) Parameters Type Name Description Single newVolume The new volume to set. The range is between 0.0 and 1.0 inclusive. Returns Type Description Task A Task representing the asynchronous set volume operation. Events | Improve this Doc View Source IsPlayingChanged Occurs when the track play state has changed. true if playing; false otherwise; Declaration event EventHandler<bool> IsPlayingChanged Event Type Type Description EventHandler < Boolean > | Improve this Doc View Source RepeatModeChanged Occurs when the repeat mode changes. Declaration event EventHandler<RepeatMode> RepeatModeChanged Event Type Type Description EventHandler < RepeatMode > | Improve this Doc View Source SettingChanged Occurs when a setting has changed internally. Declaration event EventHandler<SettingChangedEventArgs> SettingChanged Event Type Type Description EventHandler < SettingChangedEventArgs > | Improve this Doc View Source ShuffleChanged Occurs when the shuffle state changes. true if shuffle is on; false otherwise; Declaration event EventHandler<bool> ShuffleChanged Event Type Type Description EventHandler < Boolean > | Improve this Doc View Source TrackInfoChanged Occurs when track information has changed. Declaration event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged Event Type Type Description EventHandler < TrackInfoChangedEventArgs > | Improve this Doc View Source TrackProgressChanged Occurs when the current track progress has changed. Declaration event EventHandler<TimeSpan> TrackProgressChanged Event Type Type Description EventHandler < TimeSpan > | Improve this Doc View Source VolumeChanged Occurs when the volume of the audio source changes. The range of the volume is between 0.0 and 1.0 inclusive. Declaration event EventHandler<float> VolumeChanged Event Type Type Description EventHandler < Single >"
+  },
+  "audioband/faq.html": {
+    "href": "audioband/faq.html",
+    "title": "FAQ",
+    "keywords": "FAQ Q. Why is there a margin on the right of the toolbar? This occurs if you've moved the toolbar, then lock the task bar. Restarting explorer should get rid of the margin"
+  },
+  "audioband/development/setup.html": {
+    "href": "audioband/development/setup.html",
+    "title": "Setup",
+    "keywords": "Setup Install Visual Studio 2017 . Make sure to install support for .Net Framework 4.7 development. Clone the repo git clone git@github.com:dsafa/audio-band.git Open the solution file under src/AudioBand.sln in visual studio. Update nuget packages before building Note Explorer does not unload audioband so you will not be able to build if explorer has loaded it. The debug configuration will automatically close explorer to build the audioband project and restart it after the build. Running local version To test the local version of audioband, it needs to be installed as a toolbar. The easiest way is to copy the install script from tools/install.cmd to the build folder and run it. Warning Installing the development version will overwrite any other installations. Debugging There are 2 ways you can use a debugger on audioband. Attach the debugger: In visual studio, open the attach to process menu (ctrl + alt + p). Select explorer.exe and click attach. Inserting the statement System.Diagnostics.Debugger.Launch(); will allow you to attach a debugger at any place in the code. This is useful if you need the debugger at the start."
+  },
+  "audioband/audiosources/spotify.html": {
+    "href": "audioband/audiosources/spotify.html",
+    "title": "Spotify",
+    "keywords": "Spotify Setup Login to the Spotify dashboard and create a new App. Fill in the details, you can name it whatever you want. This app will be just for AudioBand. Go to the app you created and click Edit Settings . Add http://localhost:80 as a callback url. You can use a different port for the local webserver (see next step) Right click anywhere in the toolbar > Audio Band Settings > Audio Source Settings and fill in the fields Spotify Client Id and Spotify Client Secret . You can find them in the same dashboard page for the Spotify app you created. You can also change the Callback Port if needed. Your browser should open asking you to login and allow your spotify app to access your currently playing songs. Sign-in and accept and it should now display song information (make sure spotify is selected as the audio source). Note The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying. Dashboard Callback settings"
+  },
+  "audioband/audiosources/musicbee.html": {
+    "href": "audioband/audiosources/musicbee.html",
+    "title": "MusicBee",
+    "keywords": "MusicBee Setup Make sure that the Musicbee IPC plugin is installed for MusicBee. Use this link if that link doesn't work."
+  },
+  "audioband/audiosources/itunes.html": {
+    "href": "audioband/audiosources/itunes.html",
+    "title": "iTunes",
+    "keywords": "iTunes No specific setup required for iTunes Note iTunes will open when the audio source is selected, and cannot be changed (as far as I know)."
+  },
+  "audioband/audiosources/index.html": {
+    "href": "audioband/audiosources/index.html",
+    "title": "Audio Sources",
+    "keywords": "Audio Sources Audio sources allow AudioBand to access data from different music players. To select an audio source, right click AudioBand and go to the AudioSources submenu. Check below for links on the specific audio source and setup instructions. Available audio sources Spotify iTunes MusicBee Audio source development See here to find out how to develop and add a custom audio source"
+  },
+  "index.html": {
+    "href": "index.html",
+    "title": "Welcome to the AudioBand documentation homepage.",
+    "keywords": "Welcome to the AudioBand documentation homepage. Refer to the links below to get started. Links AudioBand help and documentation Documentation for implmenting an audiosource"
   },
   "audiosource-docs/index.html": {
     "href": "audiosource-docs/index.html",
@@ -39,50 +74,15 @@
     "title": "General",
     "keywords": "General Width The Width of the toolbar Height The Height of the toolbar"
   },
-  "audioband/development/setup.html": {
-    "href": "audioband/development/setup.html",
-    "title": "Setup",
-    "keywords": "Setup Install Visual Studio 2017 . Make sure to install support for .Net Framework 4.7 development. Clone the repo git clone git@github.com:dsafa/audio-band.git Open the solution file under src/AudioBand.sln in visual studio. Update nuget packages before building Note Explorer does not unload audioband so you will not be able to build if explorer has loaded it. The debug configuration will automatically close explorer to build the audioband project and restart it after the build. Running local version To test the local version of audioband, it needs to be installed as a toolbar. The easiest way is to copy the install script from tools/install.cmd to the build folder and run it. Warning Installing the development version will overwrite any other installations. Debugging There are 2 ways you can use a debugger on audioband. Attach the debugger: In visual studio, open the attach to process menu (ctrl + alt + p). Select explorer.exe and click attach. Inserting the statement System.Diagnostics.Debugger.Launch(); will allow you to attach a debugger at any place in the code. This is useful if you need the debugger at the start."
-  },
   "audioband/customization/albumartpopup.html": {
     "href": "audioband/customization/albumartpopup.html",
     "title": "Album Art Popup",
     "keywords": "Album Art Popup Visibility Whether the popup will be visible Width Width of the popup Height Height of the popup X Position The x position of the popup. It is relative to the top left corner of the album art. Y Position The y position of the popup. It is relative to the top left corner of the album art."
   },
-  "audioband/audiosources/spotify.html": {
-    "href": "audioband/audiosources/spotify.html",
-    "title": "Spotify",
-    "keywords": "Spotify Setup Login to the Spotify dashboard and create a new App. Fill in the details, you can name it whatever you want. This app will be just for AudioBand. Go to the app you created and click Edit Settings . Add http://localhost:80 as a callback url. You can use a different port for the local webserver (see next step) Right click anywhere in the toolbar > Audio Band Settings > Audio Source Settings and fill in the fields Spotify Client Id and Spotify Client Secret . You can find them in the same dashboard page for the Spotify app you created. You can also change the Callback Port if needed. Your browser should open asking you to login and allow your spotify app to access your currently playing songs. Sign-in and accept and it should now display song information (make sure spotify is selected as the audio source). Note The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying. Dashboard Callback settings"
-  },
-  "audioband/audiosources/musicbee.html": {
-    "href": "audioband/audiosources/musicbee.html",
-    "title": "MusicBee",
-    "keywords": "MusicBee Setup Make sure that the Musicbee IPC plugin is installed for MusicBee. Use this link if that link doesn't work."
-  },
-  "audioband/audiosources/itunes.html": {
-    "href": "audioband/audiosources/itunes.html",
-    "title": "iTunes",
-    "keywords": "iTunes No specific setup required for iTunes Note iTunes will open when the audio source is selected, and cannot be changed (as far as I know)."
-  },
-  "audioband/audiosources/index.html": {
-    "href": "audioband/audiosources/index.html",
-    "title": "Audio Sources",
-    "keywords": "Audio Sources Audio sources allow AudioBand to access data from different music players. To select an audio source, right click AudioBand and go to the AudioSources submenu. Check below for links on the specific audio source and setup instructions. Available audio sources Spotify iTunes MusicBee Audio source development See here to find out how to develop and add a custom audio source"
-  },
   "audioband/index.html": {
     "href": "audioband/index.html",
     "title": "Audioband Documentation",
     "keywords": "Audioband Documentation Here you will find links to get you started with AudioBand. See below for installation. See the links on the side for more information. Quick Start Requirements .Net framework 4.7 Windows 10 Installation There is currently no installer available, however there are prereleases in the Release page that come with a script to install manually. Usage If nothing appears on your toolbar after installation, right click on the taskbar and select Audio Band from the toolbars submenu. ( See images below ) Right click on the Audio Band toolbar and select an audio source (ex. Spotify) Do any audio source specific setup Check out other helpful links in the side Important Previous versions of windows are not supported. Audioband may still work but there is no testing on older versions. Important Windows may block the .zip download. You can right click the zip file > properties > unblock to unblock it. The unblock option will only be available if it is blocked Note High DPI is supported on 1703 and above. Info Logs can be found in the temp folder: %temp%\\AudioBand.log Settings are saved in the app data directory: %appdata%\\AudioBand Links Audio source development"
-  },
-  "audioband/faq.html": {
-    "href": "audioband/faq.html",
-    "title": "FAQ",
-    "keywords": "FAQ Q. Why is there a margin on the right of the toolbar? This occurs if you've moved the toolbar, then lock the task bar. Restarting explorer should get rid of the margin"
-  },
-  "index.html": {
-    "href": "index.html",
-    "title": "Welcome to the AudioBand documentation homepage.",
-    "keywords": "Welcome to the AudioBand documentation homepage. Refer to the links below to get started. Links AudioBand help and documentation Documentation for implmenting an audiosource"
   },
   "audiosource-api/index.html": {
     "href": "audiosource-api/index.html",
@@ -94,30 +94,30 @@
     "title": "Namespace AudioBand.AudioSource",
     "keywords": "Namespace AudioBand.AudioSource Classes AudioSourceSettingAttribute Represents a setting that is exposed to the user to modify. SettingChangedEventArgs Provides data for a SettingChanged event. TrackInfoChangedEventArgs Event arguments for the TrackInfoChanged event. Interfaces IAudioSource Provides information and notifies changes from an audio source and exposes playback controls. IAudioSourceLogger Provides access to logging facilities for a audio source. ISupportsRatings Indicates that this audio source supports ratings on tracks. Enums RepeatMode Specifies the repeat mode of the audio source. SettingOptions Flags for audio source settings. TrackRating Options for the rating of a track."
   },
-  "audiosource-api/AudioBand.AudioSource.TrackRating.html": {
-    "href": "audiosource-api/AudioBand.AudioSource.TrackRating.html",
-    "title": "Enum TrackRating",
-    "keywords": "Enum TrackRating Options for the rating of a track. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax public enum TrackRating Fields Name Description Negative The song has a negative rating. None No rating. Positive The track has a positive rating."
-  },
-  "audiosource-api/AudioBand.AudioSource.SettingOptions.html": {
-    "href": "audiosource-api/AudioBand.AudioSource.SettingOptions.html",
-    "title": "Enum SettingOptions",
-    "keywords": "Enum SettingOptions Flags for audio source settings. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax [Flags] public enum SettingOptions Fields Name Description Hidden Setting is invisible to the user. ReadOnly Setting cannot be modified by the user. Sensitive Indicates a sensitive setting such as a password, causing a warning to be given."
+  "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html": {
+    "href": "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html",
+    "title": "Class TrackInfoChangedEventArgs",
+    "keywords": "Class TrackInfoChangedEventArgs Event arguments for the TrackInfoChanged event. Inheritance Object EventArgs TrackInfoChangedEventArgs Implements ISerializable Inherited Members EventArgs.Empty Object.ToString() Object.Equals(Object) Object.Equals(Object, Object) Object.ReferenceEquals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax [Serializable] public sealed class TrackInfoChangedEventArgs : EventArgs, ISerializable Constructors | Improve this Doc View Source TrackInfoChangedEventArgs() Initializes a new instance of the TrackInfoChangedEventArgs class. Declaration public TrackInfoChangedEventArgs() Properties | Improve this Doc View Source Album Gets or sets the album name. Declaration public string Album { get; set; } Property Value Type Description String The name of the album. | Improve this Doc View Source AlbumArt Gets or sets the album art image. If null , a placeholder will be used. Declaration public Image AlbumArt { get; set; } Property Value Type Description Image The album art. | Improve this Doc View Source Artist Gets or sets the artist. Declaration public string Artist { get; set; } Property Value Type Description String The name of the artist. | Improve this Doc View Source TrackLength Gets or sets the length of the track. Declaration public TimeSpan TrackLength { get; set; } Property Value Type Description TimeSpan The length of the track. | Improve this Doc View Source TrackName Gets or sets the track Name. Declaration public string TrackName { get; set; } Property Value Type Description String The name of the track. Explicit Interface Implementations | Improve this Doc View Source ISerializable.GetObjectData(SerializationInfo, StreamingContext) Declaration void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) Parameters Type Name Description SerializationInfo info StreamingContext context Implements System.Runtime.Serialization.ISerializable"
   },
   "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.html": {
     "href": "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.html",
     "title": "Class SettingChangedEventArgs",
     "keywords": "Class SettingChangedEventArgs Provides data for a SettingChanged event. Inheritance Object EventArgs SettingChangedEventArgs Inherited Members EventArgs.Empty Object.ToString() Object.Equals(Object) Object.Equals(Object, Object) Object.ReferenceEquals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax [Serializable] public sealed class SettingChangedEventArgs : EventArgs Constructors | Improve this Doc View Source SettingChangedEventArgs(String) Initializes a new instance of the SettingChangedEventArgs class with the setting's name. Declaration public SettingChangedEventArgs(string settingName) Parameters Type Name Description String settingName Name of the setting that changed. Properties | Improve this Doc View Source SettingName Gets or sets the name of the setting that changed. Declaration public string SettingName { get; set; } Property Value Type Description String The name of the setting."
   },
+  "audiosource-api/AudioBand.AudioSource.ISupportsRatings.html": {
+    "href": "audiosource-api/AudioBand.AudioSource.ISupportsRatings.html",
+    "title": "Interface ISupportsRatings",
+    "keywords": "Interface ISupportsRatings Indicates that this audio source supports ratings on tracks. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax public interface ISupportsRatings Methods | Improve this Doc View Source SetTrackRatingAsync(TrackRating) Called when a new rating is being set. Declaration Task SetTrackRatingAsync(TrackRating newRating) Parameters Type Name Description TrackRating newRating The new rating of the track. Returns Type Description Task A Task representing the asynchronous set rating operation. Events | Improve this Doc View Source TrackRatingChanged Occurs when the the track's rating has changed. Declaration event EventHandler<TrackRating> TrackRatingChanged Event Type Type Description EventHandler < TrackRating >"
+  },
+  "audiosource-api/AudioBand.AudioSource.TrackRating.html": {
+    "href": "audiosource-api/AudioBand.AudioSource.TrackRating.html",
+    "title": "Enum TrackRating",
+    "keywords": "Enum TrackRating Options for the rating of a track. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax public enum TrackRating Fields Name Description Negative The song has a negative rating. None No rating. Positive The track has a positive rating."
+  },
   "audiosource-api/AudioBand.AudioSource.IAudioSourceLogger.html": {
     "href": "audiosource-api/AudioBand.AudioSource.IAudioSourceLogger.html",
     "title": "Interface IAudioSourceLogger",
     "keywords": "Interface IAudioSourceLogger Provides access to logging facilities for a audio source. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax public interface IAudioSourceLogger Methods | Improve this Doc View Source Debug(Object) Log a debug level message. Declaration void Debug(object value) Parameters Type Name Description Object value Value to be logged. | Improve this Doc View Source Debug(String) Log a debug level message. Declaration void Debug(string message) Parameters Type Name Description String message Message to be logged. | Improve this Doc View Source Error(Object) Log an error level message. Declaration void Error(object value) Parameters Type Name Description Object value Value to be logged. | Improve this Doc View Source Error(String) Log an error level message. Declaration void Error(string message) Parameters Type Name Description String message Message to be logged. | Improve this Doc View Source Info(Object) Log an info level message. Declaration void Info(object value) Parameters Type Name Description Object value Value to be logged. | Improve this Doc View Source Info(String) Log an info level message. Declaration void Info(string message) Parameters Type Name Description String message Message to be logged. | Improve this Doc View Source Warn(Object) Log a warning level message. Declaration void Warn(object value) Parameters Type Name Description Object value Value to be logged. | Improve this Doc View Source Warn(String) Log a warning level message. Declaration void Warn(string message) Parameters Type Name Description String message Message to be logged."
-  },
-  "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html": {
-    "href": "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html",
-    "title": "Class TrackInfoChangedEventArgs",
-    "keywords": "Class TrackInfoChangedEventArgs Event arguments for the TrackInfoChanged event. Inheritance Object EventArgs TrackInfoChangedEventArgs Implements ISerializable Inherited Members EventArgs.Empty Object.ToString() Object.Equals(Object) Object.Equals(Object, Object) Object.ReferenceEquals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax [Serializable] public sealed class TrackInfoChangedEventArgs : EventArgs, ISerializable Constructors | Improve this Doc View Source TrackInfoChangedEventArgs() Initializes a new instance of the TrackInfoChangedEventArgs class. Declaration public TrackInfoChangedEventArgs() Properties | Improve this Doc View Source Album Gets or sets the album name. Declaration public string Album { get; set; } Property Value Type Description String The name of the album. | Improve this Doc View Source AlbumArt Gets or sets the album art image. If null , a placeholder will be used. Declaration public Image AlbumArt { get; set; } Property Value Type Description Image The album art. | Improve this Doc View Source Artist Gets or sets the artist. Declaration public string Artist { get; set; } Property Value Type Description String The name of the artist. | Improve this Doc View Source TrackLength Gets or sets the length of the track. Declaration public TimeSpan TrackLength { get; set; } Property Value Type Description TimeSpan The length of the track. | Improve this Doc View Source TrackName Gets or sets the track Name. Declaration public string TrackName { get; set; } Property Value Type Description String The name of the track. Explicit Interface Implementations | Improve this Doc View Source ISerializable.GetObjectData(SerializationInfo, StreamingContext) Declaration void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) Parameters Type Name Description SerializationInfo info StreamingContext context Implements System.Runtime.Serialization.ISerializable"
   },
   "audiosource-api/AudioBand.AudioSource.AudioSourceSettingAttribute.html": {
     "href": "audiosource-api/AudioBand.AudioSource.AudioSourceSettingAttribute.html",
