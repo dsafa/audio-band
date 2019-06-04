@@ -15,9 +15,9 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class CustomLabelViewModel : LayoutViewModelBase<CustomLabel>
     {
-        private readonly FormattedTextParser _parser;
         private IInternalAudioSource _audioSource;
         private bool _isPlaying;
+        private IEnumerable<TextSegment> _textSegments;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomLabelViewModel"/> class.
@@ -28,7 +28,7 @@ namespace AudioBand.ViewModels
             : base(model)
         {
             DialogService = dialogService;
-            _parser = new FormattedTextParser(FormatString, Color);
+            TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color);
         }
 
         /// <summary>
@@ -155,7 +155,11 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets the text segments.
         /// </summary>
-        public IEnumerable<TextSegment> TextSegments => _parser.TextSegments;
+        public IEnumerable<TextSegment> TextSegments
+        {
+            get => _textSegments;
+            private set => SetProperty(ref _textSegments, value, false);
+        }
 
         /// <summary>
         /// Gets the values of <see cref="CustomLabel.TextAlignment"/>.
@@ -206,10 +210,14 @@ namespace AudioBand.ViewModels
             switch (propertyName)
             {
                 case nameof(Model.Color):
-                    _parser.DefaultColor = Model.Color;
+                    foreach (var textSegment in TextSegments)
+                    {
+                        textSegment.Color = Color;
+                    }
+
                     break;
                 case nameof(Model.FormatString):
-                    _parser.Format = Model.FormatString;
+                    TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color);
                     break;
             }
         }
@@ -218,54 +226,24 @@ namespace AudioBand.ViewModels
         {
             if (_audioSource != null)
             {
-                Clear();
-                _audioSource.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
-                _audioSource.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
                 _audioSource.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
             }
 
             _audioSource = audioSource;
             if (_audioSource == null)
             {
-                Clear();
                 return;
             }
 
             // Sync current information in the case the profiles change, otherwise we won't receive information until the next time the event is activated.
-            AudioSourceOnTrackInfoChanged(null, _audioSource.LastTrackInfo);
             AudioSourceOnIsPlayingChanged(null, _audioSource.IsPlaying);
-            AudioSourceOnTrackProgressChanged(null, _audioSource.CurrentProgress);
 
-            _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
-            _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
             _audioSource.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
         }
 
         private void AudioSourceOnIsPlayingChanged(object sender, bool e)
         {
             IsPlaying = e;
-        }
-
-        private void AudioSourceOnTrackProgressChanged(object sender, TimeSpan e)
-        {
-            _parser.SongProgress = e;
-        }
-
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
-        {
-            _parser.Artist = e.Artist;
-            _parser.AlbumName = e.Album;
-            _parser.SongLength = e.TrackLength;
-            _parser.SongName = e.TrackName;
-        }
-
-        private void Clear()
-        {
-            _parser.Artist = null;
-            _parser.AlbumName = null;
-            _parser.SongName = null;
-            _parser.SongLength = TimeSpan.Zero;
-            _parser.SongProgress = TimeSpan.Zero;
         }
     }
 }
