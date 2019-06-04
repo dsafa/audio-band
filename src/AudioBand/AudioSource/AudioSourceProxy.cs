@@ -88,6 +88,21 @@ namespace AudioBand.AudioSource
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         /// <summary>
+        /// Gets a value indicating whether the audio source is currently playing.
+        /// </summary>
+        public bool IsPlaying { get; private set; }
+
+        /// <summary>
+        /// Gets the current progress.
+        /// </summary>
+        public TimeSpan CurrentProgress { get; private set; }
+
+        /// <summary>
+        /// Gets the last track info.
+        /// </summary>
+        public TrackInfoChangedEventArgs LastTrackInfo { get; private set; } = new TrackInfoChangedEventArgs();
+
+        /// <summary>
         /// Gets the settings that the audio source has.
         /// </summary>
         public List<AudioSourceSettingAttribute> Settings { get; private set; } = new List<AudioSourceSettingAttribute>();
@@ -321,9 +336,21 @@ namespace AudioBand.AudioSource
             }
 
             _wrapper.SettingChanged += new MarshaledEventHandler<SettingChangedEventArgs>(e => SettingChanged?.Invoke(this, e)).Handler;
-            _wrapper.TrackInfoChanged += new MarshaledEventHandler<TrackInfoChangedEventArgs>(e => TrackInfoChanged?.Invoke(this, e)).Handler;
-            _wrapper.IsPlayingChanged += new MarshaledEventHandler<bool>(e => IsPlayingChanged?.Invoke(this, e)).Handler;
-            _wrapper.TrackProgressChanged += new MarshaledEventHandler<TimeSpan>(e => TrackProgressChanged?.Invoke(this, e)).Handler;
+            _wrapper.TrackInfoChanged += new MarshaledEventHandler<TrackInfoChangedEventArgs>(e =>
+            {
+                TrackInfoChanged?.Invoke(this, e);
+                LastTrackInfo = e;
+            }).Handler;
+            _wrapper.IsPlayingChanged += new MarshaledEventHandler<bool>(e =>
+            {
+                IsPlayingChanged?.Invoke(this, e);
+                IsPlaying = e;
+            }).Handler;
+            _wrapper.TrackProgressChanged += new MarshaledEventHandler<TimeSpan>(e =>
+            {
+                TrackProgressChanged?.Invoke(this, e);
+                CurrentProgress = e;
+            }).Handler;
             _wrapper.VolumeChanged += new MarshaledEventHandler<float>(e => VolumeChanged?.Invoke(this, e)).Handler;
             _wrapper.ShuffleChanged += new MarshaledEventHandler<bool>(e => ShuffleChanged?.Invoke(this, e)).Handler;
             _wrapper.RepeatModeChanged += new MarshaledEventHandler<RepeatMode>(e => RepeatModeChanged?.Invoke(this, e)).Handler;
