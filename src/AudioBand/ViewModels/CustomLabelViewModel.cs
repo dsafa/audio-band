@@ -16,7 +16,7 @@ namespace AudioBand.ViewModels
     public class CustomLabelViewModel : LayoutViewModelBase<CustomLabel>
     {
         private readonly FormattedTextParser _parser;
-        private IAudioSource _audioSource;
+        private IInternalAudioSource _audioSource;
         private bool _isPlaying;
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Sets the audio source.
         /// </summary>
-        public IAudioSource AudioSource
+        public IInternalAudioSource AudioSource
         {
             set => UpdateAudioSource(value);
         }
@@ -214,7 +214,7 @@ namespace AudioBand.ViewModels
             }
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void UpdateAudioSource(IInternalAudioSource audioSource)
         {
             if (_audioSource != null)
             {
@@ -230,6 +230,11 @@ namespace AudioBand.ViewModels
                 Clear();
                 return;
             }
+
+            // Sync current information in the case the profiles change, otherwise we won't receive information until the next time the event is activated.
+            AudioSourceOnTrackInfoChanged(null, _audioSource.LastTrackInfo);
+            AudioSourceOnIsPlayingChanged(null, _audioSource.IsPlaying);
+            AudioSourceOnTrackProgressChanged(null, _audioSource.CurrentProgress);
 
             _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
             _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;

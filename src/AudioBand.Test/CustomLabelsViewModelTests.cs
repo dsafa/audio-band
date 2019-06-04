@@ -130,7 +130,8 @@ namespace AudioBand.Test
             var settingsMock = new Mock<IAppSettings>();
             settingsMock.SetupSequence(m => m.CustomLabels)
                 .Returns(new List<CustomLabel> {new CustomLabel()});
-            var audioSourceMock = new Mock<IAudioSource>();
+            var audioSourceMock = new Mock<IInternalAudioSource>();
+            audioSourceMock.SetupGet(m => m.LastTrackInfo).Returns(new TrackInfoChangedEventArgs());
 
             var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object);
             vm.AudioSource = audioSourceMock.Object;

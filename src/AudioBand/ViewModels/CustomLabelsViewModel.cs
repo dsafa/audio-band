@@ -19,7 +19,7 @@ namespace AudioBand.ViewModels
         private readonly HashSet<CustomLabelViewModel> _removed = new HashSet<CustomLabelViewModel>();
         private readonly IAppSettings _appsettings;
         private readonly IDialogService _dialogService;
-        private IAudioSource _audioSource;
+        private IInternalAudioSource _audioSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomLabelsViewModel"/> class
@@ -56,7 +56,7 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Sets the audio source.
         /// </summary>
-        public IAudioSource AudioSource
+        public IInternalAudioSource AudioSource
         {
             set => UpdateAudioSource(value);
         }
@@ -149,7 +149,7 @@ namespace AudioBand.ViewModels
             }
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void UpdateAudioSource(IInternalAudioSource audioSource)
         {
             _audioSource = audioSource;
             foreach (var customLabelViewModel in CustomLabels)
