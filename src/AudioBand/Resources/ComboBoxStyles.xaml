@@ -72,7 +72,7 @@
                                 <ColumnDefinition Width="{Binding ElementName=Border, Path=ActualHeight}"/>
                             </Grid.ColumnDefinitions>
                             <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2"
-                                          Focusable="false" ClickMode="Press" BorderThickness="0"
+                                          Focusable="false" BorderThickness="0"
                                           IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
                                           VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                           Background="{TemplateBinding Background}"

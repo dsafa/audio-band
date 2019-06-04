@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Models;
 using AudioBand.Settings;
@@ -18,6 +19,7 @@ namespace AudioBand.ViewModels
         private readonly HashSet<CustomLabelViewModel> _removed = new HashSet<CustomLabelViewModel>();
         private readonly IAppSettings _appsettings;
         private readonly IDialogService _dialogService;
+        private IInternalAudioSource _audioSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomLabelsViewModel"/> class
@@ -50,6 +52,14 @@ namespace AudioBand.ViewModels
         /// Gets the command to remove a label.
         /// </summary>
         public RelayCommand<CustomLabelViewModel> RemoveLabelCommand { get; }
+
+        /// <summary>
+        /// Sets the audio source.
+        /// </summary>
+        public IInternalAudioSource AudioSource
+        {
+            set => UpdateAudioSource(value);
+        }
 
         /// <inheritdoc/>
         protected override void OnBeginEdit()
@@ -130,10 +140,22 @@ namespace AudioBand.ViewModels
         {
             Debug.Assert(IsEditing == false, "Should not be editing while profile is changing");
 
-            CustomLabels.Clear();
-
             // Add labels for new profile
             SetupLabels();
+
+            foreach (var customLabelViewModel in CustomLabels)
+            {
+                customLabelViewModel.AudioSource = _audioSource;
+            }
+        }
+
+        private void UpdateAudioSource(IInternalAudioSource audioSource)
+        {
+            _audioSource = audioSource;
+            foreach (var customLabelViewModel in CustomLabels)
+            {
+                customLabelViewModel.AudioSource = audioSource;
+            }
         }
     }
 }

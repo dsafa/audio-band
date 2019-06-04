@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AudioBand.AudioSource;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AudioBand.ViewModels;
 using AudioBand.Models;
@@ -108,16 +109,35 @@ namespace AudioBand.Test
             Assert.AreEqual(0, _viewModel.CustomLabels.Count);
         }
 
-        [TestMethod, Ignore("Issue with verifying invocation")]
+        [TestMethod, Ignore("Unable to setup sequence")]
         public void ProfileChangeRemovesAllLabelsAndAddsNewOnes()
         {
-
             var settingsMock = new Mock<IAppSettings>();
-            settingsMock.SetupGet(m => m.CustomLabels).Returns(new List<CustomLabel> {new CustomLabel()});
+            settingsMock.SetupSequence(m => m.CustomLabels)
+                .Returns(new List<CustomLabel> { new CustomLabel { Name = "test" } })
+                .Returns(new List<CustomLabel> { new CustomLabel { Name = "second" } });
 
             var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object);
             Assert.AreEqual(1, vm.CustomLabels.Count);
-            _appSettingsMock.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
+            Assert.AreEqual("test", vm.CustomLabels[0].Name);
+            _appSettingsMock.Raise(m => m.ProfileChanged += null, null, EventArgs.Empty);
+            Assert.AreEqual("second", vm.CustomLabels[0].Name);
+        }
+
+        [TestMethod]
+        public void ProfileChangeUpdateAudioSources()
+        {
+            var settingsMock = new Mock<IAppSettings>();
+            settingsMock.SetupSequence(m => m.CustomLabels)
+                .Returns(new List<CustomLabel> {new CustomLabel()});
+            var audioSourceMock = new Mock<IInternalAudioSource>();
+            audioSourceMock.SetupGet(m => m.LastTrackInfo).Returns(new TrackInfoChangedEventArgs());
+
+            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object);
+            vm.AudioSource = audioSourceMock.Object;
+            _appSettingsMock.Raise(m => m.ProfileChanged += null, null, EventArgs.Empty);
+            audioSourceMock.Raise(m => m.IsPlayingChanged += null, null, true);
+            Assert.IsTrue(vm.CustomLabels[0].IsPlaying);
         }
     }
 }

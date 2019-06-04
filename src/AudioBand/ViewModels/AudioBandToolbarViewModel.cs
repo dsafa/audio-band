@@ -38,7 +38,7 @@ namespace AudioBand.ViewModels
 
             ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommandOnExecute);
             LoadCommand = new AsyncRelayCommand<object>(LoadCommandOnExecute);
-            SelectAudioSourceCommand = new AsyncRelayCommand<IAudioSource>(SelectAudioSourceCommandOnExecute);
+            SelectAudioSourceCommand = new AsyncRelayCommand<IInternalAudioSource>(SelectAudioSourceCommandOnExecute);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace AudioBand.ViewModels
             Logger.Debug("Audio sources loaded. Loaded {num} sources", AudioSources.Count);
         }
 
-        private async Task SelectAudioSourceCommandOnExecute(IAudioSource audioSource)
+        private async Task SelectAudioSourceCommandOnExecute(IInternalAudioSource audioSource)
         {
             if (SelectedAudioSource != null)
             {
@@ -153,7 +153,7 @@ namespace AudioBand.ViewModels
             }
         }
 
-        private void UpdateViewModels(IAudioSource audioSource)
+        private void UpdateViewModels(IInternalAudioSource audioSource)
         {
             ViewModels.AlbumArtViewModel.AudioSource = audioSource;
             ViewModels.NextButtonViewModel.AudioSource = audioSource;
@@ -162,10 +162,7 @@ namespace AudioBand.ViewModels
             ViewModels.ProgressBarViewModel.AudioSource = audioSource;
             ViewModels.RepeatModeButtonViewModel.AudioSource = audioSource;
             ViewModels.ShuffleModeButtonViewModel.AudioSource = audioSource;
-            foreach (var customLabelVm in ViewModels.CustomLabelsViewModel.CustomLabels)
-            {
-                customLabelVm.AudioSource = audioSource;
-            }
+            ViewModels.CustomLabelsViewModel.AudioSource = audioSource;
         }
     }
 }
