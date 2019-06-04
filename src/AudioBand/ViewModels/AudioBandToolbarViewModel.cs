@@ -162,10 +162,7 @@ namespace AudioBand.ViewModels
             ViewModels.ProgressBarViewModel.AudioSource = audioSource;
             ViewModels.RepeatModeButtonViewModel.AudioSource = audioSource;
             ViewModels.ShuffleModeButtonViewModel.AudioSource = audioSource;
-            foreach (var customLabelVm in ViewModels.CustomLabelsViewModel.CustomLabels)
-            {
-                customLabelVm.AudioSource = audioSource;
-            }
+            ViewModels.CustomLabelsViewModel.AudioSource = audioSource;
         }
     }
 }
