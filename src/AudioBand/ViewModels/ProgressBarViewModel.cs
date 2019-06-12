@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Media;
 using AudioBand.AudioSource;
@@ -13,7 +14,7 @@ namespace AudioBand.ViewModels
     public class ProgressBarViewModel : LayoutViewModelBase<ProgressBar>
     {
         private readonly IAppSettings _appsettings;
-        private IAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
         private TimeSpan _trackProgress;
         private TimeSpan _trackLength;
 
@@ -22,10 +23,13 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public ProgressBarViewModel(IAppSettings appsettings, IDialogService dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        public ProgressBarViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession)
             : base(appsettings.ProgressBar)
         {
             _appsettings = appsettings;
+            _audioSession = audioSession;
+            _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
             DialogService = dialogService;
 
             _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
@@ -71,7 +75,7 @@ namespace AudioBand.ViewModels
             {
                 if (SetProperty(ref _trackProgress, value, trackChanges: false))
                 {
-                    _audioSource?.SetPlaybackProgressAsync(value);
+                    _audioSession.CurrentAudioSource?.SetPlaybackProgressAsync(value);
                 }
             }
         }
@@ -90,50 +94,33 @@ namespace AudioBand.ViewModels
         /// </summary>
         public IDialogService DialogService { get; set; }
 
-        /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
-        }
-
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
             ReplaceModel(_appsettings.ProgressBar);
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_audioSource != null)
+            switch (e.PropertyName)
             {
-                _audioSource.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
-                _audioSource.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
-                TrackProgress = TimeSpan.Zero;
-                TrackLength = TimeSpan.Zero;
+                case nameof(IAudioSession.SongProgress):
+                    OnProgressChanged(_audioSession.SongProgress);
+                    break;
+                case nameof(IAudioSession.SongLength):
+                    OnSongLengthChanged(_audioSession.SongLength);
+                    break;
             }
-
-            _audioSource = audioSource;
-            if (_audioSource == null)
-            {
-                TrackLength = TimeSpan.Zero;
-                TrackProgress = TimeSpan.Zero;
-                return;
-            }
-
-            _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
-            _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
         }
 
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
+        private void OnSongLengthChanged(TimeSpan length)
         {
-            TrackLength = e.TrackLength;
+            TrackLength = length;
         }
 
-        private void AudioSourceOnTrackProgressChanged(object sender, TimeSpan e)
+        private void OnProgressChanged(TimeSpan progress)
         {
-            _trackProgress = e;
+            _trackProgress = progress;
             RaisePropertyChanged(nameof(TrackProgress));
         }
     }

@@ -105,6 +105,7 @@ namespace AudioBand
                 _container.Register<IAppSettings, AppSettings>(Lifestyle.Singleton);
                 _container.Register<IDialogService, DialogService>(Lifestyle.Singleton);
                 _container.Register<IViewModelContainer, ViewModelContainer>(Lifestyle.Singleton);
+                _container.Register<IAudioSession, AudioSession>(Lifestyle.Singleton);
 
                 _container.Register<AboutDialogViewModel>(Lifestyle.Singleton);
                 _container.Register<AlbumArtViewModel>(Lifestyle.Singleton);

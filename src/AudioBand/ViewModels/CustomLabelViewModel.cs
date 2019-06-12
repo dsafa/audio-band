@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
 using AudioBand.AudioSource;
@@ -15,7 +16,7 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class CustomLabelViewModel : LayoutViewModelBase<CustomLabel>
     {
-        private IInternalAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
         private bool _isPlaying;
         private IEnumerable<TextSegment> _textSegments;
 
@@ -24,11 +25,15 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="model">The custom label.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CustomLabelViewModel(CustomLabel model, IDialogService dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        public CustomLabelViewModel(CustomLabel model, IDialogService dialogService, IAudioSession audioSession)
             : base(model)
         {
+            _audioSession = audioSession;
+            _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
+
             DialogService = dialogService;
-            TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color);
+            TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color, audioSession);
         }
 
         /// <summary>
@@ -187,14 +192,6 @@ namespace AudioBand.ViewModels
         public IDialogService DialogService { get; }
 
         /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IInternalAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether a track is playing.
         /// </summary>
         /// <remarks>Public so that bindings are set up correctly.</remarks>
@@ -217,33 +214,24 @@ namespace AudioBand.ViewModels
 
                     break;
                 case nameof(Model.FormatString):
-                    TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color);
+                    TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color, _audioSession);
                     break;
             }
         }
 
-        private void UpdateAudioSource(IInternalAudioSource audioSource)
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_audioSource != null)
-            {
-                _audioSource.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
-            }
-
-            _audioSource = audioSource;
-            if (_audioSource == null)
+            if (e.PropertyName != nameof(IAudioSession.IsPlaying))
             {
                 return;
             }
 
-            // Sync current information in the case the profiles change, otherwise we won't receive information until the next time the event is activated.
-            AudioSourceOnIsPlayingChanged(null, _audioSource.IsPlaying);
-
-            _audioSource.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
+            OnIsPlayingChanged(_audioSession.IsPlaying);
         }
 
-        private void AudioSourceOnIsPlayingChanged(object sender, bool e)
+        private void OnIsPlayingChanged(bool isPlaying)
         {
-            IsPlaying = e;
+            IsPlaying = isPlaying;
         }
     }
 }

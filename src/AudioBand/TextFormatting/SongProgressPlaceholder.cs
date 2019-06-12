@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using AudioBand.AudioSource;
+using AudioBand.Extensions;
 
 namespace AudioBand.TextFormatting
 {
@@ -11,15 +13,23 @@ namespace AudioBand.TextFormatting
         /// Initializes a new instance of the <see cref="SongProgressPlaceholder"/> class.
         /// </summary>
         /// <param name="parameters">The placeholder parameters.</param>
-        public SongProgressPlaceholder(IEnumerable<TextPlaceholderParameter> parameters)
-            : base(parameters)
+        /// <param name="session">The audio session.</param>
+        public SongProgressPlaceholder(IEnumerable<TextPlaceholderParameter> parameters, IAudioSession session)
+            : base(parameters, session)
         {
+            AddSessionPropertyFilter(nameof(IAudioSession.SongProgress));
         }
 
         /// <inheritdoc />
         public override string GetText()
         {
-            return "time";
+            return Session.SongProgress.Format();
+        }
+
+        /// <inheritdoc />
+        protected override void OnAudioSessionPropertyChanged(string propertyName)
+        {
+            RaiseTextChanged();
         }
     }
 }

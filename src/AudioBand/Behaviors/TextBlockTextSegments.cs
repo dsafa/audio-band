@@ -52,17 +52,17 @@ namespace AudioBand.Behaviors
                 var run = new Run();
                 run.SetBinding(Run.TextProperty, textBinding);
                 run.SetBinding(TextElement.ForegroundProperty, colorBinding);
-                if (textSegment.Type.HasFlag(FormattedTextFlags.Bold))
+                if (textSegment.Flags.HasFlag(FormattedTextFlags.Bold))
                 {
                     run.FontWeight = FontWeights.Bold;
                 }
 
-                if (textSegment.Type.HasFlag(FormattedTextFlags.Italic))
+                if (textSegment.Flags.HasFlag(FormattedTextFlags.Italic))
                 {
                     run.FontStyle = FontStyles.Italic;
                 }
 
-                if (textSegment.Type.HasFlag(FormattedTextFlags.Underline))
+                if (textSegment.Flags.HasFlag(FormattedTextFlags.Underline))
                 {
                     run.TextDecorations.Add(TextDecorations.Underline);
                 }

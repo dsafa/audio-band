@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AudioBand.AudioSource;
 
 namespace AudioBand.TextFormatting
 {
@@ -11,15 +12,23 @@ namespace AudioBand.TextFormatting
         /// Initializes a new instance of the <see cref="SongNamePlaceholder"/> class.
         /// </summary>
         /// <param name="parameters">The placeholder parameters.</param>
-        public SongNamePlaceholder(IEnumerable<TextPlaceholderParameter> parameters)
-            : base(parameters)
+        /// <param name="session">The audio session.</param>
+        public SongNamePlaceholder(IEnumerable<TextPlaceholderParameter> parameters, IAudioSession session)
+            : base(parameters, session)
         {
+            AddSessionPropertyFilter(nameof(IAudioSession.SongName));
         }
 
         /// <inheritdoc />
         public override string GetText()
         {
-            return "song name";
+            return Session.SongName;
+        }
+
+        /// <inheritdoc />
+        protected override void OnAudioSessionPropertyChanged(string propertyName)
+        {
+            RaiseTextChanged();
         }
     }
 }

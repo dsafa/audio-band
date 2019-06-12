@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AudioBand.AudioSource;
@@ -15,7 +17,7 @@ namespace AudioBand.ViewModels
     public class AlbumArtViewModel : LayoutViewModelBase<AlbumArt>
     {
         private readonly IAppSettings _appsettings;
-        private IAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
         private ImageSource _albumArt;
 
         /// <summary>
@@ -23,13 +25,16 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession)
             : base(appsettings.AlbumArt)
         {
             DialogService = dialogService;
             _appsettings = appsettings;
+            _audioSession = audioSession;
 
             appsettings.ProfileChanged += AppsettingsOnProfileChanged;
+            audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
         }
 
         /// <summary>
@@ -52,14 +57,6 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
-        }
-
-        /// <summary>
         /// Gets the dialog service.
         /// </summary>
         public IDialogService DialogService { get; }
@@ -70,27 +67,19 @@ namespace AudioBand.ViewModels
             ReplaceModel(_appsettings.AlbumArt);
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_audioSource != null)
+            if (e.PropertyName != nameof(IAudioSession.AlbumArt))
             {
-                AlbumArt = null;
-                _audioSource.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
-            }
-
-            _audioSource = audioSource;
-            if (_audioSource == null)
-            {
-                AlbumArt = null;
                 return;
             }
 
-            _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
+            AlbumArtUpdated(_audioSession.AlbumArt);
         }
 
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
+        private void AlbumArtUpdated(Image albumArt)
         {
-            if (e.AlbumArt == null)
+            if (albumArt == null)
             {
                 try
                 {
@@ -104,7 +93,7 @@ namespace AudioBand.ViewModels
                 return;
             }
 
-            AlbumArt = e.AlbumArt.ToImageSource();
+            AlbumArt = albumArt.ToImageSource();
         }
     }
 }

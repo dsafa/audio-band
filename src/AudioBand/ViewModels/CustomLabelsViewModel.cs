@@ -19,7 +19,7 @@ namespace AudioBand.ViewModels
         private readonly HashSet<CustomLabelViewModel> _removed = new HashSet<CustomLabelViewModel>();
         private readonly IAppSettings _appsettings;
         private readonly IDialogService _dialogService;
-        private IInternalAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomLabelsViewModel"/> class
@@ -27,10 +27,12 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The app setings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CustomLabelsViewModel(IAppSettings appsettings, IDialogService dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        public CustomLabelsViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession)
         {
             _appsettings = appsettings;
             _dialogService = dialogService;
+            _audioSession = audioSession;
             SetupLabels();
 
             AddLabelCommand = new RelayCommand(AddLabelCommandOnExecute);
@@ -52,14 +54,6 @@ namespace AudioBand.ViewModels
         /// Gets the command to remove a label.
         /// </summary>
         public RelayCommand<CustomLabelViewModel> RemoveLabelCommand { get; }
-
-        /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IInternalAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
-        }
 
         /// <inheritdoc/>
         protected override void OnBeginEdit()
@@ -103,7 +97,7 @@ namespace AudioBand.ViewModels
         {
             BeginEdit();
 
-            var newLabel = new CustomLabelViewModel(new CustomLabel(), _dialogService) { Name = "New Label" };
+            var newLabel = new CustomLabelViewModel(new CustomLabel(), _dialogService, _audioSession) { Name = "New Label" };
             CustomLabels.Add(newLabel);
 
             _added.Add(newLabel);
@@ -130,7 +124,7 @@ namespace AudioBand.ViewModels
         private void SetupLabels()
         {
             CustomLabels.Clear();
-            foreach (var customLabelVm in _appsettings.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService)))
+            foreach (var customLabelVm in _appsettings.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession)))
             {
                 CustomLabels.Add(customLabelVm);
             }
@@ -142,20 +136,6 @@ namespace AudioBand.ViewModels
 
             // Add labels for new profile
             SetupLabels();
-
-            foreach (var customLabelViewModel in CustomLabels)
-            {
-                customLabelViewModel.AudioSource = _audioSource;
-            }
-        }
-
-        private void UpdateAudioSource(IInternalAudioSource audioSource)
-        {
-            _audioSource = audioSource;
-            foreach (var customLabelViewModel in CustomLabels)
-            {
-                customLabelViewModel.AudioSource = audioSource;
-            }
         }
     }
 }
