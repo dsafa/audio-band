@@ -19,6 +19,7 @@ namespace AudioBand.Test
     {
         private Mock<IDialogService> _dialogMock;
         private Mock<IAppSettings> _appSettingsMock;
+        private Mock<IAudioSession> _sessionMock;
         private CustomLabel _label;
         private CustomLabelsViewModel _viewModel;
 
@@ -29,7 +30,8 @@ namespace AudioBand.Test
             _appSettingsMock = new Mock<IAppSettings>();
             _appSettingsMock.Setup(x => x.CustomLabels).Returns(new List<CustomLabel>());
             _label = new CustomLabel();
-            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object);
+            _sessionMock = new Mock<IAudioSession>();
+            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object, _sessionMock.Object);
         }
 
         [TestMethod]
@@ -86,7 +88,7 @@ namespace AudioBand.Test
         {
             _appSettingsMock.SetupGet(x => x.CustomLabels).Returns(new List<CustomLabel> { new CustomLabel() });
             _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(true);
-            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object);
+            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object, _sessionMock.Object);
             _viewModel.BeginEdit();
             var label = _viewModel.CustomLabels[0];
             _viewModel.RemoveLabelCommand.Execute(label);
@@ -117,7 +119,7 @@ namespace AudioBand.Test
                 .Returns(new List<CustomLabel> { new CustomLabel { Name = "test" } })
                 .Returns(new List<CustomLabel> { new CustomLabel { Name = "second" } });
 
-            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object);
+            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object, _sessionMock.Object);
             Assert.AreEqual(1, vm.CustomLabels.Count);
             Assert.AreEqual("test", vm.CustomLabels[0].Name);
             _appSettingsMock.Raise(m => m.ProfileChanged += null, null, EventArgs.Empty);
@@ -125,18 +127,15 @@ namespace AudioBand.Test
         }
 
         [TestMethod]
-        public void ProfileChangeUpdateAudioSources()
+        public void ProfileChangeViewModelStillHasCurrentTrackData()
         {
             var settingsMock = new Mock<IAppSettings>();
             settingsMock.SetupSequence(m => m.CustomLabels)
                 .Returns(new List<CustomLabel> {new CustomLabel()});
-            var audioSourceMock = new Mock<IInternalAudioSource>();
-            audioSourceMock.SetupGet(m => m.LastTrackInfo).Returns(new TrackInfoChangedEventArgs());
+            _sessionMock.SetupGet(m => m.IsPlaying).Returns(true);
 
-            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object);
-            vm.AudioSource = audioSourceMock.Object;
+            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object, _sessionMock.Object);
             _appSettingsMock.Raise(m => m.ProfileChanged += null, null, EventArgs.Empty);
-            audioSourceMock.Raise(m => m.IsPlayingChanged += null, null, true);
             Assert.IsTrue(vm.CustomLabels[0].IsPlaying);
         }
     }

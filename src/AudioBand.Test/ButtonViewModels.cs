@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
@@ -15,12 +16,14 @@ namespace AudioBand.Test
     {
         private Mock<IAppSettings> _appSettings;
         private Mock<IDialogService> _dialog;
+        private Mock<IAudioSession> _session;
 
         [TestInitialize]
         public void TestInit()
         {
             _appSettings = new Mock<IAppSettings>();
             _dialog = new Mock<IDialogService>();
+            _session = new Mock<IAudioSession>();
         }
 
         [TestMethod]
@@ -32,7 +35,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new NextButtonViewModel(_appSettings.Object, _dialog.Object);
+            var vm = new NextButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
@@ -49,10 +52,10 @@ namespace AudioBand.Test
         public async Task NextButtonCommandCallsNextTrack()
         {
             _appSettings.SetupGet(m => m.NextButton).Returns(new NextButton());
-            var vm = new NextButtonViewModel(_appSettings.Object, _dialog.Object);
-            var audioSourceMock = new Mock<IAudioSource>();
+            var audioSourceMock = new Mock<IInternalAudioSource>();
             audioSourceMock.Setup(m => m.NextTrackAsync()).Returns(Task.CompletedTask);
-            vm.AudioSource = audioSourceMock.Object;
+            _session.SetupGet(m => m.CurrentAudioSource).Returns(audioSourceMock.Object);
+            var vm = new NextButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object);
 
             await vm.NextTrackCommand.ExecuteAsync(null);
             audioSourceMock.Verify(m => m.NextTrackAsync());
@@ -67,7 +70,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object);
+            var vm = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
@@ -83,7 +86,7 @@ namespace AudioBand.Test
         public void PlayPauseButtonMarkedAsEditingWhenContentIsEdited()
         {
             _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
-            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object);
+            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object);
 
             viewModel.PlayContent.Text = "";
             Assert.IsTrue(viewModel.PlayContent.IsEditing);
@@ -102,16 +105,14 @@ namespace AudioBand.Test
         public void PlayPauseButtonListensToAudioSource()
         {
             _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
-            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object);
-            var audioSourceMock = new Mock<IAudioSource>();
+            _session.SetupSequence(m => m.IsPlaying).Returns(true).Returns(false);
+            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object);
 
-            viewModel.AudioSource = audioSourceMock.Object;
-
-            audioSourceMock.Raise(m => m.IsPlayingChanged += null, null, true);
+            _session.Raise(m => m.PropertyChanged+= null, null, new PropertyChangedEventArgs(nameof(IAudioSession.IsPlaying)));
             Assert.IsTrue(viewModel.IsPlaying);
             Assert.IsFalse(viewModel.IsPlayButtonShown);
 
-            audioSourceMock.Raise(m => m.IsPlayingChanged += null, null, false);
+            _session.Raise(m => m.PropertyChanged += null, null, new PropertyChangedEventArgs(nameof(IAudioSession.IsPlaying)));
             Assert.IsFalse(viewModel.IsPlaying);
             Assert.IsTrue(viewModel.IsPlayButtonShown);
         }
@@ -120,8 +121,7 @@ namespace AudioBand.Test
         public async Task PlayPauseButtonPlayAndPauseCommandWorks()
         {
             _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
-            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object);
-            var audioSourceMock = new Mock<IAudioSource>();
+            var audioSourceMock = new Mock<IInternalAudioSource>();
             var isPlayingSequence = new[] {true, false};
             var index = 0;
             audioSourceMock.Setup(m => m.PlayTrackAsync())
@@ -131,7 +131,12 @@ namespace AudioBand.Test
                 .Callback(() => Assert.AreEqual(isPlayingSequence[index++], false))
                 .Returns(Task.CompletedTask);
 
+            _session.SetupGet(m => m.CurrentAudioSource).Returns(audioSourceMock.Object);
+            _session.SetupSequence(m => m.IsPlaying).Returns(true).Returns(false);
+
+            var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object);
             await viewModel.PlayPauseTrackCommand.ExecuteAsync(null);
+            _session.Raise(m => m.PropertyChanged += null, null, new PropertyChangedEventArgs(nameof(IAudioSession.IsPlaying)));
             audioSourceMock.Raise(m => m.IsPlayingChanged += null, null, true);
             await viewModel.PlayPauseTrackCommand.ExecuteAsync(null);
         }
@@ -145,7 +150,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new PreviousButtonViewModel(_appSettings.Object, _dialog.Object);
+            var vm = new PreviousButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
@@ -161,10 +166,10 @@ namespace AudioBand.Test
         public async Task PreviousButtonCommandCallsPreviousTrack()
         {
             _appSettings.SetupGet(m => m.PreviousButton).Returns(new PreviousButton());
-            var vm = new PreviousButtonViewModel(_appSettings.Object, _dialog.Object);
-            var audioSourceMock = new Mock<IAudioSource>();
+            var audioSourceMock = new Mock<IInternalAudioSource>();
             audioSourceMock.Setup(m => m.PreviousTrackAsync()).Returns(Task.CompletedTask);
-            vm.AudioSource = audioSourceMock.Object;
+            _session.SetupGet(m => m.CurrentAudioSource).Returns(audioSourceMock.Object);
+            var vm = new PreviousButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object);
 
             await vm.PreviousTrackCommand.ExecuteAsync(null);
             audioSourceMock.Verify(m => m.PreviousTrackAsync());

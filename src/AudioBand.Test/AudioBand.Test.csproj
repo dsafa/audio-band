@@ -100,7 +100,7 @@
     <Compile Include="SettingsMigrationTests.cs" />
     <Compile Include="AudioSourceSettingsCollectionTests.cs" />
     <Compile Include="SettingsWindowViewModelTests.cs" />
-    <Compile Include="TextRendererTests.cs" />
+    <Compile Include="CustomTextParsingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ButtonViewModels.cs" />
     <Compile Include="ProgressBarViewModelTests.cs" />
