@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.ModelBinding;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using AudioBand.AudioSource;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
@@ -32,7 +33,7 @@ namespace AudioBand.Test
             _appSettings.SetupGet(m => m.CustomLabels).Returns(new List<CustomLabel>());
             _dialog = new Mock<IDialogService>();
             _container = new Mock<IViewModelContainer>();
-            _container.SetupGet(m => m.CustomLabelsViewModel).Returns(new CustomLabelsViewModel(_appSettings.Object, _dialog.Object));
+            _container.SetupGet(m => m.CustomLabelsViewModel).Returns(new CustomLabelsViewModel(_appSettings.Object, _dialog.Object, new Mock<IAudioSession>().Object));
             _messageBus = new Mock<IMessageBus>();
         }
 

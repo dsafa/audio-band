@@ -34,6 +34,7 @@ namespace AudioBand.ViewModels
 
             DialogService = dialogService;
             TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color, audioSession);
+            IsPlaying = _audioSession.IsPlaying;
         }
 
         /// <summary>
