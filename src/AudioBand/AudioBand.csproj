@@ -185,6 +185,7 @@
     <Compile Include="Settings\Profiles\SettingsV3Profile.cs" />
     <Compile Include="TaskbarHook.cs" />
     <Compile Include="TextFormatting\AlbumNamePlaceholder.cs" />
+    <Compile Include="TextFormatting\RemainingTimePlaceholder.cs" />
     <Compile Include="TextFormatting\SongArtistPlaceholder.cs" />
     <Compile Include="TextFormatting\SongLengthPlaceholder.cs" />
     <Compile Include="TextFormatting\SongNamePlaceholder.cs" />
