@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using AudioBand.AudioSource;
 
 namespace AudioBand.TextFormatting
 {
@@ -8,12 +10,18 @@ namespace AudioBand.TextFormatting
     /// </summary>
     public abstract class TextPlaceholder
     {
+        private readonly HashSet<string> _propertyFilter = new HashSet<string>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TextPlaceholder"/> class.
         /// </summary>
         /// <param name="parameters">The parameters passed to the text format.</param>
-        protected TextPlaceholder(IEnumerable<TextPlaceholderParameter> parameters)
+        /// <param name="audioSession">The audio session to use for the placeholder value.</param>
+        protected TextPlaceholder(IEnumerable<TextPlaceholderParameter> parameters, IAudioSession audioSession)
         {
+            Session = audioSession;
+            Session.PropertyChanged += AudioSessionOnPropertyChanged;
+
             // TODO parameters
         }
 
@@ -21,6 +29,11 @@ namespace AudioBand.TextFormatting
         /// Occurs when the placeholders text has changed.
         /// </summary>
         public event EventHandler TextChanged;
+
+        /// <summary>
+        /// Gets the audio session.
+        /// </summary>
+        protected IAudioSession Session { get; private set; }
 
         /// <summary>
         /// Gets the current text value for the placeholder.
@@ -44,6 +57,31 @@ namespace AudioBand.TextFormatting
         protected string GetParameter(string parameterName)
         {
             return null;
+        }
+
+        /// <summary>
+        /// Adds a filter for <see cref="OnAudioSessionPropertyChanged"/>.
+        /// </summary>
+        /// <param name="audioSessionPropertyName">The property name to filter.</param>
+        protected void AddSessionPropertyFilter(string audioSessionPropertyName)
+        {
+            _propertyFilter.Add(audioSessionPropertyName);
+        }
+
+        /// <summary>
+        /// Called when the audio session property value changes.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
+        protected virtual void OnAudioSessionPropertyChanged(string propertyName)
+        {
+        }
+
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (_propertyFilter.Contains(e.PropertyName) || _propertyFilter.Count == 0)
+            {
+                OnAudioSessionPropertyChanged(e.PropertyName);
+            }
         }
     }
 }

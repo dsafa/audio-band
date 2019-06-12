@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,18 +16,21 @@ namespace AudioBand.ViewModels
     public class PlayPauseButtonViewModel : ButtonViewModelBase<PlayPauseButton>
     {
         private readonly IAppSettings _appSettings;
+        private readonly IAudioSession _audioSession;
         private bool _isPlaying;
-        private IAudioSource _audioSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayPauseButtonViewModel"/> class.
         /// </summary>
         /// <param name="appSettings">App settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public PlayPauseButtonViewModel(IAppSettings appSettings, IDialogService dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        public PlayPauseButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession)
             : base(appSettings.PlayPauseButton, dialogService)
         {
             _appSettings = appSettings;
+            _audioSession = audioSession;
+            _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
             _appSettings.ProfileChanged += AppSettingsOnProfileChanged;
             PlayPauseTrackCommand = new AsyncRelayCommand<object>(PlayPauseTrackCommandOnExecute);
 
@@ -46,14 +50,6 @@ namespace AudioBand.ViewModels
         /// Gets the view model for the button in the pause state.
         /// </summary>
         public ButtonContentViewModel PauseContent { get; }
-
-        /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
-        }
 
         /// <summary>
         /// Gets the play pause command.
@@ -81,42 +77,35 @@ namespace AudioBand.ViewModels
             ReplaceModel(_appSettings.PlayPauseButton);
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_audioSource != null)
+            if (e.PropertyName != nameof(IAudioSession.IsPlaying))
             {
-                _audioSource.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
-            }
-
-            _audioSource = audioSource;
-            if (_audioSource == null)
-            {
-                IsPlaying = false;
                 return;
             }
 
-            _audioSource.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
+            OnIsPlayingChanged(_audioSession.IsPlaying);
         }
 
-        private void AudioSourceOnIsPlayingChanged(object sender, bool e)
+        private void OnIsPlayingChanged(bool isPlaying)
         {
-            IsPlaying = e;
+            IsPlaying = isPlaying;
         }
 
         private async Task PlayPauseTrackCommandOnExecute(object arg)
         {
-            if (_audioSource == null)
+            if (_audioSession.CurrentAudioSource == null)
             {
                 return;
             }
 
             if (IsPlaying)
             {
-                await _audioSource.PauseTrackAsync();
+                await _audioSession.CurrentAudioSource.PauseTrackAsync();
             }
             else
             {
-                await _audioSource.PlayTrackAsync();
+                await _audioSession.CurrentAudioSource.PlayTrackAsync();
             }
         }
     }

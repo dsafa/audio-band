@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AudioBand.AudioSource;
 
 namespace AudioBand.TextFormatting
 {
@@ -9,14 +10,14 @@ namespace AudioBand.TextFormatting
     {
         private static readonly Dictionary<string, PlaceholderFactoryFunc> PlaceholderMap = new Dictionary<string, PlaceholderFactoryFunc>()
         {
-            { "artist", parameters => new SongArtistPlaceholder(parameters) },
-            { "song", parameters => new SongNamePlaceholder(parameters) },
-            { "album", parameters => new AlbumNamePlaceholder(parameters) },
-            { "time", parameters => new SongProgressPlaceholder(parameters) },
-            { "length", parameters => new SongLengthPlaceholder(parameters) },
+            { "artist", (parameters, session) => new SongArtistPlaceholder(parameters, session) },
+            { "song", (parameters, session) => new SongNamePlaceholder(parameters, session) },
+            { "album", (parameters, session) => new AlbumNamePlaceholder(parameters, session) },
+            { "time", (parameters, session) => new SongProgressPlaceholder(parameters, session) },
+            { "length", (parameters, session) => new SongLengthPlaceholder(parameters, session) },
         };
 
-        private delegate TextPlaceholder PlaceholderFactoryFunc(IEnumerable<TextPlaceholderParameter> parameters);
+        private delegate TextPlaceholder PlaceholderFactoryFunc(IEnumerable<TextPlaceholderParameter> parameters, IAudioSession session);
 
         /// <summary>
         /// Gets all available tags for text placeholders.
@@ -28,13 +29,14 @@ namespace AudioBand.TextFormatting
         /// </summary>
         /// <param name="tag">The tag for the placeholder.</param>
         /// <param name="parameters">The parameters for the placeholder.</param>
+        /// <param name="session">The audio session.</param>
         /// <param name="placeholder">The text placeholder.</param>
         /// <returns>True if the tag matches a placeholder.</returns>
-        public static bool TryGetPlaceholder(string tag, IEnumerable<TextPlaceholderParameter> parameters, out TextPlaceholder placeholder)
+        public static bool TryGetPlaceholder(string tag, IEnumerable<TextPlaceholderParameter> parameters, IAudioSession session, out TextPlaceholder placeholder)
         {
             if (PlaceholderMap.TryGetValue(tag, out var func))
             {
-                placeholder = func(parameters);
+                placeholder = func(parameters, session);
                 return true;
             }
 

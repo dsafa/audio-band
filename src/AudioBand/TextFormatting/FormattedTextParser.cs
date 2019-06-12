@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
+using AudioBand.AudioSource;
 
 namespace AudioBand.TextFormatting
 {
@@ -27,8 +28,9 @@ namespace AudioBand.TextFormatting
         /// </summary>
         /// <param name="format">The formatted string.</param>
         /// <param name="defaultColor">The default text color to use.</param>
+        /// <param name="audioSession">The audio session to use.</param>
         /// <returns>A list of text segments.</returns>
-        public static IEnumerable<TextSegment> ParseFormattedString(string format, Color defaultColor)
+        public static IEnumerable<TextSegment> ParseFormattedString(string format, Color defaultColor, IAudioSession audioSession)
         {
             // Build up segments, each chunk is a sparately formatted piece of text
             var segments = new List<TextSegment>();
@@ -42,7 +44,7 @@ namespace AudioBand.TextFormatting
                     // If we see the start of the format, get a chunk until the end token
                     case PlaceholderStartToken:
                         // Add what we have so far
-                        AddSegment(segments, currentText, false, defaultColor);
+                        AddSegment(segments, currentText, false, defaultColor, audioSession);
 
                         // Skip the start token
                         i++;
@@ -58,12 +60,12 @@ namespace AudioBand.TextFormatting
                         if (i == format.Length)
                         {
                             currentText.Insert(0, PlaceholderStartToken);
-                            AddSegment(segments, currentText, false, defaultColor);
+                            AddSegment(segments, currentText, false, defaultColor, audioSession);
                         }
                         else
                         {
                             // Full placeholder
-                            AddSegment(segments, currentText, true, defaultColor);
+                            AddSegment(segments, currentText, true, defaultColor, audioSession);
                         }
 
                         break;
@@ -73,11 +75,11 @@ namespace AudioBand.TextFormatting
                 }
             }
 
-            AddSegment(segments, currentText, false, defaultColor);
+            AddSegment(segments, currentText, false, defaultColor, audioSession);
             return segments;
         }
 
-        private static void AddSegment(List<TextSegment> segments, StringBuilder text, bool isPlaceholder, Color defaultColor)
+        private static void AddSegment(List<TextSegment> segments, StringBuilder text, bool isPlaceholder, Color defaultColor, IAudioSession session)
         {
             if (text.Length == 0)
             {
@@ -86,7 +88,7 @@ namespace AudioBand.TextFormatting
 
             if (isPlaceholder)
             {
-                if (TryParsePlaceholder(text.ToString(), defaultColor, out TextPlaceholder placeholder, out FormattedTextFlags flags, out Color c))
+                if (TryParsePlaceholder(text.ToString(), defaultColor, session, out TextPlaceholder placeholder, out FormattedTextFlags flags, out Color c))
                 {
                     segments.Add(new PlaceholderTextSegment(placeholder, flags, c));
                 }
@@ -103,7 +105,7 @@ namespace AudioBand.TextFormatting
             text.Clear();
         }
 
-        private static bool TryParsePlaceholder(string placeholderString, Color defaultColor, out TextPlaceholder placeholder, out FormattedTextFlags flags, out Color color)
+        private static bool TryParsePlaceholder(string placeholderString, Color defaultColor, IAudioSession session, out TextPlaceholder placeholder, out FormattedTextFlags flags, out Color color)
         {
             var match = PlaceholderPattern.Match(placeholderString);
             flags = FormattedTextFlags.Normal;
@@ -136,7 +138,7 @@ namespace AudioBand.TextFormatting
                 }
             }
 
-            if (!TextPlaceholderFactory.TryGetPlaceholder(match.Groups["tag"].Value, null, out placeholder))
+            if (!TextPlaceholderFactory.TryGetPlaceholder(match.Groups["tag"].Value, null, session, out placeholder))
             {
                 color = Colors.Red;
                 return false;
@@ -147,7 +149,6 @@ namespace AudioBand.TextFormatting
                 try
                 {
                     color = (Color)ColorConverter.ConvertFrom(match.Groups["color"].Value);
-                    flags |= FormattedTextFlags.Colored;
                 }
                 catch (Exception)
                 {

@@ -14,48 +14,18 @@ namespace AudioBand.TextFormatting
         Normal = 0,
 
         /// <summary>
-        /// Displays the artist
-        /// </summary>
-        Artist = 1,
-
-        /// <summary>
-        /// Displays the song.
-        /// </summary>
-        Song = 2,
-
-        /// <summary>
-        /// Displays the album
-        /// </summary>
-        Album = 4,
-
-        /// <summary>
-        /// Displays the current time.
-        /// </summary>
-        CurrentTime = 8,
-
-        /// <summary>
-        /// Displays the song length.
-        /// </summary>
-        SongLength = 16,
-
-        /// <summary>
-        /// Text is colored.
-        /// </summary>
-        Colored = 32,
-
-        /// <summary>
         /// Text is bolded.
         /// </summary>
-        Bold = 64,
+        Bold = 1,
 
         /// <summary>
         /// Text is italicised.
         /// </summary>
-        Italic = 128,
+        Italic = 1 << 1,
 
         /// <summary>
         /// Text is underlined.
         /// </summary>
-        Underline = 256,
+        Underline = 1 << 2,
     }
 }
