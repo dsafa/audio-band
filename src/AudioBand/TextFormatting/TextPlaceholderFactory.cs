@@ -15,6 +15,7 @@ namespace AudioBand.TextFormatting
             { "album", (parameters, session) => new AlbumNamePlaceholder(parameters, session) },
             { "time", (parameters, session) => new SongProgressPlaceholder(parameters, session) },
             { "length", (parameters, session) => new SongLengthPlaceholder(parameters, session) },
+            { "remaining", (parameters, session) => new RemainingTimePlaceholder(parameters, session) },
         };
 
         private delegate TextPlaceholder PlaceholderFactoryFunc(IEnumerable<TextPlaceholderParameter> parameters, IAudioSession session);
