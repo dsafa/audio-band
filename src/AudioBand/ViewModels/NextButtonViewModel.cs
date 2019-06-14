@@ -1,9 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -23,12 +23,14 @@ namespace AudioBand.ViewModels
         /// <param name="appSettings">The appSettings.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="audioSession">The audio session.</param>
-        public NextButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession)
-            : base(appSettings.NextButton, dialogService)
+        /// <param name="messageBus">The message bus.</param>
+        public NextButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(appSettings.NextButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
             _audioSession = audioSession;
             _appSettings.ProfileChanged += AppsSettingsOnProfileChanged;
+
             NextTrackCommand = new AsyncRelayCommand<object>(NextTrackCommandOnExecute);
             Content = new ButtonContentViewModel(Model.Content, new NextButton().Content, dialogService);
             TrackContentViewModel(Content);
@@ -44,6 +46,13 @@ namespace AudioBand.ViewModels
         /// </summary>
         public IAsyncCommand NextTrackCommand { get; }
 
+        /// <inheritdoc />
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            MapSelf(Model, _appSettings.NextButton);
+        }
+
         private async Task NextTrackCommandOnExecute(object arg)
         {
             if (_audioSession.CurrentAudioSource == null)
@@ -57,7 +66,8 @@ namespace AudioBand.ViewModels
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appSettings.NextButton);
+            MapSelf(_appSettings.NextButton, Model);
+            RaisePropertyChangedAll();
         }
     }
 }

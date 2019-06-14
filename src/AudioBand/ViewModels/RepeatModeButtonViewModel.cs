@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -15,7 +16,7 @@ namespace AudioBand.ViewModels
     public class RepeatModeButtonViewModel : ButtonViewModelBase<RepeatModeButton>
     {
         private readonly IAppSettings _appSettings;
-        private IAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
         private RepeatMode _repeatMode;
 
         /// <summary>
@@ -23,10 +24,14 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public RepeatModeButtonViewModel(IAppSettings appSettings, IDialogService dialogService)
-            : base(appSettings.RepeatModeButton, dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public RepeatModeButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(appSettings.RepeatModeButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
+            _audioSession = audioSession;
+            _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
             _appSettings.ProfileChanged += AppSettingsOnProfileChanged;
 
             var resetState = new RepeatModeButton();
@@ -66,35 +71,27 @@ namespace AudioBand.ViewModels
         public RepeatMode RepeatMode
         {
             get => _repeatMode;
-            private set => SetProperty(ref _repeatMode, value, false);
+            private set => SetProperty(ref _repeatMode, value);
         }
 
-        /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
+        /// <inheritdoc />
+        protected override void OnEndEdit()
         {
-            set => UpdateAudioSource(value);
+            base.OnEndEdit();
+            MapSelf(Model, _appSettings.RepeatModeButton);
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_audioSource != null)
+            if (e.PropertyName != nameof(IAudioSession.RepeatMode))
             {
-                _audioSource.RepeatModeChanged -= AudioSourceOnRepeatModeChanged;
-            }
-
-            _audioSource = audioSource;
-            if (_audioSource == null)
-            {
-                RepeatMode = RepeatMode.Off;
                 return;
             }
 
-            _audioSource.RepeatModeChanged += AudioSourceOnRepeatModeChanged;
+            OnRepeatModeChanged(_audioSession.RepeatMode);
         }
 
-        private void AudioSourceOnRepeatModeChanged(object sender, RepeatMode e)
+        private void OnRepeatModeChanged(RepeatMode e)
         {
             RepeatMode = e;
         }
@@ -102,12 +99,13 @@ namespace AudioBand.ViewModels
         private void AppSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appSettings.RepeatModeButton);
+            MapSelf(_appSettings.RepeatModeButton, Model);
+            RaisePropertyChangedAll();
         }
 
         private async Task CycleRepeatModeCommandOnExecute(object obj)
         {
-            if (_audioSource == null)
+            if (_audioSession.CurrentAudioSource == null)
             {
                 return;
             }
@@ -126,7 +124,7 @@ namespace AudioBand.ViewModels
                     break;
             }
 
-            await _audioSource.SetRepeatModeAsync(nextRepeatMode);
+            await _audioSession.CurrentAudioSource.SetRepeatModeAsync(nextRepeatMode);
         }
     }
 }

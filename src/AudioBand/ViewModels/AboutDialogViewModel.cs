@@ -10,7 +10,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the `about audioband` view.
     /// </summary>
-    public class AboutDialogViewModel : ViewModelBase
+    public class AboutDialogViewModel : ObservableObject
     {
         /// <summary>
         /// Gets the current audioband version.

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using AudioBand.AudioSource;
+using AudioBand.Messages;
 using AudioBand.Models;
 
 namespace AudioBand.ViewModels
@@ -14,15 +15,18 @@ namespace AudioBand.ViewModels
     public class AudioSourceSettingsCollectionViewModel : ViewModelBase
     {
         private readonly IInternalAudioSource _audioSource;
+        private readonly IMessageBus _messageBus;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceSettingsCollectionViewModel"/> class.
         /// </summary>
         /// <param name="audioSource">The audiosource that these settings belong to.</param>
         /// <param name="settingsModel">The settings model.</param>
-        public AudioSourceSettingsCollectionViewModel(IInternalAudioSource audioSource, AudioSourceSettings settingsModel)
+        /// <param name="messageBus">The message bus.</param>
+        public AudioSourceSettingsCollectionViewModel(IInternalAudioSource audioSource, AudioSourceSettings settingsModel, IMessageBus messageBus)
         {
             _audioSource = audioSource;
+            _messageBus = messageBus;
             SettingsList = new ObservableCollection<AudioSourceSettingKeyValue>(CreateKeyValuePairs(audioSource, settingsModel));
             _audioSource.SettingChanged += AudioSourceOnSettingChanged;
 
@@ -30,6 +34,8 @@ namespace AudioBand.ViewModels
             {
                 audioSourceSettingKeyValue.PropertyChanged += AudioSourceSettingKeyValueOnPropertyChanged;
             }
+
+            UseMessageBus(messageBus);
         }
 
         /// <summary>

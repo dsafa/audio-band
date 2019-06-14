@@ -106,6 +106,8 @@
     <Compile Include="Behaviors\RedirectScrolling.cs" />
     <Compile Include="Behaviors\SliderClickAndDrag.cs" />
     <Compile Include="Behaviors\TrackOffsetFix.cs" />
+    <Compile Include="StateModel\IChangeTrackable.cs" />
+    <Compile Include="StateModel\TrackStateAttribute.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\IAsyncCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
@@ -119,6 +121,8 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Messages\DpiChangedMessage.cs" />
+    <Compile Include="Messages\EditEndMessage.cs" />
+    <Compile Include="Messages\EditStartMessage.cs" />
     <Compile Include="Messages\FocusChangedMessage.cs" />
     <Compile Include="Messages\IMessageBus.cs" />
     <Compile Include="Messages\MessageBus.cs" />
@@ -130,7 +134,6 @@
     <Compile Include="Models\ButtonContentType.cs" />
     <Compile Include="Models\ButtonModelBase.cs" />
     <Compile Include="Models\LayoutModelBase.cs" />
-    <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\NextButton.cs" />
     <Compile Include="Models\PlayPauseButton.cs" />
     <Compile Include="Models\PositionAnchor.cs" />
@@ -144,6 +147,7 @@
     <Compile Include="Models\TextFadeEffect.cs" />
     <Compile Include="Models\TextOverflow.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="ObservableObject.cs" />
     <Compile Include="Resources\Theming\DarkThemeResources.cs" />
     <Compile Include="Resources\Theming\FallbackThemeDictionary.cs" />
     <Compile Include="Resources\Theming\IThemeDictionary.cs" />
@@ -201,7 +205,7 @@
     <Compile Include="ValueConverters\PathToImageSourceConverter.cs" />
     <Compile Include="ValueConverters\PointConverter.cs" />
     <Compile Include="ViewModels\AlbumArtPopupViewModel.cs" />
-    <Compile Include="ViewModels\AlsoNotifyAttribute.cs" />
+    <Compile Include="AlsoNotifyAttribute.cs" />
     <Compile Include="ViewModels\AudioBandToolbarViewModel.cs" />
     <Compile Include="ViewModels\AudioSourceSettingKeyValue.cs" />
     <Compile Include="ViewModels\AudioSourceSettingsCollectionViewModel.cs" />
@@ -214,13 +218,12 @@
     <Compile Include="ViewModels\LayoutViewModelBase.cs" />
     <Compile Include="ViewModels\PlayPauseButtonViewModel.cs" />
     <Compile Include="ViewModels\PreviousButtonViewModel.cs" />
-    <Compile Include="ViewModels\PropertyChangeBindingAttribute.cs" />
     <Compile Include="ViewModels\RenameProfileDialogViewModel.cs" />
     <Compile Include="ViewModels\RepeatModeButtonViewModel.cs" />
     <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
     <Compile Include="ViewModels\ShuffleModeButtonViewModel.cs" />
+    <Compile Include="ViewModels\ValidatingViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="ViewModels\ViewModelBase{TModel}.cs" />
     <Compile Include="ViewModels\ViewModelContainer.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />

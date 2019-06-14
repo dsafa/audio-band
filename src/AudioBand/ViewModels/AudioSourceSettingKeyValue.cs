@@ -1,5 +1,6 @@
 ﻿using System;
 using AudioBand.AudioSource;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioSourceHost;
 
@@ -8,42 +9,46 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for <see cref="AudioSourceSetting"/>. Represents one key-value pair.
     /// </summary>
-    public class AudioSourceSettingKeyValue : ViewModelBase<AudioSourceSetting>
+    public class AudioSourceSettingKeyValue : ViewModelBase
     {
         private readonly AudioSourceSettingAttribute _settingAttribute;
         private readonly IInternalAudioSource _audioSource;
+        private readonly AudioSourceSetting _model = new AudioSourceSetting();
+        private readonly AudioSourceSetting _originalSource;
+        private readonly AudioSourceSetting _backup = new AudioSourceSetting();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceSettingKeyValue"/> class
         /// with the model, setting information and if it was saved.
         /// </summary>
         /// <param name="audioSource">The associated <see cref="IInternalAudioSource"/>.</param>
-        /// <param name="model">The setting model.</param>
+        /// <param name="source">The setting model.</param>
         /// <param name="settingAttribute">The <see cref="AudioSourceSettingAttribute"/>.</param>
-        public AudioSourceSettingKeyValue(IInternalAudioSource audioSource, AudioSourceSetting model, AudioSourceSettingAttribute settingAttribute)
-            : base(model)
+        public AudioSourceSettingKeyValue(IInternalAudioSource audioSource, AudioSourceSetting source, AudioSourceSettingAttribute settingAttribute)
         {
             _settingAttribute = settingAttribute;
             _audioSource = audioSource;
+            _originalSource = source;
+
+            MapSelf(_originalSource, _model);
 
             // Model value was deserialized from string maybe so change to correct type
-            model.Value = TypeConvertHelper.ConvertToType(model.Value, SettingType);
+            source.Value = TypeConvertHelper.ConvertToType(source.Value, SettingType);
         }
 
         /// <summary>
         /// Gets the setting name.
         /// </summary>
-        [PropertyChangeBinding(nameof(AudioSourceSetting.Name))]
-        public string Name => Model.Name;
+        public string Name => _model.Name;
 
         /// <summary>
         /// Gets or sets the value of the setting, can be any basic type.
         /// </summary>
-        [PropertyChangeBinding(nameof(AudioSourceSetting.Value))]
+        [TrackState]
         public object Value
         {
-            get => Model.Value;
-            set => SetProperty(nameof(Model.Value), value);
+            get => _model.Value;
+            set => SetProperty(_model, nameof(_model.Value), value);
         }
 
         /// <summary>
@@ -91,6 +96,25 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <inheritdoc />
+        protected override void OnBeginEdit()
+        {
+            base.OnBeginEdit();
+            MapSelf(_model, _backup);
+        }
+
+        /// <inheritdoc />
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+            if (ReadOnly)
+            {
+                return;
+            }
+
+            MapSelf(_backup, _model);
+        }
+
         /// <inheritdoc/>
         protected override void OnEndEdit()
         {
@@ -100,6 +124,7 @@ namespace AudioBand.ViewModels
                 return;
             }
 
+            MapSelf(_model, _originalSource);
             PropagateSettingToAudioSource();
         }
     }

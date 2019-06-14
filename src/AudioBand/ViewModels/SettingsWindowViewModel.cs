@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using AudioBand.Commands;
@@ -18,7 +16,6 @@ namespace AudioBand.ViewModels
         private readonly IAppSettings _appSettings;
         private readonly IDialogService _dialogService;
         private readonly IMessageBus _messageBus;
-        private readonly List<ViewModelBase> _dirtyViewModels = new List<ViewModelBase>();
         private ViewModelBase _selectedViewModel;
         private string _selectedProfileName;
         private bool _hasUnsavedChanges;
@@ -36,6 +33,7 @@ namespace AudioBand.ViewModels
             _appSettings = appSettings;
             _dialogService = dialogService;
             _messageBus = messageBus;
+            messageBus.Subscribe<EditStartMessage>(EditStartMessageOnPublished);
             ViewModels = viewModels;
             _selectedProfileName = appSettings.CurrentProfile;
             Profiles = new ObservableCollection<string>(appSettings.Profiles);
@@ -50,8 +48,6 @@ namespace AudioBand.ViewModels
             CloseCommand = new RelayCommand(CloseCommandOnExecute);
             ImportProfilesCommand = new RelayCommand(ImportProfilesCommandOnExecute);
             ExportProfilesCommand = new RelayCommand(ExportProfilesCommandOnExecute);
-
-            ViewModels.CustomLabelsViewModel.PropertyChanged += ViewModelOnEditChanged;
         }
 
         /// <summary>
@@ -65,26 +61,7 @@ namespace AudioBand.ViewModels
         public ViewModelBase SelectedViewModel
         {
             get => _selectedViewModel;
-            set
-            {
-                var old = _selectedViewModel;
-                if (SetProperty(ref _selectedViewModel, value, trackChanges: false))
-                {
-                    if (old != null)
-                    {
-                        old.PropertyChanged -= ViewModelOnEditChanged;
-                    }
-
-                    if (value != null)
-                    {
-                        value.PropertyChanged += ViewModelOnEditChanged;
-                        if (value.IsEditing)
-                        {
-                            HandleViewModelEditing(value);
-                        }
-                    }
-                }
-            }
+            set => SetProperty(ref _selectedViewModel, value);
         }
 
         /// <summary>
@@ -95,7 +72,7 @@ namespace AudioBand.ViewModels
             get => _selectedProfileName;
             set
             {
-                if (SetProperty(ref _selectedProfileName, value, trackChanges: false))
+                if (SetProperty(ref _selectedProfileName, value))
                 {
                     EndEdits();
                     _appSettings.CurrentProfile = value;
@@ -109,7 +86,7 @@ namespace AudioBand.ViewModels
         public string SelectedViewHeader
         {
             get => _selectedViewHeader;
-            set => SetProperty(ref _selectedViewHeader, value, trackChanges: false);
+            set => SetProperty(ref _selectedViewHeader, value);
         }
 
         /// <summary>
@@ -118,7 +95,7 @@ namespace AudioBand.ViewModels
         public bool HasUnsavedChanges
         {
             get => _hasUnsavedChanges;
-            set => SetProperty(ref _hasUnsavedChanges, value, trackChanges: false);
+            set => SetProperty(ref _hasUnsavedChanges, value);
         }
 
         /// <summary>
@@ -240,8 +217,8 @@ namespace AudioBand.ViewModels
 
         private void SaveCommandOnExecute(object obj)
         {
-            _appSettings.Save();
             EndEdits();
+            _appSettings.Save();
         }
 
         private bool SaveCommandCanExecute(object obj)
@@ -251,44 +228,19 @@ namespace AudioBand.ViewModels
 
         private void EndEdits()
         {
-            foreach (var dirtyViewModel in _dirtyViewModels)
-            {
-                dirtyViewModel.EndEdit();
-            }
-
-            _dirtyViewModels.Clear();
+            _messageBus.Publish(EditEndMessage.Accepted);
             HasUnsavedChanges = false;
         }
 
         private void CancelEdits()
         {
-            foreach (var dirtyViewModel in _dirtyViewModels)
-            {
-                dirtyViewModel.CancelEdit();
-            }
-
-            _dirtyViewModels.Clear();
+            _messageBus.Publish(EditEndMessage.Cancelled);
             HasUnsavedChanges = false;
         }
 
-        private void ViewModelOnEditChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName != nameof(IsEditing))
-            {
-                return;
-            }
-
-            var vm = (ViewModelBase)sender;
-            if (vm.IsEditing)
-            {
-                HandleViewModelEditing(vm);
-            }
-        }
-
-        private void HandleViewModelEditing(ViewModelBase vm)
+        private void EditStartMessageOnPublished(EditStartMessage obj)
         {
             HasUnsavedChanges = true;
-            _dirtyViewModels.Add(vm);
         }
 
         private void ExportProfilesCommandOnExecute(object obj)

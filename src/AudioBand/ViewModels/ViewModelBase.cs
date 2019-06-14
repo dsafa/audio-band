@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using AudioBand.ChangeTracking;
 using AudioBand.Commands;
 using AudioBand.Logging;
+using AudioBand.Messages;
 using AutoMapper;
 using NLog;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// Base class for view models. Extends <see cref="ObservableObject"/> with automatic support for
-    /// <see cref="IChangeTrackable"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and associated commands.
+    /// Base class for view models. Extends <see cref="ValidatingViewModelBase"/> with support for
+    /// <see cref="IEditableObject"/>, <see cref="IResettableObject"/>, and associated commands.
     /// </summary>
-    public abstract class ViewModelBase : ObservableObject, IChangeTrackable, IResettableObject, INotifyDataErrorInfo
+    public abstract class ViewModelBase : ValidatingViewModelBase, IEditableObject, IResettableObject
     {
-        private readonly Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
+        private readonly Dictionary<Type, MapperConfiguration> _mapperCache = new Dictionary<Type, MapperConfiguration>();
+        private readonly HashSet<string> _trackedProperties = new HashSet<string>();
         private bool _isEditing;
 
         /// <summary>
@@ -33,16 +31,14 @@ namespace AudioBand.ViewModels
             EndEditCommand = new RelayCommand(o => EndEdit());
             CancelEditCommand = new RelayCommand(o => CancelEdit());
             ResetCommand = new RelayCommand(o => Reset());
+
+            GetTrackingProperties();
         }
 
-        /// <inheritdoc cref="INotifyDataErrorInfo.ErrorsChanged"/>
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        /// <inheritdoc />
+        /// <summary>
+        /// Occurs when <see cref="IsEditing"/> changes.
+        /// </summary>
         public event EventHandler IsEditingChanged;
-
-        /// <inheritdoc cref="INotifyDataErrorInfo.HasErrors"/>
-        public bool HasErrors => _propertyErrors.Any(entry => entry.Value?.Any() ?? false);
 
         /// <summary>
         /// Gets the command to start editing.
@@ -64,7 +60,10 @@ namespace AudioBand.ViewModels
         /// </summary>
         public ICommand ResetCommand { get; }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets a value indicating whether the object is being edited.
+        /// </summary>
+        /// <value>True when <see cref="BeginEdit"/> is called and <see cref="EndEdit"/> or <see cref="CancelEdit"/> has not been called.</value>
         public bool IsEditing
         {
             get => _isEditing;
@@ -82,16 +81,10 @@ namespace AudioBand.ViewModels
         /// </summary>
         protected ILogger Logger { get; }
 
-        /// <inheritdoc cref="INotifyDataErrorInfo.GetErrors"/>
-        public IEnumerable GetErrors(string propertyName)
-        {
-            if (_propertyErrors.TryGetValue(propertyName, out var errors) && errors.Any())
-            {
-                return _propertyErrors[propertyName];
-            }
-
-            return null;
-        }
+        /// <summary>
+        /// Gets the message bus.
+        /// </summary>
+        protected IMessageBus MessageBus { get; private set; }
 
         /// <summary>
         /// Begins editing on this object.
@@ -121,6 +114,7 @@ namespace AudioBand.ViewModels
             Logger.Debug("Ending edit");
             OnEndEdit();
             IsEditing = false;
+            RaisePropertyChangedAll();
         }
 
         /// <summary>
@@ -136,12 +130,15 @@ namespace AudioBand.ViewModels
             Logger.Debug("Cancelling edit");
             OnCancelEdit();
             IsEditing = false;
+            RaisePropertyChangedAll();
         }
 
         /// <inheritdoc cref="IResettableObject.Reset"/>
         public void Reset()
         {
+            BeginEdit();
             OnReset();
+            RaisePropertyChangedAll();
         }
 
         /// <summary>
@@ -170,6 +167,7 @@ namespace AudioBand.ViewModels
         /// </summary>
         protected virtual void OnBeginEdit()
         {
+            MessageBus?.Publish(default(EditStartMessage));
         }
 
         /// <summary>
@@ -180,7 +178,7 @@ namespace AudioBand.ViewModels
         protected void ResetObject<T>(T obj)
             where T : new()
         {
-            MapType(new T(), obj);
+            MapSelf(new T(), obj);
         }
 
         /// <summary>
@@ -189,123 +187,57 @@ namespace AudioBand.ViewModels
         /// <typeparam name="T">The type of the object to map.</typeparam>
         /// <param name="objectFrom">The object to map.</param>
         /// <param name="objectTo">The other instance of the object to map to.</param>
-        protected void MapType<T>(T objectFrom, T objectTo)
+        protected void MapSelf<T>(T objectFrom, T objectTo)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
-            mapper.Map<T, T>(objectFrom, objectTo);
+            if (!_mapperCache.ContainsKey(typeof(T)))
+            {
+                _mapperCache.Add(typeof(T), new MapperConfiguration(cfg => cfg.CreateMap<T, T>()));
+            }
+
+            _mapperCache[typeof(T)].CreateMapper().Map<T, T>(objectFrom, objectTo);
         }
 
-        /// <summary>
-        /// Raises a <see cref="ErrorsChanged"/> event.
-        /// </summary>
-        /// <param name="errors">Errors that occured during validation.</param>
-        /// <param name="propertyName">Property that failed validation.</param>
-        protected void RaiseValidationError(IEnumerable<string> errors, [CallerMemberName] string propertyName = null)
+        /// <inheritdoc />
+        protected override void OnPropertyChanging(string propertyName)
         {
-            _propertyErrors.Clear();
-            _propertyErrors[propertyName] = errors;
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Raises a <see cref="ErrorsChanged"/> event.
-        /// </summary>
-        /// <param name="error">Error that occured during validation.</param>
-        /// <param name="propertyName">Property that failed validation.</param>
-        protected void RaiseValidationError(string error, [CallerMemberName] string propertyName = null)
-        {
-            RaiseValidationError(new[] { error }, propertyName);
-        }
-
-        /// <summary>
-        /// Raises a <see cref="ErrorsChanged"/> event.
-        /// </summary>
-        /// <param name="e">Exception that occured during validation.</param>
-        /// <param name="propertyName">Property that failed validation.</param>
-        protected void RaiseValidationError(Exception e, [CallerMemberName] string propertyName = null)
-        {
-            RaiseValidationError(e.ToString(), propertyName);
-        }
-
-        /// <summary>
-        /// Clears all validation errors.
-        /// </summary>
-        protected void ClearErrors()
-        {
-            _propertyErrors.Clear();
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(string.Empty));
-        }
-
-        /// <summary>
-        /// Clears validation errors for a property.
-        /// </summary>
-        /// <param name="propertyName">The name of the property to clear.</param>
-        protected void ClearError([CallerMemberName] string propertyName = null)
-        {
-            _propertyErrors.Remove(propertyName);
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Sets the <paramref name="field"/> to the <paramref name="newValue"/> if they are different and raise <see cref="PropertyChanged"/>
-        /// for the property and other properties marked with the <see cref="AlsoNotifyAttribute"/>. And invokes <see cref="BeginEdit"/>.
-        /// </summary>
-        /// <typeparam name="T">Type of the property.</typeparam>
-        /// <param name="field">Old value.</param>
-        /// <param name="newValue">New value.</param>
-        /// <param name="propertyName">Name of the property that changed.</param>
-        /// <returns>True if the property changed.</returns>
-        protected bool SetPropertyAndTrack<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            var didChange = SetProperty(ref field, newValue, propertyName);
-            if (didChange)
+            base.OnPropertyChanging(propertyName);
+            if (_trackedProperties.Contains(propertyName))
             {
                 BeginEdit();
             }
-
-            return didChange;
         }
 
         /// <summary>
-        /// Sets the <paramref name="modelPropertyName"/> property of the <paramref name="model"/> to the <paramref name="newValue"/>
-        /// if they are different and raise <see cref="PropertyChanged"/> for the property and other properties marked with the <see cref="AlsoNotifyAttribute"/>.
-        /// And invokes <see cref="BeginEdit"/>.
+        /// Use the message bus for listening and publishing edit events.
         /// </summary>
-        /// <typeparam name="TModel">The type of the model.</typeparam>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="model">The model instance.</param>
-        /// <param name="modelPropertyName">The property name of the model.</param>
-        /// <param name="newValue">The new value to set.</param>
-        /// <param name="propertyName">The property name.</param>
-        /// <returns>True if the property changed.</returns>
-        protected bool SetPropertyAndTrack<TModel, TValue>(TModel model, string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
+        /// <param name="messageBus">The message bus to use.</param>
+        protected void UseMessageBus(IMessageBus messageBus)
         {
-            var didChange = SetProperty(model, modelPropertyName, newValue, propertyName);
-            if (didChange)
+            MessageBus = messageBus;
+            messageBus.Subscribe<EditEndMessage>(OnEditEndMessagePublished);
+        }
+
+        private void GetTrackingProperties()
+        {
+            foreach (var member in Accessor.GetMembers())
             {
-                BeginEdit();
+                if (member.IsDefined(typeof(TrackStateAttribute)))
+                {
+                    _trackedProperties.Add(member.Name);
+                }
             }
-
-            return didChange;
         }
 
-        /// <summary>
-        /// Registers a model for automatic <see cref="BeginEdit"/>, <see cref="Reset"/>, <see cref="EndEdit"/> and <see cref="CancelEdit"/>.
-        /// </summary>
-        /// <param name="model">The model to register.</param>
-        protected void RegisterModelForChangeTracking(object model)
+        private void OnEditEndMessagePublished(EditEndMessage message)
         {
-            _trackedModels.Add(model);
-            _backupModels.Add(_trackedModels, model);
-        }
-
-        /// <summary>
-        /// Removes a model for automatic <see cref="BeginEdit"/>, <see cref="Reset"/>, <see cref="EndEdit"/> and <see cref="CancelEdit"/>.
-        /// </summary>
-        /// <param name="model">The model to unregister.</param>
-        protected void UnregisterModelFromChangeTracking(object model)
-        {
-            _trackedModels.Remove(model);
+            if (message == EditEndMessage.Cancelled)
+            {
+                CancelEdit();
+            }
+            else if (message == EditEndMessage.Accepted)
+            {
+                EndEdit();
+            }
         }
     }
 }
