@@ -145,30 +145,6 @@ namespace AudioBand.ViewModels
         }
 
         /// <summary>
-        /// Resets an object to its default state.
-        /// </summary>
-        /// <typeparam name="T">Object type.</typeparam>
-        /// <param name="obj">Object to reset.</param>
-        protected void ResetObject<T>(T obj)
-            where T : new()
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
-            mapper.Map<T, T>(new T(), obj);
-        }
-
-        /// <summary>
-        /// Resets an object to its default state using the given state.
-        /// </summary>
-        /// <typeparam name="T">Object type.</typeparam>
-        /// <param name="initialState">The objects initial state.</param>
-        /// <param name="obj">Object to reset.</param>
-        protected void ResetObject<T>(T initialState, T obj)
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
-            mapper.Map<T, T>(initialState, obj);
-        }
-
-        /// <summary>
         /// Called when <see cref="Reset"/> is called.
         /// </summary>
         protected virtual void OnReset()
@@ -194,6 +170,29 @@ namespace AudioBand.ViewModels
         /// </summary>
         protected virtual void OnBeginEdit()
         {
+        }
+
+        /// <summary>
+        /// Resets an object to its default state.
+        /// </summary>
+        /// <typeparam name="T">Object type.</typeparam>
+        /// <param name="obj">Object to reset.</param>
+        protected void ResetObject<T>(T obj)
+            where T : new()
+        {
+            MapType(new T(), obj);
+        }
+
+        /// <summary>
+        /// Maps an object from to another instance of the same type.
+        /// </summary>
+        /// <typeparam name="T">The type of the object to map.</typeparam>
+        /// <param name="objectFrom">The object to map.</param>
+        /// <param name="objectTo">The other instance of the object to map to.</param>
+        protected void MapType<T>(T objectFrom, T objectTo)
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
+            mapper.Map<T, T>(objectFrom, objectTo);
         }
 
         /// <summary>
@@ -245,6 +244,68 @@ namespace AudioBand.ViewModels
         {
             _propertyErrors.Remove(propertyName);
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Sets the <paramref name="field"/> to the <paramref name="newValue"/> if they are different and raise <see cref="PropertyChanged"/>
+        /// for the property and other properties marked with the <see cref="AlsoNotifyAttribute"/>. And invokes <see cref="BeginEdit"/>.
+        /// </summary>
+        /// <typeparam name="T">Type of the property.</typeparam>
+        /// <param name="field">Old value.</param>
+        /// <param name="newValue">New value.</param>
+        /// <param name="propertyName">Name of the property that changed.</param>
+        /// <returns>True if the property changed.</returns>
+        protected bool SetPropertyAndTrack<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            var didChange = SetProperty(ref field, newValue, propertyName);
+            if (didChange)
+            {
+                BeginEdit();
+            }
+
+            return didChange;
+        }
+
+        /// <summary>
+        /// Sets the <paramref name="modelPropertyName"/> property of the <paramref name="model"/> to the <paramref name="newValue"/>
+        /// if they are different and raise <see cref="PropertyChanged"/> for the property and other properties marked with the <see cref="AlsoNotifyAttribute"/>.
+        /// And invokes <see cref="BeginEdit"/>.
+        /// </summary>
+        /// <typeparam name="TModel">The type of the model.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="model">The model instance.</param>
+        /// <param name="modelPropertyName">The property name of the model.</param>
+        /// <param name="newValue">The new value to set.</param>
+        /// <param name="propertyName">The property name.</param>
+        /// <returns>True if the property changed.</returns>
+        protected bool SetPropertyAndTrack<TModel, TValue>(TModel model, string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
+        {
+            var didChange = SetProperty(model, modelPropertyName, newValue, propertyName);
+            if (didChange)
+            {
+                BeginEdit();
+            }
+
+            return didChange;
+        }
+
+        /// <summary>
+        /// Registers a model for automatic <see cref="BeginEdit"/>, <see cref="Reset"/>, <see cref="EndEdit"/> and <see cref="CancelEdit"/>.
+        /// </summary>
+        /// <param name="model">The model to register.</param>
+        protected void RegisterModelForChangeTracking(object model)
+        {
+            _trackedModels.Add(model);
+            _backupModels.Add(_trackedModels, model);
+        }
+
+        /// <summary>
+        /// Removes a model for automatic <see cref="BeginEdit"/>, <see cref="Reset"/>, <see cref="EndEdit"/> and <see cref="CancelEdit"/>.
+        /// </summary>
+        /// <param name="model">The model to unregister.</param>
+        protected void UnregisterModelFromChangeTracking(object model)
+        {
+            _trackedModels.Remove(model);
         }
     }
 }

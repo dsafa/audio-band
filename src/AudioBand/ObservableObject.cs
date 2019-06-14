@@ -11,6 +11,7 @@ namespace AudioBand
     /// </summary>
     public abstract class ObservableObject : INotifyPropertyChanged
     {
+        private readonly Dictionary<object, ObjectAccessor> _modelToAccessor = new Dictionary<object, ObjectAccessor>();
         private readonly Dictionary<string, string[]> _alsoNotifyMap = new Dictionary<string, string[]>();
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace AudioBand
         /// <param name="newValue">New value.</param>
         /// <param name="propertyName">Name of the property that changed.</param>
         /// <returns>True if the property changed.</returns>
-        protected virtual bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, newValue))
             {
@@ -67,17 +68,39 @@ namespace AudioBand
             field = newValue;
             RaisePropertyChanged(propertyName);
             OnPropertyChanged(propertyName);
+            RaiseAlsoNotify(propertyName);
+            return true;
+        }
 
-            if (_alsoNotifyMap.TryGetValue(propertyName, out var alsoNotify))
+        /// <summary>
+        /// Sets the <paramref name="modelPropertyName"/> property of the <paramref name="model"/> to the <paramref name="newValue"/>
+        /// if they are different and raise <see cref="PropertyChanged"/> for the property and other properties marked with the <see cref="AlsoNotifyAttribute"/>.
+        /// </summary>
+        /// <typeparam name="TModel">The type of the model.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="model">The model instance.</param>
+        /// <param name="modelPropertyName">The property name of the model.</param>
+        /// <param name="newValue">The new value to set.</param>
+        /// <param name="propertyName">The property name.</param>
+        /// <returns>True if the property changed.</returns>
+        protected bool SetProperty<TModel, TValue>(TModel model, string modelPropertyName, TValue newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!_modelToAccessor.ContainsKey(model))
             {
-                foreach (var alsoNotifyPropertyName in alsoNotify)
-                {
-                    OnPropertyChanging(alsoNotifyPropertyName);
-                    RaisePropertyChanged(alsoNotifyPropertyName);
-                    OnPropertyChanged(alsoNotifyPropertyName);
-                }
+                _modelToAccessor.Add(model, ObjectAccessor.Create(model));
             }
 
+            var currentModelValue = (TValue)_modelToAccessor[model][modelPropertyName];
+            if (EqualityComparer<TValue>.Default.Equals(currentModelValue, newValue))
+            {
+                return false;
+            }
+
+            OnPropertyChanging(propertyName);
+            _modelToAccessor[model][modelPropertyName] = newValue;
+            RaisePropertyChanged(propertyName);
+            OnPropertyChanged(propertyName);
+            RaiseAlsoNotify(propertyName);
             return true;
         }
 
@@ -104,6 +127,21 @@ namespace AudioBand
             {
                 var attr = (AlsoNotifyAttribute)propertyInfo.GetAttribute(typeof(AlsoNotifyAttribute), true);
                 _alsoNotifyMap.Add(propertyInfo.Name, attr.AlsoNotify);
+            }
+        }
+
+        private void RaiseAlsoNotify(string propertyName)
+        {
+            if (!_alsoNotifyMap.TryGetValue(propertyName, out var alsoNotify))
+            {
+                return;
+            }
+
+            foreach (var alsoNotifyPropertyName in alsoNotify)
+            {
+                OnPropertyChanging(alsoNotifyPropertyName);
+                RaisePropertyChanged(alsoNotifyPropertyName);
+                OnPropertyChanged(alsoNotifyPropertyName);
             }
         }
     }
