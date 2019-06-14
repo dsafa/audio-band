@@ -1,4 +1,6 @@
-﻿namespace AudioBand.ViewModels
+﻿using System.Linq;
+
+namespace AudioBand.ViewModels
 {
     /// <summary>
     /// Container for all the view models.

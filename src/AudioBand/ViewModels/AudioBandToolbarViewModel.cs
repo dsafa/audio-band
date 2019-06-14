@@ -4,16 +4,19 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Logging;
 using AudioBand.Messages;
 using AudioBand.Settings;
+using NLog;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for audio band toolbar.
     /// </summary>
-    public class AudioBandToolbarViewModel : ViewModelBase
+    public class AudioBandToolbarViewModel : ObservableObject
     {
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioBandToolbarViewModel>();
         private readonly IAppSettings _appSettings;
         private readonly IAudioSourceManager _audioSourceManager;
         private readonly IMessageBus _messageBus;
@@ -74,7 +77,7 @@ namespace AudioBand.ViewModels
             get => _selectedAudioSource;
             set
             {
-                if (SetProperty(ref _selectedAudioSource, value, false))
+                if (SetProperty(ref _selectedAudioSource, value))
                 {
                     _appSettings.AudioSource = value?.Name;
                 }

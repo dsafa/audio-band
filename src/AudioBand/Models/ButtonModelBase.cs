@@ -7,35 +7,19 @@ namespace AudioBand.Models
     /// </summary>
     public class ButtonModelBase : LayoutModelBase
     {
-        private Color _backgroundColor = Colors.Transparent;
-        private Color _hoveredBackgroundColor = Color.FromArgb(25, 255, 255, 255);
-        private Color _clickedBackgroundColor = Color.FromArgb(15, 255, 255, 255);
-
         /// <summary>
         /// Gets or sets the background color.
         /// </summary>
-        public Color BackgroundColor
-        {
-            get => _backgroundColor;
-            set => SetProperty(ref _backgroundColor, value);
-        }
+        public Color BackgroundColor { get; set; } = Colors.Transparent;
 
         /// <summary>
         /// Gets or sets the background color when hovered.
         /// </summary>
-        public Color HoveredBackgroundColor
-        {
-            get => _hoveredBackgroundColor;
-            set => SetProperty(ref _hoveredBackgroundColor, value);
-        }
+        public Color HoveredBackgroundColor { get; set; } = Color.FromArgb(25, 255, 255, 255);
 
         /// <summary>
         /// Gets or sets the background color when clicked.
         /// </summary>
-        public Color ClickedBackgroundColor
-        {
-            get => _clickedBackgroundColor;
-            set => SetProperty(ref _clickedBackgroundColor, value);
-        }
+        public Color ClickedBackgroundColor { get; set; } = Color.FromArgb(15, 255, 255, 255);
     }
 }

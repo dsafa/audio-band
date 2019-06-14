@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Drawing;
-using AudioBand.Models;
 
 namespace AudioBand.AudioSource
 {
     /// <summary>
     /// Persistent audio source session that updates when the audio source changes.
     /// </summary>
-    public class AudioSession : ModelBase, IAudioSession
+    public class AudioSession : ObservableObject, IAudioSession
     {
         private IInternalAudioSource _currentAudioSource;
         private bool _isPlaying;

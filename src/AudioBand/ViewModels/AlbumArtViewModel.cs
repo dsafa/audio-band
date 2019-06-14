@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AudioBand.AudioSource;
 using AudioBand.Extensions;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -26,8 +27,9 @@ namespace AudioBand.ViewModels
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="audioSession">The audio session.</param>
-        public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession)
-            : base(appsettings.AlbumArt)
+        /// <param name="messageBus">The message bus.</param>
+        public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(messageBus, appsettings.AlbumArt)
         {
             DialogService = dialogService;
             _appsettings = appsettings;
@@ -40,11 +42,11 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets or sets the placeholder path.
         /// </summary>
-        [PropertyChangeBinding(nameof(Models.AlbumArt.PlaceholderPath))]
+        [TrackState]
         public string PlaceholderPath
         {
             get => Model.PlaceholderPath;
-            set => SetProperty(nameof(Model.PlaceholderPath), value);
+            set => SetProperty(Model, nameof(Model.PlaceholderPath), value);
         }
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace AudioBand.ViewModels
         public ImageSource AlbumArt
         {
             get => _albumArt;
-            private set => SetProperty(ref _albumArt, value, false);
+            private set => SetProperty(ref _albumArt, value);
         }
 
         /// <summary>
@@ -61,10 +63,18 @@ namespace AudioBand.ViewModels
         /// </summary>
         public IDialogService DialogService { get; }
 
+        /// <inheritdoc />
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            MapSelf(Model, _appsettings.AlbumArt);
+        }
+
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appsettings.AlbumArt);
+            MapSelf(_appsettings.AlbumArt, Model);
+            RaisePropertyChangedAll();
         }
 
         private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)

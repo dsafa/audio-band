@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -22,8 +23,9 @@ namespace AudioBand.ViewModels
         /// <param name="appSettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="audioSession">The audio session.</param>
-        public PreviousButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession)
-            : base(appSettings.PreviousButton, dialogService)
+        /// <param name="messageBus">The message bus.</param>
+        public PreviousButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(appSettings.PreviousButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
             _audioSession = audioSession;
@@ -43,6 +45,13 @@ namespace AudioBand.ViewModels
         /// </summary>
         public IAsyncCommand PreviousTrackCommand { get; }
 
+        /// <inheritdoc />
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            MapSelf(Model, _appSettings.PreviousButton);
+        }
+
         private async Task PreviousTrackCommandOnExecute(object arg)
         {
             if (_audioSession.CurrentAudioSource == null)
@@ -56,7 +65,8 @@ namespace AudioBand.ViewModels
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appSettings.PreviousButton);
+            MapSelf(_appSettings.PreviousButton, Model);
+            RaisePropertyChangedAll();
         }
     }
 }

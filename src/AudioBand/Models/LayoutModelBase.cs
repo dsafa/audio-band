@@ -3,67 +3,37 @@
     /// <summary>
     /// Base model that contains support for layout.
     /// </summary>
-    public class LayoutModelBase : ModelBase
+    /// <remarks>This should probably be a has-a relationship instead of inheriting from this class.</remarks>
+    public class LayoutModelBase
     {
-        private bool _isVisible = true;
-        private double _width;
-        private double _height;
-        private double _xPosition;
-        private double _yPosition;
-        private PositionAnchor _positionAnchor = PositionAnchor.TopLeft;
-
         /// <summary>
         /// Gets or sets a value indicating whether it is visible.
         /// </summary>
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => SetProperty(ref _isVisible, value);
-        }
+        public bool IsVisible { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the width.
         /// </summary>
-        public double Width
-        {
-            get => _width;
-            set => SetProperty(ref _width, value);
-        }
+        public double Width { get; set; }
 
         /// <summary>
         /// Gets or sets the height.
         /// </summary>
-        public double Height
-        {
-            get => _height;
-            set => SetProperty(ref _height, value);
-        }
+        public double Height { get; set; }
 
         /// <summary>
         /// Gets or sets the x position.
         /// </summary>
-        public double XPosition
-        {
-            get => _xPosition;
-            set => SetProperty(ref _xPosition, value);
-        }
+        public double XPosition { get; set; }
 
         /// <summary>
         /// Gets or sets the y position.
         /// </summary>
-        public double YPosition
-        {
-            get => _yPosition;
-            set => SetProperty(ref _yPosition, value);
-        }
+        public double YPosition { get; set; }
 
         /// <summary>
         /// Gets or sets the positioning.
         /// </summary>
-        public PositionAnchor Anchor
-        {
-            get => _positionAnchor;
-            set => SetProperty(ref _positionAnchor, value);
-        }
+        public PositionAnchor Anchor { get; set; } = PositionAnchor.TopLeft;
     }
 }

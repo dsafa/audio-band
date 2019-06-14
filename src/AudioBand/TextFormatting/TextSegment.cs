@@ -1,12 +1,11 @@
 ﻿using System.Windows.Media;
-using AudioBand.Models;
 
 namespace AudioBand.TextFormatting
 {
     /// <summary>
     /// A segment of text to be rendered in a text label.
     /// </summary>
-    public abstract class TextSegment : ModelBase
+    public abstract class TextSegment : ObservableObject
     {
         private string _text;
         private Color _color;

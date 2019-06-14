@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -13,7 +15,7 @@ namespace AudioBand.ViewModels
     public class ShuffleModeButtonViewModel : ButtonViewModelBase<ShuffleModeButton>
     {
         private readonly IAppSettings _appSettings;
-        private IAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
         private bool _isShuffleOn;
 
         /// <summary>
@@ -21,10 +23,14 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public ShuffleModeButtonViewModel(IAppSettings appSettings, IDialogService dialogService)
-            : base(appSettings.ShuffleModeButton, dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public ShuffleModeButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(appSettings.ShuffleModeButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
+            _audioSession = audioSession;
+            _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
             _appSettings.ProfileChanged += AppSettingsOnProfileChanged;
 
             ToggleShuffleCommand = new AsyncRelayCommand<object>(ToggleShuffleCommandOnExecute);
@@ -56,53 +62,45 @@ namespace AudioBand.ViewModels
         public bool IsShuffleOn
         {
             get => _isShuffleOn;
-            private set => SetProperty(ref _isShuffleOn, value, false);
+            private set => SetProperty(ref _isShuffleOn, value);
         }
 
-        /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
+        /// <inheritdoc />
+        protected override void OnEndEdit()
         {
-            private get => _audioSource;
-            set => UpdateAudioSource(value);
+            base.OnEndEdit();
+            MapSelf(Model, _appSettings.ShuffleModeButton);
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_audioSource != null)
+            if (e.PropertyName != nameof(IAudioSession.IsShuffleOn))
             {
-                _audioSource.ShuffleChanged -= AudioSourceOnShuffleChanged;
-            }
-
-            _audioSource = audioSource;
-            if (_audioSource == null)
-            {
-                IsShuffleOn = false;
                 return;
             }
 
-            _audioSource.ShuffleChanged += AudioSourceOnShuffleChanged;
+            OnSufflechanged(_audioSession.IsShuffleOn);
         }
 
-        private void AudioSourceOnShuffleChanged(object sender, bool e)
+        private void OnSufflechanged(bool e)
         {
             IsShuffleOn = e;
         }
 
         private void AppSettingsOnProfileChanged(object sender, EventArgs e)
         {
-            ReplaceModel(_appSettings.ShuffleModeButton);
+            MapSelf(_appSettings.ShuffleModeButton, Model);
+            RaisePropertyChangedAll();
         }
 
         private async Task ToggleShuffleCommandOnExecute(object arg)
         {
-            if (AudioSource == null)
+            if (_audioSession.CurrentAudioSource == null)
             {
                 return;
             }
 
-            await AudioSource.SetShuffleAsync(!IsShuffleOn);
+            await _audioSession.CurrentAudioSource.SetShuffleAsync(!IsShuffleOn);
         }
     }
 }

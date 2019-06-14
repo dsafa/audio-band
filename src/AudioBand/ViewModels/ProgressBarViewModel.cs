@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Media;
 using AudioBand.AudioSource;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -24,8 +25,9 @@ namespace AudioBand.ViewModels
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="audioSession">The audio session.</param>
-        public ProgressBarViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession)
-            : base(appsettings.ProgressBar)
+        /// <param name="messageBus">The message bus.</param>
+        public ProgressBarViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(messageBus, appsettings.ProgressBar)
         {
             _appsettings = appsettings;
             _audioSession = audioSession;
@@ -38,31 +40,31 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets or sets the foreground color.
         /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.ForegroundColor))]
+        [TrackState]
         public Color ForegroundColor
         {
             get => Model.ForegroundColor;
-            set => SetProperty(nameof(Model.ForegroundColor), value);
+            set => SetProperty(Model, nameof(Model.ForegroundColor), value);
         }
 
         /// <summary>
         /// Gets or sets the background color.
         /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.BackgroundColor))]
+        [TrackState]
         public Color BackgroundColor
         {
             get => Model.BackgroundColor;
-            set => SetProperty(nameof(Model.BackgroundColor), value);
+            set => SetProperty(Model, nameof(Model.BackgroundColor), value);
         }
 
         /// <summary>
         /// Gets or sets the hover color.
         /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.HoverColor))]
+        [TrackState]
         public Color HoverColor
         {
             get => Model.HoverColor;
-            set => SetProperty(nameof(Model.HoverColor), value);
+            set => SetProperty(Model, nameof(Model.HoverColor), value);
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace AudioBand.ViewModels
             get => _trackProgress;
             set
             {
-                if (SetProperty(ref _trackProgress, value, trackChanges: false))
+                if (SetProperty(ref _trackProgress, value))
                 {
                     _audioSession.CurrentAudioSource?.SetPlaybackProgressAsync(value);
                 }
@@ -86,7 +88,7 @@ namespace AudioBand.ViewModels
         public TimeSpan TrackLength
         {
             get => _trackLength;
-            private set => SetProperty(ref _trackLength, value, false);
+            private set => SetProperty(ref _trackLength, value);
         }
 
         /// <summary>
@@ -94,10 +96,18 @@ namespace AudioBand.ViewModels
         /// </summary>
         public IDialogService DialogService { get; set; }
 
+        /// <inheritdoc />
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            MapSelf(Model, _appsettings.ProgressBar);
+        }
+
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appsettings.ProgressBar);
+            MapSelf(_appsettings.ProgressBar, Model);
+            RaisePropertyChangedAll();
         }
 
         private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)

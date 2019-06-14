@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -8,75 +9,110 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the album art popup.
     /// </summary>
-    public class AlbumArtPopupViewModel : ViewModelBase<AlbumArtPopup>
+    public class AlbumArtPopupViewModel : ViewModelBase
     {
         private readonly IAppSettings _appSettings;
+        private readonly AlbumArtPopup _model = new AlbumArtPopup();
+        private readonly AlbumArtPopup _backup = new AlbumArtPopup();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlbumArtPopupViewModel"/> class.
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
-        public AlbumArtPopupViewModel(IAppSettings appSettings)
-            : base(appSettings.AlbumArtPopup)
+        /// <param name="messageBus">The message bus.</param>
+        public AlbumArtPopupViewModel(IAppSettings appSettings, IMessageBus messageBus)
         {
+            MapSelf(appSettings.AlbumArtPopup, _model);
+            MapSelf(appSettings.AlbumArtPopup, _backup);
+
             _appSettings = appSettings;
             appSettings.ProfileChanged += AppSettingsOnProfileChanged;
+            UseMessageBus(messageBus);
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether it is visible.
         /// </summary>
-        [PropertyChangeBinding(nameof(AlbumArtPopup.IsVisible))]
+        [TrackState]
         public bool IsVisible
         {
-            get => Model.IsVisible;
-            set => SetProperty(nameof(Model.IsVisible), value);
+            get => _model.IsVisible;
+            set => SetProperty(_model, nameof(_model.IsVisible), value);
         }
 
         /// <summary>
         /// Gets or sets the width.
         /// </summary>
-        [PropertyChangeBinding(nameof(AlbumArtPopup.Width))]
+        [TrackState]
         public double Width
         {
-            get => Model.Width;
-            set => SetProperty(nameof(Model.Width), value);
+            get => _model.Width;
+            set => SetProperty(_model, nameof(_model.Width), value);
         }
 
         /// <summary>
         /// Gets or sets the height.
         /// </summary>
-        [PropertyChangeBinding(nameof(AlbumArtPopup.Height))]
+        [TrackState]
         public double Height
         {
-            get => Model.Height;
-            set => SetProperty(nameof(Model.Height), value);
+            get => _model.Height;
+            set => SetProperty(_model, nameof(_model.Height), value);
         }
 
         /// <summary>
         /// Gets or sets the x position.
         /// </summary>
-        [PropertyChangeBinding(nameof(AlbumArtPopup.XPosition))]
+        [TrackState]
         public double XPosition
         {
-            get => Model.XPosition;
-            set => SetProperty(nameof(Model.XPosition), value);
+            get => _model.XPosition;
+            set => SetProperty(_model, nameof(_model.XPosition), value);
         }
 
         /// <summary>
         /// Gets or sets the margin.
         /// </summary>
-        [PropertyChangeBinding(nameof(AlbumArtPopup.Margin))]
+        [TrackState]
         public double Margin
         {
-            get => Model.Margin;
-            set => SetProperty(nameof(Model.Margin), value);
+            get => _model.Margin;
+            set => SetProperty(_model, nameof(_model.Margin), value);
+        }
+
+        /// <inheritdoc />
+        protected override void OnReset()
+        {
+            base.OnReset();
+            ResetObject(_model);
+        }
+
+        /// <inheritdoc />
+        protected override void OnBeginEdit()
+        {
+            base.OnBeginEdit();
+            MapSelf(_model, _backup);
+        }
+
+        /// <inheritdoc />
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+            MapSelf(_backup, _model);
+        }
+
+        /// <inheritdoc />
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            MapSelf(_model, _appSettings.AlbumArtPopup);
         }
 
         private void AppSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appSettings.AlbumArtPopup);
+            MapSelf(_appSettings.AlbumArtPopup, _model);
+            RaisePropertyChangedAll();
         }
     }
 }

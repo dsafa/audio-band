@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Media;
+using AudioBand.Messages;
 using AudioBand.Models;
 
 namespace AudioBand.ViewModels
@@ -18,10 +19,11 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="ButtonViewModelBase{TButton}"/> class.
         /// </summary>
-        /// <param name="model">The button model.</param>
+        /// <param name="source">The button model with the initial data.</param>
         /// <param name="dialogService">The dialog service to use.</param>
-        public ButtonViewModelBase(TButton model, IDialogService dialogService)
-            : base(model)
+        /// <param name="messageBus">The message bus to use.</param>
+        public ButtonViewModelBase(TButton source, IDialogService dialogService, IMessageBus messageBus)
+            : base(messageBus, source)
         {
             DialogService = dialogService;
         }
@@ -29,31 +31,31 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets or sets the background color.
         /// </summary>
-        [PropertyChangeBinding(nameof(ButtonModelBase.BackgroundColor))]
+        [TrackState]
         public Color BackgroundColor
         {
             get => Model.BackgroundColor;
-            set => SetProperty(nameof(Model.BackgroundColor), value);
+            set => SetProperty(Model, nameof(Model.BackgroundColor), value);
         }
 
         /// <summary>
         /// Gets or sets the background color when hovered.
         /// </summary>
-        [PropertyChangeBinding(nameof(ButtonModelBase.HoveredBackgroundColor))]
+        [TrackState]
         public Color HoveredBackgroundColor
         {
             get => Model.HoveredBackgroundColor;
-            set => SetProperty(nameof(Model.HoveredBackgroundColor), value);
+            set => SetProperty(Model, nameof(Model.HoveredBackgroundColor), value);
         }
 
         /// <summary>
         /// Gets or sets the background color when clicked.
         /// </summary>
-        [PropertyChangeBinding(nameof(ButtonModelBase.ClickedBackgroundColor))]
+        [TrackState]
         public Color ClickedBackgroundColor
         {
             get => Model.ClickedBackgroundColor;
-            set => SetProperty(nameof(Model.ClickedBackgroundColor), value);
+            set => SetProperty(Model, nameof(Model.ClickedBackgroundColor), value);
         }
 
         /// <summary>

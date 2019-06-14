@@ -16,6 +16,7 @@ using AudioBand.Views.Settings;
 using CSDeskBand;
 using NLog;
 using SimpleInjector;
+using SimpleInjector.Advanced;
 
 namespace AudioBand
 {

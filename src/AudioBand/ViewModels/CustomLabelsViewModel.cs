@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -15,8 +16,8 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class CustomLabelsViewModel : ViewModelBase
     {
-        private readonly HashSet<CustomLabelViewModel> _added = new HashSet<CustomLabelViewModel>();
-        private readonly HashSet<CustomLabelViewModel> _removed = new HashSet<CustomLabelViewModel>();
+        private readonly List<CustomLabelViewModel> _added = new List<CustomLabelViewModel>();
+        private readonly List<CustomLabelViewModel> _removed = new List<CustomLabelViewModel>();
         private readonly IAppSettings _appsettings;
         private readonly IDialogService _dialogService;
         private readonly IAudioSession _audioSession;
@@ -28,11 +29,13 @@ namespace AudioBand.ViewModels
         /// <param name="appsettings">The app setings.</param>
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="audioSession">The audio session.</param>
-        public CustomLabelsViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession)
+        /// <param name="messageBus">The message bus.</param>
+        public CustomLabelsViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
         {
             _appsettings = appsettings;
             _dialogService = dialogService;
             _audioSession = audioSession;
+            UseMessageBus(messageBus);
             SetupLabels();
 
             AddLabelCommand = new RelayCommand(AddLabelCommandOnExecute);
@@ -97,7 +100,7 @@ namespace AudioBand.ViewModels
         {
             BeginEdit();
 
-            var newLabel = new CustomLabelViewModel(new CustomLabel(), _dialogService, _audioSession) { Name = "New Label" };
+            var newLabel = new CustomLabelViewModel(new CustomLabel(), _dialogService, _audioSession, MessageBus) { Name = "New Label" };
             CustomLabels.Add(newLabel);
 
             _added.Add(newLabel);
@@ -124,7 +127,7 @@ namespace AudioBand.ViewModels
         private void SetupLabels()
         {
             CustomLabels.Clear();
-            foreach (var customLabelVm in _appsettings.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession)))
+            foreach (var customLabelVm in _appsettings.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession, MessageBus)))
             {
                 CustomLabels.Add(customLabelVm);
             }
