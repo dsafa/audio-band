@@ -17,60 +17,10 @@ namespace AudioBand.ViewModels
     {
         // Mapping from a model and model property to the viewmodel property name
         private readonly Dictionary<(object model, string modelPropName), List<string>> _modelToPropertyName = new Dictionary<(object model, string modelPropName), List<string>>();
-        private readonly Dictionary<object, ObjectAccessor> _modelToAccessor = new Dictionary<object, ObjectAccessor>();
+
         private readonly MapperConfiguration _mapperConfiguration = new MapperConfiguration(cfg => cfg.CreateMap<TModel, TModel>());
         private TModel _backup;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModelBase{TModel}"/> class
-        /// with the model and hooks up change notifications.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        protected ViewModelBase(TModel model)
-        {
-            Model = model;
-            SetupModelBindings(Model);
-        }
-
-        /// <summary>
-        /// Gets or sets the model associated with this view model.
-        /// </summary>
-        protected TModel Model { get; set; }
-
-        /// <summary>
-        /// Get the model representation of this viewmodel. By default it returns <see cref="Model"/>.
-        /// </summary>
-        /// <returns>A model representation.</returns>
-        public virtual TModel GetModel()
-        {
-            return Model;
-        }
-
-        /// <summary>
-        /// Sets the property in the <see cref="Model"/>.
-        /// </summary>
-        /// <typeparam name="TValue">Type of the property to set.</typeparam>
-        /// <param name="modelPropertyName">Name of the property to set.</param>
-        /// <param name="newValue">New value to set.</param>
-        /// <param name="trackChanges">True if changes are tracked by calling <see cref="ViewModelBase.BeginEdit"/>.</param>
-        /// <param name="propertyName">Name of the property to notify with.</param>
-        /// <returns>Returns true if new value was set.</returns>
-        protected bool SetProperty<TValue>(string modelPropertyName, TValue newValue, bool trackChanges = true, [CallerMemberName] string propertyName = null)
-        {
-            var currentModelValue = (TValue)_modelToAccessor[Model][modelPropertyName];
-            if (EqualityComparer<TValue>.Default.Equals(currentModelValue, newValue))
-            {
-                return false;
-            }
-
-            if (trackChanges)
-            {
-                BeginEdit();
-            }
-
-            _modelToAccessor[Model][modelPropertyName] = newValue;
-            return true;
-        }
 
         /// <summary>
         /// Performs setup to recieve change notifications from <paramref name="model"/> and wire it to properties marked with <see cref="PropertyChangeBindingAttribute"/>.
@@ -173,44 +123,6 @@ namespace AudioBand.ViewModels
             base.OnBeginEdit();
             _backup = new TModel();
             _mapperConfiguration.CreateMapper().Map(Model, _backup);
-        }
-
-        /// <summary>
-        /// Called when a model property changes.
-        /// </summary>
-        /// <param name="propertyName">Name of the property that changed.</param>
-        protected virtual void OnModelPropertyChanged(string propertyName)
-        {
-        }
-
-        /// <summary>
-        /// When a model property changes, raise <see cref="INotifyPropertyChanged.PropertyChanged"/> for the corresponding property marked with <see cref="PropertyChangeBindingAttribute"/>
-        /// and also properties in <see cref="AlsoNotifyAttribute"/>.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="propertyChangedEventArgs">The event args.</param>
-        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            if (!_modelToPropertyName.TryGetValue((sender, propertyChangedEventArgs.PropertyName), out var propertyNames))
-            {
-                return;
-            }
-
-            foreach (var propertyName in propertyNames)
-            {
-                RaisePropertyChanged(propertyName);
-                OnModelPropertyChanged(propertyName);
-
-                if (!AlsoNotifyMap.TryGetValue(propertyName, out var alsoNotfify))
-                {
-                    continue;
-                }
-
-                foreach (var name in alsoNotfify)
-                {
-                    RaisePropertyChanged(name);
-                }
-            }
         }
     }
 }
