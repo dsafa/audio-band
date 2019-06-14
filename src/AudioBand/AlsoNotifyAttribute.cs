@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using AudioBand.ViewModels;
 
-namespace AudioBand.ViewModels
+namespace AudioBand
 {
     /// <summary>
     /// Specifies that <see cref="INotifyPropertyChanged.PropertyChanged"/> event of <see cref="ViewModelBase{TModel}"/> will be raised for other properties.
