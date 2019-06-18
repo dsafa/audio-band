@@ -3,12 +3,8 @@ using AudioBand.Models;
 using AudioBand.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using AudioBand.Messages;
 
 namespace AudioBand.Test
 {
@@ -16,12 +12,13 @@ namespace AudioBand.Test
     public class AudioSourceSettingsCollectionTests
     {
         private Mock<IInternalAudioSource> _audioSourceMock;
-
+        private Mock<IMessageBus> _messageBus;
 
         [TestInitialize]
         public void Init()
         {
             _audioSourceMock = new Mock<IInternalAudioSource>();
+            _messageBus = new Mock<IMessageBus>();
         }
 
         [TestMethod]
@@ -38,7 +35,7 @@ namespace AudioBand.Test
             };
             var settings = new AudioSourceSettings { AudioSourceName = name, Settings = keyVals };
 
-            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings);
+            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings, _messageBus.Object);
 
             Assert.AreEqual(0, vm.SettingsList.Count);
             Assert.AreEqual(name, vm.AudioSourceName);
@@ -61,7 +58,7 @@ namespace AudioBand.Test
             _audioSourceMock.SetupGet(s => s[It.Is<string>(x => x == setting1)]).Returns(val1);
             _audioSourceMock.SetupGet(s => s[It.Is<string>(x => x == setting2)]).Returns(val2);
             _audioSourceMock.Setup(s => s.GetSettingType(It.Is<string>(x => x == setting1))).Returns(typeof(string));
-            _audioSourceMock.Setup(s => s.GetSettingType(It.Is<string>(x => x == setting2))).Returns(typeof(string));
+            _audioSourceMock.Setup(s => s.GetSettingType(It.Is<string>(x => x == setting2))).Returns(typeof(int));
 
             var settingModels = new List<AudioSourceSetting>
             {
@@ -70,7 +67,7 @@ namespace AudioBand.Test
             };
 
             var settings = new AudioSourceSettings { Settings = settingModels };
-            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings);
+            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings, _messageBus.Object);
 
             Assert.AreEqual(settingModels.Count, vm.SettingsList.Count);
             Assert.AreEqual(settingModels[0].Name, vm.SettingsList[0].Name);
@@ -81,7 +78,7 @@ namespace AudioBand.Test
         }
 
         [TestMethod]
-        public void AudioSourceSettingUpdatesAreHandled()
+        public void AudioSourceSettingUpdateNewValueIsWrittenBackToSettings()
         {
             var setting = "setting";
 
@@ -91,14 +88,15 @@ namespace AudioBand.Test
             {
                 Settings = new List<AudioSourceSetting> { settingModel }
             };
-
-            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings);
-
             object newSettingValue = 1;
             _audioSourceMock.SetupGet(s => s[It.Is<string>(x => x == setting)]).Returns(newSettingValue);
+
+            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings, _messageBus.Object);
+
             _audioSourceMock.Raise(s => s.SettingChanged += null, new SettingChangedEventArgs(setting));
 
-            Assert.AreEqual(settingModel.Value, newSettingValue);
+            vm.EndEdit();
+            Assert.AreEqual(newSettingValue, settingModel.Value);
         }
        
         [TestMethod]
@@ -126,7 +124,7 @@ namespace AudioBand.Test
             _audioSourceMock.InSequence(s).SetupSet(source => source[It.Is<string>(x => x == setting1.Name)] = null);
             _audioSourceMock.InSequence(s).SetupSet(source => source[It.Is<string>(x => x == setting2.Name)] = null);
 
-            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings);
+            var vm = new AudioSourceSettingsCollectionViewModel(_audioSourceMock.Object, settings, _messageBus.Object);
 
             _audioSourceMock.VerifySet(source => source[setting3.Name] = null);
             _audioSourceMock.VerifySet(source => source[setting1.Name] = null);

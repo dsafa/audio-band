@@ -1,9 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
-using AudioBand.Messages;
-using AudioBand.Models;
-using AudioBand.ViewModels;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+﻿using AudioBand.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AudioBand.Test
@@ -17,11 +12,10 @@ namespace AudioBand.Test
             string propertyName = null;
             var vm = new ViewModel();
             vm.PropertyChanged += (o, e) => { propertyName = e.PropertyName; };
-            vm._field = 0;
             vm.Field = 10;
 
             Assert.AreEqual(nameof(ViewModel.Field), propertyName);
-            Assert.AreEqual(10, vm._field);
+            Assert.AreEqual(10, vm.Field);
         }
 
         [TestMethod]
@@ -31,24 +25,33 @@ namespace AudioBand.Test
             string propertyName = null;
             var vm = new ViewModel();
             vm.PropertyChanged += (o, e) => { propertyName = e.PropertyName; called++; };
-            vm._field = 0;
             vm.Field = 0;
 
             Assert.AreEqual(0, called);
             Assert.AreEqual(null, propertyName);
-            Assert.AreEqual(0, vm._field);
+            Assert.AreEqual(0, vm.Field);
         }
 
         [TestMethod]
-        public void SetPropertyAutomaticallyStartsEdit()
+        public void SetPropertyWithTrackedStateAttributeAutomaticallyStartsEdit()
         {
             var vm = new ViewModel();
-            vm._field = 0;
             vm.Field = 0;
 
             Assert.IsFalse(vm.IsEditing);
             vm.Field = 1;
             Assert.IsTrue(vm.IsEditing);
+        }
+
+        [TestMethod]
+        public void SetPropertyWithoutTrackedStateAttributeDoesNotStartEdit()
+        {
+            var vm = new ViewModel();
+            vm.FieldNotTracked = 0;
+
+            Assert.IsFalse(vm.IsEditing);
+            vm.FieldNotTracked = 1;
+            Assert.IsFalse(vm.IsEditing);
         }
 
         [TestMethod]
@@ -72,26 +75,6 @@ namespace AudioBand.Test
         }
 
         [TestMethod]
-        public void ViewModelWithModelSetupBindingsProperly()
-        {
-            var m = new Model();
-            var vm = new ViewModelWithModel(m);
-
-            bool raised = false;
-            vm.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(ViewModelWithModel.Field))
-                {
-                    raised = true;
-                }
-            };
-
-            m.ModelField = 10;
-
-            Assert.IsTrue(raised);
-        }
-
-        [TestMethod]
         public void ViewModelWithModelUnbindModelProperly()
         {
             var m = new Model();
@@ -106,56 +89,52 @@ namespace AudioBand.Test
                 }
             };
 
-            vm.Unbind();
-
-            m.ModelField = 10;
-
             Assert.IsFalse(raised);
         }
 
         private class ViewModel : ViewModelBase
         {
-            public int _field;
-
-            public int Field
-            {
-                get => _field;
-                set => SetProperty(ref _field, value);
-            }
-        }
-
-        private class ViewModelWithModel : ViewModelBase<Model>
-        {
-            public ViewModelWithModel() : base(new Model())
-            {
-            }
-
-            public ViewModelWithModel(Model m) : base(m)
-            {
-            }
-
-            [PropertyChangeBinding(nameof(ViewModelBaseTests.Model.ModelField))]
-            public int Field
-            {
-                get => Model.ModelField;
-                set => SetProperty(nameof(ViewModelBaseTests.Model.ModelField), value);
-            }
-
-            public void Unbind()
-            {
-                UnbindModel(Model);
-            }
-        }
-
-        private class Model : ModelBase
-        {
             private int _field = 0;
+            private int _notTracked = 0;
 
-            public int ModelField
+            [TrackState]
+            public int Field
             {
                 get => _field;
                 set => SetProperty(ref _field, value);
             }
+
+            public int FieldNotTracked
+            {
+                get => _notTracked;
+                set => SetProperty(ref _notTracked, value);
+            }
+        }
+
+        private class ViewModelWithModel : ViewModelBase
+        {
+            private Model model = new Model();
+
+            public ViewModelWithModel()
+            {
+            }
+
+            public ViewModelWithModel(Model m)
+            {
+                model = m;
+            }
+
+            [TrackState]
+            public int Field
+            {
+                get => model.Value;
+                set => SetProperty(model, nameof(ViewModelBaseTests.Model.Value), value);
+            }
+        }
+
+        private class Model
+        {
+            public int Value { get; set; } = 0;
         }
     }
 }

@@ -33,8 +33,8 @@ namespace AudioBand.Test
             _appSettings.SetupGet(m => m.CustomLabels).Returns(new List<CustomLabel>());
             _dialog = new Mock<IDialogService>();
             _container = new Mock<IViewModelContainer>();
-            _container.SetupGet(m => m.CustomLabelsViewModel).Returns(new CustomLabelsViewModel(_appSettings.Object, _dialog.Object, new Mock<IAudioSession>().Object));
             _messageBus = new Mock<IMessageBus>();
+            _container.SetupGet(m => m.CustomLabelsViewModel).Returns(new CustomLabelsViewModel(_appSettings.Object, _dialog.Object, new Mock<IAudioSession>().Object, _messageBus.Object));
         }
 
         private SettingsWindowViewModel CreateVm()
@@ -47,15 +47,16 @@ namespace AudioBand.Test
         }
 
         [TestMethod]
-        public void HasUnsavedChangesWhenSelectedViewModelIsEditing()
+        public void HasUnsavedChangesWhenStartEditMessageIsPublished()
         {
+            Action<EditStartMessage> handler = null;
+            _messageBus.Setup(m => m.Subscribe(It.IsAny<Action<EditStartMessage>>()))
+                .Callback<Action<EditStartMessage>>(x => handler = x);
+
             var vm = CreateVm();
 
             Assert.IsFalse(vm.HasUnsavedChanges);
-            var newViewModel = new TestViewmodel();
-            vm.SelectedViewModel = newViewModel;
-
-            newViewModel.BeginEdit();
+            handler(default(EditStartMessage));
             Assert.IsTrue(vm.HasUnsavedChanges);
         }
 
@@ -75,13 +76,11 @@ namespace AudioBand.Test
             var vm = CreateVm();
 
             var childViewModel = new TestViewmodel();
-            vm.HasUnsavedChanges = true;
-            vm.SelectedViewModel = childViewModel;
-            childViewModel.BeginEdit();
+            vm.HasUnsavedChanges = true; ;
             vm.SaveCommand.Execute(null);
 
             _appSettings.Verify(m => m.Save(), Times.Once);
-            Assert.IsFalse(childViewModel.IsEditing);
+            _messageBus.Verify(m => m.Publish(It.Is<EditEndMessage>(msg => msg == EditEndMessage.Accepted), It.IsAny<string>()));
             Assert.IsFalse(vm.HasUnsavedChanges);
         }
 
@@ -92,9 +91,7 @@ namespace AudioBand.Test
                 .Returns(true);
 
             var vm = CreateVm();
-            var childViewModel = new TestViewmodel();
-            vm.SelectedViewModel = childViewModel;
-            childViewModel.BeginEdit();
+            vm.HasUnsavedChanges = true;
 
             vm.CloseCommand.Execute(null);
             _dialog.Verify(m => m.ShowConfirmationDialog(It.Is<ConfirmationDialogType>(d => d == ConfirmationDialogType.DiscardChanges), It.IsAny<object[]>()));
@@ -107,14 +104,12 @@ namespace AudioBand.Test
                 .Returns(true);
 
             var vm = CreateVm();
-            var childViewModel = new TestViewmodel();
-            vm.SelectedViewModel = childViewModel;
-            childViewModel.BeginEdit();
+            vm.HasUnsavedChanges = true;
 
             vm.CloseCommand.Execute(null);
-            Assert.IsFalse(childViewModel.IsEditing);
             _messageBus.Verify(m => m.Publish(It.Is<SettingsWindowMessage>(msg => msg == SettingsWindowMessage.CloseWindow), It.IsAny<string>()));
             Assert.IsFalse(vm.HasUnsavedChanges);
+            _messageBus.Verify(m => m.Publish(It.Is<EditEndMessage>(msg => msg == EditEndMessage.Cancelled), It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -124,12 +119,9 @@ namespace AudioBand.Test
                 .Returns(false);
 
             var vm = CreateVm();
-            var childViewModel = new TestViewmodel();
-            vm.SelectedViewModel = childViewModel;
-            childViewModel.BeginEdit();
+            vm.HasUnsavedChanges = true;
 
             vm.CloseCommand.Execute(null);
-            Assert.IsTrue(childViewModel.IsEditing);
             _messageBus.Verify(m => m.Publish(It.Is<SettingsWindowMessage>(msg => msg == SettingsWindowMessage.CloseWindow), It.IsAny<string>()), Times.Never);
         }
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
+using AudioBand.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AudioBand.ViewModels;
 using AudioBand.Models;
@@ -20,6 +22,7 @@ namespace AudioBand.Test
         private Mock<IDialogService> _dialogMock;
         private Mock<IAppSettings> _appSettingsMock;
         private Mock<IAudioSession> _sessionMock;
+        private Mock<IMessageBus> _messageBus;
         private CustomLabel _label;
         private CustomLabelsViewModel _viewModel;
 
@@ -31,7 +34,8 @@ namespace AudioBand.Test
             _appSettingsMock.Setup(x => x.CustomLabels).Returns(new List<CustomLabel>());
             _label = new CustomLabel();
             _sessionMock = new Mock<IAudioSession>();
-            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object, _sessionMock.Object);
+            _messageBus = new Mock<IMessageBus>();
+            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object, _sessionMock.Object, _messageBus.Object);
         }
 
         [TestMethod]
@@ -88,7 +92,7 @@ namespace AudioBand.Test
         {
             _appSettingsMock.SetupGet(x => x.CustomLabels).Returns(new List<CustomLabel> { new CustomLabel() });
             _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(true);
-            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object, _sessionMock.Object);
+            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object, _sessionMock.Object, _messageBus.Object);
             _viewModel.BeginEdit();
             var label = _viewModel.CustomLabels[0];
             _viewModel.RemoveLabelCommand.Execute(label);
@@ -119,7 +123,7 @@ namespace AudioBand.Test
                 .Returns(new List<CustomLabel> { new CustomLabel { Name = "test" } })
                 .Returns(new List<CustomLabel> { new CustomLabel { Name = "second" } });
 
-            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object, _sessionMock.Object);
+            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object, _sessionMock.Object, _messageBus.Object);
             Assert.AreEqual(1, vm.CustomLabels.Count);
             Assert.AreEqual("test", vm.CustomLabels[0].Name);
             _appSettingsMock.Raise(m => m.ProfileChanged += null, null, EventArgs.Empty);
@@ -134,7 +138,7 @@ namespace AudioBand.Test
                 .Returns(new List<CustomLabel> {new CustomLabel()});
             _sessionMock.SetupGet(m => m.IsPlaying).Returns(true);
 
-            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object, _sessionMock.Object);
+            var vm = new CustomLabelsViewModel(settingsMock.Object, new Mock<IDialogService>().Object, _sessionMock.Object, _messageBus.Object);
             _appSettingsMock.Raise(m => m.ProfileChanged += null, null, EventArgs.Empty);
             Assert.IsTrue(vm.CustomLabels[0].IsPlaying);
         }

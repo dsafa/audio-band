@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AudioBand.AudioSource;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
@@ -18,6 +19,7 @@ namespace AudioBand.Test
     {
         private Mock<IAppSettings> _appSettings;
         private Mock<IDialogService> _dialog;
+        private Mock<IMessageBus> _messageBus;
 
         [TestInitialize]
         public void TestInit()
@@ -25,6 +27,7 @@ namespace AudioBand.Test
             _appSettings = new Mock<IAppSettings>();
             _appSettings.SetupGet(m => m.AlbumArt).Returns(new AlbumArt());
             _dialog = new Mock<IDialogService>();
+            _messageBus = new Mock<IMessageBus>();
         }
 
         [TestMethod]
@@ -35,7 +38,7 @@ namespace AudioBand.Test
             _appSettings.SetupSequence(m => m.AlbumArt)
                 .Returns(first)
                 .Returns(second);
-            var vm = new AlbumArtViewModel(_appSettings.Object, _dialog.Object, new Mock<IAudioSession>().Object);
+            var vm = new AlbumArtViewModel(_appSettings.Object, _dialog.Object, new Mock<IAudioSession>().Object, _messageBus.Object);
             bool raised = false;
             vm.PropertyChanged += (sender, e) => raised = true;
 

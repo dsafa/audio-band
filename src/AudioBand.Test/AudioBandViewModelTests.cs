@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AudioBand.Messages;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,10 +15,12 @@ namespace AudioBand.Test
     public class AudioBandViewModelTests
     {
         private Mock<IAppSettings> _appSettings;
+        private Mock<IMessageBus> _messageBus;
 
         [TestInitialize]
         public void TestInit()
         {
+            _messageBus = new Mock<IMessageBus>();
             _appSettings = new Mock<IAppSettings>();
         }
 
@@ -29,7 +32,7 @@ namespace AudioBand.Test
             _appSettings.SetupSequence(m => m.AudioBand)
                 .Returns(first)
                 .Returns(second);
-            var vm = new AudioBandViewModel(_appSettings.Object, new Mock<IDialogService>().Object);
+            var vm = new AudioBandViewModel(_appSettings.Object, new Mock<IDialogService>().Object, _messageBus.Object);
 
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
