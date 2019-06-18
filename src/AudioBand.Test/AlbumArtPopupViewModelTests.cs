@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
@@ -16,11 +12,13 @@ namespace AudioBand.Test
     public class AlbumArtPopupViewModelTests
     {
         private Mock<IAppSettings> _appSettings;
+        private Mock<IMessageBus> _messageBus;
 
         [TestInitialize]
         public void TestInit()
         {
             _appSettings = new Mock<IAppSettings>();
+            _messageBus = new Mock<IMessageBus>();
         }
 
         [TestMethod]
@@ -30,16 +28,15 @@ namespace AudioBand.Test
             var second = new AlbumArtPopup() {Height = 20};
             _appSettings.SetupSequence(m => m.AlbumArtPopup)
                 .Returns(first)
+                .Returns(second)
                 .Returns(second);
-            var vm = new AlbumArtPopupViewModel(_appSettings.Object);
-            bool raise = false;
-            vm.PropertyChanged += (_, __) => raise = true;
+
+            var vm = new AlbumArtPopupViewModel(_appSettings.Object, _messageBus.Object);
 
             Assert.AreEqual(first.Height, vm.Height);
             _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
             Assert.IsFalse(vm.IsEditing);
-            Assert.IsTrue(raise);
             Assert.AreEqual(second.Height, vm.Height);
         }
     }

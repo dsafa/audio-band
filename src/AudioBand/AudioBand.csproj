@@ -106,8 +106,7 @@
     <Compile Include="Behaviors\RedirectScrolling.cs" />
     <Compile Include="Behaviors\SliderClickAndDrag.cs" />
     <Compile Include="Behaviors\TrackOffsetFix.cs" />
-    <Compile Include="StateModel\IChangeTrackable.cs" />
-    <Compile Include="StateModel\TrackStateAttribute.cs" />
+    <Compile Include="ViewModels\TrackStateAttribute.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\IAsyncCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />

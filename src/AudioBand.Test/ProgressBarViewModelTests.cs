@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Windows.Media;
 using AudioBand.AudioSource;
+using AudioBand.Messages;
 
 namespace AudioBand.Test
 {
@@ -23,7 +24,7 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new ProgressBarViewModel(settingsMock.Object, new Mock<IDialogService>().Object, new Mock<IAudioSession>().Object);
+            var vm = new ProgressBarViewModel(settingsMock.Object, new Mock<IDialogService>().Object, new Mock<IAudioSession>().Object, new Mock<IMessageBus>().Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
