@@ -47,12 +47,12 @@ namespace AudioBand.ViewModels
         /// </summary>
         public ICommand OpenLog { get; } = new RelayCommand(OpenLogCommandOnExecute);
 
-        private static void OpenLogCommandOnExecute(object obj)
+        private static void OpenLogCommandOnExecute()
         {
             Process.Start(Path.Combine(Path.GetTempPath(), "AudioBand.log"));
         }
 
-        private static void OpenSettingsFolderCommandOnExecute(object obj)
+        private static void OpenSettingsFolderCommandOnExecute()
         {
             Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand"));
         }

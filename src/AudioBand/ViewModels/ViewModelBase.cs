@@ -27,10 +27,10 @@ namespace AudioBand.ViewModels
         {
             Logger = AudioBandLogManager.GetLogger(GetType().FullName);
 
-            BeginEditCommand = new RelayCommand(o => BeginEdit());
-            EndEditCommand = new RelayCommand(o => EndEdit());
-            CancelEditCommand = new RelayCommand(o => CancelEdit());
-            ResetCommand = new RelayCommand(o => Reset());
+            BeginEditCommand = new RelayCommand(BeginEdit);
+            EndEditCommand = new RelayCommand(EndEdit);
+            CancelEditCommand = new RelayCommand(CancelEdit);
+            ResetCommand = new RelayCommand(Reset);
 
             GetTrackingProperties();
         }

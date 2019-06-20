@@ -10,8 +10,8 @@ namespace AudioBand.Commands
         /// with an action to be executed.
         /// </summary>
         /// <param name="execute">Action to execute.</param>
-        public RelayCommand(Action<object> execute)
-            : base(execute)
+        public RelayCommand(Action execute)
+            : base(o => execute())
         {
         }
 
@@ -21,8 +21,8 @@ namespace AudioBand.Commands
         /// </summary>
         /// <param name="execute">Action to execute.</param>
         /// <param name="canExecute">Predicate to check if the command can be executed.</param>
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
-            : base(execute, canExecute)
+        public RelayCommand(Action execute, Func<bool> canExecute)
+            : base(o => execute(), o => canExecute())
         {
         }
     }
