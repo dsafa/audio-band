@@ -171,7 +171,7 @@ namespace AudioBand.ViewModels
             return Profiles.Count > 1;
         }
 
-        private void AddProfileCommandOnExecute(object o)
+        private void AddProfileCommandOnExecute()
         {
             const string NewProfileName = "New Profile";
             string newprofile = NewProfileName;
@@ -185,7 +185,7 @@ namespace AudioBand.ViewModels
             Profiles.Add(newprofile);
         }
 
-        private void RenameProfileCommandOnExecute(object obj)
+        private void RenameProfileCommandOnExecute()
         {
             string newProfileName = _dialogService.ShowRenameDialog(SelectedProfileName, Profiles.ToList());
             if (newProfileName == null || newProfileName == SelectedProfileName)
@@ -199,7 +199,7 @@ namespace AudioBand.ViewModels
             SelectedProfileName = newProfileName;
         }
 
-        private void CloseCommandOnExecute(object obj)
+        private void CloseCommandOnExecute()
         {
             if (!HasUnsavedChanges)
             {
@@ -215,13 +215,13 @@ namespace AudioBand.ViewModels
             }
         }
 
-        private void SaveCommandOnExecute(object obj)
+        private void SaveCommandOnExecute()
         {
             EndEdits();
             _appSettings.Save();
         }
 
-        private bool SaveCommandCanExecute(object obj)
+        private bool SaveCommandCanExecute()
         {
             return HasUnsavedChanges;
         }
@@ -243,7 +243,7 @@ namespace AudioBand.ViewModels
             HasUnsavedChanges = true;
         }
 
-        private void ExportProfilesCommandOnExecute(object obj)
+        private void ExportProfilesCommandOnExecute()
         {
             var exportPath = _dialogService.ShowExportProfilesDialog();
             if (exportPath == null)
@@ -254,7 +254,7 @@ namespace AudioBand.ViewModels
             _appSettings.ExportProfilesToPath(exportPath);
         }
 
-        private void ImportProfilesCommandOnExecute(object obj)
+        private void ImportProfilesCommandOnExecute()
         {
             try
             {

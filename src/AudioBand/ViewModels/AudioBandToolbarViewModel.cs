@@ -84,7 +84,7 @@ namespace AudioBand.ViewModels
             }
         }
 
-        private void ShowSettingsWindowCommandOnExecute(object obj)
+        private void ShowSettingsWindowCommandOnExecute()
         {
             _messageBus.Publish(SettingsWindowMessage.OpenWindow);
         }

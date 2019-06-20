@@ -96,7 +96,7 @@ namespace AudioBand.ViewModels
             }
         }
 
-        private void AddLabelCommandOnExecute(object o)
+        private void AddLabelCommandOnExecute()
         {
             BeginEdit();
 

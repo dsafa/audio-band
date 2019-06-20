@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace AudioBand.Commands
@@ -26,7 +27,7 @@ namespace AudioBand.Commands
         /// with an action to be executed and a predicate to determine if it can be executed.
         /// </summary>
         /// <param name="execute">Action to execute.</param>
-        /// <param name="canExecute">Predicate to check if the commmand can be executed.</param>
+        /// <param name="canExecute">Predicate to check if the command can be executed.</param>
         public RelayCommand(Action<T> execute, Predicate<T> canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
@@ -55,6 +56,7 @@ namespace AudioBand.Commands
         }
 
         /// <inheritdoc cref="ICommand.Execute"/>
+        [DebuggerStepThrough]
         public void Execute(object parameter)
         {
             _execute((T)parameter);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using AudioBand.Logging;
@@ -16,9 +17,10 @@ namespace AudioBand.Messages
         private readonly Dictionary<Type, List<object>> _handlers = new Dictionary<Type, List<object>>();
 
         /// <inheritdoc />
+        [DebuggerStepThrough]
         public void Subscribe<TMessage>(Action<TMessage> handler)
         {
-            Logger.Debug("{class} registered new handler for {message}", handler.Target.GetType(), typeof(TMessage));
+            Logger.Trace("{class} registered new handler for {message}", handler.Target.GetType(), typeof(TMessage));
 
             if (_handlers.ContainsKey(typeof(TMessage)))
             {
@@ -31,9 +33,10 @@ namespace AudioBand.Messages
         }
 
         /// <inheritdoc />
+        [DebuggerStepThrough]
         public void Unsubscribe<TMessage>(Action<TMessage> handler)
         {
-            Logger.Debug("{class} unsubscribed for {message}", handler.Target.GetType(), typeof(TMessage));
+            Logger.Trace("{class} unsubscribed for {message}", handler.Target.GetType(), typeof(TMessage));
 
             if (_handlers.TryGetValue(typeof(TMessage), out var handlers))
             {
@@ -42,6 +45,7 @@ namespace AudioBand.Messages
         }
 
         /// <inheritdoc />
+        [DebuggerStepThrough]
         public void Publish<TMessage>(TMessage message, [CallerMemberName] string caller = "")
         {
             if (!_handlers.TryGetValue(typeof(TMessage), out var handlers))
@@ -51,7 +55,7 @@ namespace AudioBand.Messages
 
             foreach (var handler in handlers.Cast<Action<TMessage>>())
             {
-                Logger.Debug("Message published {caller} -> {info}", caller, new { Target = handler.Target.GetType(), Handler = handler.Method.Name, Message = message });
+                Logger.Trace("Message published {caller} -> {info}", caller, new { Target = handler.Target.GetType(), Handler = handler.Method.Name, Message = message });
                 handler(message);
             }
         }

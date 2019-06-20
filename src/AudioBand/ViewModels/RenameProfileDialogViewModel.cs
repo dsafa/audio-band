@@ -85,17 +85,17 @@ namespace AudioBand.ViewModels
         /// </summary>
         public RelayCommand CancelCommand { get; }
 
-        private void CancelCommandOnExecute(object obj)
+        private void CancelCommandOnExecute()
         {
             Canceled?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OkCommandOnExecute(object obj)
+        private void OkCommandOnExecute()
         {
             Accepted?.Invoke(this, EventArgs.Empty);
         }
 
-        private bool OkCommandCanExecute(object obj)
+        private bool OkCommandCanExecute()
         {
             return !HasErrors;
         }
