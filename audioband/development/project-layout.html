@@ -8,7 +8,7 @@
     <title>Project layout </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Project layout ">
-    <meta name="generator" content="docfx 2.42.4.0">
+    <meta name="generator" content="docfx 2.43.1.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -79,7 +79,7 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="project-layout">Project layout</h1>
 
-<p>Last commit at this time of writing: <code>f2d140a</code></p>
+<p>Last commit at this time of writing / update: <code>a554bd34d3ea30f32b2819e35fba4130fd08af33</code></p>
 <p>Here are the main projects in the solution:</p>
 <ul>
 <li><strong>AudioBand</strong>: The is the &quot;main&quot; project where audioband lives</li>
@@ -114,7 +114,7 @@
 <p>App settings are loaded by the <code>Settings/AppSettings</code> class. It is just simple serialization in the <code>toml</code> format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, it is less readable with toml but it is still workable.</p>
 <p>There is also a <code>Migrations</code> subfolder that contains code to settings migrations. These classes update old configuration files to the latest format.</p>
 <h2 id="viewmodels">ViewModels</h2>
-<p>There are two base classes for view models: <code>ViewModels/ViewModelBase.cs</code> and <code>ViewModels/ViewModelBase{TModel}.cs</code>. Viewmodels participate in databinding for both Winforms and Wpf controls.</p>
+<p>No MVVM frameworks are used, instead there is a <code>ViewModelBase</code> implementation and standard <code>ICommand</code> implementations.</p>
 <p><code>ViewModelBase</code> provides automatic implementations for</p>
 <ul>
 <li><code>INotifyPropertyChanged</code>: Has a <code>SetProperty</code> method that automatically calls <code>INotifyPropertyChanged.PropertyChanged</code> event if a field value changes. The attribute <code>AlsoNotify</code> can also be applied to raise <code>PropertyChanged</code> for other properties. Example:</li>
@@ -131,26 +131,22 @@ public Size Size =&gt; new Size(Width, Height);
 <ul>
 <li><code>INotifyDataError</code>: Provides a few <code>RaiseValidationError</code> methods that raise the <code>INotifyDataError.ErrorsChanged</code> event.</li>
 <li><code>IResettable</code>: Custom interface that exposes a method to reset the viewmodel to default values. The base class implements a command to call reset and the method <code>ResetObject&lt;T&gt;</code> to reset an object to its default value.</li>
-<li>Undo support: Implments commands to call <code>BeginEdit</code>, <code>EndEdit</code>, <code>CancelEdit</code> and virtual methods to handle them.</li>
+<li><code>BeginEdit</code>,<code>EndEdit</code> and <code>CancelEdit</code> commands and methods. The attribute <code>TrackState</code> can is used to automatically call those methods.</li>
 </ul>
-<p><code>ViewModelBase&lt;T&gt;</code> extends <code>ViewModelBase</code> by automatically supporting the above features for a model.</p>
-<ul>
-<li><code>INotifyPropertyChanged</code>: Allows the view model to use a model to back its properties by applying the <code>PropertyChangedBindingAttribute</code> and using the <code>SetProperty</code> method.The <code>AlsoNotify</code> property can also be applied. Example:</li>
-</ul>
-<pre><code class="lang-csharp">// Bind this property to the 'Width' property of the model.
-// When the model's Width property changes, PropertyChanged is invoked for the viewmodel
-[PropertyChangeBinding(nameof(Model.Width))]
+<pre><code class="lang-csharp">// Automatically calls beginedit method if the value is changed
+[TrackState]
 public int Width
 {
     get =&gt; Model.Width; // Using the model as the source for the value
-    set =&gt; SetProperty(nameof(Model.Width), value); // Set the value in the model
+    set =&gt; SetProperty(Model, nameof(Model.Width), value); // Set the value in the model
 }
 </code></pre>
-<ul>
-<li><code>BeginEdit</code>,<code>EndEdit</code> and <code>CancelEdit</code> commands and methods. Calling begin edit will automatically create a backup of the backing <code>model</code> using automapper. Calling cancel edit will automatically reset the <code>model</code> by using automapper to map from the backup.</li>
-</ul>
+<h2 id="views">Views</h2>
+<p>The xaml is store under the <code>Views</code> folder.</p>
 <h2 id="message-bus">Message bus</h2>
 <p>Under the <code>Messages</code> folder there is a simple <code>IMessageBus</code> interface. Messages are used sparingly for communicating between the settings window &lt;-&gt; toolbar and between view models.</p>
+<h1 id="audiosourcehost-project">AudioSourceHost project</h1>
+<p>The <code>AudioSourceHost</code> project is a library to load an audio source and exposes it via <code>MarshalByRef</code> objects for cross app domain communication. It uses the <code>Microsoft Extensibility Framework</code> to locate and load an <code>IAudioSource</code>.</p>
 </article>
           </div>
           
