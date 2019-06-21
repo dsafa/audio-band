@@ -4,38 +4,41 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:theme="clr-namespace:AudioBand.Resources.Theming">
     <ResourceDictionary.MergedDictionaries>
-        <local:SharedDictionary Source="Shared.xaml"/>
-        <local:SharedDictionary Source="ScrollbarStyle.xaml"/>
+        <local:SharedDictionary Source="Shared.xaml" />
+        <local:SharedDictionary Source="ScrollbarStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+    <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
         <Style.Resources>
             <system:Double x:Key="ComboBoxItemHeight">30</system:Double>
         </Style.Resources>
-        <Setter Property="Height" Value="{StaticResource ComboBoxItemHeight}"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Height" Value="{StaticResource ComboBoxItemHeight}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                    <Border x:Name="ComboBoxItem" SnapsToDevicePixels="True" Background="{TemplateBinding Background}" Padding="4, 0">
-                        <ContentPresenter VerticalAlignment="Center"/>
+                    <Border x:Name="ComboBoxItem"
+                            Padding="4,0"
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{theme:ThemeResource SystemAccentColorLow}"/>
+                <Setter Property="Background" Value="{theme:ThemeResource SystemAccentColorLow}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{theme:ThemeResource SystemListMediumColor}"/>
+                <Setter Property="Background" Value="{theme:ThemeResource SystemListMediumColor}" />
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="IsSelected" Value="True"/>
-                    <Condition Property="IsMouseOver" Value="True"/>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsMouseOver" Value="True" />
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
-                    <Setter Property="Background" Value="{theme:ThemeResource SystemAccentColorHigh}"/>
+                    <Setter Property="Background" Value="{theme:ThemeResource SystemAccentColorHigh}" />
                 </MultiTrigger.Setters>
             </MultiTrigger>
         </Style.Triggers>
@@ -44,70 +47,102 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{TemplateBinding Background}">
-                        <TextBlock Foreground="{theme:ThemeResource SystemBaseMediumColor}"
-                                   HorizontalAlignment="Right" VerticalAlignment="Center"
-                                   Margin="8, 0"
-                                   TextAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="&#xE70D;" FontSize="16"/>
+                    <Border HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="{TemplateBinding Background}">
+                        <TextBlock Margin="8,0"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   FontSize="16"
+                                   Foreground="{theme:ThemeResource SystemBaseMediumColor}"
+                                   Text="&#xE70D;"
+                                   TextAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
     <Style TargetType="{x:Type ComboBox}">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}"/>
-        <Setter Property="BorderBrush" Value="{theme:ThemeResource SystemBaseLowColor}"/>
-        <Setter Property="FontSize" Value="{StaticResource BodyFontSize}"/>
-        <Setter Property="Background" Value="{theme:ThemeResource SystemAltHighColor}"/>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="{StaticResource BorderThickness}" />
+        <Setter Property="BorderBrush" Value="{theme:ThemeResource SystemBaseLowColor}" />
+        <Setter Property="FontSize" Value="{StaticResource BodyFontSize}" />
+        <Setter Property="Background" Value="{theme:ThemeResource SystemAltHighColor}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
-                    <Border x:Name="Border" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
-                        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <Border x:Name="Border"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="{Binding ElementName=Border, Path=ActualHeight}"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="{Binding ElementName=Border, Path=ActualHeight}" />
                             </Grid.ColumnDefinitions>
-                            <ToggleButton x:Name="ToggleButton" Grid.Column="0" Grid.ColumnSpan="2"
-                                          Focusable="false" BorderThickness="0"
-                                          IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
-                                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                            <ToggleButton x:Name="ToggleButton"
+                                          Grid.Column="0"
+                                          Grid.ColumnSpan="2"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"
                                           Background="{TemplateBinding Background}"
-                                          Style="{StaticResource ComboboxToggleButtonStyle}"/>
-                            <ContentPresenter Name="ContentSite" Grid.Column="0" IsHitTestVisible="False"
+                                          BorderThickness="0"
+                                          Focusable="false"
+                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Style="{StaticResource ComboboxToggleButtonStyle}" />
+                            <ContentPresenter Name="ContentSite"
+                                              Grid.Column="0"
                                               Margin="{StaticResource InputSpacing}"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"
                                               Content="{TemplateBinding SelectionBoxItem}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                               ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                              VerticalAlignment="Center" HorizontalAlignment="Left" />
-                            <TextBox x:Name="PART_EditableTextBox" Grid.Column="0" Style="{x:Null}"
-                                     BorderThickness="0" Padding="{StaticResource InputSpacing}"
-                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                     VerticalContentAlignment="Center" Foreground="{TemplateBinding Foreground}"
-                                     Focusable="True" Background="Transparent"
-                                     Visibility="Hidden"
+                                              IsHitTestVisible="False" />
+                            <TextBox x:Name="PART_EditableTextBox"
+                                     Grid.Column="0"
+                                     Padding="{StaticResource InputSpacing}"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     VerticalContentAlignment="Center"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     ContextMenu="{StaticResource StandardInputContextMenu}"
+                                     Focusable="True"
+                                     Foreground="{TemplateBinding Foreground}"
                                      IsReadOnly="{TemplateBinding IsReadOnly}"
-                                     ContextMenu="{StaticResource StandardInputContextMenu}">
-                            </TextBox>
-                            <Popup x:Name="PART_Popup" Grid.Column="0" Placement="Center" AllowsTransparency="True"
-                                   IsOpen="{TemplateBinding IsDropDownOpen}" PlacementTarget="{Binding ElementName=Border}"
-                                   Focusable="False" PopupAnimation="Fade">
-                                <Border BorderThickness="1" Margin="8" RenderTransformOrigin="0.5, 0.5"
-                                        BorderBrush="{theme:ThemeResource SystemChromeHighColor}"
-                                        MinWidth="{TemplateBinding ActualWidth}"
+                                     Style="{x:Null}"
+                                     Visibility="Hidden" />
+                            <Popup x:Name="PART_Popup"
+                                   Grid.Column="0"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Center"
+                                   PlacementTarget="{Binding ElementName=Border}"
+                                   PopupAnimation="Fade">
+                                <Border MinWidth="{TemplateBinding ActualWidth}"
                                         MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                        Background="{theme:ThemeResource SystemChromeMediumLowColor}">
+                                        Margin="8"
+                                        Background="{theme:ThemeResource SystemChromeMediumLowColor}"
+                                        BorderBrush="{theme:ThemeResource SystemChromeHighColor}"
+                                        BorderThickness="1"
+                                        RenderTransformOrigin="0.5, 0.5">
                                     <Border.Effect>
-                                        <DropShadowEffect x:Name="PopupEffect" BlurRadius="15" Opacity="0" ShadowDepth="0"/>
+                                        <DropShadowEffect x:Name="PopupEffect"
+                                                          BlurRadius="15"
+                                                          Opacity="0"
+                                                          ShadowDepth="0" />
                                     </Border.Effect>
                                     <FrameworkElement.RenderTransform>
-                                        <ScaleTransform x:Name="PopupTransform"/>
+                                        <ScaleTransform x:Name="PopupTransform" />
                                     </FrameworkElement.RenderTransform>
-                                    <ScrollViewer Margin="0, 4" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
-                                        <VirtualizingStackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    <ScrollViewer Margin="0,4"
+                                                  CanContentScroll="True"
+                                                  VerticalScrollBarVisibility="Auto">
+                                        <VirtualizingStackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
                                 </Border>
                             </Popup>
@@ -115,48 +150,60 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsGrouping" Value="true">
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                         </Trigger>
                         <Trigger Property="IsEditable" Value="True">
-                            <Setter Property="IsTabStop" Value="false"/>
+                            <Setter Property="IsTabStop" Value="false" />
                             <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden" />
                             <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemAccentColor}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemAccentColor}" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemAccentColor}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemAccentColor}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{theme:ThemeResource SystemBaseMediumColor}" />
                         </Trigger>
                         <Trigger Property="IsDropDownOpen" Value="True">
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="PopupTransform" Storyboard.TargetProperty="ScaleX"
-                                                         From="0.8" To="1" Duration="0:0:0.1">
+                                        <DoubleAnimation Storyboard.TargetName="PopupTransform"
+                                                         Storyboard.TargetProperty="ScaleX"
+                                                         From="0.8"
+                                                         To="1"
+                                                         Duration="0:0:0.1">
                                             <DoubleAnimation.EasingFunction>
-                                                <BackEase EasingMode="EaseOut" Amplitude="0.1"/>
+                                                <BackEase Amplitude="0.1" EasingMode="EaseOut" />
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
-                                        <DoubleAnimation Storyboard.TargetName="PopupTransform" Storyboard.TargetProperty="ScaleY"
-                                                         From="0.5" To="1" Duration="0:0:0.1">
+                                        <DoubleAnimation Storyboard.TargetName="PopupTransform"
+                                                         Storyboard.TargetProperty="ScaleY"
+                                                         From="0.5"
+                                                         To="1"
+                                                         Duration="0:0:0.1">
                                             <DoubleAnimation.EasingFunction>
-                                                <BackEase EasingMode="EaseOut" Amplitude="0.1"/>
+                                                <BackEase Amplitude="0.1" EasingMode="EaseOut" />
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
-                                        <DoubleAnimation Storyboard.TargetName="PopupEffect" Storyboard.TargetProperty="Opacity"
-                                                         From="0" To="0.4" Duration="0:0:0.4">
+                                        <DoubleAnimation Storyboard.TargetName="PopupEffect"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         From="0"
+                                                         To="0.4"
+                                                         Duration="0:0:0.4">
                                             <DoubleAnimation.EasingFunction>
-                                                <QuadraticEase EasingMode="EaseOut"/>
+                                                <QuadraticEase EasingMode="EaseOut" />
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
-                                        <DoubleAnimation Storyboard.TargetName="PopupEffect" Storyboard.TargetProperty="ShadowDepth"
-                                                         From="10" To="2" Duration="0:0:0.4">
+                                        <DoubleAnimation Storyboard.TargetName="PopupEffect"
+                                                         Storyboard.TargetProperty="ShadowDepth"
+                                                         From="10"
+                                                         To="2"
+                                                         Duration="0:0:0.4">
                                             <DoubleAnimation.EasingFunction>
-                                                <QuadraticEase EasingMode="EaseOut"/>
+                                                <QuadraticEase EasingMode="EaseOut" />
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
                                     </Storyboard>
@@ -165,8 +212,10 @@
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="PopupEffect" Storyboard.TargetProperty="Opacity"
-                                                         From="0" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="PopupEffect"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         From="0"
+                                                         Duration="0" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -178,12 +227,12 @@
     </Style>
     <DataTemplate x:Key="FontFamilyComboBoxItemDataTemplate">
         <TextBlock>
-            <Run Text="{Binding Path=.}"/>
-            <Run Text="  "/>
-            <Run Text="{Binding Path=.}" FontFamily="{Binding Path=.}"/>
+            <Run Text="{Binding Path=.}" />
+            <Run Text="  " />
+            <Run FontFamily="{Binding Path=.}" Text="{Binding Path=.}" />
         </TextBlock>
     </DataTemplate>
     <DataTemplate x:Key="EnumDescriptorItemTemplate">
-        <TextBlock Text="{Binding Description}"/>
+        <TextBlock Text="{Binding Description}" />
     </DataTemplate>
 </ResourceDictionary>

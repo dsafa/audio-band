@@ -1,27 +1,35 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:AudioBand.Views.Settings"
-                    xmlns:resources="clr-namespace:AudioBand.Resources"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:local="clr-namespace:AudioBand.Views.Settings"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:resources="clr-namespace:AudioBand.Resources"
                     mc:Ignorable="d">
     <DataTemplate x:Key="ButtonBaseTemplate">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
-                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
-                    <resources:SharedDictionary Source="LayoutSettingsTemplate.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml" />
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml" />
+                    <resources:SharedDictionary Source="LayoutSettingsTemplate.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
-        <StackPanel Style="{StaticResource SettingsStackPanel}" KeyboardNavigation.IsTabStop="False">
-            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource LayoutSettingsTemplate}"/>
+        <StackPanel KeyboardNavigation.IsTabStop="False" Style="{StaticResource SettingsStackPanel}">
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource LayoutSettingsTemplate}" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource BackgroundColorSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <local:ColorPicker Color="{Binding BackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource DefaultColorLabelText}"/>
-            <local:ColorPicker Color="{Binding HoveredBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ProgressBarHoverColorDescription}"/>
-            <local:ColorPicker Color="{Binding ClickedBackgroundColor}" DialogService="{Binding DialogService}" Title="{StaticResource ClickedColorLabelText}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource BackgroundColorSectionText}" />
+            <local:ColorPicker Title="{StaticResource DefaultColorLabelText}"
+                               DialogService="{Binding DialogService}"
+                               Color="{Binding BackgroundColor}" />
+            <local:ColorPicker Title="{StaticResource ProgressBarHoverColorDescription}"
+                               DialogService="{Binding DialogService}"
+                               Color="{Binding HoveredBackgroundColor}" />
+            <local:ColorPicker Title="{StaticResource ClickedColorLabelText}"
+                               DialogService="{Binding DialogService}"
+                               Color="{Binding ClickedBackgroundColor}" />
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>
