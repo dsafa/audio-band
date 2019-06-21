@@ -1,6 +1,6 @@
 # Project layout
 
-Last commit at this time of writing: `f2d140a`
+Last commit at this time of writing / update: `a554bd34d3ea30f32b2819e35fba4130fd08af33`
 
 Here are the main projects in the solution:
 - **AudioBand**: The is the "main" project where audioband lives
@@ -36,7 +36,7 @@ App settings are loaded by the `Settings/AppSettings` class. It is just simple s
 There is also a `Migrations` subfolder that contains code to settings migrations. These classes update old configuration files to the latest format.
 
 ## ViewModels
-There are two base classes for view models: `ViewModels/ViewModelBase.cs` and `ViewModels/ViewModelBase{TModel}.cs`. Viewmodels participate in databinding for both Winforms and Wpf controls.
+No MVVM frameworks are used, instead there is a `ViewModelBase` implementation and standard `ICommand` implementations.
 
 `ViewModelBase` provides automatic implementations for
 - `INotifyPropertyChanged`: Has a `SetProperty` method that automatically calls `INotifyPropertyChanged.PropertyChanged` event if a field value changes. The attribute `AlsoNotify` can also be applied to raise `PropertyChanged` for other properties. Example:
@@ -52,21 +52,23 @@ public Size Size => new Size(Width, Height);
 ```
 - `INotifyDataError`: Provides a few `RaiseValidationError` methods that raise the `INotifyDataError.ErrorsChanged` event.
 - `IResettable`: Custom interface that exposes a method to reset the viewmodel to default values. The base class implements a command to call reset and the method `ResetObject<T>` to reset an object to its default value.
-- Undo support: Implments commands to call `BeginEdit`, `EndEdit`, `CancelEdit` and virtual methods to handle them.
+- `BeginEdit`,`EndEdit` and `CancelEdit` commands and methods. The attribute `TrackState` can is used to automatically call those methods.
 
-`ViewModelBase<T>` extends `ViewModelBase` by automatically supporting the above features for a model.
-- `INotifyPropertyChanged`: Allows the view model to use a model to back its properties by applying the `PropertyChangedBindingAttribute` and using the `SetProperty` method.The `AlsoNotify` property can also be applied. Example:
 ```csharp
-// Bind this property to the 'Width' property of the model.
-// When the model's Width property changes, PropertyChanged is invoked for the viewmodel
-[PropertyChangeBinding(nameof(Model.Width))]
+// Automatically calls beginedit method if the value is changed
+[TrackState]
 public int Width
 {
     get => Model.Width; // Using the model as the source for the value
-    set => SetProperty(nameof(Model.Width), value); // Set the value in the model
+    set => SetProperty(Model, nameof(Model.Width), value); // Set the value in the model
 }
 ```
-- `BeginEdit`,`EndEdit` and `CancelEdit` commands and methods. Calling begin edit will automatically create a backup of the backing `model` using automapper. Calling cancel edit will automatically reset the `model` by using automapper to map from the backup.
+
+## Views
+The xaml is store under the `Views` folder.
 
 ## Message bus
 Under the `Messages` folder there is a simple `IMessageBus` interface. Messages are used sparingly for communicating between the settings window <-> toolbar and between view models.
+
+# AudioSourceHost project
+The `AudioSourceHost` project is a library to load an audio source and exposes it via `MarshalByRef` objects for cross app domain communication. It uses the `Microsoft Extensibility Framework` to locate and load an `IAudioSource`.

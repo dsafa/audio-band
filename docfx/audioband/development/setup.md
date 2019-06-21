@@ -1,8 +1,8 @@
 ## Setup
-1. Install `Visual Studio 2017`. Make sure to install support for `.Net Framework 4.7` development.
+1. Install `Visual Studio 2019`. Make sure to install support for `.Net Framework 4.7` development.
 2. Clone the repo `git clone git@github.com:dsafa/audio-band.git`
 3. Open the solution file under `src/AudioBand.sln` in visual studio.
-4. Update nuget packages before building
+4. Restore nuget packages before building
 
 > [!NOTE]
 > Explorer does not unload audioband so you will not be able to build if explorer has loaded it. The `debug configuration` will automatically close explorer to build the audioband project and restart it after the build.
