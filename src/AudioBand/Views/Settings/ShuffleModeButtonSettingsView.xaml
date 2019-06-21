@@ -1,32 +1,43 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:AudioBand.Views.Settings"
-                    xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-                    xmlns:resources="clr-namespace:AudioBand.Resources">
+                    xmlns:resources="clr-namespace:AudioBand.Resources"
+                    xmlns:viewmodels="clr-namespace:AudioBand.ViewModels">
     <DataTemplate DataType="{x:Type viewmodels:ShuffleModeButtonViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
-                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
-                    <resources:SharedDictionary Source="ButtonBaseTemplate.xaml"/>
-                    <resources:SharedDictionary Source="ButtonContentTemplate.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml" />
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml" />
+                    <resources:SharedDictionary Source="ButtonBaseTemplate.xaml" />
+                    <resources:SharedDictionary Source="ButtonContentTemplate.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource ButtonBaseTemplate}" Focusable="False"/>
+            <ContentPresenter Content="{Binding}"
+                              ContentTemplate="{StaticResource ButtonBaseTemplate}"
+                              Focusable="False" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource ShuffleModeButtonOffContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <ContentPresenter Content="{Binding ShuffleOffContent}" ContentTemplate="{StaticResource ButtonContentTemplate}" Focusable="False"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource ShuffleModeButtonOffContentSectionText}" />
+            <ContentPresenter Content="{Binding ShuffleOffContent}"
+                              ContentTemplate="{StaticResource ButtonContentTemplate}"
+                              Focusable="False" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource ShuffleModeButtonOnContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <ContentPresenter Content="{Binding ShuffleOnContent}" ContentTemplate="{StaticResource ButtonContentTemplate}" Focusable="False"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource ShuffleModeButtonOnContentSectionText}" />
+            <ContentPresenter Content="{Binding ShuffleOnContent}"
+                              ContentTemplate="{StaticResource ButtonContentTemplate}"
+                              Focusable="False" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
             <Button HorizontalAlignment="Left"
-                    Content="{StaticResource ResetButtonText}"
-                    Command="{Binding ResetCommand}"/>
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

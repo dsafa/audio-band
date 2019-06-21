@@ -1,36 +1,44 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-                 xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-                 xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
-                 xmlns:resources="clr-namespace:AudioBand.Resources">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:resources="clr-namespace:AudioBand.Resources"
+                    xmlns:viewmodels="clr-namespace:AudioBand.ViewModels">
     <DataTemplate DataType="{x:Type viewmodels:AlbumArtPopupViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <resources:SharedDictionary Source="../../Resources/Shared.xaml"/>
-                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
-                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/Shared.xaml" />
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml" />
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <TextBlock Text="{StaticResource DisplaySectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <TextBlock Text="{StaticResource VisibilityLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-            <metro:ToggleSwitch OnLabel="{StaticResource StatusVisible}" OffLabel="{StaticResource StatusHidden}" IsChecked="{Binding IsVisible, Mode=TwoWay}"/>
-            <UniformGrid Rows="4" Columns="2" Style="{StaticResource ArrangementGridStyle}">
-                <TextBlock Text="{StaticResource WidthLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource HeightLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}"/>
-                <TextBlock Text="{StaticResource XPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <TextBlock Text="{StaticResource YPositionLabelText}" Style="{StaticResource DescriptionTextBlock}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}"/>
-                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding Margin, Mode=TwoWay}"/>
+            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource DisplaySectionText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource VisibilityLabelText}" />
+            <metro:ToggleSwitch IsChecked="{Binding IsVisible, Mode=TwoWay}"
+                                OffLabel="{StaticResource StatusHidden}"
+                                OnLabel="{StaticResource StatusVisible}" />
+            <UniformGrid Columns="2"
+                         Rows="4"
+                         Style="{StaticResource ArrangementGridStyle}">
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource WidthLabelText}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource HeightLabelText}" />
+                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}" />
+                <metro:NumericUpDown behaviors:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource XPositionLabelText}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource YPositionLabelText}" />
+                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}" />
+                <metro:NumericUpDown behaviors:NumericInput.Type="Position" Value="{Binding Margin, Mode=TwoWay}" />
             </UniformGrid>
 
-            <TextBlock Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}" Margin="{StaticResource SectionMargin}"/>
-            <Button HorizontalAlignment="Left" Content="{StaticResource ResetButtonText}" Command="{Binding ResetCommand}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

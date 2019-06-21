@@ -1,41 +1,41 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:AudioBand.Views.Settings"
-             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:models="clr-namespace:AudioBand.Models"
-             xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
-             xmlns:resources="clr-namespace:AudioBand.Resources"
-             mc:Ignorable="d">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:resources="clr-namespace:AudioBand.Resources"
+                    xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
+                    mc:Ignorable="d">
     <DataTemplate x:Key="PlaybackButtonContent">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
-                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
-                    <resources:SharedDictionary Source="ButtonBaseTemplate.xaml"/>
-                    <resources:SharedDictionary Source="ButtonContentTemplate.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml" />
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml" />
+                    <resources:SharedDictionary Source="ButtonBaseTemplate.xaml" />
+                    <resources:SharedDictionary Source="ButtonContentTemplate.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
-        <StackPanel Style="{StaticResource SettingsStackPanel}" d:DataContext="{d:DesignInstance viewmodels:NextButtonViewModel}">
-            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource ButtonBaseTemplate}"/>
+        <StackPanel d:DataContext="{d:DesignInstance viewmodels:NextButtonViewModel}" Style="{StaticResource SettingsStackPanel}">
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource ButtonBaseTemplate}" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PlaybackButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <ContentPresenter Content="{Binding Content}" ContentTemplate="{StaticResource ButtonContentTemplate}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource PlaybackButtonContentSectionText}" />
+            <ContentPresenter Content="{Binding Content}" ContentTemplate="{StaticResource ButtonContentTemplate}" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <Button HorizontalAlignment="Left" 
-                Content="{StaticResource ResetButtonText}"
-                Command="{Binding ResetCommand}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
         </StackPanel>
     </DataTemplate>
     <DataTemplate DataType="{x:Type viewmodels:NextButtonViewModel}">
-        <ContentControl ContentTemplate="{StaticResource PlaybackButtonContent}" Content="{Binding}"/>
+        <ContentControl Content="{Binding}" ContentTemplate="{StaticResource PlaybackButtonContent}" />
     </DataTemplate>
     <DataTemplate DataType="{x:Type viewmodels:PreviousButtonViewModel}">
-        <ContentControl ContentTemplate="{StaticResource PlaybackButtonContent}" Content="{Binding}"/>
+        <ContentControl Content="{Binding}" ContentTemplate="{StaticResource PlaybackButtonContent}" />
     </DataTemplate>
 </ResourceDictionary>
