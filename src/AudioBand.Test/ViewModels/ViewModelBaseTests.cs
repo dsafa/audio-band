@@ -1,12 +1,11 @@
 ﻿using AudioBand.ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace AudioBand.Test
 {
-    [TestClass]
     public class ViewModelBaseTests
     {
-        [TestMethod]
+        [Fact]
         public void SetPropertyWithChangedFieldCallsPropertyChanged()
         {
             string propertyName = null;
@@ -14,11 +13,11 @@ namespace AudioBand.Test
             vm.PropertyChanged += (o, e) => { propertyName = e.PropertyName; };
             vm.Field = 10;
 
-            Assert.AreEqual(nameof(ViewModel.Field), propertyName);
-            Assert.AreEqual(10, vm.Field);
+            Assert.Equal(nameof(ViewModel.Field), propertyName);
+            Assert.Equal(10, vm.Field);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetPropertySameField()
         {
             int called = 0;
@@ -27,54 +26,54 @@ namespace AudioBand.Test
             vm.PropertyChanged += (o, e) => { propertyName = e.PropertyName; called++; };
             vm.Field = 0;
 
-            Assert.AreEqual(0, called);
-            Assert.AreEqual(null, propertyName);
-            Assert.AreEqual(0, vm.Field);
+            Assert.Equal(0, called);
+            Assert.Null(propertyName);
+            Assert.Equal(0, vm.Field);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetPropertyWithTrackedStateAttributeAutomaticallyStartsEdit()
         {
             var vm = new ViewModel();
             vm.Field = 0;
 
-            Assert.IsFalse(vm.IsEditing);
+            Assert.False(vm.IsEditing);
             vm.Field = 1;
-            Assert.IsTrue(vm.IsEditing);
+            Assert.True(vm.IsEditing);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetPropertyWithoutTrackedStateAttributeDoesNotStartEdit()
         {
             var vm = new ViewModel();
             vm.FieldNotTracked = 0;
 
-            Assert.IsFalse(vm.IsEditing);
+            Assert.False(vm.IsEditing);
             vm.FieldNotTracked = 1;
-            Assert.IsFalse(vm.IsEditing);
+            Assert.False(vm.IsEditing);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetPropertyWithModelAutomaticallyStartsEdit()
         {
             var vm = new ViewModelWithModel();
             vm.Field = 0;
 
-            Assert.IsFalse(vm.IsEditing);
+            Assert.False(vm.IsEditing);
             vm.Field = 1;
-            Assert.IsTrue(vm.IsEditing);
+            Assert.True(vm.IsEditing);
         }
 
-        [TestMethod]
+        [Fact]
         public void ResetViewModelWithModelStartsEdit()
         {
             var vm = new ViewModelWithModel();
             vm.Reset();
             
-            Assert.IsTrue(vm.IsEditing);
+            Assert.True(vm.IsEditing);
         }
 
-        [TestMethod]
+        [Fact]
         public void ViewModelWithModelUnbindModelProperly()
         {
             var m = new Model();
@@ -89,7 +88,7 @@ namespace AudioBand.Test
                 }
             };
 
-            Assert.IsFalse(raised);
+            Assert.False(raised);
         }
 
         private class ViewModel : ViewModelBase

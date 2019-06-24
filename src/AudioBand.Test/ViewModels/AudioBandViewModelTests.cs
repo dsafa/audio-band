@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AudioBand.Messages;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Xunit;
 
 namespace AudioBand.Test
 {
-    [TestClass]
     public class AudioBandViewModelTests
     {
         private Mock<IAppSettings> _appSettings;
         private Mock<IMessageBus> _messageBus;
 
-        [TestInitialize]
-        public void TestInit()
+        public AudioBandViewModelTests()
         {
             _messageBus = new Mock<IMessageBus>();
             _appSettings = new Mock<IAppSettings>();
         }
 
-        [TestMethod]
+        [Fact]
         public void AudioBandViewModelListensToProfileChanges()
         {
             var first = new Models.AudioBand(){Height = 10};
@@ -37,12 +31,12 @@ namespace AudioBand.Test
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
-            Assert.AreEqual(first.Height, vm.Height);
+            Assert.Equal(first.Height, vm.Height);
             _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
-            Assert.IsTrue(raised);
-            Assert.IsFalse(vm.IsEditing);
-            Assert.AreEqual(second.Height, vm.Height);
+            Assert.True(raised);
+            Assert.False(vm.IsEditing);
+            Assert.Equal(second.Height, vm.Height);
         }
     }
 }

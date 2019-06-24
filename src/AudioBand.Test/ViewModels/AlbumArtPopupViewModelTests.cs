@@ -3,25 +3,23 @@ using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Xunit;
 
 namespace AudioBand.Test
 {
-    [TestClass]
     public class AlbumArtPopupViewModelTests
     {
         private Mock<IAppSettings> _appSettings;
         private Mock<IMessageBus> _messageBus;
 
-        [TestInitialize]
-        public void TestInit()
+        public AlbumArtPopupViewModelTests()
         {
             _appSettings = new Mock<IAppSettings>();
             _messageBus = new Mock<IMessageBus>();
         }
 
-        [TestMethod]
+        [Fact]
         public void ListensForProfileChangesAndMapsProperly()
         {
             var first = new AlbumArtPopup() {Height = 10};
@@ -33,11 +31,11 @@ namespace AudioBand.Test
 
             var vm = new AlbumArtPopupViewModel(_appSettings.Object, _messageBus.Object);
 
-            Assert.AreEqual(first.Height, vm.Height);
+            Assert.Equal(first.Height, vm.Height);
             _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
-            Assert.IsFalse(vm.IsEditing);
-            Assert.AreEqual(second.Height, vm.Height);
+            Assert.False(vm.IsEditing);
+            Assert.Equal(second.Height, vm.Height);
         }
     }
 }
