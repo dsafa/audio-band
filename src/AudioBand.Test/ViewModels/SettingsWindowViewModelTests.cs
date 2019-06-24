@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.ModelBinding;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using AudioBand.AudioSource;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Xunit;
 
 namespace AudioBand.Test
 {
-    [TestClass]
     public class SettingsWindowViewModelTests
     {
         private Mock<IAppSettings> _appSettings;
@@ -25,8 +18,7 @@ namespace AudioBand.Test
         private Mock<IViewModelContainer> _container;
         private Mock<IMessageBus> _messageBus;
 
-        [TestInitialize]
-        public void TestSetup()
+        public SettingsWindowViewModelTests()
         {
             _appSettings = new Mock<IAppSettings>();
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string>());
@@ -46,7 +38,7 @@ namespace AudioBand.Test
         {
         }
 
-        [TestMethod]
+        [Fact]
         public void HasUnsavedChangesWhenStartEditMessageIsPublished()
         {
             Action<EditStartMessage> handler = null;
@@ -55,22 +47,22 @@ namespace AudioBand.Test
 
             var vm = CreateVm();
 
-            Assert.IsFalse(vm.HasUnsavedChanges);
+            Assert.False(vm.HasUnsavedChanges);
             handler(default(EditStartMessage));
-            Assert.IsTrue(vm.HasUnsavedChanges);
+            Assert.True(vm.HasUnsavedChanges);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveCommandCanExecuteBasedOnUnsavedChanges()
         {
             var vm = CreateVm();
 
-            Assert.IsFalse(vm.SaveCommand.CanExecute(null));
+            Assert.False(vm.SaveCommand.CanExecute(null));
             vm.HasUnsavedChanges = true;
-            Assert.IsTrue(vm.SaveCommand.CanExecute(null));
+            Assert.True(vm.SaveCommand.CanExecute(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveCommandEndsEditsAndSavesSettings()
         {
             var vm = CreateVm();
@@ -81,10 +73,10 @@ namespace AudioBand.Test
 
             _appSettings.Verify(m => m.Save(), Times.Once);
             _messageBus.Verify(m => m.Publish(It.Is<EditEndMessage>(msg => msg == EditEndMessage.Accepted), It.IsAny<string>()));
-            Assert.IsFalse(vm.HasUnsavedChanges);
+            Assert.False(vm.HasUnsavedChanges);
         }
 
-        [TestMethod]
+        [Fact]
         public void CloseCommandShowsDialogIfUnsavedChanges()
         {
             _dialog.Setup(m => m.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object[]>()))
@@ -97,7 +89,7 @@ namespace AudioBand.Test
             _dialog.Verify(m => m.ShowConfirmationDialog(It.Is<ConfirmationDialogType>(d => d == ConfirmationDialogType.DiscardChanges), It.IsAny<object[]>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void CloseCommandShowsDialogIfUnsavedChanges_DiscardChangesCancelsEditsAndClosesWindow()
         {
             _dialog.Setup(m => m.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object[]>()))
@@ -108,11 +100,11 @@ namespace AudioBand.Test
 
             vm.CloseCommand.Execute(null);
             _messageBus.Verify(m => m.Publish(It.Is<SettingsWindowMessage>(msg => msg == SettingsWindowMessage.CloseWindow), It.IsAny<string>()));
-            Assert.IsFalse(vm.HasUnsavedChanges);
+            Assert.False(vm.HasUnsavedChanges);
             _messageBus.Verify(m => m.Publish(It.Is<EditEndMessage>(msg => msg == EditEndMessage.Cancelled), It.IsAny<string>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void CloseCommandShowsDialogIfUnsavedChanges_CancelCloseDoesNotCloseWindow()
         {
             _dialog.Setup(m => m.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object[]>()))
@@ -125,16 +117,16 @@ namespace AudioBand.Test
             _messageBus.Verify(m => m.Publish(It.Is<SettingsWindowMessage>(msg => msg == SettingsWindowMessage.CloseWindow), It.IsAny<string>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void DisableDeleteProfileCommandWhenOnlyOneProfile()
         {
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string>{"profile 1"});
             var vm = CreateVm();
 
-            Assert.IsFalse(vm.DeleteProfileCommand.CanExecute(null));
+            Assert.False(vm.DeleteProfileCommand.CanExecute(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ProfilesCollectionMatchesSettings()
         {
             string profile1 = "profile 1";
@@ -142,25 +134,25 @@ namespace AudioBand.Test
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string> {profile1, profile2});
             var vm = CreateVm();
 
-            Assert.AreEqual(2, vm.Profiles.Count);
-            Assert.AreEqual(profile1, vm.Profiles[0]);
-            Assert.AreEqual(profile2, vm.Profiles[1]);
+            Assert.Equal(2, vm.Profiles.Count);
+            Assert.Equal(profile1, vm.Profiles[0]);
+            Assert.Equal(profile2, vm.Profiles[1]);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateProfileAddsProfileToSettingsAndViewModel()
         {
             _appSettings.Setup(m => m.CreateProfile(It.IsAny<string>()));
             var vm = CreateVm();
 
-            Assert.AreEqual(0, vm.Profiles.Count);
+            Assert.Empty(vm.Profiles);
             vm.AddProfileCommand.Execute(null);
 
-            Assert.AreEqual(1, vm.Profiles.Count);
+            Assert.Single(vm.Profiles);
             _appSettings.Verify(m => m.CreateProfile(It.IsAny<string>()), Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectedProfileCommandUpdatesSettings()
         {
             string profile1 = "profile 1";
@@ -173,7 +165,7 @@ namespace AudioBand.Test
             _appSettings.VerifySet(m => m.CurrentProfile = It.Is<string>(x => x == profile2));
         }
 
-        [TestMethod]
+        [Fact]
         public void DeleteProfileConfirmationCancelDoesNotDelete()
         {
             string profile1 = "profile 1";
@@ -187,14 +179,14 @@ namespace AudioBand.Test
             vm.SelectedProfileName = profile2;
             vm.DeleteProfileCommand.Execute(profile2);
 
-            Assert.AreEqual(2, vm.Profiles.Count);
-            Assert.AreEqual(profile2, vm.SelectedProfileName);
+            Assert.Equal(2, vm.Profiles.Count);
+            Assert.Equal(profile2, vm.SelectedProfileName);
             _dialog.Verify(m => m.ShowConfirmationDialog(It.Is<ConfirmationDialogType>(c => c == ConfirmationDialogType.DeleteProfile),
                 It.Is<object[]>(data => (string)data[0] == profile2)));
             _appSettings.Verify(m => m.DeleteProfile(It.IsAny<string>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void DeleteProfileSelectsNewItem()
         {
             string profile1 = "profile 1";
@@ -208,11 +200,11 @@ namespace AudioBand.Test
             vm.SelectedProfileName = profile2;
             vm.DeleteProfileCommand.Execute(profile2);
 
-            Assert.AreEqual(profile1, vm.SelectedProfileName);
+            Assert.Equal(profile1, vm.SelectedProfileName);
             _appSettings.Verify(m => m.DeleteProfile(It.Is<string>(x => x == profile2)), Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectProfileEndsEdits()
         {
             string profile1 = "profile 1";
@@ -226,10 +218,10 @@ namespace AudioBand.Test
 
             vm.SelectedProfileName = profile2;
 
-            Assert.IsFalse(vm.IsEditing);
+            Assert.False(vm.IsEditing);
         }
 
-        [TestMethod]
+        [Fact]
         public void RenameProfileDialogAccepted()
         {
             string profile1 = "profile1";
@@ -245,12 +237,12 @@ namespace AudioBand.Test
 
             _dialog.Verify(m => m.ShowRenameDialog(It.Is<string>(s => s == profile1), It.Is<IEnumerable<string>>(e => e.Contains(profile1))));
             _appSettings.Verify(m => m.RenameCurrentProfile(It.Is<string>(s => s == profile2)), Times.Once);
-            Assert.AreEqual(profile2, vm.SelectedProfileName);
-            Assert.AreEqual(profile2, vm.Profiles[0]);
-            Assert.AreEqual(1, vm.Profiles.Count);
+            Assert.Equal(profile2, vm.SelectedProfileName);
+            Assert.Equal(profile2, vm.Profiles[0]);
+            Assert.Single(vm.Profiles);
         }
 
-        [TestMethod]
+        [Fact]
         public void RenameProfileDialogCanceled()
         {
             string profile1 = "profile1";
@@ -262,11 +254,11 @@ namespace AudioBand.Test
             vm.SelectedProfileName = profile1;
 
             _appSettings.Verify(m => m.RenameCurrentProfile(It.IsAny<string>()), Times.Never);
-            Assert.AreEqual(profile1, vm.SelectedProfileName);
-            Assert.AreEqual(profile1, vm.Profiles[0]);
+            Assert.Equal(profile1, vm.SelectedProfileName);
+            Assert.Equal(profile1, vm.Profiles[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void RenameProfileSameProfileIgnored()
         {
             string profile1 = "profile1";
@@ -278,8 +270,8 @@ namespace AudioBand.Test
             vm.SelectedProfileName = profile1;
 
             _appSettings.Verify(m => m.RenameCurrentProfile(It.IsAny<string>()), Times.Never);
-            Assert.AreEqual(profile1, vm.SelectedProfileName);
-            Assert.AreEqual(profile1, vm.Profiles[0]);
+            Assert.Equal(profile1, vm.SelectedProfileName);
+            Assert.Equal(profile1, vm.Profiles[0]);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Media;
 using AudioBand.Models;
 using AudioBand.Settings;
@@ -8,16 +7,15 @@ using AudioBand.Settings.Models.v3;
 using AudioBand.Settings.Models.V1;
 using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
 using V2Settings = AudioBand.Settings.Models.V2.Settings;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nett;
+using Xunit;
 using AudioSourceSetting = AudioBand.Settings.Models.V1.AudioSourceSetting;
 
 namespace AudioBand.Test
 {
-    [TestClass]
     public class SettingsMigrationTests
     {
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_Main()
         {
             var v1 = new V1Settings()
@@ -27,11 +25,11 @@ namespace AudioBand.Test
 
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.Version, "2");
-            Assert.AreEqual(v2.AudioSource, "test");
+            Assert.Equal("2", v2.Version);
+            Assert.Equal("test", v2.AudioSource);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_AlbumArtPopup()
         {
             var setting = new AlbumArtPopupAppearance
@@ -50,14 +48,14 @@ namespace AudioBand.Test
 
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.AlbumArtPopupSettings.Width, setting.Width);
-            Assert.AreEqual(v2.AlbumArtPopupSettings.Height, setting.Height);
-            Assert.AreEqual(v2.AlbumArtPopupSettings.IsVisible, setting.IsVisible);
-            Assert.AreEqual(v2.AlbumArtPopupSettings.Margin, setting.Margin);
-            Assert.AreEqual(v2.AlbumArtPopupSettings.XPosition, setting.XOffset);
+            Assert.Equal(v2.AlbumArtPopupSettings.Width, setting.Width);
+            Assert.Equal(v2.AlbumArtPopupSettings.Height, setting.Height);
+            Assert.Equal(v2.AlbumArtPopupSettings.IsVisible, setting.IsVisible);
+            Assert.Equal(v2.AlbumArtPopupSettings.Margin, setting.Margin);
+            Assert.Equal(v2.AlbumArtPopupSettings.XPosition, setting.XOffset);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_AlbumArt()
         {
             var setting = new AlbumArtAppearance
@@ -77,15 +75,15 @@ namespace AudioBand.Test
 
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.AlbumArtSettings.Width, setting.Width);
-            Assert.AreEqual(v2.AlbumArtSettings.Height, setting.Height);
-            Assert.AreEqual(v2.AlbumArtSettings.IsVisible, setting.IsVisible);
-            Assert.AreEqual(v2.AlbumArtSettings.XPosition, setting.XPosition);
-            Assert.AreEqual(v2.AlbumArtSettings.YPosition, setting.YPosition);
-            Assert.AreEqual(v2.AlbumArtSettings.PlaceholderPath, setting.PlaceholderPath);
+            Assert.Equal(v2.AlbumArtSettings.Width, setting.Width);
+            Assert.Equal(v2.AlbumArtSettings.Height, setting.Height);
+            Assert.Equal(v2.AlbumArtSettings.IsVisible, setting.IsVisible);
+            Assert.Equal(v2.AlbumArtSettings.XPosition, setting.XPosition);
+            Assert.Equal(v2.AlbumArtSettings.YPosition, setting.YPosition);
+            Assert.Equal(v2.AlbumArtSettings.PlaceholderPath, setting.PlaceholderPath);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_Audioband()
         {
             var setting = new AudioBandAppearance
@@ -101,11 +99,11 @@ namespace AudioBand.Test
 
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.AudioBandSettings.Width, setting.Width);
-            Assert.AreEqual(v2.AudioBandSettings.Height, setting.Height);
+            Assert.Equal(v2.AudioBandSettings.Width, setting.Width);
+            Assert.Equal(v2.AudioBandSettings.Height, setting.Height);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_NextSong()
         {
             var setting = new NextSongButtonAppearance
@@ -125,15 +123,15 @@ namespace AudioBand.Test
 
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.NextButtonSettings.Width, setting.Width);
-            Assert.AreEqual(v2.NextButtonSettings.Height, setting.Height);
-            Assert.AreEqual(v2.NextButtonSettings.IsVisible, setting.IsVisible);
-            Assert.AreEqual(v2.NextButtonSettings.XPosition, setting.XPosition);
-            Assert.AreEqual(v2.NextButtonSettings.YPosition, setting.YPosition);
-            Assert.AreEqual(v2.NextButtonSettings.ImagePath, setting.ImagePath);
+            Assert.Equal(v2.NextButtonSettings.Width, setting.Width);
+            Assert.Equal(v2.NextButtonSettings.Height, setting.Height);
+            Assert.Equal(v2.NextButtonSettings.IsVisible, setting.IsVisible);
+            Assert.Equal(v2.NextButtonSettings.XPosition, setting.XPosition);
+            Assert.Equal(v2.NextButtonSettings.YPosition, setting.YPosition);
+            Assert.Equal(v2.NextButtonSettings.ImagePath, setting.ImagePath);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_AudioSourceSettings()
         {
             var setting1 = new AudioSourceSettingsCollection
@@ -156,19 +154,19 @@ namespace AudioBand.Test
 
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.AudioSourceSettings.Count, settings.Count);
-            Assert.AreEqual(v2.AudioSourceSettings[0].AudioSourceName, setting1.Name);
-            Assert.AreEqual(v2.AudioSourceSettings[0].Settings.Count, setting1.Settings.Count);
-            Assert.AreEqual(v2.AudioSourceSettings[0].Settings[0].Name, setting1.Settings[0].Name);
-            Assert.AreEqual(v2.AudioSourceSettings[0].Settings[0].Value, setting1.Settings[0].Value);
+            Assert.Equal(v2.AudioSourceSettings.Count, settings.Count);
+            Assert.Equal(v2.AudioSourceSettings[0].AudioSourceName, setting1.Name);
+            Assert.Equal(v2.AudioSourceSettings[0].Settings.Count, setting1.Settings.Count);
+            Assert.Equal(v2.AudioSourceSettings[0].Settings[0].Name, setting1.Settings[0].Name);
+            Assert.Equal(v2.AudioSourceSettings[0].Settings[0].Value, setting1.Settings[0].Value);
 
-            Assert.AreEqual(v2.AudioSourceSettings[1].AudioSourceName, setting2.Name);
-            Assert.AreEqual(v2.AudioSourceSettings[1].Settings.Count, setting2.Settings.Count);
-            Assert.AreEqual(v2.AudioSourceSettings[1].Settings[0].Name, setting2.Settings[0].Name);
-            Assert.AreEqual(v2.AudioSourceSettings[1].Settings[0].Value, setting2.Settings[0].Value);
+            Assert.Equal(v2.AudioSourceSettings[1].AudioSourceName, setting2.Name);
+            Assert.Equal(v2.AudioSourceSettings[1].Settings.Count, setting2.Settings.Count);
+            Assert.Equal(v2.AudioSourceSettings[1].Settings[0].Name, setting2.Settings[0].Name);
+            Assert.Equal(v2.AudioSourceSettings[1].Settings[0].Value, setting2.Settings[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_PlayPauseButton()
         {
             var setting = new PlayPauseButtonAppearance
@@ -185,16 +183,16 @@ namespace AudioBand.Test
             var v1 = new V1Settings {PlayPauseButtonAppearance = setting};
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.PlayPauseButtonSettings.Width, setting.Width);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.Height, setting.Height);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.XPosition, setting.XPosition);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.YPosition, setting.YPosition);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.IsVisible, setting.IsVisible);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.PauseButtonImagePath, setting.PauseButtonImagePath);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.PlayButtonImagePath, setting.PlayButtonImagePath);
+            Assert.Equal(v2.PlayPauseButtonSettings.Width, setting.Width);
+            Assert.Equal(v2.PlayPauseButtonSettings.Height, setting.Height);
+            Assert.Equal(v2.PlayPauseButtonSettings.XPosition, setting.XPosition);
+            Assert.Equal(v2.PlayPauseButtonSettings.YPosition, setting.YPosition);
+            Assert.Equal(v2.PlayPauseButtonSettings.IsVisible, setting.IsVisible);
+            Assert.Equal(v2.PlayPauseButtonSettings.PauseButtonImagePath, setting.PauseButtonImagePath);
+            Assert.Equal(v2.PlayPauseButtonSettings.PlayButtonImagePath, setting.PlayButtonImagePath);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_PreviousButton()
         {
             var setting = new PreviousSongButtonAppearance
@@ -210,15 +208,15 @@ namespace AudioBand.Test
             var v1 = new V1Settings {PreviousSongButtonAppearance = setting};
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.PreviousButtonSettings.Height, setting.Height);
-            Assert.AreEqual(v2.PreviousButtonSettings.Width, setting.Width);
-            Assert.AreEqual(v2.PreviousButtonSettings.XPosition, setting.XPosition);
-            Assert.AreEqual(v2.PreviousButtonSettings.YPosition, setting.YPosition);
-            Assert.AreEqual(v2.PreviousButtonSettings.IsVisible, setting.IsVisible);
-            Assert.AreEqual(v2.PreviousButtonSettings.ImagePath, setting.ImagePath);
+            Assert.Equal(v2.PreviousButtonSettings.Height, setting.Height);
+            Assert.Equal(v2.PreviousButtonSettings.Width, setting.Width);
+            Assert.Equal(v2.PreviousButtonSettings.XPosition, setting.XPosition);
+            Assert.Equal(v2.PreviousButtonSettings.YPosition, setting.YPosition);
+            Assert.Equal(v2.PreviousButtonSettings.IsVisible, setting.IsVisible);
+            Assert.Equal(v2.PreviousButtonSettings.ImagePath, setting.ImagePath);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_ProgressBar()
         {
             var setting = new ProgressBarAppearance
@@ -235,16 +233,16 @@ namespace AudioBand.Test
             var v1 = new V1Settings {ProgressBarAppearance = setting};
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.ProgressBarSettings.Width, setting.Width);
-            Assert.AreEqual(v2.ProgressBarSettings.Height, setting.Height);
-            Assert.AreEqual(v2.ProgressBarSettings.XPosition, setting.XPosition);
-            Assert.AreEqual(v2.ProgressBarSettings.YPosition, setting.YPosition);
-            Assert.AreEqual(v2.ProgressBarSettings.IsVisible, setting.IsVisible);
-            Assert.AreEqual(v2.ProgressBarSettings.BackgroundColor, setting.BackgroundColor);
-            Assert.AreEqual(v2.ProgressBarSettings.ForegroundColor, setting.ForegroundColor);
+            Assert.Equal(v2.ProgressBarSettings.Width, setting.Width);
+            Assert.Equal(v2.ProgressBarSettings.Height, setting.Height);
+            Assert.Equal(v2.ProgressBarSettings.XPosition, setting.XPosition);
+            Assert.Equal(v2.ProgressBarSettings.YPosition, setting.YPosition);
+            Assert.Equal(v2.ProgressBarSettings.IsVisible, setting.IsVisible);
+            Assert.Equal(v2.ProgressBarSettings.BackgroundColor, setting.BackgroundColor);
+            Assert.Equal(v2.ProgressBarSettings.ForegroundColor, setting.ForegroundColor);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV1ToV2_CustomText()
         {
             var text1 = new TextAppearance
@@ -267,22 +265,22 @@ namespace AudioBand.Test
             var v1 = new V1Settings {TextAppearances = texts};
             var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
-            Assert.AreEqual(v2.CustomLabelSettings.Count, texts.Count);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Color, text1.Color);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Width, text1.Width);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Height, text1.Height);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Name, text1.Name);
-            Assert.AreEqual(v2.CustomLabelSettings[0].XPosition, text1.XPosition);
-            Assert.AreEqual(v2.CustomLabelSettings[0].IsVisible, text1.IsVisible);
-            Assert.AreEqual(v2.CustomLabelSettings[0].YPosition, text1.YPosition);
-            Assert.AreEqual(v2.CustomLabelSettings[0].ScrollSpeed, text1.ScrollSpeed);
-            Assert.AreEqual(v2.CustomLabelSettings[0].FontSize, text1.FontSize);
-            Assert.AreEqual(v2.CustomLabelSettings[0].FontFamily, text1.FontFamily);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Alignment, text1.Alignment);
-            Assert.AreEqual(v2.CustomLabelSettings[0].FormatString, text1.FormatString);
+            Assert.Equal(v2.CustomLabelSettings.Count, texts.Count);
+            Assert.Equal(v2.CustomLabelSettings[0].Color, text1.Color);
+            Assert.Equal(v2.CustomLabelSettings[0].Width, text1.Width);
+            Assert.Equal(v2.CustomLabelSettings[0].Height, text1.Height);
+            Assert.Equal(v2.CustomLabelSettings[0].Name, text1.Name);
+            Assert.Equal(v2.CustomLabelSettings[0].XPosition, text1.XPosition);
+            Assert.Equal(v2.CustomLabelSettings[0].IsVisible, text1.IsVisible);
+            Assert.Equal(v2.CustomLabelSettings[0].YPosition, text1.YPosition);
+            Assert.Equal(v2.CustomLabelSettings[0].ScrollSpeed, text1.ScrollSpeed);
+            Assert.Equal(v2.CustomLabelSettings[0].FontSize, text1.FontSize);
+            Assert.Equal(v2.CustomLabelSettings[0].FontFamily, text1.FontFamily);
+            Assert.Equal(v2.CustomLabelSettings[0].Alignment, text1.Alignment);
+            Assert.Equal(v2.CustomLabelSettings[0].FormatString, text1.FormatString);
         }
 
-        [TestMethod]
+        [Fact]
         public void MigrateV2ToV3()
         {
             string settingsFile = @"Version = ""2""
@@ -432,74 +430,74 @@ Value = ""secret""
             var v2 = Toml.ReadString<V2Settings>(settingsFile, settings);
             var v3 = Migration.MigrateSettings<SettingsV3>(v2, "2", "3");
 
-            Assert.AreEqual("3", v3.Version);
-            Assert.AreEqual(v2.AudioSource, v3.AudioSource);
+            Assert.Equal("3", v3.Version);
+            Assert.Equal(v2.AudioSource, v3.AudioSource);
 
-            Assert.AreEqual(v2.AlbumArtPopupSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.Width);
-            Assert.AreEqual(v2.AlbumArtPopupSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.Height);
-            Assert.AreEqual(v2.AlbumArtPopupSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.IsVisible);
-            Assert.AreEqual(v2.AlbumArtPopupSettings.Margin, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.Margin);
-            Assert.AreEqual(v2.AlbumArtPopupSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.XPosition);
+            Assert.Equal(v2.AlbumArtPopupSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.Width);
+            Assert.Equal(v2.AlbumArtPopupSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.Height);
+            Assert.Equal(v2.AlbumArtPopupSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.IsVisible);
+            Assert.Equal(v2.AlbumArtPopupSettings.Margin, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.Margin);
+            Assert.Equal(v2.AlbumArtPopupSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtPopupSettings.XPosition);
 
-            Assert.AreEqual(v2.AlbumArtSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.Width);
-            Assert.AreEqual(v2.AlbumArtSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.Height);
-            Assert.AreEqual(v2.AlbumArtSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.IsVisible);
-            Assert.AreEqual(v2.AlbumArtSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.XPosition);
-            Assert.AreEqual(v2.AlbumArtSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.YPosition);
-            Assert.AreEqual(v2.AlbumArtSettings.PlaceholderPath, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.PlaceholderPath);
+            Assert.Equal(v2.AlbumArtSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.Width);
+            Assert.Equal(v2.AlbumArtSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.Height);
+            Assert.Equal(v2.AlbumArtSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.IsVisible);
+            Assert.Equal(v2.AlbumArtSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.XPosition);
+            Assert.Equal(v2.AlbumArtSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.YPosition);
+            Assert.Equal(v2.AlbumArtSettings.PlaceholderPath, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.PlaceholderPath);
 
-            Assert.AreEqual(v2.AudioBandSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].AudioBandSettings.Width);
-            Assert.AreEqual(v2.AudioBandSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].AudioBandSettings.Height);
+            Assert.Equal(v2.AudioBandSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].AudioBandSettings.Width);
+            Assert.Equal(v2.AudioBandSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].AudioBandSettings.Height);
 
-            Assert.AreEqual(v2.NextButtonSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Width);
-            Assert.AreEqual(v2.NextButtonSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Height);
-            Assert.AreEqual(v2.NextButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.IsVisible);
-            Assert.AreEqual(v2.NextButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.XPosition);
-            Assert.AreEqual(v2.NextButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.YPosition);
-            Assert.AreEqual(v2.NextButtonSettings.ImagePath, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Content.ImagePath);
+            Assert.Equal(v2.NextButtonSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Width);
+            Assert.Equal(v2.NextButtonSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Height);
+            Assert.Equal(v2.NextButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.IsVisible);
+            Assert.Equal(v2.NextButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.XPosition);
+            Assert.Equal(v2.NextButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.YPosition);
+            Assert.Equal(v2.NextButtonSettings.ImagePath, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Content.ImagePath);
 
-            Assert.AreEqual(v2.AudioSourceSettings.Count, v3.AudioSourceSettings.Count);
-            Assert.AreEqual(v2.AudioSourceSettings[0].AudioSourceName, v3.AudioSourceSettings[0].AudioSourceName);
-            Assert.AreEqual(v2.AudioSourceSettings[0].Settings.Count, v3.AudioSourceSettings[0].Settings.Count);
-            Assert.AreEqual(v2.AudioSourceSettings[0].Settings[0].Name, v3.AudioSourceSettings[0].Settings[0].Name);
-            Assert.AreEqual(v2.AudioSourceSettings[0].Settings[0].Value, v3.AudioSourceSettings[0].Settings[0].Value);
+            Assert.Equal(v2.AudioSourceSettings.Count, v3.AudioSourceSettings.Count);
+            Assert.Equal(v2.AudioSourceSettings[0].AudioSourceName, v3.AudioSourceSettings[0].AudioSourceName);
+            Assert.Equal(v2.AudioSourceSettings[0].Settings.Count, v3.AudioSourceSettings[0].Settings.Count);
+            Assert.Equal(v2.AudioSourceSettings[0].Settings[0].Name, v3.AudioSourceSettings[0].Settings[0].Name);
+            Assert.Equal(v2.AudioSourceSettings[0].Settings[0].Value, v3.AudioSourceSettings[0].Settings[0].Value);
 
-            Assert.AreEqual(v2.PlayPauseButtonSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.Width);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.Height);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.XPosition);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.YPosition);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.IsVisible);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.PauseButtonImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.PauseContent.ImagePath);
-            Assert.AreEqual(v2.PlayPauseButtonSettings.PlayButtonImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.PlayContent.ImagePath);
+            Assert.Equal(v2.PlayPauseButtonSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.Width);
+            Assert.Equal(v2.PlayPauseButtonSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.Height);
+            Assert.Equal(v2.PlayPauseButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.XPosition);
+            Assert.Equal(v2.PlayPauseButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.YPosition);
+            Assert.Equal(v2.PlayPauseButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.IsVisible);
+            Assert.Equal(v2.PlayPauseButtonSettings.PauseButtonImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.PauseContent.ImagePath);
+            Assert.Equal(v2.PlayPauseButtonSettings.PlayButtonImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PlayPauseButtonSettings.PlayContent.ImagePath);
 
-            Assert.AreEqual(v2.PreviousButtonSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Height);
-            Assert.AreEqual(v2.PreviousButtonSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Width);
-            Assert.AreEqual(v2.PreviousButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.XPosition);
-            Assert.AreEqual(v2.PreviousButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.YPosition);
-            Assert.AreEqual(v2.PreviousButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.IsVisible);
-            Assert.AreEqual(v2.PreviousButtonSettings.ImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Content.ImagePath);
+            Assert.Equal(v2.PreviousButtonSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Height);
+            Assert.Equal(v2.PreviousButtonSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Width);
+            Assert.Equal(v2.PreviousButtonSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.XPosition);
+            Assert.Equal(v2.PreviousButtonSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.YPosition);
+            Assert.Equal(v2.PreviousButtonSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.IsVisible);
+            Assert.Equal(v2.PreviousButtonSettings.ImagePath, v3.Profiles[SettingsV3.DefaultProfileName].PreviousButtonSettings.Content.ImagePath);
 
-            Assert.AreEqual(v2.ProgressBarSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.Width);
-            Assert.AreEqual(v2.ProgressBarSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.Height);
-            Assert.AreEqual(v2.ProgressBarSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.XPosition);
-            Assert.AreEqual(v2.ProgressBarSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.YPosition);
-            Assert.AreEqual(v2.ProgressBarSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.IsVisible);
-            Assert.AreEqual(v2.ProgressBarSettings.BackgroundColor, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.BackgroundColor);
-            Assert.AreEqual(v2.ProgressBarSettings.ForegroundColor, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.ForegroundColor);
+            Assert.Equal(v2.ProgressBarSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.Width);
+            Assert.Equal(v2.ProgressBarSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.Height);
+            Assert.Equal(v2.ProgressBarSettings.XPosition, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.XPosition);
+            Assert.Equal(v2.ProgressBarSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.YPosition);
+            Assert.Equal(v2.ProgressBarSettings.IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.IsVisible);
+            Assert.Equal(v2.ProgressBarSettings.BackgroundColor, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.BackgroundColor);
+            Assert.Equal(v2.ProgressBarSettings.ForegroundColor, v3.Profiles[SettingsV3.DefaultProfileName].ProgressBarSettings.ForegroundColor);
 
-            Assert.AreEqual(v2.CustomLabelSettings.Count, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings.Count);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Color, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Color);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Width, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Width);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Height, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Height);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Name, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Name);
-            Assert.AreEqual(v2.CustomLabelSettings[0].XPosition, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].XPosition);
-            Assert.AreEqual(v2.CustomLabelSettings[0].IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].IsVisible);
-            Assert.AreEqual(v2.CustomLabelSettings[0].YPosition, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].YPosition);
-            Assert.AreEqual(v2.CustomLabelSettings[0].ScrollSpeed, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].ScrollSpeed);
-            Assert.AreEqual(v2.CustomLabelSettings[0].FontSize, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].FontSize);
-            Assert.AreEqual(v2.CustomLabelSettings[0].FontFamily, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].FontFamily);
-            Assert.AreEqual(v2.CustomLabelSettings[0].Alignment, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Alignment);
-            Assert.AreEqual(v2.CustomLabelSettings[0].FormatString, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].FormatString);
+            Assert.Equal(v2.CustomLabelSettings.Count, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings.Count);
+            Assert.Equal(v2.CustomLabelSettings[0].Color, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Color);
+            Assert.Equal(v2.CustomLabelSettings[0].Width, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Width);
+            Assert.Equal(v2.CustomLabelSettings[0].Height, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Height);
+            Assert.Equal(v2.CustomLabelSettings[0].Name, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Name);
+            Assert.Equal(v2.CustomLabelSettings[0].XPosition, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].XPosition);
+            Assert.Equal(v2.CustomLabelSettings[0].IsVisible, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].IsVisible);
+            Assert.Equal(v2.CustomLabelSettings[0].YPosition, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].YPosition);
+            Assert.Equal(v2.CustomLabelSettings[0].ScrollSpeed, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].ScrollSpeed);
+            Assert.Equal(v2.CustomLabelSettings[0].FontSize, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].FontSize);
+            Assert.Equal(v2.CustomLabelSettings[0].FontFamily, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].FontFamily);
+            Assert.Equal(v2.CustomLabelSettings[0].Alignment, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Alignment);
+            Assert.Equal(v2.CustomLabelSettings[0].FormatString, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].FormatString);
         }
     }
 }
