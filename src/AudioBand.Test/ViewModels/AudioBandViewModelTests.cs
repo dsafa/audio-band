@@ -19,7 +19,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void AudioBandViewModelListensToProfileChanges()
+        public void AudioBandViewModel_ProfileChangedEvent_ListensToProfileChanges()
         {
             var first = new Models.AudioBand(){Height = 10};
             var second = new Models.AudioBand(){Height = 20};

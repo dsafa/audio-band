@@ -13,7 +13,7 @@ namespace AudioBand.Test
     public class ProgressBarViewModelTests
     {
         [Fact]
-        public void ListensForProfileChanges()
+        public void ProgressBarViewModel_ProfileChanged_ListensForProfileChanges()
         {
             var settingsMock = new Mock<IAppSettings>();
 

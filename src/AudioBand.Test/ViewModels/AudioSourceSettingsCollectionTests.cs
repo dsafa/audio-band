@@ -20,7 +20,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void NoMatchingSettings()
+        public void NoMatchingSettings_CreatesNoChildViewModels()
         {
             _audioSourceMock.SetupGet(s => s.Settings).Returns(new List<AudioSourceSettingAttribute>());
             var name = "test";
@@ -40,7 +40,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void MatchingSettingsShouldCreateVmsInOrder()
+        public void MatchingSettings_ShouldCreateChildViewModelsInOrder()
         {
             var setting1 = "Setting1";
             var setting2 = "setting2";
@@ -75,7 +75,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void AudioSourceSettingUpdateNewValueIsWrittenBackToSettings()
+        public void AudioSourceSettingUpdate_NewValueIsWrittenBackToSettings()
         {
             var setting = "setting";
 
@@ -97,7 +97,7 @@ namespace AudioBand.Test
         }
        
         [Fact]
-        public void AudioSourceSettingsCalledInPriority()
+        public void AudioSourceSettingsUpdated_AudioSourceIsUpdatedInPriority()
         {
             var setting1 = new AudioSourceSettingAttribute("test1") { Priority = 10 };
             var setting2 = new AudioSourceSettingAttribute("test2") { Priority = 5 };
