@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -29,21 +30,26 @@ namespace AudioBand.ValueConverters
                 return null;
             }
 
-            if (path.EndsWith(".svg"))
+            if (!File.Exists(path))
             {
-                try
+                return null;
+            }
+
+            try
+            {
+                if (path.EndsWith(".svg"))
                 {
                     var svgDrawing = new FileSvgReader(new WpfDrawingSettings()).Read(path);
                     svgDrawing.Freeze();
                     return new DrawingImage(svgDrawing);
                 }
-                catch
-                {
-                    return null;
-                }
-            }
 
-            return new BitmapImage(new Uri(path));
+                return new BitmapImage(new Uri(path));
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <inheritdoc />
@@ -53,8 +59,19 @@ namespace AudioBand.ValueConverters
         }
 
         /// <inheritdoc />
+        /// returns fallback value if invalid.
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values == null)
+            {
+                return null;
+            }
+
+            if (values.Length != 2)
+            {
+                return null;
+            }
+
             return Convert(values[0], targetType, parameter, culture) ?? values[1];
         }
 
