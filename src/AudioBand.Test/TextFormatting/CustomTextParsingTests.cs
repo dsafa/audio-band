@@ -12,7 +12,7 @@ namespace AudioBand.Test
     public class CustomTextParsingTests
     {
         [Fact]
-        public void ParseNormal()
+        public void Parse_NormalTextFormat()
         {
             var format = "hello";
             var segments = FormattedTextParser.ParseFormattedString(format, Colors.Black, new Mock<IAudioSession>().Object).ToList();
@@ -23,7 +23,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseEmpty()
+        public void Parse_EmptyTextFormat_CreatesNoSegments()
         {
             var format = "";
             var segments = FormattedTextParser.ParseFormattedString(format, Colors.Black, new Mock<IAudioSession>().Object).ToList();
@@ -32,7 +32,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseSinglePlaceholder()
+        public void Parse_SinglePlaceholder_CreatesPlaceholderSegment()
         {
             var format = "{artist}";
             var artist = "123";
@@ -45,7 +45,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParsePlaceholderWithNormal()
+        public void Parse_PlaceholderTextWithNormal_CreatesPlaceholderAndNormalSegments()
         {
             var format = "{artist} song";
             var artist = "123";
@@ -61,7 +61,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseSingleNormalWithPlaceholder()
+        public void Parse_NormalWithPlaceholder_CreatesNormalAndPlaceholderSegments()
         {
             var format = "by {artist}";
             var artist = "123";
@@ -78,7 +78,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseUnclosed()
+        public void Parse_FormatContainsPlaceholderWithUnclosedBrace_CreatesNormalSegment()
         {
             var format = "{artist";
             var segments = FormattedTextParser.ParseFormattedString(format, Colors.Black, new Mock<IAudioSession>().Object).ToList();
@@ -89,7 +89,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseOnlyClosing()
+        public void Parse_FormatOnlyClosingBrace_CreatesNormalSegment()
         {
             var format = "}";
             var segments = FormattedTextParser.ParseFormattedString(format, Colors.Black, new Mock<IAudioSession>().Object).ToList();
@@ -100,7 +100,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseComplex()
+        public void Parse_ComplexFormat_CreatesProperSegments()
         {
             var format = "this is {artist} and ";
             var artist = "123";
@@ -121,7 +121,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseInvalidFormat()
+        public void Parse_InvalidPlaceholder_CreatesSegmentWithInvalidValue()
         {
             var format = "{something}";
             var segments = FormattedTextParser.ParseFormattedString(format, Colors.Black, new Mock<IAudioSession>().Object).ToList();
@@ -133,7 +133,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseArtist()
+        public void Parse_ArtistPlaceholder_SubstitutesText()
         {
             var format = "{artist}";
             var artist = "123";
@@ -150,7 +150,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseSong()
+        public void Parse_SongPlaceholder_SubstitutesText()
         {
             var format = "{song}";
             var song = "the song";
@@ -163,7 +163,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseAlbum()
+        public void Parse_AlbumPlaceholder_SubstitutesText()
         {
             var format = "{album}";
             var album = "the album";
@@ -176,7 +176,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseTime()
+        public void Parse_TimePlaceholder_SubstitutesText()
         {
             var format = "{time}";
             var time = TimeSpan.FromSeconds(40);
@@ -189,7 +189,22 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseLength()
+        public void Parse_RemainingTimePlaceholder_SubstitutesText()
+        {
+            var format = "{remaining}";
+            var time = TimeSpan.FromSeconds(40);
+            var length = TimeSpan.FromSeconds(60);
+            var mock = new Mock<IAudioSession>();
+            mock.SetupGet(m => m.SongProgress).Returns(time);
+            mock.SetupGet(m => m.SongLength).Returns(length);
+            var segments = FormattedTextParser.ParseFormattedString(format, Colors.Black, mock.Object).ToList();
+
+            Assert.Single(segments);
+            Assert.Equal("0:20", segments[0].Text);
+        }
+
+        [Fact]
+        public void Parse_LengthPlaceholder_SubstitutesText()
         {
             var format = "{length}";
             var time = TimeSpan.FromSeconds(80);
@@ -202,7 +217,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseStyleBold()
+        public void Parse_StyleBold_SegmentContainsBoldFlag()
         {
             var format = "{*artist}";
             var mock = new Mock<IAudioSession>();
@@ -213,7 +228,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseStyleItalic()
+        public void Parse_StyleItalic_SegmentContainsItalicFlag()
         {
             var format = "{&artist}";
             var segments = FormattedTextParser
@@ -224,7 +239,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseStyleUnderline()
+        public void Parse_StyleUnderline_SegmentContainsUnderlineFlag()
         {
             var format = "{_artist}";
             var segments = FormattedTextParser
@@ -235,7 +250,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseStyleWithColor()
+        public void Parse_StyleWithColor_SegmentContainsColorAndStyle()
         {
             var format = "{_artist:#ff00ff}";
             var segments = FormattedTextParser
@@ -247,7 +262,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ParseMultipleStyles()
+        public void Parse_MultipleStyles_SegmentContainsMatchingStyleFlags()
         {
             var format = "{*_artist}";
             var segments = FormattedTextParser

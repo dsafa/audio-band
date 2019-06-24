@@ -34,7 +34,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void AddLabel()
+        public void AddLabel_CreatesNewViewModel()
         {
             _viewModel.AddLabelCommand.Execute(null);
             
@@ -42,7 +42,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void RemoveLabel_confirm()
+        public void RemoveLabel_DialogShownAndConfirmed_RemovesCorrectLabel()
         {
             _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(true);
             _viewModel.AddLabelCommand.Execute(null);
@@ -57,7 +57,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void RemoveLabel_deny()
+        public void RemoveLabel_DialogShownAndCanceled_DoesNotRemoveLabel()
         {
             _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(false);
             _viewModel.AddLabelCommand.Execute(null);
@@ -72,7 +72,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void AddLabel_ThenCancel()
+        public void AddLabel_CancelMessageIsPublished_NewLabelIsRemoved()
         {
             _viewModel.BeginEdit();
             _viewModel.AddLabelCommand.Execute(null);
@@ -83,7 +83,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void RemoveLabel_ThenCancel()
+        public void RemoveLabel_CancelMessageIsPublished_DeletedLabelIsAddedBack()
         {
             _appSettingsMock.SetupGet(x => x.CustomLabels).Returns(new List<CustomLabel> { new CustomLabel() });
             _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(true);
@@ -98,7 +98,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void AddRemoveLabel_ThenCancel()
+        public void AddRemoveLabel_CancelMessageIsPublished_NoChanges()
         {
             _viewModel.BeginEdit();
             _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>())).Returns(true);
@@ -111,7 +111,7 @@ namespace AudioBand.Test
         }
 
         [Fact(Skip = "Unable to setup sequence")]
-        public void ProfileChangeRemovesAllLabelsAndAddsNewOnes()
+        public void ProfileChanged_RemovesAllLabelsAndAddsNewOnes()
         {
             var settingsMock = new Mock<IAppSettings>();
             settingsMock.SetupSequence(m => m.CustomLabels)
@@ -126,7 +126,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ProfileChangeViewModelStillHasCurrentTrackData()
+        public void ProfileChanged_NewLabelsHaveCorrectAudioSessionData()
         {
             var settingsMock = new Mock<IAppSettings>();
             settingsMock.SetupSequence(m => m.CustomLabels)

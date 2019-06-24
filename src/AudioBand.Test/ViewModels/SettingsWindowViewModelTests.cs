@@ -39,7 +39,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void HasUnsavedChangesWhenStartEditMessageIsPublished()
+        public void StartEditMessageIsPublished_HasUnsavedChangesPropertyIsTrue()
         {
             Action<EditStartMessage> handler = null;
             _messageBus.Setup(m => m.Subscribe(It.IsAny<Action<EditStartMessage>>()))
@@ -53,7 +53,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void SaveCommandCanExecuteBasedOnUnsavedChanges()
+        public void UnsavedChangesIsTrue_SaveCommandCanExecuteIsTrue()
         {
             var vm = CreateVm();
 
@@ -63,7 +63,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void SaveCommandEndsEditsAndSavesSettings()
+        public void SaveCommandExecuted_PublishesEndsEditMessageAndSavesSettings()
         {
             var vm = CreateVm();
 
@@ -77,7 +77,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void CloseCommandShowsDialogIfUnsavedChanges()
+        public void CloseCommandOnExecuted_ShowsDialogIfUnsavedChanges()
         {
             _dialog.Setup(m => m.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object[]>()))
                 .Returns(true);
@@ -90,7 +90,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void CloseCommandShowsDialogIfUnsavedChanges_DiscardChangesCancelsEditsAndClosesWindow()
+        public void CloseCommandExecuted_ShowsDialogIfUnsavedChanges_DiscardChangesCancelsEditsAndClosesWindow()
         {
             _dialog.Setup(m => m.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object[]>()))
                 .Returns(true);
@@ -105,7 +105,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void CloseCommandShowsDialogIfUnsavedChanges_CancelCloseDoesNotCloseWindow()
+        public void CloseCommandExecuted_ShowsDialogIfUnsavedChanges_CancelCloseDoesNotCloseWindow()
         {
             _dialog.Setup(m => m.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object[]>()))
                 .Returns(false);
@@ -118,7 +118,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void DisableDeleteProfileCommandWhenOnlyOneProfile()
+        public void OnlyOneProfile_DeleteProfileCommandCanExecuteIsFalse()
         {
             _appSettings.SetupGet(m => m.Profiles).Returns(new List<string>{"profile 1"});
             var vm = CreateVm();
@@ -127,7 +127,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ProfilesCollectionMatchesSettings()
+        public void SettingsHasProfiles_ProfilesCollectionMatches()
         {
             string profile1 = "profile 1";
             string profile2 = "profile 2";
@@ -140,7 +140,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void CreateProfileAddsProfileToSettingsAndViewModel()
+        public void CreateProfileCommandExecuted_AddsProfileToSettingsAndViewModel()
         {
             _appSettings.Setup(m => m.CreateProfile(It.IsAny<string>()));
             var vm = CreateVm();
@@ -153,7 +153,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void SelectedProfileCommandUpdatesSettings()
+        public void SelectedProfileCommandExecuted_UpdatesProfileInSettings()
         {
             string profile1 = "profile 1";
             string profile2 = "profile 2";
@@ -166,7 +166,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void DeleteProfileConfirmationCancelDoesNotDelete()
+        public void DeleteProfileCommandExecuted_ConfirmationDialogCancelDoesNotDelete()
         {
             string profile1 = "profile 1";
             string profile2 = "profile 2";
@@ -187,7 +187,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void DeleteProfileSelectsNewItem()
+        public void DeleteProfileCommandExecuted_SelectsDifferentProfile()
         {
             string profile1 = "profile 1";
             string profile2 = "profile 2";
@@ -205,7 +205,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void SelectProfileEndsEdits()
+        public void SelectProfileCommandExecuted_PublishesEndsEditMessage()
         {
             string profile1 = "profile 1";
             string profile2 = "profile 2";
@@ -222,7 +222,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void RenameProfileDialogAccepted()
+        public void RenameProfileCommandExecuted_DialogAcceptedRenamesProfile()
         {
             string profile1 = "profile1";
             string profile2 = "profile2";
@@ -243,7 +243,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void RenameProfileDialogCanceled()
+        public void RenameProfileCommandExecuted_DialogCanceledDoesNotRenameProfile()
         {
             string profile1 = "profile1";
 
@@ -259,7 +259,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void RenameProfileSameProfileIgnored()
+        public void RenameProfileCommandExecuted_NameNotChangedInDialogDoesNotChangeProfileName()
         {
             string profile1 = "profile1";
 

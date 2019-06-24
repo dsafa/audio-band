@@ -24,7 +24,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ListensToProfileChanges()
+        public void AlbumArtViewModel_ProfileChangedEvent_ListensToProfileChanges()
         {
             var first = new AlbumArt() {Height = 10};
             var second = new AlbumArt() {Height = 20};

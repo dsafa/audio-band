@@ -27,7 +27,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void NextButtonListensforProfileChanges()
+        public void NextButton_ProfilesChanged_ListensforProfileChanges()
         {
             var first = new NextButton() {Height = 1};
             var second = new NextButton() {Height = 2};
@@ -49,7 +49,7 @@ namespace AudioBand.Test
 
 
         [Fact]
-        public async Task NextButtonCommandCallsNextTrack()
+        public async Task NextButton_NextCommandExecuted_CallsNextTrack()
         {
             _appSettings.SetupGet(m => m.NextButton).Returns(new NextButton());
             var audioSourceMock = new Mock<IInternalAudioSource>();
@@ -62,7 +62,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void PlayPauseButtonListensForProfileChanges()
+        public void PlayPauseButton_ProfileChanged_ListensForProfileChanges()
         {
             var first = new PlayPauseButton() {Height = 1};
             var second = new PlayPauseButton() {Height = 2};
@@ -83,7 +83,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void PlayPauseButtonMarkedAsEditingWhenContentIsEdited()
+        public void PlayPauseButton_PropertiesInContentAreChanged_ViewModelIsMarkedAsEditing()
         {
             _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
             var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);
@@ -102,7 +102,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void PlayPauseButtonListensToAudioSource()
+        public void PlayPauseButton_AudioSessionPlayStateChanged_ListensToEvent()
         {
             _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
             _session.SetupSequence(m => m.IsPlaying).Returns(true).Returns(false);
@@ -118,7 +118,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public async Task PlayPauseButtonPlayAndPauseCommandWorks()
+        public async Task PlayPauseButton_PlayAndPauseCommandExecuted_AudioSourceIsNotified()
         {
             _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
             var audioSourceMock = new Mock<IInternalAudioSource>();
@@ -142,7 +142,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void PreviousButtonListensForProfileChanges()
+        public void PreviousButton_ProfileChanged_ListensForProfileChanges()
         {
             var first = new PreviousButton() { Height = 1 };
             var second = new PreviousButton() { Height = 2 };
@@ -163,7 +163,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public async Task PreviousButtonCommandCallsPreviousTrack()
+        public async Task PreviousButton_PreviousCommand_CallsPreviousTrackOnAudioSource()
         {
             _appSettings.SetupGet(m => m.PreviousButton).Returns(new PreviousButton());
             var audioSourceMock = new Mock<IInternalAudioSource>();
@@ -176,7 +176,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void RepeatModeButtonListensForProfileChanges()
+        public void RepeatModeButton_ProfileChanged_ListensForProfileChanges()
         {
             var first = new RepeatModeButton() { Height = 1 };
             var second = new RepeatModeButton() { Height = 2 };
@@ -197,7 +197,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void RepeatModeButtonMarkedAsEditingWhenContentIsEditing()
+        public void RepeatModeButton_ContentPropertiesAreModified_ViewModelIsMarkedAsEditing()
         {
             _appSettings.SetupGet(m => m.RepeatModeButton).Returns(new RepeatModeButton());
             var viewModel = new RepeatModeButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);
@@ -212,7 +212,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public async Task RepeatModeButtonCyclesRepeatMode()
+        public async Task RepeatModeButton_RepeatCommandExecuted_CyclesThroughRepeatModes()
         {
             var repeatSequence = new[] {RepeatMode.RepeatContext, RepeatMode.RepeatTrack, RepeatMode.Off};
             var index = 0;
@@ -239,7 +239,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ShuffleModeButtonListensForProfileChanges()
+        public void ShuffleModeButton_ProfileChanged_ListensForProfileChanges()
         {
             var first = new ShuffleModeButton() { Height = 1 };
             var second = new ShuffleModeButton() { Height = 2 };
@@ -260,7 +260,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ShuffleModeButtonMarkedAsEditingWhenContentIsEdited()
+        public void ShuffleModeButton_ContentIsEdited_ViewModelIsMarkedAsEditing()
         {
             _appSettings.SetupGet(m => m.ShuffleModeButton).Returns(new ShuffleModeButton());
             var vm = new ShuffleModeButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);
@@ -279,7 +279,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public async Task ShuffleModeButtonCommandTogglesShuffle()
+        public async Task ShuffleModeButton_ShuffleCommandExecuted_TogglesShuffle()
         {
             _appSettings.SetupGet(m => m.ShuffleModeButton).Returns(new ShuffleModeButton());
             var vm = new ShuffleModeButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);

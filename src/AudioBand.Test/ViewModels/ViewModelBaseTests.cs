@@ -6,7 +6,7 @@ namespace AudioBand.Test
     public class ViewModelBaseTests
     {
         [Fact]
-        public void SetPropertyWithChangedFieldCallsPropertyChanged()
+        public void SetProperty_WithChangedField_CallsPropertyChanged()
         {
             string propertyName = null;
             var vm = new ViewModel();
@@ -18,7 +18,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void SetPropertySameField()
+        public void SetProperty_SameField_DoesNotCallPropertyChanged()
         {
             int called = 0;
             string propertyName = null;
@@ -32,7 +32,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void SetPropertyWithTrackedStateAttributeAutomaticallyStartsEdit()
+        public void SetProperty_WithTrackedStateAttribute_AutomaticallyStartsEdit()
         {
             var vm = new ViewModel();
             vm.Field = 0;
@@ -43,7 +43,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void SetPropertyWithoutTrackedStateAttributeDoesNotStartEdit()
+        public void SetProperty_WithoutTrackedStateAttribute_DoesNotStartEdit()
         {
             var vm = new ViewModel();
             vm.FieldNotTracked = 0;
@@ -54,7 +54,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void SetPropertyWithModelAutomaticallyStartsEdit()
+        public void SetPropertyWithModel_AutomaticallyStartsEdit()
         {
             var vm = new ViewModelWithModel();
             vm.Field = 0;
@@ -65,30 +65,12 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void ResetViewModelWithModelStartsEdit()
+        public void ResetViewModelWithModel_StartsEdit()
         {
             var vm = new ViewModelWithModel();
             vm.Reset();
             
             Assert.True(vm.IsEditing);
-        }
-
-        [Fact]
-        public void ViewModelWithModelUnbindModelProperly()
-        {
-            var m = new Model();
-            var vm = new ViewModelWithModel(m);
-
-            bool raised = false;
-            vm.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == nameof(ViewModelWithModel.Field))
-                {
-                    raised = true;
-                }
-            };
-
-            Assert.False(raised);
         }
 
         private class ViewModel : ViewModelBase

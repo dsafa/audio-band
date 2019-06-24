@@ -281,7 +281,7 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void MigrateV2ToV3()
+        public void MigrateV2ToV3_MigratesSuccessfully()
         {
             string settingsFile = @"Version = ""2""
 AudioSource = ""Spotify""
