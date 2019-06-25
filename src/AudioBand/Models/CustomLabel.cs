@@ -7,19 +7,6 @@ namespace AudioBand.Models
     /// </summary>
     public class CustomLabel : LayoutModelBase
     {
-        private string _fontFamily = "Segoe UI";
-        private float _fontSize = 8.5f;
-        private Color _color = Colors.White;
-        private string _formatString = "{artist} - {song}";
-        private TextAlignment _alignment = TextAlignment.Center;
-        private string _name = "Now Playing";
-        private int _scrollSpeed = 5000;
-        private TextOverflow _textOverflow = TextOverflow.Scroll;
-        private ScrollBehavior _scrollBehavior = ScrollBehavior.Always;
-        private TextFadeEffect _textFadeEffect = TextFadeEffect.OnlyWhenScrolling;
-        private double _leftFadeOffset = 0.1;
-        private double _rightFadeOffset = 0.9;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomLabel"/> class.
         /// </summary>
@@ -55,109 +42,61 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the font family of the label.
         /// </summary>
-        public string FontFamily
-        {
-            get => _fontFamily;
-            set => SetProperty(ref _fontFamily, value);
-        }
+        public string FontFamily { get; set; } = "Segoe UI";
 
         /// <summary>
         /// Gets or sets the font size of the label.
         /// </summary>
-        public float FontSize
-        {
-            get => _fontSize;
-            set => SetProperty(ref _fontSize, value);
-        }
+        public float FontSize { get; set; } = 12;
 
         /// <summary>
         /// Gets or sets the color of the label.
         /// </summary>
-        public Color Color
-        {
-            get => _color;
-            set => SetProperty(ref _color, value);
-        }
+        public Color Color { get; set; } = Colors.White;
 
         /// <summary>
         /// Gets or sets the format for the label.
         /// </summary>
-        public string FormatString
-        {
-            get => _formatString;
-            set => SetProperty(ref _formatString, value);
-        }
+        public string FormatString { get; set; } = "{artist} - {song}";
 
         /// <summary>
         /// Gets or sets the alignment of the text.
         /// </summary>
-        public TextAlignment Alignment
-        {
-            get => _alignment;
-            set => SetProperty(ref _alignment, value);
-        }
+        public TextAlignment Alignment { get; set; } = TextAlignment.Center;
 
         /// <summary>
         /// Gets or sets the name of the label.
         /// </summary>
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
+        public string Name { get; set; } = "Now Playing";
 
         /// <summary>
         /// Gets or sets the number to milliseconds to scroll across.
         /// </summary>
-        public int ScrollSpeed
-        {
-            get => _scrollSpeed;
-            set => SetProperty(ref _scrollSpeed, value);
-        }
+        public int ScrollSpeed { get; set; } = 5000;
 
         /// <summary>
         /// Gets or sets the text overflow behavior.
         /// </summary>
-        public TextOverflow TextOverflow
-        {
-            get => _textOverflow;
-            set => SetProperty(ref _textOverflow, value);
-        }
+        public TextOverflow TextOverflow { get; set; } = TextOverflow.Scroll;
 
         /// <summary>
         /// Gets or sets the scroll behavior.
         /// </summary>
-        public ScrollBehavior ScrollBehavior
-        {
-            get => _scrollBehavior;
-            set => SetProperty(ref _scrollBehavior, value);
-        }
+        public ScrollBehavior ScrollBehavior { get; set; } = ScrollBehavior.Always;
 
         /// <summary>
         /// Gets or sets the fade effect.
         /// </summary>
-        public TextFadeEffect FadeEffect
-        {
-            get => _textFadeEffect;
-            set => SetProperty(ref _textFadeEffect, value);
-        }
+        public TextFadeEffect FadeEffect { get; set; } = TextFadeEffect.OnlyWhenScrolling;
 
         /// <summary>
         /// Gets or sets the fade offset for the left side.
         /// </summary>
-        public double LeftFadeOffset
-        {
-            get => _leftFadeOffset;
-            set => SetProperty(ref _leftFadeOffset, value);
-        }
+        public double LeftFadeOffset { get; set; } = 0.1;
 
         /// <summary>
         /// Gets or sets the fade offset for the right side.
         /// </summary>
-        public double RightFadeOffset
-        {
-            get => _rightFadeOffset;
-            set => SetProperty(ref _rightFadeOffset, value);
-        }
+        public double RightFadeOffset { get; set; } = 0.9;
     }
 }

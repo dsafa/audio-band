@@ -1,35 +1,37 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:AudioBand.Views.Settings"
-             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-             xmlns:models="clr-namespace:AudioBand.Models"
-             xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
-             xmlns:resources="clr-namespace:AudioBand.Resources">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:resources="clr-namespace:AudioBand.Resources"
+                    xmlns:viewmodels="clr-namespace:AudioBand.ViewModels">
     <DataTemplate DataType="{x:Type viewmodels:PlayPauseButtonViewModel}">
         <DataTemplate.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
-                    <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
-                    <resources:SharedDictionary Source="ButtonBaseTemplate.xaml"/>
-                    <resources:SharedDictionary Source="ButtonContentTemplate.xaml"/>
+                    <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml" />
+                    <resources:SharedDictionary Source="../../Resources/Strings.xaml" />
+                    <resources:SharedDictionary Source="ButtonBaseTemplate.xaml" />
+                    <resources:SharedDictionary Source="ButtonContentTemplate.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource ButtonBaseTemplate}"/>
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource ButtonBaseTemplate}" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PlayButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <ContentPresenter Content="{Binding PlayContent}" ContentTemplate="{StaticResource ButtonContentTemplate}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource PlayButtonContentSectionText}" />
+            <ContentPresenter Content="{Binding PlayContent}" ContentTemplate="{StaticResource ButtonContentTemplate}" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource PauseButtonContentSectionText}" Style="{StaticResource TitleTextBlock}"/>
-            <ContentPresenter Content="{Binding PauseContent}" ContentTemplate="{StaticResource ButtonContentTemplate}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource PauseButtonContentSectionText}" />
+            <ContentPresenter Content="{Binding PauseContent}" ContentTemplate="{StaticResource ButtonContentTemplate}" />
 
-            <TextBlock Margin="{StaticResource SectionMargin}" Text="{StaticResource OtherSectionText}" Style="{StaticResource TitleTextBlock}"/>
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
             <Button HorizontalAlignment="Left"
-                Content="{StaticResource ResetButtonText}"
-                Command="{Binding ResetCommand}"/>
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
         </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

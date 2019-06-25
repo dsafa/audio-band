@@ -1,75 +1,82 @@
-﻿<fw:AcrylicWindow
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-            xmlns:converters="clr-namespace:AudioBand.ValueConverters"
-            xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
-            xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
-            xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-            xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
-            xmlns:resources="clr-namespace:AudioBand.Resources"
-            xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
-            x:Class="AudioBand.Views.Settings.SettingsWindow"
-            mc:Ignorable="d" 
-            x:Name="Window"
-            d:DesignHeight="600" d:DesignWidth="400"
-            d:DataContext="{d:DesignInstance viewmodels:SettingsWindowViewModel, IsDesignTimeCreatable=True}"
-            Title="Audio Band Settings"
-            Icon="pack://application:,,,/AudioBand;component/audioband.ico"
-            Height="700"
-            Width="930"
-            TintOpacity="0"
-            TintColor="Transparent"
-            FallbackColor="Transparent"
-            NoiseOpacity="0.01"
-            fw:PointerTracker.Enabled="True"
-            ExtendViewIntoTitleBar="True"
-            WindowStartupLocation="CenterScreen"
-            Foreground="{theme:ThemeResource SystemBaseHighColor}"
-            BorderBrush="{theme:ThemeResource SystemAccentColor}">
+﻿<fw:AcrylicWindow x:Class="AudioBand.Views.Settings.SettingsWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:behaviors="clr-namespace:AudioBand.Behaviors"
+                  xmlns:converters="clr-namespace:AudioBand.ValueConverters"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:resources="clr-namespace:AudioBand.Resources"
+                  xmlns:theme="clr-namespace:AudioBand.Resources.Theming"
+                  xmlns:viewmodels="clr-namespace:AudioBand.ViewModels"
+                  x:Name="Window"
+                  Title="Audio Band Settings"
+                  Width="930"
+                  Height="700"
+                  d:DataContext="{d:DesignInstance viewmodels:SettingsWindowViewModel,
+                                                   IsDesignTimeCreatable=True}"
+                  d:DesignHeight="600"
+                  d:DesignWidth="400"
+                  fw:PointerTracker.Enabled="True"
+                  BorderBrush="{theme:ThemeResource SystemAccentColor}"
+                  ExtendViewIntoTitleBar="True"
+                  FallbackColor="Transparent"
+                  Foreground="{theme:ThemeResource SystemBaseHighColor}"
+                  Icon="pack://application:,,,/AudioBand;component/audioband.ico"
+                  NoiseOpacity="0.01"
+                  TintColor="Transparent"
+                  TintOpacity="0"
+                  WindowStartupLocation="CenterScreen"
+                  mc:Ignorable="d">
     <i:Interaction.Behaviors>
-        <behaviors:AppUserModelID/>
-        <behaviors:DpiScaling/>
+        <behaviors:AppUserModelID />
+        <behaviors:DpiScaling />
     </i:Interaction.Behaviors>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding CloseCommand}"/>
+            <i:InvokeCommandAction Command="{Binding CloseCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <fw:AcrylicWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml"/>
-                <resources:SharedDictionary Source="../../Resources/Strings.xaml"/>
-                <resources:SharedDictionary Source="../../Resources/Icons.xaml"/>
+                <resources:SharedDictionary Source="../../Resources/SettingsWindowStyle.xaml" />
+                <resources:SharedDictionary Source="../../Resources/Strings.xaml" />
+                <resources:SharedDictionary Source="../../Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </fw:AcrylicWindow.Resources>
-    <DockPanel LastChildFill="True" KeyboardNavigation.IsTabStop="False">
+    <DockPanel KeyboardNavigation.IsTabStop="False" LastChildFill="True">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
-            <Border x:Name="CustomFallback" Grid.RowSpan="3" Background="{theme:ThemeResource SystemChromeMediumColor}">
+            <Border x:Name="CustomFallback"
+                    Grid.RowSpan="3"
+                    Background="{theme:ThemeResource SystemChromeMediumColor}">
                 <Border.Style>
                     <Style TargetType="{x:Type Border}">
-                        <Setter Property="Opacity" Value="0.6"/>
+                        <Setter Property="Opacity" Value="0.6" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=Window, Path=IsActive}" Value="False">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
                                 <DataTrigger.ExitActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.6" Duration="0:0:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             To="0.6"
+                                                             Duration="0:0:0.2" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.ExitActions>
@@ -78,119 +85,161 @@
                     </Style>
                 </Border.Style>
             </Border>
-            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" IsTabStop="False" Width="300" WindowChrome.IsHitTestVisibleInChrome="True">
-                <StackPanel DockPanel.Dock="Left" Background="Transparent" x:Name="NavigationPane">
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AudioBandViewModel}">
+            <ScrollViewer Grid.Row="0"
+                          Width="300"
+                          IsTabStop="False"
+                          VerticalScrollBarVisibility="Auto"
+                          WindowChrome.IsHitTestVisibleInChrome="True">
+                <StackPanel x:Name="NavigationPane"
+                            Background="Transparent"
+                            DockPanel.Dock="Left">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.AudioBandViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Gear}"/>
-                            <TextBlock Text="{StaticResource GeneralSettingsTab}"/>
+                            <Image Source="{StaticResource Gear}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource GeneralSettingsTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.PlayPauseButtonViewModel}">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.PlayPauseButtonViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Play}"/>
-                            <TextBlock Text="{StaticResource PlayPauseButtonTab}"/>
+                            <Image Source="{StaticResource Play}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource PlayPauseButtonTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav" 
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.NextButtonViewModel}">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.NextButtonViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Next}"/>
-                            <TextBlock Text="{StaticResource NextButtonTab}"/>
+                            <Image Source="{StaticResource Next}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource NextButtonTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.PreviousButtonViewModel}">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.PreviousButtonViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Previous}"/>
-                            <TextBlock Text="{StaticResource PrevButtonTab}"/>
+                            <Image Source="{StaticResource Previous}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource PrevButtonTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.RepeatModeButtonViewModel}">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.RepeatModeButtonViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource RepeatModeIcon}"/>
-                            <TextBlock Text="{StaticResource RepeatModeButtonTab}"/>
+                            <Image Source="{StaticResource RepeatModeIcon}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource RepeatModeButtonTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.ShuffleModeButtonViewModel}">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.ShuffleModeButtonViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource ShuffleModeIcon}"/>
-                            <TextBlock Text="{StaticResource ShuffleModeButtonTab}"/>
+                            <Image Source="{StaticResource ShuffleModeIcon}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource ShuffleModeButtonTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.ProgressBarViewModel}">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.ProgressBarViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Progress}"/>
-                            <TextBlock Text="{StaticResource ProgressBarTab}"/>
+                            <Image Source="{StaticResource Progress}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource ProgressBarTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AlbumArtViewModel}">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.AlbumArtViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource Album}"/>
-                            <TextBlock Text="{StaticResource AlbumArtTab}"/>
+                            <Image Source="{StaticResource Album}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource AlbumArtTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" GroupName="nav"
-                                 Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ViewModels.AlbumArtPopupViewModel}">
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.AlbumArtPopupViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource AlbumPopup}"/>
-                            <TextBlock Text="{StaticResource AlbumArtPopupTab}"/>
+                            <Image Source="{StaticResource AlbumPopup}" Style="{StaticResource NavigationPaneIcon}" />
+                            <TextBlock Text="{StaticResource AlbumArtPopupTab}" />
                         </StackPanel>
                     </RadioButton>
                     <Expander Style="{StaticResource NavigationPaneExpander}">
                         <Expander.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{StaticResource CustomLabelsTab}" Style="{StaticResource NavigationPaneTextBlock}"
-                                           VerticalAlignment="Center" FontWeight="Normal" Foreground="{theme:ThemeResource SystemBaseHighColor}">
-                                </TextBlock>
-                                <Button Grid.Column="1" Style="{StaticResource RevealButton}" BorderThickness="1,0,0,0"
-                                        Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
-                                        Command="{Binding Path=ViewModels.CustomLabelsViewModel.AddLabelCommand}">
-                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" FontSize="17"/>
+                                <TextBlock Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Normal"
+                                           Foreground="{theme:ThemeResource SystemBaseHighColor}"
+                                           Style="{StaticResource NavigationPaneTextBlock}"
+                                           Text="{StaticResource CustomLabelsTab}" />
+                                <Button Grid.Column="1"
+                                        Width="{StaticResource NavigationPaneItemHeight}"
+                                        Height="{StaticResource NavigationPaneItemHeight}"
+                                        BorderThickness="1,0,0,0"
+                                        Command="{Binding Path=ViewModels.CustomLabelsViewModel.AddLabelCommand}"
+                                        Style="{StaticResource RevealButton}">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets"
+                                               FontSize="17"
+                                               Text="&#xE710;" />
                                     <Button.ToolTip>
-                                        <TextBlock Text="{StaticResource AddNewLabelHelpText}"/>
+                                        <TextBlock Text="{StaticResource AddNewLabelHelpText}" />
                                     </Button.ToolTip>
                                 </Button>
                             </Grid>
                         </Expander.Header>
-                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.CustomLabelsViewModel.CustomLabels}"
+                        <ListBox Background="Transparent"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}"
+                                 ItemsSource="{Binding Path=ViewModels.CustomLabelsViewModel.CustomLabels}"
                                  KeyboardNavigation.TabNavigation="Local">
                             <i:Interaction.Behaviors>
-                                <behaviors:RedirectScrolling/>
+                                <behaviors:RedirectScrolling />
                             </i:Interaction.Behaviors>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" 
+                                    <RadioButton Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
+                                                 CommandParameter="{Binding}"
                                                  GroupName="nav"
-                                                 Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
-                                                 CommandParameter="{Binding}">
+                                                 Style="{StaticResource NavigationPaneRadioButton}">
                                         <Grid HorizontalAlignment="Stretch">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Grid.Column="0" Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource TextLabels}"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding Name}"
-                                                        HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                                            <Button Grid.Column="2" Style="{StaticResource RevealButton}" BorderThickness="1,0,0,0"
-                                                        Width="{StaticResource NavigationPaneItemHeight}" Height="{StaticResource NavigationPaneItemHeight}"
-                                                        Command="{Binding ElementName=Window, Path=DataContext.ViewModels.CustomLabelsViewModel.RemoveLabelCommand}"
-                                                        CommandParameter="{Binding}">
-                                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="18"/>
+                                            <Image Grid.Column="0"
+                                                   Source="{StaticResource TextLabels}"
+                                                   Style="{StaticResource NavigationPaneIcon}" />
+                                            <TextBlock Grid.Column="1"
+                                                       HorizontalAlignment="Stretch"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding Name}" />
+                                            <Button Grid.Column="2"
+                                                    Width="{StaticResource NavigationPaneItemHeight}"
+                                                    Height="{StaticResource NavigationPaneItemHeight}"
+                                                    BorderThickness="1,0,0,0"
+                                                    Command="{Binding ElementName=Window, Path=DataContext.ViewModels.CustomLabelsViewModel.RemoveLabelCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource RevealButton}">
+                                                <TextBlock FontFamily="Segoe MDL2 Assets"
+                                                           FontSize="18"
+                                                           Text="&#xE711;" />
                                                 <Button.ToolTip>
-                                                    <TextBlock Text="{StaticResource DeleteLabelHelpText}"/>
+                                                    <TextBlock Text="{StaticResource DeleteLabelHelpText}" />
                                                 </Button.ToolTip>
                                             </Button>
                                         </Grid>
@@ -201,27 +250,33 @@
                     </Expander>
                     <Expander Style="{StaticResource NavigationPaneExpander}">
                         <Expander.Header>
-                            <TextBlock Padding="0, 0, 10, 0" FontWeight="Normal" Style="{StaticResource NavigationPaneTextBlock}" Text="{StaticResource AudioSourceSettingsTab}"
-                                       Foreground="{theme:ThemeResource SystemBaseHighColor}"/>
+                            <TextBlock Padding="0,0,10,0"
+                                       FontWeight="Normal"
+                                       Foreground="{theme:ThemeResource SystemBaseHighColor}"
+                                       Style="{StaticResource NavigationPaneTextBlock}"
+                                       Text="{StaticResource AudioSourceSettingsTab}" />
                         </Expander.Header>
-                        <ListBox Background="Transparent" ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsViewModel.AudioSourcesSettings}"
-                                 ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}">
+                        <ListBox Background="Transparent"
+                                 ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}"
+                                 ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsViewModel.AudioSourcesSettings}">
                             <i:Interaction.Behaviors>
-                                <behaviors:RedirectScrolling/>
+                                <behaviors:RedirectScrolling />
                             </i:Interaction.Behaviors>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <RadioButton Style="{StaticResource NavigationPaneRadioButton}" 
+                                    <RadioButton Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
+                                                 CommandParameter="{Binding}"
                                                  GroupName="nav"
-                                                 Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
-                                                 CommandParameter="{Binding}">
+                                                 Style="{StaticResource NavigationPaneRadioButton}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Image Grid.Column="0" Style="{StaticResource NavigationPaneIcon}" Source="{StaticResource AudioSources}"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding AudioSourceName}"/>
+                                            <Image Grid.Column="0"
+                                                   Source="{StaticResource AudioSources}"
+                                                   Style="{StaticResource NavigationPaneIcon}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding AudioSourceName}" />
                                         </Grid>
                                     </RadioButton>
                                 </DataTemplate>
@@ -230,136 +285,162 @@
                     </Expander>
                 </StackPanel>
             </ScrollViewer>
-            <ComboBox Margin="8" Height="{StaticResource DefaultButtonHeight}" Grid.Row="1"
-                      x:Name="ProfilesComboBox"  IsSynchronizedWithCurrentItem="True"
-                      SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}"
-                      ItemsSource="{Binding Profiles}">
-            </ComboBox>
-            <UniformGrid Grid.Row="2" Rows="1" SnapsToDevicePixels="True">
+            <ComboBox x:Name="ProfilesComboBox"
+                      Grid.Row="1"
+                      Height="{StaticResource DefaultButtonHeight}"
+                      Margin="8"
+                      IsSynchronizedWithCurrentItem="True"
+                      ItemsSource="{Binding Profiles}"
+                      SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}" />
+            <UniformGrid Grid.Row="2"
+                         Rows="1"
+                         SnapsToDevicePixels="True">
                 <UniformGrid.Resources>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource RevealButton}"/>
+                    <Style BasedOn="{StaticResource RevealButton}" TargetType="{x:Type Button}" />
                 </UniformGrid.Resources>
                 <Button Command="{Binding AddProfileCommand}">
-                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE710;" FontSize="17"/> <!-- Line up the icon better by using different font size-->
+                    <TextBlock FontSize="17"
+                               Style="{StaticResource ProfileIconText}"
+                               Text="&#xE710;" />
+                    <!--  Line up the icon better by using different font size  -->
                     <Button.ToolTip>
-                        <TextBlock Text="{StaticResource NewProfileHelpText}"/>
+                        <TextBlock Text="{StaticResource NewProfileHelpText}" />
                     </Button.ToolTip>
                 </Button>
-                <Button Command="{Binding DeleteProfileCommand}" 
-                        CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}">
-                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE74D;"/>
+                <Button Command="{Binding DeleteProfileCommand}" CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}">
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE74D;" />
                     <Button.ToolTip>
-                        <TextBlock Text="{StaticResource DeleteProfileHelpText}"/>
+                        <TextBlock Text="{StaticResource DeleteProfileHelpText}" />
                     </Button.ToolTip>
                 </Button>
                 <Button Command="{Binding RenameProfileCommand}">
-                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE8AC;"/>
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE8AC;" />
                     <Button.ToolTip>
-                        <TextBlock Text="{StaticResource RenameProfileHelpText}"/>
+                        <TextBlock Text="{StaticResource RenameProfileHelpText}" />
                     </Button.ToolTip>
                 </Button>
                 <Button Command="{Binding ImportProfilesCommand}">
-                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE896;"/>
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE896;" />
                     <Button.ToolTip>
-                        <TextBlock Text="{StaticResource ImportProfilesHelpText}"/>
+                        <TextBlock Text="{StaticResource ImportProfilesHelpText}" />
                     </Button.ToolTip>
                 </Button>
                 <Button Command="{Binding ExportProfilesCommand}">
-                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE898;"/>
+                    <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE898;" />
                     <Button.ToolTip>
-                        <TextBlock Text="{StaticResource ExportProfilesHelpText}"/>
+                        <TextBlock Text="{StaticResource ExportProfilesHelpText}" />
                     </Button.ToolTip>
                 </Button>
             </UniformGrid>
         </Grid>
-        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft"
-                    DockPanel.Dock="Bottom" HorizontalAlignment="Stretch"
-                    SnapsToDevicePixels="True" Background="{theme:ThemeResource SystemAltHighColor}">
-            <Button Content="{StaticResource CloseButtonText}" IsCancel="True" Width="80" Margin="8"
-                    Command="{Binding CloseCommand}"/>
-            <Button Content="{StaticResource ApplyButtonText}" Width="80" Margin="8"
-                    Command="{Binding SaveCommand}"/>
+        <StackPanel HorizontalAlignment="Stretch"
+                    Background="{theme:ThemeResource SystemAltHighColor}"
+                    DockPanel.Dock="Bottom"
+                    FlowDirection="RightToLeft"
+                    Orientation="Horizontal"
+                    SnapsToDevicePixels="True">
+            <Button Width="80"
+                    Margin="8"
+                    Command="{Binding CloseCommand}"
+                    Content="{StaticResource CloseButtonText}"
+                    IsCancel="True" />
+            <Button Width="80"
+                    Margin="8"
+                    Command="{Binding SaveCommand}"
+                    Content="{StaticResource ApplyButtonText}" />
         </StackPanel>
-        <Grid SnapsToDevicePixels="True" Background="{theme:ThemeResource SystemAltHighColor}">
+        <Grid Background="{theme:ThemeResource SystemAltHighColor}" SnapsToDevicePixels="True">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel x:Name="CaptionControls" Orientation="Horizontal" Grid.Row="0" WindowChrome.IsHitTestVisibleInChrome="True"
-                        Height="{x:Static SystemParameters.CaptionHeight}" HorizontalAlignment="Right" Margin="0, 0, 140, 0">
+            <StackPanel x:Name="CaptionControls"
+                        Grid.Row="0"
+                        Height="{x:Static SystemParameters.CaptionHeight}"
+                        Margin="0,0,140,0"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal"
+                        WindowChrome.IsHitTestVisibleInChrome="True">
                 <TextBlock VerticalAlignment="Center">
                     <Hyperlink Command="{Binding ElementName=Window, Path=OpenAboutDialogCommand}">
-                        <Run Text="{StaticResource AboutButtonText}"/>
+                        <Run Text="{StaticResource AboutButtonText}" />
                     </Hyperlink>
                 </TextBlock>
             </StackPanel>
-            <TextBlock x:Name="ViewHeader" Grid.Row="1" Margin="20, 0" FontWeight="Light" LineHeight="40" 
-                       FontSize="{StaticResource HeaderFontSize}">
+            <TextBlock x:Name="ViewHeader"
+                       Grid.Row="1"
+                       Margin="20,0"
+                       FontSize="{StaticResource HeaderFontSize}"
+                       FontWeight="Light"
+                       LineHeight="40">
                 <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AlbumArtViewModel}">
-                                <Setter Property="Text" Value="{StaticResource AlbumArtTab}"/>
+                                <Setter Property="Text" Value="{StaticResource AlbumArtTab}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AlbumArtPopupViewModel}">
-                                <Setter Property="Text" Value="{StaticResource AlbumArtPopupTab}"/>
+                                <Setter Property="Text" Value="{StaticResource AlbumArtPopupTab}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AudioBandViewModel}">
-                                <Setter Property="Text" Value="{StaticResource GeneralSettingsTab}"/>
+                                <Setter Property="Text" Value="{StaticResource GeneralSettingsTab}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:AudioSourceSettingsCollectionViewModel}">
-                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:AudioSourceSettingsCollectionViewModel.AudioSourceName), 
-                                                                        Converter={x:Static converters:Converters.StringFormat}, 
-                                                                        ConverterParameter={StaticResource AudioSourceViewHeaderFormat}}"/>
+                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:AudioSourceSettingsCollectionViewModel.AudioSourceName), Converter={x:Static converters:Converters.StringFormat}, ConverterParameter={StaticResource AudioSourceViewHeaderFormat}}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:CustomLabelViewModel}">
-                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:CustomLabelViewModel.Name),
-                                                                        Converter={x:Static converters:Converters.StringFormat},
-                                                                        ConverterParameter={StaticResource LabelsViewHeaderFormat}}"/>
+                                <Setter Property="Text" Value="{Binding Path=SelectedViewModel.(viewmodels:CustomLabelViewModel.Name), Converter={x:Static converters:Converters.StringFormat}, ConverterParameter={StaticResource LabelsViewHeaderFormat}}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:PlayPauseButtonViewModel}">
-                                <Setter Property="Text" Value="{StaticResource PlayPauseButtonTab}"/>
+                                <Setter Property="Text" Value="{StaticResource PlayPauseButtonTab}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:NextButtonViewModel}">
-                                <Setter Property="Text" Value="{StaticResource NextButtonTab}"/>
+                                <Setter Property="Text" Value="{StaticResource NextButtonTab}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:PreviousButtonViewModel}">
-                                <Setter Property="Text" Value="{StaticResource PrevButtonTab}"/>
+                                <Setter Property="Text" Value="{StaticResource PrevButtonTab}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:ProgressBarViewModel}">
-                                <Setter Property="Text" Value="{StaticResource ProgressBarTab}"/>
+                                <Setter Property="Text" Value="{StaticResource ProgressBarTab}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:RepeatModeButtonViewModel}">
-                                <Setter Property="Text" Value="{StaticResource RepeatModeButtonTab}"/>
+                                <Setter Property="Text" Value="{StaticResource RepeatModeButtonTab}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static converters:Converters.ObjectToType}}" Value="{x:Type viewmodels:ShuffleModeButtonViewModel}">
-                                <Setter Property="Text" Value="{StaticResource ShuffleModeButtonTab}"/>
+                                <Setter Property="Text" Value="{StaticResource ShuffleModeButtonTab}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <ScrollViewer x:Name="ContentScrollView" VerticalScrollBarVisibility="Auto" IsTabStop="False" Grid.Row="2" FocusVisualStyle="{x:Null}">
-                <ContentControl Content="{Binding SelectedViewModel}" BorderThickness="0" IsTabStop="False" Margin="20">
-                <ContentControl.Resources>
-                    <ResourceDictionary>
-                        <ResourceDictionary.MergedDictionaries>
-                            <resources:SharedDictionary Source="AlbumArtSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="AlbumPopupSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="AudioSourceSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="CustomLabelSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="GeneralSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="PlaybackButtonSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="PlayPauseButtonSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="ProgressBarSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="RepeatModeButtonSettingsView.xaml"/>
-                            <resources:SharedDictionary Source="ShuffleModeButtonSettingsView.xaml"/>
-                        </ResourceDictionary.MergedDictionaries>
-                    </ResourceDictionary>
-                </ContentControl.Resources>
-            </ContentControl>
-        </ScrollViewer>
+            <ScrollViewer x:Name="ContentScrollView"
+                          Grid.Row="2"
+                          FocusVisualStyle="{x:Null}"
+                          IsTabStop="False"
+                          VerticalScrollBarVisibility="Auto">
+                <ContentControl Margin="20"
+                                BorderThickness="0"
+                                Content="{Binding SelectedViewModel}"
+                                IsTabStop="False">
+                    <ContentControl.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <resources:SharedDictionary Source="AlbumArtSettingsView.xaml" />
+                                <resources:SharedDictionary Source="AlbumPopupSettingsView.xaml" />
+                                <resources:SharedDictionary Source="AudioSourceSettingsView.xaml" />
+                                <resources:SharedDictionary Source="CustomLabelSettingsView.xaml" />
+                                <resources:SharedDictionary Source="GeneralSettingsView.xaml" />
+                                <resources:SharedDictionary Source="PlaybackButtonSettingsView.xaml" />
+                                <resources:SharedDictionary Source="PlayPauseButtonSettingsView.xaml" />
+                                <resources:SharedDictionary Source="ProgressBarSettingsView.xaml" />
+                                <resources:SharedDictionary Source="RepeatModeButtonSettingsView.xaml" />
+                                <resources:SharedDictionary Source="ShuffleModeButtonSettingsView.xaml" />
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                    </ContentControl.Resources>
+                </ContentControl>
+            </ScrollViewer>
         </Grid>
     </DockPanel>
 </fw:AcrylicWindow>

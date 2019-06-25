@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AudioBand.AudioSource;
 using AudioBand.Extensions;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -15,7 +18,7 @@ namespace AudioBand.ViewModels
     public class AlbumArtViewModel : LayoutViewModelBase<AlbumArt>
     {
         private readonly IAppSettings _appsettings;
-        private IAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
         private ImageSource _albumArt;
 
         /// <summary>
@@ -23,23 +26,27 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService)
-            : base(appsettings.AlbumArt)
+        /// <param name="audioSession">The audio session.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(messageBus, appsettings.AlbumArt)
         {
             DialogService = dialogService;
             _appsettings = appsettings;
+            _audioSession = audioSession;
 
             appsettings.ProfileChanged += AppsettingsOnProfileChanged;
+            audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
         }
 
         /// <summary>
         /// Gets or sets the placeholder path.
         /// </summary>
-        [PropertyChangeBinding(nameof(Models.AlbumArt.PlaceholderPath))]
+        [TrackState]
         public string PlaceholderPath
         {
             get => Model.PlaceholderPath;
-            set => SetProperty(nameof(Model.PlaceholderPath), value);
+            set => SetProperty(Model, nameof(Model.PlaceholderPath), value);
         }
 
         /// <summary>
@@ -48,15 +55,7 @@ namespace AudioBand.ViewModels
         public ImageSource AlbumArt
         {
             get => _albumArt;
-            private set => SetProperty(ref _albumArt, value, false);
-        }
-
-        /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
+            private set => SetProperty(ref _albumArt, value);
         }
 
         /// <summary>
@@ -64,33 +63,33 @@ namespace AudioBand.ViewModels
         /// </summary>
         public IDialogService DialogService { get; }
 
+        /// <inheritdoc />
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            MapSelf(Model, _appsettings.AlbumArt);
+        }
+
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appsettings.AlbumArt);
+            MapSelf(_appsettings.AlbumArt, Model);
+            RaisePropertyChangedAll();
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_audioSource != null)
+            if (e.PropertyName != nameof(IAudioSession.AlbumArt))
             {
-                AlbumArt = null;
-                _audioSource.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
-            }
-
-            _audioSource = audioSource;
-            if (_audioSource == null)
-            {
-                AlbumArt = null;
                 return;
             }
 
-            _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
+            AlbumArtUpdated(_audioSession.AlbumArt);
         }
 
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
+        private void AlbumArtUpdated(Image albumArt)
         {
-            if (e.AlbumArt == null)
+            if (albumArt == null)
             {
                 try
                 {
@@ -104,7 +103,7 @@ namespace AudioBand.ViewModels
                 return;
             }
 
-            AlbumArt = e.AlbumArt.ToImageSource();
+            AlbumArt = albumArt.ToImageSource();
         }
     }
 }

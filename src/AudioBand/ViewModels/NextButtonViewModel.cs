@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -15,18 +15,22 @@ namespace AudioBand.ViewModels
     public class NextButtonViewModel : ButtonViewModelBase<NextButton>
     {
         private readonly IAppSettings _appSettings;
-        private IAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NextButtonViewModel"/> class.
         /// </summary>
         /// <param name="appSettings">The appSettings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public NextButtonViewModel(IAppSettings appSettings, IDialogService dialogService)
-            : base(appSettings.NextButton, dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public NextButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(appSettings.NextButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
+            _audioSession = audioSession;
             _appSettings.ProfileChanged += AppsSettingsOnProfileChanged;
+
             NextTrackCommand = new AsyncRelayCommand<object>(NextTrackCommandOnExecute);
             Content = new ButtonContentViewModel(Model.Content, new NextButton().Content, dialogService);
             TrackContentViewModel(Content);
@@ -38,37 +42,32 @@ namespace AudioBand.ViewModels
         public ButtonContentViewModel Content { get; }
 
         /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
-        }
-
-        /// <summary>
         /// Gets the next track command.
         /// </summary>
         public IAsyncCommand NextTrackCommand { get; }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        /// <inheritdoc />
+        protected override void OnEndEdit()
         {
-            _audioSource = audioSource;
+            base.OnEndEdit();
+            MapSelf(Model, _appSettings.NextButton);
         }
 
         private async Task NextTrackCommandOnExecute(object arg)
         {
-            if (_audioSource == null)
+            if (_audioSession.CurrentAudioSource == null)
             {
                 return;
             }
 
-            await _audioSource.NextTrackAsync();
+            await _audioSession.CurrentAudioSource.NextTrackAsync();
         }
 
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appSettings.NextButton);
+            MapSelf(_appSettings.NextButton, Model);
+            RaisePropertyChangedAll();
         }
     }
 }

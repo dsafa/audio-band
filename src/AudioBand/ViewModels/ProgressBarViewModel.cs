@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Media;
 using AudioBand.AudioSource;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -13,7 +15,7 @@ namespace AudioBand.ViewModels
     public class ProgressBarViewModel : LayoutViewModelBase<ProgressBar>
     {
         private readonly IAppSettings _appsettings;
-        private IAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
         private TimeSpan _trackProgress;
         private TimeSpan _trackLength;
 
@@ -22,10 +24,14 @@ namespace AudioBand.ViewModels
         /// </summary>
         /// <param name="appsettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public ProgressBarViewModel(IAppSettings appsettings, IDialogService dialogService)
-            : base(appsettings.ProgressBar)
+        /// <param name="audioSession">The audio session.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public ProgressBarViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(messageBus, appsettings.ProgressBar)
         {
             _appsettings = appsettings;
+            _audioSession = audioSession;
+            _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
             DialogService = dialogService;
 
             _appsettings.ProfileChanged += AppsettingsOnProfileChanged;
@@ -34,31 +40,31 @@ namespace AudioBand.ViewModels
         /// <summary>
         /// Gets or sets the foreground color.
         /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.ForegroundColor))]
+        [TrackState]
         public Color ForegroundColor
         {
             get => Model.ForegroundColor;
-            set => SetProperty(nameof(Model.ForegroundColor), value);
+            set => SetProperty(Model, nameof(Model.ForegroundColor), value);
         }
 
         /// <summary>
         /// Gets or sets the background color.
         /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.BackgroundColor))]
+        [TrackState]
         public Color BackgroundColor
         {
             get => Model.BackgroundColor;
-            set => SetProperty(nameof(Model.BackgroundColor), value);
+            set => SetProperty(Model, nameof(Model.BackgroundColor), value);
         }
 
         /// <summary>
         /// Gets or sets the hover color.
         /// </summary>
-        [PropertyChangeBinding(nameof(ProgressBar.HoverColor))]
+        [TrackState]
         public Color HoverColor
         {
             get => Model.HoverColor;
-            set => SetProperty(nameof(Model.HoverColor), value);
+            set => SetProperty(Model, nameof(Model.HoverColor), value);
         }
 
         /// <summary>
@@ -69,9 +75,9 @@ namespace AudioBand.ViewModels
             get => _trackProgress;
             set
             {
-                if (SetProperty(ref _trackProgress, value, trackChanges: false))
+                if (SetProperty(ref _trackProgress, value))
                 {
-                    _audioSource?.SetPlaybackProgressAsync(value);
+                    _audioSession.CurrentAudioSource?.SetPlaybackProgressAsync(value);
                 }
             }
         }
@@ -82,7 +88,7 @@ namespace AudioBand.ViewModels
         public TimeSpan TrackLength
         {
             get => _trackLength;
-            private set => SetProperty(ref _trackLength, value, false);
+            private set => SetProperty(ref _trackLength, value);
         }
 
         /// <summary>
@@ -90,50 +96,41 @@ namespace AudioBand.ViewModels
         /// </summary>
         public IDialogService DialogService { get; set; }
 
-        /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
+        /// <inheritdoc />
+        protected override void OnEndEdit()
         {
-            set => UpdateAudioSource(value);
+            base.OnEndEdit();
+            MapSelf(Model, _appsettings.ProgressBar);
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appsettings.ProgressBar);
+            MapSelf(_appsettings.ProgressBar, Model);
+            RaisePropertyChangedAll();
         }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (_audioSource != null)
+            switch (e.PropertyName)
             {
-                _audioSource.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
-                _audioSource.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
-                TrackProgress = TimeSpan.Zero;
-                TrackLength = TimeSpan.Zero;
+                case nameof(IAudioSession.SongProgress):
+                    OnProgressChanged(_audioSession.SongProgress);
+                    break;
+                case nameof(IAudioSession.SongLength):
+                    OnSongLengthChanged(_audioSession.SongLength);
+                    break;
             }
-
-            _audioSource = audioSource;
-            if (_audioSource == null)
-            {
-                TrackLength = TimeSpan.Zero;
-                TrackProgress = TimeSpan.Zero;
-                return;
-            }
-
-            _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
-            _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
         }
 
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
+        private void OnSongLengthChanged(TimeSpan length)
         {
-            TrackLength = e.TrackLength;
+            TrackLength = length;
         }
 
-        private void AudioSourceOnTrackProgressChanged(object sender, TimeSpan e)
+        private void OnProgressChanged(TimeSpan progress)
         {
-            _trackProgress = e;
+            _trackProgress = progress;
             RaisePropertyChanged(nameof(TrackProgress));
         }
     }

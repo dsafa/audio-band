@@ -25,28 +25,16 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets or sets the foreground color.
         /// </summary>
-        public Color ForegroundColor
-        {
-            get => _foregroundColor;
-            set => SetProperty(ref _foregroundColor, value);
-        }
+        public Color ForegroundColor { get; set; } = Colors.DodgerBlue;
 
         /// <summary>
         /// Gets or sets the background color.
         /// </summary>
-        public Color BackgroundColor
-        {
-            get => _backgroundColor;
-            set => SetProperty(ref _backgroundColor, value);
-        }
+        public Color BackgroundColor { get; set; } = Colors.DimGray;
 
         /// <summary>
         /// Gets or sets the hover color.
         /// </summary>
-        public Color HoverColor
-        {
-            get => _hoverColor;
-            set => SetProperty(ref _hoverColor, value);
-        }
+        public Color HoverColor { get; set; } = Colors.DeepSkyBlue;
     }
 }

@@ -8,7 +8,7 @@ namespace AudioBand.ViewModels
     /// <summary>
     /// View model for the rename profile dialog.
     /// </summary>
-    public class RenameProfileDialogViewModel : ViewModelBase
+    public class RenameProfileDialogViewModel : ValidatingViewModelBase
     {
         private readonly IEnumerable<string> _profileNames;
         private string _currentName;
@@ -46,7 +46,7 @@ namespace AudioBand.ViewModels
         public string CurrentName
         {
             get => _currentName;
-            set => SetProperty(ref _currentName, value, trackChanges: false);
+            set => SetProperty(ref _currentName, value);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace AudioBand.ViewModels
                     ClearErrors();
                 }
 
-                SetProperty(ref _newProfileName, value, trackChanges: false);
+                SetProperty(ref _newProfileName, value);
             }
         }
 
@@ -85,17 +85,17 @@ namespace AudioBand.ViewModels
         /// </summary>
         public RelayCommand CancelCommand { get; }
 
-        private void CancelCommandOnExecute(object obj)
+        private void CancelCommandOnExecute()
         {
             Canceled?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OkCommandOnExecute(object obj)
+        private void OkCommandOnExecute()
         {
             Accepted?.Invoke(this, EventArgs.Empty);
         }
 
-        private bool OkCommandCanExecute(object obj)
+        private bool OkCommandCanExecute()
         {
             return !HasErrors;
         }

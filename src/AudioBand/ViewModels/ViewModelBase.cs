@@ -1,28 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using AudioBand.Commands;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AutoMapper;
-using FastMember;
 using NLog;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
-    /// Base class for view models with automatic support for
-    /// <see cref="INotifyPropertyChanged"/>, <see cref="IResettableObject"/>, <see cref="INotifyDataErrorInfo"/> and commands.
+    /// Base class for view models. Extends <see cref="ValidatingViewModelBase"/> with support for
+    /// <see cref="IEditableObject"/>, <see cref="IResettableObject"/>, and associated commands.
     /// </summary>
-    /// <remarks>
-    /// <see cref="IEditableObject"/> is implemented explicitly through methods instead of the interface because of issues with the methods being automatically called.
-    /// </remarks>
-    public abstract class ViewModelBase : INotifyPropertyChanged, IResettableObject, INotifyDataErrorInfo
+    public abstract class ViewModelBase : ValidatingViewModelBase, IEditableObject, IResettableObject
     {
-        private readonly Dictionary<string, IEnumerable<string>> _propertyErrors = new Dictionary<string, IEnumerable<string>>();
+        private readonly Dictionary<Type, MapperConfiguration> _mapperCache = new Dictionary<Type, MapperConfiguration>();
+        private readonly HashSet<string> _trackedProperties = new HashSet<string>();
         private bool _isEditing;
 
         /// <summary>
@@ -31,58 +26,55 @@ namespace AudioBand.ViewModels
         protected ViewModelBase()
         {
             Logger = AudioBandLogManager.GetLogger(GetType().FullName);
-            Accessor = TypeAccessor.Create(GetType(), true);
 
-            BeginEditCommand = new RelayCommand(o => BeginEdit());
-            EndEditCommand = new RelayCommand(o => EndEdit());
-            CancelEditCommand = new RelayCommand(o => CancelEdit());
-            ResetCommand = new RelayCommand(o => Reset());
+            BeginEditCommand = new RelayCommand(BeginEdit);
+            EndEditCommand = new RelayCommand(EndEdit);
+            CancelEditCommand = new RelayCommand(CancelEdit);
+            ResetCommand = new RelayCommand(Reset);
 
-            SetupAlsoNotify();
+            GetTrackingProperties();
         }
 
-        /// <inheritdoc cref="INotifyDataErrorInfo.ErrorsChanged"/>
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <inheritdoc cref="INotifyDataErrorInfo.HasErrors"/>
-        public bool HasErrors => _propertyErrors.Any(entry => entry.Value?.Any() ?? false);
+        /// <summary>
+        /// Occurs when <see cref="IsEditing"/> changes.
+        /// </summary>
+        public event EventHandler IsEditingChanged;
 
         /// <summary>
         /// Gets the command to start editing.
         /// </summary>
-        public RelayCommand BeginEditCommand { get; }
+        public ICommand BeginEditCommand { get; }
 
         /// <summary>
         /// Gets the command to end editing.
         /// </summary>
-        public RelayCommand EndEditCommand { get; }
+        public ICommand EndEditCommand { get; }
 
         /// <summary>
         /// Gets the command to cancel edit.
         /// </summary>
-        public RelayCommand CancelEditCommand { get; }
+        public ICommand CancelEditCommand { get; }
 
         /// <summary>
         /// Gets the command to reset the state.
         /// </summary>
-        public RelayCommand ResetCommand { get; }
+        public ICommand ResetCommand { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the current object is being edited.
+        /// Gets a value indicating whether the object is being edited.
         /// </summary>
+        /// <value>True when <see cref="BeginEdit"/> is called and <see cref="EndEdit"/> or <see cref="CancelEdit"/> has not been called.</value>
         public bool IsEditing
         {
             get => _isEditing;
-            private set => SetProperty(ref _isEditing, value, trackChanges: false);
+            private set
+            {
+                if (SetProperty(ref _isEditing, value))
+                {
+                    IsEditingChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
         }
-
-        /// <summary>
-        /// Gets the map from [model property name] to [other vm property names].
-        /// </summary>
-        protected Dictionary<string, string[]> AlsoNotifyMap { get; } = new Dictionary<string, string[]>();
 
         /// <summary>
         /// Gets the logger for the view model.
@@ -90,20 +82,9 @@ namespace AudioBand.ViewModels
         protected ILogger Logger { get; }
 
         /// <summary>
-        /// Gets the type accessor for this object.
+        /// Gets the message bus.
         /// </summary>
-        protected TypeAccessor Accessor { get; }
-
-        /// <inheritdoc cref="INotifyDataErrorInfo.GetErrors"/>
-        public IEnumerable GetErrors(string propertyName)
-        {
-            if (_propertyErrors.TryGetValue(propertyName, out var errors) && errors.Any())
-            {
-                return _propertyErrors[propertyName];
-            }
-
-            return null;
-        }
+        protected IMessageBus MessageBus { get; private set; }
 
         /// <summary>
         /// Begins editing on this object.
@@ -133,6 +114,7 @@ namespace AudioBand.ViewModels
             Logger.Debug("Ending edit");
             OnEndEdit();
             IsEditing = false;
+            RaisePropertyChangedAll();
         }
 
         /// <summary>
@@ -148,53 +130,15 @@ namespace AudioBand.ViewModels
             Logger.Debug("Cancelling edit");
             OnCancelEdit();
             IsEditing = false;
+            RaisePropertyChangedAll();
         }
 
         /// <inheritdoc cref="IResettableObject.Reset"/>
         public void Reset()
         {
+            BeginEdit();
             OnReset();
-        }
-
-        /// <summary>
-        /// Notifies subsribers to a property change.
-        /// </summary>
-        /// <param name="propertyName">Name of the property that changed.</param>
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Notifies all properties changed.
-        /// </summary>
-        protected void RaisePropertyChangedAll()
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
-        }
-
-        /// <summary>
-        /// Resets an object to its default state.
-        /// </summary>
-        /// <typeparam name="T">Object type.</typeparam>
-        /// <param name="obj">Object to reset.</param>
-        protected void ResetObject<T>(T obj)
-            where T : new()
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
-            mapper.Map<T, T>(new T(), obj);
-        }
-
-        /// <summary>
-        /// Resets an object to its default state using the given state.
-        /// </summary>
-        /// <typeparam name="T">Object type.</typeparam>
-        /// <param name="initialState">The objects initial state.</param>
-        /// <param name="obj">Object to reset.</param>
-        protected void ResetObject<T>(T initialState, T obj)
-        {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<T, T>()).CreateMapper();
-            mapper.Map<T, T>(initialState, obj);
+            RaisePropertyChangedAll();
         }
 
         /// <summary>
@@ -223,101 +167,76 @@ namespace AudioBand.ViewModels
         /// </summary>
         protected virtual void OnBeginEdit()
         {
+            MessageBus?.Publish(default(EditStartMessage));
         }
 
         /// <summary>
-        /// Sets the <paramref name="field"/> and calls property changed for it and any others given with a <see cref="AlsoNotifyAttribute"/>.
+        /// Resets an object to its default state.
         /// </summary>
-        /// <typeparam name="TValue">Type of the value.</typeparam>
-        /// <param name="field">Field to set.</param>
-        /// <param name="newValue">New value of the field.</param>
-        /// <param name="trackChanges">True if <see cref="BeginEdit"/> should be called if the value changes.</param>
-        /// <param name="propertyName">Name of the property to notify with.</param>
-        /// <returns>Returns true if new value was set.</returns>
-        protected bool SetProperty<TValue>(ref TValue field, TValue newValue, bool trackChanges = true, [CallerMemberName] string propertyName = null)
+        /// <typeparam name="T">Object type.</typeparam>
+        /// <param name="obj">Object to reset.</param>
+        protected void ResetObject<T>(T obj)
+            where T : new()
         {
-            if (EqualityComparer<TValue>.Default.Equals(field, newValue))
+            MapSelf(new T(), obj);
+        }
+
+        /// <summary>
+        /// Maps an object from to another instance of the same type.
+        /// </summary>
+        /// <typeparam name="T">The type of the object to map.</typeparam>
+        /// <param name="objectFrom">The object to map.</param>
+        /// <param name="objectTo">The other instance of the object to map to.</param>
+        protected void MapSelf<T>(T objectFrom, T objectTo)
+        {
+            if (!_mapperCache.ContainsKey(typeof(T)))
             {
-                return false;
+                _mapperCache.Add(typeof(T), new MapperConfiguration(cfg => cfg.CreateMap<T, T>()));
             }
 
-            if (trackChanges)
+            _mapperCache[typeof(T)].CreateMapper().Map<T, T>(objectFrom, objectTo);
+        }
+
+        /// <inheritdoc />
+        protected override void OnPropertyChanging(string propertyName)
+        {
+            base.OnPropertyChanging(propertyName);
+            if (_trackedProperties.Contains(propertyName))
             {
                 BeginEdit();
             }
+        }
 
-            field = newValue;
-            RaisePropertyChanged(propertyName);
+        /// <summary>
+        /// Use the message bus for listening and publishing edit events.
+        /// </summary>
+        /// <param name="messageBus">The message bus to use.</param>
+        protected void UseMessageBus(IMessageBus messageBus)
+        {
+            MessageBus = messageBus;
+            messageBus.Subscribe<EditEndMessage>(OnEditEndMessagePublished);
+        }
 
-            if (AlsoNotifyMap.TryGetValue(propertyName, out var alsoNotify))
+        private void GetTrackingProperties()
+        {
+            foreach (var member in Accessor.GetMembers())
             {
-                foreach (var propName in alsoNotify)
+                if (member.IsDefined(typeof(TrackStateAttribute)))
                 {
-                    RaisePropertyChanged(propName);
+                    _trackedProperties.Add(member.Name);
                 }
             }
-
-            return true;
         }
 
-        /// <summary>
-        /// Raises a <see cref="ErrorsChanged"/> event.
-        /// </summary>
-        /// <param name="errors">Errors that occured during validation.</param>
-        /// <param name="propertyName">Property that failed validation.</param>
-        protected void RaiseValidationError(IEnumerable<string> errors, [CallerMemberName] string propertyName = null)
+        private void OnEditEndMessagePublished(EditEndMessage message)
         {
-            _propertyErrors.Clear();
-            _propertyErrors[propertyName] = errors;
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Raises a <see cref="ErrorsChanged"/> event.
-        /// </summary>
-        /// <param name="error">Error that occured during validation.</param>
-        /// <param name="propertyName">Property that failed validation.</param>
-        protected void RaiseValidationError(string error, [CallerMemberName] string propertyName = null)
-        {
-            RaiseValidationError(new[] { error }, propertyName);
-        }
-
-        /// <summary>
-        /// Raises a <see cref="ErrorsChanged"/> event.
-        /// </summary>
-        /// <param name="e">Exception that occured during validation.</param>
-        /// <param name="propertyName">Property that failed validation.</param>
-        protected void RaiseValidationError(Exception e, [CallerMemberName] string propertyName = null)
-        {
-            RaiseValidationError(e.ToString(), propertyName);
-        }
-
-        /// <summary>
-        /// Clears validation errors.
-        /// </summary>
-        protected void ClearErrors()
-        {
-            _propertyErrors.Clear();
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(string.Empty));
-        }
-
-        /// <summary>
-        /// Clears errors for a property.
-        /// </summary>
-        /// <param name="propertyName">The property to clear.</param>
-        protected void ClearError(string propertyName)
-        {
-            _propertyErrors.Remove(propertyName);
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        private void SetupAlsoNotify()
-        {
-            var alsoNotifyProperties = Accessor.GetMembers().Where(m => m.IsDefined(typeof(AlsoNotifyAttribute)));
-            foreach (var propertyInfo in alsoNotifyProperties)
+            if (message == EditEndMessage.Cancelled)
             {
-                var attr = (AlsoNotifyAttribute)propertyInfo.GetAttribute(typeof(AlsoNotifyAttribute), true);
-                AlsoNotifyMap.Add(propertyInfo.Name, attr.AlsoNotify);
+                CancelEdit();
+            }
+            else if (message == EditEndMessage.Accepted)
+            {
+                EndEdit();
             }
         }
     }

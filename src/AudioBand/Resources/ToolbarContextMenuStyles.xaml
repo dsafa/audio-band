@@ -2,29 +2,34 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF">
     <Color x:Key="ContextMenuHighlightColor">#44FFFFFF</Color>
-    <SolidColorBrush x:Key="ContextMenuHighlightBrush" Color="{StaticResource ContextMenuHighlightColor}"/>
+    <SolidColorBrush x:Key="ContextMenuHighlightBrush" Color="{StaticResource ContextMenuHighlightColor}" />
     <Color x:Key="ContextMenuBorderColor">#44ffffff</Color>
-    <SolidColorBrush x:Key="ContextMenuBorderBrush" Color="{StaticResource ContextMenuBorderColor}"/>
+    <SolidColorBrush x:Key="ContextMenuBorderBrush" Color="{StaticResource ContextMenuBorderColor}" />
     <Color x:Key="ContextMenuBackgroundColor">#AA000000</Color>
-    <SolidColorBrush x:Key="ContextMenuBackgroundBrush" Color="{StaticResource ContextMenuBackgroundColor}"/>
+    <SolidColorBrush x:Key="ContextMenuBackgroundBrush" Color="{StaticResource ContextMenuBackgroundColor}" />
     <Style x:Key="ContextMenuItemsHostStyle" TargetType="{x:Type StackPanel}">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="MinWidth" Value="200"/>
-        <Setter Property="Grid.IsSharedSizeScope" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="Grid.IsSharedSizeScope" Value="True" />
     </Style>
+    <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
     <Style x:Key="ToolbarContextMenu" TargetType="{x:Type ContextMenu}">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontFamily" Value="Segoe UI"/>
-        <Setter Property="FontWeight" Value="Light"/>
-        <Setter Property="Placement" Value="Top"/>
-        <Setter Property="Background" Value="{StaticResource ContextMenuBackgroundBrush}"/>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontWeight" Value="Light" />
+        <Setter Property="Placement" Value="Top" />
+        <Setter Property="Background" Value="{StaticResource ContextMenuBackgroundBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border Background="{StaticResource ContextMenuBackgroundBrush}" BorderThickness="1" Padding="0, 8">
-                        <StackPanel Orientation="Vertical" IsItemsHost="True" Style="{StaticResource ContextMenuItemsHostStyle}"/>
+                    <Border Padding="0,8"
+                            Background="{StaticResource ContextMenuBackgroundBrush}"
+                            BorderThickness="1">
+                        <StackPanel IsItemsHost="True"
+                                    Orientation="Vertical"
+                                    Style="{StaticResource ContextMenuItemsHostStyle}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -34,32 +39,53 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
-                    <Grid Background="{TemplateBinding Background}" x:Name="MenuItemRoot">
+                    <Grid x:Name="MenuItemRoot" Background="{TemplateBinding Background}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="40" SharedSizeGroup="IconColumn"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="ExpandColumn"/>
+                            <ColumnDefinition MinWidth="40" SharedSizeGroup="IconColumn" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="ExpandColumn" />
                         </Grid.ColumnDefinitions>
-                        <ContentPresenter Grid.Column="0" x:Name="IconContent" Content="{TemplateBinding Icon}" Margin="8, 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <ContentPresenter Grid.Column="1" x:Name="HeaderContent" 
-                                          Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" 
-                                          Margin="0, 6" HorizontalAlignment="Left"/>
-                        <TextBlock x:Name="ItemsArrow" Grid.Column="2" FontFamily="Segoe MDL2 Assets" Text="&#xE76C;" 
-                                   VerticalAlignment="Center" Margin="8, 0" Visibility="Hidden"/>
-                        <fluentWpf:AcrylicPopup Grid.Column="0" x:Name="Popup" Placement="Right" HorizontalOffset="-4" IsOpen="{TemplateBinding IsSubmenuOpen}"
-                               AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
-                            <Border BorderThickness="1" BorderBrush="{StaticResource ContextMenuBorderBrush}" Padding="0, 8" 
-                                    Background="{StaticResource ContextMenuBackgroundBrush}">
-                                <StackPanel IsItemsHost="True" Style="{StaticResource ContextMenuItemsHostStyle}"/>
+                        <ContentPresenter x:Name="IconContent"
+                                          Grid.Column="0"
+                                          Margin="8,0"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Icon}" />
+                        <ContentPresenter x:Name="HeaderContent"
+                                          Grid.Column="1"
+                                          Margin="0,6"
+                                          HorizontalAlignment="Left"
+                                          Content="{TemplateBinding Header}"
+                                          ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                        <TextBlock x:Name="ItemsArrow"
+                                   Grid.Column="2"
+                                   Margin="8,0"
+                                   VerticalAlignment="Center"
+                                   FontFamily="Segoe MDL2 Assets"
+                                   Text="&#xE76C;"
+                                   Visibility="Hidden" />
+                        <fluentWpf:AcrylicPopup x:Name="Popup"
+                                                Grid.Column="0"
+                                                AllowsTransparency="True"
+                                                Focusable="False"
+                                                HorizontalOffset="-4"
+                                                IsOpen="{TemplateBinding IsSubmenuOpen}"
+                                                Placement="Right"
+                                                PopupAnimation="None">
+                            <Border Padding="0,8"
+                                    Background="{StaticResource ContextMenuBackgroundBrush}"
+                                    BorderBrush="{StaticResource ContextMenuBorderBrush}"
+                                    BorderThickness="0.5">
+                                <StackPanel IsItemsHost="True" Style="{StaticResource ContextMenuItemsHostStyle}" />
                             </Border>
                         </fluentWpf:AcrylicPopup>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasItems" Value="True">
-                            <Setter TargetName="ItemsArrow" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="ItemsArrow" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="Icon" Value="{x:Null}">
-                            <Setter TargetName="IconContent" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="IconContent" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -67,7 +93,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource ContextMenuHighlightBrush}"/>
+                <Setter Property="Background" Value="{StaticResource ContextMenuHighlightBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

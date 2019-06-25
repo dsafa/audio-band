@@ -9,21 +9,6 @@ namespace AudioBand.AudioSource
     public interface IInternalAudioSource : IAudioSource
     {
         /// <summary>
-        /// Gets a value indicating whether the audio source is currently playing.
-        /// </summary>
-        bool IsPlaying { get; }
-
-        /// <summary>
-        /// Gets the current progress.
-        /// </summary>
-        TimeSpan CurrentProgress { get; }
-
-        /// <summary>
-        /// Gets the last track info.
-        /// </summary>
-        TrackInfoChangedEventArgs LastTrackInfo { get; }
-
-        /// <summary>
         /// Gets the settings that the audio source exposes.
         /// </summary>
         List<AudioSourceSettingAttribute> Settings { get; }

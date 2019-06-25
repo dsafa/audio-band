@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
 using AudioBand.AudioSource;
 using AudioBand.Extensions;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.TextFormatting;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
@@ -15,147 +17,157 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class CustomLabelViewModel : LayoutViewModelBase<CustomLabel>
     {
-        private readonly FormattedTextParser _parser;
-        private IInternalAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
         private bool _isPlaying;
+        private IEnumerable<TextSegment> _textSegments;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomLabelViewModel"/> class.
         /// </summary>
-        /// <param name="model">The custom label.</param>
+        /// <param name="source">The custom label.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public CustomLabelViewModel(CustomLabel model, IDialogService dialogService)
-            : base(model)
+        /// <param name="audioSession">The audio session.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public CustomLabelViewModel(CustomLabel source, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(messageBus, source)
         {
+            _audioSession = audioSession;
+            _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
+
             DialogService = dialogService;
-            _parser = new FormattedTextParser(FormatString, Color);
+            TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color, audioSession);
+            IsPlaying = _audioSession.IsPlaying;
         }
 
         /// <summary>
         /// Gets or sets the name of the label.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.Name))]
+        [TrackState]
         public string Name
         {
             get => Model.Name;
-            set => SetProperty(nameof(Model.Name), value);
+            set => SetProperty(Model, nameof(Model.Name), value);
         }
 
         /// <summary>
         /// Gets or sets the font family.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.FontFamily))]
+        [TrackState]
         public string FontFamily
         {
             get => Model.FontFamily;
-            set => SetProperty(nameof(Model.FontFamily), value);
+            set => SetProperty(Model, nameof(Model.FontFamily), value);
         }
 
         /// <summary>
         /// Gets or sets the font size.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.FontSize))]
+        [TrackState]
         public float FontSize
         {
             get => Model.FontSize;
-            set => SetProperty(nameof(Model.FontSize), value);
+            set => SetProperty(Model, nameof(Model.FontSize), value);
         }
 
         /// <summary>
         /// Gets or sets the font color.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.Color))]
+        [TrackState]
         public Color Color
         {
             get => Model.Color;
-            set => SetProperty(nameof(Model.Color), value);
+            set => SetProperty(Model, nameof(Model.Color), value);
         }
 
         /// <summary>
         /// Gets or sets the format string.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.FormatString))]
         [AlsoNotify(nameof(TextSegments))]
+        [TrackState]
         public string FormatString
         {
             get => Model.FormatString;
-            set => SetProperty(nameof(Model.FormatString), value);
+            set => SetProperty(Model, nameof(Model.FormatString), value);
         }
 
         /// <summary>
         /// Gets or sets the text alignment.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.Alignment))]
+        [TrackState]
         public TextAlignment TextAlignment
         {
             get => Model.Alignment;
-            set => SetProperty(nameof(Model.Alignment), value);
+            set => SetProperty(Model, nameof(Model.Alignment), value);
         }
 
         /// <summary>
         /// Gets or sets the scroll speed.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.ScrollSpeed))]
+        [TrackState]
         public TimeSpan ScrollSpeed
         {
             get => TimeSpan.FromMilliseconds(Model.ScrollSpeed);
-            set => SetProperty(nameof(Model.ScrollSpeed), (int)value.TotalMilliseconds);
+            set => SetProperty(Model, nameof(Model.ScrollSpeed), (int)value.TotalMilliseconds);
         }
 
         /// <summary>
         /// Gets or sets the text overflow.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.TextOverflow))]
+        [TrackState]
         public TextOverflow TextOverflow
         {
             get => Model.TextOverflow;
-            set => SetProperty(nameof(Model.TextOverflow), value);
+            set => SetProperty(Model, nameof(Model.TextOverflow), value);
         }
 
         /// <summary>
         /// Gets or sets the scroll behavior.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.ScrollBehavior))]
+        [TrackState]
         public ScrollBehavior ScrollBehavior
         {
             get => Model.ScrollBehavior;
-            set => SetProperty(nameof(Model.ScrollBehavior), value);
+            set => SetProperty(Model, nameof(Model.ScrollBehavior), value);
         }
 
         /// <summary>
         /// Gets or sets the fade effect.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.FadeEffect))]
+        [TrackState]
         public TextFadeEffect FadeEffect
         {
             get => Model.FadeEffect;
-            set => SetProperty(nameof(Model.FadeEffect), value);
+            set => SetProperty(Model, nameof(Model.FadeEffect), value);
         }
 
         /// <summary>
         /// Gets or sets the left offset for the text fade gradient.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.LeftFadeOffset))]
+        [TrackState]
         public double LeftFadeOffset
         {
             get => Model.LeftFadeOffset;
-            set => SetProperty(nameof(Model.LeftFadeOffset), value);
+            set => SetProperty(Model, nameof(Model.LeftFadeOffset), value);
         }
 
         /// <summary>
         /// Gets or sets the right offset for the text fade gradient.
         /// </summary>
-        [PropertyChangeBinding(nameof(CustomLabel.RightFadeOffset))]
+        [TrackState]
         public double RightFadeOffset
         {
             get => Model.RightFadeOffset;
-            set => SetProperty(nameof(Model.RightFadeOffset), value);
+            set => SetProperty(Model, nameof(Model.RightFadeOffset), value);
         }
 
         /// <summary>
         /// Gets the text segments.
         /// </summary>
-        public IEnumerable<TextSegment> TextSegments => _parser.TextSegments;
+        public IEnumerable<TextSegment> TextSegments
+        {
+            get => _textSegments;
+            private set => SetProperty(ref _textSegments, value);
+        }
 
         /// <summary>
         /// Gets the values of <see cref="CustomLabel.TextAlignment"/>.
@@ -183,89 +195,80 @@ namespace AudioBand.ViewModels
         public IDialogService DialogService { get; }
 
         /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IInternalAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether a track is playing.
         /// </summary>
         /// <remarks>Public so that bindings are set up correctly.</remarks>
         public bool IsPlaying
         {
             get => _isPlaying;
-            set => SetProperty(ref _isPlaying, value, false);
+            set => SetProperty(ref _isPlaying, value);
+        }
+
+        /// <summary>
+        /// Gets the current custom label model.
+        /// </summary>
+        /// <returns>The custom label model.</returns>
+        public CustomLabel GetModel()
+        {
+            return Model;
         }
 
         /// <inheritdoc/>
-        protected override void OnModelPropertyChanged(string propertyName)
+        protected override void OnPropertyChanged(string propertyName)
         {
             switch (propertyName)
             {
                 case nameof(Model.Color):
-                    _parser.DefaultColor = Model.Color;
+                    RefreshSegmentColors();
                     break;
                 case nameof(Model.FormatString):
-                    _parser.Format = Model.FormatString;
+                    ReParseSegments();
                     break;
             }
         }
 
-        private void UpdateAudioSource(IInternalAudioSource audioSource)
+        /// <inheritdoc />
+        protected override void OnCancelEdit()
         {
-            if (_audioSource != null)
-            {
-                Clear();
-                _audioSource.TrackInfoChanged -= AudioSourceOnTrackInfoChanged;
-                _audioSource.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
-                _audioSource.IsPlayingChanged -= AudioSourceOnIsPlayingChanged;
-            }
+            base.OnCancelEdit();
+            RefreshSegmentColors();
+            ReParseSegments();
+        }
 
-            _audioSource = audioSource;
-            if (_audioSource == null)
+        /// <inheritdoc />
+        protected override void OnReset()
+        {
+            base.OnReset();
+            RefreshSegmentColors();
+            ReParseSegments();
+        }
+
+        private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(IAudioSession.IsPlaying))
             {
-                Clear();
                 return;
             }
 
-            // Sync current information in the case the profiles change, otherwise we won't receive information until the next time the event is activated.
-            AudioSourceOnTrackInfoChanged(null, _audioSource.LastTrackInfo);
-            AudioSourceOnIsPlayingChanged(null, _audioSource.IsPlaying);
-            AudioSourceOnTrackProgressChanged(null, _audioSource.CurrentProgress);
-
-            _audioSource.TrackInfoChanged += AudioSourceOnTrackInfoChanged;
-            _audioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
-            _audioSource.IsPlayingChanged += AudioSourceOnIsPlayingChanged;
+            OnIsPlayingChanged(_audioSession.IsPlaying);
         }
 
-        private void AudioSourceOnIsPlayingChanged(object sender, bool e)
+        private void OnIsPlayingChanged(bool isPlaying)
         {
-            IsPlaying = e;
+            IsPlaying = isPlaying;
         }
 
-        private void AudioSourceOnTrackProgressChanged(object sender, TimeSpan e)
+        private void RefreshSegmentColors()
         {
-            _parser.SongProgress = e;
+            foreach (var textSegment in TextSegments)
+            {
+                textSegment.Color = Color;
+            }
         }
 
-        private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
+        private void ReParseSegments()
         {
-            _parser.Artist = e.Artist;
-            _parser.AlbumName = e.Album;
-            _parser.SongLength = e.TrackLength;
-            _parser.SongName = e.TrackName;
-        }
-
-        private void Clear()
-        {
-            _parser.Artist = null;
-            _parser.AlbumName = null;
-            _parser.SongName = null;
-            _parser.SongLength = TimeSpan.Zero;
-            _parser.SongProgress = TimeSpan.Zero;
+            TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color, _audioSession);
         }
     }
 }

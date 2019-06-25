@@ -76,17 +76,17 @@ namespace AudioBand.Views.Settings
         /// </summary>
         public RelayCommand BrowseForImageCommand { get; }
 
-        private void ResetImagePathOnExecuted(object parameter)
+        private void ResetImagePathOnExecuted()
         {
             ImagePath = "";
         }
 
-        private bool ResetImagePathCanExecute(object parameter)
+        private bool ResetImagePathCanExecute()
         {
             return !string.IsNullOrEmpty(ImagePath);
         }
 
-        private void BrowseForImageOnExecuted(object parameter)
+        private void BrowseForImageOnExecuted()
         {
             Debug.Assert(DialogService != null, "Dialog service not assigned");
 

@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Logging;
 using AudioBand.Messages;
-using AudioBand.Models;
 using AudioBand.Settings;
-using NLog.Fluent;
+using NLog;
 
 namespace AudioBand.ViewModels
 {
     /// <summary>
     /// View model for audio band toolbar.
     /// </summary>
-    public class AudioBandToolbarViewModel : ViewModelBase
+    public class AudioBandToolbarViewModel : ObservableObject
     {
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AudioBandToolbarViewModel>();
         private readonly IAppSettings _appSettings;
         private readonly IAudioSourceManager _audioSourceManager;
         private readonly IMessageBus _messageBus;
+        private readonly IAudioSession _audioSession;
         private IAudioSource _selectedAudioSource;
 
         /// <summary>
@@ -29,11 +30,13 @@ namespace AudioBand.ViewModels
         /// <param name="appSettings">The app settings.</param>
         /// <param name="audioSourceManager">The audio source mananger.</param>
         /// <param name="messageBus">The message bus.</param>
-        public AudioBandToolbarViewModel(IViewModelContainer viewModels, IAppSettings appSettings, IAudioSourceManager audioSourceManager, IMessageBus messageBus)
+        /// <param name="audioSession">The audio session.</param>
+        public AudioBandToolbarViewModel(IViewModelContainer viewModels, IAppSettings appSettings, IAudioSourceManager audioSourceManager, IMessageBus messageBus, IAudioSession audioSession)
         {
             _appSettings = appSettings;
             _audioSourceManager = audioSourceManager;
             _messageBus = messageBus;
+            _audioSession = audioSession;
             ViewModels = viewModels;
 
             ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommandOnExecute);
@@ -74,14 +77,14 @@ namespace AudioBand.ViewModels
             get => _selectedAudioSource;
             set
             {
-                if (SetProperty(ref _selectedAudioSource, value, false))
+                if (SetProperty(ref _selectedAudioSource, value))
                 {
                     _appSettings.AudioSource = value?.Name;
                 }
             }
         }
 
-        private void ShowSettingsWindowCommandOnExecute(object obj)
+        private void ShowSettingsWindowCommandOnExecute()
         {
             _messageBus.Publish(SettingsWindowMessage.OpenWindow);
         }
@@ -134,7 +137,7 @@ namespace AudioBand.ViewModels
                 return;
             }
 
-            UpdateViewModels(audioSource);
+            _audioSession.CurrentAudioSource = audioSource;
 
             Logger.Debug("Activating new audio source {audiosource}", audioSource.Name);
             try
@@ -151,18 +154,6 @@ namespace AudioBand.ViewModels
             {
                 _appSettings.Save();
             }
-        }
-
-        private void UpdateViewModels(IInternalAudioSource audioSource)
-        {
-            ViewModels.AlbumArtViewModel.AudioSource = audioSource;
-            ViewModels.NextButtonViewModel.AudioSource = audioSource;
-            ViewModels.PreviousButtonViewModel.AudioSource = audioSource;
-            ViewModels.PlayPauseButtonViewModel.AudioSource = audioSource;
-            ViewModels.ProgressBarViewModel.AudioSource = audioSource;
-            ViewModels.RepeatModeButtonViewModel.AudioSource = audioSource;
-            ViewModels.ShuffleModeButtonViewModel.AudioSource = audioSource;
-            ViewModels.CustomLabelsViewModel.AudioSource = audioSource;
         }
     }
 }

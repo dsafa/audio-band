@@ -1,29 +1,14 @@
 ﻿using System.Windows.Media;
-using AudioBand.Models;
 
 namespace AudioBand.TextFormatting
 {
     /// <summary>
-    /// A chunk of text that has its own custom rendering.
+    /// A segment of text to be rendered in a text label.
     /// </summary>
-    public class TextSegment : ModelBase
+    public abstract class TextSegment : ObservableObject
     {
         private string _text;
         private Color _color;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextSegment"/> class
-        /// with text, color and type.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="type">The text type.</param>
-        /// <param name="color">The text color.</param>
-        public TextSegment(string text, FormattedTextFlags type, Color color)
-        {
-            Text = text;
-            Type = type;
-            Color = color;
-        }
 
         /// <summary>
         /// Gets or sets the text.
@@ -31,13 +16,13 @@ namespace AudioBand.TextFormatting
         public string Text
         {
             get => _text;
-            set => SetProperty(ref _text, value);
+            protected set => SetProperty(ref _text, value);
         }
 
         /// <summary>
-        /// Gets the text type.
+        /// Gets or sets the text segment flags.
         /// </summary>
-        public FormattedTextFlags Type { get; }
+        public FormattedTextFlags Flags { get; protected set; }
 
         /// <summary>
         /// Gets or sets the chunk color.

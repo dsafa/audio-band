@@ -70,7 +70,7 @@ namespace AudioBand.Views.Settings
             _messageBus.Publish(FocusChangedMessage.FocusCaptured);
         }
 
-        private void OpenAboutCommandOnExecute(object o)
+        private void OpenAboutCommandOnExecute()
         {
             _dialogService.ShowAboutDialog();
         }

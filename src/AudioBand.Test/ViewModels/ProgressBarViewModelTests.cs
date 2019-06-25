@@ -2,17 +2,18 @@
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Windows.Media;
+using AudioBand.AudioSource;
+using AudioBand.Messages;
+using Xunit;
 
 namespace AudioBand.Test
 {
-    [TestClass]
     public class ProgressBarViewModelTests
     {
-        [TestMethod]
-        public void ListensForProfileChanges()
+        [Fact]
+        public void ProgressBarViewModel_ProfileChanged_ListensForProfileChanges()
         {
             var settingsMock = new Mock<IAppSettings>();
 
@@ -22,16 +23,16 @@ namespace AudioBand.Test
                 .Returns(first)
                 .Returns(second);
 
-            var vm = new ProgressBarViewModel(settingsMock.Object, new Mock<IDialogService>().Object);
+            var vm = new ProgressBarViewModel(settingsMock.Object, new Mock<IDialogService>().Object, new Mock<IAudioSession>().Object, new Mock<IMessageBus>().Object);
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
-            Assert.AreEqual(first.BackgroundColor, vm.BackgroundColor);
+            Assert.Equal(first.BackgroundColor, vm.BackgroundColor);
             settingsMock.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
-            Assert.IsFalse(vm.IsEditing);
-            Assert.IsTrue(raised);
-            Assert.AreEqual(second.BackgroundColor, vm.BackgroundColor);
+            Assert.False(vm.IsEditing);
+            Assert.True(raised);
+            Assert.Equal(second.BackgroundColor, vm.BackgroundColor);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <!-- Common settings -->
+    <!--  Common settings  -->
     <sys:String x:Key="WidthLabelText">Width</sys:String>
     <sys:String x:Key="HeightLabelText">Height</sys:String>
     <sys:String x:Key="VisibilityLabelText">Visibility</sys:String>
@@ -21,14 +21,14 @@
     <sys:String x:Key="BackgroundColorDescription">Background color</sys:String>
     <sys:String x:Key="PositionAnchorDescription">Change the relative positioning of the control</sys:String>
 
-    <!-- Play/pause button settings -->
+    <!--  Play/pause button settings  -->
     <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
     <sys:String x:Key="PauseButtonContentSectionText">Pause button content</sys:String>
 
-    <!-- Playback button settings -->
+    <!--  Playback button settings  -->
     <sys:String x:Key="PlaybackButtonContentSectionText">Button content</sys:String>
 
-    <!-- Button content settings -->
+    <!--  Button content settings  -->
     <sys:String x:Key="ButtonImageLabelText">Button Image</sys:String>
     <sys:String x:Key="ButtonHoveredImageLabelText">Button image when hovered</sys:String>
     <sys:String x:Key="ButtonClickedImageLabelText">Button image when clicked</sys:String>
@@ -37,16 +37,16 @@
     <sys:String x:Key="ButtonFontFamilyDescription">Select the font family for the text</sys:String>
     <sys:String x:Key="ButtonTextDescription">Button text</sys:String>
 
-    <!-- Repeat mode button settings -->
+    <!--  Repeat mode button settings  -->
     <sys:String x:Key="RepeatModeButtonOffContentSectionText">Repeat off button content</sys:String>
     <sys:String x:Key="RepeatModeButtonContextContentSectionText">Repeat on button content</sys:String>
     <sys:String x:Key="RepeatModeButtonTrackContentSectionText">Repeat track button content</sys:String>
 
-    <!-- Shuffle mode button settings -->
+    <!--  Shuffle mode button settings  -->
     <sys:String x:Key="ShuffleModeButtonOffContentSectionText">Shuffle off button content</sys:String>
     <sys:String x:Key="ShuffleModeButtonOnContentSectionText">Shuffle on button content</sys:String>
 
-    <!-- Custom text label settings -->
+    <!--  Custom text label settings  -->
     <sys:String x:Key="CustomLabelNameSectionText">Label name</sys:String>
     <sys:String x:Key="CustomLabelNameDescription">Choose a name for the label</sys:String>
     <sys:String x:Key="CustomLabelFontFamilyDescription">Font Family</sys:String>
@@ -70,7 +70,8 @@ Placeholders will be substituted with their corresponding values. Placeholders a
 &#8226; song - The title of the current song
 &#8226; album - Album name for the current song
 &#8226; time - Current playback time for the current song
-&#8226; length - Total length of the current song</sys:String>
+&#8226; length - Total length of the current song
+&#8226; remaining - The remaining time left in current song</sys:String>
     <sys:String x:Key="CustomLabelFormatHelpTextStyles" xml:space="preserve">&#8226; * - Bolds the placeholder
 &#8226; &amp; - Italicizes the placeholder
 &#8226; _ - Underlines the placeholder</sys:String>
@@ -80,7 +81,7 @@ Showing the album name in bold : {*album}
 Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9}
 Using style and color : {*artist:#a9a9a9}</sys:String>
 
-    <!-- Navigation pane -->
+    <!--  Navigation pane  -->
     <sys:String x:Key="GeneralSettingsTab">General</sys:String>
     <sys:String x:Key="PlaybackControlsTab">Playback Controls</sys:String>
     <sys:String x:Key="PlayPauseButtonTab">Play/Pause Button</sys:String>
@@ -98,7 +99,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="AddNewLabelHelpText">Add a new label</sys:String>
     <sys:String x:Key="DeleteLabelHelpText">Delete this label</sys:String>
 
-    <!-- Common button text -->
+    <!--  Common button text  -->
     <sys:String x:Key="ResetButtonText">Reset Settings</sys:String>
     <sys:String x:Key="BrowseButtonText">Browse</sys:String>
     <sys:String x:Key="DefaultButtonText">Default</sys:String>
@@ -118,17 +119,17 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="RememberHelpText">This setting will be saved. Are you sure?</sys:String>
     <sys:String x:Key="RememberSettingLabelText">Remember</sys:String>
 
-    <!-- Progress bar settings text -->
+    <!--  Progress bar settings text  -->
     <sys:String x:Key="ProgressBarColorsSectionText">Colors</sys:String>
     <sys:String x:Key="ProgressBarForegroundColorDescription">Foreground color</sys:String>
     <sys:String x:Key="ProgressBarBackgroundColorDescription">Background color</sys:String>
     <sys:String x:Key="ProgressBarHoverColorDescription">Background color when hovered</sys:String>
 
-    <!-- Album art settings text -->
+    <!--  Album art settings text  -->
     <sys:String x:Key="AlbumArtPlaceholderSectionText">Image</sys:String>
     <sys:String x:Key="AlbumArtPlaceholderDescription">Placeholder image</sys:String>
 
-    <!-- Dialogs -->
+    <!--  Dialogs  -->
     <sys:String x:Key="AboutTitle">About AudioBand</sys:String>
     <sys:String x:Key="DeleteLabelDialogTitle">Delete label</sys:String>
     <sys:String x:Key="DeleteLabelDialogBody">Are you sure you want to delete the label '{0}'?</sys:String>
@@ -144,7 +145,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="DeleteProfileDialogTitle">Delete profile</sys:String>
     <sys:String x:Key="DeleteProfileDialogBody">Are you sure you want to delete the profile '{0}'</sys:String>
 
-    <!-- Profiles -->
+    <!--  Profiles  -->
     <sys:String x:Key="NewProfileHelpText">New profile</sys:String>
     <sys:String x:Key="DeleteProfileHelpText">Delete the current profile</sys:String>
     <sys:String x:Key="RenameProfileHelpText">Rename the current profile</sys:String>
@@ -152,7 +153,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="ExportProfilesHelpText">Export profiles</sys:String>
     <sys:String x:Key="DefaultProfileItemText">Default Profile</sys:String>
 
-    <!-- Image picker -->
+    <!--  Image picker  -->
     <sys:String x:Key="ImagePickerResetText">Click here to reset</sys:String>
     <sys:String x:Key="ImagePickerNoImageText">No image selected</sys:String>
 </ResourceDictionary>

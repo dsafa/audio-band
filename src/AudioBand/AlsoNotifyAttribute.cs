@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace AudioBand.ViewModels
+namespace AudioBand
 {
     /// <summary>
-    /// Specifies that <see cref="INotifyPropertyChanged.PropertyChanged"/> event of <see cref="ViewModelBase{TModel}"/> will be raised for other properties.
+    /// Specifies that <see cref="INotifyPropertyChanged.PropertyChanged"/> events will be raised for other properties.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     internal class AlsoNotifyAttribute : Attribute

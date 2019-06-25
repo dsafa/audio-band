@@ -16,6 +16,14 @@ namespace AudioBand.Settings.Migrations
         {
             MapConfig = new MapperConfiguration(c =>
             {
+                c.CreateMap<Models.V1.AudioSourceSetting, Models.V2.AudioSourceSetting>();
+                c.CreateMap<Models.V1.AlbumArtAppearance, Models.V2.AlbumArtSettings>();
+                c.CreateMap<Models.V1.AudioBandSettings, Models.V2.AudioBandSettings>();
+                c.CreateMap<Models.V1.AudioBandAppearance, Models.V2.AudioBandSettings>();
+                c.CreateMap<Models.V1.NextSongButtonAppearance, Models.V2.NextButtonSettings>();
+                c.CreateMap<Models.V1.PlayPauseButtonAppearance, Models.V2.PlayPauseButtonSettings>();
+                c.CreateMap<Models.V1.PreviousSongButtonAppearance, Models.V2.PreviousButtonSettings>();
+                c.CreateMap<Models.V1.ProgressBarAppearance, Models.V2.ProgressBarSettings>();
                 c.CreateMap<Models.V1.AlbumArtPopupAppearance, Models.V2.AlbumArtPopupSettings>()
                     .ForMember(dest => dest.XPosition, opts => opts.MapFrom(source => source.XOffset));
                 c.CreateMap<Models.V1.TextAppearance, Models.V2.CustomLabelSettings>();

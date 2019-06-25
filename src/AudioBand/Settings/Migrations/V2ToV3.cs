@@ -97,6 +97,7 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.AlbumArtSettings, AlbumArt>()
                     .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft));
+                cfg.CreateMap<Models.V2.AlbumArtPopupSettings, AlbumArtPopup>();
                 cfg.CreateMap<Models.V2.Settings, ProfileV3>()
                     .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.MapFrom(source => source.AlbumArtPopupSettings))
                     .ForMember(dest => dest.AlbumArtSettings, opt => opt.MapFrom(source => source.AlbumArtSettings))
@@ -109,6 +110,7 @@ namespace AudioBand.Settings.Migrations
                     .ForMember(dest => dest.RepeatModeButtonSettings, opt => opt.MapFrom(source => new RepeatModeButton()))
                     .ForMember(dest => dest.ShuffleModeButtonSettings, opt => opt.MapFrom(source => new ShuffleModeButton()));
                 cfg.CreateMap<Models.V2.Settings, Dictionary<string, ProfileV3>>().ConvertUsing<ProfilesConverter>();
+                cfg.CreateMap<Models.V2.AudioSourceSetting, AudioSourceSetting>();
                 cfg.CreateMap<Models.V2.Settings, SettingsV3>()
                     .ForMember(dest => dest.Version, opt => opt.Ignore())
                     .ForMember(dest => dest.AudioSourceSettings, opt => opt.MapFrom(source => source.AudioSourceSettings))

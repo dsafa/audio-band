@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 
@@ -15,17 +15,20 @@ namespace AudioBand.ViewModels
     public class PreviousButtonViewModel : ButtonViewModelBase<PreviousButton>
     {
         private readonly IAppSettings _appSettings;
-        private IAudioSource _audioSource;
+        private readonly IAudioSession _audioSession;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PreviousButtonViewModel"/> class.
         /// </summary>
         /// <param name="appSettings">The app settings.</param>
         /// <param name="dialogService">The dialog service.</param>
-        public PreviousButtonViewModel(IAppSettings appSettings, IDialogService dialogService)
-            : base(appSettings.PreviousButton, dialogService)
+        /// <param name="audioSession">The audio session.</param>
+        /// <param name="messageBus">The message bus.</param>
+        public PreviousButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
+            : base(appSettings.PreviousButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
+            _audioSession = audioSession;
             _appSettings.ProfileChanged += AppsSettingsOnProfileChanged;
             PreviousTrackCommand = new AsyncRelayCommand<object>(PreviousTrackCommandOnExecute);
             Content = new ButtonContentViewModel(Model.Content, new PreviousButton().Content, dialogService);
@@ -38,37 +41,32 @@ namespace AudioBand.ViewModels
         public ButtonContentViewModel Content { get; }
 
         /// <summary>
-        /// Sets the audio source.
-        /// </summary>
-        public IAudioSource AudioSource
-        {
-            set => UpdateAudioSource(value);
-        }
-
-        /// <summary>
         /// Gets the previous track command.
         /// </summary>
         public IAsyncCommand PreviousTrackCommand { get; }
 
-        private void UpdateAudioSource(IAudioSource audioSource)
+        /// <inheritdoc />
+        protected override void OnEndEdit()
         {
-            _audioSource = audioSource;
+            base.OnEndEdit();
+            MapSelf(Model, _appSettings.PreviousButton);
         }
 
         private async Task PreviousTrackCommandOnExecute(object arg)
         {
-            if (_audioSource == null)
+            if (_audioSession.CurrentAudioSource == null)
             {
                 return;
             }
 
-            await _audioSource.PreviousTrackAsync();
+            await _audioSession.CurrentAudioSource.PreviousTrackAsync();
         }
 
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            ReplaceModel(_appSettings.PreviousButton);
+            MapSelf(_appSettings.PreviousButton, Model);
+            RaisePropertyChangedAll();
         }
     }
 }
