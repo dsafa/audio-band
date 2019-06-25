@@ -219,16 +219,28 @@ namespace AudioBand.ViewModels
             switch (propertyName)
             {
                 case nameof(Model.Color):
-                    foreach (var textSegment in TextSegments)
-                    {
-                        textSegment.Color = Color;
-                    }
-
+                    RefreshSegmentColors();
                     break;
                 case nameof(Model.FormatString):
-                    TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color, _audioSession);
+                    ReParseSegments();
                     break;
             }
+        }
+
+        /// <inheritdoc />
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+            RefreshSegmentColors();
+            ReParseSegments();
+        }
+
+        /// <inheritdoc />
+        protected override void OnReset()
+        {
+            base.OnReset();
+            RefreshSegmentColors();
+            ReParseSegments();
         }
 
         private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -244,6 +256,19 @@ namespace AudioBand.ViewModels
         private void OnIsPlayingChanged(bool isPlaying)
         {
             IsPlaying = isPlaying;
+        }
+
+        private void RefreshSegmentColors()
+        {
+            foreach (var textSegment in TextSegments)
+            {
+                textSegment.Color = Color;
+            }
+        }
+
+        private void ReParseSegments()
+        {
+            TextSegments = FormattedTextParser.ParseFormattedString(FormatString, Color, _audioSession);
         }
     }
 }
