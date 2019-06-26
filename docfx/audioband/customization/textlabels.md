@@ -45,6 +45,7 @@ The format for a placeholder is {`style` `tag`:`color`} where `tag` and `color` 
 - **album**: Album name for the current song
 - **time**: Current playback time for the current song
 - **length**: Total length of the current song
+- **remaining**: Remaining time of the current song
 
 **Color**
 
