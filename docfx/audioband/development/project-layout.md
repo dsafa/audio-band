@@ -70,5 +70,9 @@ The xaml is store under the `Views` folder.
 ## Message bus
 Under the `Messages` folder there is a simple `IMessageBus` interface. Messages are used sparingly for communicating between the settings window <-> toolbar and between view models.
 
+## Behaviors
+### Dpi
+Since we are in an interop scenario, there are some issues with automatic dpi handling so it is done manually through the `DpiScaling` behavior.
+
 # AudioSourceHost project
 The `AudioSourceHost` project is a library to load an audio source and exposes it via `MarshalByRef` objects for cross app domain communication. It uses the `Microsoft Extensibility Framework` to locate and load an `IAudioSource`.
