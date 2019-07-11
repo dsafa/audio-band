@@ -8,7 +8,7 @@ namespace AudioBand.ValueConverters
     /// <summary>
     /// Converts a string to a <see cref="Visibility"/> value.
     /// </summary>
-    [ValueConversion(typeof(string), typeof(Visibility))]
+    [ValueConversion(typeof(string), typeof(Visibility), ParameterType = typeof(bool))]
     public class StringToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc />
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return DependencyProperty.UnsetValue;
         }
     }
 }

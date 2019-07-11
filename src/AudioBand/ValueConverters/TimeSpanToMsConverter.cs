@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace AudioBand.ValueConverters
@@ -14,9 +13,9 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || value == DependencyProperty.UnsetValue)
+            if (!ValueConverterHelper.IsValid<TimeSpan>(value))
             {
-                return 0;
+                return 0.0;
             }
 
             return ((TimeSpan)value).TotalMilliseconds;
@@ -25,7 +24,7 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc />
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || value == DependencyProperty.UnsetValue)
+            if (!ValueConverterHelper.IsValid<double>(value))
             {
                 return TimeSpan.Zero;
             }

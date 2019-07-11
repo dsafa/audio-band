@@ -107,6 +107,7 @@
     <Compile Include="Behaviors\SliderClickAndDrag.cs" />
     <Compile Include="Behaviors\TrackOffsetFix.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
+    <Compile Include="ValueConverters\ValueConverterHelper.cs" />
     <Compile Include="ViewModels\TrackStateAttribute.cs" />
     <Compile Include="Commands\AsyncRelayCommand{T}.cs" />
     <Compile Include="Commands\IAsyncCommand.cs" />
