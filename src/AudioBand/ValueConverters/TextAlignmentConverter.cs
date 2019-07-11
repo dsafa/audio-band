@@ -15,6 +15,11 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!ValueConverterHelper.IsValid<CustomLabel.TextAlignment>(value))
+            {
+                return DependencyProperty.UnsetValue;
+            }
+
             switch ((CustomLabel.TextAlignment)value)
             {
                 case CustomLabel.TextAlignment.Center:
@@ -31,7 +36,7 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc />
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return DependencyProperty.UnsetValue;
         }
     }
 }

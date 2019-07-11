@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -14,21 +15,20 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            if (!ValueConverterHelper.IsValid<string>(value))
             {
-                throw new ArgumentNullException(nameof(value));
+                return DependencyProperty.UnsetValue;
             }
 
-            var fontFamilyString = (string)value;
-            return new FontFamily(fontFamilyString);
+            return new FontFamily((string)value);
         }
 
         /// <inheritdoc/>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            if (!ValueConverterHelper.IsValid<FontFamily>(value))
             {
-                throw new ArgumentNullException(nameof(value));
+                return DependencyProperty.UnsetValue;
             }
 
             var fontFamily = (FontFamily)value;

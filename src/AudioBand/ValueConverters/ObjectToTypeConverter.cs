@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace AudioBand.ValueConverters
 {
     /// <summary>
-    /// Converts and object to a type.
+    /// Converts an object to its type.
     /// </summary>
     [ValueConversion(typeof(object), typeof(Type))]
     public class ObjectToTypeConverter : IValueConverter
@@ -13,13 +14,18 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value?.GetType();
+            if (value == null)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+
+            return value.GetType();
         }
 
         /// <inheritdoc />
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return DependencyProperty.UnsetValue;
         }
     }
 }

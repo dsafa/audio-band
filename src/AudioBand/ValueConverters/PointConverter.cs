@@ -16,12 +16,12 @@ namespace AudioBand.ValueConverters
         {
             if (values == null)
             {
-                return default(Point);
+                return DependencyProperty.UnsetValue;
             }
 
             if (values.Any(v => v == DependencyProperty.UnsetValue))
             {
-                return default(Point);
+                return DependencyProperty.UnsetValue;
             }
 
             var x = System.Convert.ToDouble(values[0]);
@@ -32,7 +32,7 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc />
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
