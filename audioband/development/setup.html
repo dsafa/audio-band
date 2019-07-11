@@ -84,6 +84,7 @@
 <li>Clone the repo <code>git clone git@github.com:dsafa/audio-band.git</code></li>
 <li>Open the solution file under <code>src/AudioBand.sln</code> in visual studio.</li>
 <li>Restore nuget packages before building</li>
+<li>The toolbar will have to be installed after being built.</li>
 </ol>
 <div class="NOTE">
 <h5>Note</h5>
@@ -101,6 +102,8 @@
 <li>Attach the debugger: In visual studio, open the <code>attach to process</code> menu (ctrl + alt + p). Select <code>explorer.exe</code> and click attach.</li>
 <li>Inserting the statement <code>System.Diagnostics.Debugger.Launch();</code> will allow you to attach a debugger at any place in the code. This is useful if you need the debugger at the start.</li>
 </ul>
+<h2 id="running-unit-tests">Running unit tests</h2>
+<p>You may notice that there is a configuration called <code>Test</code>. This is so that it is easier to run tests without having to restart explorer to build the project. Since the dlls will be in use by explorer, switching to the test configuration allows the project to be built. Otherwise, it <em>should</em> be identical to the debug configuration.</p>
 </article>
           </div>
           

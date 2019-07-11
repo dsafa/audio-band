@@ -145,6 +145,9 @@ public int Width
 <p>The xaml is store under the <code>Views</code> folder.</p>
 <h2 id="message-bus">Message bus</h2>
 <p>Under the <code>Messages</code> folder there is a simple <code>IMessageBus</code> interface. Messages are used sparingly for communicating between the settings window &lt;-&gt; toolbar and between view models.</p>
+<h2 id="behaviors">Behaviors</h2>
+<h3 id="dpi">Dpi</h3>
+<p>Since we are in an interop scenario, there are some issues with automatic dpi handling so it is done manually through the <code>DpiScaling</code> behavior.</p>
 <h1 id="audiosourcehost-project">AudioSourceHost project</h1>
 <p>The <code>AudioSourceHost</code> project is a library to load an audio source and exposes it via <code>MarshalByRef</code> objects for cross app domain communication. It uses the <code>Microsoft Extensibility Framework</code> to locate and load an <code>IAudioSource</code>.</p>
 </article>

@@ -1,83 +1,18 @@
 {
-  "audioband/audiosources/itunes.html": {
-    "href": "audioband/audiosources/itunes.html",
-    "title": "iTunes",
-    "keywords": "iTunes No specific setup required for iTunes Note iTunes will open when the audio source is selected, and cannot be changed (as far as I know)."
-  },
-  "index.html": {
-    "href": "index.html",
-    "title": "Welcome to the AudioBand documentation homepage.",
-    "keywords": "Welcome to the AudioBand documentation homepage. Refer to the links below to get started. Links AudioBand help and documentation Documentation for implmenting an audiosource"
-  },
-  "audiosource-api/index.html": {
-    "href": "audiosource-api/index.html",
-    "title": "AudioSource api reference",
-    "keywords": "AudioSource api reference"
-  },
-  "audiosource-docs/index.html": {
-    "href": "audiosource-docs/index.html",
-    "title": "AudioSource development",
-    "keywords": "AudioSource development This page contains the AudioBand.AudioSource api documentation and documentation on developing an audio source for AudioBand. Building a new audio source project Create a new class library project Install the audio source nuget package Create a class to implement IAudioSource . Api reference on the right. public class AudioSource : IAudioSource { // implementation here } The file AudioSource.manifest should be add to the project after installing the nuget package. Edit the file so that the name will matches your asembly file name. AudioSource = \"AudioSource.dll\" Deploying your new audio source. For now, AudioBand reads each sub folder under the AudioSources folder. To deploy your new audio source, place your files under a new subfolder in the AudioSources directory. Ensure that your AudioSource.manifest file is also included. You also do not need to copy the AudioBand.AudioSource library files The file structure will look like this: Audioband/ |--AudioSources/ |--NewAudioSource/ |--Audiosource.dll |--AudioSource.manifest |--other files"
-  },
-  "audioband/customization/textlabels.html": {
-    "href": "audioband/customization/textlabels.html",
-    "title": "Text Labels",
-    "keywords": "Text Labels Name Name of the label. Used for indentification purposes Visibility Whether to show the label or not Width Width of the label. If the text exceeds the width, the text will scroll Height Height of the text X Position The x position of the text Y Position The Y Position of the text Font family The font family for the text Font size The font size of the text Font color The default color of the text Alignment The alignment of the label Scroll speed The scroll speed of the label when the text scrolls Text Format The text format for a label determines what text is shown It can be any combination of text or placeholders. For example the format This is some text will make the label display This is some text or Song name: {song} will display Song name: followed by whatever the current song's name is. The format for a placeholder is { style tag : color } where tag and color are any of the following values: Tag ( case sensitive! ) artist : Artist for the current song song : The title of the current song album : Album name for the current song time : Current playback time for the current song length : Total length of the current song remaining : Remaining time of the current song Color Use an html color code in the format #RRGGBB Text Style * (asterisk): Bolds the placeholder & (ampersand): Italicizes the placeholder _ (underline) - Underlines the placeholder Example formats Normal label showing the song and artist : {song} by {artist} Showing the album name in bold : {*album} Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9} Using style and color : {*artist:#a9a9a9}"
-  },
-  "audioband/customization/general.html": {
-    "href": "audioband/customization/general.html",
-    "title": "General",
-    "keywords": "General Width The Width of the toolbar Height The Height of the toolbar"
-  },
-  "audiosource-api/AudioBand.AudioSource.TrackRating.html": {
-    "href": "audiosource-api/AudioBand.AudioSource.TrackRating.html",
-    "title": "Enum TrackRating",
-    "keywords": "Enum TrackRating Options for the rating of a track. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax public enum TrackRating Fields Name Description Negative The song has a negative rating. None No rating. Positive The track has a positive rating."
-  },
-  "audioband/customization/albumartpopup.html": {
-    "href": "audioband/customization/albumartpopup.html",
-    "title": "Album Art Popup",
-    "keywords": "Album Art Popup Visibility Whether the popup will be visible Width Width of the popup Height Height of the popup X Position The x position of the popup. It is relative to the top left corner of the album art. Y Position The y position of the popup. It is relative to the top left corner of the album art."
-  },
-  "audioband/audiosources/spotify.html": {
-    "href": "audioband/audiosources/spotify.html",
-    "title": "Spotify",
-    "keywords": "Spotify Setup Login to the Spotify dashboard and create a new App. Fill in the details, you can name it whatever you want. This app will be just for AudioBand. Go to the app you created and click Edit Settings . Add http://localhost:80 as a callback url. You can use a different port for the local webserver (see next step) Right click anywhere in the toolbar > Audio Band Settings > Audio Source Settings and fill in the fields Spotify Client Id and Spotify Client Secret . You can find them in the same dashboard page for the Spotify app you created. You can also change the Callback Port if needed. Your browser should open asking you to login and allow your spotify app to access your currently playing songs. Sign-in and accept and it should now display song information (make sure spotify is selected as the audio source). Note The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying. Dashboard Callback settings"
+  "audioband/audiosources/musicbee.html": {
+    "href": "audioband/audiosources/musicbee.html",
+    "title": "MusicBee",
+    "keywords": "MusicBee Setup Make sure that the Musicbee IPC plugin is installed for MusicBee. Use this link if that link doesn't work."
   },
   "audioband/audiosources/index.html": {
     "href": "audioband/audiosources/index.html",
     "title": "Audio Sources",
     "keywords": "Audio Sources Audio sources allow AudioBand to access data from different music players. To select an audio source, right click AudioBand and go to the AudioSources submenu. Check below for links on the specific audio source and setup instructions. Available audio sources Spotify iTunes MusicBee Audio source development See here to find out how to develop and add a custom audio source"
   },
-  "audioband/faq.html": {
-    "href": "audioband/faq.html",
-    "title": "FAQ",
-    "keywords": "FAQ Q. Why is there a margin on the right of the toolbar? This occurs if you've moved the toolbar, then lock the task bar. Restarting explorer should get rid of the margin"
-  },
-  "audioband/development/project-layout.html": {
-    "href": "audioband/development/project-layout.html",
-    "title": "Project layout",
-    "keywords": "Project layout Last commit at this time of writing / update: a554bd34d3ea30f32b2819e35fba4130fd08af33 Here are the main projects in the solution: AudioBand : The is the \"main\" project where audioband lives AudioBand.Logging : This project contains shared logging facilities AudioBand.AudioSource : This project contains the audiosource interface AudioSourceHost : This project contains the assembly used to host an audio source in a separate app domain * AudioSource : These are the projects for the included audio sources. AudioBand project Entry point The entry point for audioband can be found in the Deskband.cs file. This is the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling Application.Run() , the user control is instantiated directly. The toolbar is implemented as a WPF usercontrol in Views/AudioBandToolbar.xaml AudioBandToolbar.xaml This is the top level user control, equivalent to the main window in wpf or main form in winforms. Codebehind The codebehind listens to size changes and notifies windows to update the deskband size. ViewModel The viewmodel for the toolbar can be found in ViewModels/AudioBandToolbarViewModel . It handles the context menu, loading the audio sources, and updating other view models when the audio source changes. Audio source loading Audio source loading is done by the AudioSource/AudioSourceManager class. Each audio source is loaded in their own app domain using the AudioSourceHost project. The creation and communication with the app domain is done through the AudioSource/AudioSourceProxy class. Currently, all audio sources are loaded at the start by the toolbar viewmodel, and there is no file system monitoring for new sources. When new audio sources are added, these steps are performed: Add to the observable collection for the context menu Merge settings. If there are already saved settings for the audio source, then the settings are applied to the audio source If there are no previously saved settings, then the default setting values are extracted and saved Viewmodels for these settings are built and added so they can be manipulated by the settings window If the audio source is selected in the settings, then it is activated. App settings loading App settings are loaded by the Settings/AppSettings class. It is just simple serialization in the toml format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, it is less readable with toml but it is still workable. There is also a Migrations subfolder that contains code to settings migrations. These classes update old configuration files to the latest format. ViewModels No MVVM frameworks are used, instead there is a ViewModelBase implementation and standard ICommand implementations. ViewModelBase provides automatic implementations for INotifyPropertyChanged : Has a SetProperty method that automatically calls INotifyPropertyChanged.PropertyChanged event if a field value changes. The attribute AlsoNotify can also be applied to raise PropertyChanged for other properties. Example: [AlsoNotify(nameof(Size))] public int Width { get => _width; set => SetProperty(ref _width, value); } public Size Size => new Size(Width, Height); INotifyDataError : Provides a few RaiseValidationError methods that raise the INotifyDataError.ErrorsChanged event. IResettable : Custom interface that exposes a method to reset the viewmodel to default values. The base class implements a command to call reset and the method ResetObject<T> to reset an object to its default value. BeginEdit , EndEdit and CancelEdit commands and methods. The attribute TrackState can is used to automatically call those methods. // Automatically calls beginedit method if the value is changed [TrackState] public int Width { get => Model.Width; // Using the model as the source for the value set => SetProperty(Model, nameof(Model.Width), value); // Set the value in the model } Views The xaml is store under the Views folder. Message bus Under the Messages folder there is a simple IMessageBus interface. Messages are used sparingly for communicating between the settings window <-> toolbar and between view models. AudioSourceHost project The AudioSourceHost project is a library to load an audio source and exposes it via MarshalByRef objects for cross app domain communication. It uses the Microsoft Extensibility Framework to locate and load an IAudioSource ."
-  },
-  "audioband/customization/index.html": {
-    "href": "audioband/customization/index.html",
-    "title": "Customization",
-    "keywords": "Customization Right click audio band and select Audio Band Settings and a new window will appear where you can do your customization. A description of the options can be found on this page and on the naviagtion on the left. In app help coming soon"
-  },
-  "audioband/index.html": {
-    "href": "audioband/index.html",
-    "title": "Audioband Documentation",
-    "keywords": "Audioband Documentation Here you will find links to get you started with AudioBand. See below for installation. See the links on the side for more information. Quick Start Requirements .Net framework 4.7 Windows 10 Installation Find the latest download in the Releases page and download the installer (.msi) file. Usage Right click on the taskbar and select Audio Band from the toolbars submenu. ( See images below ) Right click on the Audio Band toolbar and select an audio source (ex. Spotify) Do any audio source specific setup . Spotify, for example requires some additional setup. Check out other helpful links in the side Important Previous versions of windows are not supported. Audioband may still work but there is no testing on older versions. Note High DPI is supported on Windows 10 1703 and above. Info Logs can be found in the temp folder: %temp%\\AudioBand.log Settings are saved in the app data directory: %appdata%\\AudioBand Links Audio source development"
-  },
-  "audioband/development/setup.html": {
-    "href": "audioband/development/setup.html",
-    "title": "Setup",
-    "keywords": "Setup Install Visual Studio 2019 . Make sure to install support for .Net Framework 4.7 development. Clone the repo git clone git@github.com:dsafa/audio-band.git Open the solution file under src/AudioBand.sln in visual studio. Restore nuget packages before building Note Explorer does not unload audioband so you will not be able to build if explorer has loaded it. The debug configuration will automatically close explorer to build the audioband project and restart it after the build. Running local version To test the local version of audioband, it needs to be installed as a toolbar. The easiest way is to copy the install script from tools/install.cmd to the build folder and run it. Warning Installing the development version will overwrite any other installations. Debugging There are 2 ways you can use a debugger on audioband. Attach the debugger: In visual studio, open the attach to process menu (ctrl + alt + p). Select explorer.exe and click attach. Inserting the statement System.Diagnostics.Debugger.Launch(); will allow you to attach a debugger at any place in the code. This is useful if you need the debugger at the start."
-  },
-  "audioband/audiosources/musicbee.html": {
-    "href": "audioband/audiosources/musicbee.html",
-    "title": "MusicBee",
-    "keywords": "MusicBee Setup Make sure that the Musicbee IPC plugin is installed for MusicBee. Use this link if that link doesn't work."
+  "audiosource-api/AudioBand.AudioSource.TrackRating.html": {
+    "href": "audiosource-api/AudioBand.AudioSource.TrackRating.html",
+    "title": "Enum TrackRating",
+    "keywords": "Enum TrackRating Options for the rating of a track. Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax public enum TrackRating Fields Name Description Negative The song has a negative rating. None No rating. Positive The track has a positive rating."
   },
   "audiosource-api/AudioBand.AudioSource.SettingOptions.html": {
     "href": "audiosource-api/AudioBand.AudioSource.SettingOptions.html",
@@ -98,6 +33,71 @@
     "href": "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html",
     "title": "Class TrackInfoChangedEventArgs",
     "keywords": "Class TrackInfoChangedEventArgs Event arguments for the TrackInfoChanged event. Inheritance Object EventArgs TrackInfoChangedEventArgs Implements ISerializable Inherited Members EventArgs.Empty Object.ToString() Object.Equals(Object) Object.Equals(Object, Object) Object.ReferenceEquals(Object, Object) Object.GetHashCode() Object.GetType() Object.MemberwiseClone() Namespace : AudioBand.AudioSource Assembly : AudioBand.AudioSource.dll Syntax [Serializable] public sealed class TrackInfoChangedEventArgs : EventArgs, ISerializable Constructors | Improve this Doc View Source TrackInfoChangedEventArgs() Initializes a new instance of the TrackInfoChangedEventArgs class. Declaration public TrackInfoChangedEventArgs() Properties | Improve this Doc View Source Album Gets or sets the album name. Declaration public string Album { get; set; } Property Value Type Description String The name of the album. | Improve this Doc View Source AlbumArt Gets or sets the album art image. If null , a placeholder will be used. Declaration public Image AlbumArt { get; set; } Property Value Type Description Image The album art. | Improve this Doc View Source Artist Gets or sets the artist. Declaration public string Artist { get; set; } Property Value Type Description String The name of the artist. | Improve this Doc View Source TrackLength Gets or sets the length of the track. Declaration public TimeSpan TrackLength { get; set; } Property Value Type Description TimeSpan The length of the track. | Improve this Doc View Source TrackName Gets or sets the track Name. Declaration public string TrackName { get; set; } Property Value Type Description String The name of the track. Explicit Interface Implementations | Improve this Doc View Source ISerializable.GetObjectData(SerializationInfo, StreamingContext) Declaration void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) Parameters Type Name Description SerializationInfo info StreamingContext context Implements System.Runtime.Serialization.ISerializable"
+  },
+  "audiosource-docs/index.html": {
+    "href": "audiosource-docs/index.html",
+    "title": "AudioSource development",
+    "keywords": "AudioSource development This page contains the AudioBand.AudioSource api documentation and documentation on developing an audio source for AudioBand. Building a new audio source project Create a new class library project Install the audio source nuget package Create a class to implement IAudioSource . Api reference on the right. public class AudioSource : IAudioSource { // implementation here } The file AudioSource.manifest should be add to the project after installing the nuget package. Edit the file so that the name will matches your asembly file name. AudioSource = \"AudioSource.dll\" Deploying your new audio source. For now, AudioBand reads each sub folder under the AudioSources folder. To deploy your new audio source, place your files under a new subfolder in the AudioSources directory. Ensure that your AudioSource.manifest file is also included. You also do not need to copy the AudioBand.AudioSource library files The file structure will look like this: Audioband/ |--AudioSources/ |--NewAudioSource/ |--Audiosource.dll |--AudioSource.manifest |--other files"
+  },
+  "audioband/customization/index.html": {
+    "href": "audioband/customization/index.html",
+    "title": "Customization",
+    "keywords": "Customization Right click audio band and select Audio Band Settings and a new window will appear where you can do your customization. A description of the options can be found on this page and on the naviagtion on the left. In app help coming soon"
+  },
+  "audioband/customization/general.html": {
+    "href": "audioband/customization/general.html",
+    "title": "General",
+    "keywords": "General Width The Width of the toolbar Height The Height of the toolbar"
+  },
+  "audioband/faq.html": {
+    "href": "audioband/faq.html",
+    "title": "FAQ",
+    "keywords": "FAQ Q. Why is there a margin on the right of the toolbar? This occurs if you've moved the toolbar, then lock the task bar. Restarting explorer should get rid of the margin"
+  },
+  "audiosource-api/index.html": {
+    "href": "audiosource-api/index.html",
+    "title": "AudioSource api reference",
+    "keywords": "AudioSource api reference"
+  },
+  "audioband/audiosources/spotify.html": {
+    "href": "audioband/audiosources/spotify.html",
+    "title": "Spotify",
+    "keywords": "Spotify Setup Login to the Spotify dashboard and create a new App. Fill in the details, you can name it whatever you want. This app will be just for AudioBand. Go to the app you created and click Edit Settings . Add http://localhost:80 as a callback url. You can use a different port for the local webserver (see next step) Right click anywhere in the toolbar > Audio Band Settings > Audio Source Settings and fill in the fields Spotify Client Id and Spotify Client Secret . You can find them in the same dashboard page for the Spotify app you created. You can also change the Callback Port if needed. Your browser should open asking you to login and allow your spotify app to access your currently playing songs. Sign-in and accept and it should now display song information (make sure spotify is selected as the audio source). Note The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying. Dashboard Callback settings"
+  },
+  "audioband/audiosources/itunes.html": {
+    "href": "audioband/audiosources/itunes.html",
+    "title": "iTunes",
+    "keywords": "iTunes No specific setup required for iTunes Note iTunes will open when the audio source is selected, and cannot be changed (as far as I know)."
+  },
+  "index.html": {
+    "href": "index.html",
+    "title": "Welcome to the AudioBand documentation homepage.",
+    "keywords": "Welcome to the AudioBand documentation homepage. Refer to the links below to get started. Links AudioBand help and documentation Documentation for implmenting an audiosource"
+  },
+  "audioband/development/project-layout.html": {
+    "href": "audioband/development/project-layout.html",
+    "title": "Project layout",
+    "keywords": "Project layout Last commit at this time of writing / update: a554bd34d3ea30f32b2819e35fba4130fd08af33 Here are the main projects in the solution: AudioBand : The is the \"main\" project where audioband lives AudioBand.Logging : This project contains shared logging facilities AudioBand.AudioSource : This project contains the audiosource interface AudioSourceHost : This project contains the assembly used to host an audio source in a separate app domain * AudioSource : These are the projects for the included audio sources. AudioBand project Entry point The entry point for audioband can be found in the Deskband.cs file. This is the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling Application.Run() , the user control is instantiated directly. The toolbar is implemented as a WPF usercontrol in Views/AudioBandToolbar.xaml AudioBandToolbar.xaml This is the top level user control, equivalent to the main window in wpf or main form in winforms. Codebehind The codebehind listens to size changes and notifies windows to update the deskband size. ViewModel The viewmodel for the toolbar can be found in ViewModels/AudioBandToolbarViewModel . It handles the context menu, loading the audio sources, and updating other view models when the audio source changes. Audio source loading Audio source loading is done by the AudioSource/AudioSourceManager class. Each audio source is loaded in their own app domain using the AudioSourceHost project. The creation and communication with the app domain is done through the AudioSource/AudioSourceProxy class. Currently, all audio sources are loaded at the start by the toolbar viewmodel, and there is no file system monitoring for new sources. When new audio sources are added, these steps are performed: Add to the observable collection for the context menu Merge settings. If there are already saved settings for the audio source, then the settings are applied to the audio source If there are no previously saved settings, then the default setting values are extracted and saved Viewmodels for these settings are built and added so they can be manipulated by the settings window If the audio source is selected in the settings, then it is activated. App settings loading App settings are loaded by the Settings/AppSettings class. It is just simple serialization in the toml format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, it is less readable with toml but it is still workable. There is also a Migrations subfolder that contains code to settings migrations. These classes update old configuration files to the latest format. ViewModels No MVVM frameworks are used, instead there is a ViewModelBase implementation and standard ICommand implementations. ViewModelBase provides automatic implementations for INotifyPropertyChanged : Has a SetProperty method that automatically calls INotifyPropertyChanged.PropertyChanged event if a field value changes. The attribute AlsoNotify can also be applied to raise PropertyChanged for other properties. Example: [AlsoNotify(nameof(Size))] public int Width { get => _width; set => SetProperty(ref _width, value); } public Size Size => new Size(Width, Height); INotifyDataError : Provides a few RaiseValidationError methods that raise the INotifyDataError.ErrorsChanged event. IResettable : Custom interface that exposes a method to reset the viewmodel to default values. The base class implements a command to call reset and the method ResetObject<T> to reset an object to its default value. BeginEdit , EndEdit and CancelEdit commands and methods. The attribute TrackState can is used to automatically call those methods. // Automatically calls beginedit method if the value is changed [TrackState] public int Width { get => Model.Width; // Using the model as the source for the value set => SetProperty(Model, nameof(Model.Width), value); // Set the value in the model } Views The xaml is store under the Views folder. Message bus Under the Messages folder there is a simple IMessageBus interface. Messages are used sparingly for communicating between the settings window <-> toolbar and between view models. Behaviors Dpi Since we are in an interop scenario, there are some issues with automatic dpi handling so it is done manually through the DpiScaling behavior. AudioSourceHost project The AudioSourceHost project is a library to load an audio source and exposes it via MarshalByRef objects for cross app domain communication. It uses the Microsoft Extensibility Framework to locate and load an IAudioSource ."
+  },
+  "audioband/customization/textlabels.html": {
+    "href": "audioband/customization/textlabels.html",
+    "title": "Text Labels",
+    "keywords": "Text Labels Name Name of the label. Used for indentification purposes Visibility Whether to show the label or not Width Width of the label. If the text exceeds the width, the text will scroll Height Height of the text X Position The x position of the text Y Position The Y Position of the text Font family The font family for the text Font size The font size of the text Font color The default color of the text Alignment The alignment of the label Scroll speed The scroll speed of the label when the text scrolls Text Format The text format for a label determines what text is shown It can be any combination of text or placeholders. For example the format This is some text will make the label display This is some text or Song name: {song} will display Song name: followed by whatever the current song's name is. The format for a placeholder is { style tag : color } where tag and color are any of the following values: Tag ( case sensitive! ) artist : Artist for the current song song : The title of the current song album : Album name for the current song time : Current playback time for the current song length : Total length of the current song remaining : Remaining time of the current song Color Use an html color code in the format #RRGGBB Text Style * (asterisk): Bolds the placeholder & (ampersand): Italicizes the placeholder _ (underline) - Underlines the placeholder Example formats Normal label showing the song and artist : {song} by {artist} Showing the album name in bold : {*album} Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9} Using style and color : {*artist:#a9a9a9}"
+  },
+  "audioband/customization/albumartpopup.html": {
+    "href": "audioband/customization/albumartpopup.html",
+    "title": "Album Art Popup",
+    "keywords": "Album Art Popup Visibility Whether the popup will be visible Width Width of the popup Height Height of the popup X Position The x position of the popup. It is relative to the top left corner of the album art. Y Position The y position of the popup. It is relative to the top left corner of the album art."
+  },
+  "audioband/index.html": {
+    "href": "audioband/index.html",
+    "title": "Audioband Documentation",
+    "keywords": "Audioband Documentation Here you will find links to get you started with AudioBand. See below for installation. See the links on the side for more information. Quick Start Requirements .Net framework 4.7 Windows 10 Installation Find the latest download in the Releases page and download the installer (.msi) file. Usage Right click on the taskbar and select Audio Band from the toolbars submenu. ( See images below ) Right click on the Audio Band toolbar and select an audio source (ex. Spotify) Do any audio source specific setup . Spotify, for example requires some additional setup. Check out other helpful links in the side Important Previous versions of windows are not supported. Audioband may still work but there is no testing on older versions. Note High DPI is supported on Windows 10 1703 and above. Info Logs can be found in the temp folder: %temp%\\AudioBand.log Settings are saved in the app data directory: %appdata%\\AudioBand Links Audio source development"
+  },
+  "audioband/development/setup.html": {
+    "href": "audioband/development/setup.html",
+    "title": "Setup",
+    "keywords": "Setup Install Visual Studio 2019 . Make sure to install support for .Net Framework 4.7 development. Clone the repo git clone git@github.com:dsafa/audio-band.git Open the solution file under src/AudioBand.sln in visual studio. Restore nuget packages before building The toolbar will have to be installed after being built. Note Explorer does not unload audioband so you will not be able to build if explorer has loaded it. The debug configuration will automatically close explorer to build the audioband project and restart it after the build. Running local version To test the local version of audioband, it needs to be installed as a toolbar. The easiest way is to copy the install script from tools/install.cmd to the build folder and run it. Warning Installing the development version will overwrite any other installations. Debugging There are 2 ways you can use a debugger on audioband. Attach the debugger: In visual studio, open the attach to process menu (ctrl + alt + p). Select explorer.exe and click attach. Inserting the statement System.Diagnostics.Debugger.Launch(); will allow you to attach a debugger at any place in the code. This is useful if you need the debugger at the start. Running unit tests You may notice that there is a configuration called Test . This is so that it is easier to run tests without having to restart explorer to build the project. Since the dlls will be in use by explorer, switching to the test configuration allows the project to be built. Otherwise, it should be identical to the debug configuration."
   },
   "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.html": {
     "href": "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.html",
