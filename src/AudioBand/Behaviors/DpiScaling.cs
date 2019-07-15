@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interactivity;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace AudioBand.Behaviors
 {
@@ -108,24 +110,43 @@ namespace AudioBand.Behaviors
             switch (msg)
             {
                 case WM_DPICHANGED:
-                    UpdateDpi(HiWord(wparam));
+                    var newDpi = HiWord(wparam);
+                    if (AssociatedObject is Window window)
+                    {
+                        UpdateDpi(newDpi, false);
+                        var suggestedRect = Marshal.PtrToStructure<NativeMethods.RECT>(lparam);
+                        window.Left = suggestedRect.Left;
+                        window.Top = suggestedRect.Top;
+                        window.Width = suggestedRect.Right - suggestedRect.Left;
+                        window.Height = suggestedRect.Bottom - suggestedRect.Top;
+                    }
+                    else
+                    {
+                        UpdateDpi(newDpi);
+                    }
 
+                    handled = true;
                     break;
                 case WM_DPICHANGED_AFTERPARENT:
+                    // Used for the toolbar since we don't receive WM_DPICHANGED messages there.
                     UpdateDpi(GetParentWindowDpi(AssociatedObject));
+                    handled = true;
                     break;
             }
 
             return IntPtr.Zero;
         }
 
-        private void UpdateDpi(double newDpi)
+        private void UpdateDpi(double newDpi, bool updateSize = true)
         {
-            var dpiScale = newDpi / CurrentDpi;
-            CurrentDpi = newDpi;
+            if (updateSize)
+            {
+                var dpiScale = newDpi / CurrentDpi;
+                AssociatedObject.Width *= dpiScale;
+                AssociatedObject.Height *= dpiScale;
+            }
 
-            AssociatedObject.Width *= dpiScale;
-            AssociatedObject.Height *= dpiScale;
+            CurrentDpi = newDpi;
 
             if (VisualTreeHelper.GetChildrenCount(AssociatedObject) == 0)
             {
