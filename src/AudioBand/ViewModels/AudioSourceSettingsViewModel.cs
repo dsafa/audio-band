@@ -48,14 +48,14 @@ namespace AudioBand.ViewModels
             var matchingSetting = _appSettings.AudioSourceSettings.FirstOrDefault(s => s.AudioSourceName == audioSource.Name);
             if (matchingSetting != null)
             {
-                var viewModel = new AudioSourceSettingsCollectionViewModel(audioSource, matchingSetting, _messageBus);
+                var viewModel = new AudioSourceSettingsCollectionViewModel(audioSource, matchingSetting, _messageBus, _appSettings);
                 AudioSourcesSettings.Add(viewModel);
             }
             else
             {
                 var newSettingsModel = new AudioSourceSettings { AudioSourceName = audioSource.Name };
                 _appSettings.AudioSourceSettings.Add(newSettingsModel);
-                var newViewModel = new AudioSourceSettingsCollectionViewModel(audioSource, newSettingsModel, _messageBus);
+                var newViewModel = new AudioSourceSettingsCollectionViewModel(audioSource, newSettingsModel, _messageBus, _appSettings);
                 AudioSourcesSettings.Add(newViewModel);
             }
 

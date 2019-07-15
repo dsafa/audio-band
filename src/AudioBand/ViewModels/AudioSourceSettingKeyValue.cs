@@ -96,6 +96,14 @@ namespace AudioBand.ViewModels
             }
         }
 
+        /// <summary>
+        /// When the audio sources updates the setting itself instead of from audioband. Sync the changes back to the model.
+        /// </summary>
+        public void SyncToModel()
+        {
+            MapSelf(_model, _originalSource);
+        }
+
         /// <inheritdoc />
         protected override void OnBeginEdit()
         {
@@ -124,7 +132,7 @@ namespace AudioBand.ViewModels
                 return;
             }
 
-            MapSelf(_model, _originalSource);
+            SyncToModel();
             PropagateSettingToAudioSource();
         }
     }
