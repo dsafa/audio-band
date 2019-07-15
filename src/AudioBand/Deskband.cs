@@ -16,7 +16,6 @@ using AudioBand.Views.Settings;
 using CSDeskBand;
 using NLog;
 using SimpleInjector;
-using SimpleInjector.Advanced;
 
 namespace AudioBand
 {
@@ -39,6 +38,7 @@ namespace AudioBand
         private AudioBandToolbar _audioBandToolbar;
         private Container _container;
         private Window _settingsWindow;
+        private ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Deskband"/> class.
@@ -55,11 +55,13 @@ namespace AudioBand
             Options.HorizontalSize = initialSize;
             Options.MinHorizontalSize = initialSize;
             AudioBandLogManager.Initialize();
-            var logger = AudioBandLogManager.GetLogger("AudioBand");
-            logger.Info("Starting AudioBand. Version: {version}, OS: {os}", GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion, Environment.OSVersion);
+            _logger = AudioBandLogManager.GetLogger("AudioBand");
+            _logger.Info("Starting AudioBand. Version: {version}, OS: {os}", GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion, Environment.OSVersion);
 
-            AppDomain.CurrentDomain.UnhandledException += (sender, args) => AudioBandLogManager.GetLogger("AudioBand").Error((Exception)args.ExceptionObject, "Unhandled Exception");
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            StartupCheck();
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomainOnAssemblyResolve;
 
             ConfigureDependencies();
 
@@ -81,7 +83,7 @@ namespace AudioBand
         }
 
         // Problem with late binding. Fuslogvw shows its not probing the original location.
-        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        private static Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
         {
             // name is in this format Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4
             var asmName = args.Name.Split(',')[0];
@@ -92,6 +94,14 @@ namespace AudioBand
 
             var filename = Path.Combine(DirectoryHelper.BaseDirectory, asmName + ".dll");
             return File.Exists(filename) ? Assembly.LoadFrom(filename) : null;
+        }
+
+        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            GlobalSettings.Default.UnhandledException = true;
+            GlobalSettings.Default.Save();
+
+            AudioBandLogManager.GetLogger("AudioBand").Error((Exception)args.ExceptionObject, "Unhandled Exception");
         }
 
         private void ConfigureDependencies()
@@ -138,6 +148,22 @@ namespace AudioBand
             {
                 UpdateFocus(true);
             }
+        }
+
+        private void StartupCheck()
+        {
+            if (!GlobalSettings.Default.UnhandledException)
+            {
+                return;
+            }
+
+            // Unhandled exception from last run. Prevent audioband from starting in case there is a crash loop.
+            _logger.Info("Startup prevented due to previous unhandled exception. Open audioband again to ignore.");
+            GlobalSettings.Default.UnhandledException = false;
+            GlobalSettings.Default.Save();
+
+            // Exception should make explorer remove the deskband from being automatically started.
+            throw new Exception("Startup prevented due to previous unhandled exception.");
         }
     }
 }
