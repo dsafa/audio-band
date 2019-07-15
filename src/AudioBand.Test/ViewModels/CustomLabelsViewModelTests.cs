@@ -137,5 +137,29 @@ namespace AudioBand.Test
             _appSettingsMock.Raise(m => m.ProfileChanged += null, null, EventArgs.Empty);
             Assert.True(vm.CustomLabels[0].IsPlaying);
         }
+
+        [Fact]
+        public void RemoveLabel_PublishEdit()
+        {
+            _appSettingsMock.SetupGet(x => x.CustomLabels).Returns(new List<CustomLabel> { new CustomLabel() });
+            _dialogMock.Setup(o => o.ShowConfirmationDialog(It.IsAny<ConfirmationDialogType>(), It.IsAny<object>())).Returns(true);
+            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object, _sessionMock.Object, _messageBus.Object);
+            var label = _viewModel.CustomLabels[0];
+            _viewModel.RemoveLabelCommand.Execute(label);
+
+            Assert.True(_viewModel.IsEditing);
+            _messageBus.Verify(m => m.Publish(It.IsAny<EditStartMessage>(), It.IsAny<string>()));
+        }
+
+        [Fact]
+        public void AddLabel_PublishEdit()
+        {
+            _appSettingsMock.SetupGet(x => x.CustomLabels).Returns(new List<CustomLabel> { new CustomLabel() });
+            _viewModel = new CustomLabelsViewModel(_appSettingsMock.Object, _dialogMock.Object, _sessionMock.Object, _messageBus.Object);
+            _viewModel.AddLabelCommand.Execute(null);
+
+            Assert.True(_viewModel.IsEditing);
+            _messageBus.Verify(m => m.Publish(It.IsAny<EditStartMessage>(), It.IsAny<string>()));
+        }
     }
 }
