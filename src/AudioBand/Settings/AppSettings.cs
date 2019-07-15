@@ -32,7 +32,6 @@ namespace AudioBand.Settings
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AppSettings>();
-        private readonly TomlSettings _tomlSettings;
         private SettingsV3 _settings;
         private ProfileV3 _currentProfile;
 
@@ -41,31 +40,7 @@ namespace AudioBand.Settings
         /// </summary>
         public AppSettings()
         {
-            _tomlSettings = TomlSettings.Create(cfg =>
-            {
-                cfg.ConfigureType<Color>(type => type.WithConversionFor<TomlString>(convert => convert
-                    .ToToml(SerializationConversions.ColorToString)
-                    .FromToml(tomlString => SerializationConversions.StringToColor(tomlString.Value))));
-                cfg.ConfigureType<CustomLabel.TextAlignment>(type => type.WithConversionFor<TomlString>(convert => convert
-                    .ToToml(SerializationConversions.EnumToString)
-                    .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
-                cfg.ConfigureType<double>(type => type.WithConversionFor<TomlInt>(c => c
-                    .FromToml(tml => tml.Value)));
-            });
-
-            if (!Directory.Exists(SettingsDirectory))
-            {
-                Directory.CreateDirectory(SettingsDirectory);
-            }
-
-            if (!File.Exists(SettingsFilePath))
-            {
-                CreateDefaultSettingsFile();
-            }
-            else
-            {
-                LoadSettingsFromPath(SettingsFilePath);
-            }
+            InitSettings();
 
             if (_settings.AudioSourceSettings == null)
             {
@@ -243,7 +218,7 @@ namespace AudioBand.Settings
         {
             try
             {
-                Toml.WriteFile(_settings, SettingsFilePath, _tomlSettings);
+                Toml.WriteFile(_settings, SettingsFilePath, TomlHelper.DefaultSettings);
             }
             catch (Exception e)
             {
@@ -254,7 +229,7 @@ namespace AudioBand.Settings
         /// <inheritdoc />
         public void ImportProfilesFromPath(string path)
         {
-            var profilesToImport = Toml.ReadFile<ProfileExportV3>(path, _tomlSettings);
+            var profilesToImport = Toml.ReadFile<ProfileExportV3>(path, TomlHelper.DefaultSettings);
             foreach (var keyVal in profilesToImport.Profiles)
             {
                 var key = GetUniqueProfileName(keyVal.Key);
@@ -266,18 +241,18 @@ namespace AudioBand.Settings
         public void ExportProfilesToPath(string path)
         {
             var exportObject = new ProfileExportV3 { Profiles = _settings.Profiles };
-            Toml.WriteFile(exportObject, path, _tomlSettings);
+            Toml.WriteFile(exportObject, path, TomlHelper.DefaultSettings);
         }
 
         private void LoadSettingsFromPath(string path)
         {
-            var tomlFile = Toml.ReadFile(path, _tomlSettings);
+            var tomlFile = Toml.ReadFile(path, TomlHelper.DefaultSettings);
             var version = tomlFile["Version"].Get<string>();
 
             // Create backup
             if (version != CurrentVersion)
             {
-                Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), _tomlSettings);
+                Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), TomlHelper.DefaultSettings);
                 _settings = Migration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
                 Save();
             }
@@ -401,6 +376,33 @@ namespace AudioBand.Settings
             }
 
             return newName;
+        }
+
+        private void InitSettings()
+        {
+            if (!Directory.Exists(SettingsDirectory))
+            {
+                Directory.CreateDirectory(SettingsDirectory);
+            }
+
+            if (!File.Exists(SettingsFilePath))
+            {
+                CreateDefaultSettingsFile();
+                return;
+            }
+
+            try
+            {
+                LoadSettingsFromPath(SettingsFilePath);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Unable to load settings");
+                var backupPath = Path.Combine(SettingsDirectory, "audioband.settings.backup-" + DateTime.Now.Ticks);
+                File.Copy(SettingsFilePath, backupPath, true);
+                Logger.Info("Creating new default settings. Backup created at {backup}", backupPath);
+                CreateDefaultSettingsFile();
+            }
         }
     }
 }

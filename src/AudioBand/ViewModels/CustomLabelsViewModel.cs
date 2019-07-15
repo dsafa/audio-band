@@ -61,6 +61,8 @@ namespace AudioBand.ViewModels
         /// <inheritdoc/>
         protected override void OnBeginEdit()
         {
+            base.OnBeginEdit();
+
             _added.Clear();
             _removed.Clear();
         }
@@ -68,6 +70,8 @@ namespace AudioBand.ViewModels
         /// <inheritdoc/>
         protected override void OnCancelEdit()
         {
+            base.OnCancelEdit();
+
             foreach (var label in _added)
             {
                 CustomLabels.Remove(label);
@@ -85,6 +89,8 @@ namespace AudioBand.ViewModels
         /// <inheritdoc/>
         protected override void OnEndEdit()
         {
+            base.OnEndEdit();
+
             _added.Clear();
             _removed.Clear();
 
@@ -108,12 +114,12 @@ namespace AudioBand.ViewModels
 
         private void RemoveLabelCommandOnExecute(CustomLabelViewModel labelViewModel)
         {
-            BeginEdit();
-
             if (!_dialogService.ShowConfirmationDialog(ConfirmationDialogType.DeleteLabel, labelViewModel.Name))
             {
                 return;
             }
+
+            BeginEdit();
 
             CustomLabels.Remove(labelViewModel);
 

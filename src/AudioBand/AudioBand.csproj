@@ -96,6 +96,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>GlobalSettings.settings</DependentUpon>
+    </Compile>
     <Compile Include="AudioSource\AudioSourceProxy.cs" />
     <Compile Include="AudioSource\AudioSession.cs" />
     <Compile Include="AudioSource\IAudioSession.cs" />
@@ -107,6 +112,9 @@
     <Compile Include="Behaviors\SliderClickAndDrag.cs" />
     <Compile Include="Behaviors\TrackOffsetFix.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
+    <Compile Include="Settings\Migrations\IdentityMigrator.cs" />
+    <Compile Include="Settings\TomlHelper.cs" />
+    <Compile Include="ValueConverters\ValueConverterHelper.cs" />
     <Compile Include="ViewModels\TrackStateAttribute.cs" />
     <Compile Include="Commands\AsyncRelayCommand{T}.cs" />
     <Compile Include="Commands\IAsyncCommand.cs" />
@@ -302,6 +310,10 @@
     <None Include="app.config" />
     <None Include="app.manifest">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="GlobalSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>GlobalSettings.Designer.cs</LastGenOutput>
     </None>
     <None Include="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

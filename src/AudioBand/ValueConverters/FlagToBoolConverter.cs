@@ -8,13 +8,20 @@ namespace AudioBand.ValueConverters
     /// <summary>
     /// Converts enum flag to bool.
     /// </summary>
-    [ValueConversion(typeof(Enum), typeof(bool))]
+    [ValueConversion(typeof(Enum), typeof(bool), ParameterType = typeof(Enum))]
     public class FlagToBoolConverter : IValueConverter
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Converts an enum flag to a bool value.
+        /// </summary>
+        /// <param name="value">The value of the flag.</param>
+        /// <param name="targetType">The target type.</param>
+        /// <param name="parameter">The flag to check if set.</param>
+        /// <param name="culture">The culture.</param>
+        /// <returns>True if the flag specified by <paramref name="parameter"/> is set.</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || value == DependencyProperty.UnsetValue || parameter == null)
+            if (value == null || parameter == null)
             {
                 return false;
             }
@@ -25,7 +32,7 @@ namespace AudioBand.ValueConverters
         /// <inheritdoc />
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return DependencyProperty.UnsetValue;
         }
     }
 }
