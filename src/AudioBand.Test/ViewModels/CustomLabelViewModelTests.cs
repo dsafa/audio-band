@@ -73,5 +73,34 @@ namespace AudioBand.Test
 
             Assert.All(vm.TextSegments, segment => Assert.Equal(Colors.Blue, segment.Color));
         }
+
+        [Fact]
+        void CustomLabel_CancelEdit_ModelHasNoChanges()
+        {
+            var formatString = "test";
+            var model = new CustomLabel {FormatString = formatString};
+            var vm = new CustomLabelViewModel(model, _dialogMock.Object, _sessionMock.Object, _messageBusMock.Object);
+
+            vm.FormatString = "new";
+            vm.CancelEdit();
+
+            Assert.Equal(formatString, vm.FormatString);
+            Assert.Equal(formatString, model.FormatString);
+        }
+
+        [Fact]
+        void CustomLabel_SaveEdit_ModelHasNewChanges()
+        {
+            var formatString = "test";
+            var newFormatstring = "format";
+            var model = new CustomLabel { FormatString = formatString };
+            var vm = new CustomLabelViewModel(model, _dialogMock.Object, _sessionMock.Object, _messageBusMock.Object);
+
+            vm.FormatString = newFormatstring;
+            vm.EndEdit();
+
+            Assert.Equal(newFormatstring, vm.FormatString);
+            Assert.Equal(newFormatstring, model.FormatString);
+        }
     }
 }

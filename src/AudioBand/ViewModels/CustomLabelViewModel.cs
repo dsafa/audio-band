@@ -17,6 +17,7 @@ namespace AudioBand.ViewModels
     /// </summary>
     public class CustomLabelViewModel : LayoutViewModelBase<CustomLabel>
     {
+        private readonly CustomLabel _source;
         private readonly IAudioSession _audioSession;
         private bool _isPlaying;
         private IEnumerable<TextSegment> _textSegments;
@@ -31,6 +32,7 @@ namespace AudioBand.ViewModels
         public CustomLabelViewModel(CustomLabel source, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
             : base(messageBus, source)
         {
+            _source = source;
             _audioSession = audioSession;
             _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
 
@@ -241,6 +243,13 @@ namespace AudioBand.ViewModels
             base.OnReset();
             RefreshSegmentColors();
             ReParseSegments();
+        }
+
+        /// <inheritdoc />
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            MapSelf(Model, _source);
         }
 
         private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
