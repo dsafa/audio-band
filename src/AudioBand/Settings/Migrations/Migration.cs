@@ -11,10 +11,12 @@ namespace AudioBand.Settings.Migrations
     /// </summary>
     internal static class Migration
     {
-        private static readonly Dictionary<(string From, string To), ISettingsMigrator> SupportedMigrations = new Dictionary<(string From, string To), ISettingsMigrator>()
+        // Assume that migrations can be applied in order.
+        private static readonly List<(string version, ISettingsMigrator migrator)> MigrationsList = new List<(string, ISettingsMigrator)>
         {
-            { ("0.1", "2"), new V1ToV2() },
-            { ("2", "3"), new V2ToV3() },
+            ("0.1", new V1ToV2()),
+            ("2", new V2ToV3()),
+            ("3", new IdentityMigrator()),
         };
 
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger(typeof(Migration).FullName);
@@ -35,7 +37,7 @@ namespace AudioBand.Settings.Migrations
             }
 
             var plan = FindPlan(oldVersion, newVersion);
-            if (!plan.Any())
+            if (plan == null || !plan.Any())
             {
                 throw new ArgumentException($"No migration plan from {oldVersion} to {newVersion}");
             }
@@ -48,7 +50,20 @@ namespace AudioBand.Settings.Migrations
 
         private static List<ISettingsMigrator> FindPlan(string from, string to)
         {
-            return SupportedMigrations.Where(x => x.Key.From == from && x.Key.To == to).Select(x => x.Value).ToList();
+            var startIndex = MigrationsList.FindIndex(m => m.version == from);
+            var endIndex = MigrationsList.FindIndex(m => m.version == to);
+            if (startIndex == -1 || endIndex == -1)
+            {
+                return null;
+            }
+
+            if (endIndex < startIndex)
+            {
+                Logger.Error("End index less than start index");
+                return null;
+            }
+
+            return MigrationsList.GetRange(startIndex, endIndex - startIndex).Select(m => m.migrator).ToList();
         }
     }
 }
