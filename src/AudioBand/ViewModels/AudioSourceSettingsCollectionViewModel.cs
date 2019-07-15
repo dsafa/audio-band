@@ -6,6 +6,7 @@ using System.Linq;
 using AudioBand.AudioSource;
 using AudioBand.Messages;
 using AudioBand.Models;
+using AudioBand.Settings;
 
 namespace AudioBand.ViewModels
 {
@@ -16,6 +17,7 @@ namespace AudioBand.ViewModels
     {
         private readonly IInternalAudioSource _audioSource;
         private readonly IMessageBus _messageBus;
+        private readonly IAppSettings _appSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSourceSettingsCollectionViewModel"/> class.
@@ -23,10 +25,12 @@ namespace AudioBand.ViewModels
         /// <param name="audioSource">The audiosource that these settings belong to.</param>
         /// <param name="settingsModel">The settings model.</param>
         /// <param name="messageBus">The message bus.</param>
-        public AudioSourceSettingsCollectionViewModel(IInternalAudioSource audioSource, AudioSourceSettings settingsModel, IMessageBus messageBus)
+        /// <param name="appSettings">The app settings.</param>
+        public AudioSourceSettingsCollectionViewModel(IInternalAudioSource audioSource, AudioSourceSettings settingsModel, IMessageBus messageBus, IAppSettings appSettings)
         {
             _audioSource = audioSource;
             _messageBus = messageBus;
+            _appSettings = appSettings;
             SettingsList = new ObservableCollection<AudioSourceSettingKeyValue>(CreateKeyValuePairs(audioSource, settingsModel));
             _audioSource.SettingChanged += AudioSourceOnSettingChanged;
 
@@ -102,6 +106,9 @@ namespace AudioBand.ViewModels
         }
 
         // Audio sources can change settings themselves so we need to listen for them.
+        // Usually, settings are saved after the user edits a setting and clicks apply.
+        // These changes occur outside of the normal settings lifecycle, so the only time that the new values can be saved
+        // are when the application closes but there are some issues with detected that, so instead just save now.
         private void AudioSourceOnSettingChanged(object sender, SettingChangedEventArgs e)
         {
             var settingThatChanged = SettingsList.FirstOrDefault(s => s.Name == e.SettingName);
@@ -114,6 +121,8 @@ namespace AudioBand.ViewModels
             try
             {
                 settingThatChanged.Value = _audioSource[e.SettingName];
+                settingThatChanged.SyncToModel();
+                _appSettings.Save();
             }
             catch (Exception ex)
             {
