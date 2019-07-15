@@ -9,7 +9,7 @@ using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
 using V2Settings = AudioBand.Settings.Models.V2.Settings;
 using Nett;
 using Xunit;
-using AudioSourceSetting = AudioBand.Settings.Models.V1.AudioSourceSetting;
+using V1AudioSourceSetting = AudioBand.Settings.Models.V1.AudioSourceSetting;
 
 namespace AudioBand.Test
 {
@@ -137,13 +137,13 @@ namespace AudioBand.Test
             var setting1 = new AudioSourceSettingsCollection
             {
                 Name = "test",
-                Settings = new List<AudioSourceSetting> {new AudioSourceSetting {Name = "key1", Value = "val1"}}
+                Settings = new List<V1AudioSourceSetting> {new V1AudioSourceSetting {Name = "key1", Value = "val1"}}
             };
 
             var setting2 = new AudioSourceSettingsCollection
             {
                 Name = "test2",
-                Settings = new List<AudioSourceSetting> { new AudioSourceSetting { Name = "key2", Value = "val2" } }
+                Settings = new List<V1AudioSourceSetting> { new V1AudioSourceSetting { Name = "key2", Value = "val2" } }
             };
 
             var settings = new List<AudioSourceSettingsCollection> {setting1,setting2};
@@ -415,17 +415,7 @@ Value = ""id""
 Name = ""Spotify Client secret""
 Value = ""secret""
 ";
-            var settings = TomlSettings.Create(cfg =>
-            {
-                cfg.ConfigureType<System.Windows.Media.Color>(type => type.WithConversionFor<TomlString>(convert => convert
-                    .ToToml(SerializationConversions.ColorToString)
-                    .FromToml(tomlString => SerializationConversions.StringToColor(tomlString.Value))));
-                cfg.ConfigureType<CustomLabel.TextAlignment>(type => type.WithConversionFor<TomlString>(convert => convert
-                    .ToToml(SerializationConversions.EnumToString)
-                    .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
-                cfg.ConfigureType<double>(type => type.WithConversionFor<TomlInt>(c => c
-                    .FromToml(tml => tml.Value)));
-            });
+            var settings = TomlHelper.DefaultSettings;
 
             var v2 = Toml.ReadString<V2Settings>(settingsFile, settings);
             var v3 = Migration.MigrateSettings<SettingsV3>(v2, "2", "3");
@@ -498,6 +488,120 @@ Value = ""secret""
             Assert.Equal(v2.CustomLabelSettings[0].FontFamily, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].FontFamily);
             Assert.Equal(v2.CustomLabelSettings[0].Alignment, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].Alignment);
             Assert.Equal(v2.CustomLabelSettings[0].FormatString, v3.Profiles[SettingsV3.DefaultProfileName].CustomLabelSettings[0].FormatString);
+        }
+
+        [Fact]
+        public void ChainedMigrations_V1ToV3_SuccessfulMigration()
+        {
+            var v1Settings = @"
+Version = ""0.1""
+
+[AudioBandAppearance]
+Width = 300
+Height = 30
+
+[PlayPauseButtonAppearance]
+XPosition = 0
+YPosition = 0
+Width = 30
+Height = 10
+IsVisible = true
+
+[NextSongButtonAppearance]
+IsVisible = true
+Width = 30
+Height = 10
+XPosition = 0
+YPosition = 0
+
+[PreviousSongButtonAppearance]
+IsVisible = true
+Width = 30
+Height = 10
+XPosition = 0
+YPosition = 0
+
+[[TextAppearances]]
+IsVisible = true
+Width = 100
+Height = 15
+XPosition = 150
+YPosition = 10
+FontSize = 10.0
+Color = ""White""
+Alignment = ""Center""
+ScrollSpeed = 0
+FormatString = ""{song}""
+
+[ProgressBarAppearance]
+ForegroundColor = ""Blue""
+BackgroundColor = ""Gray""
+IsVisible = true
+XPosition = 0
+YPosition = 26
+Width = 200
+Height = 2
+
+[AlbumArtAppearance]
+IsVisible = true
+Width = 30
+Height = 30
+XPosition = 0
+YPosition = 0
+
+[AlbumArtPopupAppearance]
+IsVisible = true
+Width = 500
+Height = 500
+XOffset = 50
+Margin = 6
+
+";
+            var v1 = Toml.ReadString<V1Settings>(v1Settings, TomlHelper.DefaultSettings);
+            var v3 = Migration.MigrateSettings<SettingsV3>(v1, "0.1", "3");
+            var v3Profile = v3.Profiles[SettingsV3.DefaultProfileName];
+
+            Assert.Equal(v1.AudioBandAppearance.Width, v3Profile.AudioBandSettings.Width);
+            Assert.Equal(v1.AudioBandAppearance.Height, v3Profile.AudioBandSettings.Height);
+
+            Assert.Equal(v1.PlayPauseButtonAppearance.Width, v3Profile.PlayPauseButtonSettings.Width);
+            Assert.Equal(v1.PlayPauseButtonAppearance.Height, v3Profile.PlayPauseButtonSettings.Height);
+            Assert.Equal(v1.PlayPauseButtonAppearance.XPosition, v3Profile.PlayPauseButtonSettings.XPosition);
+            Assert.Equal(v1.PlayPauseButtonAppearance.YPosition, v3Profile.PlayPauseButtonSettings.YPosition);
+            Assert.Equal(v1.PlayPauseButtonAppearance.IsVisible, v3Profile.PlayPauseButtonSettings.IsVisible);
+
+            Assert.Equal(v1.NextSongButtonAppearance.Width, v3Profile.NextButtonSettings.Width);
+            Assert.Equal(v1.NextSongButtonAppearance.Height, v3Profile.NextButtonSettings.Height);
+            Assert.Equal(v1.NextSongButtonAppearance.XPosition, v3Profile.NextButtonSettings.XPosition);
+            Assert.Equal(v1.NextSongButtonAppearance.YPosition, v3Profile.NextButtonSettings.YPosition);
+            Assert.Equal(v1.NextSongButtonAppearance.IsVisible, v3Profile.NextButtonSettings.IsVisible);
+
+            Assert.Equal(v1.PreviousSongButtonAppearance.Width, v3Profile.PreviousButtonSettings.Width);
+            Assert.Equal(v1.PreviousSongButtonAppearance.Height, v3Profile.PreviousButtonSettings.Height);
+            Assert.Equal(v1.PreviousSongButtonAppearance.XPosition, v3Profile.PreviousButtonSettings.XPosition);
+            Assert.Equal(v1.PreviousSongButtonAppearance.YPosition, v3Profile.PreviousButtonSettings.YPosition);
+            Assert.Equal(v1.PreviousSongButtonAppearance.IsVisible, v3Profile.PreviousButtonSettings.IsVisible);
+
+            Assert.Single(v3Profile.CustomLabelSettings);
+            Assert.Equal(v1.TextAppearances[0].Color, v3Profile.CustomLabelSettings[0].Color);
+            Assert.Equal(v1.TextAppearances[0].Alignment, v3Profile.CustomLabelSettings[0].Alignment);
+            Assert.Equal(v1.TextAppearances[0].FontFamily, v3Profile.CustomLabelSettings[0].FontFamily);
+            Assert.Equal(v1.TextAppearances[0].FontSize, v3Profile.CustomLabelSettings[0].FontSize);
+            Assert.Equal(v1.TextAppearances[0].FormatString, v3Profile.CustomLabelSettings[0].FormatString);
+            Assert.Equal(v1.TextAppearances[0].Height, v3Profile.CustomLabelSettings[0].Height);
+            Assert.Equal(v1.TextAppearances[0].IsVisible, v3Profile.CustomLabelSettings[0].IsVisible);
+            Assert.Equal(v1.TextAppearances[0].Name, v3Profile.CustomLabelSettings[0].Name);
+            Assert.Equal(v1.TextAppearances[0].ScrollSpeed, v3Profile.CustomLabelSettings[0].ScrollSpeed);
+            Assert.Equal(v1.TextAppearances[0].Width, v3Profile.CustomLabelSettings[0].Width);
+            Assert.Equal(v1.TextAppearances[0].XPosition, v3Profile.CustomLabelSettings[0].XPosition);
+            Assert.Equal(v1.TextAppearances[0].YPosition, v3Profile.CustomLabelSettings[0].YPosition);
+
+            Assert.Equal(v1.AlbumArtAppearance.Height, v3Profile.AlbumArtSettings.Height);
+            Assert.Equal(v1.AlbumArtAppearance.IsVisible, v3Profile.AlbumArtSettings.IsVisible);
+            Assert.Equal(v1.AlbumArtAppearance.PlaceholderPath, v3Profile.AlbumArtSettings.PlaceholderPath);
+            Assert.Equal(v1.AlbumArtAppearance.Width, v3Profile.AlbumArtSettings.Width);
+            Assert.Equal(v1.AlbumArtAppearance.XPosition, v3Profile.AlbumArtSettings.XPosition);
+            Assert.Equal(v1.AlbumArtAppearance.YPosition, v3Profile.AlbumArtSettings.YPosition);
         }
     }
 }
