@@ -10,7 +10,10 @@
 5. Sign-in and accept and it should now display song information (make sure spotify is selected as the audio source).
 
 >[!NOTE]
->The first time you open up Spotify, the current song may not be displayed. This is because Spotify doesn't report any song information if you have no devices playing songs. Just start playing a song and it will start displaying.
+> Currently you need to have the Spotify desktop application for the playback buttons to work properly.
+
+>[!WARNING]
+> Proxy settings are currently unavailable.
 
 > Dashboard
 ![](~/images/spotify-dashboard.png)
