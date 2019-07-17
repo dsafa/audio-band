@@ -18,7 +18,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/audiosources/index.html",
-          "hash": "L4ksaq267cTD4n7k4VkoyA=="
+          "hash": "oB4aKk7bbFfIdBbuc2FMvQ=="
         }
       },
       "is_incremental": false,
@@ -30,7 +30,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/audiosources/itunes.html",
-          "hash": "ua0KmJRzZUnivhtZZkFK3w=="
+          "hash": "nDBteNbf6j6ZHww4+N6wMQ=="
         }
       },
       "is_incremental": false,
@@ -42,7 +42,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/audiosources/musicbee.html",
-          "hash": "h8pKV4XOC3Qkr0wmrXZ8Rg=="
+          "hash": "y2zpWxUgOBt9tpNrUdngXA=="
         }
       },
       "is_incremental": false,
@@ -54,7 +54,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/audiosources/spotify.html",
-          "hash": "Opo4ohHx+jH+NUTmd+OGcg=="
+          "hash": "u48tgwMdbxCEapJE92xvXA=="
         }
       },
       "is_incremental": false,
@@ -66,7 +66,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/customization/albumartpopup.html",
-          "hash": "9N5g8jatA61qdrH/cd546g=="
+          "hash": "kgop78RTZAlOVMoF/8lsIQ=="
         }
       },
       "is_incremental": false,
@@ -78,7 +78,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/customization/general.html",
-          "hash": "FEkvftqKUlsX4nd8zk+9Fg=="
+          "hash": "Q5/1NQpJt4zKFAy21Ag4Kg=="
         }
       },
       "is_incremental": false,
@@ -90,7 +90,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/customization/index.html",
-          "hash": "YsNMPVWsjHGZML1c+JZ0ew=="
+          "hash": "kPVs54ENy64iWlfMDq13Mw=="
         }
       },
       "is_incremental": false,
@@ -102,7 +102,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/customization/textlabels.html",
-          "hash": "gh6nsYLozHjy6+rO4GVlLQ=="
+          "hash": "If6M43lUj34SC6m/os/Ttg=="
         }
       },
       "is_incremental": false,
@@ -114,7 +114,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/development/project-layout.html",
-          "hash": "XiYyx59LK543y9BD8Q78PA=="
+          "hash": "QlPFDGMZoarGHJXmI8ksJQ=="
         }
       },
       "is_incremental": false,
@@ -126,7 +126,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/development/setup.html",
-          "hash": "ywxFBkXEPDvXwjjICeAIiA=="
+          "hash": "SysLuuAqXCRPLSFzW3uWcw=="
         }
       },
       "is_incremental": false,
@@ -138,7 +138,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/faq.html",
-          "hash": "OvB6Av2CNPlIt03VL8GOZA=="
+          "hash": "d9dJiPfxyQeKnLlYQYiG9g=="
         }
       },
       "is_incremental": false,
@@ -150,7 +150,7 @@
       "output": {
         ".html": {
           "relative_path": "audioband/index.html",
-          "hash": "W2fdpdXurAX400rD8P2CLQ=="
+          "hash": "Ju8UKGEYVlIPZBVQ5b8E2w=="
         }
       },
       "is_incremental": false,
@@ -174,7 +174,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.AudioSourceSettingAttribute.html",
-          "hash": "8pVgZbB7/0ms0qdp0V8s2Q=="
+          "hash": "Gf92ewUHmKjv6Bue7vDSXw=="
         }
       },
       "is_incremental": false,
@@ -186,7 +186,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSource.html",
-          "hash": "l7/3uv1DNY4a54H4Rg/nsg=="
+          "hash": "OqW6Ui06u8stPfcLBLPgHw=="
         }
       },
       "is_incremental": false,
@@ -198,7 +198,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.IAudioSourceLogger.html",
-          "hash": "cZaqdx/1eqyiTuioVKwXhA=="
+          "hash": "a+uChNVIzaJXQB09yFLCuQ=="
         }
       },
       "is_incremental": false,
@@ -210,7 +210,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.ISupportsRatings.html",
-          "hash": "llB6GNhRMGKJQYccEYmOWQ=="
+          "hash": "Xsl3oak9ZpTb5TJgae1Fbg=="
         }
       },
       "is_incremental": false,
@@ -222,7 +222,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.RepeatMode.html",
-          "hash": "I+QKplK5GoxcHJpLeEVLHg=="
+          "hash": "UflePajfESodmYLTRBSvZg=="
         }
       },
       "is_incremental": false,
@@ -234,7 +234,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.SettingChangedEventArgs.html",
-          "hash": "oa17LdxlwUBMs4N4uKsraQ=="
+          "hash": "bybn2Fa0AWIK2PeLJoKRAQ=="
         }
       },
       "is_incremental": false,
@@ -246,7 +246,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.SettingOptions.html",
-          "hash": "Iw9Zyb2x1SVhlxsG9QyK2A=="
+          "hash": "G/bYGhht79ooxIbUTRaL3g=="
         }
       },
       "is_incremental": false,
@@ -258,7 +258,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.TrackInfoChangedEventArgs.html",
-          "hash": "89RPL6+C7ZczVSSr1g2HmQ=="
+          "hash": "BcGI+nSuJIV/+G/sLdCV/g=="
         }
       },
       "is_incremental": false,
@@ -270,7 +270,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.TrackRating.html",
-          "hash": "M1eKsyNQnLLsKDNAfuyE8w=="
+          "hash": "cB9uloDFS4j8vDOLci9IlQ=="
         }
       },
       "is_incremental": false,
@@ -282,7 +282,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/AudioBand.AudioSource.html",
-          "hash": "hMgACWCWECNZbezW4YJZqA=="
+          "hash": "hGr0vACke0kcK/Hlgiacyw=="
         }
       },
       "is_incremental": false,
@@ -294,7 +294,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-api/index.html",
-          "hash": "QLyl3/UaUPFM8mC2xf4RkQ=="
+          "hash": "36RdDJPoGXuaILfuPvWk3A=="
         }
       },
       "is_incremental": false,
@@ -306,7 +306,7 @@
       "output": {
         ".html": {
           "relative_path": "audiosource-docs/index.html",
-          "hash": "QUSSuhw0md4AO5YZuL7AEw=="
+          "hash": "OobqDJWVBm1pL2O0WFJNUQ=="
         }
       },
       "is_incremental": false,
@@ -374,7 +374,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "ZjZBVw0Zet15wFzB7/L5hg=="
+          "hash": "e0I64iinoffH9F+06Byn6g=="
         }
       },
       "is_incremental": false,
