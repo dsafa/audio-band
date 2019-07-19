@@ -30,9 +30,9 @@ namespace AudioBand.Settings
         AlbumArt AlbumArt { get; }
 
         /// <summary>
-        /// Gets the saved audio band model.
+        /// Gets the saved general settings model.
         /// </summary>
-        AudioBand.Models.AudioBand AudioBand { get; }
+        GeneralSettings GeneralSettings { get; }
 
         /// <summary>
         /// Gets the saved labels.

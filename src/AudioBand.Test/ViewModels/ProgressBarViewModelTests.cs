@@ -1,11 +1,11 @@
 ﻿using System;
 using AudioBand.Models;
 using AudioBand.Settings;
-using AudioBand.ViewModels;
 using Moq;
 using System.Windows.Media;
 using AudioBand.AudioSource;
 using AudioBand.Messages;
+using AudioBand.UI;
 using Xunit;
 
 namespace AudioBand.Test

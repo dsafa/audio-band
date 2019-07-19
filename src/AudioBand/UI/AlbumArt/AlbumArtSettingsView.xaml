@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:audioband="clr-namespace:AudioBand.UI">
+    <DataTemplate DataType="{x:Type audioband:AlbumArtViewModel}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <audioband:SharedDictionary Source="../Resources/Shared.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+                    <audioband:SharedDictionary Source="../LayoutSettingsTemplate.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource LayoutSettingsTemplate}" />
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource AlbumArtPlaceholderSectionText}" />
+            <audioband:ImagePicker Title="{StaticResource AlbumArtPlaceholderDescription}"
+                                   DialogService="{Binding DialogService}"
+                                   ImagePath="{Binding PlaceholderPath, Mode=TwoWay}" />
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

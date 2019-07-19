@@ -77,7 +77,7 @@ namespace AudioBand.Settings
         /// <summary>
         /// Gets the saved audio band model.
         /// </summary>
-        public AudioBand.Models.AudioBand AudioBand { get; private set; } = new AudioBand.Models.AudioBand();
+        public AudioBand.Models.GeneralSettings GeneralSettings { get; private set; } = new AudioBand.Models.GeneralSettings();
 
         /// <summary>
         /// Gets the saved labels.
@@ -282,7 +282,7 @@ namespace AudioBand.Settings
         {
             return new ProfileV3
             {
-                AudioBandSettings = new AudioBand.Models.AudioBand(),
+                GeneralSettings = new AudioBand.Models.GeneralSettings(),
                 AlbumArtSettings = new AlbumArt(),
                 AlbumArtPopupSettings = new AlbumArtPopup(),
                 PlayPauseButtonSettings = new PlayPauseButton(),
@@ -354,7 +354,7 @@ namespace AudioBand.Settings
 
             AlbumArtPopup = _currentProfile.AlbumArtPopupSettings;
             AlbumArt = _currentProfile.AlbumArtSettings;
-            AudioBand = _currentProfile.AudioBandSettings;
+            GeneralSettings = _currentProfile.GeneralSettings;
             CustomLabels = _currentProfile.CustomLabelSettings;
             NextButton = _currentProfile.NextButtonSettings;
             PreviousButton = _currentProfile.PreviousButtonSettings;

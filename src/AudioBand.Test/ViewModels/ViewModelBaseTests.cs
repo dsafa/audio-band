@@ -1,4 +1,4 @@
-﻿using AudioBand.ViewModels;
+﻿using AudioBand.UI;
 using Xunit;
 
 namespace AudioBand.Test

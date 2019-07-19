@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="AudioBand.UI.ColorPicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:audioband="clr-namespace:AudioBand.UI"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:wpfColorPicker="clr-namespace:Dsafa.WpfColorPicker;assembly=Dsafa.WpfColorPicker"
+             x:Name="ColorPickerControl"
+             d:DataContext="{d:DesignInstance wpfColorPicker:ColorPicker}"
+             d:DesignHeight="50"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+                <audioband:SharedDictionary Source="../Resources/Shared.xaml" />
+                <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Button Click="OpenColorPickerOnClick" Style="{StaticResource ContainerButtonStyle}">
+        <Grid HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Row="0"
+                       Grid.RowSpan="2"
+                       Grid.Column="0"
+                       Width="40"
+                       Height="40"
+                       Margin="0,0,10,0"
+                       VerticalAlignment="Stretch"
+                       Fill="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={x:Static audioband:Converters.ColorToBrush}}"
+                       Stroke="{audioband:ThemeResource SystemBaseHighColor}" />
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       VerticalAlignment="Top"
+                       FontSize="14"
+                       Text="{Binding Title, ElementName=ColorPickerControl}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       VerticalAlignment="Bottom"
+                       FontSize="14"
+                       Foreground="{audioband:ThemeResource SystemBaseMediumColor}"
+                       Text="{Binding Color, ElementName=ColorPickerControl, Mode=OneWay, Converter={x:Static audioband:Converters.ColorToName}}" />
+        </Grid>
+    </Button>
+</UserControl>

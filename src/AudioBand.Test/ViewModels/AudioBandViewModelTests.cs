@@ -1,7 +1,7 @@
 ﻿using System;
 using AudioBand.Messages;
 using AudioBand.Settings;
-using AudioBand.ViewModels;
+using AudioBand.UI;
 using Moq;
 using Xunit;
 
@@ -21,12 +21,12 @@ namespace AudioBand.Test
         [Fact]
         public void AudioBandViewModel_ProfileChangedEvent_ListensToProfileChanges()
         {
-            var first = new Models.AudioBand(){Height = 10};
-            var second = new Models.AudioBand(){Height = 20};
-            _appSettings.SetupSequence(m => m.AudioBand)
+            var first = new Models.GeneralSettings(){Height = 10};
+            var second = new Models.GeneralSettings(){Height = 20};
+            _appSettings.SetupSequence(m => m.GeneralSettings)
                 .Returns(first)
                 .Returns(second);
-            var vm = new AudioBandViewModel(_appSettings.Object, new Mock<IDialogService>().Object, _messageBus.Object);
+            var vm = new GeneralSettingsViewModel(_appSettings.Object, new Mock<IDialogService>().Object, _messageBus.Object);
 
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;

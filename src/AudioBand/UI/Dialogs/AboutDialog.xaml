@@ -1,0 +1,130 @@
+﻿<Window x:Class="AudioBand.UI.AboutDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:audioband="clr-namespace:AudioBand.UI"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+        Title="About Audio Band"
+        Width="600"
+        Height="500"
+        d:DesignHeight="450"
+        d:DesignWidth="800"
+        Background="{audioband:ThemeResource SystemAltHighColor}"
+        Foreground="{audioband:ThemeResource SystemBaseHighColor}"
+        Icon="pack://application:,,,/AudioBand;component/audioband.ico"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
+    <i:Interaction.Behaviors>
+        <audioband:AppUserModelID />
+        <audioband:DpiScaling />
+    </i:Interaction.Behaviors>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+                <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.DataContext>
+        <audioband:AboutDialogViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+            <Image Width="200" Height="200">
+                <Image.Source>
+                    <DrawingImage p:Freeze="True">
+                        <DrawingImage.Drawing>
+                            <DrawingGroup ClipGeometry="M0,0 V3683 H4335 V0 H0 Z">
+                                <DrawingGroup Opacity="1">
+                                    <DrawingGroup Opacity="1">
+                                        <GeometryDrawing Brush="#FF12A4CC" Geometry="F0 M4335,3683z M0,0z M3124,1264C3288,1631,3288,2053,3124,2419L3124,2419C3112,2446 3105,2476 3105,2508 3105,2627 3202,2724 3321,2724 3412,2724 3490,2668 3522,2589 3731,2119 3733,1579 3528,1108 3500,1021 3418,959 3322,959 3203,959 3106,1056 3106,1175 3106,1207 3113,1237 3125,1264L3124,1264z M1995,2119L2359,1909 2359,1909C2371,1902 2382,1891 2390,1878 2413,1837 2399,1785 2358,1762L1995,1552 1638,1346C1624,1336 1607,1330 1589,1330 1542,1330 1504,1369 1504,1416L1504,1835 1504,2255 1504,2255C1504,2270 1508,2284 1515,2298 1539,2338 1590,2352 1631,2329L1990,2121C1992,2121,1994,2120,1995,2119z M1013,1014C555,1472 555,2215 1013,2674 1471,3132 2214,3132 2672,2674 2758,2588 2758,2449 2672,2363 2586,2278 2448,2278 2362,2363L2362,2363C2075,2650 1610,2650 1323,2363 1036,2076 1036,1611 1323,1324 1610,1038 2075,1038 2362,1324 2448,1410 2586,1410 2672,1324 2758,1239 2758,1100 2672,1014L2672,1014C2214,556,1471,556,1013,1014z M539,540C528,552 517,563 506,574 495,586 484,597 474,609 463,621 453,632 443,644 432,656 422,668 413,680 403,692 393,704 384,717 374,729 365,741 356,754 347,766 338,778 329,791 320,804 312,816 303,829L303,829C295,842 287,855 278,868 270,880 262,893 255,907 247,920 239,933 232,946 225,959 218,972 211,986L211,986C204,999,197,1013,190,1026L190,1026C183,1040,177,1053,171,1067L171,1067C164,1080 158,1094 152,1108 146,1121 140,1135 135,1149L135,1149C129,1163,124,1177,118,1191L118,1191C113,1205,108,1219,103,1233L103,1233C98,1247,94,1261,89,1275L89,1275C84,1289,80,1303,76,1318L76,1318C72,1332,68,1346,64,1360L64,1360C60,1375,56,1389,53,1403L53,1403C49,1418,46,1432,43,1447L43,1447C39,1461,36,1476,34,1490L34,1490C31,1505,28,1519,26,1534L26,1534C23,1548,21,1563,19,1577L19,1577C17,1592,15,1607,13,1621L13,1621C11,1636,10,1651,8,1665L8,1665C7,1680,6,1694,5,1709L5,1709C4,1724,3,1739,2,1753L2,1753C1,1768,1,1783,1,1797L1,1797C0,1827,0,1856,1,1886L1,1886C1,1900,1,1915,2,1930L2,1930C3,1945,4,1959,5,1974L5,1974C6,1989,7,2003,8,2018L8,2018C10,2033,11,2047,13,2062L13,2062C15,2076 17,2091 19,2106 21,2120 23,2135 26,2149L26,2149C28,2164,31,2179,34,2193L34,2193C39,2222,46,2251,53,2280L53,2280C56,2294,60,2308,64,2323L64,2323C68,2337,72,2351,76,2365L76,2365C84,2394,93,2422,103,2450L103,2450C192,2703 337,2941 539,3143 543,3147 547,3151 551,3155 558,3161 565,3168 571,3174 576,3179 582,3184 587,3189 593,3194 599,3200 605,3205 610,3210 615,3215 620,3219 626,3225 633,3230 639,3235 644,3240 650,3245 656,3250 661,3255 667,3259 673,3264 679,3269 685,3274 691,3278 696,3283 702,3288 708,3292 714,3297 720,3302 726,3306 732,3311 738,3315 743,3319 750,3324 756,3328 762,3333 768,3337 774,3341 779,3345 786,3350 792,3354 798,3359 804,3363 810,3366 816,3370 822,3375 829,3379 835,3383 841,3387 847,3391 852,3394 859,3399 865,3403 872,3407 878,3411 884,3414 890,3418 897,3422 903,3426 910,3430 916,3433 922,3437 928,3440 935,3444 941,3448 948,3451 953,3454 959,3457 964,3460 992,3475 1021,3490 1049,3504 1054,3506 1058,3508 1062,3510 1070,3513 1078,3517 1086,3521 1091,3523 1096,3525 1101,3527 1109,3531 1117,3534 1125,3538 1131,3540 1136,3542 1141,3544 1149,3547 1157,3551 1166,3554 1171,3556 1176,3558 1181,3560 1189,3563 1197,3566 1205,3569 1210,3571 1216,3573 1221,3575 1229,3578 1237,3581 1246,3583 1251,3585 1256,3587 1261,3588 1269,3591 1278,3594 1286,3597L1301,3601C1310,3604 1318,3606 1327,3609 1332,3610 1337,3612 1342,3613 1351,3616 1360,3618 1368,3620 1373,3622 1377,3623 1382,3624 1391,3626 1400,3629 1410,3631 1414,3632 1417,3633 1421,3634 1431,3636 1442,3638 1452,3640L1457,3641C1521,3655,1587,3665,1653,3672L1655,3672C1667,3674,1679,3675,1691,3676L1697,3676C1709,3677,1720,3678,1731,3678L1739,3679C1750,3679,1761,3680,1773,3680L1781,3681C1792,3681,1803,3681,1815,3681L1822,3682C1833,3682,1845,3682,1857,3682L1863,3681C1874,3681,1886,3681,1898,3681L1903,3681C1916,3680,1928,3680,1940,3679L1942,3679C2310,3658,2672,3529,2976,3289L2976,3289C3033,3244 3089,3195 3141,3143 3228,3057 3228,2917 3141,2831 3055,2745 2916,2745 2829,2831 2283,3377 1397,3377 851,2831 305,2284 305,1399 851,852 1397,306 2283,306 2829,852L2829,852 2832,855C2918,941 3057,941 3144,855 3230,768 3230,629 3144,543L3141,540 3141,540C2917,316,2649,161,2364,77L2364,77C2350,73,2336,69,2321,65L2321,65C2307,61,2293,58,2278,54L2278,54C2235,43,2192,35,2148,27L2148,27C2090,17,2031,10,1973,6L1973,6C1943,4,1914,3,1884,2L1884,2C1870,2,1855,1,1840,1L1840,1C1825,1,1811,2,1796,2L1796,2C1781,2,1767,3,1752,3L1752,3C1737,4,1722,5,1708,6L1708,6C1693,7,1678,8,1664,10L1664,10C1649,11,1634,13,1620,15L1620,15C1605,16,1591,18,1576,20L1576,20C1561,22,1547,25,1532,27L1532,27C1518,30,1503,32,1489,35L1489,35C1474,38,1460,41,1445,44L1445,44C1431,47,1416,51,1402,54L1402,54C1388,58,1373,61,1359,65L1359,65C1345,69,1330,73,1316,77L1316,77C1302,81,1288,86,1274,90L1274,90C1260,95,1245,100,1231,105L1231,105C1217,109,1203,115,1189,120L1189,120C1175,125,1162,131,1148,136L1148,136C1134,142,1120,148,1106,154L1106,154C1093,159,1079,166,1065,172L1065,172C1052,178,1038,185,1025,191L1025,191C1011,198,998,205,984,212L984,212C971,219 958,226 945,234 931,241 918,248 905,256L905,256C892,264,879,272,866,280L866,280C853,288,840,296,828,305L828,305C815,313,802,322,790,330L790,330C777,339 765,348 752,357 740,366 727,376 715,385L715,385C703,395 691,404 679,414 667,424 655,434 643,444L643,444C631,454 619,465 608,475 596,486 584,496 573,507 562,518 550,529 539,540z M2987,2066C3001,1994 3008,1920 3008,1843 3008,1767 3001,1692 2987,1620L2986,1620C2967,1520 2882,1444 2779,1444 2662,1444 2567,1541 2567,1662 2567,1676 2568,1690 2571,1703L2570,1704C2578,1749 2583,1795 2583,1843 2583,1891 2578,1938 2570,1983L2571,1983C2568,1997 2567,2010 2567,2025 2567,2145 2662,2243 2779,2243 2882,2243 2967,2167 2986,2066L2987,2066z M4025,3046L4026,3045C4027,3042 4029,3040 4030,3038 4224,2682 4335,2275 4335,1841 4335,1405 4223,994 4025,637 3989,567 3916,519 3832,519 3711,519 3614,617 3614,737 3614,777 3625,815 3644,847 3806,1142 3899,1481 3899,1841 3899,2198 3808,2534 3649,2826L3649,2826C3630,2859 3619,2896 3619,2936 3619,3057 3716,3154 3837,3154 3917,3154 3987,3111 4025,3046L4025,3046z M3644,847L3644,847 3644,847z" />
+                                    </DrawingGroup>
+                                </DrawingGroup>
+                            </DrawingGroup>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+            <TextBlock HorizontalAlignment="Center"
+                       FontSize="{StaticResource HeaderFontSize}"
+                       FontWeight="Bold"
+                       Text="Audio Band" />
+            <TextBlock Margin="0,10"
+                       HorizontalAlignment="Center"
+                       FontSize="14"
+                       Text="{Binding Version}" />
+        </StackPanel>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0"
+                        VerticalAlignment="Stretch"
+                        Orientation="Vertical">
+                <StackPanel.Margin>
+                    <Thickness Top="{x:Static SystemParameters.CaptionHeight}" />
+                </StackPanel.Margin>
+                <StackPanel.Resources>
+                    <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                        <Setter Property="FontSize" Value="{StaticResource BodyFontSize}" />
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                        <Setter Property="Margin" Value="5" />
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock Text="{StaticResource AudioBandAboutDialogDescription}" />
+                <TextBlock>
+                    <Run Text="{StaticResource AudioBandAboutDialogProjectPre}" />
+                    <Hyperlink Command="{Binding OpenLinkCommand}"
+                               CommandParameter="{Binding ProjectLink}"
+                               NavigateUri="{Binding ProjectLink}">
+                        <Run Text="{Binding ProjectLink, Mode=OneTime}" />
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink Command="{Binding OpenLinkCommand}"
+                               CommandParameter="{Binding LicenseLink}"
+                               NavigateUri="{Binding LicenseLink}">
+                        <Run Text="{StaticResource AudioBandAboutDialogLicenseLinkText}" />
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink Command="{Binding OpenLinkCommand}"
+                               CommandParameter="{Binding ThirdPartyLicenseLink}"
+                               NavigateUri="{Binding ThirdPartyLicenseLink}">
+                        <Run Text="{StaticResource AudioBandAboutDialogThirdPartyLicenseLink}" />
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink Command="{Binding OpenSettingsFolderCommand}">
+                        <Run Text="{StaticResource AudioBandAboutDialogSettingsLinkText}" />
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink Command="{Binding OpenLog}">
+                        <Run Text="{StaticResource AudioBandAboutDialogLogsLink}" />
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock Text="Logo by @mirzazulfan" />
+            </StackPanel>
+            <Button Grid.Row="1"
+                    Width="80"
+                    Margin="8"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Click="OkButtonOnClick"
+                    Content="{StaticResource OkButtonText}"
+                    IsCancel="True"
+                    IsDefault="True" />
+        </Grid>
+    </Grid>
+</Window>

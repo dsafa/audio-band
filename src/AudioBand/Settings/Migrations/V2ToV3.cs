@@ -93,7 +93,7 @@ namespace AudioBand.Settings.Migrations
                 cfg.CreateMap<Models.V2.ProgressBarSettings, ProgressBar>()
                     .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft))
                     .ForMember(dest => dest.HoverColor, opt => opt.Ignore());
-                cfg.CreateMap<Models.V2.AudioBandSettings, AudioBand.Models.AudioBand>()
+                cfg.CreateMap<Models.V2.AudioBandSettings, AudioBand.Models.GeneralSettings>()
                     .ForMember(dest => dest.BackgroundColor, opt => opt.Ignore());
                 cfg.CreateMap<Models.V2.AlbumArtSettings, AlbumArt>()
                     .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft));
@@ -101,7 +101,7 @@ namespace AudioBand.Settings.Migrations
                 cfg.CreateMap<Models.V2.Settings, ProfileV3>()
                     .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.MapFrom(source => source.AlbumArtPopupSettings))
                     .ForMember(dest => dest.AlbumArtSettings, opt => opt.MapFrom(source => source.AlbumArtSettings))
-                    .ForMember(dest => dest.AudioBandSettings, opt => opt.MapFrom(source => source.AudioBandSettings))
+                    .ForMember(dest => dest.GeneralSettings, opt => opt.MapFrom(source => source.AudioBandSettings))
                     .ForMember(dest => dest.CustomLabelSettings, opt => opt.MapFrom(source => source.CustomLabelSettings))
                     .ForMember(dest => dest.NextButtonSettings, opt => opt.MapFrom(source => source.NextButtonSettings))
                     .ForMember(dest => dest.PlayPauseButtonSettings, opt => opt.MapFrom(source => source.PlayPauseButtonSettings))

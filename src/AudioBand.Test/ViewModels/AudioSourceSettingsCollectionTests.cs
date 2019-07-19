@@ -1,10 +1,10 @@
 ﻿using AudioBand.AudioSource;
 using AudioBand.Models;
-using AudioBand.ViewModels;
 using Moq;
 using System.Collections.Generic;
 using AudioBand.Messages;
 using AudioBand.Settings;
+using AudioBand.UI;
 using Xunit;
 
 namespace AudioBand.Test

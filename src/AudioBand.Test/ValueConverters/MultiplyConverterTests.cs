@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using AudioBand.ValueConverters;
+using AudioBand.UI;
 using Xunit;
 
 namespace AudioBand.Test
