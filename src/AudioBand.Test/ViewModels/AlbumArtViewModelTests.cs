@@ -3,7 +3,7 @@ using AudioBand.AudioSource;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
-using AudioBand.ViewModels;
+using AudioBand.UI;
 using Moq;
 using Xunit;
 

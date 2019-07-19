@@ -12,7 +12,7 @@ namespace AudioBand.Settings.Models.v3
         /// <summary>
         /// Gets or sets the audio band settings.
         /// </summary>
-        public AudioBand.Models.AudioBand AudioBandSettings { get; set; }
+        public GeneralSettings GeneralSettings { get; set; }
 
         /// <summary>
         /// Gets or sets the previous button settings.

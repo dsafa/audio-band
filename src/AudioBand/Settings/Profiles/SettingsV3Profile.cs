@@ -19,7 +19,7 @@ namespace AudioBand.Settings.Profiles
             CreateMap<ProfileV3, ProfileV3>()
                 .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.NullSubstitute(new AlbumArtPopup()))
                 .ForMember(dest => dest.AlbumArtSettings, opt => opt.NullSubstitute(new AlbumArt()))
-                .ForMember(dest => dest.AudioBandSettings, opt => opt.NullSubstitute(new AudioBand.Models.AudioBand()))
+                .ForMember(dest => dest.GeneralSettings, opt => opt.NullSubstitute(new AudioBand.Models.GeneralSettings()))
                 .ForMember(dest => dest.CustomLabelSettings, opt => opt.NullSubstitute(new List<CustomLabel>()))
                 .ForMember(dest => dest.NextButtonSettings, opt => opt.NullSubstitute(new NextButton()))
                 .ForMember(dest => dest.PlayPauseButtonSettings, opt => opt.NullSubstitute(new PlayPauseButton()))

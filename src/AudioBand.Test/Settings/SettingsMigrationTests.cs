@@ -436,8 +436,8 @@ Value = ""secret""
             Assert.Equal(v2.AlbumArtSettings.YPosition, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.YPosition);
             Assert.Equal(v2.AlbumArtSettings.PlaceholderPath, v3.Profiles[SettingsV3.DefaultProfileName].AlbumArtSettings.PlaceholderPath);
 
-            Assert.Equal(v2.AudioBandSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].AudioBandSettings.Width);
-            Assert.Equal(v2.AudioBandSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].AudioBandSettings.Height);
+            Assert.Equal(v2.AudioBandSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].GeneralSettings.Width);
+            Assert.Equal(v2.AudioBandSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].GeneralSettings.Height);
 
             Assert.Equal(v2.NextButtonSettings.Width, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Width);
             Assert.Equal(v2.NextButtonSettings.Height, v3.Profiles[SettingsV3.DefaultProfileName].NextButtonSettings.Height);
@@ -561,8 +561,8 @@ Margin = 6
             var v3 = Migration.MigrateSettings<SettingsV3>(v1, "0.1", "3");
             var v3Profile = v3.Profiles[SettingsV3.DefaultProfileName];
 
-            Assert.Equal(v1.AudioBandAppearance.Width, v3Profile.AudioBandSettings.Width);
-            Assert.Equal(v1.AudioBandAppearance.Height, v3Profile.AudioBandSettings.Height);
+            Assert.Equal(v1.AudioBandAppearance.Width, v3Profile.GeneralSettings.Width);
+            Assert.Equal(v1.AudioBandAppearance.Height, v3Profile.GeneralSettings.Height);
 
             Assert.Equal(v1.PlayPauseButtonAppearance.Width, v3Profile.PlayPauseButtonSettings.Width);
             Assert.Equal(v1.PlayPauseButtonAppearance.Height, v3Profile.PlayPauseButtonSettings.Height);

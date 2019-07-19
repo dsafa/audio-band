@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:audioband="clr-namespace:AudioBand.UI"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:models="clr-namespace:AudioBand.Models"
+                    mc:Ignorable="d">
+    <DataTemplate x:Key="LayoutSettingsTemplate">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <audioband:SharedDictionary Source="Resources/SettingsWindowStyle.xaml" />
+                    <audioband:SharedDictionary Source="Resources/Strings.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel KeyboardNavigation.IsTabStop="False" Style="{StaticResource SettingsStackPanel}">
+            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource DisplaySectionText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource VisibilityLabelText}" />
+            <mah:ToggleSwitch IsChecked="{Binding IsVisible, Mode=TwoWay}"
+                              OffLabel="{StaticResource StatusHidden}"
+                              OnLabel="{StaticResource StatusVisible}" />
+            <UniformGrid Columns="2"
+                         Rows="4"
+                         Style="{StaticResource ArrangementGridStyle}">
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource WidthLabelText}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource HeightLabelText}" />
+                <mah:NumericUpDown audioband:NumericInput.Type="Size" Value="{Binding Width, Mode=TwoWay}" />
+                <mah:NumericUpDown audioband:NumericInput.Type="Size" Value="{Binding Height, Mode=TwoWay}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource XPositionLabelText}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource YPositionLabelText}" />
+                <mah:NumericUpDown audioband:NumericInput.Type="Position" Value="{Binding XPosition, Mode=TwoWay}" />
+                <mah:NumericUpDown audioband:NumericInput.Type="Position" Value="{Binding YPosition, Mode=TwoWay}" />
+            </UniformGrid>
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource PositionAnchorDescription}" />
+            <ComboBox ItemTemplate="{StaticResource EnumDescriptorItemTemplate}"
+                      ItemsSource="{x:Static models:PositionAnchors.Values}"
+                      SelectedValue="{Binding Anchor}"
+                      SelectedValuePath="Value" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>
