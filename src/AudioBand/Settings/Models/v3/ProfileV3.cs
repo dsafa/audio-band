@@ -5,7 +5,7 @@ using AudioBand.Models;
 namespace AudioBand.Settings.Models.v3
 {
     /// <summary>
-    /// Represents a profile which is the arrangement of ui controls.
+    /// Represents a profile for v3 of settings.
     /// </summary>
     public class ProfileV3
     {

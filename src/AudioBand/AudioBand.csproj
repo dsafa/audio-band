@@ -106,6 +106,7 @@
     <Compile Include="AudioSource\IAudioSession.cs" />
     <Compile Include="AudioSource\IAudioSourceManager.cs" />
     <Compile Include="AudioSource\IInternalAudioSource.cs" />
+    <Compile Include="Models\UserProfile.cs" />
     <Compile Include="UI\Behaviors\CanvasPositioning.cs" />
     <Compile Include="UI\Behaviors\Fallback.cs" />
     <Compile Include="UI\Behaviors\RedirectScrolling.cs" />
@@ -194,7 +195,7 @@
     <Compile Include="Settings\Models\v3\ProfileExportV3.cs" />
     <Compile Include="Settings\Models\v3\ProfileV3.cs" />
     <Compile Include="Settings\Models\v3\SettingsV3.cs" />
-    <Compile Include="Settings\Profiles\SettingsV3Profile.cs" />
+    <Compile Include="Settings\MappingProfiles\SettingsV3Profile.cs" />
     <Compile Include="TaskbarHook.cs" />
     <Compile Include="TextFormatting\AlbumNamePlaceholder.cs" />
     <Compile Include="TextFormatting\RemainingTimePlaceholder.cs" />
