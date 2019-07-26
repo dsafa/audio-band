@@ -3,7 +3,7 @@ using Color = System.Windows.Media.Color;
 
 namespace AudioBand.Settings.Models.V2
 {
-    internal class ProgressBarSettings
+    public class ProgressBarSettings
     {
         public Color ForegroundColor { get; set; }
 

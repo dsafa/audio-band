@@ -35,12 +35,12 @@ namespace AudioBand.UI
             _messageBus = messageBus;
             messageBus.Subscribe<EditStartMessage>(EditStartMessageOnPublished);
             ViewModels = viewModels;
-            _selectedProfileName = appSettings.CurrentProfile;
-            Profiles = new ObservableCollection<string>(appSettings.Profiles);
+            _selectedProfileName = appSettings.CurrentProfile.Name;
+            ProfileNames = new ObservableCollection<string>(appSettings.Profiles.Select(p => p.Name));
 
             SelectViewModelCommand = new RelayCommand<ViewModelBase>(SelectViewModelOnExecute);
-            DeleteProfileCommand = new RelayCommand<string>(DeleteProfileCommandOnExecute, DeleteProfileCommandCanExecute);
-            DeleteProfileCommand.Observe(Profiles);
+            DeleteProfileCommand = new RelayCommand(DeleteProfileCommandOnExecute, DeleteProfileCommandCanExecute);
+            DeleteProfileCommand.Observe(ProfileNames);
             AddProfileCommand = new RelayCommand(AddProfileCommandOnExecute);
             RenameProfileCommand = new RelayCommand(RenameProfileCommandOnExecute);
             SaveCommand = new RelayCommand(SaveCommandOnExecute, SaveCommandCanExecute);
@@ -75,7 +75,7 @@ namespace AudioBand.UI
                 if (SetProperty(ref _selectedProfileName, value))
                 {
                     EndEdits();
-                    _appSettings.CurrentProfile = value;
+                    _appSettings.SelectProfile(value);
                 }
             }
         }
@@ -99,9 +99,9 @@ namespace AudioBand.UI
         }
 
         /// <summary>
-        /// Gets the list of profiles.
+        /// Gets the list of profile names.
         /// </summary>
-        public ObservableCollection<string> Profiles { get; }
+        public ObservableCollection<string> ProfileNames { get; }
 
         /// <summary>
         /// Gets the command to select the view model.
@@ -111,7 +111,7 @@ namespace AudioBand.UI
         /// <summary>
         /// Gets the command to delete a profile.
         /// </summary>
-        public RelayCommand<string> DeleteProfileCommand { get; }
+        public RelayCommand DeleteProfileCommand { get; }
 
         /// <summary>
         /// Gets the command to add a profile.
@@ -148,27 +148,27 @@ namespace AudioBand.UI
             SelectedViewModel = viewModel;
         }
 
-        private void DeleteProfileCommandOnExecute(string profileName)
+        private void DeleteProfileCommandOnExecute()
         {
-            Debug.Assert(Profiles.Count > 1, "Should not be able to delete profiles if there is only one");
+            Debug.Assert(ProfileNames.Count > 1, "Should not be able to delete profiles if there is only one");
 
-            var deleteConfirmed = _dialogService.ShowConfirmationDialog(ConfirmationDialogType.DeleteProfile, profileName);
+            var deleteConfirmed = _dialogService.ShowConfirmationDialog(ConfirmationDialogType.DeleteProfile, SelectedProfileName);
             if (!deleteConfirmed)
             {
                 return;
             }
 
-            _appSettings.DeleteProfile(profileName);
-            Profiles.Remove(profileName);
+            _appSettings.DeleteProfile(SelectedProfileName);
+            ProfileNames.Remove(SelectedProfileName);
 
-            _appSettings.CurrentProfile = Profiles[0];
-            SelectedProfileName = Profiles[0];
+            _appSettings.SelectProfile(SelectedProfileName);
+            SelectedProfileName = ProfileNames[0];
             _appSettings.Save();
         }
 
-        private bool DeleteProfileCommandCanExecute(string obj)
+        private bool DeleteProfileCommandCanExecute()
         {
-            return Profiles.Count > 1;
+            return ProfileNames.Count > 1;
         }
 
         private void AddProfileCommandOnExecute()
@@ -176,26 +176,26 @@ namespace AudioBand.UI
             const string NewProfileName = "New Profile";
             string newprofile = NewProfileName;
             int count = 1;
-            while (Profiles.Contains(newprofile))
+            while (ProfileNames.Contains(newprofile))
             {
                 newprofile = $"{NewProfileName} {count++}";
             }
 
             _appSettings.CreateProfile(newprofile);
-            Profiles.Add(newprofile);
+            ProfileNames.Add(newprofile);
         }
 
         private void RenameProfileCommandOnExecute()
         {
-            string newProfileName = _dialogService.ShowRenameDialog(SelectedProfileName, Profiles.ToList());
+            string newProfileName = _dialogService.ShowRenameDialog(SelectedProfileName, ProfileNames.ToList());
             if (newProfileName == null || newProfileName == SelectedProfileName)
             {
                 return;
             }
 
             _appSettings.RenameCurrentProfile(newProfileName);
-            var index = Profiles.IndexOf(SelectedProfileName);
-            Profiles[index] = newProfileName;
+            var index = ProfileNames.IndexOf(SelectedProfileName);
+            ProfileNames[index] = newProfileName;
             SelectedProfileName = newProfileName;
         }
 
@@ -265,10 +265,10 @@ namespace AudioBand.UI
                 }
 
                 _appSettings.ImportProfilesFromPath(profilesPath);
-                foreach (var newProfile in _appSettings.Profiles.Where(p => !Profiles.Contains(p)))
+                foreach (var newProfile in _appSettings.Profiles.Where(p => !ProfileNames.Contains(p.Name)))
                 {
                     // Should not be too slow unless a lot of profiles.
-                    Profiles.Add(newProfile);
+                    ProfileNames.Add(newProfile.Name);
                 }
 
                 _appSettings.Save();

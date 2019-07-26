@@ -23,7 +23,7 @@ namespace AudioBand.UI
         /// <param name="messageBus">The message bus.</param>
         public GeneralSettingsViewModel(IAppSettings appsettings, IDialogService dialogService, IMessageBus messageBus)
         {
-            MapSelf(appsettings.GeneralSettings, _model);
+            MapSelf(appsettings.CurrentProfile.GeneralSettings, _model);
 
             DialogService = dialogService;
             _appsettings = appsettings;
@@ -91,13 +91,13 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(_model, _appsettings.GeneralSettings);
+            MapSelf(_model, _appsettings.CurrentProfile.GeneralSettings);
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            MapSelf(_appsettings.GeneralSettings, _model);
+            MapSelf(_appsettings.CurrentProfile.GeneralSettings, _model);
             RaisePropertyChangedAll();
         }
     }

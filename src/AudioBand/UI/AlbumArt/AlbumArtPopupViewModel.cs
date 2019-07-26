@@ -22,8 +22,8 @@ namespace AudioBand.UI
         /// <param name="messageBus">The message bus.</param>
         public AlbumArtPopupViewModel(IAppSettings appSettings, IMessageBus messageBus)
         {
-            MapSelf(appSettings.AlbumArtPopup, _model);
-            MapSelf(appSettings.AlbumArtPopup, _backup);
+            MapSelf(appSettings.CurrentProfile.AlbumArtPopup, _model);
+            MapSelf(appSettings.CurrentProfile.AlbumArtPopup, _backup);
 
             _appSettings = appSettings;
             appSettings.ProfileChanged += AppSettingsOnProfileChanged;
@@ -105,13 +105,13 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(_model, _appSettings.AlbumArtPopup);
+            MapSelf(_model, _appSettings.CurrentProfile.AlbumArtPopup);
         }
 
         private void AppSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            MapSelf(_appSettings.AlbumArtPopup, _model);
+            MapSelf(_appSettings.CurrentProfile.AlbumArtPopup, _model);
             RaisePropertyChangedAll();
         }
     }

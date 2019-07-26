@@ -29,7 +29,7 @@ namespace AudioBand.UI
         /// <param name="audioSession">The audio session.</param>
         /// <param name="messageBus">The message bus.</param>
         public AlbumArtViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
-            : base(messageBus, appsettings.AlbumArt)
+            : base(messageBus, appsettings.CurrentProfile.AlbumArt)
         {
             DialogService = dialogService;
             _appsettings = appsettings;
@@ -67,13 +67,13 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(Model, _appsettings.AlbumArt);
+            MapSelf(Model, _appsettings.CurrentProfile.AlbumArt);
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            MapSelf(_appsettings.AlbumArt, Model);
+            MapSelf(_appsettings.CurrentProfile.AlbumArt, Model);
             RaisePropertyChangedAll();
         }
 

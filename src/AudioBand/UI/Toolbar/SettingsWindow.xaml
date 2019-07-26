@@ -287,7 +287,7 @@
                       Height="{StaticResource DefaultButtonHeight}"
                       Margin="8"
                       IsSynchronizedWithCurrentItem="True"
-                      ItemsSource="{Binding Profiles}"
+                      ItemsSource="{Binding ProfileNames}"
                       SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}" />
             <UniformGrid Grid.Row="2"
                          Rows="1"
@@ -298,13 +298,13 @@
                 <Button Command="{Binding AddProfileCommand}">
                     <TextBlock FontSize="17"
                                Style="{StaticResource ProfileIconText}"
-                               Text="&#xE710;" />
+                               Text="&#xE8FA;" />
                     <!--  Line up the icon better by using different font size  -->
                     <Button.ToolTip>
                         <TextBlock Text="{StaticResource NewProfileHelpText}" />
                     </Button.ToolTip>
                 </Button>
-                <Button Command="{Binding DeleteProfileCommand}" CommandParameter="{Binding ElementName=ProfilesComboBox, Path=SelectedItem}">
+                <Button Command="{Binding DeleteProfileCommand}">
                     <TextBlock Style="{StaticResource ProfileIconText}" Text="&#xE74D;" />
                     <Button.ToolTip>
                         <TextBlock Text="{StaticResource DeleteProfileHelpText}" />

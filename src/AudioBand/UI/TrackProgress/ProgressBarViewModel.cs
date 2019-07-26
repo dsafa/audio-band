@@ -27,7 +27,7 @@ namespace AudioBand.UI
         /// <param name="audioSession">The audio session.</param>
         /// <param name="messageBus">The message bus.</param>
         public ProgressBarViewModel(IAppSettings appsettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
-            : base(messageBus, appsettings.ProgressBar)
+            : base(messageBus, appsettings.CurrentProfile.ProgressBar)
         {
             _appsettings = appsettings;
             _audioSession = audioSession;
@@ -100,13 +100,13 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(Model, _appsettings.ProgressBar);
+            MapSelf(Model, _appsettings.CurrentProfile.ProgressBar);
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            MapSelf(_appsettings.ProgressBar, Model);
+            MapSelf(_appsettings.CurrentProfile.ProgressBar, Model);
             RaisePropertyChangedAll();
         }
 

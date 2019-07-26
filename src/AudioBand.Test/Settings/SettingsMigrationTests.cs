@@ -23,7 +23,7 @@ namespace AudioBand.Test
                 AudioSource = "test"
             };
 
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal("2", v2.Version);
             Assert.Equal("test", v2.AudioSource);
@@ -46,7 +46,7 @@ namespace AudioBand.Test
                 AlbumArtPopupAppearance = setting,
             };
 
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.AlbumArtPopupSettings.Width, setting.Width);
             Assert.Equal(v2.AlbumArtPopupSettings.Height, setting.Height);
@@ -73,7 +73,7 @@ namespace AudioBand.Test
                 AlbumArtAppearance = setting
             };
 
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.AlbumArtSettings.Width, setting.Width);
             Assert.Equal(v2.AlbumArtSettings.Height, setting.Height);
@@ -97,7 +97,7 @@ namespace AudioBand.Test
                 AudioBandAppearance = setting
             };
 
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.AudioBandSettings.Width, setting.Width);
             Assert.Equal(v2.AudioBandSettings.Height, setting.Height);
@@ -121,7 +121,7 @@ namespace AudioBand.Test
                 NextSongButtonAppearance = setting
             };
 
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.NextButtonSettings.Width, setting.Width);
             Assert.Equal(v2.NextButtonSettings.Height, setting.Height);
@@ -152,7 +152,7 @@ namespace AudioBand.Test
                 AudioSourceSettings = settings
             };
 
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.AudioSourceSettings.Count, settings.Count);
             Assert.Equal(v2.AudioSourceSettings[0].AudioSourceName, setting1.Name);
@@ -181,7 +181,7 @@ namespace AudioBand.Test
             };
 
             var v1 = new V1Settings {PlayPauseButtonAppearance = setting};
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.PlayPauseButtonSettings.Width, setting.Width);
             Assert.Equal(v2.PlayPauseButtonSettings.Height, setting.Height);
@@ -206,7 +206,7 @@ namespace AudioBand.Test
             };
 
             var v1 = new V1Settings {PreviousSongButtonAppearance = setting};
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.PreviousButtonSettings.Height, setting.Height);
             Assert.Equal(v2.PreviousButtonSettings.Width, setting.Width);
@@ -231,7 +231,7 @@ namespace AudioBand.Test
             };
 
             var v1 = new V1Settings {ProgressBarAppearance = setting};
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.ProgressBarSettings.Width, setting.Width);
             Assert.Equal(v2.ProgressBarSettings.Height, setting.Height);
@@ -263,7 +263,7 @@ namespace AudioBand.Test
 
             var texts = new List<TextAppearance>() {text1};
             var v1 = new V1Settings {TextAppearances = texts};
-            var v2 = Migration.MigrateSettings<V2Settings>(v1, "0.1", "2");
+            var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.CustomLabelSettings.Count, texts.Count);
             Assert.Equal(v2.CustomLabelSettings[0].Color, text1.Color);
@@ -418,7 +418,7 @@ Value = ""secret""
             var settings = TomlHelper.DefaultSettings;
 
             var v2 = Toml.ReadString<V2Settings>(settingsFile, settings);
-            var v3 = Migration.MigrateSettings<SettingsV3>(v2, "2", "3");
+            var v3 = SettingsMigration.MigrateSettings<SettingsV3>(v2, "2", "3");
 
             Assert.Equal("3", v3.Version);
             Assert.Equal(v2.AudioSource, v3.AudioSource);
@@ -558,7 +558,7 @@ Margin = 6
 
 ";
             var v1 = Toml.ReadString<V1Settings>(v1Settings, TomlHelper.DefaultSettings);
-            var v3 = Migration.MigrateSettings<SettingsV3>(v1, "0.1", "3");
+            var v3 = SettingsMigration.MigrateSettings<SettingsV3>(v1, "0.1", "3");
             var v3Profile = v3.Profiles[SettingsV3.DefaultProfileName];
 
             Assert.Equal(v1.AudioBandAppearance.Width, v3Profile.GeneralSettings.Width);

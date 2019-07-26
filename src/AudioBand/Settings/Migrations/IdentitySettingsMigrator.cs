@@ -3,7 +3,7 @@
     /// <summary>
     /// Performs no migration.
     /// </summary>
-    internal class IdentityMigrator : ISettingsMigrator
+    internal class IdentitySettingsMigrator : ISettingsMigrator
     {
         /// <summary>
         /// Migrate settings to new version.
