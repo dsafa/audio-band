@@ -207,7 +207,7 @@ namespace AudioBand.Settings
             if (version != CurrentVersion)
             {
                 Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), TomlHelper.DefaultSettings);
-                _settings = Migration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
+                _settings = SettingsMigration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
                 Save();
             }
             else

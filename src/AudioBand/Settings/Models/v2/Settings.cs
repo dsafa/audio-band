@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AudioBand.Settings.Models.V2
 {
-    internal class Settings
+    public class Settings
     {
         public string Version { get; set; } = "2";
 

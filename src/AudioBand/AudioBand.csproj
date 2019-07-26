@@ -108,14 +108,17 @@
     <Compile Include="AudioSource\IInternalAudioSource.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Settings\MappingProfiles\SettingsProfileToUserProfile.cs" />
+    <Compile Include="Settings\MappingProfiles\SettingsV1ToSettingsV2Profile.cs" />
+    <Compile Include="Settings\MappingProfiles\SettingsV2ToSettingsV3Profile.cs" />
     <Compile Include="Settings\MappingProfiles\UserProfileToSettingsProfile.cs" />
+    <Compile Include="Settings\Migrations\ProfileSettingsMigrator.cs" />
     <Compile Include="UI\Behaviors\CanvasPositioning.cs" />
     <Compile Include="UI\Behaviors\Fallback.cs" />
     <Compile Include="UI\Behaviors\RedirectScrolling.cs" />
     <Compile Include="UI\Behaviors\SliderClickAndDrag.cs" />
     <Compile Include="UI\Behaviors\TrackOffsetFix.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
-    <Compile Include="Settings\Migrations\IdentityMigrator.cs" />
+    <Compile Include="Settings\Migrations\IdentitySettingsMigrator.cs" />
     <Compile Include="Settings\TomlHelper.cs" />
     <Compile Include="UI\ValueConverters\ValueConverterHelper.cs" />
     <Compile Include="UI\ViewModel\TrackStateAttribute.cs" />
@@ -170,7 +173,7 @@
     <Compile Include="UI\Resources\Theming\ThemeResourceKey.cs" />
     <Compile Include="Settings\IAppSettings.cs" />
     <Compile Include="Settings\Migrations\ISettingsMigrator.cs" />
-    <Compile Include="Settings\Migrations\Migration.cs" />
+    <Compile Include="Settings\Migrations\SettingsMigration.cs" />
     <Compile Include="Settings\Migrations\V1ToV2.cs" />
     <Compile Include="Settings\Migrations\V2ToV3.cs" />
     <Compile Include="Settings\Models\v1\AlbumArtAppearance.cs" />

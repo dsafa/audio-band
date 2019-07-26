@@ -5,7 +5,7 @@ using AutoMapper;
 namespace AudioBand.Settings.MappingProfiles
 {
     /// <summary>
-    /// Maps from user profile model to the settings profile model.
+    /// Maps from <see cref="UserProfile"/> to the settings profile model.
     /// </summary>
     public class UserProfileToSettingsProfile : Profile
     {

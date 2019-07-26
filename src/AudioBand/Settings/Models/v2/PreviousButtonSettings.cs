@@ -1,7 +1,7 @@
 ﻿#pragma warning disable
 namespace AudioBand.Settings.Models.V2
 {
-    internal class PreviousButtonSettings
+    public class PreviousButtonSettings
     {
         public string ImagePath { get; set; }
 

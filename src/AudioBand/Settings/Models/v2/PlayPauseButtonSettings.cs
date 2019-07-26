@@ -1,7 +1,7 @@
 ﻿#pragma warning disable
 namespace AudioBand.Settings.Models.V2
 {
-    internal class PlayPauseButtonSettings
+    public class PlayPauseButtonSettings
     {
         public string PlayButtonImagePath { get; set; }
 

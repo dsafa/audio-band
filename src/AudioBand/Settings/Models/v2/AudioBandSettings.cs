@@ -1,7 +1,7 @@
 ﻿#pragma warning disable
 namespace AudioBand.Settings.Models.V2
 {
-    internal class AudioBandSettings
+    public class AudioBandSettings
     {
         public int Width { get; set; }
 
