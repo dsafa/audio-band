@@ -89,6 +89,7 @@ namespace AudioBand.Settings
 
             CurrentProfile = _profiles[profileName];
             ProfileChanged?.Invoke(this, EventArgs.Empty);
+            Save();
         }
 
         /// <summary>
@@ -186,8 +187,9 @@ namespace AudioBand.Settings
             var mapper = ProfileMappingConfiguration.CreateMapper();
             foreach (var keyVal in profilesToImport.Profiles)
             {
-                var key = GetUniqueProfileName(keyVal.Key);
-                _profiles[key] = mapper.Map<ProfileV3, UserProfile>(keyVal.Value);
+                var name = GetUniqueProfileName(keyVal.Key);
+                _profiles[name] = mapper.Map<ProfileV3, UserProfile>(keyVal.Value);
+                _profiles[name].Name = name;
             }
         }
 
@@ -276,9 +278,32 @@ namespace AudioBand.Settings
         private void InitProfiles()
         {
             var mapper = ProfileMappingConfiguration.CreateMapper();
+
+            // If profiles are somehow null, then create a default one.
+            if (_settings.Profiles == null)
+            {
+                _settings.CurrentProfileName = SettingsV3.DefaultProfileName;
+                _profiles = new Dictionary<string, UserProfile>
+                {
+                    {SettingsV3.DefaultProfileName, UserProfile.CreateInitialProfile()},
+                };
+
+                return;
+            }
+
             _profiles = _settings.Profiles.ToDictionary(
                 keyValPair => keyValPair.Key,
-                keyValPair => mapper.Map<ProfileV3, UserProfile>(keyValPair.Value));
+                keyValPair =>
+                {
+                    var profile = mapper.Map<ProfileV3, UserProfile>(keyValPair.Value);
+                    profile.Name = keyValPair.Key;
+                    return profile;
+                });
+
+            if (_settings.CurrentProfileName == null || !_profiles.ContainsKey(_settings.CurrentProfileName))
+            {
+                _settings.CurrentProfileName = _profiles.First().Key;
+            }
         }
     }
 }

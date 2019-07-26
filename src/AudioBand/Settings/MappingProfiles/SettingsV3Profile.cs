@@ -15,7 +15,8 @@ namespace AudioBand.Settings.MappingProfiles
         /// </summary>
         public SettingsV3Profile()
         {
-            CreateMap<SettingsV3, SettingsV3>();
+            CreateMap<SettingsV3, SettingsV3>()
+                .ForMember(dest => dest.Profiles, opt => opt.NullSubstitute(new Dictionary<string, ProfileV3>()));
             CreateMap<ProfileV3, ProfileV3>()
                 .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.NullSubstitute(new AlbumArtPopup()))
                 .ForMember(dest => dest.AlbumArtSettings, opt => opt.NullSubstitute(new AlbumArt()))
