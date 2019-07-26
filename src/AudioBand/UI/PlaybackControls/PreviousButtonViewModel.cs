@@ -25,7 +25,7 @@ namespace AudioBand.UI
         /// <param name="audioSession">The audio session.</param>
         /// <param name="messageBus">The message bus.</param>
         public PreviousButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
-            : base(appSettings.PreviousButton, dialogService, messageBus)
+            : base(appSettings.CurrentProfile.PreviousButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
             _audioSession = audioSession;
@@ -49,7 +49,7 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(Model, _appSettings.PreviousButton);
+            MapSelf(Model, _appSettings.CurrentProfile.PreviousButton);
         }
 
         private async Task PreviousTrackCommandOnExecute(object arg)
@@ -65,7 +65,7 @@ namespace AudioBand.UI
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            MapSelf(_appSettings.PreviousButton, Model);
+            MapSelf(_appSettings.CurrentProfile.PreviousButton, Model);
             RaisePropertyChangedAll();
         }
     }

@@ -19,7 +19,7 @@ namespace AudioBand.Test
 
             var first = new ProgressBar() {BackgroundColor = Colors.AliceBlue};
             var second = new ProgressBar() {BackgroundColor = Colors.Aqua};
-            settingsMock.SetupSequence(m => m.ProgressBar)
+            settingsMock.SetupSequence(m => m.CurrentProfile.ProgressBar)
                 .Returns(first)
                 .Returns(second);
 

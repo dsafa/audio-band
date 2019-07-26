@@ -25,7 +25,7 @@ namespace AudioBand.UI
         /// <param name="audioSession">The audio session.</param>
         /// <param name="messageBus">The message bus.</param>
         public NextButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
-            : base(appSettings.NextButton, dialogService, messageBus)
+            : base(appSettings.CurrentProfile.NextButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
             _audioSession = audioSession;
@@ -50,7 +50,7 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(Model, _appSettings.NextButton);
+            MapSelf(Model, _appSettings.CurrentProfile.NextButton);
         }
 
         private async Task NextTrackCommandOnExecute(object arg)
@@ -66,7 +66,7 @@ namespace AudioBand.UI
         private void AppsSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            MapSelf(_appSettings.NextButton, Model);
+            MapSelf(_appSettings.CurrentProfile.NextButton, Model);
             RaisePropertyChangedAll();
         }
     }

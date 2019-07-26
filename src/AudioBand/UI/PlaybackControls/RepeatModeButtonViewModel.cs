@@ -27,7 +27,7 @@ namespace AudioBand.UI
         /// <param name="audioSession">The audio session.</param>
         /// <param name="messageBus">The message bus.</param>
         public RepeatModeButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
-            : base(appSettings.RepeatModeButton, dialogService, messageBus)
+            : base(appSettings.CurrentProfile.RepeatModeButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
             _audioSession = audioSession;
@@ -78,7 +78,7 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(Model, _appSettings.RepeatModeButton);
+            MapSelf(Model, _appSettings.CurrentProfile.RepeatModeButton);
         }
 
         private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -99,7 +99,7 @@ namespace AudioBand.UI
         private void AppSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            MapSelf(_appSettings.RepeatModeButton, Model);
+            MapSelf(_appSettings.CurrentProfile.RepeatModeButton, Model);
             RaisePropertyChangedAll();
         }
 

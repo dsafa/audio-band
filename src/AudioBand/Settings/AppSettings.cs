@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Media;
 using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.MappingProfiles;
@@ -12,7 +11,6 @@ using AudioBand.Settings.Models.v3;
 using AutoMapper;
 using Nett;
 using NLog;
-using Color = System.Windows.Media.Color;
 
 namespace AudioBand.Settings
 {

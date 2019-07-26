@@ -94,11 +94,11 @@ namespace AudioBand.UI
             _added.Clear();
             _removed.Clear();
 
-            _appsettings.CustomLabels.Clear();
+            _appsettings.CurrentProfile.CustomLabels.Clear();
 
             foreach (var customLabelVm in CustomLabels)
             {
-                _appsettings.CustomLabels.Add(customLabelVm.GetModel());
+                _appsettings.CurrentProfile.CustomLabels.Add(customLabelVm.GetModel());
             }
         }
 
@@ -133,7 +133,7 @@ namespace AudioBand.UI
         private void SetupLabels()
         {
             CustomLabels.Clear();
-            foreach (var customLabelVm in _appsettings.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession, MessageBus)))
+            foreach (var customLabelVm in _appsettings.CurrentProfile.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession, MessageBus)))
             {
                 CustomLabels.Add(customLabelVm);
             }

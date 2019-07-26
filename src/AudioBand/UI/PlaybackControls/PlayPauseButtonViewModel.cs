@@ -27,7 +27,7 @@ namespace AudioBand.UI
         /// <param name="audioSession">The audio session.</param>
         /// <param name="messageBus">The message bus.</param>
         public PlayPauseButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
-            : base(appSettings.PlayPauseButton, dialogService, messageBus)
+            : base(appSettings.CurrentProfile.PlayPauseButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
             _audioSession = audioSession;
@@ -76,13 +76,13 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(Model, _appSettings.PlayPauseButton);
+            MapSelf(Model, _appSettings.CurrentProfile.PlayPauseButton);
         }
 
         private void AppSettingsOnProfileChanged(object sender, EventArgs e)
         {
             Debug.Assert(IsEditing == false, "Should not be editing");
-            MapSelf(_appSettings.PlayPauseButton, Model);
+            MapSelf(_appSettings.CurrentProfile.PlayPauseButton, Model);
             RaisePropertyChangedAll();
         }
 

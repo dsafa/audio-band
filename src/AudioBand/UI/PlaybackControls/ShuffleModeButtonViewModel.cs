@@ -26,7 +26,7 @@ namespace AudioBand.UI
         /// <param name="audioSession">The audio session.</param>
         /// <param name="messageBus">The message bus.</param>
         public ShuffleModeButtonViewModel(IAppSettings appSettings, IDialogService dialogService, IAudioSession audioSession, IMessageBus messageBus)
-            : base(appSettings.ShuffleModeButton, dialogService, messageBus)
+            : base(appSettings.CurrentProfile.ShuffleModeButton, dialogService, messageBus)
         {
             _appSettings = appSettings;
             _audioSession = audioSession;
@@ -69,7 +69,7 @@ namespace AudioBand.UI
         protected override void OnEndEdit()
         {
             base.OnEndEdit();
-            MapSelf(Model, _appSettings.ShuffleModeButton);
+            MapSelf(Model, _appSettings.CurrentProfile.ShuffleModeButton);
         }
 
         private void AudioSessionOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -89,7 +89,7 @@ namespace AudioBand.UI
 
         private void AppSettingsOnProfileChanged(object sender, EventArgs e)
         {
-            MapSelf(_appSettings.ShuffleModeButton, Model);
+            MapSelf(_appSettings.CurrentProfile.ShuffleModeButton, Model);
             RaisePropertyChangedAll();
         }
 

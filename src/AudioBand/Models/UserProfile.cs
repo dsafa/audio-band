@@ -16,52 +16,52 @@ namespace AudioBand.Models
         /// <summary>
         /// Gets the saved album art popup model.
         /// </summary>
-        public AlbumArtPopup AlbumArtPopup { get; private set; }
+        public AlbumArtPopup AlbumArtPopup { get; set; }
 
         /// <summary>
         /// Gets the saved album art model.
         /// </summary>
-        public AlbumArt AlbumArt { get; private set; }
+        public AlbumArt AlbumArt { get; set; }
 
         /// <summary>
         /// Gets the saved general settings model.
         /// </summary>
-        public GeneralSettings GeneralSettings { get; private set; }
+        public GeneralSettings GeneralSettings { get; set; }
 
         /// <summary>
         /// Gets the saved labels.
         /// </summary>
-        public List<CustomLabel> CustomLabels { get; private set; }
+        public List<CustomLabel> CustomLabels { get; set; }
 
         /// <summary>
         /// Gets the saved button model.
         /// </summary>
-        public NextButton NextButton { get; private set; }
+        public NextButton NextButton { get; set; }
 
         /// <summary>
         /// Gets the saved previous button model.
         /// </summary>
-        public PreviousButton PreviousButton { get; private set; }
+        public PreviousButton PreviousButton { get; set; }
 
         /// <summary>
         /// Gets the saved play pause button model.
         /// </summary>
-        public PlayPauseButton PlayPauseButton { get; private set; }
+        public PlayPauseButton PlayPauseButton { get; set; }
 
         /// <summary>
         /// Gets the repeat mode button model.
         /// </summary>
-        public RepeatModeButton RepeatModeButton { get; private set; }
+        public RepeatModeButton RepeatModeButton { get; set; }
 
         /// <summary>
         /// Gets the shuffle mode button model.
         /// </summary>
-        public ShuffleModeButton ShuffleModeButton { get; private set; }
+        public ShuffleModeButton ShuffleModeButton { get; set; }
 
         /// <summary>
         /// Gets the saved progress bar model.
         /// </summary>
-        public ProgressBar ProgressBar { get; private set; }
+        public ProgressBar ProgressBar { get; set; }
 
         /// <summary>
         /// Creates an initial profile with default values.

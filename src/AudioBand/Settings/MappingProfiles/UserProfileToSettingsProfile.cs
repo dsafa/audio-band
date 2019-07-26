@@ -25,7 +25,8 @@ namespace AudioBand.Settings.MappingProfiles
                 .ForMember(dest => dest.ProgressBarSettings, opt => opt.MapFrom(src => src.ProgressBar))
                 .ForMember(dest => dest.RepeatModeButtonSettings, opt => opt.MapFrom(src => src.RepeatModeButton))
                 .ForMember(dest => dest.ShuffleModeButtonSettings, opt => opt.MapFrom(src => src.ShuffleModeButton))
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(dest => dest.Name, opt => opt.Ignore());
         }
     }
 }
