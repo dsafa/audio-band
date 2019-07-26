@@ -21,13 +21,16 @@ namespace AudioBand.Test
         public SettingsWindowViewModelTests()
         {
             _appSettings = new Mock<IAppSettings>();
-            _appSettings.SetupGet(m => m.Profiles).Returns(new List<UserProfile>()
+            var profile = new UserProfile()
             {
-                new UserProfile()
+                Name = "profile",
+                CustomLabels = new List<CustomLabel>
                 {
-                    CustomLabels = new List<CustomLabel>()
+                    new CustomLabel()
                 }
-            });
+            };
+
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
 
             _dialog = new Mock<IDialogService>();
             _container = new Mock<IViewModelContainer>();
