@@ -155,7 +155,7 @@ namespace SpotifyAudioSource
         /// <summary>
         /// Gets or sets a value indicating whether to use a proxy.
         /// </summary>
-        [AudioSourceSetting("Use Proxy")]
+        [AudioSourceSetting("Use Proxy", Priority = 15)]
         public bool UseProxy
         {
             get => _useProxy;
@@ -174,7 +174,7 @@ namespace SpotifyAudioSource
         /// <summary>
         /// Gets or sets the proxy host.
         /// </summary>
-        [AudioSourceSetting("Proxy Host")]
+        [AudioSourceSetting("Proxy Host", Priority = 20)]
         public string ProxyHost
         {
             get => _proxyConfig.Host;
@@ -193,7 +193,7 @@ namespace SpotifyAudioSource
         /// <summary>
         /// Gets or sets the proxy port.
         /// </summary>
-        [AudioSourceSetting("Proxy Port")]
+        [AudioSourceSetting("Proxy Port", Priority = 20)]
         public uint ProxyPort
         {
             get => (uint)_proxyConfig.Port;
@@ -212,7 +212,7 @@ namespace SpotifyAudioSource
         /// <summary>
         /// Gets or sets the proxy username.
         /// </summary>
-        [AudioSourceSetting("Proxy Username")]
+        [AudioSourceSetting("Proxy Username", Priority = 20)]
         public string ProxyUserName
         {
             get => _proxyConfig.Username;
@@ -231,7 +231,7 @@ namespace SpotifyAudioSource
         /// <summary>
         /// Gets or sets the proxy password.
         /// </summary>
-        [AudioSourceSetting("Proxy Password", Options = SettingOptions.Sensitive)]
+        [AudioSourceSetting("Proxy Password", Options = SettingOptions.Sensitive, Priority = 20)]
         public string ProxyPassword
         {
             get => _proxyConfig.Password;
@@ -364,6 +364,12 @@ namespace SpotifyAudioSource
             _auth?.Stop();
             _auth = new AuthorizationCodeAuth(ClientId, ClientSecret, url, url, Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying);
 
+            Logger.Debug($"Using proxy {UseProxy}, {_proxyConfig.Host} {_proxyConfig.Password}, {_proxyConfig.Username}, {_proxyConfig.GetUri()}");
+            if (UseProxy)
+            {
+                _auth.ProxyConfig = _proxyConfig;
+            }
+
             if (string.IsNullOrEmpty(RefreshToken))
             {
                 _auth.Start();
@@ -401,26 +407,24 @@ namespace SpotifyAudioSource
             }
         }
 
-        private SpotifyWebAPI CreateSpotifyClient()
+        private SpotifyWebAPI CreateSpotifyClient(string accessToken, string tokenType)
         {
-            return new SpotifyWebAPI(_proxyConfig)
+            return new SpotifyWebAPI(UseProxy ? _proxyConfig : null)
             {
-                AccessToken = _spotifyApi.AccessToken,
-                TokenType = _spotifyApi.TokenType,
+                AccessToken = accessToken,
+                TokenType = tokenType,
             };
         }
 
         private void UpdateProxy()
         {
-            if (!UseProxy)
-            {
-                return;
-            }
-
             Logger.Debug("Updating proxy configuration");
 
-            _spotifyApi = CreateSpotifyClient();
-            _httpClient = new HttpClient(new HttpClientHandler { Proxy = _proxyConfig.CreateWebProxy(), UseProxy = true });
+            _spotifyApi = CreateSpotifyClient(_spotifyApi.AccessToken, _spotifyApi.TokenType);
+
+            _httpClient = UseProxy
+                ? new HttpClient(new HttpClientHandler { Proxy = _proxyConfig.CreateWebProxy(), UseProxy = true })
+                : new HttpClient();
         }
 
         private async Task<PlaybackContext> GetPlayback()
@@ -447,7 +451,7 @@ namespace SpotifyAudioSource
                 // When there is an error, for unknown reasons, the client sometimes stops working properly
                 // i.e, it is unable to refresh the token properly. Recreate the client prevents this issue.
                 await Task.Delay(TimeSpan.FromSeconds(5));
-                _spotifyApi = CreateSpotifyClient();
+                _spotifyApi = CreateSpotifyClient(_spotifyApi.AccessToken, _spotifyApi.TokenType);
                 return null;
             }
         }
@@ -679,7 +683,7 @@ namespace SpotifyAudioSource
                 Logger.Warn("Access token is null");
             }
 
-            _spotifyApi = CreateSpotifyClient();
+            _spotifyApi = CreateSpotifyClient(token.AccessToken, token.TokenType);
 
             if (!string.IsNullOrEmpty(token.RefreshToken))
             {
