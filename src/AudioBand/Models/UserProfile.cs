@@ -9,6 +9,11 @@ namespace AudioBand.Models
     public class UserProfile
     {
         /// <summary>
+        /// The default profile name.
+        /// </summary>
+        public const string DefaultProfileName = "Default Profile";
+
+        /// <summary>
         /// Gets or sets the name of the profile.
         /// </summary>
         public string Name { get; set; }
@@ -66,11 +71,13 @@ namespace AudioBand.Models
         /// <summary>
         /// Creates an initial profile with default values.
         /// </summary>
+        /// <param name="name">The name of the new profile.</param>
         /// <returns>A new profile with default values.</returns>
-        public static UserProfile CreateInitialProfile()
+        public static UserProfile CreateDefaultProfile(string name)
         {
             return new UserProfile()
             {
+                Name = name,
                 GeneralSettings = new GeneralSettings(),
                 AlbumArt = new AlbumArt(),
                 AlbumArtPopup = new AlbumArtPopup(),
@@ -132,6 +139,24 @@ namespace AudioBand.Models
                     },
                 },
             };
+        }
+
+        /// <summary>
+        /// Gets a unique profile name from a target name.
+        /// </summary>
+        /// <param name="profileNames">Collection of current profile names.</param>
+        /// <param name="name">Target name.</param>
+        /// <returns>The target name if available, otherwise the target name appended with a number.</returns>
+        public static string GetUniqueProfileName(ICollection<string> profileNames, string name)
+        {
+            string newName = name;
+            int count = 0;
+            while (profileNames.Contains(newName))
+            {
+                newName += count;
+            }
+
+            return newName;
         }
     }
 }

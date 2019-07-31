@@ -2,7 +2,7 @@
 using AudioBand.Models;
 using Nett;
 
-namespace AudioBand.Settings
+namespace AudioBand.Settings.Persistence
 {
     /// <summary>
     /// Helper for TOML serialization and deserialization.

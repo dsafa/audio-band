@@ -5,6 +5,7 @@ using AudioBand.Settings;
 using AudioBand.Settings.Migrations;
 using AudioBand.Settings.Models.v3;
 using AudioBand.Settings.Models.V1;
+using AudioBand.Settings.Persistence;
 using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
 using V2Settings = AudioBand.Settings.Models.V2.Settings;
 using Nett;
