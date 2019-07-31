@@ -16,7 +16,8 @@ namespace AudioBand.Settings.Migrations
         {
             ("0.1", new V1ToV2()),
             ("2", new V2ToV3()),
-            ("3", new IdentitySettingsMigrator()),
+            ("3", new V3ToV4()),
+            ("4", new IdentitySettingsMigrator()),
         };
 
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger(typeof(SettingsMigration).FullName);

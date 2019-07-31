@@ -32,7 +32,7 @@ namespace AudioBand.Settings.Persistence
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<PersistSettings>();
-        private static readonly MapperConfiguration ProfileMappingConfiguration = new MapperConfiguration(cfg => cfg.AddProfile<UserProfileToSettingsProfile>());
+        private static readonly MapperConfiguration ProfileMappingConfiguration = new MapperConfiguration(cfg => cfg.AddProfile<UserProfileToProfileV3Profile>());
 
         public void WriteSettings(PersistedSettingsDto settings)
         {
