@@ -17,7 +17,16 @@ namespace AudioBand.Settings.MappingProfiles
                 .ForMember(dest => dest.Profiles, opt => opt.MapFrom(src => src.Profiles));
             CreateMap<KeyValuePair<string, ProfileV3>, UserProfile>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Key))
-                .ForAllOtherMembers(opt => opt.MapFrom(src => src.Value));
+                .ForMember(dest => dest.AlbumArtPopup, opt => opt.MapFrom(src => src.Value.AlbumArtPopupSettings))
+                .ForMember(dest => dest.AlbumArt, opt => opt.MapFrom(src => src.Value.AlbumArtSettings))
+                .ForMember(dest => dest.CustomLabels, opt => opt.MapFrom(src => src.Value.CustomLabelSettings))
+                .ForMember(dest => dest.GeneralSettings, opt => opt.MapFrom(src => src.Value.GeneralSettings))
+                .ForMember(dest => dest.NextButton, opt => opt.MapFrom(src => src.Value.NextButtonSettings))
+                .ForMember(dest => dest.PlayPauseButton, opt => opt.MapFrom(src => src.Value.PlayPauseButtonSettings))
+                .ForMember(dest => dest.PreviousButton, opt => opt.MapFrom(src => src.Value.PreviousButtonSettings))
+                .ForMember(dest => dest.ProgressBar, opt => opt.MapFrom(src => src.Value.ProgressBarSettings))
+                .ForMember(dest => dest.RepeatModeButton, opt => opt.MapFrom(src => src.Value.RepeatModeButtonSettings))
+                .ForMember(dest => dest.ShuffleModeButton, opt => opt.MapFrom(src => src.Value.ShuffleModeButtonSettings));
         }
     }
 }

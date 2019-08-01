@@ -16,7 +16,7 @@ namespace AudioBand.Settings.MappingProfiles
         public CurrentSettingsProfile()
         {
             CreateMap<CurrentSettings, CurrentSettings>()
-                .ForMember(dest => dest.Profiles, opt => opt.NullSubstitute(new List<string, CurrentSettings>()));
+                .ForMember(dest => dest.Profiles, opt => opt.NullSubstitute(new List<CurrentSettings>()));
             CreateMap<UserProfile, UserProfile>()
                 .ForMember(dest => dest.AlbumArtPopup, opt => opt.NullSubstitute(new AlbumArtPopup()))
                 .ForMember(dest => dest.AlbumArt, opt => opt.NullSubstitute(new AlbumArt()))

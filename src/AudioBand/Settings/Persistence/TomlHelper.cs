@@ -22,6 +22,12 @@ namespace AudioBand.Settings.Persistence
                 .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
             cfg.ConfigureType<double>(type => type.WithConversionFor<TomlInt>(c => c
                 .FromToml(tml => tml.Value)));
+            cfg.ConfigureType<string>(type => type.WithConversionFor<TomlInt>(c => c
+                .FromToml(tml => tml.ToString())
+                .ToToml(value => int.Parse(value))));
+            cfg.ConfigureType<string>(type => type.WithConversionFor<TomlBool>(c => c
+                .FromToml(tml => tml.ToString())
+                .ToToml(bool.Parse)));
         });
     }
 }
