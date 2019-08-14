@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using AudioBand.AudioSource;
@@ -249,22 +250,22 @@ namespace SpotifyAudioSource
 
         public async Task SetVolumeAsync(float newVolume)
         {
-            await _spotifyApi.SetVolumeAsync((int)(newVolume * 100));
+            await LogPlayerCommandIfFailed(() => _spotifyApi.SetVolumeAsync((int)(newVolume * 100)));
         }
 
         public async Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
-            await _spotifyApi.SeekPlaybackAsync((int)newProgress.TotalMilliseconds);
+            await LogPlayerCommandIfFailed(() => _spotifyApi.SeekPlaybackAsync((int)newProgress.TotalMilliseconds));
         }
 
         public async Task SetShuffleAsync(bool shuffleOn)
         {
-            await _spotifyApi.SetShuffleAsync(shuffleOn);
+            await LogPlayerCommandIfFailed(() => _spotifyApi.SetShuffleAsync(shuffleOn));
         }
 
         public async Task SetRepeatModeAsync(RepeatMode newRepeatMode)
         {
-            await _spotifyApi.SetRepeatModeAsync(ToRepeatState(newRepeatMode));
+            await LogPlayerCommandIfFailed(() => _spotifyApi.SetRepeatModeAsync(ToRepeatState(newRepeatMode)));
         }
 
         private RepeatMode ToRepeatMode(RepeatState state)
@@ -294,7 +295,7 @@ namespace SpotifyAudioSource
                 case RepeatMode.RepeatTrack:
                     return RepeatState.Track;
                 default:
-                    Logger.Warn("No case for {mode}");
+                    Logger.Warn($"No case for {mode}");
                     return RepeatState.Off;
             }
         }
@@ -640,6 +641,15 @@ namespace SpotifyAudioSource
 
             var expiresIn = TimeSpan.FromSeconds(token.ExpiresIn);
             Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn})");
+        }
+
+        private async Task LogPlayerCommandIfFailed(Func<Task<ErrorResponse>> command, [CallerMemberName] string caller = null)
+        {
+            var result = await command();
+            if (result.HasError())
+            {
+                Logger.Warn($"Error with player command [{caller}]: Code = '{result.Error.Status}', Message = '{result.Error.Message}'");
+            }
         }
     }
 }
