@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AudioBand.Logging;
 using NLog;
@@ -20,7 +20,12 @@ namespace AudioBand.AudioSource
         /// <inheritdoc />
         public async Task<IEnumerable<IInternalAudioSource>> LoadAudioSourcesAsync()
         {
-            Logger.Debug("Loading audio sources as {path}", PluginFolderPath);
+            Logger.Debug("Loading audio sources in {path}", PluginFolderPath);
+            if (!Directory.Exists(PluginFolderPath))
+            {
+                Logger.Debug("Audiosource folder does not exist");
+                return Enumerable.Empty<IInternalAudioSource>();
+            }
 
             var audioSources = new List<IInternalAudioSource>();
             foreach (var dir in Directory.EnumerateDirectories(PluginFolderPath))
