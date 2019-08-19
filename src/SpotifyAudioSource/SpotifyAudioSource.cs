@@ -270,6 +270,8 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public Task PlayTrackAsync()
         {
+            // Play/pause/next/back controls use the desktop rather than the api
+            // because it is quicker and player controls require spotify premium.
             _spotifyControls.Play();
             return Task.CompletedTask;
         }
@@ -582,6 +584,7 @@ namespace SpotifyAudioSource
 
         private async void CheckSpotifyTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
+            // Spotify api does not provide a way to get realtime player status updates, so we have to resort to polling.
             try
             {
                 if (!_isActive || string.IsNullOrEmpty(_spotifyApi.AccessToken))
