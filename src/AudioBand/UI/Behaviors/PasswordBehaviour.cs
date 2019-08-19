@@ -5,7 +5,7 @@ using System.Windows.Interactivity;
 namespace AudioBand.UI
 {
     /// <summary>
-    /// Behaviour for a password box to allow binding. From http://www.wpftutorial.net/PasswordBox.html
+    /// Behaviour for a password box to allow binding. From http://www.wpftutorial.net/PasswordBox.html.
     /// </summary>
     internal class PasswordBehaviour : Behavior<PasswordBox>
     {
