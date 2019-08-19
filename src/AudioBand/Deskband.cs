@@ -8,6 +8,7 @@ using AudioBand.AudioSource;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AudioBand.Settings;
+using AudioBand.Settings.Persistence;
 using AudioBand.UI;
 using CSDeskBand;
 using NLog;
@@ -113,6 +114,7 @@ namespace AudioBand
                 _container.Register<IDialogService, DialogService>(Lifestyle.Singleton);
                 _container.Register<IViewModelContainer, ViewModelContainer>(Lifestyle.Singleton);
                 _container.Register<IAudioSession, AudioSession>(Lifestyle.Singleton);
+                _container.Register<IPersistSettings, PersistSettings>(Lifestyle.Singleton);
 
                 _container.Register<AboutDialogViewModel>(Lifestyle.Singleton);
                 _container.Register<AlbumArtViewModel>(Lifestyle.Singleton);

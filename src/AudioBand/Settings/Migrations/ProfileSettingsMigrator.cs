@@ -19,9 +19,18 @@ namespace AudioBand.Settings.Migrations
         public object MigrateSetting(object oldSetting)
         {
             var source = (TOldSettings)oldSetting;
-            var mappingConfig = new MapperConfiguration(cfg => cfg.AddProfile(typeof(TProfile)));
+            var mappingConfig = new MapperConfiguration(ConfigureMapperConfig);
             mappingConfig.AssertConfigurationIsValid();
             return mappingConfig.CreateMapper().Map<TOldSettings, TNewSettings>(source);
+        }
+
+        /// <summary>
+        /// Configures the mapping configuration with the <typeparamref name="TProfile"/> as the default.
+        /// </summary>
+        /// <param name="cfg">The mapper configuration.</param>
+        protected virtual void ConfigureMapperConfig(IMapperConfigurationExpression cfg)
+        {
+            cfg.AddProfile(typeof(TProfile));
         }
     }
 }

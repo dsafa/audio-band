@@ -1,7 +1,7 @@
 ﻿#pragma warning disable SA1300
 using System.Collections.Generic;
 
-namespace AudioBand.Settings.Models.v3
+namespace AudioBand.Settings.Models.V3
 {
     /// <summary>
     /// The format for exported profiles.

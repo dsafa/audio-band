@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using AudioBand.Models;
 
-namespace AudioBand.Settings.Models.v3
+namespace AudioBand.Settings.Models.V3
 {
     /// <summary>
     /// Version 3 for settings.

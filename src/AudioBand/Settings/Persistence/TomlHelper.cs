@@ -2,7 +2,7 @@
 using AudioBand.Models;
 using Nett;
 
-namespace AudioBand.Settings
+namespace AudioBand.Settings.Persistence
 {
     /// <summary>
     /// Helper for TOML serialization and deserialization.
@@ -22,6 +22,10 @@ namespace AudioBand.Settings
                 .FromToml(str => SerializationConversions.StringToEnum<CustomLabel.TextAlignment>(str.Value))));
             cfg.ConfigureType<double>(type => type.WithConversionFor<TomlInt>(c => c
                 .FromToml(tml => tml.Value)));
+            cfg.ConfigureType<string>(type => type.WithConversionFor<TomlInt>(c => c
+                .FromToml(tml => tml.ToString())));
+            cfg.ConfigureType<string>(type => type.WithConversionFor<TomlBool>(c => c
+                .FromToml(tml => tml.ToString())));
         });
     }
 }

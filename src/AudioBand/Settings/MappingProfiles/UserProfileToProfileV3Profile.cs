@@ -1,5 +1,5 @@
 ﻿using AudioBand.Models;
-using AudioBand.Settings.Models.v3;
+using AudioBand.Settings.Models.V3;
 using AutoMapper;
 
 namespace AudioBand.Settings.MappingProfiles
@@ -7,12 +7,12 @@ namespace AudioBand.Settings.MappingProfiles
     /// <summary>
     /// Maps from <see cref="UserProfile"/> to the settings profile model.
     /// </summary>
-    public class UserProfileToSettingsProfile : Profile
+    public class UserProfileToProfileV3Profile : Profile
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserProfileToSettingsProfile"/> class.
+        /// Initializes a new instance of the <see cref="UserProfileToProfileV3Profile"/> class.
         /// </summary>
-        public UserProfileToSettingsProfile()
+        public UserProfileToProfileV3Profile()
         {
             CreateMap<UserProfile, ProfileV3>()
                 .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.MapFrom(src => src.AlbumArtPopup))
