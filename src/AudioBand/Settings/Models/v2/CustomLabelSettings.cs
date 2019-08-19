@@ -4,7 +4,7 @@ using Color = System.Windows.Media.Color;
 
 namespace AudioBand.Settings.Models.V2
 {
-    internal class CustomLabelSettings
+    public class CustomLabelSettings
     {
         public bool IsVisible { get; set; }
 

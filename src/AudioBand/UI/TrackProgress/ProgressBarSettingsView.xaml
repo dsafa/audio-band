@@ -1,0 +1,39 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:audioband="clr-namespace:AudioBand.UI">
+    <DataTemplate DataType="{x:Type audioband:ProgressBarViewModel}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <audioband:SharedDictionary Source="../Resources/Shared.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+                    <audioband:SharedDictionary Source="../LayoutSettingsTemplate.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource LayoutSettingsTemplate}" />
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource ProgressBarColorsSectionText}" />
+            <audioband:ColorPicker Title="{StaticResource ProgressBarForegroundColorDescription}"
+                                   DialogService="{Binding DialogService}"
+                                   Color="{Binding ForegroundColor}" />
+            <audioband:ColorPicker Title="{StaticResource ProgressBarBackgroundColorDescription}"
+                                   DialogService="{Binding DialogService}"
+                                   Color="{Binding BackgroundColor}" />
+            <audioband:ColorPicker Title="{StaticResource ProgressBarHoverColorDescription}"
+                                   DialogService="{Binding DialogService}"
+                                   Color="{Binding HoverColor}" />
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

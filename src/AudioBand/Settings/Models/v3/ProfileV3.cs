@@ -5,14 +5,14 @@ using AudioBand.Models;
 namespace AudioBand.Settings.Models.v3
 {
     /// <summary>
-    /// Represents a profile which is the arrangement of ui controls.
+    /// Represents a profile for v3 of settings.
     /// </summary>
     public class ProfileV3
     {
         /// <summary>
         /// Gets or sets the audio band settings.
         /// </summary>
-        public AudioBand.Models.AudioBand AudioBandSettings { get; set; }
+        public GeneralSettings GeneralSettings { get; set; }
 
         /// <summary>
         /// Gets or sets the previous button settings.

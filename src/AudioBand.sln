@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioBand.Logging", "AudioB
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "AudioBandInstaller", "AudioBandInstaller\AudioBandInstaller.wixproj", "{4E9EEE47-23F6-45B7-9DDB-A34731D6AE4A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AudioBand Core", "AudioBand Core", "{AD1A45A7-F5E2-4657-BA09-99F8A5421FF0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AudioBand", "AudioBand", "{AD1A45A7-F5E2-4657-BA09-99F8A5421FF0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Audio Sources", "Audio Sources", "{31BA7036-81E7-4D02-90CA-753832D950C5}"
 EndProject

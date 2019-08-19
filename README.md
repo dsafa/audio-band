@@ -17,12 +17,18 @@ Audio Band allows you to display song information in the taskbar.
 - Add support for your music player of choice through plugins
 - Customizable
 
+## Current included support for
+- Spotify
+- iTunes
+- MusicBee
+
 ## Screenshots
+![](screenshots/screenshot1.png)
+
 ![](./screenshots/screenshot.png)
 
 ![](screenshots/custom-1.png)
 
-![](screenshots/custom-2.png)
 
 ## Getting started
 [Click here to get started](https://dsafa.github.io/audio-band/audioband/index.html)

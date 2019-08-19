@@ -1,7 +1,7 @@
 ﻿#pragma warning disable
 namespace AudioBand.Settings.Models.V2
 {
-    internal class AudioSourceSetting
+    public class AudioSourceSetting
     {
         public string Name { get; set; }
 

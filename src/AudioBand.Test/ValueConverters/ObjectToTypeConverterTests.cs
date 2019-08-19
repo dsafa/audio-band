@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
-using AudioBand.ValueConverters;
+using AudioBand.UI;
 using Xunit;
 
 namespace AudioBand.Test

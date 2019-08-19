@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Media;
 using AudioBand.Logging;
 using AudioBand.Models;
+using AudioBand.Settings.MappingProfiles;
 using AudioBand.Settings.Migrations;
 using AudioBand.Settings.Models.v3;
-using AudioBand.Settings.Profiles;
 using AutoMapper;
 using Nett;
 using NLog;
-using Color = System.Windows.Media.Color;
 
 namespace AudioBand.Settings
 {
@@ -32,8 +30,9 @@ namespace AudioBand.Settings
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AppSettings>();
+        private static readonly MapperConfiguration ProfileMappingConfiguration = new MapperConfiguration(cfg => cfg.AddProfile<UserProfileToSettingsProfile>());
         private SettingsV3 _settings;
-        private ProfileV3 _currentProfile;
+        private Dictionary<string, UserProfile> _profiles = new Dictionary<string, UserProfile>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSettings"/> class.
@@ -41,6 +40,7 @@ namespace AudioBand.Settings
         public AppSettings()
         {
             InitSettings();
+            InitProfiles();
 
             if (_settings.AudioSourceSettings == null)
             {
@@ -65,82 +65,32 @@ namespace AudioBand.Settings
         }
 
         /// <summary>
-        /// Gets the saved album art popup model.
-        /// </summary>
-        public AlbumArtPopup AlbumArtPopup { get; private set; } = new AlbumArtPopup();
-
-        /// <summary>
-        /// Gets the saved album art model.
-        /// </summary>
-        public AlbumArt AlbumArt { get; private set; } = new AlbumArt();
-
-        /// <summary>
-        /// Gets the saved audio band model.
-        /// </summary>
-        public AudioBand.Models.AudioBand AudioBand { get; private set; } = new AudioBand.Models.AudioBand();
-
-        /// <summary>
-        /// Gets the saved labels.
-        /// </summary>
-        public List<CustomLabel> CustomLabels { get; private set; } = new List<CustomLabel>();
-
-        /// <summary>
-        /// Gets the saved button model.
-        /// </summary>
-        public NextButton NextButton { get; private set; } = new NextButton();
-
-        /// <summary>
-        /// Gets the saved previous button model.
-        /// </summary>
-        public PreviousButton PreviousButton { get; private set; } = new PreviousButton();
-
-        /// <summary>
-        /// Gets the saved play pause button model.
-        /// </summary>
-        public PlayPauseButton PlayPauseButton { get; private set; } = new PlayPauseButton();
-
-        /// <summary>
-        /// Gets the saved repeat mode button model.
-        /// </summary>
-        public RepeatModeButton RepeatModeButton { get; private set; } = new RepeatModeButton();
-
-        /// <summary>
-        /// Gets the saved shuffle mode button model.
-        /// </summary>
-        public ShuffleModeButton ShuffleModeButton { get; private set; } = new ShuffleModeButton();
-
-        /// <summary>
-        /// Gets the saved progress bar model.
-        /// </summary>
-        public ProgressBar ProgressBar { get; private set; } = new ProgressBar();
-
-        /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
         public List<AudioSourceSettings> AudioSourceSettings => _settings.AudioSourceSettings;
 
         /// <summary>
-        /// Gets or sets the current profile.
+        /// Gets the current profile.
         /// </summary>
-        public string CurrentProfile
-        {
-            get => _settings.CurrentProfileName;
-            set
-            {
-                if (value == _settings.CurrentProfileName)
-                {
-                    return;
-                }
-
-                _settings.CurrentProfileName = value;
-                SelectProfile(value);
-            }
-        }
+        public UserProfile CurrentProfile { get; private set; }
 
         /// <summary>
         /// Gets a list of available profiles.
         /// </summary>
-        public List<string> Profiles => _settings.Profiles.Keys.ToList();
+        public IEnumerable<UserProfile> Profiles => _profiles.Values;
+
+        /// <summary>
+        /// Selects a new profile.
+        /// </summary>
+        /// <param name="profileName">The name of the profile to switch to.</param>
+        public void SelectProfile(string profileName)
+        {
+            Debug.Assert(_profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}");
+
+            CurrentProfile = _profiles[profileName];
+            ProfileChanged?.Invoke(this, EventArgs.Empty);
+            Save();
+        }
 
         /// <summary>
         /// Creates a new profile.
@@ -153,12 +103,12 @@ namespace AudioBand.Settings
                 throw new ArgumentNullException(nameof(profileName));
             }
 
-            if (_settings.Profiles.ContainsKey(profileName))
+            if (_profiles.ContainsKey(profileName))
             {
                 throw new ArgumentException("Profile name already exists", nameof(profileName));
             }
 
-            _settings.Profiles.Add(profileName, CreateProfileModel());
+            _profiles.Add(profileName, UserProfile.CreateInitialProfile());
         }
 
         /// <summary>
@@ -172,17 +122,17 @@ namespace AudioBand.Settings
                 throw new ArgumentNullException(nameof(profileName));
             }
 
-            if (_settings.Profiles.Count == 1)
+            if (_profiles.Count == 1)
             {
                 throw new InvalidOperationException("Must have at least one profile");
             }
 
-            if (!_settings.Profiles.ContainsKey(profileName))
+            if (!_profiles.ContainsKey(profileName))
             {
                 throw new ArgumentException($"Profile {profileName} does not exist", nameof(profileName));
             }
 
-            _settings.Profiles.Remove(profileName);
+            _profiles.Remove(profileName);
         }
 
         /// <summary>
@@ -196,19 +146,18 @@ namespace AudioBand.Settings
                 throw new ArgumentNullException(nameof(newProfileName));
             }
 
-            if (_currentProfile == null)
+            if (CurrentProfile == null)
             {
                 throw new InvalidOperationException("No profile selected. Current profile is null");
             }
 
-            if (_settings.Profiles.ContainsKey(newProfileName))
+            if (_profiles.ContainsKey(newProfileName))
             {
                 throw new ArgumentException("Profile already exists", nameof(newProfileName));
             }
 
-            _settings.Profiles.Remove(_settings.CurrentProfileName);
             _settings.CurrentProfileName = newProfileName;
-            _settings.Profiles.Add(newProfileName, _currentProfile);
+            CurrentProfile.Name = newProfileName;
         }
 
         /// <summary>
@@ -218,6 +167,10 @@ namespace AudioBand.Settings
         {
             try
             {
+                // Write back to the settings object before saving.
+                var mapper = ProfileMappingConfiguration.CreateMapper();
+                _settings.CurrentProfileName = CurrentProfile.Name;
+                _settings.Profiles = _profiles.ToDictionary(kvp => kvp.Key, kvp => mapper.Map<UserProfile, ProfileV3>(kvp.Value));
                 Toml.WriteFile(_settings, SettingsFilePath, TomlHelper.DefaultSettings);
             }
             catch (Exception e)
@@ -229,11 +182,14 @@ namespace AudioBand.Settings
         /// <inheritdoc />
         public void ImportProfilesFromPath(string path)
         {
+            // Todo: deal with different profile versions?
             var profilesToImport = Toml.ReadFile<ProfileExportV3>(path, TomlHelper.DefaultSettings);
+            var mapper = ProfileMappingConfiguration.CreateMapper();
             foreach (var keyVal in profilesToImport.Profiles)
             {
-                var key = GetUniqueProfileName(keyVal.Key);
-                _settings.Profiles[key] = keyVal.Value;
+                var name = GetUniqueProfileName(keyVal.Key);
+                _profiles[name] = mapper.Map<ProfileV3, UserProfile>(keyVal.Value);
+                _profiles[name].Name = name;
             }
         }
 
@@ -253,12 +209,12 @@ namespace AudioBand.Settings
             if (version != CurrentVersion)
             {
                 Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), TomlHelper.DefaultSettings);
-                _settings = Migration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
+                _settings = SettingsMigration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
                 Save();
             }
             else
             {
-                // Fix any null values
+                // Fix any missing values
                 var initial = new SettingsV3();
                 var settings = tomlFile.Get<SettingsV3>();
                 new MapperConfiguration(cfg => cfg.AddProfile<SettingsV3Profile>()).CreateMapper().Map(settings, initial);
@@ -268,109 +224,23 @@ namespace AudioBand.Settings
 
         private void CreateDefaultSettingsFile()
         {
+            var settingsProfile = ProfileMappingConfiguration.CreateMapper().Map<UserProfile, ProfileV3>(UserProfile.CreateInitialProfile());
+
             _settings = new SettingsV3()
             {
                 AudioSource = null,
                 AudioSourceSettings = new List<AudioSourceSettings>(),
-                Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, CreateProfileModel() } },
+                Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, settingsProfile } },
                 CurrentProfileName = SettingsV3.DefaultProfileName,
             };
             Save();
-        }
-
-        private ProfileV3 CreateProfileModel()
-        {
-            return new ProfileV3
-            {
-                AudioBandSettings = new AudioBand.Models.AudioBand(),
-                AlbumArtSettings = new AlbumArt(),
-                AlbumArtPopupSettings = new AlbumArtPopup(),
-                PlayPauseButtonSettings = new PlayPauseButton(),
-                NextButtonSettings = new NextButton(),
-                PreviousButtonSettings = new PreviousButton(),
-                RepeatModeButtonSettings = new RepeatModeButton(),
-                ShuffleModeButtonSettings = new ShuffleModeButton(),
-                ProgressBarSettings = new ProgressBar(),
-                CustomLabelSettings = new List<CustomLabel>
-                {
-                    new CustomLabel
-                    {
-                        Name = "Song Length",
-                        Width = 40,
-                        Height = 15,
-                        FontSize = 12,
-                        XPosition = 460,
-                        YPosition = 14,
-                        FormatString = "{length}",
-                        Color = Color.FromRgb(195, 195, 195),
-                        Alignment = CustomLabel.TextAlignment.Right,
-                    },
-                    new CustomLabel
-                    {
-                        Name = "Song Progress",
-                        Width = 40,
-                        Height = 15,
-                        FontSize = 12,
-                        XPosition = 280,
-                        YPosition = 14,
-                        FormatString = "{time}",
-                        Color = Color.FromRgb(195, 195, 195),
-                        Alignment = CustomLabel.TextAlignment.Left,
-                    },
-                    new CustomLabel
-                    {
-                        Name = "Song Name",
-                        Width = 240,
-                        Height = 20,
-                        XPosition = 0,
-                        YPosition = -2,
-                        FontSize = 14,
-                        FormatString = "{song}",
-                        Color = Colors.White,
-                        Alignment = CustomLabel.TextAlignment.Right,
-                    },
-                    new CustomLabel
-                    {
-                        Name = "Artist",
-                        Width = 240,
-                        Height = 20,
-                        XPosition = 0,
-                        YPosition = 13,
-                        FontSize = 12,
-                        FormatString = "{artist}",
-                        Color = Color.FromRgb(170, 170, 170),
-                        Alignment = CustomLabel.TextAlignment.Right,
-                    },
-                },
-            };
-        }
-
-        private void SelectProfile(string profileName)
-        {
-            Debug.Assert(_settings.Profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}");
-
-            // Get new profile. Map to the app settings properties to trigger notification changes
-            _currentProfile = _settings.Profiles[profileName];
-
-            AlbumArtPopup = _currentProfile.AlbumArtPopupSettings;
-            AlbumArt = _currentProfile.AlbumArtSettings;
-            AudioBand = _currentProfile.AudioBandSettings;
-            CustomLabels = _currentProfile.CustomLabelSettings;
-            NextButton = _currentProfile.NextButtonSettings;
-            PreviousButton = _currentProfile.PreviousButtonSettings;
-            PlayPauseButton = _currentProfile.PlayPauseButtonSettings;
-            ProgressBar = _currentProfile.ProgressBarSettings;
-            RepeatModeButton = _currentProfile.RepeatModeButtonSettings;
-            ShuffleModeButton = _currentProfile.ShuffleModeButtonSettings;
-
-            ProfileChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private string GetUniqueProfileName(string name)
         {
             string newName = name;
             int count = 0;
-            while (_settings.Profiles.ContainsKey(newName))
+            while (_profiles.ContainsKey(newName))
             {
                 newName += count;
             }
@@ -402,6 +272,37 @@ namespace AudioBand.Settings
                 File.Copy(SettingsFilePath, backupPath, true);
                 Logger.Info("Creating new default settings. Backup created at {backup}", backupPath);
                 CreateDefaultSettingsFile();
+            }
+        }
+
+        private void InitProfiles()
+        {
+            var mapper = ProfileMappingConfiguration.CreateMapper();
+
+            // If profiles are somehow null, then create a default one.
+            if (_settings.Profiles == null)
+            {
+                _settings.CurrentProfileName = SettingsV3.DefaultProfileName;
+                _profiles = new Dictionary<string, UserProfile>
+                {
+                    {SettingsV3.DefaultProfileName, UserProfile.CreateInitialProfile()},
+                };
+
+                return;
+            }
+
+            _profiles = _settings.Profiles.ToDictionary(
+                keyValPair => keyValPair.Key,
+                keyValPair =>
+                {
+                    var profile = mapper.Map<ProfileV3, UserProfile>(keyValPair.Value);
+                    profile.Name = keyValPair.Key;
+                    return profile;
+                });
+
+            if (_settings.CurrentProfileName == null || !_profiles.ContainsKey(_settings.CurrentProfileName))
+            {
+                _settings.CurrentProfileName = _profiles.First().Key;
             }
         }
     }

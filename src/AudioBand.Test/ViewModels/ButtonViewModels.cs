@@ -5,7 +5,7 @@ using AudioBand.AudioSource;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
-using AudioBand.ViewModels;
+using AudioBand.UI;
 using Moq;
 using Xunit;
 
@@ -27,11 +27,11 @@ namespace AudioBand.Test
         }
 
         [Fact]
-        public void NextButton_ProfilesChanged_ListensforProfileChanges()
+        public void NextButton_ProfilesChanged_ListensForProfileChanges()
         {
-            var first = new NextButton() {Height = 1};
-            var second = new NextButton() {Height = 2};
-            _appSettings.SetupSequence(m => m.NextButton)
+            var first = new UserProfile() { NextButton = new NextButton() {Height = 1}};
+            var second = new UserProfile() { NextButton = new NextButton() { Height = 2}};
+            _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
                 .Returns(second);
 
@@ -39,19 +39,19 @@ namespace AudioBand.Test
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
-            Assert.Equal(first.Height, vm.Height);
+            Assert.Equal(first.NextButton.Height, vm.Height);
             _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
             Assert.False(vm.IsEditing);
             Assert.True(raised);
-            Assert.Equal(second.Height, vm.Height);
+            Assert.Equal(second.NextButton.Height, vm.Height);
         }
 
 
         [Fact]
         public async Task NextButton_NextCommandExecuted_CallsNextTrack()
         {
-            _appSettings.SetupGet(m => m.NextButton).Returns(new NextButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile() {NextButton = new NextButton()});
             var audioSourceMock = new Mock<IInternalAudioSource>();
             audioSourceMock.Setup(m => m.NextTrackAsync()).Returns(Task.CompletedTask);
             _session.SetupGet(m => m.CurrentAudioSource).Returns(audioSourceMock.Object);
@@ -64,9 +64,9 @@ namespace AudioBand.Test
         [Fact]
         public void PlayPauseButton_ProfileChanged_ListensForProfileChanges()
         {
-            var first = new PlayPauseButton() {Height = 1};
-            var second = new PlayPauseButton() {Height = 2};
-            _appSettings.SetupSequence(m => m.PlayPauseButton)
+            var first = new UserProfile() {PlayPauseButton = new PlayPauseButton() {Height = 1}};
+            var second = new UserProfile() { PlayPauseButton = new PlayPauseButton() { Height = 2 } };
+            _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
                 .Returns(second);
 
@@ -74,18 +74,18 @@ namespace AudioBand.Test
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
-            Assert.Equal(first.Height, vm.Height);
+            Assert.Equal(first.PlayPauseButton.Height, vm.Height);
             _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
             Assert.False(vm.IsEditing);
             Assert.True(raised);
-            Assert.Equal(second.Height, vm.Height);
+            Assert.Equal(second.PlayPauseButton.Height, vm.Height);
         }
 
         [Fact]
         public void PlayPauseButton_PropertiesInContentAreChanged_ViewModelIsMarkedAsEditing()
         {
-            _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile(){PlayPauseButton = new PlayPauseButton()});
             var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);
 
             viewModel.PlayContent.Text = "";
@@ -104,7 +104,7 @@ namespace AudioBand.Test
         [Fact]
         public void PlayPauseButton_AudioSessionPlayStateChanged_ListensToEvent()
         {
-            _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile() { PlayPauseButton = new PlayPauseButton() });
             _session.SetupSequence(m => m.IsPlaying).Returns(true).Returns(false);
             var viewModel = new PlayPauseButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);
 
@@ -120,7 +120,7 @@ namespace AudioBand.Test
         [Fact]
         public async Task PlayPauseButton_PlayAndPauseCommandExecuted_AudioSourceIsNotified()
         {
-            _appSettings.SetupGet(m => m.PlayPauseButton).Returns(new PlayPauseButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile() { PlayPauseButton = new PlayPauseButton() });
             var audioSourceMock = new Mock<IInternalAudioSource>();
             var isPlayingSequence = new[] {true, false};
             var index = 0;
@@ -144,9 +144,9 @@ namespace AudioBand.Test
         [Fact]
         public void PreviousButton_ProfileChanged_ListensForProfileChanges()
         {
-            var first = new PreviousButton() { Height = 1 };
-            var second = new PreviousButton() { Height = 2 };
-            _appSettings.SetupSequence(m => m.PreviousButton)
+            var first = new UserProfile() {PreviousButton = new PreviousButton() {Height = 1}};
+            var second = new UserProfile() { PreviousButton = new PreviousButton() { Height = 2 } };
+            _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
                 .Returns(second);
 
@@ -154,18 +154,18 @@ namespace AudioBand.Test
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
-            Assert.Equal(first.Height, vm.Height);
+            Assert.Equal(first.PreviousButton.Height, vm.Height);
             _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
             Assert.False(vm.IsEditing);
             Assert.True(raised);
-            Assert.Equal(second.Height, vm.Height);
+            Assert.Equal(second.PreviousButton.Height, vm.Height);
         }
 
         [Fact]
         public async Task PreviousButton_PreviousCommand_CallsPreviousTrackOnAudioSource()
         {
-            _appSettings.SetupGet(m => m.PreviousButton).Returns(new PreviousButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile(){PreviousButton = new PreviousButton()});
             var audioSourceMock = new Mock<IInternalAudioSource>();
             audioSourceMock.Setup(m => m.PreviousTrackAsync()).Returns(Task.CompletedTask);
             _session.SetupGet(m => m.CurrentAudioSource).Returns(audioSourceMock.Object);
@@ -178,9 +178,9 @@ namespace AudioBand.Test
         [Fact]
         public void RepeatModeButton_ProfileChanged_ListensForProfileChanges()
         {
-            var first = new RepeatModeButton() { Height = 1 };
-            var second = new RepeatModeButton() { Height = 2 };
-            _appSettings.SetupSequence(m => m.RepeatModeButton)
+            var first = new UserProfile() {RepeatModeButton = new RepeatModeButton() {Height = 1}};
+            var second = new UserProfile() { RepeatModeButton = new RepeatModeButton() { Height = 2 } };
+            _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
                 .Returns(second);
 
@@ -188,18 +188,18 @@ namespace AudioBand.Test
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
-            Assert.Equal(first.Height, vm.Height);
+            Assert.Equal(first.RepeatModeButton.Height, vm.Height);
             _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
             Assert.False(vm.IsEditing);
             Assert.True(raised);
-            Assert.Equal(second.Height, vm.Height);
+            Assert.Equal(second.RepeatModeButton.Height, vm.Height);
         }
 
         [Fact]
         public void RepeatModeButton_ContentPropertiesAreModified_ViewModelIsMarkedAsEditing()
         {
-            _appSettings.SetupGet(m => m.RepeatModeButton).Returns(new RepeatModeButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile(){RepeatModeButton = new RepeatModeButton()});
             var viewModel = new RepeatModeButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);
 
             Assert.False(viewModel.RepeatTrackContent.IsEditing);
@@ -220,7 +220,7 @@ namespace AudioBand.Test
             audiosourceMock.Setup(m => m.SetRepeatModeAsync(It.IsAny<RepeatMode>()))
                 .Callback((RepeatMode mode) => Assert.Equal(repeatSequence[index++], mode))
                 .Returns(Task.CompletedTask);
-            _appSettings.SetupGet(m => m.RepeatModeButton).Returns(new RepeatModeButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile(){RepeatModeButton = new RepeatModeButton()});
             _session.SetupGet(m => m.CurrentAudioSource).Returns(audiosourceMock.Object);
             _session.SetupSequence(m => m.RepeatMode)
                 .Returns(RepeatMode.RepeatContext)
@@ -241,9 +241,9 @@ namespace AudioBand.Test
         [Fact]
         public void ShuffleModeButton_ProfileChanged_ListensForProfileChanges()
         {
-            var first = new ShuffleModeButton() { Height = 1 };
-            var second = new ShuffleModeButton() { Height = 2 };
-            _appSettings.SetupSequence(m => m.ShuffleModeButton)
+            var first = new UserProfile() {ShuffleModeButton = new ShuffleModeButton() {Height = 1}};
+            var second = new UserProfile() { ShuffleModeButton = new ShuffleModeButton() { Height = 2 } };
+            _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
                 .Returns(second);
 
@@ -251,18 +251,18 @@ namespace AudioBand.Test
             bool raised = false;
             vm.PropertyChanged += (_, __) => raised = true;
 
-            Assert.Equal(first.Height, vm.Height);
+            Assert.Equal(first.ShuffleModeButton.Height, vm.Height);
             _appSettings.Raise(m => m.ProfileChanged += null, EventArgs.Empty);
 
             Assert.False(vm.IsEditing);
             Assert.True(raised);
-            Assert.Equal(second.Height, vm.Height);
+            Assert.Equal(second.ShuffleModeButton.Height, vm.Height);
         }
 
         [Fact]
         public void ShuffleModeButton_ContentIsEdited_ViewModelIsMarkedAsEditing()
         {
-            _appSettings.SetupGet(m => m.ShuffleModeButton).Returns(new ShuffleModeButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile(){ShuffleModeButton = new ShuffleModeButton()});
             var vm = new ShuffleModeButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);
 
             vm.ShuffleOnContent.Text = "A";
@@ -281,7 +281,7 @@ namespace AudioBand.Test
         [Fact]
         public async Task ShuffleModeButton_ShuffleCommandExecuted_TogglesShuffle()
         {
-            _appSettings.SetupGet(m => m.ShuffleModeButton).Returns(new ShuffleModeButton());
+            _appSettings.SetupGet(m => m.CurrentProfile).Returns(new UserProfile() { ShuffleModeButton = new ShuffleModeButton() });
             var vm = new ShuffleModeButtonViewModel(_appSettings.Object, _dialog.Object, _session.Object, _messageBus.Object);
             var audioSourceMock = new Mock<IInternalAudioSource>();
             _session.SetupGet(m => m.CurrentAudioSource).Returns(audioSourceMock.Object);

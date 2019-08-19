@@ -1,0 +1,63 @@
+﻿<Window x:Class="AudioBand.UI.RenameProfileDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:audioband="clr-namespace:AudioBand.UI"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="RenameProfileDialog"
+        Width="450"
+        Height="200"
+        MinWidth="300"
+        MinHeight="180"
+        d:DataContext="{d:DesignInstance audioband:RenameProfileDialogViewModel,
+                                         IsDesignTimeCreatable=True}"
+        Background="{audioband:ThemeResource SystemAltHighColor}"
+        Foreground="{audioband:ThemeResource SystemBaseHighColor}"
+        Icon="pack://application:,,,/AudioBand;component/audioband.ico"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        mc:Ignorable="d">
+    <i:Interaction.Behaviors>
+        <audioband:AppUserModelID />
+        <audioband:DpiScaling />
+    </i:Interaction.Behaviors>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+                <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   FontSize="{StaticResource TitleFontSize}"
+                   Text="{Binding CurrentName, StringFormat={StaticResource RenameProfileDialogTitle}}"
+                   TextWrapping="Wrap" />
+        <TextBox x:Name="NameInput"
+                 Grid.Row="1"
+                 Margin="0,20"
+                 Text="{Binding NewProfileName, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+        <StackPanel Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button x:Name="OkButton"
+                    Width="100"
+                    Margin="8,0"
+                    Command="{Binding OkCommand}"
+                    Content="{StaticResource OkButtonText}" />
+            <Button x:Name="CancelButton"
+                    Width="100"
+                    Margin="0"
+                    Command="{Binding CancelCommand}"
+                    Content="{StaticResource CancelButtonText}"
+                    IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

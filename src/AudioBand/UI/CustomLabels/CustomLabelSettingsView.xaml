@@ -1,0 +1,178 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:audioband="clr-namespace:AudioBand.UI"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:models="clr-namespace:AudioBand.Models">
+    <DataTemplate DataType="{x:Type audioband:CustomLabelViewModel}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <audioband:SharedDictionary Source="../Resources/Shared.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/RangeSliderStyles.xaml" />
+                    <audioband:SharedDictionary Source="../LayoutSettingsTemplate.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource CustomLabelNameSectionText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelNameDescription}" />
+            <TextBox Width="150"
+                     metro:TextBoxHelper.ClearTextButton="True"
+                     Text="{Binding Name, Mode=TwoWay}" />
+            <ContentPresenter Margin="{StaticResource SectionMargin}"
+                              Content="{Binding}"
+                              ContentTemplate="{StaticResource LayoutSettingsTemplate}" />
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource CustomLabelFormatSectionText}" />
+            <TextBlock x:Name="CustomLabelFormatHelpLink"
+                       Focusable="False"
+                       Style="{StaticResource DescriptionTextBlock}">
+                <Run Text="{StaticResource CustomLabelTextFormatDescription}" />
+                .
+                <TextBlock>
+                    <Hyperlink>
+                        <Run Text="{StaticResource CustomLabelTextFormatHelpLink}" />
+                    </Hyperlink>
+                    <TextBlock.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.GotFocus">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="FormatHelpPopup" Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="FrameworkElement.LostFocus">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="FormatHelpPopup" Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="0" Value="False" />
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </TextBlock.Triggers>
+                </TextBlock>
+            </TextBlock>
+            <TextBox Width="400"
+                     metro:TextBoxHelper.ClearTextButton="True"
+                     Text="{Binding FormatString, Mode=TwoWay}" />
+            <Popup x:Name="FormatHelpPopup"
+                   AllowsTransparency="True"
+                   Placement="Top"
+                   PlacementTarget="{x:Reference CustomLabelFormatHelpLink}"
+                   PopupAnimation="Slide"
+                   StaysOpen="False">
+                <Border Margin="4"
+                        Padding="4"
+                        Background="{audioband:ThemeResource SystemChromeMediumLowColor}"
+                        BorderBrush="{audioband:ThemeResource SystemChromeHighColor}"
+                        BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect Opacity="0.3" ShadowDepth="0" />
+                    </Border.Effect>
+                    <TextBlock FontSize="{StaticResource BodyFontSize}" Foreground="{audioband:ThemeResource SystemBaseHighColor}">
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpText}" /><LineBreak />
+                        <Bold>Tags</Bold> <LineBreak />
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextTags}" /><LineBreak />
+                        <Bold>Styles</Bold> <LineBreak />
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextStyles}" /><LineBreak />
+                        <Bold>Colors</Bold> <LineBreak />
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextColors}" /><LineBreak />
+                        <Bold>Example formats</Bold> <LineBreak />
+                        <TextBlock Text="{StaticResource CustomLabelFormatHelpTextExamples}" /><LineBreak />
+                    </TextBlock>
+                </Border>
+            </Popup>
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource CustomLabelFontSectionText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelAlignmentDescription}" />
+            <ComboBox IsEditable="False"
+                      ItemsSource="{Binding TextAlignValues}"
+                      SelectedItem="{Binding TextAlignment, Mode=TwoWay}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelFontFamilyDescription}" />
+            <ComboBox Width="400"
+                      IsEditable="True"
+                      ItemTemplate="{StaticResource FontFamilyComboBoxItemDataTemplate}"
+                      ItemsSource="{Binding Source={x:Static Fonts.SystemFontFamilies}}"
+                      SelectedValue="{Binding FontFamily}"
+                      SelectedValuePath="Source" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelFontSizeDescription}" />
+            <metro:NumericUpDown audioband:NumericInput.Type="FontSize" Value="{Binding FontSize, Mode=TwoWay}" />
+            <audioband:ColorPicker Title="{StaticResource CustomLabelFontColorDescription}"
+                                   DialogService="{Binding Path=DialogService}"
+                                   Color="{Binding Path=Color}" />
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource CustomLabelOverflowSectionText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelOverflowDescription}" />
+            <ComboBox ItemTemplate="{StaticResource EnumDescriptorItemTemplate}"
+                      ItemsSource="{Binding TextOverflowValues}"
+                      SelectedValue="{Binding TextOverflow}"
+                      SelectedValuePath="Value" />
+            <ItemsControl>
+                <ItemsControl.Style>
+                    <Style TargetType="{x:Type ItemsControl}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding TextOverflow}" Value="{x:Static models:TextOverflow.Scroll}">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.Style>
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelScrollBehaviorDescription}" />
+                <ComboBox Width="300"
+                          ItemTemplate="{StaticResource EnumDescriptorItemTemplate}"
+                          ItemsSource="{Binding ScrollBehaviorValues}"
+                          SelectedValue="{Binding ScrollBehavior}"
+                          SelectedValuePath="Value" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelScrollSpeedDescription}" />
+                <metro:NumericUpDown audioband:NumericInput.Type="WholeNumber" Value="{Binding ScrollSpeed, Mode=TwoWay, Converter={x:Static audioband:Converters.TimeSpanToMs}, Delay=700}" />
+            </ItemsControl>
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource CustomLabelEffectsSectionText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelTextEffectDescription}" />
+            <ComboBox ItemTemplate="{StaticResource EnumDescriptorItemTemplate}"
+                      ItemsSource="{Binding FadeEffectValues}"
+                      SelectedValue="{Binding FadeEffect}"
+                      SelectedValuePath="Value" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource CustomLabelTextFadeDescription}" />
+            <metro:RangeSlider Width="400"
+                               HorizontalAlignment="Left"
+                               AutoToolTipPlacement="TopLeft"
+                               AutoToolTipPrecision="2"
+                               IsMoveToPointEnabled="True"
+                               LowerValue="{Binding LeftFadeOffset}"
+                               Maximum="1.0"
+                               MinRange="0"
+                               MinRangeWidth="0"
+                               Minimum="0.0"
+                               Style="{StaticResource RangeSliderStyle}"
+                               TickFrequency="0.1"
+                               TickPlacement="BottomRight"
+                               UpperValue="{Binding RightFadeOffset}" />
+
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

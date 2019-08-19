@@ -1,0 +1,92 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:audioband="clr-namespace:AudioBand.UI"
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                    xmlns:templateSelectors="clr-namespace:AudioBand.UI.TemplateSelectors">
+    <DataTemplate DataType="{x:Type audioband:AudioSourceSettingsCollectionViewModel}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <audioband:SharedDictionary Source="../Resources/Shared.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <ItemsControl ItemsSource="{Binding SettingsList}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="0,4">
+                        <StackPanel Visibility="{Binding Visible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
+                            <FrameworkElement.Resources>
+                                <DataTemplate x:Key="String">
+                                    <TextBox Height="{StaticResource DefaultControlHeight}"
+                                             metro:TextBoxHelper.ClearTextButton="True"
+                                             IsReadOnly="{Binding ReadOnly}"
+                                             Text="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                                             TextWrapping="Wrap" />
+                                </DataTemplate>
+                                <DataTemplate x:Key="Int">
+                                    <metro:NumericUpDown Height="{StaticResource DefaultControlHeight}"
+                                                         audioband:NumericInput.Type="Integer"
+                                                         Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" />
+                                </DataTemplate>
+                                <DataTemplate x:Key="UInt">
+                                    <metro:NumericUpDown Height="{StaticResource DefaultControlHeight}"
+                                                         audioband:NumericInput.Type="Positive"
+                                                         Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static audioband:Converters.CoerceNumber}}" />
+                                </DataTemplate>
+                                <DataTemplate x:Key="Bool">
+                                    <metro:ToggleSwitch Height="{StaticResource DefaultControlHeight}"
+                                                        IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static audioband:Converters.CoerceNumber}}"
+                                                        OffLabel=""
+                                                        OnLabel="" />
+                                </DataTemplate>
+                                <DataTemplate x:Key="Password">
+                                    <Grid Height="{StaticResource DefaultControlHeight}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <PasswordBox Grid.Column="0">
+                                            <i:Interaction.Behaviors>
+                                                <audioband:PasswordBehaviour Password="{Binding Value, Mode=TwoWay}" />
+                                            </i:Interaction.Behaviors>
+                                        </PasswordBox>
+                                        <TextBlock Grid.Column="1"
+                                                   Margin="4,0"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="20"
+                                                   Foreground="{DynamicResource ValidationBrush5}"
+                                                   Text="&#xE7BA;">
+                                            <FrameworkElement.ToolTip>
+                                                <TextBlock Text="{StaticResource SensitiveSettingsWarning}" />
+                                            </FrameworkElement.ToolTip>
+                                        </TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                                <templateSelectors:AudioSourceSettingSelector x:Key="ValueTemplateSelector"
+                                                                              BoolTemplate="{StaticResource Bool}"
+                                                                              IntTemplate="{StaticResource Int}"
+                                                                              PasswordStringTemplate="{StaticResource Password}"
+                                                                              StringTemplate="{StaticResource String}"
+                                                                              UIntTemplate="{StaticResource UInt}" />
+                            </FrameworkElement.Resources>
+                            <TextBlock FontSize="16" Text="{Binding Name}" />
+                            <TextBlock FontSize="{StaticResource BodyFontSize}"
+                                       Foreground="{audioband:ThemeResource SystemBaseMediumColor}"
+                                       Text="{Binding Description}"
+                                       Visibility="{Binding Description, Converter={x:Static audioband:Converters.StringToVisibility}}" />
+                            <ContentControl Margin="0,4,0,0"
+                                            Content="{Binding}"
+                                            ContentTemplateSelector="{StaticResource ValueTemplateSelector}" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DataTemplate>
+</ResourceDictionary>

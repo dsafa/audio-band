@@ -20,69 +20,25 @@ namespace AudioBand.Settings
         string AudioSource { get; set; }
 
         /// <summary>
-        /// Gets the saved album art popup model.
-        /// </summary>
-        AlbumArtPopup AlbumArtPopup { get; }
-
-        /// <summary>
-        /// Gets the saved album art model.
-        /// </summary>
-        AlbumArt AlbumArt { get; }
-
-        /// <summary>
-        /// Gets the saved audio band model.
-        /// </summary>
-        AudioBand.Models.AudioBand AudioBand { get; }
-
-        /// <summary>
-        /// Gets the saved labels.
-        /// </summary>
-        List<CustomLabel> CustomLabels { get; }
-
-        /// <summary>
-        /// Gets the saved button model.
-        /// </summary>
-        NextButton NextButton { get; }
-
-        /// <summary>
-        /// Gets the saved previous button model.
-        /// </summary>
-        PreviousButton PreviousButton { get; }
-
-        /// <summary>
-        /// Gets the saved play pause button model.
-        /// </summary>
-        PlayPauseButton PlayPauseButton { get; }
-
-        /// <summary>
-        /// Gets the repeat mode button model.
-        /// </summary>
-        RepeatModeButton RepeatModeButton { get; }
-
-        /// <summary>
-        /// Gets the shuffle mode button model.
-        /// </summary>
-        ShuffleModeButton ShuffleModeButton { get; }
-
-        /// <summary>
-        /// Gets the saved progress bar model.
-        /// </summary>
-        ProgressBar ProgressBar { get; }
-
-        /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
         List<AudioSourceSettings> AudioSourceSettings { get; }
 
         /// <summary>
-        /// Gets or sets the current profile.
+        /// Gets the current profile.
         /// </summary>
-        string CurrentProfile { get; set; }
+        UserProfile CurrentProfile { get; }
 
         /// <summary>
         /// Gets the list of profiles.
         /// </summary>
-        List<string> Profiles { get; }
+        IEnumerable<UserProfile> Profiles { get; }
+
+        /// <summary>
+        /// Selects a new profile.
+        /// </summary>
+        /// <param name="profileName">The name of the profile to switch to.</param>
+        void SelectProfile(string profileName);
 
         /// <summary>
         /// Creates a new profile.

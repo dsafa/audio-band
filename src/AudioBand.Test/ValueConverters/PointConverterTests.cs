@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 using Xunit;
-using PointConverter = AudioBand.ValueConverters.PointConverter;
+using PointConverter = AudioBand.UI.PointConverter;
 
 namespace AudioBand.Test
 {

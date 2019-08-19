@@ -105,7 +105,7 @@
     <Compile Include="ValueConverters\TimeSpanToMsConverterTests.cs" />
     <Compile Include="ViewModels\AlbumArtPopupViewModelTests.cs" />
     <Compile Include="ViewModels\AlbumArtViewModelTests.cs" />
-    <Compile Include="ViewModels\AudioBandViewModelTests.cs" />
+    <Compile Include="ViewModels\GeneralSettingsViewModelTests.cs" />
     <Compile Include="ViewModels\CustomLabelsViewModelTests.cs" />
     <Compile Include="Settings\SettingsMigrationTests.cs" />
     <Compile Include="ViewModels\AudioSourceSettingsCollectionTests.cs" />

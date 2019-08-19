@@ -1,7 +1,7 @@
 ﻿#pragma warning disable
 namespace AudioBand.Settings.Models.V2
 {
-    internal class AlbumArtPopupSettings
+    public class AlbumArtPopupSettings
     {
         public bool IsVisible { get; set; }
 
