@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AudioBand.Models;
-using AudioBand.Settings.Models.V3;
 using AudioBand.Settings.Persistence;
 
 namespace AudioBand.Settings
@@ -174,14 +173,14 @@ namespace AudioBand.Settings
         private void CheckAndLoadProfiles(PersistedSettingsDto dto)
         {
             // If there are no profiles, create new ones.
-            // Note we are not creating the profiles directly into the persisted settings,
+            // Note we are not creating the profiles directly into the persisted settings dto,
             // they will be saved later.
             if (dto.Profiles == null || !dto.Profiles.Any())
             {
-                dto.CurrentProfileName = SettingsV3.DefaultProfileName;
+                dto.CurrentProfileName = UserProfile.DefaultProfileName;
                 _profiles = new Dictionary<string, UserProfile>
                 {
-                    { SettingsV3.DefaultProfileName, UserProfile.CreateDefaultProfile(UserProfile.DefaultProfileName) },
+                    { UserProfile.DefaultProfileName, UserProfile.CreateDefaultProfile(UserProfile.DefaultProfileName) },
                 };
 
                 return;
