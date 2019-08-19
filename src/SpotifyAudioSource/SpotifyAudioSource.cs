@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using AudioBand.AudioSource;
-using SpotifyAPI;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
@@ -364,7 +363,6 @@ namespace SpotifyAudioSource
             _auth?.Stop();
             _auth = new AuthorizationCodeAuth(ClientId, ClientSecret, url, url, Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying);
 
-            Logger.Debug($"Using proxy {UseProxy}, {_proxyConfig.Host} {_proxyConfig.Password}, {_proxyConfig.Username}, {_proxyConfig.GetUri()}");
             if (UseProxy)
             {
                 _auth.ProxyConfig = _proxyConfig;
