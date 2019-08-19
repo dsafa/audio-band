@@ -19,52 +19,52 @@ namespace AudioBand.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets the saved album art popup model.
+        /// Gets or sets the saved album art popup model.
         /// </summary>
         public AlbumArtPopup AlbumArtPopup { get; set; }
 
         /// <summary>
-        /// Gets the saved album art model.
+        /// Gets or sets the saved album art model.
         /// </summary>
         public AlbumArt AlbumArt { get; set; }
 
         /// <summary>
-        /// Gets the saved general settings model.
+        /// Gets or sets the saved general settings model.
         /// </summary>
         public GeneralSettings GeneralSettings { get; set; }
 
         /// <summary>
-        /// Gets the saved labels.
+        /// Gets or sets the saved labels.
         /// </summary>
         public List<CustomLabel> CustomLabels { get; set; }
 
         /// <summary>
-        /// Gets the saved button model.
+        /// Gets or sets the saved button model.
         /// </summary>
         public NextButton NextButton { get; set; }
 
         /// <summary>
-        /// Gets the saved previous button model.
+        /// Gets or sets the saved previous button model.
         /// </summary>
         public PreviousButton PreviousButton { get; set; }
 
         /// <summary>
-        /// Gets the saved play pause button model.
+        /// Gets or sets the saved play pause button model.
         /// </summary>
         public PlayPauseButton PlayPauseButton { get; set; }
 
         /// <summary>
-        /// Gets the repeat mode button model.
+        /// Gets or sets the repeat mode button model.
         /// </summary>
         public RepeatModeButton RepeatModeButton { get; set; }
 
         /// <summary>
-        /// Gets the shuffle mode button model.
+        /// Gets or sets the shuffle mode button model.
         /// </summary>
         public ShuffleModeButton ShuffleModeButton { get; set; }
 
         /// <summary>
-        /// Gets the saved progress bar model.
+        /// Gets or sets the saved progress bar model.
         /// </summary>
         public ProgressBar ProgressBar { get; set; }
 

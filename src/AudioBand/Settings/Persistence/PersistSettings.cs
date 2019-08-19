@@ -34,16 +34,19 @@ namespace AudioBand.Settings.Persistence
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<PersistSettings>();
         private static readonly MapperConfiguration ProfileMappingConfiguration = new MapperConfiguration(cfg => cfg.AddProfile<UserProfileToProfileV3Profile>());
 
+        /// <inheritdoc />
         public void WriteSettings(PersistedSettingsDto settings)
         {
             SerializeSettings(DtoToCurrentSettings(settings));
         }
 
+        /// <inheritdoc />
         public PersistedSettingsDto ReadSettings()
         {
             return CurrentSettingsToDto(InitAndLoadSettings());
         }
 
+        /// <inheritdoc />
         public void WriteProfiles(IEnumerable<UserProfile> profiles, string path)
         {
             // Just write out the settings object stripped of everything else to make it easier to import/export
@@ -55,6 +58,7 @@ namespace AudioBand.Settings.Persistence
             Toml.WriteFile(exportObject, path, TomlHelper.DefaultSettings);
         }
 
+        /// <inheritdoc />
         public IEnumerable<UserProfile> ReadProfiles(string path)
         {
             var tomlFile = Toml.ReadFile(path, TomlHelper.DefaultSettings);
@@ -65,6 +69,10 @@ namespace AudioBand.Settings.Persistence
 
         private CurrentSettings InitAndLoadSettings()
         {
+            // Tries to load settings from the path.
+            // 1. If no settings exist, then create a new default settings file.
+            // 2. If there are errors with loading settings, then backup and create a new settings file.
+            // 3. If the settings file is an older version, then run migrations to update to the latest format.
             if (!Directory.Exists(SettingsDirectory))
             {
                 Directory.CreateDirectory(SettingsDirectory);
@@ -95,7 +103,7 @@ namespace AudioBand.Settings.Persistence
             var tomlFile = Toml.ReadFile(path, TomlHelper.DefaultSettings);
             var version = tomlFile["Version"].Get<string>();
 
-            // Create backup
+            // Create backup before migration
             if (version != CurrentSettingsVersion)
             {
                 Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), TomlHelper.DefaultSettings);

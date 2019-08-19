@@ -6,8 +6,14 @@ using AutoMapper;
 
 namespace AudioBand.Settings.MappingProfiles
 {
+    /// <summary>
+    /// Mapping profile that maps from version 3 settings to version 4 settings.
+    /// </summary>
     public class SettingsV3ToSettingsV4Profile : Profile
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingsV3ToSettingsV4Profile"/> class.
+        /// </summary>
         public SettingsV3ToSettingsV4Profile()
         {
             CreateMap<SettingsV3, SettingsV4>()
