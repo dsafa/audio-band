@@ -28,7 +28,7 @@ namespace AudioBand.Settings.Persistence
             { "4", typeof(AudioBand.Settings.Models.v4.SettingsV4) },
         };
 
-        private static readonly string CurrentSettingsVersion = "3";
+        private static readonly string CurrentSettingsVersion = "4";
         private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
         private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<PersistSettings>();

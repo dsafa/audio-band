@@ -23,11 +23,9 @@ namespace AudioBand.Settings.Persistence
             cfg.ConfigureType<double>(type => type.WithConversionFor<TomlInt>(c => c
                 .FromToml(tml => tml.Value)));
             cfg.ConfigureType<string>(type => type.WithConversionFor<TomlInt>(c => c
-                .FromToml(tml => tml.ToString())
-                .ToToml(value => int.Parse(value))));
+                .FromToml(tml => tml.ToString())));
             cfg.ConfigureType<string>(type => type.WithConversionFor<TomlBool>(c => c
-                .FromToml(tml => tml.ToString())
-                .ToToml(bool.Parse)));
+                .FromToml(tml => tml.ToString())));
         });
     }
 }

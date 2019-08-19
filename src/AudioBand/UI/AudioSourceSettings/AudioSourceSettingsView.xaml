@@ -30,7 +30,7 @@
                                 <DataTemplate x:Key="Int">
                                     <metro:NumericUpDown Height="{StaticResource DefaultControlHeight}"
                                                          audioband:NumericInput.Type="Integer"
-                                                         Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" />
+                                                         Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static audioband:Converters.CoerceNumber}}" />
                                 </DataTemplate>
                                 <DataTemplate x:Key="UInt">
                                     <metro:NumericUpDown Height="{StaticResource DefaultControlHeight}"
@@ -39,7 +39,7 @@
                                 </DataTemplate>
                                 <DataTemplate x:Key="Bool">
                                     <metro:ToggleSwitch Height="{StaticResource DefaultControlHeight}"
-                                                        IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static audioband:Converters.CoerceNumber}}"
+                                                        IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                                                         OffLabel=""
                                                         OnLabel="" />
                                 </DataTemplate>
