@@ -1,5 +1,5 @@
 ﻿using AudioBand.Models;
-using AudioBand.Settings.Models.v3;
+using AudioBand.Settings.Models.V3;
 using AutoMapper;
 
 namespace AudioBand.Settings.MappingProfiles

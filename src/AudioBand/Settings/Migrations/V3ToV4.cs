@@ -1,6 +1,6 @@
 ﻿using AudioBand.Settings.MappingProfiles;
-using AudioBand.Settings.Models.v3;
-using AudioBand.Settings.Models.v4;
+using AudioBand.Settings.Models.V3;
+using AudioBand.Settings.Models.V4;
 
 namespace AudioBand.Settings.Migrations
 {

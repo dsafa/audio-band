@@ -11,7 +11,7 @@ using Nett;
 using NLog;
 
 // Alias the current settings version
-using CurrentSettings = AudioBand.Settings.Models.v4.SettingsV4;
+using CurrentSettings = AudioBand.Settings.Models.V4.SettingsV4;
 
 namespace AudioBand.Settings.Persistence
 {
@@ -24,8 +24,8 @@ namespace AudioBand.Settings.Persistence
         {
             { "0.1", typeof(AudioBand.Settings.Models.V1.AudioBandSettings) },
             { "2", typeof(AudioBand.Settings.Models.V2.Settings) },
-            { "3", typeof(AudioBand.Settings.Models.v3.SettingsV3) },
-            { "4", typeof(AudioBand.Settings.Models.v4.SettingsV4) },
+            { "3", typeof(AudioBand.Settings.Models.V3.SettingsV3) },
+            { "4", typeof(AudioBand.Settings.Models.V4.SettingsV4) },
         };
 
         private static readonly string CurrentSettingsVersion = "4";

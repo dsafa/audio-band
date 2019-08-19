@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AudioBand.Models;
 
-namespace AudioBand.Settings.Models.v4
+namespace AudioBand.Settings.Models.V4
 {
     /// <summary>
     /// Version 4 of the settings.

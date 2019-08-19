@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using AudioBand.Models;
-using AudioBand.Settings.Models.v3;
+using AudioBand.Settings.Models.V3;
 using AudioBand.Settings.Persistence;
 
 namespace AudioBand.Settings
