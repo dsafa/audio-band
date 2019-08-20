@@ -8,7 +8,7 @@
     <title>Project layout </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Project layout ">
-    <meta name="generator" content="docfx 2.43.3.0">
+    <meta name="generator" content="docfx 2.44.0.0">
     
     <link rel="shortcut icon" href="../../favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -79,7 +79,7 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="project-layout">Project layout</h1>
 
-<p>Last commit at this time of writing / update: <code>a554bd34d3ea30f32b2819e35fba4130fd08af33</code></p>
+<p>Last commit at this time of writing / update: <code>f13b2f226991e46704684e060873e03b26441f0e</code></p>
 <p>Here are the main projects in the solution:</p>
 <ul>
 <li><strong>AudioBand</strong>: The is the &quot;main&quot; project where audioband lives</li>
@@ -90,30 +90,32 @@
 </ul>
 <h1 id="audioband-project">AudioBand project</h1>
 <h2 id="entry-point">Entry point</h2>
-<p>The entry point for audioband can be found in the <code>Deskband.cs</code> file. This is the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling <code>Application.Run()</code>, the user control is instantiated directly. The toolbar is implemented as a WPF usercontrol in <code>Views/AudioBandToolbar.xaml</code></p>
+<p>The entry point for audioband can be found in the <code>Deskband.cs</code> file. This is the composition root of the application. It's the equivalent of the main function in a normal winforms or wpf application but instead of calling <code>Application.Run()</code>, the root user control is instantiated directly. There is no <code>main window</code>. The toolbar is implemented as a WPF usercontrol in <code>UI/Toolbar/AudioBandToolbar.xaml</code></p>
 <h2 id="audiobandtoolbarxaml">AudioBandToolbar.xaml</h2>
 <p>This is the top level user control, equivalent to the main window in wpf or main form in winforms.</p>
 <h3 id="codebehind">Codebehind</h3>
 <p>The codebehind listens to size changes and notifies windows to update the deskband size.</p>
 <h3 id="viewmodel">ViewModel</h3>
-<p>The viewmodel for the toolbar can be found in <code>ViewModels/AudioBandToolbarViewModel</code>. It handles the context menu, loading the audio sources, and updating other view models when the audio source changes.</p>
+<p>The viewmodel for the toolbar can be found in <code>ViewModels/AudioBandToolbarViewModel</code>. It handles the context menu, loading the audio sources, and updating other view models when the audio source changes. When the toolbar is loaded, the <code>LoadCommand</code> is invoked, starting the step in initialization: loading the audio sources.</p>
 <h2 id="audio-source-loading">Audio source loading</h2>
-<p>Audio source loading is done by the <code>AudioSource/AudioSourceManager</code> class. Each audio source is loaded in their own app domain using the <code>AudioSourceHost</code> project. The creation and communication with the app domain is done through the <code>AudioSource/AudioSourceProxy</code> class. Currently, all audio sources are loaded at the start by the toolbar viewmodel, and there is no file system monitoring for new sources. When new audio sources are added, these steps are performed:</p>
+<p>Audio source loading is done by the <code>AudioSource/AudioSourceManager</code> class. Each audio source is loaded in their own app domain using the <code>AudioSourceHost</code> project. The creation and communication with the app domain is done through the <code>AudioSource/AudioSourceProxy</code> class. Currently, all audio sources are loaded at the start by the toolbar viewmodel, and there is no file system monitoring for new sources. For each audio source, these steps are performed:</p>
 <ol>
 <li>Add to the observable collection for the context menu</li>
 <li>Merge settings.
 <ol>
 <li>If there are already saved settings for the audio source, then the settings are applied to the audio source</li>
 <li>If there are no previously saved settings, then the default setting values are extracted and saved</li>
-<li>Viewmodels for these settings are built and added so they can be manipulated by the settings window</li>
+<li>Viewmodels for these settings are built and added so they can be manipulated in the settings window ui</li>
 </ol>
 </li>
 <li>If the audio source is selected in the settings, then it is activated.</li>
 </ol>
 <h2 id="app-settings-loading">App settings loading</h2>
-<p>App settings are loaded by the <code>Settings/AppSettings</code> class. It is just simple serialization in the <code>toml</code> format. Toml is used because at the start of the project, configuration was simple and the ability to change the values outside of audioband was desired. Toml was a good use case for that. Now, the settings have more nesting and more lists, it is less readable with toml but it is still workable.</p>
-<p>There is also a <code>Migrations</code> subfolder that contains code to settings migrations. These classes update old configuration files to the latest format.</p>
-<h2 id="viewmodels">ViewModels</h2>
+<p>App settings are loaded and exposed by the <code>Settings/AppSettings</code> class. Persistence is done through <code>Settings/Persistence/PersistSettings</code>. The serialization format for settings uses the <code>toml</code> format. Toml is used because when the project was created, configuration was simple and editing the file in a text editor was the way to change settings. Toml was a good use case for that. Now, the settings have more nesting and more lists, which is less readable with toml however there is now a settings UI so editing the file isn't required. So migration to another serialization format isn't something required for now.</p>
+<h3 id="settings-migrations">Settings migrations</h3>
+<p>As the settings evolve, the serialization format can change so there are settings migrations located in the <code>Migrations</code> subfolder. These classes update old configuration files to the latest format. If an older version of the settings is detected, then a lookup is done in <code>SettingsMigration.cs</code> to find the appropriate way to transform the settings file. Mapping is done with <code>AutoMapper</code>.</p>
+<h2 id="views-and-viewmodels">Views and ViewModels</h2>
+<p>Views and viewmodels are stored together in the <code>UI</code> subfolder.</p>
 <p>No MVVM frameworks are used, instead there is a <code>ViewModelBase</code> implementation and standard <code>ICommand</code> implementations.</p>
 <p><code>ViewModelBase</code> provides automatic implementations for</p>
 <ul>
@@ -141,13 +143,11 @@ public int Width
     set =&gt; SetProperty(Model, nameof(Model.Width), value); // Set the value in the model
 }
 </code></pre>
-<h2 id="views">Views</h2>
-<p>The xaml is store under the <code>Views</code> folder.</p>
 <h2 id="message-bus">Message bus</h2>
 <p>Under the <code>Messages</code> folder there is a simple <code>IMessageBus</code> interface. Messages are used sparingly for communicating between the settings window &lt;-&gt; toolbar and between view models.</p>
-<h2 id="behaviors">Behaviors</h2>
+<h2 id="other">Other</h2>
 <h3 id="dpi">Dpi</h3>
-<p>Since we are in an interop scenario, there are some issues with automatic dpi handling so it is done manually through the <code>DpiScaling</code> behavior.</p>
+<p>Since we are in an interop scenario, there are some issues with automatic dpi handling so it is done manually through the <code>DpiScaling</code> behavior located in the <code>UI/behaviors</code> folder.</p>
 <h1 id="audiosourcehost-project">AudioSourceHost project</h1>
 <p>The <code>AudioSourceHost</code> project is a library to load an audio source and exposes it via <code>MarshalByRef</code> objects for cross app domain communication. It uses the <code>Microsoft Extensibility Framework</code> to locate and load an <code>IAudioSource</code>.</p>
 </article>
