@@ -1,5 +1,6 @@
 # Audioband Documentation
-Here you will find links to get you started with AudioBand.
+Audio Band allows you to display song information in the Windows taskbar.
+Here you will find links to get you started with Audio Band.
 See below for installation. See the links on the side for more information.
 
 ## Quick Start
