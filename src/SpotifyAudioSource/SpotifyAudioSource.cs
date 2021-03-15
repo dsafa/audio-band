@@ -476,7 +476,8 @@ namespace SpotifyAudioSource
 
             var album = track.Album?.Name;
             var trackName = track.Name;
-            var artist = string.Join(", ", track.Artists?.Select(a => a.Name));
+            var artist = string.Join(", ", track.Artists?.Select(a => a?.Name));
+
             var trackLength = TimeSpan.FromMilliseconds(track.DurationMs);
 
             var trackUpdateInfo = new TrackInfoChangedEventArgs
