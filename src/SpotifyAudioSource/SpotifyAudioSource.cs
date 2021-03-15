@@ -1,15 +1,15 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using SpotifyAPI.Web;
+using SpotifyAPI.Web.Auth;
+using SpotifyAPI.Web.Enums;
+using SpotifyAPI.Web.Models;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
-using AudioBand.AudioSource;
-using SpotifyAPI.Web;
-using SpotifyAPI.Web.Auth;
-using SpotifyAPI.Web.Enums;
-using SpotifyAPI.Web.Models;
 using Image = System.Drawing.Image;
 using Timer = System.Timers.Timer;
 
@@ -467,16 +467,17 @@ namespace SpotifyAudioSource
             _currentTrackId = track.Id;
             _currentTrackName = track.Name;
 
-            string albumArtUrl = track.Album?.Images.FirstOrDefault()?.Url;
+            var albumArtUrl = track.Album?.Images.FirstOrDefault()?.Url;
             Image albumArtImage = null;
             if (albumArtUrl != null)
             {
                 albumArtImage = await GetAlbumArt(new Uri(albumArtUrl));
             }
 
-            string album = track.Album?.Name;
-            string trackName = track.Name;
-            string artist = track.Artists?.FirstOrDefault()?.Name;
+            var album = track.Album?.Name;
+            var trackName = track.Name;
+            var artist = string.Join(", ", track.Artists?.Select(a => a?.Name));
+
             var trackLength = TimeSpan.FromMilliseconds(track.DurationMs);
 
             var trackUpdateInfo = new TrackInfoChangedEventArgs
@@ -493,7 +494,7 @@ namespace SpotifyAudioSource
 
         private void NotifyPlayState(PlaybackContext context)
         {
-            bool isPlaying = context.IsPlaying;
+            var isPlaying = context.IsPlaying;
             if (isPlaying == _currentIsPlaying)
             {
                 return;
@@ -505,7 +506,7 @@ namespace SpotifyAudioSource
 
         private void NotifyTrackProgress(PlaybackContext context)
         {
-            int progress = context.ProgressMs;
+            var progress = context.ProgressMs;
             if (progress == _currentProgress)
             {
                 return;
@@ -522,7 +523,7 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            int vol = context.Device.VolumePercent;
+            var vol = context.Device.VolumePercent;
             if (vol == _currentVolumePercent)
             {
                 return;
@@ -534,7 +535,7 @@ namespace SpotifyAudioSource
 
         private void NotifyShuffle(PlaybackContext context)
         {
-            bool shuffle = context.ShuffleState;
+            var shuffle = context.ShuffleState;
             if (shuffle == _currentShuffle)
             {
                 return;
@@ -546,7 +547,7 @@ namespace SpotifyAudioSource
 
         private void NotifyRepeat(PlaybackContext context)
         {
-            RepeatState repeat = context.RepeatState;
+            var repeat = context.RepeatState;
             if (repeat == _currentRepeat)
             {
                 return;
