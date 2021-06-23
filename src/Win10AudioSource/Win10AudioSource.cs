@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using System.Timers;
 using AudioBand.AudioSource;
 using Windows.Foundation.Metadata;
 using Windows.Media;
@@ -12,6 +13,7 @@ namespace Win10AudioSource
 {
     public class Win10AudioSource : IAudioSource
     {
+        private readonly Timer _checkTimer = new Timer(1000);
         private GlobalSystemMediaTransportControlsSessionManager _mtcManager;
         private GlobalSystemMediaTransportControlsSession _currentSession;
 
@@ -41,8 +43,14 @@ namespace Win10AudioSource
 
         public IAudioSourceLogger Logger { get; set; }
 
+        public Win10AudioSource()
+        {
+            _checkTimer.Elapsed += OnTimerElapsed;
+        }
+
         public async Task ActivateAsync()
         {
+            _checkTimer.Start();
             if (!ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 7))
             {
                 Logger.Info("Audio source only available on windows 10 1809 and later");
@@ -51,13 +59,12 @@ namespace Win10AudioSource
 
             _mtcManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
             await UpdateSession(_mtcManager.GetCurrentSession());
-            _mtcManager.CurrentSessionChanged += MtcManagerOnCurrentSessionChanged;
         }
 
         public Task DeactivateAsync()
         {
+            _checkTimer.Stop();
             UnsubscribeFromSession();
-            _mtcManager.CurrentSessionChanged -= MtcManagerOnCurrentSessionChanged;
             _mtcManager = null;
 
             return Task.CompletedTask;
@@ -115,7 +122,10 @@ namespace Win10AudioSource
                 return;
             }
 
-            await _currentSession.TryChangePlaybackPositionAsync((long)newProgress.TotalSeconds);
+            if (!await _currentSession.TryChangePlaybackPositionAsync((long)newProgress.TotalSeconds))
+            {
+                Logger.Warn($"Failed to set playback for Win10 Audio Source.");
+            }
         }
 
         public async Task SetShuffleAsync(bool shuffleOn)
@@ -138,9 +148,11 @@ namespace Win10AudioSource
             await _currentSession.TryChangeAutoRepeatModeAsync(ToWindowsRepeatMode(newRepeatMode));
         }
 
-        private async void MtcManagerOnCurrentSessionChanged(GlobalSystemMediaTransportControlsSessionManager sender, CurrentSessionChangedEventArgs args)
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            await UpdateSession(sender.GetCurrentSession());
+            var session = _mtcManager.GetCurrentSession();
+
+            UpdateSession(session).GetAwaiter().GetResult();
         }
 
         private void CurrentSessionOnTimelinePropertiesChanged(GlobalSystemMediaTransportControlsSession sender, TimelinePropertiesChangedEventArgs args)

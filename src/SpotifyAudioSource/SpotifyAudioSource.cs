@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
 using AudioBand.AudioSource;
-using SpotifyAPI;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;

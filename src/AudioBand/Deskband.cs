@@ -7,7 +7,6 @@ using System.Windows;
 using AudioBand.AudioSource;
 using AudioBand.Logging;
 using AudioBand.Messages;
-using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.ViewModels;
 using AudioBand.Views;
