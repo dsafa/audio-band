@@ -361,7 +361,7 @@ namespace SpotifyAudioSource
             }
 
             Logger.Debug("Connecting to spotify");
-            var url = "http://localhost:" + LocalPort;
+            var url = $"http://localhost:{localPort}";
             _auth?.Stop();
             _auth = new AuthorizationCodeAuth(ClientId, ClientSecret, url, url, Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying);
 
@@ -398,7 +398,7 @@ namespace SpotifyAudioSource
 
                 Logger.Debug("Authorization recieved");
 
-                var token = await _auth.ExchangeCode(payload.Code);
+                Token token = await _auth.ExchangeCode(payload.Code);
                 UpdateAccessToken(token);
             }
             catch (Exception e)
@@ -467,22 +467,22 @@ namespace SpotifyAudioSource
             _currentTrackId = track.Id;
             _currentTrackName = track.Name;
 
-            var albumArtUrl = track.Album?.Images.FirstOrDefault()?.Url;
+            string albumArtUrl = track.Album?.Images.FirstOrDefault()?.Url;
             Image albumArtImage = null;
             if (albumArtUrl != null)
             {
                 albumArtImage = await GetAlbumArt(new Uri(albumArtUrl));
             }
 
-            var album = track.Album?.Name;
-            var trackName = track.Name;
-            var artist = string.Join(", ", track.Artists?.Select(a => a?.Name));
+            string album = track.Album?.Name;
+            string trackName = track.Name;
+            string artists = string.Join(", ", track.Artists?.Select(a => a?.Name));
 
             var trackLength = TimeSpan.FromMilliseconds(track.DurationMs);
 
             var trackUpdateInfo = new TrackInfoChangedEventArgs
             {
-                Artist = artist,
+                Artist = artists,
                 TrackName = trackName,
                 AlbumArt = albumArtImage,
                 Album = album,
@@ -494,7 +494,7 @@ namespace SpotifyAudioSource
 
         private void NotifyPlayState(PlaybackContext context)
         {
-            var isPlaying = context.IsPlaying;
+            bool isPlaying = context.IsPlaying;
             if (isPlaying == _currentIsPlaying)
             {
                 return;
@@ -506,7 +506,7 @@ namespace SpotifyAudioSource
 
         private void NotifyTrackProgress(PlaybackContext context)
         {
-            var progress = context.ProgressMs;
+            int progress = context.ProgressMs;
             if (progress == _currentProgress)
             {
                 return;
@@ -523,7 +523,7 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            var vol = context.Device.VolumePercent;
+            int vol = context.Device.VolumePercent;
             if (vol == _currentVolumePercent)
             {
                 return;
@@ -535,7 +535,7 @@ namespace SpotifyAudioSource
 
         private void NotifyShuffle(PlaybackContext context)
         {
-            var shuffle = context.ShuffleState;
+            bool shuffle = context.ShuffleState;
             if (shuffle == _currentShuffle)
             {
                 return;
@@ -547,7 +547,7 @@ namespace SpotifyAudioSource
 
         private void NotifyRepeat(PlaybackContext context)
         {
-            var repeat = context.RepeatState;
+            RepeatState repeat = context.RepeatState;
             if (repeat == _currentRepeat)
             {
                 return;
