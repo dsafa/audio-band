@@ -369,7 +369,7 @@ namespace SpotifyAudioSource
             }
 
             Logger.Debug("Connecting to spotify");
-            var url = $"http://localhost:{localPort}";
+            var url = $"http://localhost:{_localPort}";
             _auth?.Stop();
             _auth = new AuthorizationCodeAuth(ClientId, ClientSecret, url, url, Scope.UserModifyPlaybackState | Scope.UserReadPlaybackState | Scope.UserReadCurrentlyPlaying);
 
