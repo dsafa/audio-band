@@ -20,6 +20,8 @@ namespace SpotifyAudioSource
     /// </summary>
     public class SpotifyAudioSource : IAudioSource
     {
+        private const int MaxRetries = 8;
+        private const int RetriesOffset = 2000;
         private readonly SpotifyControls _spotifyControls = new SpotifyControls();
         private readonly Timer _checkSpotifyTimer = new Timer(1000);
         private readonly ProxyConfig _proxyConfig = new ProxyConfig();
@@ -75,6 +77,11 @@ namespace SpotifyAudioSource
 
         /// <inheritdoc />
         public IAudioSourceLogger Logger { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current Retry attempt.
+        /// </summary>
+        public int CurrentRetryAttempt { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the spotify client id.
@@ -263,6 +270,7 @@ namespace SpotifyAudioSource
 
             _checkSpotifyTimer.Stop();
             _currentTrackId = null;
+            Logger.Debug("Spotify has been deactivated.");
 
             return Task.CompletedTask;
         }
@@ -398,8 +406,15 @@ namespace SpotifyAudioSource
 
                 Logger.Debug("Authorization recieved");
 
-                Token token = await _auth.ExchangeCode(payload.Code);
-                UpdateAccessToken(token);
+                var token = await _auth.ExchangeCode(payload.Code);
+
+                if (!string.IsNullOrEmpty(token?.RefreshToken))
+                {
+                    RefreshToken = token.RefreshToken;
+                }
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                RefreshAccessToken();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
             catch (Exception e)
             {
@@ -442,17 +457,40 @@ namespace SpotifyAudioSource
                     }
                 }
 
+                CurrentRetryAttempt = 0;
                 return playback;
             }
             catch (Exception e)
             {
                 Logger.Error(e);
 
+                HandleRetryAttempts();
+
                 // When there is an error, for unknown reasons, the client sometimes stops working properly
                 // i.e, it is unable to refresh the token properly. Recreate the client prevents this issue.
                 await Task.Delay(TimeSpan.FromSeconds(5));
                 _spotifyApi = CreateSpotifyClient(_spotifyApi.AccessToken, _spotifyApi.TokenType);
                 return null;
+            }
+        }
+
+        private void HandleRetryAttempts(bool refreshTokenRetry = false)
+        {
+            CurrentRetryAttempt++;
+            var newInterval = RetriesOffset * CurrentRetryAttempt;
+            _checkSpotifyTimer.Interval = newInterval;
+            Logger.Debug($"Retry {CurrentRetryAttempt}/{MaxRetries}. Increasing polling interval to: {_checkSpotifyTimer.Interval}ms");
+
+            if (CurrentRetryAttempt >= MaxRetries)
+            {
+                Logger.Warn("Maximum retries reached.");
+                if (refreshTokenRetry)
+                {
+                    Logger.Warn($"Resetting {nameof(RefreshToken)}. Go through Authorization flow again to get a new token.");
+                    RefreshToken = null;
+                }
+
+                DeactivateAsync();
             }
         }
 
@@ -646,16 +684,32 @@ namespace SpotifyAudioSource
 
         private async Task RefreshAccessToken()
         {
+            if (string.IsNullOrWhiteSpace(RefreshToken))
+            {
+                Logger.Warn("RefreshToken missing. Please restart and go through the authorization process again.");
+                await DeactivateAsync();
+                return;
+            }
+
             try
             {
                 Logger.Debug("Getting new access token");
 
                 var token = await _auth.RefreshToken(RefreshToken);
+
                 if (token.HasError())
                 {
-                    Logger.Warn($"Error getting new token. Requesting new refresh token. Error: {token.Error}|{token.ErrorDescription}");
-                    RefreshToken = null;
-                    Authorize();
+                    Logger.Warn($"Error getting new Access token. Error: {token.Error}|{token.ErrorDescription}");
+
+                    if (token.Error.Equals("invalid_grant"))
+                    {
+                        Logger.Error("RefreshToken is revoked or wrong. Restart and go through the authorization process again.");
+                        RefreshToken = null;
+                        await DeactivateAsync();
+                        return;
+                    }
+
+                    HandleRetryAttempts(true);
                     return;
                 }
 
@@ -686,11 +740,6 @@ namespace SpotifyAudioSource
             }
 
             _spotifyApi = CreateSpotifyClient(token.AccessToken, token.TokenType);
-
-            if (!string.IsNullOrEmpty(token.RefreshToken))
-            {
-                RefreshToken = token.RefreshToken;
-            }
 
             var expiresIn = TimeSpan.FromSeconds(token.ExpiresIn);
             Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn})");
