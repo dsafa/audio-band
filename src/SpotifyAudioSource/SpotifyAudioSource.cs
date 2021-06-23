@@ -20,9 +20,8 @@ namespace SpotifyAudioSource
     /// </summary>
     public class SpotifyAudioSource : IAudioSource
     {
-        private const int MAXRETRIES = 20;
-        private const int RETRIESOFFSET = 30000;
-
+        private const int MaxRetries = 8;
+        private const int RetriesOffset = 2000;
         private readonly SpotifyControls _spotifyControls = new SpotifyControls();
         private readonly Timer _checkSpotifyTimer = new Timer(1000);
         private readonly ProxyConfig _proxyConfig = new ProxyConfig();
@@ -80,9 +79,9 @@ namespace SpotifyAudioSource
         public IAudioSourceLogger Logger { get; set; }
 
         /// <summary>
-        /// Gets or sets current Retry attempt.
+        /// Gets or sets the current Retry attempt.
         /// </summary>
-        public int CurrentRetries { get; set; } = 0;
+        public int CurrentRetryAttempt { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the spotify client id.
@@ -271,7 +270,7 @@ namespace SpotifyAudioSource
 
             _checkSpotifyTimer.Stop();
             _currentTrackId = null;
-            Logger.Debug("I have been deactivated.");
+            Logger.Debug("Spotify has been deactivated.");
 
             return Task.CompletedTask;
         }
@@ -458,7 +457,7 @@ namespace SpotifyAudioSource
                     }
                 }
 
-                CurrentRetries = 0;
+                CurrentRetryAttempt = 0;
                 return playback;
             }
             catch (Exception e)
@@ -477,12 +476,12 @@ namespace SpotifyAudioSource
 
         private void HandleRetryAttempts(bool refreshTokenRetry = false)
         {
-            CurrentRetries++;
-            var newInterval = RETRIESOFFSET * CurrentRetries;
+            CurrentRetryAttempt++;
+            var newInterval = RetriesOffset * CurrentRetryAttempt;
             _checkSpotifyTimer.Interval = newInterval;
-            Logger.Debug($"Retry {CurrentRetries}/{MAXRETRIES}. Increasing polling interval to: {_checkSpotifyTimer.Interval}ms");
+            Logger.Debug($"Retry {CurrentRetryAttempt}/{MaxRetries}. Increasing polling interval to: {_checkSpotifyTimer.Interval}ms");
 
-            if (CurrentRetries >= MAXRETRIES)
+            if (CurrentRetryAttempt >= MaxRetries)
             {
                 Logger.Warn("Maximum retries reached.");
                 if (refreshTokenRetry)
