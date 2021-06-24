@@ -27,6 +27,7 @@
     <Compile Include="MusicBeeHeatGenerated.wxs" />
     <Compile Include="SpotifyHeatGenerated.wxs" />
     <Compile Include="AudioBandCOM.wxs" />
+    <Compile Include="Win10HeatGenerated.wxs" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
@@ -102,6 +103,15 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>AudioSourcesFolder</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\Win10AudioSource\Win10AudioSource.csproj">
+      <Name>Win10AudioSource</Name>
+      <Project>{A709B842-7F5A-4C81-8A2E-80396996EF79}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>AudioSourcesFolder</RefTargetDir>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="audioband.ico" />
@@ -116,7 +126,7 @@
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
   </Target>
   <PropertyGroup>
-    <DefineConstants>AudioBandHarvestPath=..\Audioband\bin\$(Configuration);ITunesHarvestPath=..\iTunesAudioSource\bin\$(Configuration)\iTunes;MusicBeeHarvestPath=..\MusicBeeAudioSource\bin\$(Configuration)\MusicBee;SpotifyHarvestPath=..\SpotifyAudioSource\bin\$(Configuration)\spotify</DefineConstants>
+    <DefineConstants>AudioBandHarvestPath=..\Audioband\bin\$(Configuration);ITunesHarvestPath=..\iTunesAudioSource\bin\$(Configuration)\iTunes;MusicBeeHarvestPath=..\MusicBeeAudioSource\bin\$(Configuration)\MusicBee;SpotifyHarvestPath=..\SpotifyAudioSource\bin\$(Configuration)\spotify;Win10HarvestPath=..\Win10AudioSource\bin\$(Configuration)\Windows10</DefineConstants>
   </PropertyGroup>
   <Target Name="AfterResolveReferences">
     <HeatDirectory Directory="..\Audioband\bin\$(Configuration)" PreprocessorVariable="var.AudioBandHarvestPath" OutputFile="$(ProjectDir)\AudioBandHeatGenerated.wxs" ComponentGroupName="AudioBandFiles" DirectoryRefId="AUDIOBANDINSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" Transforms="$(ProjectDir)\AudioBandHeatXsl.xslt" />
@@ -124,5 +134,6 @@
     <HeatDirectory Directory="..\iTunesAudioSource\bin\$(Configuration)\iTunes" PreprocessorVariable="var.ITunesHarvestPath" OutputFile="$(ProjectDir)\iTunesHeatGenerated.wxs" ComponentGroupName="iTunesFiles" DirectoryRefId="AUDIOSOURCESFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="false" Transforms="$(ProjectDir)\AudioSourcesXsl.xslt" />
     <HeatDirectory Directory="..\MusicBeeAudioSource\bin\$(Configuration)\MusicBee" PreprocessorVariable="var.MusicBeeHarvestPath" OutputFile="$(ProjectDir)\MusicBeeHeatGenerated.wxs" ComponentGroupName="MusicBeeFiles" DirectoryRefId="AUDIOSOURCESFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="false" Transforms="$(ProjectDir)\AudioSourcesXsl.xslt" />
     <HeatDirectory Directory="..\SpotifyAudioSource\bin\$(Configuration)\spotify" PreprocessorVariable="var.SpotifyHarvestPath" OutputFile="$(ProjectDir)\SpotifyHeatGenerated.wxs" ComponentGroupName="SpotifyFiles" DirectoryRefId="AUDIOSOURCESFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="false" Transforms="$(ProjectDir)\AudioSourcesXsl.xslt" />
+    <HeatDirectory Directory="..\Win10AudioSource\bin\$(Configuration)\Windows10" PreprocessorVariable="var.Win10HarvestPath" OutputFile="$(ProjectDir)\Win10HeatGenerated.wxs" ComponentGroupName="Win10Files" DirectoryRefId="AUDIOSOURCESFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="false" Transforms="$(ProjectDir)\AudioSourcesXsl.xslt" />
   </Target>
 </Project>
