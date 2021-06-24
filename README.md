@@ -21,6 +21,7 @@ Audio Band allows you to display song information in the taskbar.
 - Spotify
 - iTunes
 - MusicBee
+- Windows 10 (e.g. Groove Music)
 
 ## Screenshots
 ![](screenshots/screenshot1.png)
