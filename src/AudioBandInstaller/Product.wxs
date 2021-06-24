@@ -23,9 +23,9 @@
             <Feature Id="SpotifyAudioSource" Title="Spotify" Description="Install support for Spotify" Level="1" InstallDefault="local" AllowAdvertise="yes">
                <ComponentGroupRef Id="SpotifyFiles" />
             </Feature>
-	         <Feature Id="Win10AudioSource" Title="Win10" Description="Install support for Win10" Level="1" InstallDefault="local" AllowAdvertise="yes">
-		         <ComponentGroupRef Id="Win10Files" />
-	         </Feature>
+            <Feature Id="Win10AudioSource" Title="Win10" Description="Install support for Win10" Level="1" InstallDefault="local" AllowAdvertise="yes">
+               <ComponentGroupRef Id="Win10Files" />
+            </Feature>
             <Component Id="stub_" Directory="AUDIOSOURCESFOLDER" Guid="{A5165469-44B0-4E76-839F-E1AA9B6E978A}" KeyPath="yes" />
             <!-- Empty component so that the feature tree works properly-->
          </Feature>
