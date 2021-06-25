@@ -172,16 +172,21 @@ namespace AudioBand.Settings
 
         private void CheckAndLoadProfiles(PersistedSettingsDto dto)
         {
-            // If there are no profiles, create new ones.
-            // Note we are not creating the profiles directly into the persisted settings dto,
-            // they will be saved later.
-            if (dto.Profiles == null || !dto.Profiles.Any())
+            /* If there are no profiles, create new ones, they're automatically saved later.
+             * Second line of if statement is for people who have reinstalled audioband
+             * while their last version was pre-profiles (v0.9.6) update */
+            if (dto.Profiles == null || !dto.Profiles.Any()
+            || (dto.Profiles.Count() == 1 && dto.Profiles.First().Name == "Default Profile"))
             {
                 dto.CurrentProfileName = UserProfile.DefaultProfileName;
-                _profiles = new Dictionary<string, UserProfile>
+
+                _profiles = new Dictionary<string, UserProfile>();
+                var profiles = UserProfile.CreateDefaultProfiles();
+
+                for (int i = 0; i < profiles.Length; i++)
                 {
-                    { UserProfile.DefaultProfileName, UserProfile.CreateDefaultProfile(UserProfile.DefaultProfileName) },
-                };
+                    _profiles.Add(profiles[i].Name, profiles[i]);
+                }
 
                 return;
             }

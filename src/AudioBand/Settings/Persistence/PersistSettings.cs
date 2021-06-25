@@ -119,7 +119,7 @@ namespace AudioBand.Settings.Persistence
             {
                 AudioSource = null,
                 AudioSourceSettings = new List<AudioSourceSettings>(),
-                Profiles = new List<UserProfile> { UserProfile.CreateDefaultProfile(UserProfile.DefaultProfileName) },
+                Profiles = new List<UserProfile>(UserProfile.CreateDefaultProfiles()),
                 CurrentProfileName = UserProfile.DefaultProfileName,
             };
 
