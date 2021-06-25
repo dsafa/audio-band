@@ -6,8 +6,8 @@
       <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
       <Icon Id="AudiobandIcon" SourceFile="audioband.ico" />
       <Property Id="ARPPRODUCTICON" Value="AudiobandIcon" />
-      <WixVariable Id="WixUIBannerBmp" Value="installer_banner.bmp" />
-      <WixVariable Id="WixUIDialogBmp" Value="installer_background.bmp" />
+      <WixVariable Id="WixUIBannerBmp" Value="installer_banner.png" />
+      <WixVariable Id="WixUIDialogBmp" Value="installer_background.png" />
       <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
       <MediaTemplate EmbedCab="yes" />
       <Feature Id="Complete" Title="AudioBand" Description="Install AudioBand and all audio sources" Display="expand" Level="1" ConfigurableDirectory="AUDIOBANDINSTALLFOLDER" Absent="disallow" AllowAdvertise="no" InstallDefault="local">

@@ -117,8 +117,8 @@
     <Content Include="audioband.ico" />
     <Content Include="AudioBandHeatXsl.xslt" />
     <Content Include="AudioSourcesXsl.xslt" />
-    <Content Include="installer_background.bmp" />
-    <Content Include="installer_banner.bmp" />
+    <Content Include="installer_background.png" />
+    <Content Include="installer_banner.png" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
