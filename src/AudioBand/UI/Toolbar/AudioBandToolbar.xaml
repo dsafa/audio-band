@@ -125,6 +125,39 @@
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
+            <MenuItem Header="Profiles"
+                      ItemsSource="{Binding Profiles}"
+                      Style="{StaticResource ToolbarContextMenuItem}">
+                <MenuItem.Icon>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE771;" />
+                </MenuItem.Icon>
+                <MenuItem.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:UserProfile}">
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </MenuItem.ItemTemplate>
+                <MenuItem.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource ToolbarContextMenuItem}" TargetType="{x:Type MenuItem}">
+                        <Setter Property="Command" Value="{Binding PlacementTarget.DataContext.SelectProfileCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{x:Static audioband:MultiConverters.Comparison}">
+                                        <Binding Path="Name" />
+                                        <Binding Path="PlacementTarget.DataContext.SelectedProfile.Name" RelativeSource="{RelativeSource AncestorType={x:Type ContextMenu}}" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+                                <Setter Property="Icon">
+                                    <Setter.Value>
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" />
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
         </fluentWpf:AcrylicContextMenu>
     </UserControl.ContextMenu>
     <Canvas Width="{Binding ViewModels.GeneralSettingsViewModel.Width}" Height="{Binding ViewModels.GeneralSettingsViewModel.Height}">

@@ -6,6 +6,7 @@ using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Logging;
 using AudioBand.Messages;
+using AudioBand.Models;
 using AudioBand.Settings;
 using NLog;
 
@@ -22,6 +23,7 @@ namespace AudioBand.UI
         private readonly IMessageBus _messageBus;
         private readonly IAudioSession _audioSession;
         private IAudioSource _selectedAudioSource;
+        private UserProfile _selectedUserProfile;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioBandToolbarViewModel"/> class.
@@ -42,17 +44,23 @@ namespace AudioBand.UI
             ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommandOnExecute);
             LoadCommand = new AsyncRelayCommand<object>(LoadCommandOnExecute);
             SelectAudioSourceCommand = new AsyncRelayCommand<IInternalAudioSource>(SelectAudioSourceCommandOnExecute);
+            SelectProfileCommand = new AsyncRelayCommand<UserProfile>(SelectProfileCommandOnExecute);
         }
 
         /// <summary>
-        /// Gets the view models.
+        /// A list of all the ViewModels.
         /// </summary>
         public IViewModelContainer ViewModels { get; }
 
         /// <summary>
-        /// Gets the audio sources.
+        /// A collection of all available AudioSources.
         /// </summary>
         public ObservableCollection<IInternalAudioSource> AudioSources { get; private set; }
+
+        /// <summary>
+        /// A collection of all possible UserProfiles.
+        /// </summary>
+        public ObservableCollection<UserProfile> Profiles { get; private set; }
 
         /// <summary>
         /// Gets the command to show the settings window.
@@ -70,6 +78,11 @@ namespace AudioBand.UI
         public ICommand SelectAudioSourceCommand { get; }
 
         /// <summary>
+        /// Gets the command to select a profile.
+        /// </summary>
+        public ICommand SelectProfileCommand { get; }
+
+        /// <summary>
         /// Gets or sets the selected audio source.
         /// </summary>
         public IAudioSource SelectedAudioSource
@@ -78,6 +91,21 @@ namespace AudioBand.UI
             set
             {
                 if (SetProperty(ref _selectedAudioSource, value))
+                {
+                    _appSettings.AudioSource = value?.Name;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected profile.
+        /// </summary>
+        public UserProfile SelectedProfile
+        {
+            get => _selectedUserProfile;
+            set
+            {
+                if (SetProperty(ref _selectedUserProfile, value))
                 {
                     _appSettings.AudioSource = value?.Name;
                 }
@@ -113,6 +141,12 @@ namespace AudioBand.UI
             // Raise property changed after everything is set up so audio source settings can't be changed by the user in the middle.
             RaisePropertyChanged(nameof(AudioSources));
             Logger.Debug("Audio sources loaded. Loaded {num} sources", AudioSources.Count);
+
+            // Initalize Profiles
+            Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles);
+            SelectedProfile = _appSettings.CurrentProfile;
+            RaisePropertyChanged(nameof(Profiles));
+            Logger.Debug($"Profiles loaded. Loaded {Profiles.Count} profiles.");
         }
 
         private async Task SelectAudioSourceCommandOnExecute(IInternalAudioSource audioSource)
@@ -154,6 +188,12 @@ namespace AudioBand.UI
             {
                 _appSettings.Save();
             }
+        }
+
+        private async Task SelectProfileCommandOnExecute(UserProfile profile)
+        {
+            _appSettings.SelectProfile(profile.Name);
+            SelectedProfile = _appSettings.CurrentProfile;
         }
     }
 }

@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using AudioBand.Logging;
 using AudioBand.Models;
-using AudioBand.Settings.MappingProfiles;
-using AudioBand.Settings.Migrations;
-using AudioBand.Settings.Models.v3;
-using AutoMapper;
-using Nett;
-using NLog;
+using AudioBand.Settings.Persistence;
 
 namespace AudioBand.Settings
 {
@@ -19,35 +12,22 @@ namespace AudioBand.Settings
     /// </summary>
     public class AppSettings : IAppSettings
     {
-        private static readonly Dictionary<string, Type> SettingsTable = new Dictionary<string, Type>()
-        {
-            { "0.1", typeof(AudioBand.Settings.Models.V1.AudioBandSettings) },
-            { "2", typeof(AudioBand.Settings.Models.V2.Settings) },
-            { "3", typeof(SettingsV3) },
-        };
-
-        private static readonly string CurrentVersion = "3";
-        private static readonly string SettingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand");
-        private static readonly string SettingsFilePath = Path.Combine(SettingsDirectory, "audioband.settings");
-        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<AppSettings>();
-        private static readonly MapperConfiguration ProfileMappingConfiguration = new MapperConfiguration(cfg => cfg.AddProfile<UserProfileToSettingsProfile>());
-        private SettingsV3 _settings;
+        private readonly IPersistSettings _persistSettings;
         private Dictionary<string, UserProfile> _profiles = new Dictionary<string, UserProfile>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppSettings"/> class.
         /// </summary>
-        public AppSettings()
+        /// <param name="persistSettings">The settings persistence object.</param>
+        public AppSettings(IPersistSettings persistSettings)
         {
-            InitSettings();
-            InitProfiles();
+            _persistSettings = persistSettings;
 
-            if (_settings.AudioSourceSettings == null)
-            {
-                _settings.AudioSourceSettings = new List<AudioSourceSettings>();
-            }
-
-            SelectProfile(_settings.CurrentProfileName);
+            var dto = _persistSettings.ReadSettings();
+            AudioSource = dto.AudioSource;
+            AudioSourceSettings = dto.AudioSourceSettings?.ToList() ?? new List<AudioSourceSettings>();
+            CheckAndLoadProfiles(dto);
+            SelectProfile(dto.CurrentProfileName);
         }
 
         /// <summary>
@@ -58,16 +38,12 @@ namespace AudioBand.Settings
         /// <summary>
         /// Gets or sets the name of the current audio source.
         /// </summary>
-        public string AudioSource
-        {
-            get => _settings.AudioSource;
-            set => _settings.AudioSource = value;
-        }
+        public string AudioSource { get; set; }
 
         /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
-        public List<AudioSourceSettings> AudioSourceSettings => _settings.AudioSourceSettings;
+        public List<AudioSourceSettings> AudioSourceSettings { get; }
 
         /// <summary>
         /// Gets the current profile.
@@ -108,7 +84,7 @@ namespace AudioBand.Settings
                 throw new ArgumentException("Profile name already exists", nameof(profileName));
             }
 
-            _profiles.Add(profileName, UserProfile.CreateInitialProfile());
+            _profiles.Add(profileName, UserProfile.CreateDefaultProfile(profileName));
         }
 
         /// <summary>
@@ -156,7 +132,6 @@ namespace AudioBand.Settings
                 throw new ArgumentException("Profile already exists", nameof(newProfileName));
             }
 
-            _settings.CurrentProfileName = newProfileName;
             CurrentProfile.Name = newProfileName;
         }
 
@@ -165,30 +140,26 @@ namespace AudioBand.Settings
         /// </summary>
         public void Save()
         {
-            try
+            var dto = new PersistedSettingsDto
             {
-                // Write back to the settings object before saving.
-                var mapper = ProfileMappingConfiguration.CreateMapper();
-                _settings.CurrentProfileName = CurrentProfile.Name;
-                _settings.Profiles = _profiles.ToDictionary(kvp => kvp.Key, kvp => mapper.Map<UserProfile, ProfileV3>(kvp.Value));
-                Toml.WriteFile(_settings, SettingsFilePath, TomlHelper.DefaultSettings);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-            }
+                AudioSource = AudioSource,
+                CurrentProfileName = CurrentProfile.Name,
+                Profiles = _profiles.Values,
+                AudioSourceSettings = AudioSourceSettings,
+            };
+            _persistSettings.WriteSettings(dto);
         }
 
         /// <inheritdoc />
         public void ImportProfilesFromPath(string path)
         {
-            // Todo: deal with different profile versions?
-            var profilesToImport = Toml.ReadFile<ProfileExportV3>(path, TomlHelper.DefaultSettings);
-            var mapper = ProfileMappingConfiguration.CreateMapper();
-            foreach (var keyVal in profilesToImport.Profiles)
+            var profiles = _persistSettings.ReadProfiles(path).ToList();
+
+            // Check imported profiles for duplicate names before adding them to the dict.
+            foreach (var profile in profiles)
             {
-                var name = GetUniqueProfileName(keyVal.Key);
-                _profiles[name] = mapper.Map<ProfileV3, UserProfile>(keyVal.Value);
+                var name = UserProfile.GetUniqueProfileName(_profiles.Keys, profile.Name);
+                _profiles[name] = profile;
                 _profiles[name].Name = name;
             }
         }
@@ -196,113 +167,35 @@ namespace AudioBand.Settings
         /// <inheritdoc />
         public void ExportProfilesToPath(string path)
         {
-            var exportObject = new ProfileExportV3 { Profiles = _settings.Profiles };
-            Toml.WriteFile(exportObject, path, TomlHelper.DefaultSettings);
+            _persistSettings.WriteProfiles(_profiles.Values, path);
         }
 
-        private void LoadSettingsFromPath(string path)
+        private void CheckAndLoadProfiles(PersistedSettingsDto dto)
         {
-            var tomlFile = Toml.ReadFile(path, TomlHelper.DefaultSettings);
-            var version = tomlFile["Version"].Get<string>();
-
-            // Create backup
-            if (version != CurrentVersion)
+            /* If there are no profiles, create new ones, they're automatically saved later.
+             * Second line of if statement is for people who have reinstalled audioband
+             * while their last version was pre-profiles (v0.9.6) update */
+            if (dto.Profiles == null || !dto.Profiles.Any()
+            || (dto.Profiles.Count() == 1 && dto.Profiles.First().Name == "Default Profile"))
             {
-                Toml.WriteFile(tomlFile, Path.Combine(SettingsDirectory, $"audioband.settings.{version}"), TomlHelper.DefaultSettings);
-                _settings = SettingsMigration.MigrateSettings<SettingsV3>(tomlFile.Get(SettingsTable[version]), version, CurrentVersion);
-                Save();
-            }
-            else
-            {
-                // Fix any missing values
-                var initial = new SettingsV3();
-                var settings = tomlFile.Get<SettingsV3>();
-                new MapperConfiguration(cfg => cfg.AddProfile<SettingsV3Profile>()).CreateMapper().Map(settings, initial);
-                _settings = initial;
-            }
-        }
+                dto.CurrentProfileName = UserProfile.DefaultProfileName;
 
-        private void CreateDefaultSettingsFile()
-        {
-            var settingsProfile = ProfileMappingConfiguration.CreateMapper().Map<UserProfile, ProfileV3>(UserProfile.CreateInitialProfile());
+                _profiles = new Dictionary<string, UserProfile>();
+                var profiles = UserProfile.CreateDefaultProfiles();
 
-            _settings = new SettingsV3()
-            {
-                AudioSource = null,
-                AudioSourceSettings = new List<AudioSourceSettings>(),
-                Profiles = new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, settingsProfile } },
-                CurrentProfileName = SettingsV3.DefaultProfileName,
-            };
-            Save();
-        }
-
-        private string GetUniqueProfileName(string name)
-        {
-            string newName = name;
-            int count = 0;
-            while (_profiles.ContainsKey(newName))
-            {
-                newName += count;
-            }
-
-            return newName;
-        }
-
-        private void InitSettings()
-        {
-            if (!Directory.Exists(SettingsDirectory))
-            {
-                Directory.CreateDirectory(SettingsDirectory);
-            }
-
-            if (!File.Exists(SettingsFilePath))
-            {
-                CreateDefaultSettingsFile();
-                return;
-            }
-
-            try
-            {
-                LoadSettingsFromPath(SettingsFilePath);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "Unable to load settings");
-                var backupPath = Path.Combine(SettingsDirectory, "audioband.settings.backup-" + DateTime.Now.Ticks);
-                File.Copy(SettingsFilePath, backupPath, true);
-                Logger.Info("Creating new default settings. Backup created at {backup}", backupPath);
-                CreateDefaultSettingsFile();
-            }
-        }
-
-        private void InitProfiles()
-        {
-            var mapper = ProfileMappingConfiguration.CreateMapper();
-
-            // If profiles are somehow null, then create a default one.
-            if (_settings.Profiles == null)
-            {
-                _settings.CurrentProfileName = SettingsV3.DefaultProfileName;
-                _profiles = new Dictionary<string, UserProfile>
+                for (int i = 0; i < profiles.Length; i++)
                 {
-                    {SettingsV3.DefaultProfileName, UserProfile.CreateInitialProfile()},
-                };
+                    _profiles.Add(profiles[i].Name, profiles[i]);
+                }
 
                 return;
             }
 
-            _profiles = _settings.Profiles.ToDictionary(
-                keyValPair => keyValPair.Key,
-                keyValPair =>
-                {
-                    var profile = mapper.Map<ProfileV3, UserProfile>(keyValPair.Value);
-                    profile.Name = keyValPair.Key;
-                    return profile;
-                });
+            _profiles = dto.Profiles.ToDictionary(profile => profile.Name, profile => profile);
 
-            if (_settings.CurrentProfileName == null || !_profiles.ContainsKey(_settings.CurrentProfileName))
+            if (dto.CurrentProfileName == null || !_profiles.ContainsKey(dto.CurrentProfileName))
             {
-                _settings.CurrentProfileName = _profiles.First().Key;
+                dto.CurrentProfileName = _profiles.First().Key;
             }
         }
     }

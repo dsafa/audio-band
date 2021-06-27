@@ -3,8 +3,10 @@ using System.Windows.Media;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.Settings.Migrations;
-using AudioBand.Settings.Models.v3;
+using AudioBand.Settings.Models.V3;
 using AudioBand.Settings.Models.V1;
+using AudioBand.Settings.Models.V4;
+using AudioBand.Settings.Persistence;
 using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
 using V2Settings = AudioBand.Settings.Models.V2.Settings;
 using Nett;
@@ -602,6 +604,303 @@ Margin = 6
             Assert.Equal(v1.AlbumArtAppearance.Width, v3Profile.AlbumArtSettings.Width);
             Assert.Equal(v1.AlbumArtAppearance.XPosition, v3Profile.AlbumArtSettings.XPosition);
             Assert.Equal(v1.AlbumArtAppearance.YPosition, v3Profile.AlbumArtSettings.YPosition);
+        }
+
+        [Fact]
+        public void MigrateV3ToV4_MigratesSuccessfully()
+        {
+            var settings = @"
+Version = ""3""
+AudioSource = ""Spotify""
+CurrentProfileName = ""Default Profile""
+
+[Profiles]
+
+[Profiles.'Default Profile']
+
+[Profiles.'Default Profile'.GeneralSettings]
+Width = 500.0
+Height = 30.0
+BackgroundColor = ""#00FFFFFF""
+
+[Profiles.'Default Profile'.PreviousButtonSettings]
+BackgroundColor = ""#00FFFFFF""
+HoveredBackgroundColor = ""#19FFFFFF""
+ClickedBackgroundColor = ""#0FFFFFFF""
+IsVisible = true
+Width = 40.0
+Height = 15.0
+XPosition = 330.0
+YPosition = 3.0
+Anchor = ""TopLeft""
+
+[Profiles.'Default Profile'.PreviousButtonSettings.Content]
+ContentType = ""Text""
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FFFFFFFF""
+HoveredTextColor = ""#FFFFFFFF""
+ClickedTextColor = ""#FFFFFFFF""
+
+[Profiles.'Default Profile'.PlayPauseButtonSettings]
+BackgroundColor = ""#00FFFFFF""
+HoveredBackgroundColor = ""#19FFFFFF""
+ClickedBackgroundColor = ""#0FFFFFFF""
+IsVisible = true
+Width = 40.0
+Height = 14.0
+XPosition = 370.0
+YPosition = 3.0
+Anchor = ""TopLeft""
+
+[Profiles.'Default Profile'.PlayPauseButtonSettings.PlayContent]
+ContentType = ""Text""
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FFFFFFFF""
+HoveredTextColor = ""#FFFFFFFF""
+ClickedTextColor = ""#FFFFFFFF""
+
+[Profiles.'Default Profile'.PlayPauseButtonSettings.PauseContent]
+ContentType = ""Text""
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FFFFFFFF""
+HoveredTextColor = ""#FFFFFFFF""
+ClickedTextColor = ""#FFFFFFFF""
+
+[Profiles.'Default Profile'.NextButtonSettings]
+BackgroundColor = ""#00FFFFFF""
+HoveredBackgroundColor = ""#19FFFFFF""
+ClickedBackgroundColor = ""#0FFFFFFF""
+IsVisible = true
+Width = 40.0
+Height = 15.0
+XPosition = 410.0
+YPosition = 3.0
+Anchor = ""TopLeft""
+
+[Profiles.'Default Profile'.NextButtonSettings.Content]
+ContentType = ""Text""
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FFFFFFFF""
+HoveredTextColor = ""#FFFFFFFF""
+ClickedTextColor = ""#FFFFFFFF""
+
+[Profiles.'Default Profile'.RepeatModeButtonSettings]
+BackgroundColor = ""#00FFFFFF""
+HoveredBackgroundColor = ""#19FFFFFF""
+ClickedBackgroundColor = ""#0FFFFFFF""
+IsVisible = true
+Width = 40.0
+Height = 15.0
+XPosition = 450.0
+YPosition = 3.0
+Anchor = ""TopLeft""
+
+[Profiles.'Default Profile'.RepeatModeButtonSettings.RepeatOffContent]
+ContentType = ""Text""
+ImagePath = """"
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FF696969""
+HoveredTextColor = ""#FFFFFFFF""
+ClickedTextColor = ""#FF808080""
+
+[Profiles.'Default Profile'.RepeatModeButtonSettings.RepeatContextContent]
+ContentType = ""Text""
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FF1E90FF""
+HoveredTextColor = ""#FF6495ED""
+ClickedTextColor = ""#FF4169E1""
+
+[Profiles.'Default Profile'.RepeatModeButtonSettings.RepeatTrackContent]
+ContentType = ""Text""
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FF1E90FF""
+HoveredTextColor = ""#FF6495ED""
+ClickedTextColor = ""#FF4169E1""
+
+[Profiles.'Default Profile'.ShuffleModeButtonSettings]
+BackgroundColor = ""#00FFFFFF""
+HoveredBackgroundColor = ""#19FFFFFF""
+ClickedBackgroundColor = ""#0FFFFFFF""
+IsVisible = true
+Width = 40.0
+Height = 15.0
+XPosition = 290.0
+YPosition = 3.0
+Anchor = ""TopLeft""
+
+[Profiles.'Default Profile'.ShuffleModeButtonSettings.ShuffleOffContent]
+ContentType = ""Text""
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FF696969""
+HoveredTextColor = ""#FFFFFFFF""
+ClickedTextColor = ""#FF808080""
+
+[Profiles.'Default Profile'.ShuffleModeButtonSettings.ShuffleOnContent]
+ContentType = ""Text""
+FontFamily = ""Segoe MDL2 Assets""
+Text = """"
+TextColor = ""#FF1E90FF""
+HoveredTextColor = ""#FF6495ED""
+ClickedTextColor = ""#FF4169E1""
+
+[Profiles.'Default Profile'.ProgressBarSettings]
+ForegroundColor = ""#FF1E90FF""
+BackgroundColor = ""#FF696969""
+HoverColor = ""#FF00BFFF""
+IsVisible = true
+Width = 130.0
+Height = 4.0
+XPosition = 325.0
+YPosition = 22.0
+Anchor = ""TopLeft""
+
+[Profiles.'Default Profile'.AlbumArtSettings]
+PlaceholderPath = """"
+IsVisible = true
+Width = 30.0
+Height = 30.0
+XPosition = 245.0
+YPosition = 0.0
+Anchor = ""TopLeft""
+
+[Profiles.'Default Profile'.AlbumArtPopupSettings]
+IsVisible = true
+Width = 250.0
+Height = 250.0
+XPosition = -110.0
+Margin = -4.0
+
+[[Profiles.'Default Profile'.CustomLabelSettings]]
+FontFamily = ""Segoe UI""
+FontSize = 12.0
+Color = ""#FFC3C3C3""
+FormatString = ""{length}""
+Alignment = ""Right""
+Name = ""Song Length""
+ScrollSpeed = 5000
+TextOverflow = ""Scroll""
+ScrollBehavior = ""Always""
+FadeEffect = ""OnlyWhenScrolling""
+LeftFadeOffset = 0.1
+RightFadeOffset = 0.9
+IsVisible = true
+Width = 40.0
+Height = 15.0
+XPosition = 460.0
+YPosition = 14.0
+Anchor = ""TopLeft""
+
+[[AudioSourceSettings]]
+AudioSourceName = ""Spotify""
+
+[[AudioSourceSettings.Settings]]
+Name = ""Spotify Client ID""
+Value = ""id""
+[[AudioSourceSettings.Settings]]
+Name = ""Spotify Client secret""
+Value = ""secret""
+[[AudioSourceSettings.Settings]]
+Name = ""Callback Port""
+Value = 80
+[[AudioSourceSettings.Settings]]
+Name = ""Proxy Host""
+Value = ""localhost""
+[[AudioSourceSettings.Settings]]
+Name = ""Proxy Password""
+Value = ""1""
+[[AudioSourceSettings.Settings]]
+Name = ""Proxy Port""
+Value = 5555
+[[AudioSourceSettings.Settings]]
+Name = ""Proxy Username""
+Value = ""1""
+[[AudioSourceSettings.Settings]]
+Name = ""Spotify Refresh Token""
+Value = ""token""
+[[AudioSourceSettings.Settings]]
+Name = ""Use Proxy""
+Value = false
+
+";
+            var v3 = Toml.ReadString<SettingsV3>(settings, TomlHelper.DefaultSettings);
+            var v4 = SettingsMigration.MigrateSettings<SettingsV4>(v3, "3", "4");
+
+            Assert.Equal(v3.AudioSource, v4.AudioSource);
+            Assert.Equal(v3.CurrentProfileName, v4.CurrentProfileName);
+            Assert.Equal(v3.AudioSourceSettings, v4.AudioSourceSettings);
+
+            Assert.Equal(v3.Profiles.Count, v4.Profiles.Count);
+            var v3Profile = v3.Profiles[v3.CurrentProfileName];
+            var v4Profile = v4.Profiles.Find(p => p.Name == v4.CurrentProfileName);
+            Assert.NotNull(v4Profile.Name);
+
+            Assert.Equal(v3Profile.AlbumArtPopupSettings.Width, v4Profile.AlbumArtPopup.Width);
+            Assert.Equal(v3Profile.AlbumArtPopupSettings.Height, v4Profile.AlbumArtPopup.Height);
+            Assert.Equal(v3Profile.AlbumArtPopupSettings.IsVisible, v4Profile.AlbumArtPopup.IsVisible);
+            Assert.Equal(v3Profile.AlbumArtPopupSettings.Margin, v4Profile.AlbumArtPopup.Margin);
+            Assert.Equal(v3Profile.AlbumArtPopupSettings.XPosition, v4Profile.AlbumArtPopup.XPosition);
+
+            Assert.Equal(v3Profile.AlbumArtSettings.Width, v4Profile.AlbumArt.Width);
+            Assert.Equal(v3Profile.AlbumArtSettings.Height, v4Profile.AlbumArt.Height);
+            Assert.Equal(v3Profile.AlbumArtSettings.IsVisible, v4Profile.AlbumArt.IsVisible);
+            Assert.Equal(v3Profile.AlbumArtSettings.XPosition, v4Profile.AlbumArt.XPosition);
+            Assert.Equal(v3Profile.AlbumArtSettings.YPosition, v4Profile.AlbumArt.YPosition);
+            Assert.Equal(v3Profile.AlbumArtSettings.PlaceholderPath, v4Profile.AlbumArt.PlaceholderPath);
+
+            Assert.Equal(v3Profile.GeneralSettings.Width, v4Profile.GeneralSettings.Width);
+            Assert.Equal(v3Profile.GeneralSettings.Height, v4Profile.GeneralSettings.Height);
+
+            Assert.Equal(v3Profile.NextButtonSettings.Width, v4Profile.NextButton.Width);
+            Assert.Equal(v3Profile.NextButtonSettings.Height, v4Profile.NextButton.Height);
+            Assert.Equal(v3Profile.NextButtonSettings.IsVisible, v4Profile.NextButton.IsVisible);
+            Assert.Equal(v3Profile.NextButtonSettings.XPosition, v4Profile.NextButton.XPosition);
+            Assert.Equal(v3Profile.NextButtonSettings.YPosition, v4Profile.NextButton.YPosition);
+            Assert.Equal(v3Profile.NextButtonSettings.Content.ImagePath, v4Profile.NextButton.Content.ImagePath);
+
+            Assert.Equal(v3Profile.PlayPauseButtonSettings.Width, v4Profile.PlayPauseButton.Width);
+            Assert.Equal(v3Profile.PlayPauseButtonSettings.Height, v4Profile.PlayPauseButton.Height);
+            Assert.Equal(v3Profile.PlayPauseButtonSettings.XPosition, v4Profile.PlayPauseButton.XPosition);
+            Assert.Equal(v3Profile.PlayPauseButtonSettings.YPosition, v4Profile.PlayPauseButton.YPosition);
+            Assert.Equal(v3Profile.PlayPauseButtonSettings.IsVisible, v4Profile.PlayPauseButton.IsVisible);
+            Assert.Equal(v3Profile.PlayPauseButtonSettings.PauseContent.ImagePath, v4Profile.PlayPauseButton.PauseContent.ImagePath);
+            Assert.Equal(v3Profile.PlayPauseButtonSettings.PlayContent.ImagePath, v4Profile.PlayPauseButton.PlayContent.ImagePath);
+
+            Assert.Equal(v3Profile.PreviousButtonSettings.Height, v4Profile.PreviousButton.Height);
+            Assert.Equal(v3Profile.PreviousButtonSettings.Width, v4Profile.PreviousButton.Width);
+            Assert.Equal(v3Profile.PreviousButtonSettings.XPosition, v4Profile.PreviousButton.XPosition);
+            Assert.Equal(v3Profile.PreviousButtonSettings.YPosition, v4Profile.PreviousButton.YPosition);
+            Assert.Equal(v3Profile.PreviousButtonSettings.IsVisible, v4Profile.PreviousButton.IsVisible);
+            Assert.Equal(v3Profile.PreviousButtonSettings.Content.ImagePath, v4Profile.PreviousButton.Content.ImagePath);
+
+            Assert.Equal(v3Profile.ProgressBarSettings.Width, v4Profile.ProgressBar.Width);
+            Assert.Equal(v3Profile.ProgressBarSettings.Height, v4Profile.ProgressBar.Height);
+            Assert.Equal(v3Profile.ProgressBarSettings.XPosition, v4Profile.ProgressBar.XPosition);
+            Assert.Equal(v3Profile.ProgressBarSettings.YPosition, v4Profile.ProgressBar.YPosition);
+            Assert.Equal(v3Profile.ProgressBarSettings.IsVisible, v4Profile.ProgressBar.IsVisible);
+            Assert.Equal(v3Profile.ProgressBarSettings.BackgroundColor, v4Profile.ProgressBar.BackgroundColor);
+            Assert.Equal(v3Profile.ProgressBarSettings.ForegroundColor, v4Profile.ProgressBar.ForegroundColor);
+
+            Assert.Equal(v3Profile.CustomLabelSettings.Count, v4Profile.CustomLabels.Count);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].Color, v4Profile.CustomLabels[0].Color);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].Width, v4Profile.CustomLabels[0].Width);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].Height, v4Profile.CustomLabels[0].Height);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].Name, v4Profile.CustomLabels[0].Name);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].XPosition, v4Profile.CustomLabels[0].XPosition);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].IsVisible, v4Profile.CustomLabels[0].IsVisible);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].YPosition, v4Profile.CustomLabels[0].YPosition);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].ScrollSpeed, v4Profile.CustomLabels[0].ScrollSpeed);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].FontSize, v4Profile.CustomLabels[0].FontSize);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].FontFamily, v4Profile.CustomLabels[0].FontFamily);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].Alignment, v4Profile.CustomLabels[0].Alignment);
+            Assert.Equal(v3Profile.CustomLabelSettings[0].FormatString, v4Profile.CustomLabels[0].FormatString);
         }
     }
 }
