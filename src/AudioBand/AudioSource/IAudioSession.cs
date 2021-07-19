@@ -55,6 +55,11 @@ namespace AudioBand.AudioSource
         bool IsShuffleOn { get; }
 
         /// <summary>
+        /// Gets a value indicating what the current volume is.
+        /// </summary>
+        int Volume { get; }
+
+        /// <summary>
         /// Gets the current repeat mode.
         /// </summary>
         RepeatMode RepeatMode { get; }

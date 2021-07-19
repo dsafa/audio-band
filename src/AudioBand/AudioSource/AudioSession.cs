@@ -17,6 +17,7 @@ namespace AudioBand.AudioSource
         private TimeSpan _songLength;
         private bool _isShuffleOn;
         private RepeatMode _repeatMode;
+        private int _volume;
         private Image _album;
 
         /// <summary>
@@ -100,6 +101,13 @@ namespace AudioBand.AudioSource
             set => SetProperty(ref _repeatMode, value);
         }
 
+        /// <inheritdoc />
+        public int Volume
+        {
+            get => _volume;
+            set => SetProperty(ref _volume, value);
+        }
+
         private void AudioSourceChanged()
         {
             if (_currentAudioSource != null)
@@ -110,6 +118,7 @@ namespace AudioBand.AudioSource
                 _currentAudioSource.TrackProgressChanged -= AudioSourceOnTrackProgressChanged;
                 _currentAudioSource.RepeatModeChanged -= AudioSourceOnRepeatModeChanged;
                 _currentAudioSource.ShuffleChanged -= AudioSourceOnShuffleChanged;
+                _currentAudioSource.VolumeChanged -= AudioSourceVolumeChanged;
             }
 
             if (_currentAudioSource == null)
@@ -123,6 +132,7 @@ namespace AudioBand.AudioSource
             _currentAudioSource.TrackProgressChanged += AudioSourceOnTrackProgressChanged;
             _currentAudioSource.RepeatModeChanged += AudioSourceOnRepeatModeChanged;
             _currentAudioSource.ShuffleChanged += AudioSourceOnShuffleChanged;
+            _currentAudioSource.VolumeChanged += AudioSourceVolumeChanged;
         }
 
         private void AudioSourceOnShuffleChanged(object sender, bool e)
@@ -145,6 +155,11 @@ namespace AudioBand.AudioSource
             IsPlaying = e;
         }
 
+        private void AudioSourceVolumeChanged(object sender, float e)
+        {
+            Volume = (int)(e * 100);
+        }
+
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)
         {
             SongArtist = e.Artist;
@@ -162,6 +177,7 @@ namespace AudioBand.AudioSource
             AlbumName = null;
             SongProgress = TimeSpan.Zero;
             SongLength = TimeSpan.Zero;
+            Volume = 100;
         }
     }
 }

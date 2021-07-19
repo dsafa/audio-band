@@ -51,6 +51,11 @@
         ShuffleModeButtonViewModel ShuffleModeButtonViewModel { get; }
 
         /// <summary>
+        /// Gets the view model for the volume button.
+        /// </summary>
+        VolumeButtonViewModel VolumeButtonViewModel { get; }
+
+        /// <summary>
         /// Gets the view model for the progress bar.
         /// </summary>
         ProgressBarViewModel ProgressBarViewModel { get; }

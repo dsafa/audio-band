@@ -289,8 +289,18 @@
                 DataContext="{Binding ViewModels.ShuffleModeButtonViewModel}"
                 Style="{StaticResource ToolbarShuffleModeButtonStyle}"
                 Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-        <Slider x:Name="ProgressBar"
+        <Button x:Name="VolumeButton"
                 Width="{Binding Width}"
+                Height="{Binding Height}"
+                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
+                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
+                DataContext="{Binding ViewModels.VolumeButtonViewModel}"
+                Style="{StaticResource ToolbarVolumeButtonStyle}"
+                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
+            
+        </Button>
+        <Slider x:Name="ProgressBar" Width="{Binding Width}"
                 Height="{Binding Height}"
                 audioband:CanvasPositioning.Anchor="{Binding Anchor}"
                 audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"

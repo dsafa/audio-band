@@ -129,6 +129,7 @@ namespace AudioBand
                 _container.Register<AudioSourceSettingsViewModel>(Lifestyle.Singleton);
                 _container.Register<RepeatModeButtonViewModel>(Lifestyle.Singleton);
                 _container.Register<ShuffleModeButtonViewModel>(Lifestyle.Singleton);
+                _container.Register<VolumeButtonViewModel>(Lifestyle.Singleton);
 
                 _container.Verify();
             }

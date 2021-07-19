@@ -46,6 +46,11 @@
     <sys:String x:Key="ShuffleModeButtonOffContentSectionText">Shuffle off button content</sys:String>
     <sys:String x:Key="ShuffleModeButtonOnContentSectionText">Shuffle on button content</sys:String>
 
+    <!--  Volume button settings  -->
+    <sys:String x:Key="NoVolumeButtonContentSectionText">No volume button content</sys:String>
+    <sys:String x:Key="LowVolumeButtonContentSectionText">Low volume button content</sys:String>
+    <sys:String x:Key="HighVolumeButtonContentSectionText">High volume button content</sys:String>
+
     <!--  Custom text label settings  -->
     <sys:String x:Key="CustomLabelNameSectionText">Label name</sys:String>
     <sys:String x:Key="CustomLabelNameDescription">Choose a name for the label</sys:String>
@@ -89,6 +94,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="NextButtonTab">Next Track Button</sys:String>
     <sys:String x:Key="RepeatModeButtonTab">Repeat Mode Button</sys:String>
     <sys:String x:Key="ShuffleModeButtonTab">Shuffle Mode Button</sys:String>
+    <sys:String x:Key="VolumeButtonTab">Volume Button</sys:String>
     <sys:String x:Key="ProgressBarTab">Progress Bar</sys:String>
     <sys:String x:Key="CustomLabelsTab">Text Labels</sys:String>
     <sys:String x:Key="AlbumArtTab">Album Art</sys:String>

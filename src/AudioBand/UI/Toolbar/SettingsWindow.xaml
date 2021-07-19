@@ -145,6 +145,27 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Command="{Binding SelectViewModelCommand}"
+                                 CommandParameter="{Binding ViewModels.VolumeButtonViewModel}"
+                                 GroupName="nav"
+                                 Style="{StaticResource NavigationPaneRadioButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Width="18" Height="18" >
+                                <TextBlock HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           FontSize="18"
+                                           Text="&#xE995;">
+                                </TextBlock>
+                            </StackPanel>
+                            <!--
+                                I have no clue on how to make the DrawingImages he has so this is my substitute
+                                which is in my opinion also easier, so might convert all the existing
+                                DrawingImages to this substitute.
+                                <Image Source="{StaticResource VolumeIcon}" Style="{StaticResource NavigationPaneIcon}" />-->
+                            <TextBlock Padding="14,0,0,0" Text="{StaticResource VolumeButtonTab}" />
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Command="{Binding SelectViewModelCommand}"
                                  CommandParameter="{Binding ViewModels.ProgressBarViewModel}"
                                  GroupName="nav"
                                  Style="{StaticResource NavigationPaneRadioButton}">
@@ -407,6 +428,9 @@
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static audioband:Converters.ObjectToType}}" Value="{x:Type audioband:ShuffleModeButtonViewModel}">
                                 <Setter Property="Text" Value="{StaticResource ShuffleModeButtonTab}" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static audioband:Converters.ObjectToType}}" Value="{x:Type audioband:VolumeButtonViewModel}">
+                                <Setter Property="Text" Value="{StaticResource VolumeButtonTab}" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
@@ -433,6 +457,7 @@
                                 <audioband:SharedDictionary Source="../TrackProgress/ProgressBarSettingsView.xaml" />
                                 <audioband:SharedDictionary Source="../PlaybackControls/RepeatModeButtonSettingsView.xaml" />
                                 <audioband:SharedDictionary Source="../PlaybackControls/ShuffleModeButtonSettingsView.xaml" />
+                                <audioband:SharedDictionary Source="../PlaybackControls/VolumeButtonSettingsView.xaml" />
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
                     </ContentControl.Resources>

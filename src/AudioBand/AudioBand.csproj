@@ -166,6 +166,7 @@
     <Compile Include="Models\RepeatModeButton.cs" />
     <Compile Include="Models\ScrollBehavior.cs" />
     <Compile Include="Models\ShuffleModeButton.cs" />
+    <Compile Include="Models\VolumeButton.cs" />
     <Compile Include="Models\TextFadeEffect.cs" />
     <Compile Include="Models\TextOverflow.cs" />
     <Compile Include="NativeMethods.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="UI\PlaybackControls\RepeatModeButtonViewModel.cs" />
     <Compile Include="UI\Toolbar\SettingsWindowViewModel.cs" />
     <Compile Include="UI\PlaybackControls\ShuffleModeButtonViewModel.cs" />
+    <Compile Include="UI\PlaybackControls\VolumeButtonViewModel.cs" />
     <Compile Include="UI\ViewModel\ValidatingViewModelBase.cs" />
     <Compile Include="UI\ViewModel\ViewModelBase.cs" />
     <Compile Include="UI\ViewModel\ViewModelContainer.cs" />
@@ -497,6 +499,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\PlaybackControls\ShuffleModeButtonSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PlaybackControls\VolumeButtonSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

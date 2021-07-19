@@ -12,7 +12,7 @@
         {
             Width = 30;
             Height = 30;
-            XPosition = 245;
+            XPosition = 210;
             YPosition = 0;
         }
 
