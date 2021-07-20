@@ -144,4 +144,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style x:Key="VolumeBarStyle" TargetType="{x:Type Slider}">
+    </Style>
 </ResourceDictionary>

@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Messages;
@@ -10,13 +11,14 @@ using AudioBand.Settings;
 
 namespace AudioBand.UI
 {
-/// <summary>
+    /// <summary>
     /// View model for the volume button.
     /// </summary>
     public class VolumeButtonViewModel : ButtonViewModelBase<VolumeButton>
     {
         private readonly IAppSettings _appSettings;
         private readonly IAudioSession _audioSession;
+        private bool _isVolumePopupOpen;
         private int _volume;
 
         /// <summary>
@@ -34,6 +36,7 @@ namespace AudioBand.UI
             _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
             _appSettings.ProfileChanged += AppSettingsOnProfileChanged;
             ChangeVolumeCommand = new AsyncRelayCommand<object>(ChangeVolumeCommandOnExecute);
+            VolumePopupCommand = new RelayCommand<object>(OpenVolumePopupCommandOnExecute);
 
             var resetBase = new VolumeButton();
             NoVolumeContent = new ButtonContentViewModel(Model.NoVolumeContent, resetBase.NoVolumeContent, dialogService);
@@ -65,6 +68,11 @@ namespace AudioBand.UI
         public IAsyncCommand ChangeVolumeCommand { get; }
 
         /// <summary>
+        /// Gets the VolumePopupCommand.
+        /// </summary>
+        public ICommand VolumePopupCommand { get; }
+
+        /// <summary>
         /// Gets the current VolumeState.
         /// </summary>
         public VolumeState CurrentVolumeState
@@ -87,7 +95,16 @@ namespace AudioBand.UI
         }
 
         /// <summary>
-        /// Gets or sets the Volume.
+        /// Gets a value indicating whether the Volume Popup is open.
+        /// </summary>
+        public bool IsVolumePopupOpen
+        {
+            get => _isVolumePopupOpen;
+            private set => SetProperty(ref _isVolumePopupOpen, value);
+        }
+
+        /// <summary>
+        /// Gets the current Volume.
         /// </summary>
         public int Volume
         {
@@ -132,6 +149,11 @@ namespace AudioBand.UI
             }
 
             await _audioSession.CurrentAudioSource.SetVolumeAsync(_volume);
+        }
+
+        private void OpenVolumePopupCommandOnExecute(object arg)
+        {
+            IsVolumePopupOpen = !IsVolumePopupOpen;
         }
     }
 }
