@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -205,7 +206,7 @@ namespace SpotifyAudioSource
                     return;
                 }
 
-                _proxyPort = value; // may overflow
+                _proxyPort = value;
                 UpdateProxy();
             }
         }
@@ -493,14 +494,16 @@ namespace SpotifyAudioSource
         {
             try
             {
-                /* Hasnt logged in yet */
-                if (_spotifyClient is null)
-                {
-                    return null;
-                }
                 var playback = await _spotifyClient.Player.GetCurrentPlayback();
 
                 return playback;
+            }
+            catch (HttpRequestException e)
+            {
+                // Gets thrown when internet cuts out, will retry infinitely every 10 seconds.
+                Logger.Info("Tried to update Spotify Playback, but user has no internet connection.");
+                await Task.Delay(10000);
+                return await GetPlayback();
             }
             catch (Exception e)
             {
