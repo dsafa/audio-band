@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -23,7 +22,6 @@ namespace SpotifyAudioSource
         private readonly SpotifyControls _spotifyControls = new SpotifyControls();
         private readonly Timer _checkSpotifyTimer = new Timer(1000);
         private SpotifyClientConfig _spotifyConfig;
-        private IHTTPClient _spotifyHttpClient = null;
         private ISpotifyClient _spotifyClient;
         private HttpClient _httpClient = new HttpClient();
         private string _currentItemId;
@@ -35,6 +33,7 @@ namespace SpotifyAudioSource
         private string _currentRepeat;
         private string _clientSecret;
         private string _clientId;
+        private string _refreshToken;
         private bool _useProxy;
         private string _proxyHost;
         private int _localPort = 80;
@@ -114,6 +113,25 @@ namespace SpotifyAudioSource
 
                 _clientSecret = value;
                 Authorize();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the refresh token.
+        /// </summary>
+        [AudioSourceSetting("Spotify Refresh Token", Options = SettingOptions.ReadOnly | SettingOptions.Hidden, Priority = 9)]
+        public string RefreshToken
+        {
+            get => _refreshToken;
+            set
+            {
+                if (value == _refreshToken)
+                {
+                    return;
+                }
+
+                _refreshToken = value;
+                OnSettingChanged("Spotify Refresh Token");
             }
         }
 
@@ -367,15 +385,16 @@ namespace SpotifyAudioSource
             }
             else if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret))
             {
+                return;
                 Logger.Debug($"Connecting to Spotify through Login (PKCE).");
 
                 var (verifier, challenge) = PKCEUtil.GenerateCodes();
 
-                var server = new EmbedIOAuthServer(new Uri("http://localhost:5000/callback"), 5000);
+                var server2 = new EmbedIOAuthServer(new Uri("http://localhost:5000/callback"), 5000);
 
-                server.AuthorizationCodeReceived += async (sender, response) =>
+                server2.AuthorizationCodeReceived += async (sender, response) =>
                 {
-                    await server.Stop();
+                    await server2.Stop();
                     PKCETokenResponse initialResponse;
 
                     try
@@ -395,9 +414,9 @@ namespace SpotifyAudioSource
                     _spotifyClient = new SpotifyClient(_spotifyConfig);
                 };
 
-                server.Start().GetAwaiter().GetResult();
+                server2.Start().GetAwaiter().GetResult();
 
-                var loginRequest = new LoginRequest(server.BaseUri, "857519a171be4000b821e41844d8070f", LoginRequest.ResponseType.Code)
+                var loginRequest = new LoginRequest(server2.BaseUri, "857519a171be4000b821e41844d8070f", LoginRequest.ResponseType.Code)
                     {
                         CodeChallengeMethod = "S256",
                         CodeChallenge = challenge,
@@ -407,29 +426,40 @@ namespace SpotifyAudioSource
                 BrowserUtil.Open(loginRequest.ToUri());
                 return;
             }
-
-            Logger.Debug("Connecting to Spotify through own application.");
-
-            if (UseProxy)
+            else if (!string.IsNullOrEmpty(RefreshToken))
             {
-                UpdateSpotifyHttpClient();
-            }
-
-            if (_spotifyHttpClient == null)
-            {
-                _spotifyConfig = SpotifyClientConfig
-                    .CreateDefault()
-                    .WithAuthenticator(new ClientCredentialsAuthenticator(ClientId, ClientSecret));
+                Logger.Debug("Using RefreshToken from previous auth to connect to Spotify.");
+                RefreshAccessTokenOnClient().GetAwaiter().GetResult();
             }
             else
             {
-                _spotifyConfig = SpotifyClientConfig
-                    .CreateDefault()
-                    .WithAuthenticator(new ClientCredentialsAuthenticator(ClientId, ClientSecret))
-                    .WithHTTPClient(_spotifyHttpClient);
-            }
+                Logger.Debug("Connecting to Spotify through own application.");
 
-            _spotifyClient = new SpotifyClient(_spotifyConfig);
+            var server = new EmbedIOAuthServer(new Uri("http://localhost:80"), 80);
+            server.Start().GetAwaiter().GetResult();
+
+            server.AuthorizationCodeReceived += async (sender, response) =>
+            {
+                await server.Stop();
+
+                var config = SpotifyClientConfig.CreateDefault();
+                var tokenResponse = await new OAuthClient(config).RequestToken(
+                    new AuthorizationCodeTokenRequest(
+                    ClientId, ClientSecret, response.Code, new Uri("http://localhost:80")
+                    )
+                );
+
+                _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
+                _spotifyClient = new SpotifyClient(_spotifyConfig);
+            };
+
+            var request = new LoginRequest(new Uri("http://localhost:80"), ClientId, LoginRequest.ResponseType.Code)
+            {
+                Scope = new [] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
+            };
+
+            BrowserUtil.Open(request.ToUri());
+            }
         }
 
         private void UpdateSpotifyHttpClient()
@@ -440,11 +470,13 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            _spotifyHttpClient = new NetHttpClient(new ProxyConfig(ProxyHost, ProxyPort)
+            var httpClient = new NetHttpClient(new ProxyConfig(ProxyHost, ProxyPort)
                 {
                     User = ProxyUserName,
                     Password = ProxyPassword
                 });
+
+            _spotifyConfig.WithHTTPClient(httpClient);
         }
 
         private void UpdateProxy()
@@ -495,60 +527,36 @@ namespace SpotifyAudioSource
             _currentTrackName = track.Name;
 
             string albumArtUrl = track.Album?.Images.FirstOrDefault()?.Url;
-            Image albumArtImage = null;
-            if (albumArtUrl != null)
-            {
-                albumArtImage = await GetAlbumArt(new Uri(albumArtUrl));
-            }
+            Image albumArtImage = albumArtUrl is null ? null : await GetAlbumArt(new Uri(albumArtUrl));
 
-            string album = track.Album?.Name;
-            string trackName = track.Name;
             string artists = string.Join(", ", track.Artists?.Select(a => a?.Name));
-
             var trackLength = TimeSpan.FromMilliseconds(track.DurationMs);
 
             var trackUpdateInfo = new TrackInfoChangedEventArgs
             {
                 Artist = artists,
-                TrackName = trackName,
+                TrackName = track.Name,
                 AlbumArt = albumArtImage,
-                Album = album,
+                Album = track.Album?.Name,
                 TrackLength = trackLength,
             };
 
             TrackInfoChanged?.Invoke(this, trackUpdateInfo);
         }
 
-        private async Task NotifyEpisodeUpdate(FullEpisode episode)
+        private async Task NotifyEpisodeUpdate()
         {
-            if (episode.Id == _currentItemId)
-            {
-                return;
-            }
-
-            _currentItemId = episode.Id;
-            _currentTrackName = "";
-
-            string albumArtUrl = episode.Images.FirstOrDefault()?.Url;
-            Image albumArtImage = null;
-            if (albumArtUrl != null)
-            {
-                albumArtImage = await GetAlbumArt(new Uri(albumArtUrl));
-            }
-
-            string album = "";
-            string trackName = episode.Name;
-            string artists = string.Join(", ", episode.Show.Publisher);
-
-            var trackLength = TimeSpan.FromMilliseconds(episode.DurationMs);
+            var trackName = "A Podcast";
+            _currentItemId = "podcast";
+            _currentTrackName = trackName;
 
             var trackUpdateInfo = new TrackInfoChangedEventArgs
             {
-                Artist = artists,
+                Artist = "Someone",
                 TrackName = trackName,
-                AlbumArt = albumArtImage,
-                Album = album,
-                TrackLength = trackLength,
+                AlbumArt = await GetPodcastAlbumArt(),
+                Album = "N/A",
+                TrackLength = TimeSpan.Zero,
             };
 
             TrackInfoChanged?.Invoke(this, trackUpdateInfo);
@@ -645,6 +653,22 @@ namespace SpotifyAudioSource
             }
         }
 
+        private async Task<Image> GetPodcastAlbumArt()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("https://i.imgur.com/FZG4OtK.png");
+
+                var stream = await response.Content.ReadAsStreamAsync();
+                return Image.FromStream(stream);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                return null;
+            }
+        }
+
         private async void CheckSpotifyTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             // Spotify api does not provide a way to get realtime player status updates, so we have to resort to polling.
@@ -678,20 +702,23 @@ namespace SpotifyAudioSource
                 NotifyShuffle(playback);
                 NotifyRepeat(playback);
 
+                // spotify's api is limited and you cannot query info about the episode
+                // that is currently playing, the item will be null, though, they have
+                // a different property that will indicate that it is an episode
+                if (playback.CurrentlyPlayingType == "episode")
+                {
+                    await NotifyEpisodeUpdate();
+                }
+
                 if (playback.Item == null)
                 {
                     // Playback can be null if there are no devices playing
                     await Task.Delay(TimeSpan.FromSeconds(1));
                     return;
                 }
-
-                if (playback.Item.Type == ItemType.Track)
-                {
-                    await NotifyTrackUpdate(playback.Item as FullTrack);
-                }
                 else
                 {
-                    await NotifyEpisodeUpdate(playback.Item as FullEpisode);
+                    await NotifyTrackUpdate(playback.Item as FullTrack);
                 }
             }
             catch (Exception e)
@@ -708,10 +735,26 @@ namespace SpotifyAudioSource
             }
         }
 
+        private async Task RefreshAccessTokenOnClient()
+        {
+            if (string.IsNullOrEmpty(RefreshToken))
+            {
+                Logger.Warn("RefreshToken missing. Please restart and go through the authorization process again.");
+                await DeactivateAsync();
+                return;
+            }
+
+            var a = new AuthorizationCodeRefreshRequest(ClientId, ClientSecret, RefreshToken);
+            var response = await new OAuthClient().RequestToken(a);
+
+            _spotifyClient = new SpotifyClient(response.AccessToken);
+        }
+
         private void OnSettingChanged(string settingName)
         {
             SettingChanged?.Invoke(this, new SettingChangedEventArgs(settingName));
         }
+
         private async Task LogPlayerCommandIfFailed(Func<Task<bool>> command, [CallerMemberName] string caller = null)
         {
             var hasError = await command();
