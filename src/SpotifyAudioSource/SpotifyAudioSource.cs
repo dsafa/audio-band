@@ -36,6 +36,7 @@ namespace SpotifyAudioSource
         private string _clientSecret;
         private string _clientId;
         private string _refreshToken;
+        private int _pollingInterval = 1000;
         private bool _useProxy;
         private string _proxyHost;
         private int _localPort = 80;
@@ -51,6 +52,7 @@ namespace SpotifyAudioSource
         /// </summary>
         public SpotifyAudioSource()
         {
+            _checkSpotifyTimer.Interval = PollingInterval;
             _checkSpotifyTimer.AutoReset = false;
             _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
         }
@@ -136,6 +138,25 @@ namespace SpotifyAudioSource
 
                 _refreshToken = value;
                 OnSettingChanged("Spotify Refresh Token");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Polling Interval.
+        /// </summary>
+        [AudioSourceSetting("Spotify Polling Interval")]
+        public int PollingInterval
+        {
+            get => _pollingInterval;
+            set
+            {
+                if (value == _pollingInterval)
+                {
+                    return;
+                }
+
+                _pollingInterval = value;
+                OnSettingChanged("Spotify Polling Interval");
             }
         }
 
