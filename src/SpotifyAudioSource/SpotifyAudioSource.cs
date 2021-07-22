@@ -290,6 +290,7 @@ namespace SpotifyAudioSource
 
             _checkSpotifyTimer.Stop();
             _currentItemId = null;
+            _currentTrackName = null;
             Logger.Debug("Spotify has been deactivated.");
 
             return Task.CompletedTask;
