@@ -77,7 +77,10 @@ namespace SpotifyAudioSource
         public event EventHandler<bool> IsPlayingChanged;
 
         /// <inheritdoc />
-        public string Name { get; } = "Spotify";
+        public string Name => "Spotify";
+
+        /// <inheritdoc />
+        public string WindowClassName => _spotifyControls.GetSpotifyWindowClassName();
 
         /// <inheritdoc />
         public IAudioSourceLogger Logger { get; set; }

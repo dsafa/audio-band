@@ -17,18 +17,23 @@ namespace Win10AudioSource
         private GlobalSystemMediaTransportControlsSessionManager _mtcManager;
         private GlobalSystemMediaTransportControlsSession _currentSession;
 
+        /// <inheritdoc />
         public event EventHandler<SettingChangedEventArgs> SettingChanged
         {
             add { }
             remove { }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
+        /// <inheritdoc />
         public event EventHandler<bool> IsPlayingChanged;
 
+        /// <inheritdoc />
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
+        /// <inheritdoc />
         public event EventHandler<float> VolumeChanged
         {
             add { }
@@ -37,10 +42,16 @@ namespace Win10AudioSource
 
         public event EventHandler<bool> ShuffleChanged;
 
+        /// <inheritdoc />
         public event EventHandler<RepeatMode> RepeatModeChanged;
 
-        public string Name { get; } = "Windows 10";
+        /// <inheritdoc />
+        public string Name => "Windows 10";
 
+        /// <inheritdoc />
+        public string WindowClassName => _mtcManager.GetCurrentSession().SourceAppUserModelId;
+
+        /// <inheritdoc />
         public IAudioSourceLogger Logger { get; set; }
 
         public Win10AudioSource()
@@ -48,6 +59,7 @@ namespace Win10AudioSource
             _checkTimer.Elapsed += OnTimerElapsed;
         }
 
+        /// <inheritdoc />
         public async Task ActivateAsync()
         {
             _checkTimer.Start();
@@ -61,6 +73,7 @@ namespace Win10AudioSource
             await UpdateSession(_mtcManager.GetCurrentSession());
         }
 
+        /// <inheritdoc />
         public Task DeactivateAsync()
         {
             _checkTimer.Stop();
@@ -70,6 +83,7 @@ namespace Win10AudioSource
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc />
         public async Task PlayTrackAsync()
         {
             if (_currentSession == null)
@@ -80,6 +94,7 @@ namespace Win10AudioSource
             await _currentSession.TryPlayAsync();
         }
 
+        /// <inheritdoc />
         public async Task PauseTrackAsync()
         {
             if (_currentSession == null)
@@ -90,6 +105,7 @@ namespace Win10AudioSource
             await _currentSession.TryPauseAsync();
         }
 
+        /// <inheritdoc />
         public async Task PreviousTrackAsync()
         {
             if (_currentSession == null)
@@ -100,6 +116,7 @@ namespace Win10AudioSource
             await _currentSession.TrySkipPreviousAsync();
         }
 
+        /// <inheritdoc />
         public async Task NextTrackAsync()
         {
             if (_currentSession == null)
@@ -110,11 +127,13 @@ namespace Win10AudioSource
             await _currentSession.TrySkipNextAsync();
         }
 
+        /// <inheritdoc />
         public Task SetVolumeAsync(float newVolume)
         {
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc />
         public async Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
             if (_currentSession == null)
@@ -128,6 +147,7 @@ namespace Win10AudioSource
             }
         }
 
+        /// <inheritdoc />
         public async Task SetShuffleAsync(bool shuffleOn)
         {
             if (_currentSession == null)
@@ -138,6 +158,7 @@ namespace Win10AudioSource
             await _currentSession.TryChangeShuffleActiveAsync(shuffleOn);
         }
 
+        /// <inheritdoc />
         public async Task SetRepeatModeAsync(RepeatMode newRepeatMode)
         {
             if (_currentSession == null)

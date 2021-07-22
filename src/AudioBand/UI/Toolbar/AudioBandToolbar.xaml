@@ -161,6 +161,10 @@
         </fluentWpf:AcrylicContextMenu>
     </UserControl.ContextMenu>
     <Canvas Width="{Binding ViewModels.GeneralSettingsViewModel.Width}" Height="{Binding ViewModels.GeneralSettingsViewModel.Height}">
+        <Canvas.InputBindings>
+            <MouseBinding MouseAction="LeftDoubleClick"
+                          Command="{Binding DoubleClickCommand}" />
+        </Canvas.InputBindings>
         <Canvas.Resources>
             <audioband:BindingProxy x:Key="DataContextProxy" Value="{Binding .}" />
         </Canvas.Resources>
