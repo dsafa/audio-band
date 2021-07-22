@@ -506,12 +506,6 @@ namespace SpotifyAudioSource
             catch (Exception e)
             {
                 Logger.Error(e);
-
-                // Currently commented to see if it is still necessary
-                // When there is an error, for unknown reasons, the client sometimes stops working properly
-                // i.e, it is unable to refresh the token properly. Recreate the client prevents this issue.
-                // await Task.Delay(TimeSpan.FromSeconds(5));
-                // _spotifyApi = CreateSpotifyClient(_spotifyApi.AccessToken, _spotifyApi.TokenType);
                 return null;
             }
         }
