@@ -387,45 +387,7 @@ namespace SpotifyAudioSource
             }
             else if (string.IsNullOrEmpty(ClientId) || string.IsNullOrEmpty(ClientSecret))
             {
-                return;
-                Logger.Debug($"Connecting to Spotify through Login (PKCE).");
-
-                var (verifier, challenge) = PKCEUtil.GenerateCodes();
-
-                var server2 = new EmbedIOAuthServer(new Uri("http://localhost:5000/callback"), 5000);
-
-                server2.AuthorizationCodeReceived += async (sender, response) =>
-                {
-                    await server2.Stop();
-                    PKCETokenResponse initialResponse;
-
-                    try
-                    {
-                        initialResponse = await new OAuthClient().RequestToken(
-                        new PKCETokenRequest("857519a171be4000b821e41844d8070f", response.Code, new Uri("http://localhost:5000/callback"), verifier));
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Debug(e.Message);
-                        throw;
-                    }
-
-                    var authenticator = new PKCEAuthenticator("857519a171be4000b821e41844d8070f", initialResponse);
-
-                    _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(authenticator);
-                    _spotifyClient = new SpotifyClient(_spotifyConfig);
-                };
-
-                server2.Start().GetAwaiter().GetResult();
-
-                var loginRequest = new LoginRequest(server2.BaseUri, "857519a171be4000b821e41844d8070f", LoginRequest.ResponseType.Code)
-                    {
-                        CodeChallengeMethod = "S256",
-                        CodeChallenge = challenge,
-                        Scope = new[] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
-                    };
-
-                BrowserUtil.Open(loginRequest.ToUri());
+                Logger.Error($"Cannot connect to Spotify because either ClientId or ClientSecret is empty.");
                 return;
             }
             else if (!string.IsNullOrEmpty(RefreshToken))
@@ -436,31 +398,30 @@ namespace SpotifyAudioSource
             else
             {
                 Logger.Debug("Connecting to Spotify through own application.");
+                var address = new Uri("http://localhost:80");
 
-            var server = new EmbedIOAuthServer(new Uri("http://localhost:80"), 80);
-            server.Start().GetAwaiter().GetResult();
+                var server = new EmbedIOAuthServer(address, 80);
+                server.Start().GetAwaiter().GetResult();
 
-            server.AuthorizationCodeReceived += async (sender, response) =>
-            {
-                await server.Stop();
+                server.AuthorizationCodeReceived += async (sender, response) =>
+                {
+                    await server.Stop();
 
-                var config = SpotifyClientConfig.CreateDefault();
-                var tokenResponse = await new OAuthClient(config).RequestToken(
-                    new AuthorizationCodeTokenRequest(
-                    ClientId, ClientSecret, response.Code, new Uri("http://localhost:80")
-                    )
-                );
+                    var config = SpotifyClientConfig.CreateDefault();
+                    var tokenResponse = await new OAuthClient(config).RequestToken(
+                        new AuthorizationCodeTokenRequest(ClientId, ClientSecret, response.Code, address)
+                    );
 
-                _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
-                _spotifyClient = new SpotifyClient(_spotifyConfig);
-            };
+                    _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
+                    _spotifyClient = new SpotifyClient(_spotifyConfig);
+                };
 
-            var request = new LoginRequest(new Uri("http://localhost:80"), ClientId, LoginRequest.ResponseType.Code)
-            {
-                Scope = new [] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
-            };
+                var request = new LoginRequest(address, ClientId, LoginRequest.ResponseType.Code)
+                {
+                    Scope = new [] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
+                };
 
-            BrowserUtil.Open(request.ToUri());
+                BrowserUtil.Open(request.ToUri());
             }
         }
 
@@ -483,7 +444,7 @@ namespace SpotifyAudioSource
 
         private void UpdateProxy()
         {
-            Logger.Debug("Updating proxy configuration");
+            Logger.Debug("Updating proxy configuration.");
 
             UpdateSpotifyHttpClient();
             if (_spotifyConfig is null)
@@ -506,6 +467,11 @@ namespace SpotifyAudioSource
                 await Task.Delay(10000);
                 return await GetPlayback();
             }
+            catch (APIUnauthorizedException e)
+            {
+                await RefreshAccessTokenOnClient();
+                return await GetPlayback();
+            }
             catch (Exception e)
             {
                 Logger.Error(e);
@@ -521,7 +487,7 @@ namespace SpotifyAudioSource
 
         private async Task NotifyTrackUpdate(FullTrack track)
         {
-            // need name because local files dont have ids
+            // Local files have no id so we use name
             if (track.Id == _currentItemId && track.Name == _currentTrackName)
             {
                 return;
@@ -754,10 +720,13 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            var a = new AuthorizationCodeRefreshRequest(ClientId, ClientSecret, RefreshToken);
-            var response = await new OAuthClient().RequestToken(a);
+            var request = new AuthorizationCodeRefreshRequest(ClientId, ClientSecret, RefreshToken);
+            var response = await new OAuthClient().RequestToken(request);
 
             _spotifyClient = new SpotifyClient(response.AccessToken);
+
+            var expiresIn = TimeSpan.FromSeconds(response.ExpiresIn);
+            Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn})");
         }
 
         private void OnSettingChanged(string settingName)
@@ -770,7 +739,7 @@ namespace SpotifyAudioSource
             var hasError = await command();
             if (hasError)
             {
-                Logger.Warn($"Error with player command [{caller}].");
+                Logger.Warn($"Something went wrong with player command [{caller}].");
             }
         }
     }
