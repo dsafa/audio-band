@@ -9,6 +9,7 @@ using AudioBand.AudioSource;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Http;
+using static SpotifyAPI.Web.PlayerCurrentPlaybackRequest;
 using static SpotifyAPI.Web.PlayerSetRepeatRequest;
 using Image = System.Drawing.Image;
 using Timer = System.Timers.Timer;
@@ -494,7 +495,7 @@ namespace SpotifyAudioSource
         {
             try
             {
-                var playback = await _spotifyClient.Player.GetCurrentPlayback();
+                var playback = await _spotifyClient.Player.GetCurrentPlayback(new PlayerCurrentPlaybackRequest(AdditionalTypes.All));
 
                 return playback;
             }
@@ -547,19 +548,20 @@ namespace SpotifyAudioSource
             TrackInfoChanged?.Invoke(this, trackUpdateInfo);
         }
 
-        private async Task NotifyEpisodeUpdate()
+        private async Task NotifyEpisodeUpdate(FullEpisode episode)
         {
-            var trackName = "A Podcast";
-            _currentItemId = "podcast";
-            _currentTrackName = trackName;
+            _currentItemId = episode.Id;
+            _currentTrackName = episode.Name;
+
+            var imageUrl = episode.Images?.FirstOrDefault()?.Url;
 
             var trackUpdateInfo = new TrackInfoChangedEventArgs
             {
-                Artist = "Someone",
-                TrackName = trackName,
-                AlbumArt = await GetPodcastAlbumArt(),
-                Album = "N/A",
-                TrackLength = TimeSpan.Zero,
+                Artist = episode.Show.Publisher,
+                TrackName = episode.Name,
+                AlbumArt = await GetPodcastAlbumArtAsync(imageUrl),
+                Album = episode.Show.Name,
+                TrackLength = TimeSpan.FromMilliseconds(episode.DurationMs),
             };
 
             TrackInfoChanged?.Invoke(this, trackUpdateInfo);
@@ -656,11 +658,20 @@ namespace SpotifyAudioSource
             }
         }
 
-        private async Task<Image> GetPodcastAlbumArt()
+        private async Task<Image> GetPodcastAlbumArtAsync(string imageUrl = null)
         {
             try
             {
-                var response = await _httpClient.GetAsync("https://i.imgur.com/FZG4OtK.png");
+                HttpResponseMessage response;
+                
+                if (string.IsNullOrEmpty(imageUrl))
+                {
+                    response = await _httpClient.GetAsync("https://i.imgur.com/FZG4OtK.png");
+                }
+                else
+                {
+                    response = await _httpClient.GetAsync(new Uri(imageUrl));
+                }
 
                 var stream = await response.Content.ReadAsStreamAsync();
                 return Image.FromStream(stream);
@@ -705,23 +716,19 @@ namespace SpotifyAudioSource
                 NotifyShuffle(playback);
                 NotifyRepeat(playback);
 
-                // spotify's api is limited and you cannot query info about the episode
-                // that is currently playing, the item will be null, though, they have
-                // a different property that will indicate that it is an episode
-                if (playback.CurrentlyPlayingType == "episode")
-                {
-                    await NotifyEpisodeUpdate();
-                }
-
                 if (playback.Item == null)
                 {
                     // Playback can be null if there are no devices playing
                     await Task.Delay(TimeSpan.FromSeconds(1));
                     return;
                 }
-                else
+                else if (playback.Item.Type == ItemType.Track)
                 {
                     await NotifyTrackUpdate(playback.Item as FullTrack);
+                }
+                else
+                {
+                    await NotifyEpisodeUpdate(playback.Item as FullEpisode);
                 }
             }
             catch (Exception e)
