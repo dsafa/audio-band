@@ -52,7 +52,6 @@ namespace SpotifyAudioSource
         /// </summary>
         public SpotifyAudioSource()
         {
-            _checkSpotifyTimer.Interval = PollingInterval;
             _checkSpotifyTimer.AutoReset = false;
             _checkSpotifyTimer.Elapsed += CheckSpotifyTimerOnElapsed;
         }
@@ -157,6 +156,7 @@ namespace SpotifyAudioSource
 
                 _pollingInterval = value;
                 OnSettingChanged("Spotify Polling Interval");
+                UpdatePollingInterval();
             }
         }
 
@@ -492,7 +492,7 @@ namespace SpotifyAudioSource
                     await DeactivateAsync();
                     return null;
                 }
-                
+
                 Logger.Info("Tried to update Spotify Playback, but user has no internet connection.");
                 await Task.Delay(10000);
                 _retryAttempts++;
@@ -698,7 +698,7 @@ namespace SpotifyAudioSource
                 }
                 else
                 {
-                    _checkSpotifyTimer.Interval = 1000;
+                    _checkSpotifyTimer.Interval = PollingInterval;
                 }
 
                 var playback = await GetPlayback();
@@ -772,6 +772,13 @@ namespace SpotifyAudioSource
             {
                 Logger.Warn($"Something went wrong with player command [{caller}].");
             }
+        }
+    
+        private void UpdatePollingInterval()
+        {
+            _checkSpotifyTimer.Stop();
+            _checkSpotifyTimer.Interval = PollingInterval;
+            _checkSpotifyTimer.Start();
         }
     }
 }
