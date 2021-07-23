@@ -49,6 +49,11 @@ namespace AudioBand.UI
         public ObservableCollection<CustomLabelViewModel> CustomLabels { get; } = new ObservableCollection<CustomLabelViewModel>();
 
         /// <summary>
+        /// Gets the collection of visible custom label viewmodels.
+        /// </summary>
+        public ObservableCollection<CustomLabelViewModel> VisibleCustomLabels => new ObservableCollection<CustomLabelViewModel>(CustomLabels.Where(x => x.IsVisible));
+
+        /// <summary>
         /// Gets the command to add a new label.
         /// </summary>
         public RelayCommand AddLabelCommand { get; }

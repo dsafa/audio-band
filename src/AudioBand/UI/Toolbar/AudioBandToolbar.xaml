@@ -312,7 +312,7 @@
         <ItemsControl x:Name="CustomLabels"
                       Width="{Binding ViewModels.GeneralSettingsViewModel.Width}"
                       Height="{Binding ViewModels.GeneralSettingsViewModel.Height}"
-                      ItemsSource="{Binding ViewModels.CustomLabelsViewModel.CustomLabels}">
+                      ItemsSource="{Binding ViewModels.CustomLabelsViewModel.VisibleCustomLabels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
