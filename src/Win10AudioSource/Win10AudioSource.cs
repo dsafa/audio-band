@@ -49,7 +49,7 @@ namespace Win10AudioSource
         public string Name => "Windows 10";
 
         /// <inheritdoc />
-        public string WindowClassName => _mtcManager.GetCurrentSession().SourceAppUserModelId;
+        public string WindowClassName => null;
 
         /// <inheritdoc />
         public IAudioSourceLogger Logger { get; set; }
