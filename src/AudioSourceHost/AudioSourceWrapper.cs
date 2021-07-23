@@ -68,6 +68,11 @@ namespace AudioSourceHost
         public string Name => _audioSource.Name;
 
         /// <summary>
+        /// Gets the Window Class Name of the audio source.
+        /// </summary>
+        public string WindowClassName => _audioSource.WindowClassName;
+
+        /// <summary>
         /// Gets the list of audio source settings.
         /// </summary>
         public List<AudioSourceSettingAttribute> Settings => _audioSourceSettingsList.Select(s => s.Attribute).ToList();

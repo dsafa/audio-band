@@ -85,6 +85,23 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
+        public string WindowClassName
+        {
+            get
+            {
+                try
+                {
+                    return _wrapper.WindowClassName;
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, "Error trying to get the Window Class Name");
+                    throw;
+                }
+            }
+        }
+
+        /// <inheritdoc/>
         public IAudioSourceLogger Logger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         /// <summary>

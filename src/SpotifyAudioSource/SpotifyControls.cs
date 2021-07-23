@@ -42,6 +42,11 @@ namespace SpotifyAudioSource
             return hwnd == IntPtr.Zero ? null : GetTitle(hwnd);
         }
 
+        public string GetSpotifyWindowClassName()
+        {
+            return SpotifyWindowClassName;
+        }
+
         public void Play()
         {
             if (_spotifyHwnd == IntPtr.Zero)

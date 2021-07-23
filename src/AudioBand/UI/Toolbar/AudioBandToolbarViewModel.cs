@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Logging;
@@ -9,6 +10,7 @@ using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using NLog;
+using System.Runtime.InteropServices;
 
 namespace AudioBand.UI
 {
@@ -43,6 +45,7 @@ namespace AudioBand.UI
 
             ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommandOnExecute);
             LoadCommand = new AsyncRelayCommand<object>(LoadCommandOnExecute);
+            DoubleClickCommand = new AsyncRelayCommand<RoutedEventArgs>(OnDoubleClick);
             SelectAudioSourceCommand = new AsyncRelayCommand<IInternalAudioSource>(SelectAudioSourceCommandOnExecute);
             SelectProfileCommand = new AsyncRelayCommand<UserProfile>(SelectProfileCommandOnExecute);
         }
@@ -71,6 +74,11 @@ namespace AudioBand.UI
         /// Gets the command to initialize loading.
         /// </summary>
         public ICommand LoadCommand { get; }
+
+        /// <summary>
+        /// Gets the command to handle double clicks.
+        /// </summary>
+        public ICommand DoubleClickCommand { get; }
 
         /// <summary>
         /// Gets the command to select an audio source.
@@ -147,6 +155,31 @@ namespace AudioBand.UI
             SelectedProfile = _appSettings.CurrentProfile;
             RaisePropertyChanged(nameof(Profiles));
             Logger.Debug($"Profiles loaded. Loaded {Profiles.Count} profiles.");
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow (IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr FindWindowEx(IntPtr parent, IntPtr childAfter, string className, string windowName);
+
+        private async Task OnDoubleClick(RoutedEventArgs e)
+        {
+            if (SelectedAudioSource == null)
+            {
+                return;
+            }
+
+            var windowPtr = FindWindowEx(IntPtr.Zero, IntPtr.Zero, SelectedAudioSource.WindowClassName, null);
+
+            if (windowPtr == IntPtr.Zero)
+            {
+                Logger.Warn("Could not find the associated window to open with double click.");
+            }
+            else if (!SetForegroundWindow(windowPtr))
+            {
+                Logger.Warn("Failed to focus on the associated window.");
+            }
         }
 
         private async Task SelectAudioSourceCommandOnExecute(IInternalAudioSource audioSource)

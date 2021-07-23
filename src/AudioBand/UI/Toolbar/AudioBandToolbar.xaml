@@ -161,6 +161,10 @@
         </fluentWpf:AcrylicContextMenu>
     </UserControl.ContextMenu>
     <Canvas Width="{Binding ViewModels.GeneralSettingsViewModel.Width}" Height="{Binding ViewModels.GeneralSettingsViewModel.Height}">
+        <Canvas.InputBindings>
+            <MouseBinding MouseAction="LeftDoubleClick"
+                          Command="{Binding DoubleClickCommand}" />
+        </Canvas.InputBindings>
         <Canvas.Resources>
             <audioband:BindingProxy x:Key="DataContextProxy" Value="{Binding .}" />
         </Canvas.Resources>
@@ -308,7 +312,7 @@
         <ItemsControl x:Name="CustomLabels"
                       Width="{Binding ViewModels.GeneralSettingsViewModel.Width}"
                       Height="{Binding ViewModels.GeneralSettingsViewModel.Height}"
-                      ItemsSource="{Binding ViewModels.CustomLabelsViewModel.CustomLabels}">
+                      ItemsSource="{Binding ViewModels.CustomLabelsViewModel.VisibleCustomLabels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
