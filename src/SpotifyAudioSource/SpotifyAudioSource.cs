@@ -482,6 +482,11 @@ namespace SpotifyAudioSource
         {
             try
             {
+                if (_spotifyClient is null)
+                {
+                    Authorize();
+                }
+
                 var playback = await _spotifyClient.Player.GetCurrentPlayback(new PlayerCurrentPlaybackRequest(AdditionalTypes.All));
 
                 return playback;
