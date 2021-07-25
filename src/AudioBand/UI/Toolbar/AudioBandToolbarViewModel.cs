@@ -11,6 +11,8 @@ using AudioBand.Models;
 using AudioBand.Settings;
 using NLog;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Linq;
 
 namespace AudioBand.UI
 {
@@ -157,12 +159,6 @@ namespace AudioBand.UI
             Logger.Debug($"Profiles loaded. Loaded {Profiles.Count} profiles.");
         }
 
-        [DllImport("user32.dll")]
-        private static extern bool SetForegroundWindow (IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr FindWindowEx(IntPtr parent, IntPtr childAfter, string className, string windowName);
-
         private async Task OnDoubleClick(RoutedEventArgs e)
         {
             if (SelectedAudioSource == null)
@@ -170,15 +166,29 @@ namespace AudioBand.UI
                 return;
             }
 
-            var windowPtr = FindWindowEx(IntPtr.Zero, IntPtr.Zero, SelectedAudioSource.WindowClassName, null);
+            var windowPtr = NativeMethods.FindWindow(SelectedAudioSource.WindowClassName, null);
+
+            // Spotify has some weird shenanigans with their windows, doign it like normal
+            // results in the wrong window handle being returned.
+            if (SelectedAudioSource.Name == "Spotify")
+            {
+                var spotifyProcesses = Process.GetProcessesByName("spotify");
+                var title = spotifyProcesses.FirstOrDefault(x => !string.IsNullOrEmpty(x.MainWindowTitle))?.MainWindowTitle;
+                windowPtr = NativeMethods.FindWindow(null, title);
+            }
 
             if (windowPtr == IntPtr.Zero)
             {
                 Logger.Warn("Could not find the associated window to open with double click.");
             }
-            else if (!SetForegroundWindow(windowPtr))
+            else
             {
-                Logger.Warn("Failed to focus on the associated window.");
+                if (NativeMethods.IsIconic(windowPtr))
+                {
+                    NativeMethods.ShowWindow(windowPtr, 9);
+                }
+
+                NativeMethods.SetForegroundWindow(windowPtr);
             }
         }
 
