@@ -26,6 +26,15 @@ namespace AudioBand
         [DllImport("user32")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow (IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool IsIconic(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
         // requires win 10 anniversary
         [DllImport("user32")]
         public static extern uint GetDpiForWindow(IntPtr hWnd);
