@@ -142,6 +142,26 @@ namespace AudioBand.Models
         }
 
         /// <summary>
+        /// Creates an idle profile used for when the player is idle. 
+        /// </summary>
+        /// <returns>A default idle profile.</returns>
+        public static UserProfile CreateIdleProfile()
+        {
+            return new UserProfile()
+            {
+                GeneralSettings = new GeneralSettings()
+                {
+                    Width = 40,
+                    Height = 30
+                },
+                AlbumArt = new AlbumArt()
+                {
+                    PlaceholderPath = "https://raw.githubusercontent.com/svr333/audio-band/master/logo/icon_48px.png"
+                }
+            };
+        }
+
+        /// <summary>
         /// Creates an array of UserProfiles to fill up the default settings.
         /// </summary>
         /// <returns>The array of default profiles</returns>
