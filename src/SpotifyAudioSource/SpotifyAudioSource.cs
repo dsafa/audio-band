@@ -302,30 +302,46 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public Task PlayTrackAsync()
         {
-            // Play/pause/next/back controls use the desktop rather than the api
-            // because it is quicker and player controls require spotify premium.
-            _spotifyControls.Play();
+            // Play/pause/next/back controls use the desktop, if that fails, use api
+            // api does require spotify premium
+            if (!_spotifyControls.TryPlay())
+            {
+                _spotifyClient.Player.ResumePlayback();
+            }
+
             return Task.CompletedTask;
         }
 
         /// <inheritdoc />
         public Task PauseTrackAsync()
         {
-            _spotifyControls.Pause();
+            if (!_spotifyControls.TryPause())
+            {
+                _spotifyClient.Player.PausePlayback();
+            }
+
             return Task.CompletedTask;
         }
 
         /// <inheritdoc />
         public Task PreviousTrackAsync()
         {
-            _spotifyControls.Previous();
+            if (!_spotifyControls.TryPrevious())
+            {
+                _spotifyClient.Player.SkipPrevious();
+            }
+
             return Task.CompletedTask;
         }
 
         /// <inheritdoc />
         public Task NextTrackAsync()
         {
-            _spotifyControls.Next();
+            if (!_spotifyControls.TryNext())
+            {
+                _spotifyClient.Player.SkipNext();
+            }
+
             return Task.CompletedTask;
         }
 
@@ -441,6 +457,7 @@ namespace SpotifyAudioSource
                         new AuthorizationCodeTokenRequest(ClientId, ClientSecret, response.Code, address)
                     );
 
+                    RefreshToken = tokenResponse.RefreshToken;
                     _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
                     _spotifyClient = new SpotifyClient(_spotifyConfig);
                     _authIsInProcess = false;
