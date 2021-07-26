@@ -25,6 +25,7 @@ namespace SpotifyAudioSource
         private SpotifyClientConfig _spotifyConfig;
         private ISpotifyClient _spotifyClient;
         private HttpClient _httpClient = new HttpClient();
+        private bool _authIsInProcess = false;
         private string _currentItemId;
         private string _currentTrackName;
         private bool _currentIsPlaying;
@@ -407,6 +408,8 @@ namespace SpotifyAudioSource
 
         private void Authorize()
         {
+            _authIsInProcess = true;
+
             if (!_isActive)
             {
                 return;
@@ -424,9 +427,9 @@ namespace SpotifyAudioSource
             else
             {
                 Logger.Debug("Connecting to Spotify through own application.");
-                var address = new Uri("http://localhost:80");
+                var address = new Uri($"http://localhost:{LocalPort}");
 
-                var server = new EmbedIOAuthServer(address, 80);
+                var server = new EmbedIOAuthServer(new Uri("http://localhost"), LocalPort);
                 server.Start().GetAwaiter().GetResult();
 
                 server.AuthorizationCodeReceived += async (sender, response) =>
@@ -440,6 +443,7 @@ namespace SpotifyAudioSource
 
                     _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
                     _spotifyClient = new SpotifyClient(_spotifyConfig);
+                    _authIsInProcess = false;
                 };
 
                 var request = new LoginRequest(address, ClientId, LoginRequest.ResponseType.Code)
@@ -482,9 +486,10 @@ namespace SpotifyAudioSource
         {
             try
             {
-                if (_spotifyClient is null)
+                if (_spotifyClient is null && !_authIsInProcess)
                 {
                     Authorize();
+                    return null;
                 }
 
                 var playback = await _spotifyClient.Player.GetCurrentPlayback(new PlayerCurrentPlaybackRequest(AdditionalTypes.All));
@@ -508,7 +513,7 @@ namespace SpotifyAudioSource
             }
             catch (APIUnauthorizedException e)
             {
-                await RefreshAccessTokenOnClient();
+                Authorize();
                 return await GetPlayback();
             }
             catch (Exception e)

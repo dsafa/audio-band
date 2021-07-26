@@ -3,7 +3,10 @@
 # Audio Band
 Audio Band allows you to display song information from various sources in the taskbar.
 
-**[Download Now](https://github.com/svr333/audio-band/releases)**
+
+**[Download Now](https://github.com/svr333/audio-band/releases)**  
+**[Documentation Link](https://svr333.github.io/audio-band/audioband/index.html)**  
+**[Discord Invite](https://discord.gg/yWDHdH2za5)**
 
 <img align="right" src="screenshots/demo.gif"/>
 
