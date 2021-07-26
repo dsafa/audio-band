@@ -457,6 +457,7 @@ namespace SpotifyAudioSource
                         new AuthorizationCodeTokenRequest(ClientId, ClientSecret, response.Code, address)
                     );
 
+                    RefreshToken = tokenResponse.RefreshToken;
                     _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
                     _spotifyClient = new SpotifyClient(_spotifyConfig);
                     _authIsInProcess = false;
