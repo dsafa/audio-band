@@ -47,44 +47,48 @@ namespace SpotifyAudioSource
             return SpotifyWindowClassName;
         }
 
-        public void Play()
+        public bool TryPlay()
         {
             if (_spotifyHwnd == IntPtr.Zero)
             {
-                return;
+                return false;
             }
 
             NativeMethods.SendMessage(_spotifyHwnd, NativeMethods.WM_APPCOMMAND, 0, new IntPtr((int)NativeMethods.AppCommand.Play));
+            return true;
         }
 
-        public void Pause()
+        public bool TryPause()
         {
             if (_spotifyHwnd == IntPtr.Zero)
             {
-                return;
+                return false;
             }
 
             NativeMethods.SendMessage(_spotifyHwnd, NativeMethods.WM_APPCOMMAND, 0, new IntPtr((int)NativeMethods.AppCommand.Pause));
+            return true;
         }
 
-        public void Previous()
+        public bool TryPrevious()
         {
             if (_spotifyHwnd == IntPtr.Zero)
             {
-                return;
+                return false;
             }
 
             NativeMethods.SendMessage(_spotifyHwnd, NativeMethods.WM_APPCOMMAND, 0, new IntPtr((int)NativeMethods.AppCommand.Previous));
+            return true;
         }
 
-        public void Next()
+        public bool TryNext()
         {
             if (_spotifyHwnd == IntPtr.Zero)
             {
-                return;
+                return false;
             }
 
             NativeMethods.SendMessage(_spotifyHwnd, NativeMethods.WM_APPCOMMAND, 0, new IntPtr((int)NativeMethods.AppCommand.Next));
+            return true;
         }
 
         public bool IsPaused()
