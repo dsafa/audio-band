@@ -161,6 +161,9 @@
         </fluentWpf:AcrylicContextMenu>
     </UserControl.ContextMenu>
     <Canvas Width="{Binding ViewModels.GeneralSettingsViewModel.Width}" Height="{Binding ViewModels.GeneralSettingsViewModel.Height}">
+        <Canvas.RenderTransform>
+            <RotateTransform CenterX="0" CenterY="0" Angle="0" />
+        </Canvas.RenderTransform>
         <Canvas.InputBindings>
             <MouseBinding MouseAction="LeftDoubleClick"
                           Command="{Binding DoubleClickCommand}" />
