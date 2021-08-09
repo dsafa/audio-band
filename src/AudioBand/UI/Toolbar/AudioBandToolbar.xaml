@@ -246,76 +246,10 @@
                 </ToolTip>
             </Viewbox.ToolTip>
         </Viewbox>
-        <Button x:Name="PlayPauseButton"
-                Width="{Binding Width}"
-                Height="{Binding Height}"
-                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
-                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
-                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
-                Command="{Binding PlayPauseTrackCommand}"
-                DataContext="{Binding ViewModels.PlayPauseButtonViewModel}"
-                Style="{StaticResource ToolbarPlayPauseButtonStyle}"
-                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-        <Button x:Name="NextButton"
-                Width="{Binding Width}"
-                Height="{Binding Height}"
-                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
-                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
-                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
-                Command="{Binding NextTrackCommand}"
-                DataContext="{Binding ViewModels.NextButtonViewModel}"
-                Style="{StaticResource ToolbarNextButtonStyle}"
-                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-        <Button x:Name="PreviousButton"
-                Width="{Binding Width}"
-                Height="{Binding Height}"
-                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
-                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
-                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
-                Command="{Binding PreviousTrackCommand}"
-                DataContext="{Binding ViewModels.PreviousButtonViewModel}"
-                Style="{StaticResource ToolbarPreviousButtonStyle}"
-                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-        <Button x:Name="RepeatModeButton"
-                Width="{Binding Width}"
-                Height="{Binding Height}"
-                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
-                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
-                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
-                Command="{Binding CycleRepeatModeCommand}"
-                DataContext="{Binding ViewModels.RepeatModeButtonViewModel}"
-                Style="{StaticResource ToolbarRepeatModeButtonStyle}"
-                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-        <Button x:Name="ShuffleModeButton"
-                Width="{Binding Width}"
-                Height="{Binding Height}"
-                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
-                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
-                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
-                Command="{Binding ToggleShuffleCommand}"
-                DataContext="{Binding ViewModels.ShuffleModeButtonViewModel}"
-                Style="{StaticResource ToolbarShuffleModeButtonStyle}"
-                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-        <Slider x:Name="ProgressBar"
-                Width="{Binding Width}"
-                Height="{Binding Height}"
-                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
-                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
-                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
-                DataContext="{Binding ViewModels.ProgressBarViewModel}"
-                Maximum="{Binding TrackLength, Converter={x:Static audioband:Converters.TimeSpanToMs}, Mode=OneWay}"
-                Minimum="0"
-                Style="{StaticResource ProgressBarStyle}"
-                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
-            <i:Interaction.Behaviors>
-                <audioband:SliderThrottle FinalValue="{Binding TrackProgress, Converter={x:Static audioband:Converters.TimeSpanToMs}, Mode=TwoWay}" />
-                <audioband:SliderClickAndDrag />
-            </i:Interaction.Behaviors>
-        </Slider>
         <ItemsControl x:Name="CustomLabels"
                       Width="{Binding ViewModels.GeneralSettingsViewModel.Width}"
                       Height="{Binding ViewModels.GeneralSettingsViewModel.Height}"
-                      ItemsSource="{Binding ViewModels.CustomLabelsViewModel.VisibleCustomLabels}">
+                      ItemsSource="{Binding ViewModels.CustomLabelsViewModel.CustomLabels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas />
@@ -406,5 +340,71 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Button x:Name="PlayPauseButton"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
+                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
+                Command="{Binding PlayPauseTrackCommand}"
+                DataContext="{Binding ViewModels.PlayPauseButtonViewModel}"
+                Style="{StaticResource ToolbarPlayPauseButtonStyle}"
+                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+        <Button x:Name="NextButton"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
+                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
+                Command="{Binding NextTrackCommand}"
+                DataContext="{Binding ViewModels.NextButtonViewModel}"
+                Style="{StaticResource ToolbarNextButtonStyle}"
+                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+        <Button x:Name="PreviousButton"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
+                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
+                Command="{Binding PreviousTrackCommand}"
+                DataContext="{Binding ViewModels.PreviousButtonViewModel}"
+                Style="{StaticResource ToolbarPreviousButtonStyle}"
+                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+        <Button x:Name="RepeatModeButton"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
+                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
+                Command="{Binding CycleRepeatModeCommand}"
+                DataContext="{Binding ViewModels.RepeatModeButtonViewModel}"
+                Style="{StaticResource ToolbarRepeatModeButtonStyle}"
+                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+        <Button x:Name="ShuffleModeButton"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
+                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
+                Command="{Binding ToggleShuffleCommand}"
+                DataContext="{Binding ViewModels.ShuffleModeButtonViewModel}"
+                Style="{StaticResource ToolbarShuffleModeButtonStyle}"
+                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+        <Slider x:Name="ProgressBar"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
+                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
+                DataContext="{Binding ViewModels.ProgressBarViewModel}"
+                Maximum="{Binding TrackLength, Converter={x:Static audioband:Converters.TimeSpanToMs}, Mode=OneWay}"
+                Minimum="0"
+                Style="{StaticResource ProgressBarStyle}"
+                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
+            <i:Interaction.Behaviors>
+                <audioband:SliderThrottle FinalValue="{Binding TrackProgress, Converter={x:Static audioband:Converters.TimeSpanToMs}, Mode=TwoWay}" />
+                <audioband:SliderClickAndDrag />
+            </i:Interaction.Behaviors>
+        </Slider>
     </Canvas>
 </UserControl>
