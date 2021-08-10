@@ -557,7 +557,7 @@ namespace SpotifyAudioSource
             _currentTrackName = track.Name;
 
             string albumArtUrl = track.Album?.Images.FirstOrDefault()?.Url;
-            Image albumArtImage = albumArtUrl is null ? null : await GetAlbumArt(new Uri(albumArtUrl));
+            Image albumArtImage = albumArtUrl is null ? null : await GetAlbumArtAsync(new Uri(albumArtUrl));
 
             string artists = string.Join(", ", track.Artists?.Select(a => a?.Name));
             var trackLength = TimeSpan.FromMilliseconds(track.DurationMs);
@@ -595,25 +595,13 @@ namespace SpotifyAudioSource
 
         private void NotifyPlayState(CurrentlyPlayingContext context)
         {
-            bool isPlaying = context.IsPlaying;
-            if (isPlaying == _currentIsPlaying)
-            {
-                return;
-            }
-
-            _currentIsPlaying = isPlaying;
+            _currentIsPlaying = context.IsPlaying;
             IsPlayingChanged?.Invoke(this, _currentIsPlaying);
         }
 
         private void NotifyTrackProgress(CurrentlyPlayingContext context)
         {
-            int progress = context.ProgressMs;
-            if (progress == _currentProgress)
-            {
-                return;
-            }
-
-            _currentProgress = progress;
+            _currentProgress = context.ProgressMs;
             TrackProgressChanged?.Invoke(this, TimeSpan.FromMilliseconds(_currentProgress));
         }
 
@@ -624,41 +612,23 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            int vol = context.Device.VolumePercent.HasValue ? context.Device.VolumePercent.Value : 0;
-            if (vol == _currentVolumePercent)
-            {
-                return;
-            }
-
-            _currentVolumePercent = vol;
+            _currentVolumePercent = context.Device.VolumePercent.HasValue ? context.Device.VolumePercent.Value : 0;
             VolumeChanged?.Invoke(this, _currentVolumePercent / 100f);
         }
 
         private void NotifyShuffle(CurrentlyPlayingContext context)
         {
-            bool shuffle = context.ShuffleState;
-            if (shuffle == _currentShuffle)
-            {
-                return;
-            }
-
-            _currentShuffle = shuffle;
+            _currentShuffle = context.ShuffleState;
             ShuffleChanged?.Invoke(this, _currentShuffle);
         }
 
         private void NotifyRepeat(CurrentlyPlayingContext context)
         {
-            string repeat = context.RepeatState;
-            if (repeat == _currentRepeat)
-            {
-                return;
-            }
-
-            _currentRepeat = repeat;
+            _currentRepeat = context.RepeatState;
             RepeatModeChanged?.Invoke(this, ToRepeatMode(_currentRepeat));
         }
 
-        private async Task<Image> GetAlbumArt(Uri albumArtUrl)
+        private async Task<Image> GetAlbumArtAsync(Uri albumArtUrl)
         {
             if (albumArtUrl == null)
             {
