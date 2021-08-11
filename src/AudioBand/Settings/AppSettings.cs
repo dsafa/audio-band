@@ -46,6 +46,11 @@ namespace AudioBand.Settings
         public List<AudioSourceSettings> AudioSourceSettings { get; }
 
         /// <summary>
+        /// Gets the saved AudioBand settings.
+        /// </summary>
+        public AudioBandSettings AudioBandSettings { get; }
+
+        /// <summary>
         /// Gets the current profile.
         /// </summary>
         public UserProfile CurrentProfile { get; private set; }

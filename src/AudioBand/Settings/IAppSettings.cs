@@ -20,6 +20,11 @@ namespace AudioBand.Settings
         string AudioSource { get; set; }
 
         /// <summary>
+        /// Gets the saved AudioBand settings.
+        /// </summary>
+        AudioBandSettings AudioBandSettings { get; }
+
+        /// <summary>
         /// Gets the saved audio source settings.
         /// </summary>
         List<AudioSourceSettings> AudioSourceSettings { get; }

@@ -244,6 +244,7 @@
     <Compile Include="UI\ViewModel\ValidatingViewModelBase.cs" />
     <Compile Include="UI\ViewModel\ViewModelBase.cs" />
     <Compile Include="UI\ViewModel\ViewModelContainer.cs" />
+    <Compile Include="Models\AudioBandSettings.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="TextFormatting\FormattedTextParser.cs" />

@@ -209,6 +209,12 @@ namespace AudioBand.UI
 
             if (audioSource == null || audioSource == SelectedAudioSource)
             {
+                if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
+                {
+                    _appSettings.AudioBandSettings.LastNonIdleProfile = SelectedProfile;
+                    SelectProfileCommand.Execute(UserProfile.IdleProfileName);
+                }
+
                 SelectedAudioSource = null;
                 _appSettings.Save();
                 return;
@@ -219,6 +225,11 @@ namespace AudioBand.UI
             Logger.Debug("Activating new audio source {audiosource}", audioSource.Name);
             try
             {
+                if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
+                {
+                    SelectProfileCommand.Execute(_appSettings.AudioBandSettings.LastNonIdleProfile);
+                }
+
                 await audioSource.ActivateAsync();
                 SelectedAudioSource = audioSource;
             }
