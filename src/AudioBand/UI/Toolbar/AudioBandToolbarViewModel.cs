@@ -10,7 +10,6 @@ using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using NLog;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Linq;
 
