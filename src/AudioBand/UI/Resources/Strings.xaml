@@ -82,6 +82,7 @@ Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9}
 Using style and color : {*artist:#a9a9a9}</sys:String>
 
     <!--  Navigation pane  -->
+    <sys:String x:Key="ProfilesTab">Profile Settings</sys:String>
     <sys:String x:Key="GeneralSettingsTab">General</sys:String>
     <sys:String x:Key="ButtonsTab">Buttons</sys:String>
     <sys:String x:Key="PlaybackControlsTab">Playback Controls</sys:String>

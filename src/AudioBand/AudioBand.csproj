@@ -303,6 +303,7 @@
     <Compile Include="UI\ValueConverters\TimeSpanToMsConverter.cs" />
     <Compile Include="UI\AlbumArt\AlbumArtViewModel.cs" />
     <Compile Include="DirectoryHelper.cs" />
+    <Compile Include="UI\Toolbar\GlobalSettingsViewModel.cs" />
     <Compile Include="UI\Toolbar\GeneralSettingsViewModel.cs" />
     <Compile Include="UI\AudioSourceSettings\AudioSourceSettingsViewModel.cs" />
     <Compile Include="UI\PlaybackControls\NextButtonViewModel.cs" />

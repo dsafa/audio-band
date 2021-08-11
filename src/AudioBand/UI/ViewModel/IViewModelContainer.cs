@@ -6,6 +6,11 @@
     public interface IViewModelContainer
     {
         /// <summary>
+        /// Gets the viewmodel for Global AudioBand settings.
+        /// </summary>
+        GlobalSettingsViewModel GlobalSettingsViewmodel { get; }
+
+        /// <summary>
         /// Gets the viewmodel for audioband toolbar.
         /// </summary>
         GeneralSettingsViewModel GeneralSettingsViewModel { get; }
