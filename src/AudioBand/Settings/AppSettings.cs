@@ -30,40 +30,25 @@ namespace AudioBand.Settings
             SelectProfile(dto.CurrentProfileName);
         }
 
-        /// <summary>
-        /// Occurs when the current profile changes
-        /// </summary>
+        /// <inheritdoc />
         public event EventHandler ProfileChanged;
 
-        /// <summary>
-        /// Gets or sets the name of the current audio source.
-        /// </summary>
+        /// <inheritdoc />
         public string AudioSource { get; set; }
 
-        /// <summary>
-        /// Gets the saved audio source settings.
-        /// </summary>
+        /// <inheritdoc />
         public List<AudioSourceSettings> AudioSourceSettings { get; }
 
-        /// <summary>
-        /// Gets the saved AudioBand settings.
-        /// </summary>
+        /// <inheritdoc />
         public AudioBandSettings AudioBandSettings { get; }
 
-        /// <summary>
-        /// Gets the current profile.
-        /// </summary>
+        /// <inheritdoc />
         public UserProfile CurrentProfile { get; private set; }
 
-        /// <summary>
-        /// Gets a list of available profiles.
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<UserProfile> Profiles => _profiles.Values;
 
-        /// <summary>
-        /// Selects a new profile.
-        /// </summary>
-        /// <param name="profileName">The name of the profile to switch to.</param>
+        /// <inheritdoc />
         public void SelectProfile(string profileName)
         {
             Debug.Assert(_profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}");
@@ -73,10 +58,7 @@ namespace AudioBand.Settings
             Save();
         }
 
-        /// <summary>
-        /// Creates a new profile.
-        /// </summary>
-        /// <param name="profileName">The name of the new profile.</param>
+        /// <inheritdoc />
         public void CreateProfile(string profileName)
         {
             if (profileName == null)
@@ -92,10 +74,7 @@ namespace AudioBand.Settings
             _profiles.Add(profileName, UserProfile.CreateDefaultProfile(profileName));
         }
 
-        /// <summary>
-        /// Deletes the profile.
-        /// </summary>
-        /// <param name="profileName">The name of the profile to delete.</param>
+        /// <inheritdoc />
         public void DeleteProfile(string profileName)
         {
             if (profileName == null)
@@ -116,10 +95,7 @@ namespace AudioBand.Settings
             _profiles.Remove(profileName);
         }
 
-        /// <summary>
-        /// Renames the current profile.
-        /// </summary>
-        /// <param name="newProfileName">The new profile name.</param>
+        /// <inheritdoc />
         public void RenameCurrentProfile(string newProfileName)
         {
             if (newProfileName == null)
@@ -140,9 +116,7 @@ namespace AudioBand.Settings
             CurrentProfile.Name = newProfileName;
         }
 
-        /// <summary>
-        /// Save the settings.
-        /// </summary>
+        /// <inheritdoc />
         public void Save()
         {
             var dto = new PersistedSettingsDto
