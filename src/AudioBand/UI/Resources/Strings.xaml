@@ -4,7 +4,7 @@
     <!--  Global settings  -->
     <sys:String x:Key="IdleProfileTitle">Idle Profile Settings</sys:String>
     <sys:String x:Key="UseIdleHeaderText">Whether automatically switching to Idle Profile is enabled</sys:String>
-    <sys:String x:Key="HideIdleHeaderText">Whether the Idle Profile is hidden in the quick menu</sys:String>
+    <sys:String x:Key="HideIdleHeaderText">Whether the Idle Profile is hidden in the quick menu (requires restart)</sys:String>
     <sys:String x:Key="IdleDelayLabelText">After how many seconds of inactivity the Idle Banner should activate</sys:String>
 
     <!--  Common settings  -->

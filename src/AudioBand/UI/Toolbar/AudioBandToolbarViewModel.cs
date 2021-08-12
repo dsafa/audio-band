@@ -46,9 +46,9 @@ namespace AudioBand.UI
 
             ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommandOnExecute);
             LoadCommand = new AsyncRelayCommand<object>(LoadCommandOnExecute);
-            DoubleClickCommand = new AsyncRelayCommand<RoutedEventArgs>(OnDoubleClick);
+            DoubleClickCommand = new RelayCommand<RoutedEventArgs>(OnDoubleClick);
             SelectAudioSourceCommand = new AsyncRelayCommand<IInternalAudioSource>(SelectAudioSourceCommandOnExecute);
-            SelectProfileCommand = new AsyncRelayCommand<string>(SelectProfileCommandOnExecute);
+            SelectProfileCommand = new RelayCommand<string>(SelectProfileCommandOnExecute);
         }
 
         /// <summary>
@@ -152,13 +152,21 @@ namespace AudioBand.UI
             Logger.Debug("Audio sources loaded. Loaded {num} sources", AudioSources.Count);
 
             // Initalize Profiles
-            Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles);
+            if (_appSettings.AudioBandSettings.HideIdleProfileInQuickMenu)
+            {
+                Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles.Where(x => x.Name != UserProfile.IdleProfileName));
+            }
+            else
+            {
+                Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles);
+            }
+
             SelectedProfile = _appSettings.CurrentProfile;
             RaisePropertyChanged(nameof(Profiles));
             Logger.Debug($"Profiles loaded. Loaded {Profiles.Count} profiles.");
         }
 
-        private async Task OnDoubleClick(RoutedEventArgs e)
+        private void OnDoubleClick(RoutedEventArgs e)
         {
             if (SelectedAudioSource == null)
             {
@@ -243,7 +251,7 @@ namespace AudioBand.UI
             }
         }
 
-        private async Task SelectProfileCommandOnExecute(string profileName)
+        private void SelectProfileCommandOnExecute(string profileName)
         {
             if (string.IsNullOrEmpty(profileName))
             {
