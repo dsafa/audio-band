@@ -123,10 +123,12 @@ namespace AudioBand.Settings
             var dto = new PersistedSettingsDto
             {
                 AudioSource = AudioSource,
+                AudioBandSettings = AudioBandSettings,
                 CurrentProfileName = CurrentProfile.Name,
                 Profiles = _profiles.Values,
                 AudioSourceSettings = AudioSourceSettings,
             };
+
             _persistSettings.WriteSettings(dto);
         }
 

@@ -31,6 +31,6 @@ namespace AudioBand.Settings.Persistence
         /// <summary>
         /// Gets or sets the AudioBand settings.
         /// </summary>
-        public AudioBandSettings AudioBandSettings { get; }
+        public AudioBandSettings AudioBandSettings { get; set; }
     }
 }
