@@ -48,7 +48,7 @@ namespace AudioBand.UI
             LoadCommand = new AsyncRelayCommand<object>(LoadCommandOnExecute);
             DoubleClickCommand = new AsyncRelayCommand<RoutedEventArgs>(OnDoubleClick);
             SelectAudioSourceCommand = new AsyncRelayCommand<IInternalAudioSource>(SelectAudioSourceCommandOnExecute);
-            SelectProfileCommand = new AsyncRelayCommand<UserProfile>(SelectProfileCommandOnExecute);
+            SelectProfileCommand = new AsyncRelayCommand<string>(SelectProfileCommandOnExecute);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace AudioBand.UI
             {
                 if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
                 {
-                    _appSettings.AudioBandSettings.LastNonIdleProfile = SelectedProfile;
+                    _appSettings.AudioBandSettings.LastNonIdleProfileName = SelectedProfile.Name;
                     SelectProfileCommand.Execute(UserProfile.IdleProfileName);
                 }
 
@@ -226,7 +226,7 @@ namespace AudioBand.UI
             {
                 if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
                 {
-                    SelectProfileCommand.Execute(_appSettings.AudioBandSettings.LastNonIdleProfile);
+                    SelectProfileCommand.Execute(_appSettings.AudioBandSettings.LastNonIdleProfileName);
                 }
 
                 await audioSource.ActivateAsync();
@@ -243,9 +243,14 @@ namespace AudioBand.UI
             }
         }
 
-        private async Task SelectProfileCommandOnExecute(UserProfile profile)
+        private async Task SelectProfileCommandOnExecute(string profileName)
         {
-            _appSettings.SelectProfile(profile.Name);
+            if (string.IsNullOrEmpty(profileName))
+            {
+                return;
+            }
+
+            _appSettings.SelectProfile(profileName);
             SelectedProfile = _appSettings.CurrentProfile;
         }
     }

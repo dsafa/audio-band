@@ -19,7 +19,7 @@
             <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource HideIdleHeaderText}" />
             <metro:ToggleSwitch IsChecked="{Binding HideIdleProfileInQuickMenu, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
             <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource IdleDelayLabelText}" />
-            <metro:NumericUpDown audioband:NumericInput.Type="Size" Value="{Binding ShouldGoIdleAfterInSeconds, Mode=TwoWay}" />
+            <metro:NumericUpDown audioband:NumericInput.Type="WholeNumber" Value="{Binding ShouldGoIdleAfterInSeconds, Mode=TwoWay}" />
             <TextBlock Margin="{StaticResource SectionMargin}"
                        Style="{StaticResource TitleTextBlock}"
                        Text="{StaticResource OtherSectionText}" />

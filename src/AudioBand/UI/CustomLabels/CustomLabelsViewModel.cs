@@ -133,6 +133,12 @@ namespace AudioBand.UI
         private void SetupLabels()
         {
             CustomLabels.Clear();
+
+            if (_appsettings.CurrentProfile.CustomLabels == null || _appsettings.CurrentProfile.CustomLabels.Count == 0)
+            {
+                return;
+            }
+
             foreach (var customLabelVm in _appsettings.CurrentProfile.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession, MessageBus)))
             {
                 CustomLabels.Add(customLabelVm);

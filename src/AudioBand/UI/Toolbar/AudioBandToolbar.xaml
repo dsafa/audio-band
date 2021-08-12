@@ -139,7 +139,7 @@
                 <MenuItem.ItemContainerStyle>
                     <Style BasedOn="{StaticResource ToolbarContextMenuItem}" TargetType="{x:Type MenuItem}">
                         <Setter Property="Command" Value="{Binding PlacementTarget.DataContext.SelectProfileCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" />
-                        <Setter Property="CommandParameter" Value="{Binding}" />
+                        <Setter Property="CommandParameter" Value="{Binding Name}" />
                         <Style.Triggers>
                             <DataTrigger Value="True">
                                 <DataTrigger.Binding>
