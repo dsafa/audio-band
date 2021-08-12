@@ -160,7 +160,11 @@ namespace AudioBand.Models
                     Width = 40,
                     Height = 30
                 },
-                AlbumArt = new AlbumArt(),
+                AlbumArt = new AlbumArt()
+                {
+                    XPosition = 0,
+                    YPosition = 0
+                },
                 AlbumArtPopup = new AlbumArtPopup()
                 {
                     IsVisible = false
