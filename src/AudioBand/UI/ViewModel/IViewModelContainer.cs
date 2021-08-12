@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets the viewmodel for Global AudioBand settings.
         /// </summary>
-        GlobalSettingsViewModel GlobalSettingsViewmodel { get; }
+        GlobalSettingsViewModel GlobalSettingsViewModel { get; }
 
         /// <summary>
         /// Gets the viewmodel for audioband toolbar.

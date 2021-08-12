@@ -26,6 +26,7 @@ namespace AudioBand.Settings
             var dto = _persistSettings.ReadSettings();
             AudioSource = dto.AudioSource;
             AudioSourceSettings = dto.AudioSourceSettings?.ToList() ?? new List<AudioSourceSettings>();
+            AudioBandSettings = dto.AudioBandSettings ?? new AudioBandSettings();
             CheckAndLoadProfiles(dto);
             SelectProfile(dto.CurrentProfileName);
         }

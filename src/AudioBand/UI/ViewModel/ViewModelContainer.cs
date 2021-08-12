@@ -34,7 +34,7 @@
             ProgressBarViewModel progressBarViewModel,
             AudioSourceSettingsViewModel audioSourceSettingsViewModel)
         {
-            GlobalSettingsViewmodel = globalSettingsViewModel;
+            GlobalSettingsViewModel = globalSettingsViewModel;
             GeneralSettingsViewModel = generalSettingsViewModel;
             AlbumArtPopupViewModel = albumArtPopupViewModel;
             AlbumArtViewModel = albumArtViewModel;
@@ -49,7 +49,7 @@
         }
 
         /// <inheritdoc />
-        public GlobalSettingsViewModel GlobalSettingsViewmodel { get; }
+        public GlobalSettingsViewModel GlobalSettingsViewModel { get; }
 
         /// <inheritdoc />
         public GeneralSettingsViewModel GeneralSettingsViewModel { get; }

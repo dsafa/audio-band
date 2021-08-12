@@ -1,4 +1,7 @@
+using System;
+using System.Diagnostics;
 using AudioBand.Messages;
+using AudioBand.Models;
 using AudioBand.Settings;
 
 namespace AudioBand.UI
@@ -9,8 +12,8 @@ namespace AudioBand.UI
     public class GlobalSettingsViewModel : ViewModelBase
     {
         private IAppSettings _appSettings;
-        private readonly Models.AudioBandSettings _model = new Models.AudioBandSettings();
-        private readonly Models.AudioBandSettings _backup = new Models.AudioBandSettings();
+        private readonly AudioBandSettings _model = new AudioBandSettings();
+        private readonly AudioBandSettings _backup = new AudioBandSettings();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalSettingsViewModel"/> class.
@@ -42,7 +45,7 @@ namespace AudioBand.UI
         public bool HideIdleProfileInQuickMenu
         {
             get => _model.HideIdleProfileInQuickMenu;
-            set => SetProperty(_model, nameof(_model.UseAutomaticIdleProfile), value);
+            set => SetProperty(_model, nameof(_model.HideIdleProfileInQuickMenu), value);
         }
 
         /// <summary>
@@ -53,6 +56,41 @@ namespace AudioBand.UI
         {
             get => _model.ShouldGoIdleAfterInSeconds;
             set => SetProperty(_model, nameof(_model.ShouldGoIdleAfterInSeconds), value);
+        }
+
+        /// <inheritdoc />
+        protected override void OnReset()
+        {
+            base.OnReset();
+            ResetObject(_model);
+        }
+
+        /// <inheritdoc />
+        protected override void OnBeginEdit()
+        {
+            base.OnBeginEdit();
+            MapSelf(_model, _backup);
+        }
+
+        /// <inheritdoc />
+        protected override void OnCancelEdit()
+        {
+            base.OnCancelEdit();
+            MapSelf(_backup, _model);
+        }
+
+        /// <inheritdoc />
+        protected override void OnEndEdit()
+        {
+            base.OnEndEdit();
+            MapSelf(_model, _appSettings.AudioBandSettings);
+        }
+
+        private void AppsettingsOnProfileChanged(object sender, EventArgs e)
+        {
+            Debug.Assert(IsEditing == false, "Should not be editing");
+            MapSelf(_appSettings.AudioBandSettings, _model);
+            RaisePropertyChangedAll();
         }
     }
 }

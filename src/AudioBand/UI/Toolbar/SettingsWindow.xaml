@@ -96,7 +96,7 @@
                         Style="{StaticResource NavigationPaneRadioButton}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{StaticResource Gear}" Style="{StaticResource NavigationPaneIcon}" />
-                            <TextBlock Text="{StaticResource GeneralSettingsTab}" />
+                            <TextBlock Text="{StaticResource GlobalSettingsTab}" />
                         </StackPanel>
                     </RadioButton>
                     <Expander Style="{StaticResource NavigationPaneExpander}">
@@ -423,6 +423,9 @@
                 <TextBlock.Style>
                     <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static audioband:Converters.ObjectToType}}" Value="{x:Type audioband:GlobalSettingsViewModel}">
+                                <Setter Property="Text" Value="{StaticResource GlobalSettingsTab}" />
+                            </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static audioband:Converters.ObjectToType}}" Value="{x:Type audioband:AlbumArtViewModel}">
                                 <Setter Property="Text" Value="{StaticResource AlbumArtTab}" />
                             </DataTrigger>
@@ -472,6 +475,7 @@
                     <ContentControl.Resources>
                         <ResourceDictionary>
                             <ResourceDictionary.MergedDictionaries>
+                                <audioband:SharedDictionary Source="GlobalSettingsView.xaml" />
                                 <audioband:SharedDictionary Source="GeneralSettingsView.xaml" />
                                 <audioband:SharedDictionary Source="../AlbumArt/AlbumArtSettingsView.xaml" />
                                 <audioband:SharedDictionary Source="../AlbumArt/AlbumArtPopupSettingsView.xaml" />
