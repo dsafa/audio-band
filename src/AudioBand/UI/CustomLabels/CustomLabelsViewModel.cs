@@ -146,7 +146,10 @@ namespace AudioBand.UI
 
             foreach (var customLabelVm in _appsettings.CurrentProfile.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession, MessageBus)))
             {
-                CustomLabels.Add(customLabelVm);
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    CustomLabels.Add(customLabelVm);
+                });
             }
         }
 

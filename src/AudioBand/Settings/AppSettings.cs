@@ -52,7 +52,7 @@ namespace AudioBand.Settings
         /// <inheritdoc />
         public void SelectProfile(string profileName)
         {
-            Debug.Assert(_profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}");
+            Debug.Assert(_profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}.");
 
             CurrentProfile = _profiles[profileName];
             ProfileChanged?.Invoke(this, EventArgs.Empty);

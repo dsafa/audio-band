@@ -112,13 +112,7 @@ namespace AudioBand.UI
         public UserProfile SelectedProfile
         {
             get => _selectedUserProfile;
-            set
-            {
-                if (SetProperty(ref _selectedUserProfile, value))
-                {
-                    _appSettings.AudioSource = value?.Name;
-                }
-            }
+            set => SetProperty(ref _selectedUserProfile, value);
         }
 
         private void ShowSettingsWindowCommandOnExecute()
@@ -162,8 +156,15 @@ namespace AudioBand.UI
             }
 
             SelectedProfile = _appSettings.CurrentProfile;
+            _appSettings.AudioBandSettings.LastNonIdleProfileName = SelectedProfile.Name;
+
+            if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile && !_audioSession.IsPlaying)
+            {
+                SelectProfileCommand.Execute(UserProfile.IdleProfileName);
+            }
+
             RaisePropertyChanged(nameof(Profiles));
-            Logger.Debug($"Profiles loaded. Loaded {Profiles.Count} profiles.");
+            Logger.Debug($"Loaded {Profiles.Count} profiles. (may exclude idle profile)");
         }
 
         private void OnDoubleClick(RoutedEventArgs e)
@@ -218,7 +219,7 @@ namespace AudioBand.UI
             {
                 if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
                 {
-                    _appSettings.AudioBandSettings.LastNonIdleProfileName = SelectedProfile.Name;
+                    _appSettings.AudioBandSettings.LastNonIdleProfileName = UserProfile.IdleProfileName;
                     SelectProfileCommand.Execute(UserProfile.IdleProfileName);
                 }
 
