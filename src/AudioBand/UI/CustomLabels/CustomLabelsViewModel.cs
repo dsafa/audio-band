@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Messages;
@@ -132,7 +133,11 @@ namespace AudioBand.UI
 
         private void SetupLabels()
         {
-            CustomLabels.Clear();
+            // required to modify collection created on UI thread.
+            Application.Current.Dispatcher.Invoke((Action)delegate
+            {
+                CustomLabels.Clear();
+            });
 
             if (_appsettings.CurrentProfile.CustomLabels == null || _appsettings.CurrentProfile.CustomLabels.Count == 0)
             {
