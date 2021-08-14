@@ -176,7 +176,7 @@ namespace AudioBand.UI
 
             var windowPtr = NativeMethods.FindWindow(SelectedAudioSource.WindowClassName, null);
 
-            // Spotify has some weird shenanigans with their windows, doign it like normal
+            // Spotify has some weird shenanigans with their windows, doing it like normal
             // results in the wrong window handle being returned.
             if (SelectedAudioSource.Name == "Spotify")
             {
@@ -219,7 +219,6 @@ namespace AudioBand.UI
             {
                 if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
                 {
-                    _appSettings.AudioBandSettings.LastNonIdleProfileName = UserProfile.IdleProfileName;
                     SelectProfileCommand.Execute(UserProfile.IdleProfileName);
                 }
 
@@ -259,7 +258,6 @@ namespace AudioBand.UI
                 return;
             }
 
-            _appSettings.AudioBandSettings.LastNonIdleProfileName = SelectedProfile.Name;
             _appSettings.SelectProfile(profileName);
             SelectedProfile = _appSettings.CurrentProfile;
         }

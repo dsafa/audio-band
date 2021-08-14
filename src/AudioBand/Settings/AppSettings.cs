@@ -54,6 +54,11 @@ namespace AudioBand.Settings
         {
             Debug.Assert(_profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}.");
 
+            if (!string.IsNullOrEmpty(CurrentProfile?.Name))
+            {
+                AudioBandSettings.LastNonIdleProfileName = CurrentProfile.Name;
+            }
+
             CurrentProfile = _profiles[profileName];
             ProfileChanged?.Invoke(this, EventArgs.Empty);
             Save();
