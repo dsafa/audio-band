@@ -3,9 +3,9 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <!--  Global settings  -->
     <sys:String x:Key="IdleProfileTitle">Idle Profile Settings</sys:String>
-    <sys:String x:Key="UseIdleHeaderText">Whether automatically switching to Idle Profile is enabled</sys:String>
-    <sys:String x:Key="HideIdleHeaderText">Whether the Idle Profile is hidden in the quick menu (requires restart)</sys:String>
-    <sys:String x:Key="IdleDelayLabelText">After how many seconds of inactivity the Idle Profile should activate</sys:String>
+    <sys:String x:Key="UseIdleHeaderText">Enable Idle Profile</sys:String>
+    <sys:String x:Key="HideIdleHeaderText">Hide Idle Profile in the Quick Menu (right click on audioband) [requires restart]</sys:String>
+    <sys:String x:Key="IdleDelayLabelText">Seconds before AudioBand switches to Idle Mode</sys:String>
 
     <!--  Common settings  -->
     <sys:String x:Key="WidthLabelText">Width</sys:String>

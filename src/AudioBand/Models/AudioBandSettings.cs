@@ -5,10 +5,24 @@ namespace AudioBand.Models
     /// </summary>
     public class AudioBandSettings
     {
+        private string _lastNonIdleProfileName = "";
+
         /// <summary>
         /// Gets the last active profile name before going into idle.
         /// </summary>
-        public string LastNonIdleProfileName { get; set; }
+        public string LastNonIdleProfileName
+        {
+            get => _lastNonIdleProfileName;
+            set
+            {
+                if (value == UserProfile.IdleProfileName)
+                {
+                    return;
+                }
+
+                _lastNonIdleProfileName = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets whether to use the Idle Profile.

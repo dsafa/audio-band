@@ -259,6 +259,7 @@ namespace AudioBand.UI
                 return;
             }
 
+            _appSettings.AudioBandSettings.LastNonIdleProfileName = SelectedProfile.Name;
             _appSettings.SelectProfile(profileName);
             SelectedProfile = _appSettings.CurrentProfile;
         }
