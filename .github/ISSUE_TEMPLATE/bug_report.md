@@ -7,32 +7,22 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Description
+A clear and concise description of what the bug is and what you expected to happen.
 
-**Checked common issues**
-- [ ] Unblocked the files. (Windows blocks files when installing / upgrading for some people)
-- [ ] Double checked audio source specific issues (for audio source related issues)
-
-**To Reproduce**
+## How To Reproduce
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
-
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Version Info**
- - Windows version
+## Version
+ - Windows version (Settings -> System -> About)
  - AudioBand Version [e.g. 0.8.0]
 
-**Logs attachment**
-Audioband logs can be found in windows temp directory in the `AudioBand.log` file.
+## Logs/Screenshots Attachment
+To obtain the log file, run `Windows-Key` + `R` and type in `%temp%`. Press enter.
+Now look for the file called `audioband.log`.  
 
-**Additional context**
-Add any other context about the problem here. (e.g. occurs after upgrading to new version)
+If applicable, feel free to add screenshots to show us the issue.

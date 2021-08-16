@@ -1,19 +1,24 @@
 # Intro
-Thanks for taking the time to read this!
-This doc contains guidelines and resources for contributing. It's not too complete but I'll add to it.
+Thanks for taking the time to read this!  
+This doc contains guidelines and resources for contributing. The documentation still needs some development, but this file is a start.
 
 # Ways to contribute
 ## Reporting Bugs
-Feel free to report bugs in the [issues tracker](https://github.com/dsafa/audio-band/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc). 
-There are templates when creating a new issue to help you get started. Try to search for existing bugs first, the keyword search is quite good.
+Feel free to report bugs in the [Issue Tracker](https://github.com/svr333/audio-band/issues) on GitHub. 
+Before reporting an issue, please check if the issue doesn't already exist.  
+There are templates to guide you when to report bugs, it is not necessary to follow them, but we suggest sticking to the format somewhat. Consistency speeds up the development process.
 
 ## Suggest Features
-You can also suggest features and improvements in the issue tracker as well.
+You may also feel free to suggest features in our [Issue Tracker](https://github.com/svr333/audio-band/issues), there is also a template to help you with that.  
+
+## Our Discord Server
+**[Join Now](discord.gg/yWDHdH2za5)**
+We have opened a Discord Server where we can provide support more easily and more directly, it is also a place where we openly discuss new features and the priority of what you guys would like to see developed first.  
+It is also a place to share profiles or just chat in general.
 
 ## Development
-Development docs are on the [github page](https://dsafa.github.io/audio-band/audioband/development/setup.html) for this repo.
-The site will have instructions for setting up a build environment including instructions on how to debug a local setup as well as
-an overview of the project itself.
+The development documentation is a bit bare-bones at the moment, but it might be extended further later on. You can find it on our [GitHub Pages](https://svr333.github.io/audio-band/audioband/development/setup.html).  
+There are instructions on how to get started developing, how to debug and a brief overview of the project's layout.  
+If you need any help while developing something, feel free to ask for it in either a PR/draft or in the Discord.  
 
-I try to keep it as up to date as possible but like all docs, they tend to get outdated. 
-If something is out of date feel free to raise an issue about it.
+If you feel like some necessary information is missing regarding development, or anywhere, feel free to raise an issue or mention it in our [Discord](discord.gg/yWDHdH2za5).

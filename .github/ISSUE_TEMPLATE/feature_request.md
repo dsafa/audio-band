@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+## Description of your Suggestion
+A clear and concise description of what feature(s) you would like to see in audioband.
 
-**Describe alternatives you've considered**
+## Alternative Solutions
 A clear and concise description of any alternative solutions or features you've considered.
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+## Extra (if applicable)
+Add any other info or screenshots regarding the requested feature here.
