@@ -204,6 +204,7 @@ namespace AudioBand.AudioSource
         private void OnIdleTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _appSettings.SelectProfile(UserProfile.IdleProfileName);
+            AlbumArt = null;
         }
 
         private int GetInterval()
