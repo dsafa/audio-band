@@ -26,52 +26,45 @@ namespace AudioBand.Settings
             var dto = _persistSettings.ReadSettings();
             AudioSource = dto.AudioSource;
             AudioSourceSettings = dto.AudioSourceSettings?.ToList() ?? new List<AudioSourceSettings>();
+            AudioBandSettings = dto.AudioBandSettings ?? new AudioBandSettings();
             CheckAndLoadProfiles(dto);
             SelectProfile(dto.CurrentProfileName);
         }
 
-        /// <summary>
-        /// Occurs when the current profile changes
-        /// </summary>
+        /// <inheritdoc />
         public event EventHandler ProfileChanged;
 
-        /// <summary>
-        /// Gets or sets the name of the current audio source.
-        /// </summary>
+        /// <inheritdoc />
         public string AudioSource { get; set; }
 
-        /// <summary>
-        /// Gets the saved audio source settings.
-        /// </summary>
+        /// <inheritdoc />
         public List<AudioSourceSettings> AudioSourceSettings { get; }
 
-        /// <summary>
-        /// Gets the current profile.
-        /// </summary>
+        /// <inheritdoc />
+        public AudioBandSettings AudioBandSettings { get; }
+
+        /// <inheritdoc />
         public UserProfile CurrentProfile { get; private set; }
 
-        /// <summary>
-        /// Gets a list of available profiles.
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<UserProfile> Profiles => _profiles.Values;
 
-        /// <summary>
-        /// Selects a new profile.
-        /// </summary>
-        /// <param name="profileName">The name of the profile to switch to.</param>
+        /// <inheritdoc />
         public void SelectProfile(string profileName)
         {
-            Debug.Assert(_profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}");
+            Debug.Assert(_profiles.ContainsKey(profileName), $"Selecting non existent profile {profileName}.");
+
+            if (!string.IsNullOrEmpty(CurrentProfile?.Name))
+            {
+                AudioBandSettings.LastNonIdleProfileName = CurrentProfile.Name;
+            }
 
             CurrentProfile = _profiles[profileName];
             ProfileChanged?.Invoke(this, EventArgs.Empty);
             Save();
         }
 
-        /// <summary>
-        /// Creates a new profile.
-        /// </summary>
-        /// <param name="profileName">The name of the new profile.</param>
+        /// <inheritdoc />
         public void CreateProfile(string profileName)
         {
             if (profileName == null)
@@ -87,10 +80,7 @@ namespace AudioBand.Settings
             _profiles.Add(profileName, UserProfile.CreateDefaultProfile(profileName));
         }
 
-        /// <summary>
-        /// Deletes the profile.
-        /// </summary>
-        /// <param name="profileName">The name of the profile to delete.</param>
+        /// <inheritdoc />
         public void DeleteProfile(string profileName)
         {
             if (profileName == null)
@@ -111,10 +101,7 @@ namespace AudioBand.Settings
             _profiles.Remove(profileName);
         }
 
-        /// <summary>
-        /// Renames the current profile.
-        /// </summary>
-        /// <param name="newProfileName">The new profile name.</param>
+        /// <inheritdoc />
         public void RenameCurrentProfile(string newProfileName)
         {
             if (newProfileName == null)
@@ -135,18 +122,18 @@ namespace AudioBand.Settings
             CurrentProfile.Name = newProfileName;
         }
 
-        /// <summary>
-        /// Save the settings.
-        /// </summary>
+        /// <inheritdoc />
         public void Save()
         {
             var dto = new PersistedSettingsDto
             {
                 AudioSource = AudioSource,
+                AudioBandSettings = AudioBandSettings,
                 CurrentProfileName = CurrentProfile.Name,
                 Profiles = _profiles.Values,
                 AudioSourceSettings = AudioSourceSettings,
             };
+
             _persistSettings.WriteSettings(dto);
         }
 
@@ -170,15 +157,15 @@ namespace AudioBand.Settings
             _persistSettings.WriteProfiles(_profiles.Values, path);
         }
 
-        private void CheckAndLoadProfiles(PersistedSettingsDto dto)
+        private void CheckAndLoadProfiles(PersistedSettingsDto settings)
         {
             /* If there are no profiles, create new ones, they're automatically saved later.
              * Second line of if statement is for people who have reinstalled audioband
              * while their last version was pre-profiles (v0.9.6) update */
-            if (dto.Profiles == null || !dto.Profiles.Any()
-            || (dto.Profiles.Count() == 1 && dto.Profiles.First().Name == "Default Profile"))
+            if (settings.Profiles == null || !settings.Profiles.Any()
+            || (settings.Profiles.Count() == 1 && settings.Profiles.First().Name == "Default Profile"))
             {
-                dto.CurrentProfileName = UserProfile.DefaultProfileName;
+                settings.CurrentProfileName = UserProfile.DefaultProfileName;
 
                 _profiles = new Dictionary<string, UserProfile>();
                 var profiles = UserProfile.CreateDefaultProfiles();
@@ -190,12 +177,27 @@ namespace AudioBand.Settings
 
                 return;
             }
-
-            _profiles = dto.Profiles.ToDictionary(profile => profile.Name, profile => profile);
-
-            if (dto.CurrentProfileName == null || !_profiles.ContainsKey(dto.CurrentProfileName))
+            else if (settings.Profiles.FirstOrDefault(x => x.Name == UserProfile.IdleProfileName) == null)
             {
-                dto.CurrentProfileName = _profiles.First().Key;
+                // Add idle profile as the first one, so move all the others down one.
+                var existingProfiles = settings.Profiles.ToArray();
+                var newProfiles = new UserProfile[existingProfiles.Count() + 1];
+
+                newProfiles[0] = UserProfile.CreateIdleProfile();
+
+                for (int i = 0; i < existingProfiles.Count(); i++)
+                {
+                    newProfiles[i + 1] = existingProfiles[i];
+                }
+
+                settings.Profiles = newProfiles;
+            }
+
+            _profiles = settings.Profiles.ToDictionary(profile => profile.Name, profile => profile);
+
+            if (settings.CurrentProfileName == null || !_profiles.ContainsKey(settings.CurrentProfileName))
+            {
+                settings.CurrentProfileName = _profiles.First().Key;
             }
         }
     }

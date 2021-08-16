@@ -595,6 +595,11 @@ namespace SpotifyAudioSource
 
         private void NotifyPlayState(CurrentlyPlayingContext context)
         {
+            if (_currentIsPlaying == context.IsPlaying)
+            {
+                return;
+            }
+
             _currentIsPlaying = context.IsPlaying;
             IsPlayingChanged?.Invoke(this, _currentIsPlaying);
         }
