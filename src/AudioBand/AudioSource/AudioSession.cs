@@ -23,6 +23,7 @@ namespace AudioBand.AudioSource
         private bool _isShuffleOn;
         private RepeatMode _repeatMode;
         private Image _album;
+        private Image _lastRememberedAlbum;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioSession"/> class.
@@ -197,6 +198,7 @@ namespace AudioBand.AudioSource
             else
             {
                 _idleProfileTimer.Stop();
+                AlbumArt = _lastRememberedAlbum;
                 _appSettings.SelectProfile(_appSettings.AudioBandSettings.LastNonIdleProfileName);
             }
         }
@@ -204,6 +206,7 @@ namespace AudioBand.AudioSource
         private void OnIdleTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _appSettings.SelectProfile(UserProfile.IdleProfileName);
+            _lastRememberedAlbum = AlbumArt;
             AlbumArt = null;
         }
 
