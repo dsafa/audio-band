@@ -44,8 +44,6 @@ namespace SpotifyAudioSource
         private string _proxyUserName;
         private string _proxyPassword;
         private bool _isActive;
-        private int _retryAttempts;
-        private const int _maxRetries = 25;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpotifyAudioSource"/> class.
@@ -520,23 +518,16 @@ namespace SpotifyAudioSource
             }
             catch (HttpRequestException e)
             {
-                // Gets thrown when internet cuts out, will retry every 10 seconds.
-                if (_retryAttempts >= _maxRetries)
-                {
-                    Logger.Info($"Retried {_maxRetries} times, but user still has no internet connection. Disabling Spotify.");
-                    await DeactivateAsync();
-                    return null;
-                }
+                // Gets thrown when internet cuts out, will retry every 30 seconds.
+                Logger.Info("Tried to update Spotify Playback, but user has no internet connection. Update Interval is 30 seconds.");
+                _checkSpotifyTimer.Interval = 30000;
 
-                Logger.Info("Tried to update Spotify Playback, but user has no internet connection.");
-                await Task.Delay(10000);
-                _retryAttempts++;
-                return await GetPlayback();
+                return null;
             }
             catch (APIUnauthorizedException e)
             {
                 Authorize();
-                return await GetPlayback();
+                return null;
             }
             catch (Exception e)
             {
