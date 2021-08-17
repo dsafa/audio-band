@@ -198,7 +198,7 @@ namespace AudioBand.AudioSource
             else
             {
                 _idleProfileTimer.Stop();
-                AlbumArt = _lastRememberedAlbum;
+                AlbumArt = _lastRememberedAlbum ?? AlbumArt;
                 _appSettings.SelectProfile(_appSettings.AudioBandSettings.LastNonIdleProfileName);
             }
         }
