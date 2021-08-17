@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Messages;
@@ -47,11 +48,6 @@ namespace AudioBand.UI
         /// Gets the collection of custom label viewmodels.
         /// </summary>
         public ObservableCollection<CustomLabelViewModel> CustomLabels { get; } = new ObservableCollection<CustomLabelViewModel>();
-
-        /// <summary>
-        /// Gets the collection of visible custom label viewmodels.
-        /// </summary>
-        public ObservableCollection<CustomLabelViewModel> VisibleCustomLabels => new ObservableCollection<CustomLabelViewModel>(CustomLabels.Where(x => x.IsVisible));
 
         /// <summary>
         /// Gets the command to add a new label.
@@ -137,10 +133,23 @@ namespace AudioBand.UI
 
         private void SetupLabels()
         {
-            CustomLabels.Clear();
+            // required to modify collection created on UI thread.
+            Application.Current.Dispatcher.Invoke((Action)delegate
+            {
+                CustomLabels.Clear();
+            });
+
+            if (_appsettings.CurrentProfile.CustomLabels == null || _appsettings.CurrentProfile.CustomLabels.Count == 0)
+            {
+                return;
+            }
+
             foreach (var customLabelVm in _appsettings.CurrentProfile.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession, MessageBus)))
             {
-                CustomLabels.Add(customLabelVm);
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    CustomLabels.Add(customLabelVm);
+                });
             }
         }
 

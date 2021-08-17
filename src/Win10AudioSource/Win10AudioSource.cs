@@ -16,6 +16,7 @@ namespace Win10AudioSource
         private readonly Timer _checkTimer = new Timer(1000);
         private GlobalSystemMediaTransportControlsSessionManager _mtcManager;
         private GlobalSystemMediaTransportControlsSession _currentSession;
+        private bool _isPlaying;
 
         /// <inheritdoc />
         public event EventHandler<SettingChangedEventArgs> SettingChanged
@@ -269,7 +270,11 @@ namespace Win10AudioSource
 
             // We'll just make every other state count as paused.
             var isPlaying = playbackInfo.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
-            IsPlayingChanged?.Invoke(this, isPlaying);
+
+            if (_isPlaying != isPlaying)
+            {
+                IsPlayingChanged?.Invoke(this, isPlaying);
+            }
 
             ShuffleChanged?.Invoke(this, playbackInfo.IsShuffleActive.GetValueOrDefault());
             RepeatModeChanged?.Invoke(this, ToAudioBandRepeatMode(playbackInfo.AutoRepeatMode.GetValueOrDefault()));

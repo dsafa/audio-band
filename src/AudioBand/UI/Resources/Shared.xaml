@@ -17,12 +17,18 @@
     <GridLength x:Key="DefaultControlHeightLength">32</GridLength>
     <system:Double x:Key="DefaultControlHeight">32</system:Double>
     <system:Double x:Key="NavigationPaneItemHeight">42</system:Double>
+    <system:Double x:Key="NavigationPaneSubItemHeight">38</system:Double>
+    <system:Double x:Key="NavigationPaneSubSubItemHeight">34</system:Double>
     <system:Double x:Key="NavigationPaneItemFontSize">22</system:Double>
+    <system:Double x:Key="NavigationPaneSubItemFontSize">20</system:Double>
+    <system:Double x:Key="NavigationPaneSubSubItemFontSize">18.5</system:Double>
     <system:Double x:Key="BodyFontSize">14</system:Double>
     <system:Double x:Key="TitleFontSize">24</system:Double>
     <system:Double x:Key="HeaderFontSize">34</system:Double>
     <system:Double x:Key="DefaultButtonHeight">30</system:Double>
     <system:Double x:Key="NavigationPaneIconLength">18</system:Double>
+    <system:Double x:Key="NavigationPaneSubIconLength">16</system:Double>
+    <system:Double x:Key="NavigationPaneSubSubIconLength">14</system:Double>
     <RadialGradientBrush x:Key="RevealHoverLightBrush" x:Shared="False" MappingMode="Absolute" RadiusX="200" RadiusY="200">
         <RadialGradientBrush.Center>
             <MultiBinding Converter="{StaticResource relativePositionConverter}">
