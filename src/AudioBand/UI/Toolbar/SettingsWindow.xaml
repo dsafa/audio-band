@@ -99,7 +99,8 @@
                             <TextBlock Text="{StaticResource GlobalSettingsTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <Expander Style="{StaticResource NavigationPaneExpander}">
+                    <!--Profile Settings expander-->
+                    <Expander Style="{StaticResource NavigationPaneExpander}" IsExpanded="False">
                         <Expander.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -115,16 +116,17 @@
                             </Grid>
                         </Expander.Header>
                         <Expander.Content>
-                            <StackPanel>
+                            <StackPanel Margin="15,0,0,0">
                                 <RadioButton Command="{Binding SelectViewModelCommand}"
                                     CommandParameter="{Binding ViewModels.GeneralSettingsViewModel}"
                                     GroupName="nav"
-                                    Style="{StaticResource NavigationPaneRadioButton}">
+                                    Style="{StaticResource NavigationPaneSubRadioButton}">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{StaticResource Gear}" Style="{StaticResource NavigationPaneIcon}" />
+                                        <Image Source="{StaticResource Gear}" Style="{StaticResource NavigationSubPaneIcon}" />
                                         <TextBlock Text="{StaticResource GeneralSettingsTab}" />
                                     </StackPanel>
                                 </RadioButton>
+                                <!--Buttons Expander-->
                                 <Expander Style="{StaticResource NavigationPaneExpander}">
                                     <Expander.Header>
                                         <Grid>
@@ -136,87 +138,88 @@
                                                     VerticalAlignment="Center"
                                                     FontWeight="Normal"
                                                     Foreground="{audioband:ThemeResource SystemBaseHighColor}"
-                                                    Style="{StaticResource NavigationPaneTextBlock}"
+                                                    Style="{StaticResource NavigationPaneSubTextBlock}"
                                                     Text="{StaticResource ButtonsTab}" />
                                         </Grid>
                                     </Expander.Header>
                                     <Expander.Content>
-                                        <StackPanel>
+                                        <StackPanel Margin="15,0,0,0">
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                 CommandParameter="{Binding ViewModels.PlayPauseButtonViewModel}"
                                                 GroupName="nav"
-                                                Style="{StaticResource NavigationPaneRadioButton}">
+                                                Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{StaticResource Play}" Style="{StaticResource NavigationPaneIcon}" />
+                                                    <Image Source="{StaticResource Play}" Style="{StaticResource NavigationSubSubPaneIcon}" />
                                                     <TextBlock Text="{StaticResource PlayPauseButtonTab}" />
                                                 </StackPanel>
                                             </RadioButton>
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                         CommandParameter="{Binding ViewModels.NextButtonViewModel}"
                                                         GroupName="nav"
-                                                        Style="{StaticResource NavigationPaneRadioButton}">
+                                                        Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{StaticResource Next}" Style="{StaticResource NavigationPaneIcon}" />
+                                                    <Image Source="{StaticResource Next}" Style="{StaticResource NavigationSubSubPaneIcon}" />
                                                     <TextBlock Text="{StaticResource NextButtonTab}" />
                                                 </StackPanel>
                                             </RadioButton>
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                         CommandParameter="{Binding ViewModels.PreviousButtonViewModel}"
                                                         GroupName="nav"
-                                                        Style="{StaticResource NavigationPaneRadioButton}">
+                                                        Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{StaticResource Previous}" Style="{StaticResource NavigationPaneIcon}" />
+                                                    <Image Source="{StaticResource Previous}" Style="{StaticResource NavigationSubSubPaneIcon}" />
                                                     <TextBlock Text="{StaticResource PrevButtonTab}" />
                                                 </StackPanel>
                                             </RadioButton>
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                         CommandParameter="{Binding ViewModels.RepeatModeButtonViewModel}"
                                                         GroupName="nav"
-                                                        Style="{StaticResource NavigationPaneRadioButton}">
+                                                        Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{StaticResource RepeatModeIcon}" Style="{StaticResource NavigationPaneIcon}" />
+                                                    <Image Source="{StaticResource RepeatModeIcon}" Style="{StaticResource NavigationSubSubPaneIcon}" />
                                                     <TextBlock Text="{StaticResource RepeatModeButtonTab}" />
                                                 </StackPanel>
                                             </RadioButton>
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                         CommandParameter="{Binding ViewModels.ShuffleModeButtonViewModel}"
                                                         GroupName="nav"
-                                                        Style="{StaticResource NavigationPaneRadioButton}">
+                                                        Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{StaticResource ShuffleModeIcon}" Style="{StaticResource NavigationPaneIcon}" />
+                                                    <Image Source="{StaticResource ShuffleModeIcon}" Style="{StaticResource NavigationSubSubPaneIcon}" />
                                                     <TextBlock Text="{StaticResource ShuffleModeButtonTab}" />
                                                 </StackPanel>
                                             </RadioButton>
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                         CommandParameter="{Binding ViewModels.ProgressBarViewModel}"
                                                         GroupName="nav"
-                                                        Style="{StaticResource NavigationPaneRadioButton}">
+                                                        Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{StaticResource Progress}" Style="{StaticResource NavigationPaneIcon}" />
+                                                    <Image Source="{StaticResource Progress}" Style="{StaticResource NavigationSubSubPaneIcon}" />
                                                     <TextBlock Text="{StaticResource ProgressBarTab}" />
                                                 </StackPanel>
                                             </RadioButton>
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                         CommandParameter="{Binding ViewModels.AlbumArtViewModel}"
                                                         GroupName="nav"
-                                                        Style="{StaticResource NavigationPaneRadioButton}">
+                                                        Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{StaticResource Album}" Style="{StaticResource NavigationPaneIcon}" />
+                                                    <Image Source="{StaticResource Album}" Style="{StaticResource NavigationSubSubPaneIcon}" />
                                                     <TextBlock Text="{StaticResource AlbumArtTab}" />
                                                 </StackPanel>
                                             </RadioButton>
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                         CommandParameter="{Binding ViewModels.AlbumArtPopupViewModel}"
                                                         GroupName="nav"
-                                                        Style="{StaticResource NavigationPaneRadioButton}">
+                                                        Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{StaticResource AlbumPopup}" Style="{StaticResource NavigationPaneIcon}" />
+                                                    <Image Source="{StaticResource AlbumPopup}" Style="{StaticResource NavigationSubSubPaneIcon}" />
                                                     <TextBlock Text="{StaticResource AlbumArtPopupTab}" />
                                                 </StackPanel>
                                             </RadioButton>
                                         </StackPanel>
                                     </Expander.Content>
                                 </Expander>
+                                <!--CustomLabels expander-->
                                 <Expander Style="{StaticResource NavigationPaneExpander}">
                                     <Expander.Header>
                                         <Grid>
@@ -228,11 +231,11 @@
                                                     VerticalAlignment="Center"
                                                     FontWeight="Normal"
                                                     Foreground="{audioband:ThemeResource SystemBaseHighColor}"
-                                                    Style="{StaticResource NavigationPaneTextBlock}"
+                                                    Style="{StaticResource NavigationPaneSubTextBlock}"
                                                     Text="{StaticResource CustomLabelsTab}" />
                                             <Button Grid.Column="1"
-                                                    Width="{StaticResource NavigationPaneItemHeight}"
-                                                    Height="{StaticResource NavigationPaneItemHeight}"
+                                                    Width="{StaticResource NavigationPaneSubItemHeight}"
+                                                    Height="{StaticResource NavigationPaneSubItemHeight}"
                                                     BorderThickness="1,0,0,0"
                                                     Command="{Binding Path=ViewModels.CustomLabelsViewModel.AddLabelCommand}"
                                                     Style="{StaticResource RevealButton}">
@@ -248,7 +251,8 @@
                                     <ListBox Background="Transparent"
                                             ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}"
                                             ItemsSource="{Binding Path=ViewModels.CustomLabelsViewModel.CustomLabels}"
-                                            KeyboardNavigation.TabNavigation="Local">
+                                            KeyboardNavigation.TabNavigation="Local"
+                                            Margin="15,0,0,0">
                                         <i:Interaction.Behaviors>
                                             <audioband:RedirectScrolling />
                                         </i:Interaction.Behaviors>
@@ -257,7 +261,7 @@
                                                 <RadioButton Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
                                                             CommandParameter="{Binding}"
                                                             GroupName="nav"
-                                                            Style="{StaticResource NavigationPaneRadioButton}">
+                                                            Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                     <Grid HorizontalAlignment="Stretch">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto" />
@@ -294,6 +298,7 @@
                             </StackPanel>
                         </Expander.Content>
                     </Expander>
+                    <!--AudioSource Settings expander-->
                     <Expander Style="{StaticResource NavigationPaneExpander}">
                         <Expander.Header>
                             <TextBlock Padding="0,0,10,0"
@@ -304,7 +309,8 @@
                         </Expander.Header>
                         <ListBox Background="Transparent"
                                  ItemContainerStyle="{StaticResource NavigationPaneListBoxItem}"
-                                 ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsViewModel.AudioSourcesSettings}">
+                                 ItemsSource="{Binding Path=ViewModels.AudioSourceSettingsViewModel.AudioSourcesSettings}"
+                                 Margin="15,0,0,0">
                             <i:Interaction.Behaviors>
                                 <audioband:RedirectScrolling />
                             </i:Interaction.Behaviors>
@@ -313,7 +319,7 @@
                                     <RadioButton Command="{Binding ElementName=Window, Path=DataContext.SelectViewModelCommand}"
                                                  CommandParameter="{Binding}"
                                                  GroupName="nav"
-                                                 Style="{StaticResource NavigationPaneRadioButton}">
+                                                 Style="{StaticResource NavigationPaneSubRadioButton}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />
@@ -321,7 +327,7 @@
                                             </Grid.ColumnDefinitions>
                                             <Image Grid.Column="0"
                                                    Source="{StaticResource AudioSources}"
-                                                   Style="{StaticResource NavigationPaneIcon}" />
+                                                   Style="{StaticResource NavigationSubPaneIcon}" />
                                             <TextBlock Grid.Column="1" Text="{Binding AudioSourceName}" />
                                         </Grid>
                                     </RadioButton>
