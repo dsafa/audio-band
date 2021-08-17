@@ -22,13 +22,16 @@ namespace AudioBand.Settings
         public AppSettings(IPersistSettings persistSettings)
         {
             _persistSettings = persistSettings;
-
             var dto = _persistSettings.ReadSettings();
+
             AudioSource = dto.AudioSource;
             AudioSourceSettings = dto.AudioSourceSettings?.ToList() ?? new List<AudioSourceSettings>();
             AudioBandSettings = dto.AudioBandSettings ?? new AudioBandSettings();
+
             CheckAndLoadProfiles(dto);
-            SelectProfile(dto.CurrentProfileName);
+            var profileName = string.IsNullOrEmpty(AudioBandSettings.LastNonIdleProfileName)
+                            ? dto.CurrentProfileName : AudioBandSettings.LastNonIdleProfileName;
+            SelectProfile(profileName);
         }
 
         /// <inheritdoc />
