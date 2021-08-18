@@ -1,0 +1,31 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:audioband="clr-namespace:AudioBand.UI"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls">
+    <DataTemplate DataType="{x:Type audioband:GlobalSettingsViewModel}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <audioband:SharedDictionary Source="../Resources/Shared.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource IdleProfileTitle}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource UseIdleHeaderText}" />
+            <metro:ToggleSwitch IsChecked="{Binding UseAutomaticIdleProfile, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource HideIdleHeaderText}" />
+            <metro:ToggleSwitch IsChecked="{Binding HideIdleProfileInQuickMenu, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource IdleDelayLabelText}" />
+            <metro:NumericUpDown audioband:NumericInput.Type="WholeNumber" Value="{Binding ShouldGoIdleAfterInSeconds, Mode=TwoWay}" />
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

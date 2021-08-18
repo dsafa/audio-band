@@ -118,6 +118,7 @@ namespace AudioBand.Settings.Persistence
             var settings = new CurrentSettings()
             {
                 AudioSource = null,
+                AudioBandSettings = new AudioBandSettings(),
                 AudioSourceSettings = new List<AudioSourceSettings>(),
                 Profiles = new List<UserProfile>(UserProfile.CreateDefaultProfiles()),
                 CurrentProfileName = UserProfile.DefaultProfileName,
@@ -144,6 +145,7 @@ namespace AudioBand.Settings.Persistence
             return new CurrentSettings
             {
                 AudioSource = dto.AudioSource,
+                AudioBandSettings = dto.AudioBandSettings,
                 CurrentProfileName = dto.CurrentProfileName,
                 Profiles = dto.Profiles.ToList(),
                 AudioSourceSettings = dto.AudioSourceSettings.ToList(),
@@ -155,6 +157,7 @@ namespace AudioBand.Settings.Persistence
             return new PersistedSettingsDto
             {
                 AudioSource = settings.AudioSource,
+                AudioBandSettings = settings.AudioBandSettings,
                 CurrentProfileName = settings.CurrentProfileName,
                 Profiles = settings.Profiles,
                 AudioSourceSettings = settings.AudioSourceSettings,

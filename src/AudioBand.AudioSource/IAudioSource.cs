@@ -52,6 +52,12 @@ namespace AudioBand.AudioSource
         string Name { get; }
 
         /// <summary>
+        /// Gets the Window Class Name of the associated player.
+        /// </summary>
+        /// <value>The Class Name of the Window.</value>
+        string WindowClassName { get; }
+
+        /// <summary>
         /// Gets or sets the <see cref="IAudioSourceLogger"/> used for logging.
         /// </summary>
         /// <value>Audio source logger that will be injected.</value>

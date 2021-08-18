@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Logging;
@@ -9,6 +10,8 @@ using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using NLog;
+using System.Diagnostics;
+using System.Linq;
 
 namespace AudioBand.UI
 {
@@ -43,8 +46,9 @@ namespace AudioBand.UI
 
             ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommandOnExecute);
             LoadCommand = new AsyncRelayCommand<object>(LoadCommandOnExecute);
+            DoubleClickCommand = new RelayCommand<RoutedEventArgs>(OnDoubleClick);
             SelectAudioSourceCommand = new AsyncRelayCommand<IInternalAudioSource>(SelectAudioSourceCommandOnExecute);
-            SelectProfileCommand = new AsyncRelayCommand<UserProfile>(SelectProfileCommandOnExecute);
+            SelectProfileCommand = new RelayCommand<string>(SelectProfileCommandOnExecute);
         }
 
         /// <summary>
@@ -71,6 +75,11 @@ namespace AudioBand.UI
         /// Gets the command to initialize loading.
         /// </summary>
         public ICommand LoadCommand { get; }
+
+        /// <summary>
+        /// Gets the command to handle double clicks.
+        /// </summary>
+        public ICommand DoubleClickCommand { get; }
 
         /// <summary>
         /// Gets the command to select an audio source.
@@ -103,13 +112,7 @@ namespace AudioBand.UI
         public UserProfile SelectedProfile
         {
             get => _selectedUserProfile;
-            set
-            {
-                if (SetProperty(ref _selectedUserProfile, value))
-                {
-                    _appSettings.AudioSource = value?.Name;
-                }
-            }
+            set => SetProperty(ref _selectedUserProfile, value);
         }
 
         private void ShowSettingsWindowCommandOnExecute()
@@ -143,10 +146,58 @@ namespace AudioBand.UI
             Logger.Debug("Audio sources loaded. Loaded {num} sources", AudioSources.Count);
 
             // Initalize Profiles
-            Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles);
+            if (_appSettings.AudioBandSettings.HideIdleProfileInQuickMenu)
+            {
+                Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles.Where(x => x.Name != UserProfile.IdleProfileName));
+            }
+            else
+            {
+                Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles);
+            }
+
             SelectedProfile = _appSettings.CurrentProfile;
+            _appSettings.AudioBandSettings.LastNonIdleProfileName = SelectedProfile.Name;
+
+            if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile && !_audioSession.IsPlaying)
+            {
+                SelectProfileCommand.Execute(UserProfile.IdleProfileName);
+            }
+
             RaisePropertyChanged(nameof(Profiles));
-            Logger.Debug($"Profiles loaded. Loaded {Profiles.Count} profiles.");
+            Logger.Debug($"Loaded {Profiles.Count} profiles. (may exclude idle profile)");
+        }
+
+        private void OnDoubleClick(RoutedEventArgs e)
+        {
+            if (SelectedAudioSource == null)
+            {
+                return;
+            }
+
+            var windowPtr = NativeMethods.FindWindow(SelectedAudioSource.WindowClassName, null);
+
+            // Spotify has some weird shenanigans with their windows, doing it like normal
+            // results in the wrong window handle being returned.
+            if (SelectedAudioSource.Name == "Spotify")
+            {
+                var spotifyProcesses = Process.GetProcessesByName("spotify");
+                var title = spotifyProcesses.FirstOrDefault(x => !string.IsNullOrEmpty(x.MainWindowTitle))?.MainWindowTitle;
+                windowPtr = NativeMethods.FindWindow(null, title);
+            }
+
+            if (windowPtr == IntPtr.Zero)
+            {
+                Logger.Warn("Could not find the associated window to open with double click.");
+            }
+            else
+            {
+                if (NativeMethods.IsIconic(windowPtr))
+                {
+                    NativeMethods.ShowWindow(windowPtr, 9);
+                }
+
+                NativeMethods.SetForegroundWindow(windowPtr);
+            }
         }
 
         private async Task SelectAudioSourceCommandOnExecute(IInternalAudioSource audioSource)
@@ -166,6 +217,11 @@ namespace AudioBand.UI
 
             if (audioSource == null || audioSource == SelectedAudioSource)
             {
+                if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
+                {
+                    SelectProfileCommand.Execute(UserProfile.IdleProfileName);
+                }
+
                 SelectedAudioSource = null;
                 _appSettings.Save();
                 return;
@@ -176,6 +232,11 @@ namespace AudioBand.UI
             Logger.Debug("Activating new audio source {audiosource}", audioSource.Name);
             try
             {
+                if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
+                {
+                    SelectProfileCommand.Execute(_appSettings.AudioBandSettings.LastNonIdleProfileName);
+                }
+
                 await audioSource.ActivateAsync();
                 SelectedAudioSource = audioSource;
             }
@@ -190,9 +251,14 @@ namespace AudioBand.UI
             }
         }
 
-        private async Task SelectProfileCommandOnExecute(UserProfile profile)
+        private void SelectProfileCommandOnExecute(string profileName)
         {
-            _appSettings.SelectProfile(profile.Name);
+            if (string.IsNullOrEmpty(profileName))
+            {
+                return;
+            }
+
+            _appSettings.SelectProfile(profileName);
             SelectedProfile = _appSettings.CurrentProfile;
         }
     }

@@ -14,6 +14,11 @@ namespace AudioBand.Models
         public const string DefaultProfileName = "Default";
 
         /// <summary>
+        /// The idle profile name.
+        /// </summary>
+        public const string IdleProfileName = "Idle";
+
+        /// <summary>
         /// Gets or sets the name of the profile.
         /// </summary>
         public string Name { get; set; }
@@ -148,14 +153,66 @@ namespace AudioBand.Models
         }
 
         /// <summary>
+        /// Creates an idle profile used for when the player is idle. 
+        /// </summary>
+        /// <returns>A default idle profile.</returns>
+        public static UserProfile CreateIdleProfile()
+        {
+            return new UserProfile()
+            {
+                Name = IdleProfileName,
+                GeneralSettings = new GeneralSettings()
+                {
+                    Width = 40,
+                    Height = 30
+                },
+                AlbumArt = new AlbumArt()
+                {
+                    XPosition = 0,
+                    YPosition = 0
+                },
+                AlbumArtPopup = new AlbumArtPopup()
+                {
+                    IsVisible = false
+                },
+                PlayPauseButton = new PlayPauseButton()
+                {
+                    IsVisible = false
+                },
+                NextButton = new NextButton()
+                {
+                    IsVisible = false
+                },
+                PreviousButton = new PreviousButton()
+                {
+                    IsVisible = false
+                },
+                RepeatModeButton = new RepeatModeButton()
+                {
+                    IsVisible = false
+                },
+                ShuffleModeButton = new ShuffleModeButton()
+                {
+                    IsVisible = false
+                },
+                ProgressBar = new ProgressBar()
+                {
+                    IsVisible = false
+                },
+                CustomLabels = new List<CustomLabel>()
+            };
+        }
+
+        /// <summary>
         /// Creates an array of UserProfiles to fill up the default settings.
         /// </summary>
         /// <returns>The array of default profiles</returns>
         public static UserProfile[] CreateDefaultProfiles()
         {
-            var profiles = new UserProfile[4];
-            profiles[0] = CreateDefaultProfile(DefaultProfileName);
-            profiles[1] = new UserProfile()
+            var profiles = new UserProfile[5];
+            profiles[0] = CreateIdleProfile();
+            profiles[1] = CreateDefaultProfile(DefaultProfileName);
+            profiles[2] = new UserProfile()
             {
                 Name = "Default (Compact)",
                 GeneralSettings = new GeneralSettings()
@@ -382,7 +439,7 @@ namespace AudioBand.Models
                 }
             };
 
-            profiles[2] = new UserProfile()
+            profiles[3] = new UserProfile()
             {
                 Name = "Compact",
                 GeneralSettings = new GeneralSettings()
@@ -506,7 +563,7 @@ namespace AudioBand.Models
                 }
             };
 
-            profiles[3] = new UserProfile()
+            profiles[4] = new UserProfile()
             {
                 Name = "No Controls",
                 GeneralSettings = new GeneralSettings()

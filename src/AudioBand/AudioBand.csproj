@@ -246,6 +246,7 @@
     <Compile Include="UI\ViewModel\ValidatingViewModelBase.cs" />
     <Compile Include="UI\ViewModel\ViewModelBase.cs" />
     <Compile Include="UI\ViewModel\ViewModelContainer.cs" />
+    <Compile Include="Models\AudioBandSettings.cs" />
     <Compile Include="Models\AudioSourceSetting.cs" />
     <Compile Include="Models\AudioSourceSettings.cs" />
     <Compile Include="TextFormatting\FormattedTextParser.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="UI\ValueConverters\TimeSpanToMsConverter.cs" />
     <Compile Include="UI\AlbumArt\AlbumArtViewModel.cs" />
     <Compile Include="DirectoryHelper.cs" />
+    <Compile Include="UI\Toolbar\GlobalSettingsViewModel.cs" />
     <Compile Include="UI\Toolbar\GeneralSettingsViewModel.cs" />
     <Compile Include="UI\AudioSourceSettings\AudioSourceSettingsViewModel.cs" />
     <Compile Include="UI\PlaybackControls\NextButtonViewModel.cs" />
@@ -423,6 +425,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\CustomLabels\CustomLabelSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Toolbar\GlobalSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

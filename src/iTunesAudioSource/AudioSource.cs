@@ -46,6 +46,8 @@ namespace iTunesAudioSource
 
         public string Name => "iTunes";
 
+        public string WindowClassName => "iTunes";
+
         public IAudioSourceLogger Logger { get; set; }
 
         public Task ActivateAsync()
@@ -113,6 +115,8 @@ namespace iTunesAudioSource
             _itunesControls.RepeatMode = ToITRepeat(newRepeatMode);
             return Task.CompletedTask;
         }
+
+        public string GetWindowClassName() => "iTunes";
 
         private RepeatMode ToRepeatMode(ITPlaylistRepeatMode mode)
         {

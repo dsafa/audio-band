@@ -27,5 +27,10 @@ namespace AudioBand.Settings.Persistence
         /// Gets or sets the audio source settings.
         /// </summary>
         public IEnumerable<AudioSourceSettings> AudioSourceSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the AudioBand settings.
+        /// </summary>
+        public AudioBandSettings AudioBandSettings { get; set; }
     }
 }

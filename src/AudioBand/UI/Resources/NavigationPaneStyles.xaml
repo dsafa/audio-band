@@ -18,11 +18,173 @@
         <Setter Property="FontSize" Value="{StaticResource NavigationPaneItemFontSize}" />
         <Setter Property="FontWeight" Value="Light" />
     </Style>
+    <Style x:Key="NavigationPaneSubTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontSize" Value="{StaticResource NavigationPaneSubItemFontSize}" />
+        <Setter Property="FontWeight" Value="Light" />
+    </Style>
     <Style x:Key="NavigationPaneRadioButton" TargetType="{x:Type RadioButton}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="FontSize" Value="{StaticResource NavigationPaneItemFontSize}" />
         <Setter Property="FontWeight" Value="Light" />
         <Setter Property="Height" Value="{StaticResource NavigationPaneItemHeight}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{audioband:ThemeResource SystemBaseHighColor}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Grid Background="{TemplateBinding Background}" RenderTransformOrigin="0.5, 0.5">
+                        <Grid.RenderTransform>
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </Grid.RenderTransform>
+                        <Rectangle x:Name="RevealHoverLightLayer"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Fill="{StaticResource RevealHoverLightBrush}"
+                                   Opacity="0"
+                                   StrokeThickness="0" />
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{StaticResource RevealBorderBrush}"
+                                BorderThickness="0,1,1,1" />
+                        <DockPanel LastChildFill="True">
+                            <Rectangle Width="5"
+                                       Height="25"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left"
+                                       Fill="{audioband:ThemeResource SystemAccentColor}"
+                                       Visibility="{TemplateBinding IsChecked,
+                                                                    Converter={x:Static audioband:Converters.BoolToVisibility},
+                                                                    ConverterParameter=False}" />
+                            <ContentPresenter Margin="15,0,0,0" VerticalAlignment="Center" />
+                        </DockPanel>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
+                                                         To="0.98"
+                                                         Duration="0:0:0.01" />
+                                        <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
+                                                         To="0.98"
+                                                         Duration="0:0:0.01" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{audioband:ThemeResource SystemListLowColor}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{audioband:ThemeResource SystemListMediumColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="NavigationPaneSubRadioButton" TargetType="{x:Type RadioButton}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="FontSize" Value="{StaticResource NavigationPaneSubItemFontSize}" />
+        <Setter Property="FontWeight" Value="Light" />
+        <Setter Property="Height" Value="{StaticResource NavigationPaneSubItemHeight}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{audioband:ThemeResource SystemBaseHighColor}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Grid Background="{TemplateBinding Background}" RenderTransformOrigin="0.5, 0.5">
+                        <Grid.RenderTransform>
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </Grid.RenderTransform>
+                        <Rectangle x:Name="RevealHoverLightLayer"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Fill="{StaticResource RevealHoverLightBrush}"
+                                   Opacity="0"
+                                   StrokeThickness="0" />
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{StaticResource RevealBorderBrush}"
+                                BorderThickness="0,1,1,1" />
+                        <DockPanel LastChildFill="True">
+                            <Rectangle Width="5"
+                                       Height="25"
+                                       VerticalAlignment="Center"
+                                       DockPanel.Dock="Left"
+                                       Fill="{audioband:ThemeResource SystemAccentColor}"
+                                       Visibility="{TemplateBinding IsChecked,
+                                                                    Converter={x:Static audioband:Converters.BoolToVisibility},
+                                                                    ConverterParameter=False}" />
+                            <ContentPresenter Margin="15,0,0,0" VerticalAlignment="Center" />
+                        </DockPanel>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="RevealHoverLightLayer"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
+                                                         To="0.98"
+                                                         Duration="0:0:0.01" />
+                                        <DoubleAnimation Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
+                                                         To="0.98"
+                                                         Duration="0:0:0.01" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{audioband:ThemeResource SystemListLowColor}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{audioband:ThemeResource SystemListMediumColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="NavigationPaneSubSubRadioButton" TargetType="{x:Type RadioButton}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="FontSize" Value="{StaticResource NavigationPaneSubSubItemFontSize}" />
+        <Setter Property="FontWeight" Value="Light" />
+        <Setter Property="Height" Value="{StaticResource NavigationPaneSubSubItemHeight}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Background" Value="Transparent" />
@@ -215,6 +377,22 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0,0,15,0" />
+        <Setter Property="Margin" Value="0,0,11,0" />
+    </Style>
+    <Style x:Key="NavigationSubPaneIcon" TargetType="{x:Type Image}">
+        <Setter Property="Height" Value="{StaticResource NavigationPaneSubIconLength}" />
+        <Setter Property="Width" Value="{StaticResource NavigationPaneSubIconLength}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,11,0" />
+    </Style>
+    <Style x:Key="NavigationSubSubPaneIcon" TargetType="{x:Type Image}">
+        <Setter Property="Height" Value="{StaticResource NavigationPaneSubSubIconLength}" />
+        <Setter Property="Width" Value="{StaticResource NavigationPaneSubSubIconLength}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,11,0" />
     </Style>
 </ResourceDictionary>

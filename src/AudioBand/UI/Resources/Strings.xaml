@@ -1,6 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!--  Global settings  -->
+    <sys:String x:Key="IdleProfileTitle">Idle Profile Settings</sys:String>
+    <sys:String x:Key="UseIdleHeaderText">Enable Idle Profile</sys:String>
+    <sys:String x:Key="HideIdleHeaderText">Hide Idle Profile in the Quick Menu (right click on audioband) [requires restart]</sys:String>
+    <sys:String x:Key="IdleDelayLabelText">Seconds before AudioBand switches to Idle Mode</sys:String>
+
     <!--  Common settings  -->
     <sys:String x:Key="WidthLabelText">Width</sys:String>
     <sys:String x:Key="HeightLabelText">Height</sys:String>
@@ -20,6 +26,8 @@
     <sys:String x:Key="OtherSectionText">Other</sys:String>
     <sys:String x:Key="BackgroundColorDescription">Background color</sys:String>
     <sys:String x:Key="PositionAnchorDescription">Change the relative positioning of the control</sys:String>
+    <sys:String x:Key="ToggleSwitchOnText">Enabled</sys:String>
+    <sys:String x:Key="ToggleSwitchOffText">Disabled</sys:String>
 
     <!--  Play/pause button settings  -->
     <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
@@ -87,7 +95,10 @@ Showing the song progress in gray : {time:#A9A9A9} : {length:#A9A9A9}
 Using style and color : {*artist:#a9a9a9}</sys:String>
 
     <!--  Navigation pane  -->
+    <sys:String x:Key="GlobalSettingsTab">AudioBand Settings</sys:String>
+    <sys:String x:Key="ProfilesTab">Profile Settings</sys:String>
     <sys:String x:Key="GeneralSettingsTab">General</sys:String>
+    <sys:String x:Key="ButtonsTab">Buttons</sys:String>
     <sys:String x:Key="PlaybackControlsTab">Playback Controls</sys:String>
     <sys:String x:Key="PlayPauseButtonTab">Play/Pause Button</sys:String>
     <sys:String x:Key="PrevButtonTab">Previous Track Button</sys:String>
@@ -141,7 +152,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="DeleteLabelDialogBody">Are you sure you want to delete the label '{0}'?</sys:String>
     <sys:String x:Key="DiscardChangesDialogTitle">Discard changes</sys:String>
     <sys:String x:Key="DiscardChangesDialogBody">Are you sure you want to discard all unsaved changes?</sys:String>
-    <sys:String x:Key="AudioBandAboutDialogDescription">Audio Band is an application that adds music player capabilities to the windows taskbar. Created with help from the open source community.</sys:String>
+    <sys:String x:Key="AudioBandAboutDialogDescription">Audio Band is an application that adds music player capabilities to Windows's Taskbar. Created with help from the open source community.</sys:String>
     <sys:String x:Key="AudioBandAboutDialogProjectPre">Check out the project site to report issues and get more help</sys:String>
     <sys:String x:Key="AudioBandAboutDialogLicenseLinkText">License</sys:String>
     <sys:String x:Key="AudioBandAboutDialogThirdPartyLicenseLink">Third party licenses</sys:String>

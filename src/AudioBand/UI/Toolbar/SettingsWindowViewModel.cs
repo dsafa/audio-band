@@ -35,6 +35,7 @@ namespace AudioBand.UI
             _messageBus = messageBus;
             messageBus.Subscribe<EditStartMessage>(EditStartMessageOnPublished);
             ViewModels = viewModels;
+            SelectedViewModel = viewModels.GlobalSettingsViewModel;
             _selectedProfileName = appSettings.CurrentProfile.Name;
             ProfileNames = new ObservableCollection<string>(appSettings.Profiles.Select(p => p.Name));
 
