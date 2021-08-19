@@ -83,7 +83,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioSource.cs" />
+    <Compile Include="iTunesAudioSource.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ITunesControls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

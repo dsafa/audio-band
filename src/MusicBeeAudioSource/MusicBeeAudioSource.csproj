@@ -80,7 +80,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioSource.cs" />
+    <Compile Include="MusicBeeAudioSource.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MusicBeeIPC\Enums.cs" />
     <Compile Include="MusicBeeIPC\MusicBeeIPC.cs" />
