@@ -109,7 +109,13 @@ namespace AudioBand.UI
         public int Volume
         {
             get => _volume;
-            private set => SetProperty(ref _volume, value);
+            private set
+            {
+                if (SetProperty(ref _volume, value))
+                {
+                    _audioSession.CurrentAudioSource.SetVolumeAsync(value).GetAwaiter().GetResult();
+                }
+            }
         }
 
         /// <inheritdoc />

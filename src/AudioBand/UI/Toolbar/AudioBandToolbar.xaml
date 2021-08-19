@@ -401,6 +401,29 @@
                 Style="{StaticResource ToolbarVolumeButtonStyle}"
                 Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
         </Button>
+        <Popup  x:Name="VolumePopup"
+                Placement="RelativePoint"
+                IsOpen="{Binding IsVolumePopupOpen}"
+                PlacementTarget="{Binding ElementName=VolumeButton}"
+                VerticalOffset="-115"
+                HorizontalOffset="-1">
+                <Border Background="LightYellow">
+                    <Slider x:Name="VolumeSlider"
+                            Style="{StaticResource VolumeBarStyle}"
+                            Orientation="Vertical"
+                            Minimum="0"
+                            Maximum="100"
+                            Height="110"
+                            Width="20"
+                            Padding="5,5,0,0"
+                            IsMoveToPointEnabled="True" >
+                        <i:Interaction.Behaviors>
+                            <audioband:SliderThrottle FinalValue="{Binding Volume, Mode=TwoWay}" />
+                            <audioband:SliderClickAndDrag />
+                        </i:Interaction.Behaviors>
+                    </Slider>
+                </Border>
+        </Popup>
         <Slider x:Name="ProgressBar"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
