@@ -8,7 +8,7 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   x:Name="Window"
                   Title="Audio Band Settings"
-                  Width="930"
+                  Width="960"
                   Height="700"
                   d:DataContext="{d:DesignInstance audioband:SettingsWindowViewModel,
                                                    IsDesignTimeCreatable=True}"

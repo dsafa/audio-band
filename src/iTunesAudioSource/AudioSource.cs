@@ -46,6 +46,8 @@ namespace iTunesAudioSource
 
         public string Name => "iTunes";
 
+        public string Description => "";
+
         public string WindowClassName => "iTunes";
 
         public IAudioSourceLogger Logger { get; set; }

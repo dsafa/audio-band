@@ -52,6 +52,12 @@ namespace AudioBand.AudioSource
         string Name { get; }
 
         /// <summary>
+        /// Gets the Description of this audio source.
+        /// </summary>
+        /// <value>The description of the audio source.</value>
+        string Description { get; }
+
+        /// <summary>
         /// Gets the Window Class Name of the associated player.
         /// </summary>
         /// <value>The Class Name of the Window.</value>

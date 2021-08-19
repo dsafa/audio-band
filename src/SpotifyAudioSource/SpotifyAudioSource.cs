@@ -79,6 +79,9 @@ namespace SpotifyAudioSource
         public string Name => "Spotify";
 
         /// <inheritdoc />
+        public string Description => "Please note that in order to use the controls, you require Spotify Premium.";
+
+        /// <inheritdoc />
         public string WindowClassName => _spotifyControls.GetSpotifyWindowClassName();
 
         /// <inheritdoc />

@@ -50,6 +50,8 @@ namespace MusicBeeAudioSource
 
         public string Name => "Music Bee";
 
+        public string Description => "";
+
         public string WindowClassName => "WindowsForms10.Window.8.app.0.2bf8098_r7_ad1";
 
         public IAudioSourceLogger Logger { get; set; }
