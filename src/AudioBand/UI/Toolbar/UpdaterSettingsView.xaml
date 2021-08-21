@@ -1,0 +1,46 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:audioband="clr-namespace:AudioBand.UI"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls">
+    <DataTemplate DataType="{x:Type audioband:UpdaterViewModel}">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <audioband:SharedDictionary Source="../Resources/Shared.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/Strings.xaml" />
+                    <audioband:SharedDictionary Source="../Resources/SettingsWindowStyle.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <!--  Stackpanel which pops up when an update was found  -->
+            <StackPanel Visibility="{Binding UpdateIsAvailable, Converter={x:Static audioband:Converters.BoolToVisibility}}" Margin="0,0,0,15">
+                <TextBlock FontSize="18" Text="{StaticResource UpdateIsAvailableDescription}" />
+                <Button HorizontalAlignment="Left"
+                        Content="{StaticResource InstallNowButtonText}"
+                        Command="{Binding InstallUpdateCommand}"
+                        IsEnabled="{Binding IsDownloading, Converter={x:Static audioband:Converters.InverseBool}}" />
+                <Slider Width="150" Height="20"
+                        Value="{Binding DownloadPercentage}"
+                        Visibility="{Binding IsDownloading, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+            </StackPanel>
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding CheckForUpdatesCommand}"
+                    Content="{StaticResource UpdaterButtonText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}"
+                       Text="{Binding NoUpdateFoundText}" Padding="0,0,0,5"
+                       Visibility="{Binding NoUpdateFound, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource UpdaterTitle}"
+                       Padding="0,5,0,0" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}"
+                       Text="{StaticResource ShowUpdaterPopupText}" />
+            <metro:ToggleSwitch IsChecked="{Binding ShowPopupOnAvailableUpdate, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource OtherSectionText}" />
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding ResetCommand}"
+                    Content="{StaticResource ResetButtonText}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

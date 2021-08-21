@@ -81,5 +81,10 @@ namespace AudioBand.UI
         /// Gets a <see cref="FlagToBoolConverter"/>.
         /// </summary>
         public static FlagToBoolConverter HasFlag { get; } = new FlagToBoolConverter();
+
+        /// <summary>
+        /// Gets a <see cref="InverseBoolConverter"/>.
+        /// </summary>
+        public static InverseBoolConverter InverseBool { get; } = new InverseBoolConverter();
     }
 }
