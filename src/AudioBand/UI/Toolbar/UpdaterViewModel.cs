@@ -153,14 +153,14 @@ namespace AudioBand.UI
                 client.DownloadFileAsync(link, fileName);
             }
 
-            Process process = new Process();
-            process.StartInfo.FileName = "msiexec";
-            process.StartInfo.WorkingDirectory = @"C:\temp\";
-            process.StartInfo.Arguments = $" /quiet /i {fileName} ADDLOCAL=test";
-            process.StartInfo.Verb = "runas";
-
             IsDownloading = false;
-            process.Start();
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = "msiexec",
+                Arguments = $"/i {fileName}",
+                WorkingDirectory = @"C:\temp\",
+                Verb = "runas"
+            });
         }
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
