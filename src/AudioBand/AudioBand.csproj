@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -129,6 +129,9 @@
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Settings\Migrations\IdentitySettingsMigrator.cs" />
     <Compile Include="Settings\Persistence\TomlHelper.cs" />
+    <Compile Include="UI\Dialogs\UpdateDialog.xaml.cs">
+      <DependentUpon>UpdateDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ValueConverters\ValueConverterHelper.cs" />
     <Compile Include="UI\ViewModel\TrackStateAttribute.cs" />
     <Compile Include="Commands\AsyncRelayCommand{T}.cs" />
@@ -354,6 +357,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UI\Dialogs\UpdateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Resources\ButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

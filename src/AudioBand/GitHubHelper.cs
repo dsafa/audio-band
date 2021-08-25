@@ -1,7 +1,10 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AudioBand.Logging;
+using NLog;
 using Octokit;
 
 namespace AudioBand
@@ -11,6 +14,7 @@ namespace AudioBand
     /// </summary>
     public class GitHubHelper
     {
+        private static readonly ILogger Logger = AudioBandLogManager.GetLogger<GitHubHelper>();
         private GitHubClient _client = new GitHubClient(new ProductHeaderValue("audio-band"));
 
         /// <summary>
@@ -28,7 +32,16 @@ namespace AudioBand
         public async Task<bool> IsOnLatestVersionAsync()
         {
             var currentVersion = GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-            var latestVersion = (await GetLatestRelease()).Name.Split(' ')[1];
+            string latestVersion = "";
+
+            try
+            {
+                latestVersion = (await GetLatestRelease()).Name.Split(' ')[1];
+            }
+            catch (Exception)
+            {
+                Logger.Warn("Could not check for updates, request to GitHub failed.");
+            }
 
             // custom build or forgot to change version on compile, exclude from updates
             if (currentVersion == "$version$")
@@ -50,7 +63,17 @@ namespace AudioBand
         }
 
         private async Task<Release> GetLatestRelease()
-            => (await _client.Repository.Release.GetAll("svr333", "audio-band"))[0];
+        {
+            try
+            {
+                return (await _client.Repository.Release.GetAll("svr333", "audio-band"))[0];
+            }
+            catch (Exception)
+            {
+                Logger.Warn("Could not check for updates, request to GitHub failed.");
+                return null;
+            }
+        }
 
         private SemanticVersion CreateSemanticVersion(string version)
         {
