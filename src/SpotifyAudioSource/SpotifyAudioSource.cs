@@ -448,34 +448,15 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            _authIsInProcess = true;
-            Logger.Debug("Connecting to Spotify through own application.");
-            var address = new Uri($"http://localhost:{LocalPort}");
-
-            var server = new EmbedIOAuthServer(new Uri("http://localhost"), LocalPort);
-            server.Start().GetAwaiter().GetResult();
-
-            server.AuthorizationCodeReceived += async (sender, response) =>
+            try
             {
-                await server.Stop();
-
-                var config = SpotifyClientConfig.CreateDefault();
-                var tokenResponse = await new OAuthClient(config).RequestToken(
-                    new AuthorizationCodeTokenRequest(ClientId, ClientSecret, response.Code, address)
-                );
-
-                RefreshToken = tokenResponse.RefreshToken;
-                _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
-                _spotifyClient = new SpotifyClient(_spotifyConfig);
-                _authIsInProcess = false;
-            };
-
-            var request = new LoginRequest(address, ClientId, LoginRequest.ResponseType.Code)
+                RunFirstTimeAuthentication();
+            }
+            catch (Exception e)
             {
-                Scope = new [] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
-            };
-
-            BrowserUtil.Open(request.ToUri());
+                Logger.Error($"Error while trying to authenticate, user most likely offline ~ {e.Message}");
+                throw;
+            }
         }
 
         private void UpdateSpotifyHttpClient()
@@ -758,13 +739,55 @@ namespace SpotifyAudioSource
                 return;
             }
 
-            var request = new AuthorizationCodeRefreshRequest(ClientId, ClientSecret, RefreshToken);
-            var response = await new OAuthClient().RequestToken(request);
+            AuthorizationCodeRefreshResponse response;
+
+            try
+            {
+                var request = new AuthorizationCodeRefreshRequest(ClientId, ClientSecret, RefreshToken);
+                response = await new OAuthClient().RequestToken(request);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error while refreshing access token, user most likely offline ~ {e.Message}");
+                return;
+            }
 
             _spotifyClient = new SpotifyClient(response.AccessToken);
 
             var expiresIn = TimeSpan.FromSeconds(response.ExpiresIn);
             Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn})");
+        }
+
+        private void RunFirstTimeAuthentication()
+        {
+            _authIsInProcess = true;
+            Logger.Debug("Connecting to Spotify through own application.");
+            var address = new Uri($"http://localhost:{LocalPort}");
+
+            var server = new EmbedIOAuthServer(new Uri("http://localhost"), LocalPort);
+            server.Start().GetAwaiter().GetResult();
+
+            server.AuthorizationCodeReceived += async (sender, response) =>
+            {
+                await server.Stop();
+
+                var config = SpotifyClientConfig.CreateDefault();
+                var tokenResponse = await new OAuthClient(config).RequestToken(
+                    new AuthorizationCodeTokenRequest(ClientId, ClientSecret, response.Code, address)
+                );
+
+                RefreshToken = tokenResponse.RefreshToken;
+                _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
+                _spotifyClient = new SpotifyClient(_spotifyConfig);
+                _authIsInProcess = false;
+            };
+
+            var request = new LoginRequest(address, ClientId, LoginRequest.ResponseType.Code)
+            {
+                Scope = new [] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
+            };
+
+            BrowserUtil.Open(request.ToUri());
         }
 
         private void OnSettingChanged(string settingName)
