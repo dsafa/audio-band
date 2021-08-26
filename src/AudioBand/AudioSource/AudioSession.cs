@@ -14,7 +14,7 @@ namespace AudioBand.AudioSource
         private IAppSettings _appSettings;
         private IInternalAudioSource _currentAudioSource;
         private Timer _idleProfileTimer = new Timer();
-        private bool _isIdle;
+        private bool _isIdle = true;
         private bool _isPlaying;
         private string _songArtist;
         private string _songName;

@@ -154,5 +154,12 @@ namespace AudioBand.UI
 
             return null;
         }
+
+        public void ShowUpdateDialog()
+        {
+            var dialog = new UpdateDialog();
+
+            dialog.ShowDialog();
+        }
     }
 }

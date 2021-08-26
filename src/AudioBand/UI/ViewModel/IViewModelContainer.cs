@@ -11,6 +11,11 @@
         GlobalSettingsViewModel GlobalSettingsViewModel { get; }
 
         /// <summary>
+        /// Gets the viewmodel for AudioBand updates.
+        /// </summary>
+        UpdaterViewModel UpdaterViewModel { get; }
+
+        /// <summary>
         /// Gets the viewmodel for audioband toolbar.
         /// </summary>
         GeneralSettingsViewModel GeneralSettingsViewModel { get; }
