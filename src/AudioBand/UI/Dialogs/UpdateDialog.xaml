@@ -7,8 +7,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:p="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
         Title="Update Audio Band"
-        Width="600"
-        Height="500"
+        Width="666"
+        Height="300"
         d:DesignHeight="450"
         d:DesignWidth="800"
         Background="{audioband:ThemeResource SystemAltHighColor}"
@@ -25,7 +25,10 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <TextBlock Style="{StaticResource TitleTextBlock}" 
-                   Text ="{StaticResource UpdateDialogBody}"></TextBlock>
+        <TextBlock Width="520"
+                   Style="{StaticResource TitleTextBlock}"
+                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                   Text ="{StaticResource UpdateDialogBody}"
+                   TextWrapping="Wrap" />
     </Grid>
 </Window>

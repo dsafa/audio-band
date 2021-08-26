@@ -16,13 +16,22 @@
             <!--  Stackpanel which pops up when an update was found  -->
             <StackPanel Visibility="{Binding UpdateIsAvailable, Converter={x:Static audioband:Converters.BoolToVisibility}}" Margin="0,0,0,15">
                 <TextBlock FontSize="18" Text="{StaticResource UpdateIsAvailableDescription}" />
-                <Button HorizontalAlignment="Left"
-                        Content="{StaticResource InstallNowButtonText}"
-                        Command="{Binding InstallUpdateCommand}"
-                        IsEnabled="{Binding IsDownloading, Converter={x:Static audioband:Converters.InverseBool}}" />
-                <Slider Width="150" Height="20"
-                        Value="{Binding DownloadPercentage}"
-                        Visibility="{Binding IsDownloading, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Content="{StaticResource InstallNowButtonText}"
+                            Command="{Binding InstallUpdateCommand}"
+                            IsEnabled="{Binding IsDownloading, Converter={x:Static audioband:Converters.InverseBool}}" />
+                    <ProgressBar Grid.Column="1"
+                                 HorizontalAlignment="Left"
+                                 Width="150" Height="20"
+                                 Minimum="0" Maximum="100"
+                                 Value="{Binding DownloadPercentage}"
+                                 Visibility="{Binding IsDownloading, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+                </Grid>
             </StackPanel>
             <Button HorizontalAlignment="Left"
                     Command="{Binding CheckForUpdatesCommand}"
@@ -32,8 +41,7 @@
                        Visibility="{Binding NoUpdateFound, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
             <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource UpdaterTitle}"
                        Padding="0,5,0,0" />
-            <TextBlock Style="{StaticResource DescriptionTextBlock}"
-                       Text="{StaticResource ShowUpdaterPopupText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource ShowUpdaterPopupText}" />
             <metro:ToggleSwitch IsChecked="{Binding ShowPopupOnAvailableUpdate, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
             <TextBlock Margin="{StaticResource SectionMargin}"
                        Style="{StaticResource TitleTextBlock}"
