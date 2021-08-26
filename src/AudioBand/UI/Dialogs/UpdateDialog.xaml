@@ -28,7 +28,7 @@
         <TextBlock Width="520"
                    Style="{StaticResource TitleTextBlock}"
                    VerticalAlignment="Center" HorizontalAlignment="Center"
-                   Text ="{StaticResource UpdateDialogBody}"
+                   Text="{StaticResource UpdateDialogBody}"
                    TextWrapping="Wrap" />
     </Grid>
 </Window>
