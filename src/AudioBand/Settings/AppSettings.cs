@@ -29,8 +29,8 @@ namespace AudioBand.Settings
             AudioBandSettings = dto.AudioBandSettings ?? new AudioBandSettings();
 
             CheckAndLoadProfiles(dto);
-            var profileName = string.IsNullOrEmpty(AudioBandSettings.LastNonIdleProfileName)
-                            ? dto.CurrentProfileName : AudioBandSettings.LastNonIdleProfileName;
+            var profileName = AudioBandSettings.UseAutomaticIdleProfile && !string.IsNullOrEmpty(AudioBandSettings.LastNonIdleProfileName)
+                            ? AudioBandSettings.LastNonIdleProfileName : dto.CurrentProfileName;
             SelectProfile(profileName);
         }
 
