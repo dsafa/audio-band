@@ -500,24 +500,26 @@ namespace SpotifyAudioSource
 
                 return playback;
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException)
             {
                 // Gets thrown when internet cuts out, will retry every 30 seconds.
                 Logger.Info("Tried to update Spotify Playback, but user has no internet connection. Update Interval is 30 seconds.");
                 _checkSpotifyTimer.Interval = 30000;
-
-                return null;
             }
-            catch (APIUnauthorizedException e)
+            catch (APIUnauthorizedException)
             {
                 Authorize();
-                return null;
+            }
+            catch (APITooManyRequestsException e)
+            {
+                _checkSpotifyTimer.Interval = e.RetryAfter.TotalMilliseconds;
             }
             catch (Exception e)
             {
                 Logger.Error(e);
-                return null;
             }
+
+            return null;
         }
 
         private async Task NotifyTrackUpdate(FullTrack track)
@@ -726,6 +728,8 @@ namespace SpotifyAudioSource
                 {
                     _checkSpotifyTimer.Start();
                     _checkSpotifyTimer.Enabled = true;
+                    _checkSpotifyTimer.Interval = _checkSpotifyTimer.Interval < 100
+                                                ? 100 : _checkSpotifyTimer.Interval;
                 }
             }
         }
