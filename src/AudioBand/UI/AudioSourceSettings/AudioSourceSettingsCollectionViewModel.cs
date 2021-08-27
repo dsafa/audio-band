@@ -52,6 +52,11 @@ namespace AudioBand.UI
         /// </summary>
         public ObservableCollection<AudioSourceSettingKeyValue> SettingsList { get; }
 
+        /// <summary>
+        /// Gets the description/extra info of this audio source.
+        /// </summary>
+        public string Description => _audioSource.Description;
+
         /// <inheritdoc/>
         protected override void OnCancelEdit()
         {

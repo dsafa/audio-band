@@ -84,6 +84,22 @@ namespace AudioBand.AudioSource
             }
         }
 
+        public string Description
+        {
+            get
+            {
+                try
+                {
+                    return _wrapper.Description;
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, "Error trying to get the name");
+                    throw;
+                }
+            }
+        }
+
         /// <inheritdoc/>
         public string WindowClassName
         {

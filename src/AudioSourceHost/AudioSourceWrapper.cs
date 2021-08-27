@@ -68,6 +68,11 @@ namespace AudioSourceHost
         public string Name => _audioSource.Name;
 
         /// <summary>
+        /// Gets the description of the audio source.
+        /// </summary>
+        public string Description => _audioSource.Description;
+
+        /// <summary>
         /// Gets the Window Class Name of the audio source.
         /// </summary>
         public string WindowClassName => _audioSource.WindowClassName;

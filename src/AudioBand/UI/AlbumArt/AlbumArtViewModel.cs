@@ -103,7 +103,7 @@ namespace AudioBand.UI
                 return;
             }
 
-            AlbumArt = albumArt.ToImageSource();
+            AlbumArt = ((Image) albumArt.Clone()).ToImageSource();
         }
     }
 }

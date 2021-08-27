@@ -38,5 +38,10 @@ namespace AudioBand.Models
         /// Gets or sets the amount of time in seconds it should take for AudioBand to go idle.
         /// </summary>
         public int ShouldGoIdleAfterInSeconds { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to show a popup when an update is available.
+        /// </summary>
+        public bool ShowPopupOnAvailableUpdate { get; set; } = true;
     }
 }
