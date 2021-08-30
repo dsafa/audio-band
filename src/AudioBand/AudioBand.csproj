@@ -310,7 +310,6 @@
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="GitHubHelper.cs" />
     <Compile Include="UI\Toolbar\GlobalSettingsViewModel.cs" />
-    <Compile Include="UI\Toolbar\UpdaterViewModel.cs" />
     <Compile Include="UI\Toolbar\GeneralSettingsViewModel.cs" />
     <Compile Include="UI\AudioSourceSettings\AudioSourceSettingsViewModel.cs" />
     <Compile Include="UI\PlaybackControls\NextButtonViewModel.cs" />
@@ -438,10 +437,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Toolbar\GlobalSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Toolbar\UpdaterSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

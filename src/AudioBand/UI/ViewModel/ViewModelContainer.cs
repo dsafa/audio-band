@@ -9,7 +9,6 @@
         /// Initializes a new instance of the <see cref="ViewModelContainer"/> class.
         /// </summary>
         /// <param name="globalSettingsViewModel">Global Audioband settings view model.</param>
-        /// <param name="updaterViewModel">Audioband updater view model.</param>
         /// <param name="generalSettingsViewModel">Audioband view model.</param>
         /// <param name="albumArtPopupViewModel">Album art popup view model.</param>
         /// <param name="albumArtViewModel">Album art view model.</param>
@@ -23,7 +22,6 @@
         /// <param name="audioSourceSettingsViewModel">Audio source settings view model.</param>
         public ViewModelContainer(
             GlobalSettingsViewModel globalSettingsViewModel,
-            UpdaterViewModel updaterViewModel,
             GeneralSettingsViewModel generalSettingsViewModel,
             AlbumArtPopupViewModel albumArtPopupViewModel,
             AlbumArtViewModel albumArtViewModel,
@@ -37,7 +35,6 @@
             AudioSourceSettingsViewModel audioSourceSettingsViewModel)
         {
             GlobalSettingsViewModel = globalSettingsViewModel;
-            UpdaterViewModel = updaterViewModel;
             GeneralSettingsViewModel = generalSettingsViewModel;
             AlbumArtPopupViewModel = albumArtPopupViewModel;
             AlbumArtViewModel = albumArtViewModel;
@@ -53,9 +50,6 @@
 
         /// <inheritdoc />
         public GlobalSettingsViewModel GlobalSettingsViewModel { get; }
-
-        /// <inheritdoc />
-        public UpdaterViewModel UpdaterViewModel { get; }
 
         /// <inheritdoc />
         public GeneralSettingsViewModel GeneralSettingsViewModel { get; }

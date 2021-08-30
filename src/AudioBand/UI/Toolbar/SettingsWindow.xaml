@@ -99,15 +99,6 @@
                             <TextBlock Text="{StaticResource GlobalSettingsTab}" />
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Command="{Binding SelectViewModelCommand}"
-                        CommandParameter="{Binding ViewModels.UpdaterViewModel}"
-                        GroupName="nav"
-                        Style="{StaticResource NavigationPaneRadioButton}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource Gear}" Style="{StaticResource NavigationPaneIcon}" />
-                            <TextBlock Text="{StaticResource UpdaterTab}" />
-                        </StackPanel>
-                    </RadioButton>
                     <!--Profile Settings expander-->
                     <Expander Style="{StaticResource NavigationPaneExpander}" IsExpanded="False">
                         <Expander.Header>
@@ -441,9 +432,6 @@
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static audioband:Converters.ObjectToType}}" Value="{x:Type audioband:GlobalSettingsViewModel}">
                                 <Setter Property="Text" Value="{StaticResource GlobalSettingsTab}" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static audioband:Converters.ObjectToType}}" Value="{x:Type audioband:UpdaterViewModel}">
-                                <Setter Property="Text" Value="{StaticResource UpdaterTab}" />
-                            </DataTrigger>
                             <DataTrigger Binding="{Binding SelectedViewModel, Converter={x:Static audioband:Converters.ObjectToType}}" Value="{x:Type audioband:AlbumArtViewModel}">
                                 <Setter Property="Text" Value="{StaticResource AlbumArtTab}" />
                             </DataTrigger>
@@ -494,7 +482,6 @@
                         <ResourceDictionary>
                             <ResourceDictionary.MergedDictionaries>
                                 <audioband:SharedDictionary Source="GlobalSettingsView.xaml" />
-                                <audioband:SharedDictionary Source="UpdaterSettingsView.xaml" />
                                 <audioband:SharedDictionary Source="GeneralSettingsView.xaml" />
                                 <audioband:SharedDictionary Source="../AlbumArt/AlbumArtSettingsView.xaml" />
                                 <audioband:SharedDictionary Source="../AlbumArt/AlbumArtPopupSettingsView.xaml" />
