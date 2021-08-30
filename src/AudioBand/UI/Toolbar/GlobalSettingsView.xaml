@@ -14,6 +14,8 @@
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
             <!--  Updater Settings & Checker  -->
+            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource UpdaterTitle}"
+                       Padding="0,0,0,10" />
             <StackPanel Visibility="{Binding UpdateIsAvailable, Converter={x:Static audioband:Converters.BoolToVisibility}}" Margin="0,0,0,15">
                 <TextBlock FontSize="18" Text="{StaticResource UpdateIsAvailableDescription}" />
                 <Grid>
@@ -39,11 +41,8 @@
             <TextBlock Style="{StaticResource DescriptionTextBlock}"
                        Text="{StaticResource NoUpdateFoundText}" Padding="0,0,0,5"
                        Visibility="{Binding NoUpdateFound, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource UpdaterTitle}"
-                       Padding="0,5,0,0" />
             <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource ShowUpdaterPopupText}" />
             <metro:ToggleSwitch IsChecked="{Binding ShowPopupOnAvailableUpdate, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
-            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource UpdaterTitle}" />
             <!--  Idle Profile Settings  -->
             <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource IdleProfileTitle}" />
             <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource UseIdleHeaderText}" />
