@@ -1,13 +1,13 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using SpotifyAPI.Web;
+using SpotifyAPI.Web.Auth;
+using SpotifyAPI.Web.Http;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
-using AudioBand.AudioSource;
-using SpotifyAPI.Web;
-using SpotifyAPI.Web.Auth;
-using SpotifyAPI.Web.Http;
 using static SpotifyAPI.Web.PlayerCurrentPlaybackRequest;
 using static SpotifyAPI.Web.PlayerSetRepeatRequest;
 using Image = System.Drawing.Image;
@@ -346,8 +346,8 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public async Task SetVolumeAsync(float newVolume)
         {
-            var volume = (int) newVolume * 100;
-            await LogPlayerCommandIfFailed(() 
+            var volume = (int)newVolume * 100;
+            await LogPlayerCommandIfFailed(()
                 => _spotifyClient.Player.SetVolume(new PlayerVolumeRequest(volume)), "SetVolume");
 
             await Task.Delay(100).ContinueWith(async t => await UpdatePlayer());
@@ -468,10 +468,10 @@ namespace SpotifyAudioSource
             }
 
             var httpClient = new NetHttpClient(new ProxyConfig(ProxyHost, ProxyPort)
-                {
-                    User = ProxyUserName,
-                    Password = ProxyPassword
-                });
+            {
+                User = ProxyUserName,
+                Password = ProxyPassword
+            });
 
             _spotifyConfig.WithHTTPClient(httpClient);
         }
@@ -788,7 +788,7 @@ namespace SpotifyAudioSource
 
             var request = new LoginRequest(address, ClientId, LoginRequest.ResponseType.Code)
             {
-                Scope = new [] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
+                Scope = new[] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
             };
 
             BrowserUtil.Open(request.ToUri());
@@ -807,7 +807,7 @@ namespace SpotifyAudioSource
                 Logger.Warn($"Something went wrong with player command [{caller}].");
             }
         }
-    
+
         private void UpdatePollingInterval()
         {
             _checkSpotifyTimer.Stop();

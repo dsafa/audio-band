@@ -14,10 +14,10 @@ namespace AudioBand.Test
         {
             var x = 1;
             var y = 2;
-            var result = _converter.Convert(new object[] {x, y}, typeof(Point), null, CultureInfo.CurrentCulture);
+            var result = _converter.Convert(new object[] { x, y }, typeof(Point), null, CultureInfo.CurrentCulture);
 
             Assert.IsType<Point>(result);
-            var point = (Point) result;
+            var point = (Point)result;
             Assert.Equal(x, point.X);
             Assert.Equal(y, point.Y);
         }

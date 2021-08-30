@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using AudioBand.TextFormatting;
+using Moq;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
-using AudioBand.AudioSource;
-using AudioBand.TextFormatting;
-using Moq;
 using Xunit;
 
 namespace AudioBand.Test

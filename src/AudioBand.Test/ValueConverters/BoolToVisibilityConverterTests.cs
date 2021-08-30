@@ -1,6 +1,6 @@
-﻿using System.Globalization;
+﻿using AudioBand.UI;
+using System.Globalization;
 using System.Windows;
-using AudioBand.UI;
 using Xunit;
 using Visibility = System.Windows.Visibility;
 

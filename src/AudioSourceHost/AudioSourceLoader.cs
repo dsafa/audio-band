@@ -1,11 +1,11 @@
-﻿using System;
-using System.ComponentModel.Composition.Hosting;
-using System.IO;
-using System.Linq;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Logging;
 using Nett;
 using NLog;
+using System;
+using System.ComponentModel.Composition.Hosting;
+using System.IO;
+using System.Linq;
 
 namespace AudioSourceHost
 {

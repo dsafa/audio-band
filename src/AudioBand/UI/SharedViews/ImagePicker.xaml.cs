@@ -1,7 +1,7 @@
+using AudioBand.Commands;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using AudioBand.Commands;
 
 namespace AudioBand.UI
 {

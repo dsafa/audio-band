@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AudioBand.Commands;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Input;
-using AudioBand.Commands;
 
 namespace AudioBand.UI
 {

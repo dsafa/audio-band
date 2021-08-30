@@ -20,13 +20,13 @@ namespace AudioBand.UI
         /// <returns>The inverse of the boolean.</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !((bool) value);
+            return !((bool)value);
         }
 
         /// <inheritdoc />
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !((bool) value);
+            return !((bool)value);
         }
     }
 }

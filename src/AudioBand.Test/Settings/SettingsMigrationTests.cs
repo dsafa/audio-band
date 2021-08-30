@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Windows.Media;
-using AudioBand.Models;
-using AudioBand.Settings;
+﻿using AudioBand.Models;
 using AudioBand.Settings.Migrations;
-using AudioBand.Settings.Models.V3;
 using AudioBand.Settings.Models.V1;
+using AudioBand.Settings.Models.V3;
 using AudioBand.Settings.Models.V4;
 using AudioBand.Settings.Persistence;
-using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
-using V2Settings = AudioBand.Settings.Models.V2.Settings;
 using Nett;
+using System.Collections.Generic;
+using System.Windows.Media;
 using Xunit;
 using V1AudioSourceSetting = AudioBand.Settings.Models.V1.AudioSourceSetting;
+using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
+using V2Settings = AudioBand.Settings.Models.V2.Settings;
 
 namespace AudioBand.Test
 {
@@ -139,7 +138,7 @@ namespace AudioBand.Test
             var setting1 = new AudioSourceSettingsCollection
             {
                 Name = "test",
-                Settings = new List<V1AudioSourceSetting> {new V1AudioSourceSetting {Name = "key1", Value = "val1"}}
+                Settings = new List<V1AudioSourceSetting> { new V1AudioSourceSetting { Name = "key1", Value = "val1" } }
             };
 
             var setting2 = new AudioSourceSettingsCollection
@@ -148,7 +147,7 @@ namespace AudioBand.Test
                 Settings = new List<V1AudioSourceSetting> { new V1AudioSourceSetting { Name = "key2", Value = "val2" } }
             };
 
-            var settings = new List<AudioSourceSettingsCollection> {setting1,setting2};
+            var settings = new List<AudioSourceSettingsCollection> { setting1, setting2 };
             var v1 = new V1Settings
             {
                 AudioSourceSettings = settings
@@ -182,7 +181,7 @@ namespace AudioBand.Test
                 PlayButtonImagePath = "play"
             };
 
-            var v1 = new V1Settings {PlayPauseButtonAppearance = setting};
+            var v1 = new V1Settings { PlayPauseButtonAppearance = setting };
             var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.PlayPauseButtonSettings.Width, setting.Width);
@@ -207,7 +206,7 @@ namespace AudioBand.Test
                 ImagePath = "path"
             };
 
-            var v1 = new V1Settings {PreviousSongButtonAppearance = setting};
+            var v1 = new V1Settings { PreviousSongButtonAppearance = setting };
             var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.PreviousButtonSettings.Height, setting.Height);
@@ -232,7 +231,7 @@ namespace AudioBand.Test
                 ForegroundColor = Colors.Red,
             };
 
-            var v1 = new V1Settings {ProgressBarAppearance = setting};
+            var v1 = new V1Settings { ProgressBarAppearance = setting };
             var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.ProgressBarSettings.Width, setting.Width);
@@ -263,8 +262,8 @@ namespace AudioBand.Test
                 FormatString = "123",
             };
 
-            var texts = new List<TextAppearance>() {text1};
-            var v1 = new V1Settings {TextAppearances = texts};
+            var texts = new List<TextAppearance>() { text1 };
+            var v1 = new V1Settings { TextAppearances = texts };
             var v2 = SettingsMigration.MigrateSettings<V2Settings>(v1, "0.1", "2");
 
             Assert.Equal(v2.CustomLabelSettings.Count, texts.Count);

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Windows.UI.Xaml;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using NLog;
+using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Windows.UI.Xaml;
 
 namespace AudioBand.UI
 {

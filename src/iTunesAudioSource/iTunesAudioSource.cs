@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using iTunesLib;
+using System;
 using System.Threading.Tasks;
 using System.Timers;
-using AudioBand.AudioSource;
-using iTunesLib;
 using Timer = System.Timers.Timer;
 
 namespace iTunesAudioSource

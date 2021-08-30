@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using AudioBand.Models;
+﻿using AudioBand.Models;
+using System.Collections.Generic;
 
 namespace AudioBand.Settings.Persistence
 {

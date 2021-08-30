@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AudioBand.Models;
+using System;
 using System.Collections.Generic;
-using AudioBand.Models;
 
 namespace AudioBand.Settings
 {

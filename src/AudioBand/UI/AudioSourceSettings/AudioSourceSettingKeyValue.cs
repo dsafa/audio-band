@@ -1,7 +1,7 @@
-﻿using System;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Models;
 using AudioSourceHost;
+using System;
 
 namespace AudioBand.UI
 {

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using AudioBand.AudioSource;
 
 namespace AudioBand.TextFormatting
 {

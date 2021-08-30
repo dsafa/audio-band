@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
-using AudioBand.AudioSource;
 using Windows.Foundation.Metadata;
 using Windows.Media;
 using Windows.Media.Control;

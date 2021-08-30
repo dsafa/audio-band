@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using AudioBand.Logging;
+﻿using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
 using Nett;
 using NLog;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 // Alias the current settings version
 using CurrentSettings = AudioBand.Settings.Models.V4.SettingsV4;
 

@@ -1,6 +1,6 @@
-﻿using System.Windows.Media;
-using AudioBand.Models;
+﻿using AudioBand.Models;
 using Nett;
+using System.Windows.Media;
 
 namespace AudioBand.Settings.Persistence
 {

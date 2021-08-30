@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AudioBand.Commands;
+using AudioBand.Messages;
+using AudioBand.Settings;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using AudioBand.Commands;
-using AudioBand.Messages;
-using AudioBand.Settings;
 
 namespace AudioBand.UI
 {

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AudioBand.UI;
+using System;
 using System.Globalization;
-using AudioBand.UI;
 using Xunit;
 
 namespace AudioBand.Test

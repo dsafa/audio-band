@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using AudioBand.Logging;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AudioBand.AudioSource;
-using AudioBand.Logging;
-using NLog;
 
 namespace AudioSourceHost
 {

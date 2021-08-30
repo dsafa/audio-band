@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Media;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Extensions;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.TextFormatting;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Media;
 using TextAlignment = AudioBand.Models.CustomLabel.TextAlignment;
 
 namespace AudioBand.UI

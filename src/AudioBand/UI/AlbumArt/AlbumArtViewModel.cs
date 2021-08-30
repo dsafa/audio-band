@@ -1,14 +1,14 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using AudioBand.Extensions;
+using AudioBand.Messages;
+using AudioBand.Models;
+using AudioBand.Settings;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using AudioBand.AudioSource;
-using AudioBand.Extensions;
-using AudioBand.Messages;
-using AudioBand.Models;
-using AudioBand.Settings;
 
 namespace AudioBand.UI
 {
@@ -103,7 +103,7 @@ namespace AudioBand.UI
                 return;
             }
 
-            AlbumArt = ((Image) albumArt.Clone()).ToImageSource();
+            AlbumArt = ((Image)albumArt.Clone()).ToImageSource();
         }
     }
 }

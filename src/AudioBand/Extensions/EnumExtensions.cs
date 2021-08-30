@@ -36,7 +36,7 @@ namespace AudioBand.Extensions
     /// Describes an enum value.
     /// </summary>
     /// <typeparam name="TEnum">The enum type.</typeparam>
-    #pragma warning disable SA1201
+#pragma warning disable SA1201
     public struct EnumDescriptor<TEnum>
     {
         /// <summary>

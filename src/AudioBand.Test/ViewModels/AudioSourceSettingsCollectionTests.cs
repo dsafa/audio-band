@@ -1,10 +1,10 @@
 ﻿using AudioBand.AudioSource;
-using AudioBand.Models;
-using Moq;
-using System.Collections.Generic;
 using AudioBand.Messages;
+using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.UI;
+using Moq;
+using System.Collections.Generic;
 using Xunit;
 
 namespace AudioBand.Test
@@ -98,7 +98,7 @@ namespace AudioBand.Test
             Assert.Equal(newSettingValue, settingModel.Value);
             _appSettings.Verify(m => m.Save(), Times.Once);
         }
-       
+
         [Fact]
         public void AudioSourceSettingsUpdated_AudioSourceIsUpdatedInPriority()
         {
@@ -130,5 +130,5 @@ namespace AudioBand.Test
             _audioSourceMock.VerifySet(source => source[setting1.Name] = null);
             _audioSourceMock.VerifySet(source => source[setting2.Name] = null);
         }
-    }      
+    }
 }

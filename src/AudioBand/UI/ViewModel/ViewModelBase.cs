@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Input;
-using AudioBand.Commands;
+﻿using AudioBand.Commands;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AutoMapper;
 using NLog;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace AudioBand.UI
 {

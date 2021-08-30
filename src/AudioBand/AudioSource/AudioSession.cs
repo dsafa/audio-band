@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AudioBand.Models;
+using AudioBand.Settings;
+using System;
 using System.Drawing;
 using System.Timers;
-using AudioBand.Models;
-using AudioBand.Settings;
 
 namespace AudioBand.AudioSource
 {

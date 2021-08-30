@@ -1,8 +1,8 @@
-﻿using System.IO;
-using System.Reflection;
-using NLog;
+﻿using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
+using System.IO;
+using System.Reflection;
 
 namespace AudioBand.Logging
 {

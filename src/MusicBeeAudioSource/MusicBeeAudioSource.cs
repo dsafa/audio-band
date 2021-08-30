@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
-using AudioBand.AudioSource;
 using Timer = System.Timers.Timer;
 
 namespace MusicBeeAudioSource

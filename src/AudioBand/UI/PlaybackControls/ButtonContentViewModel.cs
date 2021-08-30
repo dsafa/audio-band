@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Windows.Media;
-using AudioBand.Extensions;
+﻿using AudioBand.Extensions;
 using AudioBand.Models;
+using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace AudioBand.UI
 {

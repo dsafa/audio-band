@@ -1,11 +1,11 @@
+using AudioBand.Logging;
+using NLog;
+using Octokit;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AudioBand.Logging;
-using NLog;
-using Octokit;
 
 namespace AudioBand
 {

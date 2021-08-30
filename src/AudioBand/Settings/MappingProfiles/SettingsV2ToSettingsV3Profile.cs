@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using AudioBand.Models;
+﻿using AudioBand.Models;
 using AudioBand.Settings.Models.V3;
 using AutoMapper;
+using System.Collections.Generic;
 
 namespace AudioBand.Settings.MappingProfiles
 {

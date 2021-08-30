@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AudioBand.Logging;
+using NLog;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using AudioBand.Logging;
-using NLog;
 
 namespace AudioBand.UI.TemplateSelectors
 {

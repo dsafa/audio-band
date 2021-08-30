@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using FastMember;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AudioSourceHost
 {

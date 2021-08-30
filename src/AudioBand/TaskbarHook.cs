@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using AudioBand.Logging;
+﻿using AudioBand.Logging;
 using AudioBand.Messages;
 using NLog;
+using System;
+using System.Runtime.InteropServices;
 
 namespace AudioBand
 {
