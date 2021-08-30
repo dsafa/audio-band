@@ -41,10 +41,12 @@
             <TextBlock Style="{StaticResource DescriptionTextBlock}"
                        Text="{StaticResource NoUpdateFoundText}" Padding="0,0,0,5"
                        Visibility="{Binding NoUpdateFound, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource ShowUpdaterPopupText}" />
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource ShowUpdaterPopupText}"
+                       Padding="0,5,0,0" />
             <metro:ToggleSwitch IsChecked="{Binding ShowPopupOnAvailableUpdate, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
             <!--  Idle Profile Settings  -->
-            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource IdleProfileTitle}" />
+            <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource IdleProfileTitle}"
+                       Padding="0,10,0,0" />
             <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource UseIdleHeaderText}" />
             <metro:ToggleSwitch IsChecked="{Binding UseAutomaticIdleProfile, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
             <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource HideIdleHeaderText}" />
