@@ -514,8 +514,11 @@ namespace SpotifyAudioSource
             {
                 _checkSpotifyTimer.Interval = e.RetryAfter.TotalMilliseconds;
             }
+            catch (TaskCanceledException e) { }
             catch (Exception e)
             {
+                Logger.Error(e.InnerException?.Message);
+                Logger.Error(e.Message);
                 Logger.Error(e);
             }
 
