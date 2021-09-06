@@ -59,6 +59,7 @@ namespace AudioBand.UI
                 AudioSourcesSettings.Add(newViewModel);
             }
 
+            _messageBus.Publish(EditEndMessage.SaveFix);
             _appSettings.Save();
         }
     }

@@ -34,6 +34,7 @@ namespace AudioBand.UI
             _dialogService = dialogService;
             _messageBus = messageBus;
             messageBus.Subscribe<EditStartMessage>(EditStartMessageOnPublished);
+            messageBus.Subscribe<EditEndMessage>(FixEditMessage);
             ViewModels = viewModels;
             SelectedViewModel = viewModels.GlobalSettingsViewModel;
             _selectedProfileName = appSettings.CurrentProfile.Name;
@@ -213,6 +214,14 @@ namespace AudioBand.UI
             {
                 CancelEdits();
                 _messageBus.Publish(SettingsWindowMessage.CloseWindow);
+            }
+        }
+
+        private void FixEditMessage(EditEndMessage msg)
+        {
+            if (msg == EditEndMessage.SaveFix)
+            {
+                EndEdits();
             }
         }
 
