@@ -118,9 +118,9 @@
     <Compile Include="Settings\Models\V3\ProfileExportV3.cs" />
     <Compile Include="Settings\Models\V3\ProfileV3.cs" />
     <Compile Include="Settings\Models\V4\SettingsV4.cs" />
-    <Compile Include="Settings\Persistence\IPersistSettings.cs" />
-    <Compile Include="Settings\Persistence\PersistedSettingsDto.cs" />
-    <Compile Include="Settings\Persistence\PersistSettings.cs" />
+    <Compile Include="Settings\Persistence\IPersistentSettings.cs" />
+    <Compile Include="Settings\Persistence\Settings.cs" />
+    <Compile Include="Settings\Persistence\PersistentSettings.cs" />
     <Compile Include="UI\Behaviors\CanvasPositioning.cs" />
     <Compile Include="UI\Behaviors\Fallback.cs" />
     <Compile Include="UI\Behaviors\RedirectScrolling.cs" />
@@ -315,7 +315,7 @@
     <Compile Include="UI\PlaybackControls\NextButtonViewModel.cs" />
     <Compile Include="AudioSource\AudioSourceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\Models\V2\Settings.cs" />
+    <Compile Include="Settings\Models\V2\SettingsV2.cs" />
     <Compile Include="Settings\Persistence\SerializationConversions.cs" />
     <Compile Include="Settings\AppSettings.cs" />
     <Compile Include="UI\TrackProgress\ProgressBarViewModel.cs" />
@@ -538,6 +538,9 @@
     </PackageReference>
     <PackageReference Include="Nett">
       <Version>0.12.0</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="Octokit" Version="0.50.0" />
     <PackageReference Include="SharpVectors.Reloaded">

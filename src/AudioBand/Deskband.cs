@@ -114,7 +114,7 @@ namespace AudioBand
                 _container.Register<IDialogService, DialogService>(Lifestyle.Singleton);
                 _container.Register<IViewModelContainer, ViewModelContainer>(Lifestyle.Singleton);
                 _container.Register<IAudioSession, AudioSession>(Lifestyle.Singleton);
-                _container.Register<IPersistSettings, PersistSettings>(Lifestyle.Singleton);
+                _container.Register<IPersistentSettings, PersistentSettings>(Lifestyle.Singleton);
                 _container.Register<GitHubHelper>(Lifestyle.Singleton);
 
                 _container.Register<AboutDialogViewModel>(Lifestyle.Singleton);

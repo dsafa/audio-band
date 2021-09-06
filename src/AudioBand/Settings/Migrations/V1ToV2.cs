@@ -1,6 +1,6 @@
 ﻿using AudioBand.Settings.MappingProfiles;
 using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
-using V2Settings = AudioBand.Settings.Models.V2.Settings;
+using V2Settings = AudioBand.Settings.Models.V2.SettingsV2;
 
 namespace AudioBand.Settings.Migrations
 {

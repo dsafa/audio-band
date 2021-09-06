@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace AudioBand.Settings.MappingProfiles
 {
     /// <summary>
-    /// Mapping profile to maps a version 2 settings <see cref="AudioBand.Settings.Models.V2.Settings"/> to a version 3 settings <see cref="SettingsV3"/>.
+    /// Mapping profile to maps a version 2 settings <see cref="AudioBand.Settings.Models.V2.SettingsV2"/> to a version 3 settings <see cref="SettingsV3"/>.
     /// </summary>
     public class SettingsV2ToSettingsV3Profile : Profile
     {
@@ -86,7 +86,7 @@ namespace AudioBand.Settings.MappingProfiles
             CreateMap<Models.V2.AlbumArtSettings, AlbumArt>()
                 .ForMember(dest => dest.Anchor, opt => opt.MapFrom(source => PositionAnchor.TopLeft));
             CreateMap<Models.V2.AlbumArtPopupSettings, AlbumArtPopup>();
-            CreateMap<Models.V2.Settings, ProfileV3>()
+            CreateMap<Models.V2.SettingsV2, ProfileV3>()
                 .ForMember(dest => dest.AlbumArtPopupSettings, opt => opt.MapFrom(source => source.AlbumArtPopupSettings))
                 .ForMember(dest => dest.AlbumArtSettings, opt => opt.MapFrom(source => source.AlbumArtSettings))
                 .ForMember(dest => dest.GeneralSettings, opt => opt.MapFrom(source => source.AudioBandSettings))
@@ -97,9 +97,9 @@ namespace AudioBand.Settings.MappingProfiles
                 .ForMember(dest => dest.ProgressBarSettings, opt => opt.MapFrom(source => source.ProgressBarSettings))
                 .ForMember(dest => dest.RepeatModeButtonSettings, opt => opt.MapFrom(source => new RepeatModeButton()))
                 .ForMember(dest => dest.ShuffleModeButtonSettings, opt => opt.MapFrom(source => new ShuffleModeButton()));
-            CreateMap<Models.V2.Settings, Dictionary<string, ProfileV3>>().ConvertUsing<ProfilesConverter>();
+            CreateMap<Models.V2.SettingsV2, Dictionary<string, ProfileV3>>().ConvertUsing<ProfilesConverter>();
             CreateMap<Models.V2.AudioSourceSetting, AudioSourceSetting>();
-            CreateMap<Models.V2.Settings, SettingsV3>()
+            CreateMap<Models.V2.SettingsV2, SettingsV3>()
                 .ForMember(dest => dest.Version, opt => opt.Ignore())
                 .ForMember(dest => dest.AudioSourceSettings, opt => opt.MapFrom(source => source.AudioSourceSettings))
                 .ForMember(dest => dest.Profiles, opt => opt.MapFrom(source => source))
@@ -109,11 +109,11 @@ namespace AudioBand.Settings.MappingProfiles
         /// <summary>
         /// Converts older settings into a profile supported by newer settings.
         /// </summary>
-        private class ProfilesConverter : ITypeConverter<Models.V2.Settings, Dictionary<string, ProfileV3>>
+        private class ProfilesConverter : ITypeConverter<Models.V2.SettingsV2, Dictionary<string, ProfileV3>>
         {
-            public Dictionary<string, ProfileV3> Convert(Models.V2.Settings source, Dictionary<string, ProfileV3> destination, ResolutionContext context)
+            public Dictionary<string, ProfileV3> Convert(Models.V2.SettingsV2 source, Dictionary<string, ProfileV3> destination, ResolutionContext context)
             {
-                var profile = context.Mapper.Map<Models.V2.Settings, ProfileV3>(source);
+                var profile = context.Mapper.Map<Models.V2.SettingsV2, ProfileV3>(source);
                 return new Dictionary<string, ProfileV3> { { SettingsV3.DefaultProfileName, profile } };
             }
         }

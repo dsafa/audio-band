@@ -255,6 +255,7 @@ namespace AudioBand.UI
 
         private void ExportProfilesCommandOnExecute()
         {
+            return;
             var exportPath = _dialogService.ShowExportProfilesDialog();
             if (exportPath == null)
             {
@@ -274,10 +275,9 @@ namespace AudioBand.UI
                     return;
                 }
 
-                _appSettings.ImportProfilesFromPath(profilesPath);
+                _appSettings.ImportProfileFromPath(profilesPath);
                 foreach (var newProfile in _appSettings.Profiles.Where(p => !ProfileNames.Contains(p.Name)))
                 {
-                    // Should not be too slow unless a lot of profiles.
                     ProfileNames.Add(newProfile.Name);
                 }
 

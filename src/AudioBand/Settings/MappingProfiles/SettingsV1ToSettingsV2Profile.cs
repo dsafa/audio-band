@@ -25,7 +25,7 @@ namespace AudioBand.Settings.MappingProfiles
             CreateMap<Models.V1.TextAppearance, Models.V2.CustomLabelSettings>();
             CreateMap<Models.V1.AudioSourceSettingsCollection, Models.V2.AudioSourceSettings>()
                 .ForMember(dest => dest.AudioSourceName, opts => opts.MapFrom(source => source.Name));
-            CreateMap<AudioBandSettings, Models.V2.Settings>()
+            CreateMap<AudioBandSettings, Models.V2.SettingsV2>()
                 .ForMember(dest => dest.AlbumArtPopupSettings, opts => opts.MapFrom(source => source.AlbumArtPopupAppearance))
                 .ForMember(dest => dest.AlbumArtSettings, opts => opts.MapFrom(source => source.AlbumArtAppearance))
                 .ForMember(dest => dest.AudioBandSettings, opts => opts.MapFrom(source => source.AudioBandAppearance))
