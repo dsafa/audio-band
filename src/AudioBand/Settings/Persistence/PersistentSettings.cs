@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using NLog;
 
 // Alias the current settings version
-using CurrentSettings = AudioBand.Settings.Models.V4.SettingsV4;
+using OldTomlSettings = AudioBand.Settings.Models.V4.SettingsV4;
 
 namespace AudioBand.Settings.Persistence
 {
@@ -176,7 +176,7 @@ namespace AudioBand.Settings.Persistence
         private string[] GetAllProfileFiles()
             => Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".profile.json")).ToArray();
 
-        private CurrentSettings LoadOldSettings(string path)
+        private OldTomlSettings LoadOldSettings(string path)
         {
             try
             {
@@ -186,15 +186,15 @@ namespace AudioBand.Settings.Persistence
                 if (version != "4")
                 {
                     Toml.WriteFile(tomlFile, Path.Combine(MainDirectory, $"old-audioband.settings.{version}"), TomlHelper.DefaultSettings);
-                    return SettingsMigration.MigrateSettings<CurrentSettings>(tomlFile.Get(SettingsTypeTable[version]), version, "4");
+                    return SettingsMigration.MigrateSettings<OldTomlSettings>(tomlFile.Get(SettingsTypeTable[version]), version, "4");
                 }
 
-                return tomlFile.Get<CurrentSettings>();
+                return tomlFile.Get<OldTomlSettings>();
             }
             catch (Exception e)
             {
                 Logger.Error($"Failed to read old settings file: {e.Message}");
-                return new CurrentSettings();
+                return new OldTomlSettings();
             }
         }
     }
