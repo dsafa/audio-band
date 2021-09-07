@@ -9,6 +9,11 @@ namespace AudioBand.Settings.Persistence
     public interface IPersistentSettings
     {
         /// <summary>
+        /// Checks if a user has old settings (using Toml instead of json) and converts it over if found.
+        /// </summary>
+        void CheckAndConvertOldSettings();
+
+        /// <summary>
         /// Reads the settings.
         /// </summary>
         /// <returns>The previously persisted settings.</returns>

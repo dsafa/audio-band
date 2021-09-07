@@ -1,4 +1,10 @@
-﻿using AudioBand.AudioSource;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows;
+using AudioBand.AudioSource;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AudioBand.Settings;
@@ -7,12 +13,6 @@ using AudioBand.UI;
 using CSDeskBand;
 using NLog;
 using SimpleInjector;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows;
 
 namespace AudioBand
 {
@@ -43,9 +43,9 @@ namespace AudioBand
         public Deskband()
         {
             // Fluentwpf requires an application window
-            if (System.Windows.Application.Current == null)
+            if (Application.Current == null)
             {
-                new System.Windows.Application().MainWindow = new Window();
+                new Application().MainWindow = new Window();
             }
 
             var initialSize = new DeskBandSize(50, 30);

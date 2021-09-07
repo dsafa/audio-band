@@ -1,13 +1,14 @@
-﻿using AudioBand.Logging;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
 using Nett;
 using Newtonsoft.Json;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+
 // Alias the current settings version
 using CurrentSettings = AudioBand.Settings.Models.V4.SettingsV4;
 
@@ -23,6 +24,47 @@ namespace AudioBand.Settings.Persistence
         private static readonly string SettingsFilePath = Path.Combine(MainDirectory, "settings.json");
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<PersistentSettings>();
 
+        private static readonly Dictionary<string, Type> SettingsTypeTable = new Dictionary<string, Type>()
+        {
+            { "0.1", typeof(Models.V1.AudioBandSettings) },
+            { "2", typeof(Models.V2.SettingsV2) },
+            { "3", typeof(Models.V3.SettingsV3) },
+            { "4", typeof(Models.V4.SettingsV4) },
+        };
+
+        /// <inheritdoc />
+        public void CheckAndConvertOldSettings()
+        {
+            var oldSettingsFilePath = Path.Combine(MainDirectory, "audioband.settings");
+
+            if (!File.Exists(oldSettingsFilePath))
+            {
+                return;
+            }
+
+            // Make a backup so we can delete later
+            File.Copy(oldSettingsFilePath, Path.Combine(MainDirectory, "old-audioband-settings.backup"));
+            var oldSettings = LoadOldSettings(oldSettingsFilePath);
+
+            if (!File.Exists(SettingsFilePath))
+            {
+                WriteSettings(new Settings()
+                {
+                    CurrentAudioSource = oldSettings.AudioSource,
+                    CurrentProfileName = oldSettings.CurrentProfileName,
+                    AudioBandSettings = oldSettings.AudioBandSettings,
+                    AudioSourceSettings = oldSettings.AudioSourceSettings
+                });
+            }
+
+            if (!Directory.Exists(ProfilesDirectory) || Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".profile.json")).ToArray().Length <= 0)
+            {
+                WriteProfiles(oldSettings.Profiles);
+            }
+
+            File.Delete(oldSettingsFilePath);
+        }
+
         /// <inheritdoc />
         public Settings ReadSettings()
         {
@@ -30,13 +72,13 @@ namespace AudioBand.Settings.Persistence
             {
                 Directory.CreateDirectory(MainDirectory);
                 var settings = new Settings();
-                
+
                 WriteSettings(settings);
                 return settings;
             }
 
             var content = File.ReadAllText(SettingsFilePath);
-            
+
             try
             {
                 return JsonConvert.DeserializeObject<Settings>(content);
@@ -80,8 +122,13 @@ namespace AudioBand.Settings.Persistence
         /// <inheritdoc />
         public IEnumerable<UserProfile> ReadProfiles()
         {
+            if (!Directory.Exists(ProfilesDirectory))
+            {
+                Directory.CreateDirectory(ProfilesDirectory);
+            }
+
             var userProfiles = new List<UserProfile>();
-            var fileNames = Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".profile.json")).ToArray();
+            var fileNames = GetAllProfileFiles();
 
             for (int i = 0; i < fileNames.Length; i++)
             {
@@ -103,8 +150,13 @@ namespace AudioBand.Settings.Persistence
         /// <inheritdoc />
         public void WriteProfiles(IEnumerable<UserProfile> userProfiles)
         {
+            if (!Directory.Exists(ProfilesDirectory))
+            {
+                Directory.CreateDirectory(ProfilesDirectory);
+            }
+
             var profiles = userProfiles.ToArray();
-            var fileNames = Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".profile.json")).ToArray();
+            var fileNames = GetAllProfileFiles();
 
             // This will clear profiles if they got deleted.
             for (int i = 0; i < fileNames.Length; i++)
@@ -115,9 +167,34 @@ namespace AudioBand.Settings.Persistence
             for (int i = 0; i < profiles.Length; i++)
             {
                 var json = JsonConvert.SerializeObject(profiles[i]);
-                var path = Path.Combine(ProfilesDirectory, $"{profiles[i].Name}.json");
+                var path = Path.Combine(ProfilesDirectory, $"{profiles[i].Name}.profile.json");
 
                 File.WriteAllText(path, json);
+            }
+        }
+
+        private string[] GetAllProfileFiles()
+            => Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".profile.json")).ToArray();
+
+        private CurrentSettings LoadOldSettings(string path)
+        {
+            try
+            {
+                var tomlFile = Toml.ReadFile(path, TomlHelper.DefaultSettings);
+                var version = tomlFile["Version"].Get<string>();
+
+                if (version != "4")
+                {
+                    Toml.WriteFile(tomlFile, Path.Combine(MainDirectory, $"old-audioband.settings.{version}"), TomlHelper.DefaultSettings);
+                    return SettingsMigration.MigrateSettings<CurrentSettings>(tomlFile.Get(SettingsTypeTable[version]), version, "4");
+                }
+
+                return tomlFile.Get<CurrentSettings>();
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Failed to read old settings file: {e.Message}");
+                return new CurrentSettings();
             }
         }
     }

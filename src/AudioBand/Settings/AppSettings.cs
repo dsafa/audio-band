@@ -22,13 +22,14 @@ namespace AudioBand.Settings
         public AppSettings(IPersistentSettings persistSettings)
         {
             _persistSettings = persistSettings;
+            _persistSettings.CheckAndConvertOldSettings();
             var settings = _persistSettings.ReadSettings();
 
             AudioSource = settings.CurrentAudioSource;
             AudioSourceSettings = settings.AudioSourceSettings?.ToList() ?? new List<AudioSourceSettings>();
             AudioBandSettings = settings.AudioBandSettings ?? new AudioBandSettings();
 
-            CheckAndLoadProfiles(settings, _persistSettings.ReadProfiles());
+            CheckAndLoadProfiles(settings, _persistSettings.ReadProfiles().ToArray());
             var profileName = AudioBandSettings.UseAutomaticIdleProfile && !string.IsNullOrEmpty(AudioBandSettings.LastNonIdleProfileName)
                             ? AudioBandSettings.LastNonIdleProfileName : settings.CurrentProfileName;
             SelectProfile(profileName);
@@ -153,13 +154,13 @@ namespace AudioBand.Settings
             _profiles[name].Name = name;
         }
 
-        private void CheckAndLoadProfiles(Persistence.Settings settings, IEnumerable<UserProfile> profiles)
+        private void CheckAndLoadProfiles(Persistence.Settings settings, UserProfile[] profiles)
         {
             /* If there are no profiles, create new ones, they're automatically saved later.
              * Second line of if statement is for people who have reinstalled audioband
              * while their last version was pre-profiles (v0.9.6) update */
-            if (profiles == null || profiles.Any()
-            || (profiles.Count() == 1 && profiles.First().Name == "Default Profile"))
+            if (profiles.Length == 0
+            || (profiles.Length == 1 && profiles[0].Name == "Default Profile"))
             {
                 settings.CurrentProfileName = UserProfile.DefaultProfileName;
 
