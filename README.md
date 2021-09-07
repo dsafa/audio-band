@@ -1,12 +1,11 @@
-
 <div align="center"><img src="logo/logotype_cover.svg"/></div><br/><br/>
 
 # Audio Band
 Audio Band allows you to display song information from various sources directly in the taskbar.
 
-[![Extra_Buttons_Github-Download](https://user-images.githubusercontent.com/35664724/132343399-3f62e41b-6dc9-4c7b-9761-f835d6d40883.png)](https://github.com/svr333/audio-band/releases)
-[![Extra_Buttons_Github-Documentation](https://user-images.githubusercontent.com/35664724/132343402-91c58633-447b-48bb-b672-75fc04594c3f.png)](https://svr333.github.io/audio-band/audioband/index.html)
-[![Extra_Buttons_Github-Discord](https://user-images.githubusercontent.com/35664724/132343404-82d9f6e3-fa5f-4af4-b393-c9009189f144.png)](https://discord.gg/yWDHdH2za5)
+[![Extra_Buttons_Github-Download](https://user-images.githubusercontent.com/35664724/132344360-0bae15b4-cab4-434c-988e-0979a78f73a0.png)](https://github.com/svr333/audio-band/releases)
+[![Extra_Buttons_Github-Documentation](https://user-images.githubusercontent.com/35664724/132344361-c840ff85-2b4b-44cb-954b-98ded60eaf7d.png)](https://svr333.github.io/audio-band/audioband/index.html)
+[![Extra_Buttons_Github-Discord](https://user-images.githubusercontent.com/35664724/132344362-fb2c7c66-ac49-47f3-bf6e-2f24c1808486.png)](https://discord.gg/yWDHdH2za5)
 
 <img align="right" src="screenshots/demo.gif"/>
 
