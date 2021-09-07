@@ -16,6 +16,7 @@ namespace Win10AudioSource
         private readonly Timer _checkTimer = new Timer(1000);
         private GlobalSystemMediaTransportControlsSessionManager _mtcManager;
         private GlobalSystemMediaTransportControlsSession _currentSession;
+        private GlobalSystemMediaTransportControlsSessionMediaProperties _lastProperties;
         private bool _isPlaying;
 
         /// <inheritdoc />
@@ -238,6 +239,13 @@ namespace Win10AudioSource
             }
 
             var mediaProperties = await _currentSession.TryGetMediaPropertiesAsync();
+
+            if (mediaProperties.Title == _lastProperties?.Title && mediaProperties.Artist == _lastProperties?.Artist)
+            {
+                return;
+            }
+
+            _lastProperties = mediaProperties;
             var albumArt = await GetAlbumArt(mediaProperties.Thumbnail);
 
             TrackInfoChanged?.Invoke(this, new TrackInfoChangedEventArgs

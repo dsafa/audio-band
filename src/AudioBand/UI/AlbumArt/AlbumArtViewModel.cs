@@ -103,7 +103,14 @@ namespace AudioBand.UI
                 return;
             }
 
-            AlbumArt = ((Image)albumArt.Clone()).ToImageSource();
+            try
+            {
+                 AlbumArt = albumArt.ToImageSource();
+            }
+            catch (InvalidOperationException)
+            {
+                Logger.Error("Error while trying to update AlbumArt in Win10 (see GitHub issue #9)");
+            }
         }
     }
 }
