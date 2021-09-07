@@ -143,16 +143,14 @@ namespace AudioBand.Settings
         public void ImportProfileFromPath(string path)
         {
             var profile = _persistSettings.ReadProfile(path);
+            if (profile is null)
+            {
+                return;
+            }
 
             var name = UserProfile.GetUniqueProfileName(_profiles.Keys, profile.Name);
             _profiles[name] = profile;
             _profiles[name].Name = name;
-        }
-
-        /// <inheritdoc />
-        public void ExportProfilesToPath(string path)
-        {
-            // _persistSettings.WriteProfiles(_profiles.Values, path);
         }
 
         private void CheckAndLoadProfiles(Persistence.Settings settings, IEnumerable<UserProfile> profiles)

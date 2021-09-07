@@ -65,14 +65,23 @@ namespace AudioBand.Settings.Persistence
         /// <inheritdoc />
         public UserProfile ReadProfile(string path)
         {
-            return null;
+            var json = File.ReadAllText(path);
+
+            try
+            {
+                return JsonConvert.DeserializeObject<UserProfile>(json);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <inheritdoc />
         public IEnumerable<UserProfile> ReadProfiles()
         {
             var userProfiles = new List<UserProfile>();
-            var fileNames = Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".json")).ToArray();
+            var fileNames = Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".profile.json")).ToArray();
 
             for (int i = 0; i < fileNames.Length; i++)
             {
@@ -95,6 +104,13 @@ namespace AudioBand.Settings.Persistence
         public void WriteProfiles(IEnumerable<UserProfile> userProfiles)
         {
             var profiles = userProfiles.ToArray();
+            var fileNames = Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".profile.json")).ToArray();
+
+            // This will clear profiles if they got deleted.
+            for (int i = 0; i < fileNames.Length; i++)
+            {
+                File.Delete(fileNames[i]);
+            }
 
             for (int i = 0; i < profiles.Length; i++)
             {

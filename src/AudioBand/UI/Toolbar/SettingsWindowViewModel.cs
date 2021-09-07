@@ -4,6 +4,7 @@ using AudioBand.Settings;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace AudioBand.UI
@@ -255,14 +256,7 @@ namespace AudioBand.UI
 
         private void ExportProfilesCommandOnExecute()
         {
-            return;
-            var exportPath = _dialogService.ShowExportProfilesDialog();
-            if (exportPath == null)
-            {
-                return;
-            }
-
-            _appSettings.ExportProfilesToPath(exportPath);
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand"));
         }
 
         private void ImportProfilesCommandOnExecute()

@@ -12,7 +12,7 @@ namespace AudioBand.UI
     /// </summary>
     public class DialogService : IDialogService
     {
-        private const string AudioBandSettingsFileFilter = "Audio Band Profile File (*.json)";
+        private const string AudioBandSettingsFileFilter = "Audio Band Profile File (*.profile.json)";
         private static readonly string[] ImageFilters =
         {
             "Images (*.bmp;*.dib;*.rle;*.jpg;*.jpeg;*.jpe,*.jfif;*.tiff;*.tif;*.png;*.svg)|*.bmp;*.dib;*.rle;*.jpg;*.jpeg;*.jpe,*.jfif;*.tiff;*.tif;*.png;*.svg",
@@ -131,25 +131,6 @@ namespace AudioBand.UI
             if (result == true)
             {
                 return openFileDialog.FileName;
-            }
-
-            return null;
-        }
-
-        /// <inheritdoc />
-        public string ShowExportProfilesDialog()
-        {
-            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
-            {
-                FileName = "AudioBandProfiles",
-                DefaultExt = ".settings",
-                Filter = AudioBandSettingsFileFilter,
-            };
-
-            var result = saveFileDialog.ShowDialog();
-            if (result == true)
-            {
-                return saveFileDialog.FileName;
             }
 
             return null;
