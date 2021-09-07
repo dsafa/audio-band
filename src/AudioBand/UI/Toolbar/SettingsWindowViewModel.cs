@@ -1,5 +1,6 @@
 ﻿using AudioBand.Commands;
 using AudioBand.Messages;
+using AudioBand.Models;
 using AudioBand.Settings;
 using System;
 using System.Collections.ObjectModel;
@@ -171,7 +172,7 @@ namespace AudioBand.UI
 
         private bool DeleteProfileCommandCanExecute()
         {
-            return ProfileNames.Count > 1;
+            return ProfileNames.Count > 1 || SelectedProfileName == UserProfile.IdleProfileName;
         }
 
         private void AddProfileCommandOnExecute()
