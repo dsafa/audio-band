@@ -257,7 +257,7 @@ namespace AudioBand.UI
 
         private void ExportProfilesCommandOnExecute()
         {
-            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand"));
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand/Profiles"));
         }
 
         private void ImportProfilesCommandOnExecute()
