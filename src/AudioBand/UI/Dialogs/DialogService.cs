@@ -12,7 +12,7 @@ namespace AudioBand.UI
     /// </summary>
     public class DialogService : IDialogService
     {
-        private const string AudioBandSettingsFileFilter = "Audio Band Profile File (*.profile.json)";
+        private const string AudioBandSettingsFileFilter = "Audio Band Profile File (*.profile.json)|*.profile.json";
         private static readonly string[] ImageFilters =
         {
             "Images (*.bmp;*.dib;*.rle;*.jpg;*.jpeg;*.jpe,*.jfif;*.tiff;*.tif;*.png;*.svg)|*.bmp;*.dib;*.rle;*.jpg;*.jpeg;*.jpe,*.jfif;*.tiff;*.tif;*.png;*.svg",
