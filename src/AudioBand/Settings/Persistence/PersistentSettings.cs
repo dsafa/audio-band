@@ -57,7 +57,7 @@ namespace AudioBand.Settings.Persistence
                 });
             }
 
-            if (!Directory.Exists(ProfilesDirectory) || Directory.GetFiles(ProfilesDirectory).Where(x => x.EndsWith(".profile.json")).ToArray().Length <= 0)
+            if (!Directory.Exists(ProfilesDirectory) || GetAllProfileFiles().Length <= 0)
             {
                 WriteProfiles(oldSettings.Profiles);
             }
