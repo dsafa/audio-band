@@ -1,6 +1,5 @@
 ﻿using AudioBand.Commands;
 using AudioBand.Messages;
-using AudioBand.Models;
 using AudioBand.Settings;
 using System;
 using System.Collections.ObjectModel;

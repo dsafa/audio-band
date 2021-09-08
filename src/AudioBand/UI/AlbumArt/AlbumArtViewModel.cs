@@ -105,7 +105,7 @@ namespace AudioBand.UI
 
             try
             {
-                 AlbumArt = albumArt.ToImageSource();
+                AlbumArt = albumArt.ToImageSource();
             }
             catch (InvalidOperationException)
             {

@@ -1,7 +1,3 @@
-using AudioBand.Commands;
-using AudioBand.Messages;
-using AudioBand.Models;
-using AudioBand.Settings;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -10,6 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using AudioBand.Commands;
+using AudioBand.Messages;
+using AudioBand.Models;
+using AudioBand.Settings;
 
 namespace AudioBand.UI
 {

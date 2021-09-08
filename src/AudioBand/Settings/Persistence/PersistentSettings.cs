@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using AudioBand.Logging;
+﻿using AudioBand.Logging;
 using AudioBand.Models;
 using AudioBand.Settings.Migrations;
 using Nett;
 using Newtonsoft.Json;
 using NLog;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 // Alias the current settings version
 using OldTomlSettings = AudioBand.Settings.Models.V4.SettingsV4;
 

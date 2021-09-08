@@ -27,7 +27,7 @@ namespace AudioBand.Models
         /// <summary>
         /// The profile that should enable when AudioBand goes into idle mode.
         /// </summary>
-        public string IdleProfileName { get; set;}
+        public string IdleProfileName { get; set; }
 
         /// <summary>
         /// Gets or sets whether to use the Idle Profile.
