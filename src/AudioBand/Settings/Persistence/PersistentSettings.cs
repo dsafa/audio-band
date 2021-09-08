@@ -100,7 +100,7 @@ namespace AudioBand.Settings.Persistence
         /// <inheritdoc />
         public void WriteSettings(Settings settings)
         {
-            var json = JsonConvert.SerializeObject(settings);
+            var json = JsonConvert.SerializeObject(settings, Formatting.Indented);
             File.WriteAllText(SettingsFilePath, json);
         }
 
@@ -156,21 +156,24 @@ namespace AudioBand.Settings.Persistence
             }
 
             var profiles = userProfiles.ToArray();
-            var fileNames = GetAllProfileFiles();
-
-            // This will clear profiles if they got deleted.
-            for (int i = 0; i < fileNames.Length; i++)
-            {
-                File.Delete(fileNames[i]);
-            }
 
             for (int i = 0; i < profiles.Length; i++)
             {
-                var json = JsonConvert.SerializeObject(profiles[i]);
+                var json = JsonConvert.SerializeObject(profiles[i], Formatting.Indented);
                 var path = Path.Combine(ProfilesDirectory, $"{profiles[i].Name}.profile.json");
 
                 File.WriteAllText(path, json);
             }
+        }
+
+        /// <inheritdoc />
+        public void DeleteProfile(string profileName)
+        {
+            try
+            {
+                File.Delete($"{profileName}.profile.json");
+            }
+            catch (Exception) { }
         }
 
         private string[] GetAllProfileFiles()

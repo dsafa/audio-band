@@ -87,7 +87,7 @@ namespace AudioBand.Settings
         /// <inheritdoc />
         public void DeleteProfile(string profileName)
         {
-            if (profileName == null)
+            if (string.IsNullOrEmpty(profileName))
             {
                 throw new ArgumentNullException(nameof(profileName));
             }
@@ -103,6 +103,7 @@ namespace AudioBand.Settings
             }
 
             _profiles.Remove(profileName);
+            _persistSettings.DeleteProfile(profileName);
         }
 
         /// <inheritdoc />
@@ -123,7 +124,9 @@ namespace AudioBand.Settings
                 throw new ArgumentException("Profile already exists", nameof(newProfileName));
             }
 
+            _persistSettings.DeleteProfile(CurrentProfile.Name);
             CurrentProfile.Name = newProfileName;
+            Save();
         }
 
         /// <inheritdoc />

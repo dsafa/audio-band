@@ -43,5 +43,11 @@ namespace AudioBand.Settings.Persistence
         /// </summary>
         /// <param name="profiles">The settings object that contains the profiles to write.</param>
         void WriteProfiles(IEnumerable<UserProfile> profiles);
+
+        /// <summary>
+        /// Deletes a profile from the folder, so it wont be loaded in again.
+        /// </summary>
+        /// <param name="profileName">The name of the profile to delete.</param>
+        void DeleteProfile(string profileName);
     }
 }
