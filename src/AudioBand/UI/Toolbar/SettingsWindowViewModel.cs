@@ -161,6 +161,11 @@ namespace AudioBand.UI
             {
                 return;
             }
+            if (_appSettings.AudioBandSettings.IdleProfileName == SelectedProfileName)
+            {
+                _appSettings.AudioBandSettings.UseAutomaticIdleProfile = false;
+                _appSettings.AudioBandSettings.IdleProfileName = ProfileNames[0];
+            }
 
             _appSettings.DeleteProfile(SelectedProfileName);
             ProfileNames.Remove(SelectedProfileName);
@@ -172,7 +177,7 @@ namespace AudioBand.UI
 
         private bool DeleteProfileCommandCanExecute()
         {
-            return ProfileNames.Count > 1 || SelectedProfileName == UserProfile.IdleProfileName;
+            return ProfileNames.Count > 1;
         }
 
         private void AddProfileCommandOnExecute()

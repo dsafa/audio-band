@@ -3,8 +3,10 @@ using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -22,23 +24,25 @@ namespace AudioBand.UI
         private bool _noUpdateFound;
         private bool _isDownloading;
         private int _downloadPercentage;
+        private string _selectedProfileName;
         private readonly AudioBandSettings _model = new AudioBandSettings();
         private readonly AudioBandSettings _backup = new AudioBandSettings();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalSettingsViewModel"/> class.
         /// </summary>
-        /// <param name="appsettings">The app settings.</param>
+        /// <param name="appSettings">The app settings.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="gitHubHelper">The GitHub helper.</param>
-        public GlobalSettingsViewModel(IAppSettings appsettings, IMessageBus messageBus, GitHubHelper gitHubHelper)
+        public GlobalSettingsViewModel(IAppSettings appSettings, IMessageBus messageBus, GitHubHelper gitHubHelper)
         {
-            MapSelf(appsettings.AudioBandSettings, _model);
+            MapSelf(appSettings.AudioBandSettings, _model);
 
             CheckForUpdatesCommand = new AsyncRelayCommand(CheckForUpdatesCommandOnExecute);
             InstallUpdateCommand = new AsyncRelayCommand(InstallUpdateCommandOnExecute);
+            ProfileNames = new ObservableCollection<string>(appSettings.Profiles.Select(p => p.Name));
 
-            _appSettings = appsettings;
+            _appSettings = appSettings;
             _gitHubHelper = gitHubHelper;
             UseMessageBus(messageBus);
         }
@@ -71,6 +75,22 @@ namespace AudioBand.UI
         {
             get => _model.UseAutomaticIdleProfile;
             set => SetProperty(_model, nameof(_model.UseAutomaticIdleProfile), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the selected profile name.
+        /// </summary>
+        [TrackState]
+        public string SelectedProfileName
+        {
+            get => _selectedProfileName;
+            set
+            {
+                if (SetProperty(ref _selectedProfileName, value))
+                {
+                    _appSettings.AudioBandSettings.IdleProfileName = value;
+                }
+            }
         }
 
         /// <summary>
@@ -128,6 +148,11 @@ namespace AudioBand.UI
             get => _downloadPercentage;
             set => SetProperty(ref _downloadPercentage, value);
         }
+
+        /// <summary>
+        /// Gets the list of profile names.
+        /// </summary>
+        public ObservableCollection<string> ProfileNames { get; }
 
         /// <inheritdoc />
         protected override void OnReset()

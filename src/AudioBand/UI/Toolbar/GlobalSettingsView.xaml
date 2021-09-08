@@ -52,6 +52,13 @@
                         Padding="0,10,0,0" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource UseIdleHeaderText}" />
                 <metro:ToggleSwitch IsChecked="{Binding UseAutomaticIdleProfile, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource IdleProfileSelectorDescriptionText}" />
+                <ComboBox x:Name="IdleProfileSelectorComboBox"
+                          HorizontalAlignment="Left"
+                          Height="{StaticResource DefaultButtonHeight}"
+                          IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding ProfileNames}"
+                          SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource HideIdleHeaderText}" />
                 <metro:ToggleSwitch IsChecked="{Binding HideIdleProfileInQuickMenu, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource IdleDelayLabelText}" />

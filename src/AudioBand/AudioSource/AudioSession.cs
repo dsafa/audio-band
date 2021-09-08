@@ -211,7 +211,7 @@ namespace AudioBand.AudioSource
         private void OnIdleTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _isIdle = true;
-            _appSettings.SelectProfile(UserProfile.IdleProfileName);
+            _appSettings.SelectProfile(_appSettings.AudioBandSettings.IdleProfileName);
             _lastRememberedAlbum = AlbumArt;
             AlbumArt = null;
         }

@@ -169,6 +169,10 @@ namespace AudioBand.Settings
 
                 _profiles = new Dictionary<string, UserProfile>();
                 var defaultProfiles = UserProfile.CreateDefaultProfiles();
+                var idleProfile = UserProfile.CreateDefaultIdleProfile();
+
+                _profiles.Add(idleProfile.Name, idleProfile);
+                AudioBandSettings.IdleProfileName = UserProfile.DefaultIdleProfileName;
 
                 for (int i = 0; i < defaultProfiles.Length; i++)
                 {
@@ -177,20 +181,11 @@ namespace AudioBand.Settings
 
                 return;
             }
-            else if (profiles.FirstOrDefault(x => x.Name == UserProfile.IdleProfileName) == null)
+            else if (profiles.FirstOrDefault(x => x.Name == AudioBandSettings.IdleProfileName) == null)
             {
-                // Add idle profile as the first one, so move all the others down one.
-                var existingProfiles = profiles.ToArray();
-                var newProfiles = new UserProfile[existingProfiles.Count() + 1];
-
-                newProfiles[0] = UserProfile.CreateIdleProfile();
-
-                for (int i = 0; i < existingProfiles.Count(); i++)
-                {
-                    newProfiles[i + 1] = existingProfiles[i];
-                }
-
-                profiles = newProfiles;
+                // if the profile doesn't exist, disable idle profile
+                AudioBandSettings.IdleProfileName = profiles.First().Name;
+                AudioBandSettings.UseAutomaticIdleProfile = false;
             }
 
             _profiles = profiles.ToDictionary(profile => profile.Name, profile => profile);

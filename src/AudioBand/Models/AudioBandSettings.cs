@@ -15,7 +15,7 @@ namespace AudioBand.Models
             get => _lastNonIdleProfileName;
             set
             {
-                if (value == UserProfile.IdleProfileName)
+                if (value == IdleProfileName)
                 {
                     return;
                 }
@@ -23,6 +23,11 @@ namespace AudioBand.Models
                 _lastNonIdleProfileName = value;
             }
         }
+
+        /// <summary>
+        /// The profile that should enable when AudioBand goes into idle mode.
+        /// </summary>
+        public string IdleProfileName { get; set;}
 
         /// <summary>
         /// Gets or sets whether to use the Idle Profile.

@@ -154,7 +154,7 @@ namespace AudioBand.UI
             // Initalize Profiles
             if (_appSettings.AudioBandSettings.HideIdleProfileInQuickMenu)
             {
-                Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles.Where(x => x.Name != UserProfile.IdleProfileName));
+                Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles.Where(x => x.Name != _appSettings.AudioBandSettings.IdleProfileName));
             }
             else
             {
@@ -166,7 +166,7 @@ namespace AudioBand.UI
 
             if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile && !_audioSession.IsPlaying)
             {
-                SelectProfileCommand.Execute(UserProfile.IdleProfileName);
+                SelectProfileCommand.Execute(_appSettings.AudioBandSettings.IdleProfileName);
             }
 
             RaisePropertyChanged(nameof(Profiles));
@@ -230,7 +230,7 @@ namespace AudioBand.UI
             {
                 if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
                 {
-                    SelectProfileCommand.Execute(UserProfile.IdleProfileName);
+                    SelectProfileCommand.Execute(_appSettings.AudioBandSettings.IdleProfileName);
                 }
 
                 SelectedAudioSource = null;
