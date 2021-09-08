@@ -10,7 +10,7 @@ using System.Windows.Media;
 using Xunit;
 using V1AudioSourceSetting = AudioBand.Settings.Models.V1.AudioSourceSetting;
 using V1Settings = AudioBand.Settings.Models.V1.AudioBandSettings;
-using V2Settings = AudioBand.Settings.Models.V2.Settings;
+using V2Settings = AudioBand.Settings.Models.V2.SettingsV2;
 
 namespace AudioBand.Test
 {

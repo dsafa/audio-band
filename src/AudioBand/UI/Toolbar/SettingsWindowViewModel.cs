@@ -1,9 +1,11 @@
 ﻿using AudioBand.Commands;
 using AudioBand.Messages;
+using AudioBand.Models;
 using AudioBand.Settings;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace AudioBand.UI
@@ -170,7 +172,7 @@ namespace AudioBand.UI
 
         private bool DeleteProfileCommandCanExecute()
         {
-            return ProfileNames.Count > 1;
+            return ProfileNames.Count > 1 || SelectedProfileName == UserProfile.IdleProfileName;
         }
 
         private void AddProfileCommandOnExecute()
@@ -255,13 +257,7 @@ namespace AudioBand.UI
 
         private void ExportProfilesCommandOnExecute()
         {
-            var exportPath = _dialogService.ShowExportProfilesDialog();
-            if (exportPath == null)
-            {
-                return;
-            }
-
-            _appSettings.ExportProfilesToPath(exportPath);
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AudioBand/Profiles"));
         }
 
         private void ImportProfilesCommandOnExecute()
@@ -274,10 +270,9 @@ namespace AudioBand.UI
                     return;
                 }
 
-                _appSettings.ImportProfilesFromPath(profilesPath);
+                _appSettings.ImportProfileFromPath(profilesPath);
                 foreach (var newProfile in _appSettings.Profiles.Where(p => !ProfileNames.Contains(p.Name)))
                 {
-                    // Should not be too slow unless a lot of profiles.
                     ProfileNames.Add(newProfile.Name);
                 }
 

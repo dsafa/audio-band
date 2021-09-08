@@ -72,12 +72,6 @@ namespace AudioBand.Settings
         /// Import settings from a path.
         /// </summary>
         /// <param name="path">The path of the settings file.</param>
-        void ImportProfilesFromPath(string path);
-
-        /// <summary>
-        /// Export settings to a path.
-        /// </summary>
-        /// <param name="path">The path to output the settings file.</param>
-        void ExportProfilesToPath(string path);
+        void ImportProfileFromPath(string path);
     }
 }

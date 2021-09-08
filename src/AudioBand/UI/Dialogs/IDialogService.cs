@@ -49,12 +49,6 @@ namespace AudioBand.UI
         string ShowImportProfilesDialog();
 
         /// <summary>
-        /// Shows the dialog to export profiles.
-        /// </summary>
-        /// <returns>The path to export to. Null if canceled.</returns>
-        string ShowExportProfilesDialog();
-
-        /// <summary>
         /// Shows the dialog that tells the user there is an update.
         /// </summary>
         void ShowUpdateDialog();
