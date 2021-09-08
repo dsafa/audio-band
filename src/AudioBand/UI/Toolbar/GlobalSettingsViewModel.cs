@@ -37,6 +37,8 @@ namespace AudioBand.UI
         public GlobalSettingsViewModel(IAppSettings appSettings, IMessageBus messageBus, GitHubHelper gitHubHelper)
         {
             MapSelf(appSettings.AudioBandSettings, _model);
+            _appSettings = appSettings;
+            _gitHubHelper = gitHubHelper;
 
             CheckForUpdatesCommand = new AsyncRelayCommand(CheckForUpdatesCommandOnExecute);
             InstallUpdateCommand = new AsyncRelayCommand(InstallUpdateCommandOnExecute);
@@ -44,8 +46,6 @@ namespace AudioBand.UI
             ProfileNames = new ObservableCollection<string>(appSettings.Profiles.Select(p => p.Name));
             SelectedProfileName = appSettings.AudioBandSettings.IdleProfileName;
 
-            _appSettings = appSettings;
-            _gitHubHelper = gitHubHelper;
             UseMessageBus(messageBus);
         }
 
