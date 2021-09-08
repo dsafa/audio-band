@@ -42,7 +42,7 @@ namespace AudioBand.UI
             InstallUpdateCommand = new AsyncRelayCommand(InstallUpdateCommandOnExecute);
 
             ProfileNames = new ObservableCollection<string>(appSettings.Profiles.Select(p => p.Name));
-            SelectedProfileName = _appSettings.AudioBandSettings.IdleProfileName;
+            SelectedProfileName = appSettings.AudioBandSettings.IdleProfileName;
 
             _appSettings = appSettings;
             _gitHubHelper = gitHubHelper;
