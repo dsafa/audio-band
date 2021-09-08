@@ -1,14 +1,14 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using AudioBand.Commands;
+using AudioBand.Messages;
+using AudioBand.Models;
+using AudioBand.Settings;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using AudioBand.AudioSource;
-using AudioBand.Commands;
-using AudioBand.Messages;
-using AudioBand.Models;
-using AudioBand.Settings;
 
 namespace AudioBand.UI
 {
@@ -144,11 +144,13 @@ namespace AudioBand.UI
                 return;
             }
 
-            foreach (var customLabelVm in _appsettings.CurrentProfile.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession, MessageBus)))
+            var customLabels = _appsettings.CurrentProfile.CustomLabels.Select(customLabel => new CustomLabelViewModel(customLabel, _dialogService, _audioSession, MessageBus)).ToArray();
+
+            for (int i = 0; i < customLabels.Length; i++)
             {
                 Application.Current.Dispatcher.Invoke((Action)delegate
                 {
-                    CustomLabels.Add(customLabelVm);
+                    CustomLabels.Add(customLabels[i]);
                 });
             }
         }

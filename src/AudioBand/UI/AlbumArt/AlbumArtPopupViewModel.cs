@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using AudioBand.Messages;
+﻿using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
+using System;
+using System.Diagnostics;
 
 namespace AudioBand.UI
 {

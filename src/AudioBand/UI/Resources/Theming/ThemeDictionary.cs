@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AudioBand.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
-using AudioBand.Extensions;
 using Windows.UI.ViewManagement;
 
 namespace AudioBand.UI

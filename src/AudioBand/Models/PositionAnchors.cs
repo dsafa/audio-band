@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using AudioBand.Extensions;
+﻿using AudioBand.Extensions;
+using System.Collections.Generic;
 
 namespace AudioBand.Models
 {

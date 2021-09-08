@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using AudioBand.Messages;
+using AudioBand.Models;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Media;
-using AudioBand.Messages;
-using AudioBand.Models;
 
 namespace AudioBand.UI
 {

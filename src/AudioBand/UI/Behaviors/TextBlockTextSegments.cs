@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using AudioBand.TextFormatting;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using AudioBand.TextFormatting;
 
 namespace AudioBand.UI
 {

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
+using System.Collections.Generic;
 
 namespace AudioBand.TextFormatting
 {

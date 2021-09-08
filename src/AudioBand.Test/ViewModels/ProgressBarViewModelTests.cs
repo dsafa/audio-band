@@ -1,12 +1,12 @@
-﻿using System;
-using System.ComponentModel;
+﻿using AudioBand.AudioSource;
+using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
-using Moq;
-using System.Windows.Media;
-using AudioBand.AudioSource;
-using AudioBand.Messages;
 using AudioBand.UI;
+using Moq;
+using System;
+using System.ComponentModel;
+using System.Windows.Media;
 using Xunit;
 
 namespace AudioBand.Test
@@ -29,8 +29,8 @@ namespace AudioBand.Test
         [Fact]
         public void ProgressBarViewModel_ProfileChanged_ListensForProfileChanges()
         {
-            var first = new UserProfile() {ProgressBar = new ProgressBar() {BackgroundColor = Colors.AliceBlue}};
-            var second = new UserProfile() { ProgressBar = new ProgressBar() { BackgroundColor = Colors.Aqua }};
+            var first = new UserProfile() { ProgressBar = new ProgressBar() { BackgroundColor = Colors.AliceBlue } };
+            var second = new UserProfile() { ProgressBar = new ProgressBar() { BackgroundColor = Colors.Aqua } };
             _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
                 .Returns(second);
@@ -50,7 +50,7 @@ namespace AudioBand.Test
         [Fact]
         public void ProgressBarViewModel_EndEdit_WritesChangesToAppSettings()
         {
-            var profile = new UserProfile() {ProgressBar = new ProgressBar()};
+            var profile = new UserProfile() { ProgressBar = new ProgressBar() };
             var newWidth = 10;
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new ProgressBarViewModel(_appSettings.Object, _dialogService.Object, _audioSession.Object, _messageBus.Object);
@@ -65,7 +65,7 @@ namespace AudioBand.Test
         public void ProgressBarViewModel_CancelEdit_DoesNotWriteChangesToAppSettings()
         {
             var initialWidth = 0;
-            var profile = new UserProfile() {ProgressBar = new ProgressBar {Width = initialWidth}};
+            var profile = new UserProfile() { ProgressBar = new ProgressBar { Width = initialWidth } };
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new ProgressBarViewModel(_appSettings.Object, _dialogService.Object, _audioSession.Object, _messageBus.Object);
 
@@ -78,7 +78,7 @@ namespace AudioBand.Test
         [Fact]
         public void ProgressBarViewModel_UsesMessageBus()
         {
-            var profile = new UserProfile() {ProgressBar = new ProgressBar()};
+            var profile = new UserProfile() { ProgressBar = new ProgressBar() };
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new ProgressBarViewModel(_appSettings.Object, _dialogService.Object, _audioSession.Object, _messageBus.Object);
 
@@ -99,7 +99,7 @@ namespace AudioBand.Test
 
             _audioSession.Raise(m => m.PropertyChanged += null, null, new PropertyChangedEventArgs(nameof(IAudioSession.SongLength)));
             _audioSession.Raise(m => m.PropertyChanged += null, null, new PropertyChangedEventArgs(nameof(IAudioSession.SongProgress)));
-            
+
             _audioSession.VerifyGet(m => m.SongLength);
             _audioSession.VerifyGet(m => m.SongProgress);
             Assert.Equal(length, vm.TrackLength);

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AudioBand.Settings;
@@ -13,6 +7,12 @@ using AudioBand.UI;
 using CSDeskBand;
 using NLog;
 using SimpleInjector;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace AudioBand
 {
@@ -42,10 +42,13 @@ namespace AudioBand
         /// </summary>
         public Deskband()
         {
+#if DEBUG
+            System.Diagnostics.Debugger.Launch();
+#endif
             // Fluentwpf requires an application window
-            if (System.Windows.Application.Current == null)
+            if (Application.Current == null)
             {
-                new System.Windows.Application().MainWindow = new Window();
+                new Application().MainWindow = new Window();
             }
 
             var initialSize = new DeskBandSize(50, 30);
@@ -114,14 +117,13 @@ namespace AudioBand
                 _container.Register<IDialogService, DialogService>(Lifestyle.Singleton);
                 _container.Register<IViewModelContainer, ViewModelContainer>(Lifestyle.Singleton);
                 _container.Register<IAudioSession, AudioSession>(Lifestyle.Singleton);
-                _container.Register<IPersistSettings, PersistSettings>(Lifestyle.Singleton);
+                _container.Register<IPersistentSettings, PersistentSettings>(Lifestyle.Singleton);
                 _container.Register<GitHubHelper>(Lifestyle.Singleton);
 
                 _container.Register<AboutDialogViewModel>(Lifestyle.Singleton);
                 _container.Register<AlbumArtViewModel>(Lifestyle.Singleton);
                 _container.Register<AlbumArtPopupViewModel>(Lifestyle.Singleton);
                 _container.Register<GlobalSettingsViewModel>(Lifestyle.Singleton);
-                _container.Register<UpdaterViewModel>(Lifestyle.Singleton);
                 _container.Register<GeneralSettingsViewModel>(Lifestyle.Singleton);
                 _container.Register<CustomLabelsViewModel>(Lifestyle.Singleton);
                 _container.Register<NextButtonViewModel>(Lifestyle.Singleton);

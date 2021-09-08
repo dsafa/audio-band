@@ -1,8 +1,7 @@
-﻿using System;
+﻿using AudioBand.Settings;
+using System;
 using System.Drawing;
 using System.Timers;
-using AudioBand.Models;
-using AudioBand.Settings;
 
 namespace AudioBand.AudioSource
 {
@@ -211,7 +210,7 @@ namespace AudioBand.AudioSource
         private void OnIdleTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _isIdle = true;
-            _appSettings.SelectProfile(UserProfile.IdleProfileName);
+            _appSettings.SelectProfile(_appSettings.AudioBandSettings.IdleProfileName);
             _lastRememberedAlbum = AlbumArt;
             AlbumArt = null;
         }

@@ -69,7 +69,7 @@ namespace AudioBand.Test
         {
             var vm = new ViewModelWithModel();
             vm.Reset();
-            
+
             Assert.True(vm.IsEditing);
         }
 

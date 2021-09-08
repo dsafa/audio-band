@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AudioBand.Logging;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using AudioBand.Logging;
-using NLog;
 
 namespace AudioBand.Messages
 {

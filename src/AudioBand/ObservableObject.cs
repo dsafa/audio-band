@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using FastMember;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using FastMember;
 
 namespace AudioBand
 {

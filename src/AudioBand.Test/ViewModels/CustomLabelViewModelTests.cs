@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Windows.Media;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.UI;
 using Moq;
+using System.Linq;
+using System.Windows.Media;
 using Xunit;
 
 namespace AudioBand.Test
@@ -50,7 +50,7 @@ namespace AudioBand.Test
         void CustomLabel_TextFormatStringChangedThenCanceled_CorrectTextSegments()
         {
             var songname = "song";
-            var model = new CustomLabel {FormatString = "text format {song}"};
+            var model = new CustomLabel { FormatString = "text format {song}" };
             _sessionMock.SetupGet(m => m.SongName).Returns(songname);
             var vm = new CustomLabelViewModel(model, _dialogMock.Object, _sessionMock.Object, _messageBusMock.Object);
 
@@ -78,7 +78,7 @@ namespace AudioBand.Test
         void CustomLabel_CancelEdit_ModelHasNoChanges()
         {
             var formatString = "test";
-            var model = new CustomLabel {FormatString = formatString};
+            var model = new CustomLabel { FormatString = formatString };
             var vm = new CustomLabelViewModel(model, _dialogMock.Object, _sessionMock.Object, _messageBusMock.Object);
 
             vm.FormatString = "new";

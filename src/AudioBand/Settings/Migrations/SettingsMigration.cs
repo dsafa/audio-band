@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AudioBand.Logging;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AudioBand.Logging;
-using NLog;
 
 namespace AudioBand.Settings.Migrations
 {

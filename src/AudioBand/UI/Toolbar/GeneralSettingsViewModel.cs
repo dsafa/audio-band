@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AudioBand.Messages;
+using AudioBand.Settings;
+using System;
 using System.Diagnostics;
 using System.Windows.Media;
-using AudioBand.Messages;
-using AudioBand.Settings;
 
 namespace AudioBand.UI
 {

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
-using AudioBand.AudioSource;
 
 namespace AudioBand.TextFormatting
 {

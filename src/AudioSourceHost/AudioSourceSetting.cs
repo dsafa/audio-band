@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Logging;
 using FastMember;
 using NLog;
+using System;
 
 namespace AudioSourceHost
 {

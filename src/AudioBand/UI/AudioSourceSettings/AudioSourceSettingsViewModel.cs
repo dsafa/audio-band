@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace AudioBand.UI
 {
@@ -59,6 +59,7 @@ namespace AudioBand.UI
                 AudioSourcesSettings.Add(newViewModel);
             }
 
+            _messageBus.Publish(EditEndMessage.SaveFix);
             _appSettings.Save();
         }
     }

@@ -1,14 +1,14 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using AudioBand.Extensions;
+using AudioBand.Messages;
+using AudioBand.Models;
+using AudioBand.Settings;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using AudioBand.AudioSource;
-using AudioBand.Extensions;
-using AudioBand.Messages;
-using AudioBand.Models;
-using AudioBand.Settings;
 
 namespace AudioBand.UI
 {
@@ -103,7 +103,14 @@ namespace AudioBand.UI
                 return;
             }
 
-            AlbumArt = ((Image) albumArt.Clone()).ToImageSource();
+            try
+            {
+                AlbumArt = albumArt.ToImageSource();
+            }
+            catch (InvalidOperationException)
+            {
+                Logger.Error("Error while trying to update AlbumArt in Win10 (see GitHub issue #9)");
+            }
         }
     }
 }

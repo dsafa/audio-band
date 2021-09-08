@@ -1,9 +1,9 @@
-﻿using System;
-using AudioBand.Messages;
+﻿using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.UI;
 using Moq;
+using System;
 using Xunit;
 
 namespace AudioBand.Test
@@ -24,12 +24,12 @@ namespace AudioBand.Test
         {
             var first = new UserProfile()
             {
-                AlbumArtPopup = new AlbumArtPopup() {Height = 10}
+                AlbumArtPopup = new AlbumArtPopup() { Height = 10 }
             };
 
             var second = new UserProfile
             {
-                AlbumArtPopup = new AlbumArtPopup() {Height = 20}
+                AlbumArtPopup = new AlbumArtPopup() { Height = 20 }
             };
             _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
@@ -50,7 +50,7 @@ namespace AudioBand.Test
         {
             var profile = new UserProfile
             {
-                AlbumArtPopup = new AlbumArtPopup {Width = 50}
+                AlbumArtPopup = new AlbumArtPopup { Width = 50 }
             };
             const int newWidth = 100;
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);

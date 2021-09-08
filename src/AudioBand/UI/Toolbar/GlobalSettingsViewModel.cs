@@ -1,5 +1,12 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
@@ -12,20 +19,54 @@ namespace AudioBand.UI
     public class GlobalSettingsViewModel : ViewModelBase
     {
         private IAppSettings _appSettings;
+        private GitHubHelper _gitHubHelper;
+        private bool _updateIsAvailable;
+        private bool _noUpdateFound;
+        private bool _isDownloading;
+        private int _downloadPercentage;
+        private string _selectedProfileName;
         private readonly AudioBandSettings _model = new AudioBandSettings();
         private readonly AudioBandSettings _backup = new AudioBandSettings();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalSettingsViewModel"/> class.
         /// </summary>
-        /// <param name="appsettings">The app settings.</param>
+        /// <param name="appSettings">The app settings.</param>
         /// <param name="messageBus">The message bus.</param>
-        public GlobalSettingsViewModel(IAppSettings appsettings, IMessageBus messageBus)
+        /// <param name="gitHubHelper">The GitHub helper.</param>
+        public GlobalSettingsViewModel(IAppSettings appSettings, IMessageBus messageBus, GitHubHelper gitHubHelper)
         {
-            MapSelf(appsettings.AudioBandSettings, _model);
+            MapSelf(appSettings.AudioBandSettings, _model);
 
-            _appSettings = appsettings;
+            CheckForUpdatesCommand = new AsyncRelayCommand(CheckForUpdatesCommandOnExecute);
+            InstallUpdateCommand = new AsyncRelayCommand(InstallUpdateCommandOnExecute);
+
+            ProfileNames = new ObservableCollection<string>(appSettings.Profiles.Select(p => p.Name));
+            SelectedProfileName = _appSettings.AudioBandSettings.IdleProfileName;
+
+            _appSettings = appSettings;
+            _gitHubHelper = gitHubHelper;
             UseMessageBus(messageBus);
+        }
+
+        /// <summary>
+        /// Gets the command that checks for updates.
+        /// </summary>
+        public ICommand CheckForUpdatesCommand { get; }
+
+        /// <summary>
+        /// Gets the command that will download and install the latest update.
+        /// </summary>
+        public ICommand InstallUpdateCommand { get; }
+
+        /// <summary>
+        /// Gets or sets whether to show a popup when an update is available
+        /// </summary>
+        [TrackState]
+        public bool ShowPopupOnAvailableUpdate
+        {
+            get => _model.ShowPopupOnAvailableUpdate;
+            set => SetProperty(_model, nameof(_model.ShowPopupOnAvailableUpdate), value);
         }
 
         /// <summary>
@@ -36,6 +77,22 @@ namespace AudioBand.UI
         {
             get => _model.UseAutomaticIdleProfile;
             set => SetProperty(_model, nameof(_model.UseAutomaticIdleProfile), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the selected profile name.
+        /// </summary>
+        [TrackState]
+        public string SelectedProfileName
+        {
+            get => _selectedProfileName;
+            set
+            {
+                if (SetProperty(ref _selectedProfileName, value))
+                {
+                    _appSettings.AudioBandSettings.IdleProfileName = value;
+                }
+            }
         }
 
         /// <summary>
@@ -57,6 +114,47 @@ namespace AudioBand.UI
             get => _model.ShouldGoIdleAfterInSeconds;
             set => SetProperty(_model, nameof(_model.ShouldGoIdleAfterInSeconds), value);
         }
+
+        /// <summary>
+        /// Gets or sets whether or not an update is available.
+        /// </summary>
+        public bool UpdateIsAvailable
+        {
+            get => _updateIsAvailable;
+            set => SetProperty(ref _updateIsAvailable, value);
+        }
+
+        /// <summary>
+        /// Gets or sets whether an update was found.
+        /// </summary>
+        public bool NoUpdateFound
+        {
+            get => _noUpdateFound;
+            set => SetProperty(ref _noUpdateFound, value);
+        }
+
+        /// <summary>
+        /// Gets or sets whether the user is downloading the latest update
+        /// </summary>
+        public bool IsDownloading
+        {
+            get => _isDownloading;
+            private set => SetProperty(ref _isDownloading, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the current download percentage.
+        /// </summary>
+        public int DownloadPercentage
+        {
+            get => _downloadPercentage;
+            set => SetProperty(ref _downloadPercentage, value);
+        }
+
+        /// <summary>
+        /// Gets the list of profile names.
+        /// </summary>
+        public ObservableCollection<string> ProfileNames { get; }
 
         /// <inheritdoc />
         protected override void OnReset()
@@ -84,6 +182,47 @@ namespace AudioBand.UI
         {
             base.OnEndEdit();
             MapSelf(_model, _appSettings.AudioBandSettings);
+        }
+
+        private async Task CheckForUpdatesCommandOnExecute()
+        {
+            if (!await _gitHubHelper.IsOnLatestVersionAsync())
+            {
+                UpdateIsAvailable = true;
+                NoUpdateFound = false;
+            }
+            else
+            {
+                NoUpdateFound = true;
+                UpdateIsAvailable = false;
+            }
+        }
+
+        private async Task InstallUpdateCommandOnExecute()
+        {
+            var fileName = Path.GetTempFileName().Replace(".tmp", ".msi");
+            using (var client = new WebClient())
+            {
+                client.DownloadProgressChanged += OnDownloadProgressChanged;
+
+                IsDownloading = true;
+                var link = new Uri(await _gitHubHelper.GetLatestDownloadUrlAsync());
+                client.DownloadFileAsync(link, fileName);
+            }
+
+            IsDownloading = false;
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = "msiexec",
+                Arguments = $"/i {fileName}",
+                WorkingDirectory = @"C:\temp\",
+                Verb = "runas"
+            });
+        }
+
+        private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            DownloadPercentage = e.ProgressPercentage;
         }
 
         private void AppsettingsOnProfileChanged(object sender, EventArgs e)

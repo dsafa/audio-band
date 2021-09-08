@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using AudioBand.Models;
+using System.Windows;
 using System.Windows.Controls;
-using AudioBand.Models;
 
 namespace AudioBand.UI
 {

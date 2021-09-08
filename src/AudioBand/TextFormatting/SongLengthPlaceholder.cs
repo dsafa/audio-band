@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Extensions;
+using System.Collections.Generic;
 
 namespace AudioBand.TextFormatting
 {
