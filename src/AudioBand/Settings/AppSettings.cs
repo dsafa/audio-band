@@ -169,9 +169,7 @@ namespace AudioBand.Settings
 
                 _profiles = new Dictionary<string, UserProfile>();
                 var defaultProfiles = UserProfile.CreateDefaultProfiles();
-                var idleProfile = UserProfile.CreateDefaultIdleProfile();
 
-                _profiles.Add(idleProfile.Name, idleProfile);
                 AudioBandSettings.IdleProfileName = UserProfile.DefaultIdleProfileName;
 
                 for (int i = 0; i < defaultProfiles.Length; i++)
