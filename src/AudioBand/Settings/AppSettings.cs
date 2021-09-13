@@ -102,6 +102,17 @@ namespace AudioBand.Settings
                 throw new ArgumentException($"Profile {profileName} does not exist", nameof(profileName));
             }
 
+            if (AudioBandSettings.IdleProfileName == profileName)
+            {
+                AudioBandSettings.UseAutomaticIdleProfile = false;
+                AudioBandSettings.IdleProfileName = _profiles.First().Key;
+            }
+
+            if (AudioBandSettings.LastNonIdleProfileName == profileName)
+            {
+                AudioBandSettings.LastNonIdleProfileName = _profiles.First().Key;
+            }
+
             _profiles.Remove(profileName);
             _persistSettings.DeleteProfile(profileName);
         }
