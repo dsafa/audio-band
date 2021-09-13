@@ -1,8 +1,8 @@
-﻿using AudioBand.AudioSource;
-using iTunesLib;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Timers;
+using AudioBand.AudioSource;
+using iTunesLib;
 using Timer = System.Timers.Timer;
 
 namespace iTunesAudioSource
@@ -28,30 +28,42 @@ namespace iTunesAudioSource
             _checkiTunesTimer.Elapsed += CheckItunes;
         }
 
+        /// <inheritdoc/>
         public event EventHandler<TrackInfoChangedEventArgs> TrackInfoChanged;
 
+        /// <inheritdoc/>
         public event EventHandler<bool> IsPlayingChanged;
 
+        /// <inheritdoc/>
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
 #pragma warning disable 00067 // Event is not used
+        /// <inheritdoc/>
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 #pragma warning restore 00067 // Event is not used
 
+        /// <inheritdoc/>
         public event EventHandler<float> VolumeChanged;
 
+        /// <inheritdoc/>
         public event EventHandler<bool> ShuffleChanged;
 
+        /// <inheritdoc/>
         public event EventHandler<RepeatMode> RepeatModeChanged;
 
+        /// <inheritdoc/>
         public string Name => "iTunes";
 
+        /// <inheritdoc/>
         public string Description => "";
 
+        /// <inheritdoc/>
         public string WindowClassName => "iTunes";
 
+        /// <inheritdoc/>
         public IAudioSourceLogger Logger { get; set; }
 
+        /// <inheritdoc/>
         public Task ActivateAsync()
         {
             _itunesControls.Start();
@@ -59,6 +71,7 @@ namespace iTunesAudioSource
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task DeactivateAsync()
         {
             _checkiTunesTimer.Stop();
@@ -70,54 +83,63 @@ namespace iTunesAudioSource
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task NextTrackAsync()
         {
             _itunesControls.Next();
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task PauseTrackAsync()
         {
             _itunesControls.Pause();
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task PlayTrackAsync()
         {
             _itunesControls.Play();
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task PreviousTrackAsync()
         {
             _itunesControls.Previous();
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task SetVolumeAsync(float newVolume)
         {
             _itunesControls.Volume = (int)(newVolume * 100);
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
             _itunesControls.Progress = newProgress;
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task SetShuffleAsync(bool shuffleOn)
         {
             _itunesControls.Shuffle = shuffleOn;
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public Task SetRepeatModeAsync(RepeatMode newRepeatMode)
         {
             _itunesControls.RepeatMode = ToITRepeat(newRepeatMode);
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public string GetWindowClassName() => "iTunes";
 
         private RepeatMode ToRepeatMode(ITPlaylistRepeatMode mode)

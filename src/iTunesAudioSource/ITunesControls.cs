@@ -1,10 +1,10 @@
-﻿using iTunesLib;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Timers;
+using iTunesLib;
 using Timer = System.Timers.Timer;
 
 namespace iTunesAudioSource
