@@ -455,6 +455,7 @@ namespace SpotifyAudioSource
             catch (Exception e)
             {
                 Logger.Error($"Error while trying to authenticate, user most likely offline ~ {e.Message}");
+                _authIsInProcess = false;
                 throw;
             }
         }
@@ -490,9 +491,13 @@ namespace SpotifyAudioSource
         {
             try
             {
-                if (_spotifyClient is null && !_authIsInProcess)
+                if (_spotifyClient is null)
                 {
-                    Authorize();
+                    if (!_authIsInProcess)
+                    {
+                        Authorize();
+                    }
+
                     return null;
                 }
 
@@ -517,7 +522,11 @@ namespace SpotifyAudioSource
             catch (TaskCanceledException e) { }
             catch (Exception e)
             {
-                Logger.Error(e.InnerException?.Message);
+                if (e.InnerException != null)
+                {
+                    Logger.Error(e.InnerException.Message);
+                }
+
                 Logger.Error(e.Message);
                 Logger.Error(e);
             }
@@ -780,8 +789,7 @@ namespace SpotifyAudioSource
 
                 var config = SpotifyClientConfig.CreateDefault();
                 var tokenResponse = await new OAuthClient(config).RequestToken(
-                    new AuthorizationCodeTokenRequest(ClientId, ClientSecret, response.Code, address)
-                );
+                    new AuthorizationCodeTokenRequest(ClientId, ClientSecret, response.Code, address));
 
                 RefreshToken = tokenResponse.RefreshToken;
                 _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
