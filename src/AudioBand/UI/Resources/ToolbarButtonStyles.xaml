@@ -306,4 +306,13 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+    <Style x:Key="CloseButtonStyle" TargetType="{x:Type Button}">
+        <d:Style.DataContext>
+            <x:Type Type="audioband:PopupViewModel" />
+        </d:Style.DataContext>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="audioband:Fallback.FallbackImageSource" Value="{StaticResource PreviousButtonDefault}" />
+        <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}" />
+        <Setter Property="Content" Value="x" />
+    </Style>
 </ResourceDictionary>

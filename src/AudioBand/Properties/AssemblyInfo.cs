@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -39,7 +38,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 // Changed on build
-[assembly: AssemblyInformationalVersion("$version$")]
+[assembly: AssemblyInformationalVersion("0.9.9")]
 
 [assembly: InternalsVisibleTo("AudioBand.Test")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

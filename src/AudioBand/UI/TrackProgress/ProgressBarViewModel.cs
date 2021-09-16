@@ -1,11 +1,11 @@
-﻿using AudioBand.AudioSource;
-using AudioBand.Messages;
-using AudioBand.Models;
-using AudioBand.Settings;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Media;
+using AudioBand.AudioSource;
+using AudioBand.Messages;
+using AudioBand.Models;
+using AudioBand.Settings;
 
 namespace AudioBand.UI
 {

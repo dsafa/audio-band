@@ -1,9 +1,9 @@
-﻿using AudioBand.Models;
-using AudioBand.Settings.Persistence;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using AudioBand.Models;
+using AudioBand.Settings.Persistence;
 
 namespace AudioBand.Settings
 {

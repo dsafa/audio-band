@@ -25,7 +25,7 @@ namespace AudioBand.UI
         private readonly IAudioSourceManager _audioSourceManager;
         private readonly IMessageBus _messageBus;
         private readonly IAudioSession _audioSession;
-        private readonly IDialogService _dialog;
+        private readonly PopupService _popups;
         private readonly GitHubHelper _github;
         private IAudioSource _selectedAudioSource;
         private UserProfile _selectedUserProfile;
@@ -38,15 +38,15 @@ namespace AudioBand.UI
         /// <param name="audioSourceManager">The audio source mananger.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="audioSession">The audio session.</param>
-        /// <param name="dialog">The dialog service.</param>
+        /// <param name="popups">The popup service.</param>
         /// <param name="github">The GitHub helper.</param>
-        public AudioBandToolbarViewModel(IViewModelContainer viewModels, IAppSettings appSettings, IAudioSourceManager audioSourceManager, IMessageBus messageBus, IAudioSession audioSession, IDialogService dialog, GitHubHelper github)
+        public AudioBandToolbarViewModel(IViewModelContainer viewModels, IAppSettings appSettings, IAudioSourceManager audioSourceManager, IMessageBus messageBus, IAudioSession audioSession, PopupService popups, GitHubHelper github)
         {
             _appSettings = appSettings;
             _audioSourceManager = audioSourceManager;
             _messageBus = messageBus;
             _audioSession = audioSession;
-            _dialog = dialog;
+            _popups = popups;
             _github = github;
             ViewModels = viewModels;
 
@@ -174,7 +174,7 @@ namespace AudioBand.UI
 
             if (!await _github.IsOnLatestVersionAsync())
             {
-                _dialog.ShowUpdateDialog();
+                _popups.ShowPopup("UpdateIsAvailableTitle", "UpdateIsAvailableDescription", TimeSpan.FromSeconds(60));
             }
         }
 
