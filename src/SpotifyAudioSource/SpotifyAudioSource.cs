@@ -517,7 +517,7 @@ namespace SpotifyAudioSource
             }
             catch (APITooManyRequestsException e)
             {
-                _checkSpotifyTimer.Interval = e.RetryAfter.TotalMilliseconds;
+                _checkSpotifyTimer.Interval = e.RetryAfter.TotalMilliseconds < 100 ? 100 : e.RetryAfter.TotalMilliseconds;
             }
             catch (TaskCanceledException e) { }
             catch (Exception e)
