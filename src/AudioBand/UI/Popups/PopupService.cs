@@ -11,6 +11,7 @@ namespace AudioBand.UI
     {
         private IAppSettings _appSettings;
         private IViewModelContainer _viewModels;
+        private ResourceDictionary _textParts = new ResourceDictionary();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupService"/> class.
@@ -21,6 +22,8 @@ namespace AudioBand.UI
         {
             _appSettings = appSettings;
             _viewModels = viewModels;
+
+            _textParts.Source = new Uri("/AudioBand;component/UI/Resources/Strings.xaml", UriKind.RelativeOrAbsolute);
         }
 
         /// <summary>
@@ -40,8 +43,12 @@ namespace AudioBand.UI
             duration = duration.TotalSeconds < 3 ? TimeSpan.FromSeconds(3) : duration;
             duration = duration.TotalSeconds > 60 ? TimeSpan.FromSeconds(60) : duration;
 
-            var a = Application.Current.TryFindResource(title);
-            _viewModels.PopupViewModel.ActivateNewPopup("Update found!", "An update was found, press the button below to start downloading!", duration);
+            if (!_textParts.Contains(title) || !_textParts.Contains(description))
+            {
+                _viewModels.PopupViewModel.ActivateNewPopup("Text Error", $"The keys '{title}' and/or '{description}' could not be found in Strings.xaml. (Notify a developer)", duration);
+            }
+
+            _viewModels.PopupViewModel.ActivateNewPopup(_textParts[title].ToString(), _textParts[description].ToString(), duration);
         }
 
         /// <summary>
