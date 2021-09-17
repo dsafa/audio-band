@@ -129,9 +129,6 @@
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Settings\Migrations\IdentitySettingsMigrator.cs" />
     <Compile Include="Settings\Persistence\TomlHelper.cs" />
-    <Compile Include="UI\Dialogs\UpdateDialog.xaml.cs">
-      <DependentUpon>UpdateDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\ValueConverters\ValueConverterHelper.cs" />
     <Compile Include="UI\ViewModel\TrackStateAttribute.cs" />
     <Compile Include="Commands\AsyncRelayCommand{T}.cs" />
@@ -239,6 +236,8 @@
     <Compile Include="UI\CustomLabels\CustomLabelsViewModel.cs" />
     <Compile Include="UI\Dialogs\AboutDialogViewModel.cs" />
     <Compile Include="UI\Dialogs\IDialogService.cs" />
+    <Compile Include="UI\Popups\PopupService.cs" />
+    <Compile Include="UI\Popups\PopupViewModel.cs" />
     <Compile Include="UI\LayoutViewModelBase.cs" />
     <Compile Include="UI\PlaybackControls\PlayPauseButtonViewModel.cs" />
     <Compile Include="UI\PlaybackControls\PreviousButtonViewModel.cs" />
@@ -356,10 +355,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UI\Dialogs\UpdateDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\Resources\ButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

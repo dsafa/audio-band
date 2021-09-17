@@ -116,6 +116,16 @@ namespace AudioBand.UI
         }
 
         /// <summary>
+        /// Gets or sets whether to show information popups to the user.
+        /// </summary>
+        [TrackState]
+        public bool ShowInformationPopups
+        {
+            get => _model.ShowInformationPopups;
+            set => SetProperty(_model, nameof(_model.ShowInformationPopups), value);
+        }
+
+        /// <summary>
         /// Gets or sets whether or not an update is available.
         /// </summary>
         public bool UpdateIsAvailable

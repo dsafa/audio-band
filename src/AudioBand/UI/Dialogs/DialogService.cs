@@ -135,13 +135,5 @@ namespace AudioBand.UI
 
             return null;
         }
-
-        /// <inheritdoc />
-        public void ShowUpdateDialog()
-        {
-            var dialog = new UpdateDialog();
-
-            dialog.ShowDialog();
-        }
     }
 }

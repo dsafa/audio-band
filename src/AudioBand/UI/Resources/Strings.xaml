@@ -5,8 +5,8 @@
     <!--  Updater settings -->
     <sys:String x:Key="UpdaterTitle">In-App Updates</sys:String>
     <sys:String x:Key="UpdaterButtonText">Check For Updates</sys:String>
-    <sys:String x:Key="ShowUpdaterPopupText">Show a popup on pc startup if an update is available</sys:String>
     <sys:String x:Key="UpdateIsAvailableDescription">An update was found, press the button below to start downloading!</sys:String>
+    <sys:String x:Key="ShowUpdaterPopupText">Show a popup on pc startup if an update is available</sys:String>
     <sys:String x:Key="InstallNowButtonText">Install Now</sys:String>
     <sys:String x:Key="NoUpdateFoundText">You're already on the latest version</sys:String>
     <!--  Idle Profile settings -->
@@ -15,7 +15,9 @@
     <sys:String x:Key="IdleProfileSelectorDescriptionText">Select which profile to use when AudioBand goes idle</sys:String>
     <sys:String x:Key="HideIdleHeaderText">Hide Idle Profile in the Quick Menu (right click on audioband) [requires restart]</sys:String>
     <sys:String x:Key="IdleDelayLabelText">Seconds before AudioBand switches to Idle Mode</sys:String>
-    
+    <!--  Other settings  -->
+    <sys:String x:Key="OtherTitle">Other Settings</sys:String>
+    <sys:String x:Key="DisableInformationPopupsText">Show helpful information hints</sys:String>
 
     <!--  Common settings  -->
     <sys:String x:Key="WidthLabelText">Width</sys:String>
@@ -166,7 +168,12 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="RenameProfileDialogTitle">Renaming profile {0}</sys:String>
     <sys:String x:Key="DeleteProfileDialogTitle">Delete profile</sys:String>
     <sys:String x:Key="DeleteProfileDialogBody">Are you sure you want to delete the profile '{0}'</sys:String>
-    <sys:String x:Key="UpdateDialogBody">An update was found for Audio Band, please go to Settings -> AudioBand Settings -> In-App Updates to install it.</sys:String>
+
+    <!--  Popups  -->
+    <sys:String x:Key="UpdatePopupTitle">Update found!</sys:String>
+    <sys:String x:Key="UpdatePopupDescription">An update was found for Audio Band, please go to Settings -> AudioBand Settings -> In-App Updates to install it.</sys:String>
+    <sys:String x:Key="RequirePremiumTitle">Need Spotify Premium!</sys:String>
+    <sys:String x:Key="RequirePremiumDescription">In order to use these buttons you require Spotify Premium, this is a limitation from Spotify that we cannot bypass.</sys:String>
 
     <!--  Profiles  -->
     <sys:String x:Key="NewProfileHelpText">New profile</sys:String>

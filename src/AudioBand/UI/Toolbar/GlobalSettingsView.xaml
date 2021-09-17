@@ -48,8 +48,7 @@
             </StackPanel>
             <!--  Idle Profile Settings  -->
             <StackPanel>
-                <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource IdleProfileTitle}"
-                        Padding="0,10,0,0" />
+                <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource IdleProfileTitle}" Padding="0,10,0,0" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource UseIdleHeaderText}" />
                 <metro:ToggleSwitch IsChecked="{Binding UseAutomaticIdleProfile, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource IdleProfileSelectorDescriptionText}" />
@@ -62,6 +61,12 @@
                 <metro:ToggleSwitch IsChecked="{Binding HideIdleProfileInQuickMenu, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource IdleDelayLabelText}" />
                 <metro:NumericUpDown audioband:NumericInput.Type="WholeNumber" Value="{Binding ShouldGoIdleAfterInSeconds, Mode=TwoWay}" />
+            </StackPanel>
+            <!--  Other Settings  -->
+            <StackPanel>
+                <TextBlock Style="{StaticResource TitleTextBlock}" Text="{StaticResource OtherTitle}" Padding="0,10,0,0" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource DisableInformationPopupsText}" />
+                <metro:ToggleSwitch IsChecked="{Binding ShowInformationPopups, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
             </StackPanel>
             <!--  Reset Section  -->
             <TextBlock Margin="{StaticResource SectionMargin}"
