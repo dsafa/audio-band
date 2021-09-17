@@ -60,7 +60,6 @@ namespace SpotifyAudioSource
 
         public bool TryPause()
         {
-            _ = GetSpotifyWindowTitle();
             if (_spotifyHwnd == IntPtr.Zero)
             {
                 return false;
