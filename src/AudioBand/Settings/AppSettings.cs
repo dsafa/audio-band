@@ -1,9 +1,9 @@
-﻿using AudioBand.Models;
-using AudioBand.Settings.Persistence;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using AudioBand.Models;
+using AudioBand.Settings.Persistence;
 
 namespace AudioBand.Settings
 {
@@ -102,6 +102,17 @@ namespace AudioBand.Settings
                 throw new ArgumentException($"Profile {profileName} does not exist", nameof(profileName));
             }
 
+            if (AudioBandSettings.IdleProfileName == profileName)
+            {
+                AudioBandSettings.UseAutomaticIdleProfile = false;
+                AudioBandSettings.IdleProfileName = _profiles.First().Key;
+            }
+
+            if (AudioBandSettings.LastNonIdleProfileName == profileName)
+            {
+                AudioBandSettings.LastNonIdleProfileName = _profiles.First().Key;
+            }
+
             _profiles.Remove(profileName);
             _persistSettings.DeleteProfile(profileName);
         }
@@ -169,9 +180,7 @@ namespace AudioBand.Settings
 
                 _profiles = new Dictionary<string, UserProfile>();
                 var defaultProfiles = UserProfile.CreateDefaultProfiles();
-                var idleProfile = UserProfile.CreateDefaultIdleProfile();
 
-                _profiles.Add(idleProfile.Name, idleProfile);
                 AudioBandSettings.IdleProfileName = UserProfile.DefaultIdleProfileName;
 
                 for (int i = 0; i < defaultProfiles.Length; i++)

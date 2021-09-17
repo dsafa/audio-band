@@ -19,6 +19,7 @@
         /// <param name="shuffleModeButtonViewModel">Shuffle mode button view model.</param>
         /// <param name="previousButtonViewModel">Previous button view model.</param>
         /// <param name="progressBarViewModel">Progress bar view model.</param>
+        /// <param name="popupViewModel">Popup view model.</param>
         /// <param name="audioSourceSettingsViewModel">Audio source settings view model.</param>
         public ViewModelContainer(
             GlobalSettingsViewModel globalSettingsViewModel,
@@ -32,6 +33,7 @@
             ShuffleModeButtonViewModel shuffleModeButtonViewModel,
             PreviousButtonViewModel previousButtonViewModel,
             ProgressBarViewModel progressBarViewModel,
+            PopupViewModel popupViewModel,
             AudioSourceSettingsViewModel audioSourceSettingsViewModel)
         {
             GlobalSettingsViewModel = globalSettingsViewModel;
@@ -45,6 +47,7 @@
             ShuffleModeButtonViewModel = shuffleModeButtonViewModel;
             PreviousButtonViewModel = previousButtonViewModel;
             ProgressBarViewModel = progressBarViewModel;
+            PopupViewModel = popupViewModel;
             AudioSourceSettingsViewModel = audioSourceSettingsViewModel;
         }
 
@@ -80,6 +83,9 @@
 
         /// <inheritdoc />
         public ProgressBarViewModel ProgressBarViewModel { get; }
+
+        /// <inheritdoc />
+        public PopupViewModel PopupViewModel { get; }
 
         /// <inheritdoc />
         public AudioSourceSettingsViewModel AudioSourceSettingsViewModel { get; }

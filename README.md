@@ -42,11 +42,6 @@ Any form of contribution is appreciated:
 
 You can also join our [Discord Server](https://discord.gg/yWDHdH2za5).
 
-## Donating
-**DISCLAIMER:** You are not donating to the person who started this project, but to the one that continued it.
-
-**[Paypal](https://paypal.me/SenneVR)**
-
 ## License
 [LICENSE](https://github.com/svr333/audio-band/blob/master/LICENSE)
 

@@ -48,5 +48,10 @@ namespace AudioBand.Models
         /// Gets or sets whether to show a popup when an update is available.
         /// </summary>
         public bool ShowPopupOnAvailableUpdate { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets whether to show little help popups when something fails.
+        /// </summary>
+        public bool ShowInformationPopups { get; set; } = true;
     }
 }

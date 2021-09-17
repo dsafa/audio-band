@@ -160,11 +160,6 @@ namespace AudioBand.UI
             {
                 return;
             }
-            if (_appSettings.AudioBandSettings.IdleProfileName == SelectedProfileName)
-            {
-                _appSettings.AudioBandSettings.UseAutomaticIdleProfile = false;
-                _appSettings.AudioBandSettings.IdleProfileName = ProfileNames[0];
-            }
 
             _appSettings.DeleteProfile(SelectedProfileName);
             ProfileNames.Remove(SelectedProfileName);

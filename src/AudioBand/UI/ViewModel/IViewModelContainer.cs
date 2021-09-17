@@ -61,6 +61,11 @@
         ProgressBarViewModel ProgressBarViewModel { get; }
 
         /// <summary>
+        /// Gets the view model for information popups.
+        /// </summary>
+        PopupViewModel PopupViewModel { get; }
+
+        /// <summary>
         /// Gets the collection for view models for the audio source settings.
         /// </summary>
         AudioSourceSettingsViewModel AudioSourceSettingsViewModel { get; }
