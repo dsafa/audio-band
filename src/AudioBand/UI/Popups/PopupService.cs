@@ -34,8 +34,15 @@ namespace AudioBand.UI
         /// <param name="duration">The duration to show the popup for (max 60 seconds).</param>
         public void ShowPopup(string title, string description, TimeSpan duration)
         {
-            if (!_appSettings.AudioBandSettings.ShowInformationPopups
-            && (title == "UpdateIsAvailableTitle" && !_appSettings.AudioBandSettings.ShowPopupOnAvailableUpdate))
+            // First one is an edge-case, handled in here separately.
+            if (title == "UpdatePopupTitle")
+            {
+                if (_appSettings.AudioBandSettings.ShowPopupOnAvailableUpdate)
+                {
+                    return;
+                }
+            }
+            else if (!_appSettings.AudioBandSettings.ShowInformationPopups)
             {
                 return;
             }
