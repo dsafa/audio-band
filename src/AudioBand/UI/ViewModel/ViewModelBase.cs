@@ -33,6 +33,7 @@ namespace AudioBand.UI
             ResetCommand = new RelayCommand(Reset);
 
             GetTrackingProperties();
+            EndEdit();
         }
 
         /// <summary>
