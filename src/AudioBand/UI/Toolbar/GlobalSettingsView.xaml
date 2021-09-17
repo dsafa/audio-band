@@ -56,7 +56,6 @@
                 <ComboBox x:Name="IdleProfileSelectorComboBox"
                           HorizontalAlignment="Left"
                           Height="{StaticResource DefaultButtonHeight}"
-                          IsSynchronizedWithCurrentItem="True"
                           ItemsSource="{Binding ProfileNames}"
                           SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource HideIdleHeaderText}" />
