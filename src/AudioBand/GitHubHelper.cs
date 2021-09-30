@@ -1,4 +1,5 @@
 using AudioBand.Logging;
+using AudioBand.Settings;
 using NLog;
 using Octokit;
 using System;
@@ -14,8 +15,17 @@ namespace AudioBand
     /// </summary>
     public class GitHubHelper
     {
+        private IAppSettings _settings;
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<GitHubHelper>();
         private GitHubClient _client = new GitHubClient(new ProductHeaderValue("audio-band"));
+
+        /// <summary>
+        /// Intantiates a new instance of GitHubHelper.
+        /// </summary>
+        public GitHubHelper(IAppSettings settings)
+        {
+            _settings = settings;
+        }
 
         /// <summary>
         /// Gets the Download url of the latest release.
@@ -66,7 +76,14 @@ namespace AudioBand
         {
             try
             {
-                return (await _client.Repository.Release.GetAll("svr333", "audio-band"))[0];
+                if (_settings.AudioBandSettings.OptInForPreReleases)
+                {
+                    return (await _client.Repository.Release.GetAll("svr333", "audio-band"))[0];
+                }
+                else 
+                {
+                    return await _client.Repository.Release.GetLatest("svr333", "audio-band");
+                }
             }
             catch (Exception)
             {

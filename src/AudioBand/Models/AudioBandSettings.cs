@@ -53,5 +53,10 @@ namespace AudioBand.Models
         /// Gets or sets whether to show little help popups when something fails.
         /// </summary>
         public bool ShowInformationPopups { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets whether to opt-in for pre-releases.
+        /// </summary>
+        public bool OptInForPreReleases { get; set; }
     }
 }

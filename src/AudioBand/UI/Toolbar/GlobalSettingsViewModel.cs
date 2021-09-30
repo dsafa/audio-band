@@ -70,6 +70,16 @@ namespace AudioBand.UI
         }
 
         /// <summary>
+        /// Gets or sets whether to show a popup when an update is available
+        /// </summary>
+        [TrackState]
+        public bool OptInForPreReleases
+        {
+            get => _model.OptInForPreReleases;
+            set => SetProperty(_model, nameof(_model.OptInForPreReleases), value);
+        }
+
+        /// <summary>
         /// Gets or sets whether to use Automatic Idle Profile.
         /// </summary>
         [TrackState]
