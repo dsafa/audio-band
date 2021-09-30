@@ -1,4 +1,5 @@
 ﻿using AudioBand.AudioSource;
+using AudioBand.UI;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Http;
@@ -339,7 +340,7 @@ namespace SpotifyAudioSource
         {
             if (!await _spotifyClient.Player.SkipNext())
             {
-                await _spotifyClient.Player.SkipNext();
+                _spotifyControls.TryNext();
             }
         }
 
@@ -347,7 +348,7 @@ namespace SpotifyAudioSource
         public async Task SetVolumeAsync(float newVolume)
         {
             var volume = (int)newVolume * 100;
-            await LogPlayerCommandIfFailed(()
+            await OnPlayerCommandFailed(()
                 => _spotifyClient.Player.SetVolume(new PlayerVolumeRequest(volume)), "SetVolume");
 
             await Task.Delay(110).ContinueWith(async t => await UpdatePlayer());
@@ -356,7 +357,7 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public async Task SetPlaybackProgressAsync(TimeSpan newProgress)
         {
-            await LogPlayerCommandIfFailed(()
+            await OnPlayerCommandFailed(()
                 => _spotifyClient.Player.SeekTo(new PlayerSeekToRequest((long)newProgress.TotalMilliseconds)), "SetPlaybackProgress");
 
             await Task.Delay(110).ContinueWith(async t => await UpdatePlayer());
@@ -365,7 +366,7 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public async Task SetShuffleAsync(bool shuffleOn)
         {
-            await LogPlayerCommandIfFailed(()
+            await OnPlayerCommandFailed(()
                 => _spotifyClient.Player.SetShuffle(new PlayerShuffleRequest(shuffleOn)), "SetShuffle");
 
             await Task.Delay(110).ContinueWith(async t => await UpdatePlayer());
@@ -374,7 +375,7 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public async Task SetRepeatModeAsync(RepeatMode newRepeatMode)
         {
-            await LogPlayerCommandIfFailed(()
+            await OnPlayerCommandFailed(()
                 => _spotifyClient.Player.SetRepeat(new PlayerSetRepeatRequest(ToRepeatState(newRepeatMode))), "SetRepeatMode");
 
             await Task.Delay(110).ContinueWith(async t => await UpdatePlayer());
@@ -810,7 +811,7 @@ namespace SpotifyAudioSource
             SettingChanged?.Invoke(this, new SettingChangedEventArgs(settingName));
         }
 
-        private async Task LogPlayerCommandIfFailed(Func<Task<bool>> command, [CallerMemberName] string caller = null)
+        private async Task OnPlayerCommandFailed(Func<Task<bool>> command, [CallerMemberName] string caller = null)
         {
             var hasError = await command();
             if (hasError)
