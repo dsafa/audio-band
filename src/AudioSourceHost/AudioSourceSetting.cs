@@ -71,12 +71,6 @@ namespace AudioSourceHost
             catch (Exception e)
             {
                 Logger.Error(e, "Error occured while updating audio source settings. {info}", new { PropertyName, Value = value, SettingType });
-
-                if (SettingType.IsValueType)
-                {
-                    Logger.Error("Using default value of the type.");
-                    _accessor[PropertyName] = Activator.CreateInstance(SettingType);
-                }
             }
         }
     }
