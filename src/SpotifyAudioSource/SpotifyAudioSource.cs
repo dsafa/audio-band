@@ -101,6 +101,7 @@ namespace SpotifyAudioSource
                     return;
                 }
 
+                RefreshToken = "";
                 _clientId = value;
                 Authorize();
             }
@@ -120,6 +121,7 @@ namespace SpotifyAudioSource
                     return;
                 }
 
+                RefreshToken = "";
                 _clientSecret = value;
                 Authorize();
             }
