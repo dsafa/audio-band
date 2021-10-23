@@ -42,9 +42,10 @@
                 <TextBlock Style="{StaticResource DescriptionTextBlock}"
                         Text="{StaticResource NoUpdateFoundText}" Padding="0,0,0,5"
                         Visibility="{Binding NoUpdateFound, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
-                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource ShowUpdaterPopupText}"
-                        Padding="0,5,0,0" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource ShowUpdaterPopupText}" Padding="0,5,0,0" />
                 <metro:ToggleSwitch IsChecked="{Binding ShowPopupOnAvailableUpdate, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource OptInPreReleasesText}" Padding="0,5,0,0" />
+                <metro:ToggleSwitch IsChecked="{Binding OptInForPreReleases, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
             </StackPanel>
             <!--  Idle Profile Settings  -->
             <StackPanel>

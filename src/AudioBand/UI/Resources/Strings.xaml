@@ -9,6 +9,7 @@
     <sys:String x:Key="ShowUpdaterPopupText">Show a popup on pc startup if an update is available</sys:String>
     <sys:String x:Key="InstallNowButtonText">Install Now</sys:String>
     <sys:String x:Key="NoUpdateFoundText">You're already on the latest version</sys:String>
+    <sys:String x:Key="OptInPreReleasesText">Allow AudioBand to download Pre-Releases (receive features faster, may contain bugs)</sys:String>
     <!--  Idle Profile settings -->
     <sys:String x:Key="IdleProfileTitle">Idle Profile Settings</sys:String>
     <sys:String x:Key="UseIdleHeaderText">Enable Idle Profile</sys:String>

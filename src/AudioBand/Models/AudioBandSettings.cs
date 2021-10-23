@@ -27,7 +27,7 @@ namespace AudioBand.Models
         /// <summary>
         /// The profile that should enable when AudioBand goes into idle mode.
         /// </summary>
-        public string IdleProfileName { get; set; }
+        public string IdleProfileName { get; set; } = "Idle";
 
         /// <summary>
         /// Gets or sets whether to use the Idle Profile.
@@ -53,5 +53,10 @@ namespace AudioBand.Models
         /// Gets or sets whether to show little help popups when something fails.
         /// </summary>
         public bool ShowInformationPopups { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets whether to opt-in for pre-releases.
+        /// </summary>
+        public bool OptInForPreReleases { get; set; }
     }
 }

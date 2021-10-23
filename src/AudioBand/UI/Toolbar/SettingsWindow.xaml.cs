@@ -51,17 +51,28 @@ namespace AudioBand.UI
         protected override void OnPreviewKeyUp(KeyEventArgs e)
         {
             base.OnPreviewKeyUp(e);
-            if (e.Key != Key.Tab)
+
+            switch (e.Key)
             {
-                return;
+                case Key.Tab:
+                {
+                    var focusedElement = Keyboard.FocusedElement as UIElement;
+                    FocusNavigationDirection direction = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)
+                        ? FocusNavigationDirection.Previous
+                        : FocusNavigationDirection.Next;
+
+                    focusedElement?.MoveFocus(new TraversalRequest(direction));
+                    break;
+                }
+                case Key.W:
+                {
+                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+                    {
+                        Hide();
+                    }
+                    break;
+                }
             }
-
-            var focusedElement = Keyboard.FocusedElement as UIElement;
-            FocusNavigationDirection direction = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)
-                ? FocusNavigationDirection.Previous
-                : FocusNavigationDirection.Next;
-
-            focusedElement?.MoveFocus(new TraversalRequest(direction));
         }
 
         private void OnActivated(object sender, EventArgs e)
