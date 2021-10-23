@@ -21,7 +21,7 @@ namespace SpotifyAudioSource
     public class SpotifyAudioSource : IAudioSource
     {
         private readonly SpotifyControls _spotifyControls = new SpotifyControls();
-        private readonly Timer _checkSpotifyTimer = new Timer(1000);
+        private Timer _checkSpotifyTimer = new Timer(1000);
         private SpotifyClientConfig _spotifyConfig;
         private ISpotifyClient _spotifyClient;
         private HttpClient _httpClient = new HttpClient();
@@ -743,10 +743,17 @@ namespace SpotifyAudioSource
                 // check again in case
                 if (_isActive)
                 {
-                    _checkSpotifyTimer.Start();
-                    _checkSpotifyTimer.Enabled = true;
-                    _checkSpotifyTimer.Interval = _checkSpotifyTimer.Interval < 100
+                    try
+                    {
+                        _checkSpotifyTimer.Interval = _checkSpotifyTimer.Interval < 100
                                                 ? 100 : _checkSpotifyTimer.Interval;
+                        _checkSpotifyTimer.Start();
+                    }
+                    catch
+                    {
+                        // normally this should never fire but its here just in case
+                        _checkSpotifyTimer = new Timer(PollingInterval);
+                    }
                 }
             }
         }
