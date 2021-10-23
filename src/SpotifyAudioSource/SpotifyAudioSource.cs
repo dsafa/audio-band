@@ -1,14 +1,13 @@
-﻿using AudioBand.AudioSource;
-using AudioBand.UI;
-using SpotifyAPI.Web;
-using SpotifyAPI.Web.Auth;
-using SpotifyAPI.Web.Http;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
+using AudioBand.AudioSource;
+using SpotifyAPI.Web;
+using SpotifyAPI.Web.Auth;
+using SpotifyAPI.Web.Http;
 using static SpotifyAPI.Web.PlayerCurrentPlaybackRequest;
 using static SpotifyAPI.Web.PlayerSetRepeatRequest;
 using Image = System.Drawing.Image;
@@ -26,6 +25,7 @@ namespace SpotifyAudioSource
         private SpotifyClientConfig _spotifyConfig;
         private ISpotifyClient _spotifyClient;
         private HttpClient _httpClient = new HttpClient();
+        private EmbedIOAuthServer _server = null;
         private bool _authIsInProcess = false;
         private string _currentItemId;
         private string _currentTrackName;
@@ -451,7 +451,7 @@ namespace SpotifyAudioSource
 
             try
             {
-                RunFirstTimeAuthentication();
+                FirstTimeAuth().GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
@@ -521,6 +521,10 @@ namespace SpotifyAudioSource
                 _checkSpotifyTimer.Interval = e.RetryAfter.TotalMilliseconds < 100 ? 100 : e.RetryAfter.TotalMilliseconds;
             }
             catch (TaskCanceledException e) { }
+            catch (APIException e)
+            {
+                Logger.Error(e.Response.Body);
+            }
             catch (Exception e)
             {
                 if (e.InnerException != null)
@@ -749,13 +753,6 @@ namespace SpotifyAudioSource
 
         private async Task RefreshAccessTokenOnClient()
         {
-            if (string.IsNullOrEmpty(RefreshToken))
-            {
-                Logger.Warn("RefreshToken missing. Please restart and go through the authorization process again.");
-                await DeactivateAsync();
-                return;
-            }
-
             AuthorizationCodeRefreshResponse response;
 
             try
@@ -775,35 +772,42 @@ namespace SpotifyAudioSource
             Logger.Debug($"Received new access token. Expires in: {expiresIn} (At {DateTime.Now + expiresIn})");
         }
 
-        private void RunFirstTimeAuthentication()
+        private async Task FirstTimeAuth()
         {
             _authIsInProcess = true;
-            Logger.Debug("Connecting to Spotify through own application.");
-            var address = new Uri($"http://localhost:{LocalPort}");
+            _server = new EmbedIOAuthServer(new Uri($"http://localhost:{LocalPort}"), LocalPort);
+            await _server.Start();
 
-            var server = new EmbedIOAuthServer(new Uri("http://localhost"), LocalPort);
-            server.Start().GetAwaiter().GetResult();
+            _server.AuthorizationCodeReceived += OnAuthorizationCodeReceived;
+            _server.ErrorReceived += OnErrorReceived;
 
-            server.AuthorizationCodeReceived += async (sender, response) =>
+            var request = new LoginRequest(_server.BaseUri, ClientId, LoginRequest.ResponseType.Code)
             {
-                await server.Stop();
-
-                var config = SpotifyClientConfig.CreateDefault();
-                var tokenResponse = await new OAuthClient(config).RequestToken(
-                    new AuthorizationCodeTokenRequest(ClientId, ClientSecret, response.Code, address));
-
-                RefreshToken = tokenResponse.RefreshToken;
-                _spotifyConfig = SpotifyClientConfig.CreateDefault().WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
-                _spotifyClient = new SpotifyClient(_spotifyConfig);
-                _authIsInProcess = false;
-            };
-
-            var request = new LoginRequest(address, ClientId, LoginRequest.ResponseType.Code)
-            {
-                Scope = new[] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState }
+                Scope = new[] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadPlaybackPosition, Scopes.UserModifyPlaybackState },
             };
 
             BrowserUtil.Open(request.ToUri());
+        }
+
+        private async Task OnAuthorizationCodeReceived(object sender, AuthorizationCodeResponse response)
+        {
+            await _server.Stop();
+            var config = SpotifyClientConfig.CreateDefault();
+            var tokenResponse = await new OAuthClient(config)
+                .RequestToken(new AuthorizationCodeTokenRequest(
+                    ClientId, ClientSecret, response.Code, new Uri($"http://localhost:{LocalPort}")));
+
+            RefreshToken = tokenResponse.RefreshToken;
+            _spotifyConfig = config.WithAuthenticator(new AuthorizationCodeAuthenticator(ClientId, ClientSecret, tokenResponse));
+            _spotifyClient = new SpotifyClient(_spotifyConfig);
+            _authIsInProcess = false;
+        }
+
+        private async Task OnErrorReceived(object sender, string error, string state)
+        {
+            Logger.Error($"Error while authenticating: {error}");
+            await _server.Stop();
+            _authIsInProcess = false;
         }
 
         private void OnSettingChanged(string settingName)
