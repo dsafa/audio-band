@@ -41,35 +41,36 @@ namespace AudioBand
         /// </summary>
         public async Task<bool> IsOnLatestVersionAsync()
         {
-            var currentVersion = GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-            string latestVersion = "";
-
             try
             {
+                var currentVersion = GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+                string latestVersion = "";
+
                 latestVersion = (await GetLatestRelease()).Name.Split(' ')[1];
+
+                // custom build or forgot to change version on compile, exclude from updates
+                if (currentVersion == "$version$")
+                {
+                    return true;
+                }
+
+                var current = CreateSemanticVersion(currentVersion);
+                var latest = CreateSemanticVersion(latestVersion);
+
+                if (latest.Major > current.Major
+                || (latest.Major == current.Major && latest.Minor > current.Minor)
+                || (latest.Major == current.Major && latest.Minor == current.Minor && latest.Patch > current.Patch))
+                {
+                    return false;
+                }
+
+                return true;
             }
             catch (Exception)
             {
                 Logger.Warn("Could not check for updates, request to GitHub failed.");
-            }
-
-            // custom build or forgot to change version on compile, exclude from updates
-            if (currentVersion == "$version$")
-            {
-                return true;
-            }
-
-            var current = CreateSemanticVersion(currentVersion);
-            var latest = CreateSemanticVersion(latestVersion);
-
-            if (latest.Major > current.Major
-            || (latest.Major == current.Major && latest.Minor > current.Minor)
-            || (latest.Major == current.Major && latest.Minor == current.Minor && latest.Patch > current.Patch))
-            {
                 return false;
             }
-
-            return true;
         }
 
         private async Task<Release> GetLatestRelease()
