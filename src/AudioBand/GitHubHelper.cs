@@ -1,4 +1,5 @@
 using AudioBand.Logging;
+using AudioBand.Settings;
 using NLog;
 using Octokit;
 using System;
@@ -14,8 +15,17 @@ namespace AudioBand
     /// </summary>
     public class GitHubHelper
     {
+        private IAppSettings _settings;
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<GitHubHelper>();
         private GitHubClient _client = new GitHubClient(new ProductHeaderValue("audio-band"));
+
+        /// <summary>
+        /// Intantiates a new instance of GitHubHelper.
+        /// </summary>
+        public GitHubHelper(IAppSettings settings)
+        {
+            _settings = settings;
+        }
 
         /// <summary>
         /// Gets the Download url of the latest release.
@@ -31,42 +41,50 @@ namespace AudioBand
         /// </summary>
         public async Task<bool> IsOnLatestVersionAsync()
         {
-            var currentVersion = GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-            string latestVersion = "";
-
             try
             {
+                var currentVersion = GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+                string latestVersion = "";
+
                 latestVersion = (await GetLatestRelease()).Name.Split(' ')[1];
+
+                // custom build or forgot to change version on compile, exclude from updates
+                if (currentVersion == "$version$")
+                {
+                    return true;
+                }
+
+                var current = CreateSemanticVersion(currentVersion);
+                var latest = CreateSemanticVersion(latestVersion);
+
+                if (latest.Major > current.Major
+                || (latest.Major == current.Major && latest.Minor > current.Minor)
+                || (latest.Major == current.Major && latest.Minor == current.Minor && latest.Patch > current.Patch))
+                {
+                    return false;
+                }
+
+                return true;
             }
             catch (Exception)
             {
                 Logger.Warn("Could not check for updates, request to GitHub failed.");
-            }
-
-            // custom build or forgot to change version on compile, exclude from updates
-            if (currentVersion == "$version$")
-            {
-                return true;
-            }
-
-            var current = CreateSemanticVersion(currentVersion);
-            var latest = CreateSemanticVersion(latestVersion);
-
-            if (latest.Major > current.Major
-            || (latest.Major == current.Major && latest.Minor > current.Minor)
-            || (latest.Major == current.Major && latest.Minor == current.Minor && latest.Patch > current.Patch))
-            {
                 return false;
             }
-
-            return true;
         }
 
         private async Task<Release> GetLatestRelease()
         {
             try
             {
-                return (await _client.Repository.Release.GetAll("svr333", "audio-band"))[0];
+                if (_settings.AudioBandSettings.OptInForPreReleases)
+                {
+                    return (await _client.Repository.Release.GetAll("svr333", "audio-band"))[0];
+                }
+                else 
+                {
+                    return await _client.Repository.Release.GetLatest("svr333", "audio-band");
+                }
             }
             catch (Exception)
             {

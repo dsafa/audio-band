@@ -60,13 +60,23 @@ namespace AudioBand.UI
         public ICommand InstallUpdateCommand { get; }
 
         /// <summary>
-        /// Gets or sets whether to show a popup when an update is available
+        /// Gets or sets whether to show a popup when an update is available.
         /// </summary>
         [TrackState]
         public bool ShowPopupOnAvailableUpdate
         {
             get => _model.ShowPopupOnAvailableUpdate;
             set => SetProperty(_model, nameof(_model.ShowPopupOnAvailableUpdate), value);
+        }
+
+        /// <summary>
+        /// Gets or sets whether to show a popup when an update is available.
+        /// </summary>
+        [TrackState]
+        public bool OptInForPreReleases
+        {
+            get => _model.OptInForPreReleases;
+            set => SetProperty(_model, nameof(_model.OptInForPreReleases), value);
         }
 
         /// <summary>
@@ -144,7 +154,7 @@ namespace AudioBand.UI
         }
 
         /// <summary>
-        /// Gets or sets whether the user is downloading the latest update
+        /// Gets or sets whether the user is downloading the latest update.
         /// </summary>
         public bool IsDownloading
         {
