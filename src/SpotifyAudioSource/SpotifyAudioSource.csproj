@@ -107,10 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SpotifyAPI.Web">
-      <Version>6.2.0</Version>
+      <Version>6.2.2</Version>
     </PackageReference>
     <PackageReference Include="SpotifyAPI.Web.Auth">
-      <Version>6.2.0</Version>
+      <Version>6.2.2</Version>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers">
       <Version>1.1.118</Version>
