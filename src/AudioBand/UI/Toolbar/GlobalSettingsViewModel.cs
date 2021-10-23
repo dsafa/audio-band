@@ -60,7 +60,7 @@ namespace AudioBand.UI
         public ICommand InstallUpdateCommand { get; }
 
         /// <summary>
-        /// Gets or sets whether to show a popup when an update is available
+        /// Gets or sets whether to show a popup when an update is available.
         /// </summary>
         [TrackState]
         public bool ShowPopupOnAvailableUpdate
@@ -70,7 +70,7 @@ namespace AudioBand.UI
         }
 
         /// <summary>
-        /// Gets or sets whether to show a popup when an update is available
+        /// Gets or sets whether to show a popup when an update is available.
         /// </summary>
         [TrackState]
         public bool OptInForPreReleases
@@ -154,7 +154,7 @@ namespace AudioBand.UI
         }
 
         /// <summary>
-        /// Gets or sets whether the user is downloading the latest update
+        /// Gets or sets whether the user is downloading the latest update.
         /// </summary>
         public bool IsDownloading
         {
