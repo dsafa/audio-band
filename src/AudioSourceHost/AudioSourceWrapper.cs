@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using AudioBand.Logging;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AudioBand.AudioSource;
-using AudioBand.Logging;
-using NLog;
 
 namespace AudioSourceHost
 {
@@ -66,6 +66,11 @@ namespace AudioSourceHost
         /// Gets the name of the audio source.
         /// </summary>
         public string Name => _audioSource.Name;
+
+        /// <summary>
+        /// Gets the description of the audio source.
+        /// </summary>
+        public string Description => _audioSource.Description;
 
         /// <summary>
         /// Gets the Window Class Name of the audio source.

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using AudioBand.Logging;
+using AudioSourceHost;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using AudioBand.Logging;
-using AudioSourceHost;
-using NLog;
 
 namespace AudioBand.AudioSource
 {
@@ -75,6 +75,22 @@ namespace AudioBand.AudioSource
                 try
                 {
                     return _wrapper.Name;
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, "Error trying to get the name");
+                    throw;
+                }
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                try
+                {
+                    return _wrapper.Description;
                 }
                 catch (Exception e)
                 {

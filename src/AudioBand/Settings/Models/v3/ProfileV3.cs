@@ -1,6 +1,6 @@
 ﻿#pragma warning disable SA1300
-using System.Collections.Generic;
 using AudioBand.Models;
+using System.Collections.Generic;
 
 namespace AudioBand.Settings.Models.V3
 {

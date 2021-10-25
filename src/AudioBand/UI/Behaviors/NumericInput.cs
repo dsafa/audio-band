@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using MahApps.Metro.Controls;
+﻿using MahApps.Metro.Controls;
+using System.Windows;
 
 namespace AudioBand.UI
 {

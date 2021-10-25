@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using AudioBand.UI;
+﻿using AudioBand.UI;
+using System.Globalization;
 using Xunit;
 
 namespace AudioBand.Test
@@ -11,7 +11,7 @@ namespace AudioBand.Test
         [Fact]
         public void ConvertSingleValue_ReturnsValue()
         {
-            var result = _converter.Convert(new object[] {5.0}, typeof(double), null, CultureInfo.CurrentCulture);
+            var result = _converter.Convert(new object[] { 5.0 }, typeof(double), null, CultureInfo.CurrentCulture);
 
             Assert.IsType<double>(result);
             Assert.Equal(5.0, (double)result, 4);
@@ -20,7 +20,7 @@ namespace AudioBand.Test
         [Fact]
         public void ConvertMultipleValues_ReturnsMultipliedValue()
         {
-            var values = new object[] {1.0, 2, 3};
+            var values = new object[] { 1.0, 2, 3 };
             var result = _converter.Convert(values, typeof(double), null, CultureInfo.CurrentCulture);
 
             Assert.IsType<double>(result);
@@ -39,7 +39,7 @@ namespace AudioBand.Test
         [Fact]
         public void ConvertBack_NotSupported_ReturnsNull()
         {
-            var result = _converter.ConvertBack(new object[]{"a", 1}, new[] { typeof(string), typeof(int)}, null, CultureInfo.CurrentCulture);
+            var result = _converter.ConvertBack(new object[] { "a", 1 }, new[] { typeof(string), typeof(int) }, null, CultureInfo.CurrentCulture);
             Assert.Null(result);
         }
     }

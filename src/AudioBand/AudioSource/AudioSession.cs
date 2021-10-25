@@ -1,8 +1,7 @@
-﻿using System;
+﻿using AudioBand.Settings;
+using System;
 using System.Drawing;
 using System.Timers;
-using AudioBand.Models;
-using AudioBand.Settings;
 
 namespace AudioBand.AudioSource
 {
@@ -14,6 +13,7 @@ namespace AudioBand.AudioSource
         private IAppSettings _appSettings;
         private IInternalAudioSource _currentAudioSource;
         private Timer _idleProfileTimer = new Timer();
+        private bool _isIdle = true;
         private bool _isPlaying;
         private string _songArtist;
         private string _songName;
@@ -211,17 +211,22 @@ namespace AudioBand.AudioSource
                 _idleProfileTimer.Interval = GetInterval();
                 _idleProfileTimer.Start();
             }
+            else if (_isIdle)
+            {
+                AlbumArt ??= _lastRememberedAlbum ?? AlbumArt;
+                _appSettings.SelectProfile(_appSettings.AudioBandSettings.LastNonIdleProfileName);
+                _isIdle = false;
+            }
             else
             {
                 _idleProfileTimer.Stop();
-                AlbumArt = _lastRememberedAlbum ?? AlbumArt;
-                _appSettings.SelectProfile(_appSettings.AudioBandSettings.LastNonIdleProfileName);
             }
         }
 
         private void OnIdleTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            _appSettings.SelectProfile(UserProfile.IdleProfileName);
+            _isIdle = true;
+            _appSettings.SelectProfile(_appSettings.AudioBandSettings.IdleProfileName);
             _lastRememberedAlbum = AlbumArt;
             AlbumArt = null;
         }

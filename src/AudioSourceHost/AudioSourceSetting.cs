@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Logging;
 using FastMember;
 using NLog;
+using System;
 
 namespace AudioSourceHost
 {
@@ -72,7 +71,6 @@ namespace AudioSourceHost
             catch (Exception e)
             {
                 Logger.Error(e, "Error occured while updating audio source settings. {info}", new { PropertyName, Value = value, SettingType });
-                throw;
             }
         }
     }

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Windows.UI.Xaml;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using NLog;
+using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Windows.UI.Xaml;
 
 namespace AudioBand.UI
 {
@@ -25,6 +25,8 @@ namespace AudioBand.UI
         private readonly IAudioSourceManager _audioSourceManager;
         private readonly IMessageBus _messageBus;
         private readonly IAudioSession _audioSession;
+        private readonly PopupService _popups;
+        private readonly GitHubHelper _github;
         private IAudioSource _selectedAudioSource;
         private UserProfile _selectedUserProfile;
 
@@ -36,12 +38,16 @@ namespace AudioBand.UI
         /// <param name="audioSourceManager">The audio source mananger.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="audioSession">The audio session.</param>
-        public AudioBandToolbarViewModel(IViewModelContainer viewModels, IAppSettings appSettings, IAudioSourceManager audioSourceManager, IMessageBus messageBus, IAudioSession audioSession)
+        /// <param name="popups">The popup service.</param>
+        /// <param name="github">The GitHub helper.</param>
+        public AudioBandToolbarViewModel(IViewModelContainer viewModels, IAppSettings appSettings, IAudioSourceManager audioSourceManager, IMessageBus messageBus, IAudioSession audioSession, PopupService popups, GitHubHelper github)
         {
             _appSettings = appSettings;
             _audioSourceManager = audioSourceManager;
             _messageBus = messageBus;
             _audioSession = audioSession;
+            _popups = popups;
+            _github = github;
             ViewModels = viewModels;
 
             ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommandOnExecute);
@@ -148,7 +154,7 @@ namespace AudioBand.UI
             // Initalize Profiles
             if (_appSettings.AudioBandSettings.HideIdleProfileInQuickMenu)
             {
-                Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles.Where(x => x.Name != UserProfile.IdleProfileName));
+                Profiles = new ObservableCollection<UserProfile>(_appSettings.Profiles.Where(x => x.Name != _appSettings.AudioBandSettings.IdleProfileName));
             }
             else
             {
@@ -160,11 +166,16 @@ namespace AudioBand.UI
 
             if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile && !_audioSession.IsPlaying)
             {
-                SelectProfileCommand.Execute(UserProfile.IdleProfileName);
+                SelectProfileCommand.Execute(_appSettings.AudioBandSettings.IdleProfileName);
             }
 
             RaisePropertyChanged(nameof(Profiles));
             Logger.Debug($"Loaded {Profiles.Count} profiles. (may exclude idle profile)");
+
+            if (!await _github.IsOnLatestVersionAsync())
+            {
+                _popups.ShowPopup("UpdatePopupTitle", "UpdatePopupDescription", TimeSpan.FromSeconds(60));
+            }
         }
 
         private void OnDoubleClick(RoutedEventArgs e)
@@ -219,7 +230,7 @@ namespace AudioBand.UI
             {
                 if (_appSettings.AudioBandSettings.UseAutomaticIdleProfile)
                 {
-                    SelectProfileCommand.Execute(UserProfile.IdleProfileName);
+                    SelectProfileCommand.Execute(_appSettings.AudioBandSettings.IdleProfileName);
                 }
 
                 SelectedAudioSource = null;

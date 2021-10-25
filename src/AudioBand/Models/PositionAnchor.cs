@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AudioBand.Extensions;
+using System;
 using System.ComponentModel;
-using AudioBand.Extensions;
 
 namespace AudioBand.Models
 {

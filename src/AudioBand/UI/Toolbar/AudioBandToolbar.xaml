@@ -22,6 +22,7 @@
                 <audioband:SharedDictionary Source="../Resources/ToolbarButtonStyles.xaml" />
                 <audioband:SharedDictionary Source="../Resources/ToolbarProgressBarStyle.xaml" />
                 <audioband:SharedDictionary Source="../Resources/ToolbarContextMenuStyles.xaml" />
+                <audioband:SharedDictionary Source="../Resources/TextStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <DrawingImage x:Key="AlbumArtFallback">
                 <DrawingImage.Drawing>
@@ -160,7 +161,7 @@
             </MenuItem>
         </fluentWpf:AcrylicContextMenu>
     </UserControl.ContextMenu>
-    <Canvas Width="{Binding ViewModels.GeneralSettingsViewModel.Width}" Height="{Binding ViewModels.GeneralSettingsViewModel.Height}">
+    <Canvas Name="Toolbar" Width="{Binding ViewModels.GeneralSettingsViewModel.Width}" Height="{Binding ViewModels.GeneralSettingsViewModel.Height}">
         <Canvas.RenderTransform>
             <RotateTransform CenterX="0" CenterY="0" Angle="0" />
         </Canvas.RenderTransform>
@@ -440,5 +441,34 @@
                 <audioband:SliderClickAndDrag />
             </i:Interaction.Behaviors>
         </Slider>
+        <Popup  x:Name="InformationPopup"
+                Placement="Top"
+                IsOpen="{Binding IsInformationPopupOpen}"
+                PlacementTarget="{Binding ElementName=Toolbar}"
+                DataContext="{Binding ViewModels.PopupViewModel}"
+                PopupAnimation="Fade"
+                AllowsTransparency="True" >
+            <StackPanel Background="{audioband:ThemeResource SystemAccentColor}" Opacity="0.95">
+                <Grid Margin="5" Background="{audioband:ThemeResource SystemAltHighColor}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Background="{audioband:ThemeResource SystemAccentColor}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Title}" FontSize="18" Margin="8,3,0,5"
+                                   Style="{StaticResource TitleTextBlock}" />
+                        <Button Grid.Column="1" Command="{Binding CloseCommand}" Width="15" Height="15"
+                                HorizontalAlignment="Right" VerticalAlignment="Top" Padding="0,5,5,0"
+                                Template="{StaticResource ToolbarButtonControlTemplate}" Content="x" />
+                    </Grid>
+                    <TextBlock MaxWidth="300" Grid.Row="1" Margin="5" Style="{StaticResource DescriptionTextBlock}"
+                               Text="{Binding Description}" TextWrapping="Wrap" Foreground="{audioband:ThemeResource SystemBaseHighColor}" />
+                </Grid>
+            </StackPanel>
+        </Popup>
     </Canvas>
 </UserControl>

@@ -1,13 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Media.Imaging;
-using AudioBand.AudioSource;
+﻿using AudioBand.AudioSource;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.UI;
 using Moq;
+using System;
+using System.ComponentModel;
+using System.Drawing;
 using Xunit;
 
 namespace AudioBand.Test
@@ -32,11 +31,11 @@ namespace AudioBand.Test
         {
             var first = new UserProfile
             {
-                AlbumArt = new AlbumArt() {Height = 10}
+                AlbumArt = new AlbumArt() { Height = 10 }
             };
             var second = new UserProfile
             {
-                AlbumArt = new AlbumArt() {Height = 20}
+                AlbumArt = new AlbumArt() { Height = 20 }
             };
             _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
@@ -56,7 +55,7 @@ namespace AudioBand.Test
         [Fact]
         public void AlbumArtViewModel_EndEdit_WritesChangesToAppSettings()
         {
-            var profile = new UserProfile {AlbumArt = new AlbumArt()};
+            var profile = new UserProfile { AlbumArt = new AlbumArt() };
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new AlbumArtViewModel(_appSettings.Object, _dialog.Object, _audioSession.Object, _messageBus.Object);
 
@@ -72,7 +71,7 @@ namespace AudioBand.Test
         {
             int initialWidth = 0;
             int newWidth = 10;
-            var profile = new UserProfile {AlbumArt = new AlbumArt {Width = initialWidth}};
+            var profile = new UserProfile { AlbumArt = new AlbumArt { Width = initialWidth } };
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new AlbumArtViewModel(_appSettings.Object, _dialog.Object, _audioSession.Object, _messageBus.Object);
 
@@ -85,7 +84,7 @@ namespace AudioBand.Test
         [Fact]
         public void AlbumArtViewModel_UsesMessageBus()
         {
-            var profile = new UserProfile {AlbumArt = new AlbumArt()};
+            var profile = new UserProfile { AlbumArt = new AlbumArt() };
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new AlbumArtViewModel(_appSettings.Object, _dialog.Object, _audioSession.Object, _messageBus.Object);
 

@@ -15,7 +15,7 @@ namespace AudioBand.Models
             get => _lastNonIdleProfileName;
             set
             {
-                if (value == UserProfile.IdleProfileName)
+                if (value == IdleProfileName)
                 {
                     return;
                 }
@@ -23,6 +23,11 @@ namespace AudioBand.Models
                 _lastNonIdleProfileName = value;
             }
         }
+
+        /// <summary>
+        /// The profile that should enable when AudioBand goes into idle mode.
+        /// </summary>
+        public string IdleProfileName { get; set; } = "Idle";
 
         /// <summary>
         /// Gets or sets whether to use the Idle Profile.
@@ -38,5 +43,20 @@ namespace AudioBand.Models
         /// Gets or sets the amount of time in seconds it should take for AudioBand to go idle.
         /// </summary>
         public int ShouldGoIdleAfterInSeconds { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to show a popup when an update is available.
+        /// </summary>
+        public bool ShowPopupOnAvailableUpdate { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets whether to show little help popups when something fails.
+        /// </summary>
+        public bool ShowInformationPopups { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets whether to opt-in for pre-releases.
+        /// </summary>
+        public bool OptInForPreReleases { get; set; }
     }
 }

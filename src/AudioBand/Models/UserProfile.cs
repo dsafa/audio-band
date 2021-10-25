@@ -16,7 +16,7 @@ namespace AudioBand.Models
         /// <summary>
         /// The idle profile name.
         /// </summary>
-        public const string IdleProfileName = "Idle";
+        public const string DefaultIdleProfileName = "Idle";
 
         /// <summary>
         /// Gets or sets the name of the profile.
@@ -156,11 +156,11 @@ namespace AudioBand.Models
         /// Creates an idle profile used for when the player is idle. 
         /// </summary>
         /// <returns>A default idle profile.</returns>
-        public static UserProfile CreateIdleProfile()
+        public static UserProfile CreateDefaultIdleProfile()
         {
             return new UserProfile()
             {
-                Name = IdleProfileName,
+                Name = DefaultIdleProfileName,
                 GeneralSettings = new GeneralSettings()
                 {
                     Width = 40,
@@ -210,7 +210,7 @@ namespace AudioBand.Models
         public static UserProfile[] CreateDefaultProfiles()
         {
             var profiles = new UserProfile[5];
-            profiles[0] = CreateIdleProfile();
+            profiles[0] = CreateDefaultIdleProfile();
             profiles[1] = CreateDefaultProfile(DefaultProfileName);
             profiles[2] = new UserProfile()
             {

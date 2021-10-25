@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<?define ProductVersion = '0.9.9'?>
-<?define ProductId = '9484a268-b3a4-4ded-a525-112be5422272'?>
+<?define ProductVersion = '1.0.0'?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-   <Product Id="$(var.ProductId)" Name="AudioBand" Language="1033" Version="$(var.ProductVersion)" Manufacturer="AudioBand" UpgradeCode="F5673DE4-C5B8-403C-B353-773AC427BEC3">
-      <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+   <Product Id="*" Name="AudioBand" Language="1033" Version="$(var.ProductVersion)"
+            Manufacturer="AudioBand" UpgradeCode="F5673DE4-C5B8-403C-B353-773AC427BEC3">
+      <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"
+               Manufacturer="AudioBand" Description="Mini audio player for your task bar"/>
       <Icon Id="AudiobandIcon" SourceFile="audioband.ico" />
       <Property Id="ARPPRODUCTICON" Value="AudiobandIcon" />
       <WixVariable Id="WixUIBannerBmp" Value="installer_banner.png" />

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using AudioBand.Models;
+﻿using AudioBand.Models;
 using AutoMapper;
+using System.Collections.Generic;
 using CurrentSettings = AudioBand.Settings.Models.V4.SettingsV4;
 
 namespace AudioBand.Settings.MappingProfiles

@@ -29,6 +29,11 @@ namespace AudioSourceHost
                     return converted;
                 }
 
+                if (type.IsValueType)
+                {
+                    return Activator.CreateInstance(type);
+                }
+
                 throw new ArgumentException($"Unable to convert value to desired type: value: `{value}`, value type: `{value.GetType()}`, target type: `{type}`");
             }
 

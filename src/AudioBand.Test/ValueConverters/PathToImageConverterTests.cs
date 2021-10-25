@@ -1,7 +1,7 @@
-﻿using System.Globalization;
+﻿using AudioBand.UI;
+using System.Globalization;
 using System.IO;
 using System.Windows.Media;
-using AudioBand.UI;
 using Xunit;
 
 namespace AudioBand.Test
@@ -42,7 +42,7 @@ namespace AudioBand.Test
         void MultiConvert_InvalidFile_UsesFallback()
         {
             object fallback = new object();
-            var imgSource = _converter.Convert(new[] {"invalidfile.png", fallback}, typeof(ImageSource), null,
+            var imgSource = _converter.Convert(new[] { "invalidfile.png", fallback }, typeof(ImageSource), null,
                 CultureInfo.CurrentCulture);
 
             Assert.NotNull(imgSource);

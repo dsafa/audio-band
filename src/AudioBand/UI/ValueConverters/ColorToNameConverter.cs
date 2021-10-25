@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AudioBand.Extensions;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using AudioBand.Extensions;
 
 namespace AudioBand.UI
 {

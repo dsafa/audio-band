@@ -1,9 +1,9 @@
-﻿using System;
-using AudioBand.Messages;
+﻿using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using AudioBand.UI;
 using Moq;
+using System;
 using Xunit;
 
 namespace AudioBand.Test
@@ -24,7 +24,7 @@ namespace AudioBand.Test
         [Fact]
         public void GeneralSettingsViewModel_ProfileChangedEvent_ListensToProfileChanges()
         {
-            var first = new UserProfile {GeneralSettings = new GeneralSettings() {Height = 10}};
+            var first = new UserProfile { GeneralSettings = new GeneralSettings() { Height = 10 } };
             var second = new UserProfile { GeneralSettings = new GeneralSettings() { Height = 20 } };
             _appSettings.SetupSequence(m => m.CurrentProfile)
                 .Returns(first)
@@ -46,7 +46,7 @@ namespace AudioBand.Test
         public void GeneralSettingsViewModel_EndEdit_WritesChangesToAppSettings()
         {
             int newWidth = 10;
-            var profile = new UserProfile {GeneralSettings = new GeneralSettings()};
+            var profile = new UserProfile { GeneralSettings = new GeneralSettings() };
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new GeneralSettingsViewModel(_appSettings.Object, _dialogService.Object, _messageBus.Object);
 
@@ -60,7 +60,7 @@ namespace AudioBand.Test
         public void GeneralSettingsViewModel_CancelEdit_DoesNotWriteChangesToAppSettings()
         {
             int initialWidth = 0;
-            var profile = new UserProfile { GeneralSettings = new GeneralSettings {Width = initialWidth} };
+            var profile = new UserProfile { GeneralSettings = new GeneralSettings { Width = initialWidth } };
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new GeneralSettingsViewModel(_appSettings.Object, _dialogService.Object, _messageBus.Object);
 
@@ -73,7 +73,7 @@ namespace AudioBand.Test
         [Fact]
         public void GeneralSettingsViewModel_UsesMessageBus()
         {
-            var profile = new UserProfile() {GeneralSettings = new GeneralSettings()};
+            var profile = new UserProfile() { GeneralSettings = new GeneralSettings() };
             _appSettings.SetupGet(m => m.CurrentProfile).Returns(profile);
             var vm = new GeneralSettingsViewModel(_appSettings.Object, _dialogService.Object, _messageBus.Object);
 

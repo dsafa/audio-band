@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using AudioBand.Models;
+﻿using AudioBand.Models;
 using AudioBand.Settings.Models.V3;
 using AudioBand.Settings.Models.V4;
 using AutoMapper;
+using System.Collections.Generic;
 
 namespace AudioBand.Settings.MappingProfiles
 {
@@ -20,6 +20,7 @@ namespace AudioBand.Settings.MappingProfiles
                 .ForMember(dest => dest.AudioSource, opt => opt.MapFrom(src => src.AudioSource))
                 .ForMember(dest => dest.CurrentProfileName, opt => opt.MapFrom(src => src.CurrentProfileName))
                 .ForMember(dest => dest.AudioSourceSettings, opt => opt.MapFrom(src => src.AudioSourceSettings))
+                .ForMember(dest => dest.AudioBandSettings, opt => opt.NullSubstitute(new AudioBandSettings()))
                 .ForMember(dest => dest.Profiles, opt => opt.MapFrom(src => src.Profiles));
             CreateMap<KeyValuePair<string, ProfileV3>, UserProfile>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Key))

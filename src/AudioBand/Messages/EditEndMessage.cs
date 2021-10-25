@@ -14,5 +14,10 @@
         /// User accepted all current edits.
         /// </summary>
         Accepted,
+
+        /// <summary>
+        /// Fixes unsaved changes when opening audiosource settings for the first time.
+        /// </summary>
+        SaveFix,
     }
 }

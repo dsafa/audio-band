@@ -1,7 +1,7 @@
-﻿using System;
+﻿using NLog.LayoutRenderers;
+using System;
 using System.Diagnostics;
 using System.Text;
-using NLog.LayoutRenderers;
 
 namespace AudioBand.Logging
 {

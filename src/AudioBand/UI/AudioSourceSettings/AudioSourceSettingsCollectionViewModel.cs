@@ -1,12 +1,12 @@
-﻿using System;
+﻿using AudioBand.AudioSource;
+using AudioBand.Messages;
+using AudioBand.Models;
+using AudioBand.Settings;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using AudioBand.AudioSource;
-using AudioBand.Messages;
-using AudioBand.Models;
-using AudioBand.Settings;
 
 namespace AudioBand.UI
 {
@@ -51,6 +51,11 @@ namespace AudioBand.UI
         /// Gets the list of settings for this audio source.
         /// </summary>
         public ObservableCollection<AudioSourceSettingKeyValue> SettingsList { get; }
+
+        /// <summary>
+        /// Gets the description/extra info of this audio source.
+        /// </summary>
+        public string Description => _audioSource.Description;
 
         /// <inheritdoc/>
         protected override void OnCancelEdit()

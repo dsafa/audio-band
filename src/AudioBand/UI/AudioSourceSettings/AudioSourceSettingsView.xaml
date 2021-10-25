@@ -14,47 +14,49 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </DataTemplate.Resources>
-        <ItemsControl ItemsSource="{Binding SettingsList}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border Margin="0,4">
-                        <StackPanel Visibility="{Binding Visible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
-                            <FrameworkElement.Resources>
-                                <DataTemplate x:Key="String">
-                                    <TextBox Height="{StaticResource DefaultControlHeight}"
+        <StackPanel>
+            <TextBlock FontSize="18" Text="{Binding Description}" Padding="0,0,0,10" />
+            <ItemsControl ItemsSource="{Binding SettingsList}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,4">
+                            <StackPanel Visibility="{Binding Visible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
+                                <FrameworkElement.Resources>
+                                    <DataTemplate x:Key="String">
+                                        <TextBox Height="{StaticResource DefaultControlHeight}"
                                              metro:TextBoxHelper.ClearTextButton="True"
                                              IsReadOnly="{Binding ReadOnly}"
                                              Text="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                                              TextWrapping="Wrap" />
-                                </DataTemplate>
-                                <DataTemplate x:Key="Int">
-                                    <metro:NumericUpDown Height="{StaticResource DefaultControlHeight}"
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="Int">
+                                        <metro:NumericUpDown Height="{StaticResource DefaultControlHeight}"
                                                          audioband:NumericInput.Type="Integer"
                                                          Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static audioband:Converters.CoerceNumber}}" />
-                                </DataTemplate>
-                                <DataTemplate x:Key="UInt">
-                                    <metro:NumericUpDown Height="{StaticResource DefaultControlHeight}"
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="UInt">
+                                        <metro:NumericUpDown Height="{StaticResource DefaultControlHeight}"
                                                          audioband:NumericInput.Type="Positive"
                                                          Value="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True, Converter={x:Static audioband:Converters.CoerceNumber}}" />
-                                </DataTemplate>
-                                <DataTemplate x:Key="Bool">
-                                    <metro:ToggleSwitch Height="{StaticResource DefaultControlHeight}"
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="Bool">
+                                        <metro:ToggleSwitch Height="{StaticResource DefaultControlHeight}"
                                                         IsChecked="{Binding Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                                                         OffLabel=""
                                                         OnLabel="" />
-                                </DataTemplate>
-                                <DataTemplate x:Key="Password">
-                                    <Grid Height="{StaticResource DefaultControlHeight}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <PasswordBox Grid.Column="0">
-                                            <i:Interaction.Behaviors>
-                                                <audioband:PasswordBehaviour Password="{Binding Value, Mode=TwoWay}" />
-                                            </i:Interaction.Behaviors>
-                                        </PasswordBox>
-                                        <TextBlock Grid.Column="1"
+                                    </DataTemplate>
+                                    <DataTemplate x:Key="Password">
+                                        <Grid Height="{StaticResource DefaultControlHeight}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <PasswordBox Grid.Column="0">
+                                                <i:Interaction.Behaviors>
+                                                    <audioband:PasswordBehaviour Password="{Binding Value, Mode=TwoWay}" />
+                                                </i:Interaction.Behaviors>
+                                            </PasswordBox>
+                                            <TextBlock Grid.Column="1"
                                                    Margin="4,0"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Center"
@@ -66,27 +68,28 @@
                                                 <TextBlock Text="{StaticResource SensitiveSettingsWarning}" />
                                             </FrameworkElement.ToolTip>
                                         </TextBlock>
-                                    </Grid>
-                                </DataTemplate>
-                                <templateSelectors:AudioSourceSettingSelector x:Key="ValueTemplateSelector"
+                                        </Grid>
+                                    </DataTemplate>
+                                    <templateSelectors:AudioSourceSettingSelector x:Key="ValueTemplateSelector"
                                                                               BoolTemplate="{StaticResource Bool}"
                                                                               IntTemplate="{StaticResource Int}"
                                                                               PasswordStringTemplate="{StaticResource Password}"
                                                                               StringTemplate="{StaticResource String}"
                                                                               UIntTemplate="{StaticResource UInt}" />
-                            </FrameworkElement.Resources>
-                            <TextBlock FontSize="16" Text="{Binding Name}" />
-                            <TextBlock FontSize="{StaticResource BodyFontSize}"
+                                </FrameworkElement.Resources>
+                                <TextBlock FontSize="16" Text="{Binding Name}" />
+                                <TextBlock FontSize="{StaticResource BodyFontSize}"
                                        Foreground="{audioband:ThemeResource SystemBaseMediumColor}"
                                        Text="{Binding Description}"
                                        Visibility="{Binding Description, Converter={x:Static audioband:Converters.StringToVisibility}}" />
-                            <ContentControl Margin="0,4,0,0"
+                                <ContentControl Margin="0,4,0,0"
                                             Content="{Binding}"
                                             ContentTemplateSelector="{StaticResource ValueTemplateSelector}" />
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
     </DataTemplate>
 </ResourceDictionary>
