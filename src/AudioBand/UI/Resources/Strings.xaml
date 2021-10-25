@@ -97,7 +97,8 @@ Placeholders will be substituted with their corresponding values. Placeholders a
 &#8226; album - Album name for the current song
 &#8226; time - Current playback time for the current song
 &#8226; length - Total length of the current song
-&#8226; remaining - The remaining time left in current song</sys:String>
+&#8226; remaining - The remaining time left in current song
+&#8226; volume - The current volume as a percentage</sys:String>
     <sys:String x:Key="CustomLabelFormatHelpTextStyles" xml:space="preserve">&#8226; * - Bolds the placeholder
 &#8226; &amp; - Italicizes the placeholder
 &#8226; _ - Underlines the placeholder</sys:String>

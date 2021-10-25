@@ -214,6 +214,7 @@
     <Compile Include="TextFormatting\SongArtistPlaceholder.cs" />
     <Compile Include="TextFormatting\SongLengthPlaceholder.cs" />
     <Compile Include="TextFormatting\SongNamePlaceholder.cs" />
+    <Compile Include="TextFormatting\VolumePlaceholder.cs" />
     <Compile Include="TextFormatting\PlaceholderTextSegment.cs" />
     <Compile Include="TextFormatting\StaticTextSegment.cs" />
     <Compile Include="TextFormatting\TextPlaceholder.cs" />
