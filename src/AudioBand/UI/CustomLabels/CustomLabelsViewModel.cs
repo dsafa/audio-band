@@ -134,7 +134,7 @@ namespace AudioBand.UI
         private void SetupLabels()
         {
             // required to modify collection created on UI thread.
-            Application.Current.Dispatcher.Invoke((Action)delegate
+            Application.Current.Dispatcher.Invoke(delegate
             {
                 CustomLabels.Clear();
             });
@@ -148,7 +148,7 @@ namespace AudioBand.UI
 
             for (int i = 0; i < customLabels.Length; i++)
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate
+                Application.Current.Dispatcher.Invoke(delegate
                 {
                     CustomLabels.Add(customLabels[i]);
                 });
