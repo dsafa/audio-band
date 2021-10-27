@@ -42,7 +42,8 @@ namespace AudioBand.Settings.Persistence
             }
 
             // Make a backup so we can delete later
-            File.Copy(oldSettingsFilePath, Path.Combine(MainDirectory, "old-audioband-settings.backup"));
+            var unixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            File.Copy(oldSettingsFilePath, Path.Combine(MainDirectory, $"old-audioband-settings-{unixTime}.backup"));
             var oldSettings = LoadOldSettings(oldSettingsFilePath);
 
             if (!File.Exists(SettingsFilePath))
