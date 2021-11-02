@@ -37,7 +37,7 @@ namespace AudioBand.UI
             // First one is an edge-case, handled in here separately.
             if (title == "UpdatePopupTitle")
             {
-                if (_appSettings.AudioBandSettings.ShowPopupOnAvailableUpdate)
+                if (!_appSettings.AudioBandSettings.ShowPopupOnAvailableUpdate)
                 {
                     return;
                 }
@@ -48,7 +48,7 @@ namespace AudioBand.UI
             }
 
             duration = duration.TotalSeconds < 3 ? TimeSpan.FromSeconds(3) : duration;
-            duration = duration.TotalSeconds > 60 ? TimeSpan.FromSeconds(60) : duration;
+            duration = duration.TotalSeconds > 180 ? TimeSpan.FromSeconds(180) : duration;
 
             if (!_textParts.Contains(title) || !_textParts.Contains(description))
             {
