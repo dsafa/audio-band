@@ -1,6 +1,5 @@
 ﻿using AudioBand.Messages;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
