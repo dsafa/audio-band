@@ -1,9 +1,9 @@
-﻿using AudioBand.AudioSource;
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
+using AudioBand.AudioSource;
 using Windows.Foundation.Metadata;
 using Windows.Media;
 using Windows.Media.Control;
@@ -11,13 +11,24 @@ using Windows.Storage.Streams;
 
 namespace Win10AudioSource
 {
+    /// <summary>
+    /// The Windows 10 API AudioSource.
+    /// </summary>
     public class Win10AudioSource : IAudioSource
     {
         private readonly Timer _checkTimer = new Timer(1000);
         private GlobalSystemMediaTransportControlsSessionManager _mtcManager;
         private GlobalSystemMediaTransportControlsSession _currentSession;
         private GlobalSystemMediaTransportControlsSessionMediaProperties _lastProperties;
-        private bool _isPlaying;
+        private bool _isPlaying = false;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Win10AudioSource"/> class.
+        /// </summary>
+        public Win10AudioSource()
+        {
+            _checkTimer.Elapsed += OnTimerElapsed;
+        }
 
         /// <inheritdoc />
         public event EventHandler<SettingChangedEventArgs> SettingChanged
@@ -42,6 +53,7 @@ namespace Win10AudioSource
             remove { }
         }
 
+        /// <inheritdoc />
         public event EventHandler<bool> ShuffleChanged;
 
         /// <inheritdoc />
@@ -58,11 +70,6 @@ namespace Win10AudioSource
 
         /// <inheritdoc />
         public IAudioSourceLogger Logger { get; set; }
-
-        public Win10AudioSource()
-        {
-            _checkTimer.Elapsed += OnTimerElapsed;
-        }
 
         /// <inheritdoc />
         public async Task ActivateAsync()
@@ -284,7 +291,8 @@ namespace Win10AudioSource
 
             if (_isPlaying != isPlaying)
             {
-                IsPlayingChanged?.Invoke(this, isPlaying);
+                _isPlaying = isPlaying;
+                IsPlayingChanged?.Invoke(this, _isPlaying);
             }
 
             ShuffleChanged?.Invoke(this, playbackInfo.IsShuffleActive.GetValueOrDefault());

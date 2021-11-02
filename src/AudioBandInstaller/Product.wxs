@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<?define ProductVersion = '1.0.0'?>
+<?define ProductVersion = '1.0.1'?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
    <Product Id="*" Name="AudioBand" Language="1033" Version="$(var.ProductVersion)"
             Manufacturer="AudioBand" UpgradeCode="F5673DE4-C5B8-403C-B353-773AC427BEC3">

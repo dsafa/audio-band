@@ -20,6 +20,12 @@ namespace AudioBand.Test
 
         public SettingsWindowViewModelTests()
         {
+            // Initialize our app (necessary because of Application.Current.Dispatcher in CustomLabelsViewModel#SetupLabels)
+            if (System.Windows.Application.Current == null)
+            {
+                new System.Windows.Application { ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown };
+            }
+
             _appSettings = new Mock<IAppSettings>();
             var profile = new UserProfile()
             {
