@@ -307,8 +307,16 @@ namespace SpotifyAudioSource
         {
             // Play/pause/next/back controls use the desktop, if that fails, use api
             // api does require spotify premium
-            if (!await _spotifyClient.Player.ResumePlayback())
+            try
             {
+                if (!await _spotifyClient.Player.ResumePlayback())
+                {
+                    _spotifyControls.TryPlay();
+                }
+            }
+            catch (Exception)
+            {
+                // exception is only thrown when user was idle for too long
                 _spotifyControls.TryPlay();
             }
 

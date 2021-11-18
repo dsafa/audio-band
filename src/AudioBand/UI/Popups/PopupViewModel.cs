@@ -1,6 +1,5 @@
 using System;
 using System.Timers;
-using System.Windows;
 using System.Windows.Input;
 using AudioBand.Commands;
 

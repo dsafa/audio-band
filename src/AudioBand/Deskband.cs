@@ -1,4 +1,10 @@
-﻿using AudioBand.AudioSource;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows;
+using AudioBand.AudioSource;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AudioBand.Settings;
@@ -7,12 +13,6 @@ using AudioBand.UI;
 using CSDeskBand;
 using NLog;
 using SimpleInjector;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows;
 
 namespace AudioBand
 {

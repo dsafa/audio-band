@@ -1,8 +1,8 @@
-﻿using AudioBand.Messages;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
+using AudioBand.Messages;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace AudioBand.UI
