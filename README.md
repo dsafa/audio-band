@@ -4,7 +4,7 @@
 Audio Band allows you to display song information from various sources directly in the taskbar.
 
 [![Extra_Buttons_Github-Download](https://user-images.githubusercontent.com/35664724/142423102-caacd6d8-4674-45eb-a134-c32893c77322.png)](https://github.com/AudioBand/audio-band/releases)
-[![Extra_Buttons_Github-Documentation](https://user-images.githubusercontent.com/35664724/142423148-d3da6a71-79ba-4a22-aa59-29f97e60782d.png)](https://audioband.github.io/AudioBand/audiosource-docs/index.html)
+[![Extra_Buttons_Github-Documentation](https://user-images.githubusercontent.com/35664724/142423148-d3da6a71-79ba-4a22-aa59-29f97e60782d.png)](https://audioband.github.io/AudioBand/audioband/index.html)
 [![Extra_Buttons_Github-Discord](https://user-images.githubusercontent.com/35664724/142423185-f7b771c7-d404-4206-ba8e-e911d7bc1133.png)](https://discord.gg/yWDHdH2za5)
 
 <img align="right" src="screenshots/demo.gif"/>
@@ -30,7 +30,7 @@ Audio Band allows you to display song information from various sources directly 
 
 ## Documentation
 
-The documentation can be found on our github pages, [Click Here](https://audioband.github.io/audio-band/audioband/index.html) to get started.
+The documentation can be found on our github pages, [Click Here](https://audioband.github.io/AudioBand/audioband/index.html) to get started.
 
 It contains info on how to install AudioBand, how to support your preferred Audio Player and how to Develop it locally.
 
