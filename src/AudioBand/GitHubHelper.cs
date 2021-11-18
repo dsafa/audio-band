@@ -81,11 +81,11 @@ namespace AudioBand
             {
                 if (_settings.AudioBandSettings.OptInForPreReleases)
                 {
-                    return (await _client.Repository.Release.GetAll("svr333", "audio-band"))[0];
+                    return (await _client.Repository.Release.GetAll("AudioBand", "audio-band"))[0];
                 }
                 else
                 {
-                    return await _client.Repository.Release.GetLatest("svr333", "audio-band");
+                    return await _client.Repository.Release.GetLatest("AudioBand", "audio-band");
                 }
             }
             catch (Exception)
