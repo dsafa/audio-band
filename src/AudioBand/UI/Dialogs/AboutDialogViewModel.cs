@@ -20,17 +20,17 @@ namespace AudioBand.UI
         /// <summary>
         /// Gets the link to the project.
         /// </summary>
-        public string ProjectLink => "https://github.com/svr333/audio-band";
+        public string ProjectLink => "https://github.com/AudioBand/audio-band";
 
         /// <summary>
         /// Gets the license link.
         /// </summary>
-        public string LicenseLink => "https://github.com/svr333/audio-band/blob/master/LICENSE";
+        public string LicenseLink => "https://github.com/AudioBand/audio-band/blob/master/LICENSE";
 
         /// <summary>
         /// Gets the third party licenses link.
         /// </summary>
-        public string ThirdPartyLicenseLink => "https://github.com/svr333/audio-band/blob/master/LICENSE-3RD-PARTY";
+        public string ThirdPartyLicenseLink => "https://github.com/AudioBand/audio-band/blob/master/LICENSE-3RD-PARTY";
 
         /// <summary>
         /// Gets the command to open the link to the project.

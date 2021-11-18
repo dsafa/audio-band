@@ -4,12 +4,12 @@ This doc contains guidelines and resources for contributing. The documentation s
 
 # Ways to contribute
 ## Reporting Bugs
-Feel free to report bugs in the [Issue Tracker](https://github.com/svr333/audio-band/issues) on GitHub. 
+Feel free to report bugs in the [Issue Tracker](https://github.com/AudioBand/audio-band/issues) on GitHub. 
 Before reporting an issue, please check if the issue doesn't already exist.  
 There are templates to guide you when to report bugs, it is not necessary to follow them, but we suggest sticking to the format somewhat. Consistency speeds up the development process.
 
 ## Suggest Features
-You may also feel free to suggest features in our [Issue Tracker](https://github.com/svr333/audio-band/issues), there is also a template to help you with that.  
+You may also feel free to suggest features in our [Issue Tracker](https://github.com/AudioBand/audio-band/issues), there is also a template to help you with that.  
 
 ## Our Discord Server
 **[Join Now](discord.gg/yWDHdH2za5)**
