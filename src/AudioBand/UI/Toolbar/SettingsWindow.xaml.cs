@@ -35,7 +35,6 @@ namespace AudioBand.UI
 
             Activated += OnActivated;
             Closing += OnClosing;
-            Loaded += OnLoaded;
             viewModel.PropertyChanged += ViewModelOnPropertyChanged;
         }
 
@@ -112,18 +111,6 @@ namespace AudioBand.UI
             }
 
             ContentScrollView.ScrollToTop();
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            // Windows 10 1903 acrylic fix
-            var win1903 = new Version(10, 0, 18362);
-            if (Environment.OSVersion.Version < win1903)
-            {
-                return;
-            }
-
-            ((HwndSource)PresentationSource.FromVisual(this)).AddHook(Hook);
         }
 
         private IntPtr Hook(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled)
