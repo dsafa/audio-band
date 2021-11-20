@@ -220,24 +220,33 @@ namespace AudioBand.UI
 
         private async Task InstallUpdateCommandOnExecute()
         {
-            var fileName = Path.GetTempFileName().Replace(".tmp", ".msi");
-            using (var client = new WebClient())
+            try
             {
-                client.DownloadProgressChanged += OnDownloadProgressChanged;
+                var fileName = Path.GetTempFileName().Replace(".tmp", ".msi");
+                using (var client = new WebClient())
+                {
+                    client.DownloadProgressChanged += OnDownloadProgressChanged;
 
-                IsDownloading = true;
-                var link = new Uri(await _gitHubHelper.GetLatestDownloadUrlAsync());
-                client.DownloadFileAsync(link, fileName);
+                    IsDownloading = true;
+                    var link = new Uri(await _gitHubHelper.GetLatestDownloadUrlAsync());
+                    client.DownloadFileAsync(link, fileName);
+                }
+
+                IsDownloading = false;
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = "msiexec",
+                    Arguments = $"/i {fileName}",
+                    WorkingDirectory = @"C:\temp\",
+                    Verb = "runas"
+                });
             }
-
-            IsDownloading = false;
-            Process.Start(new ProcessStartInfo()
+            catch (Exception e)
             {
-                FileName = "msiexec",
-                Arguments = $"/i {fileName}",
-                WorkingDirectory = @"C:\temp\",
-                Verb = "runas"
-            });
+                Logger.Info(e.Message);
+                Logger.Error(e);
+            }
+            
         }
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
