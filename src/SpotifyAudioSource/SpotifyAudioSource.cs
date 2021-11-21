@@ -307,8 +307,16 @@ namespace SpotifyAudioSource
         {
             // Play/pause/next/back controls use the desktop, if that fails, use api
             // api does require spotify premium
-            if (!await _spotifyClient.Player.ResumePlayback())
+            try
             {
+                if (!await _spotifyClient.Player.ResumePlayback())
+                {
+                    _spotifyControls.TryPlay();
+                }
+            }
+            catch (Exception)
+            {
+                // exception is only thrown when user was idle for too long
                 _spotifyControls.TryPlay();
             }
 
@@ -318,7 +326,14 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public async Task PauseTrackAsync()
         {
-            if (!await _spotifyClient.Player.PausePlayback())
+            try
+            {
+                if (!await _spotifyClient.Player.PausePlayback())
+                {
+                    _spotifyControls.TryPause();
+                }
+            }
+            catch (System.Exception)
             {
                 _spotifyControls.TryPause();
             }
@@ -329,7 +344,14 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public async Task PreviousTrackAsync()
         {
-            if (!await _spotifyClient.Player.SkipPrevious())
+            try
+            {
+                if (!await _spotifyClient.Player.SkipPrevious())
+                {
+                    _spotifyControls.TryPrevious();
+                }
+            }
+            catch (System.Exception)
             {
                 _spotifyControls.TryPrevious();
             }
@@ -338,7 +360,14 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public async Task NextTrackAsync()
         {
-            if (!await _spotifyClient.Player.SkipNext())
+            try
+            {
+                if (!await _spotifyClient.Player.SkipNext())
+                {
+                    _spotifyControls.TryNext();
+                }
+            }
+            catch (System.Exception)
             {
                 _spotifyControls.TryNext();
             }

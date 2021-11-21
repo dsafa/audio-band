@@ -55,23 +55,23 @@ namespace AudioBand.UI
             switch (e.Key)
             {
                 case Key.Tab:
-                {
-                    var focusedElement = Keyboard.FocusedElement as UIElement;
-                    FocusNavigationDirection direction = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)
-                        ? FocusNavigationDirection.Previous
-                        : FocusNavigationDirection.Next;
-
-                    focusedElement?.MoveFocus(new TraversalRequest(direction));
-                    break;
-                }
-                case Key.W:
-                {
-                    if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
                     {
-                        Hide();
+                        var focusedElement = Keyboard.FocusedElement as UIElement;
+                        FocusNavigationDirection direction = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)
+                            ? FocusNavigationDirection.Previous
+                            : FocusNavigationDirection.Next;
+
+                        focusedElement?.MoveFocus(new TraversalRequest(direction));
+                        break;
                     }
-                    break;
-                }
+                case Key.W:
+                    {
+                        if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+                        {
+                            Hide();
+                        }
+                        break;
+                    }
             }
         }
 

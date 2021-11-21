@@ -174,7 +174,7 @@ namespace AudioBand.UI
 
             if (!await _github.IsOnLatestVersionAsync())
             {
-                _popups.ShowPopup("UpdatePopupTitle", "UpdatePopupDescription", TimeSpan.FromSeconds(60));
+                _popups.ShowPopup("UpdatePopupTitle", "UpdatePopupDescription", TimeSpan.FromSeconds(180));
             }
         }
 

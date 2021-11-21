@@ -1,12 +1,12 @@
-using AudioBand.Logging;
-using AudioBand.Settings;
-using NLog;
-using Octokit;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AudioBand.Logging;
+using AudioBand.Settings;
+using NLog;
+using Octokit;
 
 namespace AudioBand
 {
@@ -17,10 +17,10 @@ namespace AudioBand
     {
         private IAppSettings _settings;
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<GitHubHelper>();
-        private GitHubClient _client = new GitHubClient(new ProductHeaderValue("audio-band"));
+        private GitHubClient _client = new GitHubClient(new ProductHeaderValue("AudioBand"));
 
         /// <summary>
-        /// Intantiates a new instance of GitHubHelper.
+        /// Initializes a new instance of the <see cref="GitHubHelper"/> class.
         /// </summary>
         public GitHubHelper(IAppSettings settings)
         {
@@ -30,6 +30,7 @@ namespace AudioBand
         /// <summary>
         /// Gets the Download url of the latest release.
         /// </summary>
+        /// <returns>A string with a Url of the latest release download.</returns>
         public async Task<string> GetLatestDownloadUrlAsync()
         {
             var release = await GetLatestRelease();
@@ -39,6 +40,7 @@ namespace AudioBand
         /// <summary>
         /// Gets whether the user is currently running the latest version of AudioBand.
         /// </summary>
+        /// <returns>Whether the user is on the latest version.</returns>
         public async Task<bool> IsOnLatestVersionAsync()
         {
             try
@@ -79,11 +81,11 @@ namespace AudioBand
             {
                 if (_settings.AudioBandSettings.OptInForPreReleases)
                 {
-                    return (await _client.Repository.Release.GetAll("svr333", "audio-band"))[0];
+                    return (await _client.Repository.Release.GetAll("AudioBand", "AudioBand"))[0];
                 }
-                else 
+                else
                 {
-                    return await _client.Repository.Release.GetLatest("svr333", "audio-band");
+                    return await _client.Repository.Release.GetLatest("AudioBand", "AudioBand");
                 }
             }
             catch (Exception)
@@ -107,7 +109,7 @@ namespace AudioBand
             return new SemanticVersion(int.Parse(splits[0]), int.Parse(splits[1]), int.Parse(splits[2]));
         }
 
-        struct SemanticVersion
+        private struct SemanticVersion
         {
             public SemanticVersion(int major, int minor, int patch)
             {
