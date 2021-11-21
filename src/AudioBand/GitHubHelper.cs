@@ -17,7 +17,7 @@ namespace AudioBand
     {
         private IAppSettings _settings;
         private static readonly ILogger Logger = AudioBandLogManager.GetLogger<GitHubHelper>();
-        private GitHubClient _client = new GitHubClient(new ProductHeaderValue("audio-band"));
+        private GitHubClient _client = new GitHubClient(new ProductHeaderValue("AudioBand"));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GitHubHelper"/> class.
@@ -81,11 +81,11 @@ namespace AudioBand
             {
                 if (_settings.AudioBandSettings.OptInForPreReleases)
                 {
-                    return (await _client.Repository.Release.GetAll("AudioBand", "audio-band"))[0];
+                    return (await _client.Repository.Release.GetAll("AudioBand", "AudioBand"))[0];
                 }
                 else
                 {
-                    return await _client.Repository.Release.GetLatest("AudioBand", "audio-band");
+                    return await _client.Repository.Release.GetLatest("AudioBand", "AudioBand");
                 }
             }
             catch (Exception)

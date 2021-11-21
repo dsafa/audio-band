@@ -3,7 +3,7 @@
 # Audio Band
 Audio Band allows you to display song information from various sources directly in the taskbar.
 
-[![Extra_Buttons_Github-Download](https://user-images.githubusercontent.com/35664724/142423102-caacd6d8-4674-45eb-a134-c32893c77322.png)](https://github.com/AudioBand/audio-band/releases)
+[![Extra_Buttons_Github-Download](https://user-images.githubusercontent.com/35664724/142423102-caacd6d8-4674-45eb-a134-c32893c77322.png)](https://github.com/AudioBand/AudioBand/releases)
 [![Extra_Buttons_Github-Documentation](https://user-images.githubusercontent.com/35664724/142423148-d3da6a71-79ba-4a22-aa59-29f97e60782d.png)](https://audioband.github.io/AudioBand/audioband/index.html)
 [![Extra_Buttons_Github-Discord](https://user-images.githubusercontent.com/35664724/142423185-f7b771c7-d404-4206-ba8e-e911d7bc1133.png)](https://discord.gg/yWDHdH2za5)
 
@@ -43,8 +43,8 @@ Any form of contribution is appreciated:
 You can also join our [Discord Server](https://discord.gg/yWDHdH2za5).
 
 ## License
-[LICENSE](https://github.com/AudioBand/audio-band/blob/master/LICENSE)
+[LICENSE](https://github.com/AudioBand/AudioBand/blob/master/LICENSE)
 
-[THIRD PARTY](https://github.com/AudioBand/audio-band/blob/master/LICENSE-3RD-PARTY)
+[THIRD PARTY](https://github.com/AudioBand/AudioBand/blob/master/LICENSE-3RD-PARTY)
 
 Logo originally by @mirzazulfan (edited by @SnakeStorm87)

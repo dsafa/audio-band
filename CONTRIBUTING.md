@@ -4,12 +4,12 @@ This doc contains guidelines and resources for contributing. The documentation s
 
 # Ways to contribute
 ## Reporting Bugs
-Feel free to report bugs in the [Issue Tracker](https://github.com/AudioBand/audio-band/issues) on GitHub. 
+Feel free to report bugs in the [Issue Tracker](https://github.com/AudioBand/AudioBand/issues) on GitHub. 
 Before reporting an issue, please check if the issue doesn't already exist.  
 There are templates to guide you when to report bugs, it is not necessary to follow them, but we suggest sticking to the format somewhat. Consistency speeds up the development process.
 
 ## Suggest Features
-You may also feel free to suggest features in our [Issue Tracker](https://github.com/AudioBand/audio-band/issues), there is also a template to help you with that.  
+You may also feel free to suggest features in our [Issue Tracker](https://github.com/AudioBand/AudioBand/issues), there is also a template to help you with that.  
 
 ## Our Discord Server
 **[Join Now](discord.gg/yWDHdH2za5)**
@@ -17,7 +17,7 @@ We have opened a Discord Server where we can provide support more easily and mor
 It is also a place to share profiles or just chat in general.
 
 ## Development
-The development documentation is a bit bare-bones at the moment, but it might be extended further later on. You can find it on our [GitHub Pages](https://svr333.github.io/audio-band/audioband/development/setup.html).  
+The development documentation is a bit bare-bones at the moment, but it might be extended further later on. You can find it on our [GitHub Pages](https://audioband.github.io/AudioBand/audioband/index.html).  
 There are instructions on how to get started developing, how to debug and a brief overview of the project's layout.  
 If you need any help while developing something, feel free to ask for it in either a PR/draft or in the Discord.  
 

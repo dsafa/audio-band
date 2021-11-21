@@ -7,7 +7,7 @@
     <authors>Brandon Chong</authors>
     <owners>dsafa</owners>
     <license type="expression">MIT</license>
-    <projectUrl>https://github.com/dsafa/audio-band</projectUrl>
+    <projectUrl>https://github.com/AudioBand/AudioBand</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library to develop audio sources for AudioBand</description>
     <copyright>Copyright 2019</copyright>
