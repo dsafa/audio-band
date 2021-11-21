@@ -1,3 +1,5 @@
+using System.Windows.Media;
+
 namespace AudioBand.Models
 {
     /// <summary>
@@ -39,5 +41,15 @@ namespace AudioBand.Models
         {
             Text = "",
         };
+
+        /// <summary>
+        /// Gets or sets the ForegroundColor.
+        /// </summary>
+        public Color VolumeBarForegroundColor { get;  set; } = Colors.DodgerBlue;
+
+        /// <summary>
+        /// Gets or sets the BackgroundColor.
+        /// </summary>
+        public Color VolumeBarBackgroundColor { get; set; } = Colors.DimGray;
     }
 }

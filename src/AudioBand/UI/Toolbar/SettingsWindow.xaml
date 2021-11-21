@@ -192,7 +192,7 @@
                                             <RadioButton Command="{Binding SelectViewModelCommand}"
                                                         CommandParameter="{Binding ViewModels.VolumeButtonViewModel}"
                                                         GroupName="nav"
-                                                        Style="{StaticResource NavigationPaneRadioButton}">
+                                                        Style="{StaticResource NavigationPaneSubSubRadioButton}">
                                                 <StackPanel Orientation="Horizontal">
                                                     <StackPanel Width="18" Height="18" >
                                                         <TextBlock HorizontalAlignment="Left"

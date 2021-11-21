@@ -145,5 +145,12 @@
         </Style.Triggers>
     </Style>
     <Style x:Key="VolumeBarStyle" TargetType="{x:Type Slider}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Background" Value="{Binding VolumeBarBackgroundColor, Converter={x:Static audioband:Converters.ColorToBrush}}" />
+        <Setter Property="Foreground" Value="{Binding VolumeBarForegroundColor, Converter={x:Static audioband:Converters.ColorToBrush}}" />
+        <Setter Property="IsMoveToPointEnabled" Value="True" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="ClipToBounds" Value="False" />
     </Style>
 </ResourceDictionary>

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Messages;
@@ -45,6 +46,26 @@ namespace AudioBand.UI
             TrackContentViewModel(NoVolumeContent);
             TrackContentViewModel(LowVolumeContent);
             TrackContentViewModel(HighVolumeContent);
+        }
+
+        /// <summary>
+        /// Gets or sets the foreground color.
+        /// </summary>
+        [TrackState]
+        public Color VolumeBarForegroundColor
+        {
+            get => Model.VolumeBarForegroundColor;
+            set => SetProperty(Model, nameof(Model.VolumeBarForegroundColor), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the volume bar background color.
+        /// </summary>
+        [TrackState]
+        public Color VolumeBarBackgroundColor
+        {
+            get => Model.VolumeBarBackgroundColor;
+            set => SetProperty(Model, nameof(Model.VolumeBarBackgroundColor), value);
         }
 
         /// <summary>
@@ -106,6 +127,7 @@ namespace AudioBand.UI
         /// <summary>
         /// Gets the current Volume.
         /// </summary>
+        [AlsoNotify(nameof(CurrentVolumeState))]
         public int Volume
         {
             get => _volume;

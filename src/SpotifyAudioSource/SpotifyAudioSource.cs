@@ -376,7 +376,8 @@ namespace SpotifyAudioSource
         /// <inheritdoc />
         public async Task SetVolumeAsync(float newVolume)
         {
-            var volume = (int)newVolume * 100;
+            // * 100 is not needed
+            var volume = (int)newVolume;
             await OnPlayerCommandFailed(()
                 => _spotifyClient.Player.SetVolume(new PlayerVolumeRequest(volume)), "SetVolume");
 
@@ -641,7 +642,7 @@ namespace SpotifyAudioSource
             }
 
             _currentVolumePercent = context.Device.VolumePercent.HasValue ? context.Device.VolumePercent.Value : 0;
-            VolumeChanged?.Invoke(this, _currentVolumePercent / 100f);
+            VolumeChanged?.Invoke(this, _currentVolumePercent / 100.0f);
         }
 
         private void NotifyShuffle(CurrentlyPlayingContext context)

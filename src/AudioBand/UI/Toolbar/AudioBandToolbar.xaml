@@ -402,29 +402,32 @@
                 Style="{StaticResource ToolbarVolumeButtonStyle}"
                 Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
         </Button>
-        <Popup  x:Name="VolumePopup"
-                Placement="RelativePoint"
+        <fluentWpf:AcrylicPopup
+                x:Name="VolumePopup"
+                Placement="Top"
+                PopupAnimation="Fade"
                 IsOpen="{Binding IsVolumePopupOpen}"
                 PlacementTarget="{Binding ElementName=VolumeButton}"
-                VerticalOffset="-115"
-                HorizontalOffset="-1">
-                <Border Background="LightYellow">
-                    <Slider x:Name="VolumeSlider"
-                            Style="{StaticResource VolumeBarStyle}"
-                            Orientation="Vertical"
-                            Minimum="0"
-                            Maximum="100"
-                            Height="110"
-                            Width="20"
-                            Padding="5,5,0,0"
-                            IsMoveToPointEnabled="True" >
-                        <i:Interaction.Behaviors>
-                            <audioband:SliderThrottle FinalValue="{Binding Volume, Mode=TwoWay}" />
-                            <audioband:SliderClickAndDrag />
-                        </i:Interaction.Behaviors>
-                    </Slider>
-                </Border>
-        </Popup>
+                DataContext="{Binding ViewModels.VolumeButtonViewModel}"
+                HorizontalOffset="-1"
+                VerticalOffset="5" >
+            <Border Background="{audioband:ThemeResource SystemAccentColor}">
+                <Slider x:Name="VolumeSlider"
+                        Orientation="Vertical"
+                        Minimum="0"
+                        Maximum="100"
+                        Height="110"
+                        Width="20"
+                        Padding="5,5,0,0"
+                        IsMoveToPointEnabled="True"
+                        DataContext="{Binding ViewModels.VolumeButtonViewModel}">
+                    <i:Interaction.Behaviors>
+                        <audioband:SliderThrottle FinalValue="{Binding Volume, Mode=TwoWay}" />
+                        <audioband:SliderClickAndDrag />
+                    </i:Interaction.Behaviors>
+                </Slider>
+            </Border>
+        </fluentWpf:AcrylicPopup>
         <Slider x:Name="ProgressBar"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
