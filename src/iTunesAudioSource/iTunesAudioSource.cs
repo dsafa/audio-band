@@ -43,7 +43,7 @@ namespace iTunesAudioSource
 #pragma warning restore 00067 // Event is not used
 
         /// <inheritdoc/>
-        public event EventHandler<float> VolumeChanged;
+        public event EventHandler<int> VolumeChanged;
 
         /// <inheritdoc/>
         public event EventHandler<bool> ShuffleChanged;
@@ -112,9 +112,9 @@ namespace iTunesAudioSource
         }
 
         /// <inheritdoc/>
-        public Task SetVolumeAsync(float newVolume)
+        public Task SetVolumeAsync(int newVolume)
         {
-            _itunesControls.Volume = (int)(newVolume * 100);
+            _itunesControls.Volume = newVolume;
             return Task.CompletedTask;
         }
 
@@ -251,8 +251,7 @@ namespace iTunesAudioSource
                 return;
             }
 
-            _volume = volume;
-            VolumeChanged?.Invoke(this, _volume / 100f);
+            VolumeChanged?.Invoke(this, _volume);
         }
 
         private void NotifyShuffle()

@@ -405,7 +405,6 @@
         <fluentWpf:AcrylicPopup
                 x:Name="VolumePopup"
                 Placement="Top"
-                PopupAnimation="Fade"
                 IsOpen="{Binding IsVolumePopupOpen}"
                 PlacementTarget="{Binding ElementName=VolumeButton}"
                 DataContext="{Binding ViewModels.VolumeButtonViewModel}"
@@ -419,8 +418,7 @@
                         Height="110"
                         Width="20"
                         Padding="5,5,0,0"
-                        IsMoveToPointEnabled="True"
-                        DataContext="{Binding ViewModels.VolumeButtonViewModel}">
+                        IsMoveToPointEnabled="True">
                     <i:Interaction.Behaviors>
                         <audioband:SliderThrottle FinalValue="{Binding Volume, Mode=TwoWay}" />
                         <audioband:SliderClickAndDrag />

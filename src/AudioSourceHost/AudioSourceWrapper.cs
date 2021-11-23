@@ -50,7 +50,7 @@ namespace AudioSourceHost
         /// <summary>
         /// Wrapper for <see cref="IAudioSource.VolumeChanged"/>.
         /// </summary>
-        public event EventHandler<float> VolumeChanged;
+        public event EventHandler<int> VolumeChanged;
 
         /// <summary>
         /// Wrapper for <see cref="IAudioSource.ShuffleChanged"/>.
@@ -141,7 +141,7 @@ namespace AudioSourceHost
         /// </summary>
         /// <param name="newVolume">The new volume.</param>
         /// <param name="tcs">The task completion source.</param>
-        public void SetVolume(float newVolume, MarshaledTaskCompletionSource tcs)
+        public void SetVolume(int newVolume, MarshaledTaskCompletionSource tcs)
         {
             StartTask(_audioSource.SetVolumeAsync, newVolume, tcs);
         }
@@ -294,7 +294,7 @@ namespace AudioSourceHost
         }
 
         private void SetupTask(Task task, MarshaledTaskCompletionSource tcs)
-        {
+    {
             task.ContinueWith(t =>
             {
                 if (t.IsFaulted)
@@ -306,6 +306,6 @@ namespace AudioSourceHost
                     tcs.SetResult();
                 }
             }, TaskScheduler.Default);
-        }
+    }
     }
 }

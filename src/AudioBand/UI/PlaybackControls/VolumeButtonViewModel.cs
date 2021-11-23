@@ -20,7 +20,7 @@ namespace AudioBand.UI
         private readonly IAppSettings _appSettings;
         private readonly IAudioSession _audioSession;
         private bool _isVolumePopupOpen;
-        private int _volume;
+        private double _volume;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VolumeButtonViewModel"/> class.
@@ -36,7 +36,6 @@ namespace AudioBand.UI
             _audioSession = audioSession;
             _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
             _appSettings.ProfileChanged += AppSettingsOnProfileChanged;
-            ChangeVolumeCommand = new AsyncRelayCommand<object>(ChangeVolumeCommandOnExecute);
             VolumePopupCommand = new RelayCommand<object>(OpenVolumePopupCommandOnExecute);
 
             var resetBase = new VolumeButton();
@@ -84,11 +83,6 @@ namespace AudioBand.UI
         public ButtonContentViewModel HighVolumeContent { get; }
 
         /// <summary>
-        /// Gets the play pause command.
-        /// </summary>
-        public IAsyncCommand ChangeVolumeCommand { get; }
-
-        /// <summary>
         /// Gets the VolumePopupCommand.
         /// </summary>
         public ICommand VolumePopupCommand { get; }
@@ -125,17 +119,18 @@ namespace AudioBand.UI
         }
 
         /// <summary>
-        /// Gets the current Volume.
+        /// Gets or sets the current Volume.
         /// </summary>
         [AlsoNotify(nameof(CurrentVolumeState))]
-        public int Volume
+        public double Volume
         {
             get => _volume;
-            private set
+            set
             {
                 if (SetProperty(ref _volume, value))
                 {
-                    _audioSession.CurrentAudioSource.SetVolumeAsync(value).GetAwaiter().GetResult();
+                    var volume = (int)value;
+                    _audioSession.CurrentAudioSource?.SetVolumeAsync(volume);
                 }
             }
         }
@@ -167,16 +162,6 @@ namespace AudioBand.UI
         private void OnVolumeChanged(int newVolume)
         {
             Volume = newVolume;
-        }
-
-        private async Task ChangeVolumeCommandOnExecute(object arg)
-        {
-            if (_audioSession.CurrentAudioSource == null)
-            {
-                return;
-            }
-
-            await _audioSession.CurrentAudioSource.SetVolumeAsync(_volume);
         }
 
         private void OpenVolumePopupCommandOnExecute(object arg)

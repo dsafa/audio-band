@@ -1,7 +1,7 @@
-﻿using AudioBand.Settings;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Timers;
+using AudioBand.Settings;
 
 namespace AudioBand.AudioSource
 {
@@ -179,9 +179,9 @@ namespace AudioBand.AudioSource
             IsPlaying = isPlaying;
         }
 
-        private void AudioSourceVolumeChanged(object sender, float e)
+        private void AudioSourceVolumeChanged(object sender, int e)
         {
-            Volume = (int)(e * 100);
+            Volume = e;
         }
 
         private void AudioSourceOnTrackInfoChanged(object sender, TrackInfoChangedEventArgs e)

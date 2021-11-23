@@ -1,12 +1,12 @@
-﻿using AudioBand.Logging;
-using AudioSourceHost;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using AudioBand.Logging;
+using AudioSourceHost;
+using NLog;
 
 namespace AudioBand.AudioSource
 {
@@ -59,7 +59,7 @@ namespace AudioBand.AudioSource
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
         /// <inheritdoc/>
-        public event EventHandler<float> VolumeChanged;
+        public event EventHandler<int> VolumeChanged;
 
         /// <inheritdoc/>
         public event EventHandler<bool> ShuffleChanged;
@@ -263,7 +263,7 @@ namespace AudioBand.AudioSource
         }
 
         /// <inheritdoc/>
-        public async Task SetVolumeAsync(float newVolume)
+        public async Task SetVolumeAsync(int newVolume)
         {
             if (!IsActivated)
             {
@@ -384,7 +384,7 @@ namespace AudioBand.AudioSource
                 TrackProgressChanged?.Invoke(this, e);
                 CurrentProgress = e;
             }).Handler;
-            _wrapper.VolumeChanged += new MarshaledEventHandler<float>(e => VolumeChanged?.Invoke(this, e)).Handler;
+            _wrapper.VolumeChanged += new MarshaledEventHandler<int>(e => VolumeChanged?.Invoke(this, e)).Handler;
             _wrapper.ShuffleChanged += new MarshaledEventHandler<bool>(e => ShuffleChanged?.Invoke(this, e)).Handler;
             _wrapper.RepeatModeChanged += new MarshaledEventHandler<RepeatMode>(e => RepeatModeChanged?.Invoke(this, e)).Handler;
 

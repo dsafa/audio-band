@@ -42,7 +42,7 @@ namespace MusicBeeAudioSource
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 #pragma warning restore 00067 // The event is never used
 
-        public event EventHandler<float> VolumeChanged;
+        public event EventHandler<int> VolumeChanged;
 
         public event EventHandler<bool> ShuffleChanged;
 
@@ -92,9 +92,9 @@ namespace MusicBeeAudioSource
             return Task.CompletedTask;
         }
 
-        public Task SetVolumeAsync(float newVolume)
+        public Task SetVolumeAsync(int newVolume)
         {
-            _ipc.SetVolume((int)(newVolume * 100));
+            _ipc.SetVolume(newVolume);
             return Task.CompletedTask;
         }
 
@@ -240,8 +240,7 @@ namespace MusicBeeAudioSource
                 return;
             }
 
-            _volume = volume;
-            VolumeChanged?.Invoke(this, _volume / 100f);
+            VolumeChanged?.Invoke(this, _volume);
         }
 
         private void NotifyShuffle()

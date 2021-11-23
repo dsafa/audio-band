@@ -65,7 +65,7 @@ namespace SpotifyAudioSource
         public event EventHandler<SettingChangedEventArgs> SettingChanged;
 
         /// <inheritdoc />
-        public event EventHandler<float> VolumeChanged;
+        public event EventHandler<int> VolumeChanged;
 
         /// <inheritdoc />
         public event EventHandler<bool> ShuffleChanged;
@@ -374,12 +374,9 @@ namespace SpotifyAudioSource
         }
 
         /// <inheritdoc />
-        public async Task SetVolumeAsync(float newVolume)
+        public async Task SetVolumeAsync(int newVolume)
         {
-            // * 100 is not needed
-            var volume = (int)newVolume;
-            await OnPlayerCommandFailed(()
-                => _spotifyClient.Player.SetVolume(new PlayerVolumeRequest(volume)), "SetVolume");
+            await _spotifyClient.Player.SetVolume(new PlayerVolumeRequest(newVolume));
 
             await Task.Delay(110).ContinueWith(async t => await UpdatePlayer());
         }
@@ -642,7 +639,7 @@ namespace SpotifyAudioSource
             }
 
             _currentVolumePercent = context.Device.VolumePercent.HasValue ? context.Device.VolumePercent.Value : 0;
-            VolumeChanged?.Invoke(this, _currentVolumePercent / 100.0f);
+            VolumeChanged?.Invoke(this, _currentVolumePercent);
         }
 
         private void NotifyShuffle(CurrentlyPlayingContext context)
