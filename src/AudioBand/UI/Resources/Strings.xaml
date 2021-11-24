@@ -41,6 +41,8 @@
     <sys:String x:Key="PositionAnchorDescription">Change the relative positioning of the control</sys:String>
     <sys:String x:Key="ToggleSwitchOnText">Enabled</sys:String>
     <sys:String x:Key="ToggleSwitchOffText">Disabled</sys:String>
+    <sys:String x:Key="XPopupOffsetLabelText">X Popup Offset</sys:String>
+    <sys:String x:Key="YPopupOffsetLabelText">Y Popup Offset</sys:String>
 
     <!--  Play/pause button settings  -->
     <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
@@ -68,9 +70,13 @@
     <sys:String x:Key="ShuffleModeButtonOnContentSectionText">Shuffle on button content</sys:String>
 
     <!--  Volume button settings  -->
-    <sys:String x:Key="NoVolumeButtonContentSectionText">No volume button content</sys:String>
-    <sys:String x:Key="LowVolumeButtonContentSectionText">Low volume button content</sys:String>
-    <sys:String x:Key="HighVolumeButtonContentSectionText">High volume button content</sys:String>
+    <sys:String x:Key="PopupContentSectionText">Popup Content Settings</sys:String>
+    <sys:String x:Key="VolumeBarForegroundLabelText">Volume Bar Foreground color</sys:String>
+    <sys:String x:Key="VolumeBarBackgroundLabelText">Volume Bar Background color</sys:String>
+    <sys:String x:Key="NoVolumeButtonContentSectionText">No Volume Button content</sys:String>
+    <sys:String x:Key="LowVolumeButtonContentSectionText">Low Volume Button content</sys:String>
+    <sys:String x:Key="MidVolumeButtonContentSectionText">Mid Volume Button content</sys:String>
+    <sys:String x:Key="HighVolumeButtonContentSectionText">High Volume Button content</sys:String>
 
     <!--  Custom text label settings  -->
     <sys:String x:Key="CustomLabelNameSectionText">Label name</sys:String>

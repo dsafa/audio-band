@@ -14,9 +14,23 @@ namespace AudioBand.Models
         {
             XPosition = 251;
             YPosition = 6;
+
             Width = 18;
             Height = 18;
+
+            XPopupOffset = -1;
+            YPopupOffset = -11;
         }
+
+        /// <summary>
+        /// Gets or sets the Popup's X offset.
+        /// </summary>
+        public double XPopupOffset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Popup's Y offset.
+        /// </summary>
+        public double YPopupOffset { get; set; }
 
         /// <summary>
         /// Gets or sets the button with no volume.
@@ -32,6 +46,14 @@ namespace AudioBand.Models
         public ButtonContent LowVolumeContent { get; set; } = new ButtonContent
         {
             Text = "",
+        };
+
+        /// <summary>
+        /// Gets or sets the button with mid volume.
+        /// </summary>
+        public ButtonContent MidVolumeContent { get; set; } = new ButtonContent
+        {
+            Text = "",
         };
 
         /// <summary>

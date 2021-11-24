@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using AudioBand.AudioSource;
@@ -36,14 +35,19 @@ namespace AudioBand.UI
             _audioSession = audioSession;
             _audioSession.PropertyChanged += AudioSessionOnPropertyChanged;
             _appSettings.ProfileChanged += AppSettingsOnProfileChanged;
+
             VolumePopupCommand = new RelayCommand<object>(OpenVolumePopupCommandOnExecute);
+            MouseLeftCommand = new RelayCommand<object>(MouseLeftCommandOnExecute);
 
             var resetBase = new VolumeButton();
             NoVolumeContent = new ButtonContentViewModel(Model.NoVolumeContent, resetBase.NoVolumeContent, dialogService);
             LowVolumeContent = new ButtonContentViewModel(Model.LowVolumeContent, resetBase.LowVolumeContent, dialogService);
+            MidVolumeContent = new ButtonContentViewModel(Model.MidVolumeContent, resetBase.MidVolumeContent, dialogService);
             HighVolumeContent = new ButtonContentViewModel(Model.HighVolumeContent, resetBase.HighVolumeContent, dialogService);
+
             TrackContentViewModel(NoVolumeContent);
             TrackContentViewModel(LowVolumeContent);
+            TrackContentViewModel(MidVolumeContent);
             TrackContentViewModel(HighVolumeContent);
         }
 
@@ -68,6 +72,26 @@ namespace AudioBand.UI
         }
 
         /// <summary>
+        /// Gets or sets the Popup's X offset.
+        /// </summary>
+        [TrackState]
+        public double XPopupOffset
+        {
+            get => Model.XPopupOffset;
+            set => SetProperty(Model, nameof(Model.XPopupOffset), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the Popup's Y offset.
+        /// </summary>
+        [TrackState]
+        public double YPopupOffset
+        {
+            get => Model.YPopupOffset;
+            set => SetProperty(Model, nameof(Model.YPopupOffset), value);
+        }
+
+        /// <summary>
         /// Gets the view model for the button when there is no volume.
         /// </summary>
         public ButtonContentViewModel NoVolumeContent { get; }
@@ -76,6 +100,11 @@ namespace AudioBand.UI
         /// Gets the view model for the button with low volume.
         /// </summary>
         public ButtonContentViewModel LowVolumeContent { get; }
+
+        /// <summary>
+        /// Gets the view model for the button with mid volume.
+        /// </summary>
+        public ButtonContentViewModel MidVolumeContent { get; }
 
         /// <summary>
         /// Gets the view model for the button with high volume.
@@ -88,6 +117,11 @@ namespace AudioBand.UI
         public ICommand VolumePopupCommand { get; }
 
         /// <summary>
+        /// Gets the MouseLeftCommand.
+        /// </summary>
+        public ICommand MouseLeftCommand { get; }
+
+        /// <summary>
         /// Gets the current VolumeState.
         /// </summary>
         public VolumeState CurrentVolumeState
@@ -98,9 +132,13 @@ namespace AudioBand.UI
                 {
                     return VolumeState.Off;
                 }
-                else if (_volume < 50)
+                else if (_volume <= 33)
                 {
                     return VolumeState.Low;
+                }
+                else if (_volume <= 66)
+                {
+                    return VolumeState.Mid;
                 }
                 else
                 {
@@ -167,6 +205,11 @@ namespace AudioBand.UI
         private void OpenVolumePopupCommandOnExecute(object arg)
         {
             IsVolumePopupOpen = !IsVolumePopupOpen;
+        }
+
+        private void MouseLeftCommandOnExecute(object obj)
+        {
+            IsVolumePopupOpen = false;
         }
     }
 }

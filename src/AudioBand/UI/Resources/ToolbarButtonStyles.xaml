@@ -369,6 +369,10 @@
                 <Setter Property="Content" Value="{Binding LowVolumeContent}" />
                 <Setter Property="audioband:Fallback.FallbackImageSource" Value="{StaticResource LowVolumeDefault}" />
             </DataTrigger>
+            <DataTrigger Binding="{Binding CurrentVolumeState}" Value="{x:Static audioSource:VolumeState.Mid}">
+                <Setter Property="Content" Value="{Binding MidVolumeContent}" />
+                <Setter Property="audioband:Fallback.FallbackImageSource" Value="{StaticResource LowVolumeDefault}" />
+            </DataTrigger>
             <DataTrigger Binding="{Binding CurrentVolumeState}" Value="{x:Static audioSource:VolumeState.High}">
                 <Setter Property="Content" Value="{Binding HighVolumeContent}" />
                 <Setter Property="audioband:Fallback.FallbackImageSource" Value="{StaticResource HighVolumeDefault}" />

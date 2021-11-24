@@ -11,12 +11,17 @@ namespace AudioBand.AudioSource
         Off,
 
         /// <summary>
-        /// Less than 50% volume.
+        /// Less than 33% volume.
         /// </summary>
         Low,
 
         /// <summary>
-        /// More than 50% volume.
+        /// Between 33% and 66% volume.
+        /// </summary>
+        Mid,
+
+        /// <summary>
+        /// More than 66% volume.
         /// </summary>
         High,
     }

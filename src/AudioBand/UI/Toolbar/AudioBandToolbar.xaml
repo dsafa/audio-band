@@ -408,8 +408,13 @@
                 IsOpen="{Binding IsVolumePopupOpen}"
                 PlacementTarget="{Binding ElementName=VolumeButton}"
                 DataContext="{Binding ViewModels.VolumeButtonViewModel}"
-                HorizontalOffset="-1"
-                VerticalOffset="5" >
+                HorizontalOffset="{Binding XPopupOffset}"
+                VerticalOffset="{Binding YPopupOffset}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeave">
+                    <i:InvokeCommandAction Command="{Binding MouseLeftCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <Border Background="{audioband:ThemeResource SystemAccentColor}">
                 <Slider x:Name="VolumeSlider"
                         Orientation="Vertical"
@@ -418,7 +423,9 @@
                         Height="110"
                         Width="20"
                         Padding="5,5,0,0"
-                        IsMoveToPointEnabled="True">
+                        IsMoveToPointEnabled="True"
+                        Style="{StaticResource VolumeBarStyle}"
+                        Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
                     <i:Interaction.Behaviors>
                         <audioband:SliderThrottle FinalValue="{Binding Volume, Mode=TwoWay}" />
                         <audioband:SliderClickAndDrag />

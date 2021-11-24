@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:ui="clr-namespace:AudioBand.UI">
     <DataTemplate DataType="{x:Type ui:VolumeButtonViewModel}">
         <DataTemplate.Resources>
@@ -13,31 +14,57 @@
             </ResourceDictionary>
         </DataTemplate.Resources>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <!-- Adds Basic Button Template -->
             <ContentPresenter Content="{Binding}"
                               ContentTemplate="{StaticResource ButtonBaseTemplate}"
                               Focusable="False" />
-
+            <!-- Add Volume Specifics -->
+            <ui:ColorPicker Title="{StaticResource VolumeBarForegroundLabelText}"
+                            DialogService="{Binding DialogService}"
+                            Color="{Binding VolumeBarForegroundColor}" />
+            <ui:ColorPicker Title="{StaticResource VolumeBarBackgroundLabelText}"
+                            DialogService="{Binding DialogService}"
+                            Color="{Binding VolumeBarBackgroundColor}" />
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource PopupContentSectionText}"/>
+            <UniformGrid Columns="2"
+                         Rows="2"
+                         Style="{StaticResource ArrangementGridStyle}">
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource XPopupOffsetLabelText}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource YPopupOffsetLabelText}" />
+                <mah:NumericUpDown ui:NumericInput.Type="Position" Value="{Binding XPopupOffset, Mode=TwoWay}" />
+                <mah:NumericUpDown ui:NumericInput.Type="Position" Value="{Binding YPopupOffset, Mode=TwoWay}" />
+            </UniformGrid>
+            <!-- No Volume Content -->
             <TextBlock Margin="{StaticResource SectionMargin}"
                        Style="{StaticResource TitleTextBlock}"
                        Text="{StaticResource NoVolumeButtonContentSectionText}" />
             <ContentPresenter Content="{Binding NoVolumeContent}"
                               ContentTemplate="{StaticResource ButtonContentTemplate}"
                               Focusable="False" />
-
+            <!-- Low Volume Content -->
             <TextBlock Margin="{StaticResource SectionMargin}"
                        Style="{StaticResource TitleTextBlock}"
                        Text="{StaticResource LowVolumeButtonContentSectionText}" />
             <ContentPresenter Content="{Binding LowVolumeContent}"
                               ContentTemplate="{StaticResource ButtonContentTemplate}"
                               Focusable="False" />
-
+            <!-- Mid Volume Content -->
+            <TextBlock Margin="{StaticResource SectionMargin}"
+                       Style="{StaticResource TitleTextBlock}"
+                       Text="{StaticResource MidVolumeButtonContentSectionText}" />
+            <ContentPresenter Content="{Binding MidVolumeContent}"
+                              ContentTemplate="{StaticResource ButtonContentTemplate}"
+                              Focusable="False" />
+            <!-- High Volume Content -->
             <TextBlock Margin="{StaticResource SectionMargin}"
                        Style="{StaticResource TitleTextBlock}"
                        Text="{StaticResource HighVolumeButtonContentSectionText}" />
             <ContentPresenter Content="{Binding HighVolumeContent}"
                               ContentTemplate="{StaticResource ButtonContentTemplate}"
                               Focusable="False" />
-
+            <!-- Other Section -->
             <TextBlock Margin="{StaticResource SectionMargin}"
                        Style="{StaticResource TitleTextBlock}"
                        Text="{StaticResource OtherSectionText}" />

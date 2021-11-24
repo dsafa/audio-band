@@ -201,7 +201,7 @@ namespace AudioBand.AudioSource
             AlbumName = null;
             SongProgress = TimeSpan.Zero;
             SongLength = TimeSpan.Zero;
-            Volume = 100;
+            Volume = 0;
         }
 
         private void HandleIdleProfile(bool isPlaying)
