@@ -156,45 +156,6 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
-    <DrawingImage x:Key="NoVolumeDefault">
-        <DrawingImage.Drawing>
-            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
-                <DrawingGroup Opacity="1">
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M197.50773,230.15227L238.93436,191.00532 199.81815,149.54615" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M133.67526,152.01873C171.72829,193.16201,238.93436,191.00532,238.93436,191.00532" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.3320683,66.254193C1.3320683,66.254193,56.25668,65.309776,98.133769,105.46534" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M202.25421,25.672407L242.54219,65.992049 202.25421,106.3117" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.4633263,183.87359C1.4633263,183.87359 81.058783,187.52905 123.66156,118.0149 158.6725,60.888179 242.54219,65.992049 242.54219,65.992049" Pen="{StaticResource ButtonImagePenDim}" />
-                </DrawingGroup>
-            </DrawingGroup>
-        </DrawingImage.Drawing>
-    </DrawingImage>
-    <DrawingImage x:Key="LowVolumeDefault">
-        <DrawingImage.Drawing>
-            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
-                <DrawingGroup Opacity="1">
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M197.50773,230.15227L238.93436,191.00532 199.81815,149.54615" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M133.67526,152.01873C171.72829,193.16201,238.93436,191.00532,238.93436,191.00532" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.3320683,66.254193C1.3320683,66.254193,56.25668,65.309776,98.133769,105.46534" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M202.25421,25.672407L242.54219,65.992049 202.25421,106.3117" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.4633263,183.87359C1.4633263,183.87359 81.058783,187.52905 123.66156,118.0149 158.6725,60.888179 242.54219,65.992049 242.54219,65.992049" Pen="{StaticResource ButtonImagePenDim}" />
-                </DrawingGroup>
-            </DrawingGroup>
-        </DrawingImage.Drawing>
-    </DrawingImage>
-    <DrawingImage x:Key="HighVolumeDefault">
-        <DrawingImage.Drawing>
-            <DrawingGroup ClipGeometry="M0,0 V256 H256 V0 H0 Z">
-                <DrawingGroup Opacity="1">
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M197.50773,230.15227L238.93436,191.00532 199.81815,149.54615" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M133.67526,152.01873C171.72829,193.16201,238.93436,191.00532,238.93436,191.00532" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.3320683,66.254193C1.3320683,66.254193,56.25668,65.309776,98.133769,105.46534" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M202.25421,25.672407L242.54219,65.992049 202.25421,106.3117" Pen="{StaticResource ButtonImagePenDim}" />
-                    <GeometryDrawing Geometry="F1 M256,256z M0,0z M1.4633263,183.87359C1.4633263,183.87359 81.058783,187.52905 123.66156,118.0149 158.6725,60.888179 242.54219,65.992049 242.54219,65.992049" Pen="{StaticResource ButtonImagePenDim}" />
-                </DrawingGroup>
-            </DrawingGroup>
-        </DrawingImage.Drawing>
-    </DrawingImage>
     <Duration x:Key="ButtonAnimationDuration">0:0:0.1</Duration>
     <DataTemplate x:Key="ToolbarButtonContentImageTemplate" DataType="audioband:ButtonContentViewModel">
         <Viewbox Margin="1" RenderOptions.BitmapScalingMode="Fant">

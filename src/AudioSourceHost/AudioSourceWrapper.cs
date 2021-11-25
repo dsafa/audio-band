@@ -294,7 +294,7 @@ namespace AudioSourceHost
         }
 
         private void SetupTask(Task task, MarshaledTaskCompletionSource tcs)
-    {
+        {
             task.ContinueWith(t =>
             {
                 if (t.IsFaulted)
@@ -306,6 +306,6 @@ namespace AudioSourceHost
                     tcs.SetResult();
                 }
             }, TaskScheduler.Default);
-    }
+        }
     }
 }
