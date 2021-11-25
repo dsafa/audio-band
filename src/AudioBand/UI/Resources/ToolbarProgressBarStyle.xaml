@@ -144,6 +144,15 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style x:Key="VolumeBarStyle" TargetType="{x:Type Slider}">
+    <Style x:Key="VolumeBarStyle" TargetType="{x:Type Slider}" BasedOn="{StaticResource MetroSlider}">
+        <d:Style.DataContext>
+            <x:Type Type="audioband:VolumeButtonViewModel" />
+        </d:Style.DataContext>
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="{Binding VolumeBarBackgroundColor, Converter={x:Static audioband:Converters.ColorToBrush}}" />
+        <Setter Property="Foreground" Value="{Binding VolumeBarForegroundColor, Converter={x:Static audioband:Converters.ColorToBrush}}" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="IsMoveToPointEnabled" Value="True" />
+        <Setter Property="Orientation" Value="Vertical" />
     </Style>
 </ResourceDictionary>

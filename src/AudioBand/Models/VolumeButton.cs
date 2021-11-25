@@ -18,9 +18,22 @@ namespace AudioBand.Models
             Width = 18;
             Height = 18;
 
+            PopupWidth = 36;
+            PopupHeight = 160;
+
             XPopupOffset = -1;
             YPopupOffset = -11;
         }
+
+        /// <summary>
+        /// Gets or sets the Popup's width.
+        /// </summary>
+        public double PopupWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Popup's height.
+        /// </summary>
+        public double PopupHeight { get; set; }
 
         /// <summary>
         /// Gets or sets the Popup's X offset.

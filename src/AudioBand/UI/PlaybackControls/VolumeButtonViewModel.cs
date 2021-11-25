@@ -72,6 +72,26 @@ namespace AudioBand.UI
         }
 
         /// <summary>
+        /// Gets or sets the Popup's width.
+        /// </summary>
+        [TrackState]
+        public double PopupWidth
+        {
+            get => Model.PopupWidth;
+            set => SetProperty(Model, nameof(Model.PopupWidth), value);
+        }
+
+        /// <summary>
+        /// Gets or sets the Popup's height.
+        /// </summary>
+        [TrackState]
+        public double PopupHeight
+        {
+            get => Model.PopupHeight;
+            set => SetProperty(Model, nameof(Model.PopupHeight), value);
+        }
+
+        /// <summary>
         /// Gets or sets the Popup's X offset.
         /// </summary>
         [TrackState]

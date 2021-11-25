@@ -29,8 +29,12 @@
                        Style="{StaticResource TitleTextBlock}"
                        Text="{StaticResource PopupContentSectionText}"/>
             <UniformGrid Columns="2"
-                         Rows="2"
+                         Rows="4"
                          Style="{StaticResource ArrangementGridStyle}">
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource WidthLabelText}" />
+                <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource HeightLabelText}" />
+                <mah:NumericUpDown ui:NumericInput.Type="Size" Value="{Binding PopupWidth, Mode=TwoWay}" />
+                <mah:NumericUpDown ui:NumericInput.Type="Size" Value="{Binding PopupHeight, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource XPopupOffsetLabelText}" />
                 <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource YPopupOffsetLabelText}" />
                 <mah:NumericUpDown ui:NumericInput.Type="Position" Value="{Binding XPopupOffset, Mode=TwoWay}" />
