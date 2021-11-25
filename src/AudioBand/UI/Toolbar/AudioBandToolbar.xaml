@@ -403,7 +403,6 @@
                 Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
         </Button>
         <fluentWpf:AcrylicPopup
-                Margin="7,7,7,7"
                 x:Name="VolumePopup"
                 Placement="Top"
                 Width="{Binding PopupWidth}"
