@@ -424,7 +424,7 @@
                         Minimum="0"
                         Maximum="100"
                         Padding="5,5,0,0"
-                        IsMoveToPointEnabled="True"
+                        Style="{StaticResource VolumeSliderStyle}"
                         Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
                     <i:Interaction.Behaviors>
                         <audioband:SliderThrottle FinalValue="{Binding Volume, Mode=TwoWay}" />
