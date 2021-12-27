@@ -425,6 +425,9 @@
                         Minimum="0"
                         Maximum="100"
                         Padding="5,5,0,0"
+                        TickFrequency="1"
+                        TickPlacement="None"
+                        IsSnapToTickEnabled="True"
                         Style="{StaticResource VolumeSliderStyle}"
                         Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
                     <i:Interaction.Behaviors>
