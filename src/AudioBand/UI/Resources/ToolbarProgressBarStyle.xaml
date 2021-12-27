@@ -5,6 +5,7 @@
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
                     mc:Ignorable="d">
     <Style x:Key="ProgressBarStyle" TargetType="{x:Type Slider}">
         <d:Style.DataContext>
@@ -145,6 +146,24 @@
         </Style.Triggers>
     </Style>
     <!-- Volume slider styles / templates -->
+    <Style x:Key="VolumePopupStyle" TargetType="fluentWpf:AcrylicPopup">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsHorizontal}" Value="True">
+                <Setter Property="fluentWpf:AcrylicPopup.RenderTransform">
+                    <Setter.Value>
+                        <RotateTransform Angle="0" />
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsHorizontal}" Value="False">
+                <Setter Property="fluentWpf:AcrylicPopup.RenderTransform">
+                    <Setter.Value>
+                        <RotateTransform Angle="-90" />
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
     <Style x:Key="VolumeSliderStyle" TargetType="{x:Type Slider}">
         <d:Style.DataContext>
             <x:Type Type="audioband:VolumeButtonViewModel" />

@@ -40,6 +40,8 @@
                 <mah:NumericUpDown ui:NumericInput.Type="Position" Value="{Binding XPopupOffset, Mode=TwoWay}" />
                 <mah:NumericUpDown ui:NumericInput.Type="Position" Value="{Binding YPopupOffset, Mode=TwoWay}" />
             </UniformGrid>
+            <TextBlock Style="{StaticResource DescriptionTextBlock}" Text="{StaticResource PopupHorizontalLabelText}" />
+            <mah:ToggleSwitch IsChecked="{Binding IsHorizontal, Mode=TwoWay}" OnLabel="{StaticResource ToggleSwitchOnText}" OffLabel="{StaticResource ToggleSwitchOffText}" />
             <!-- No Volume Content -->
             <TextBlock Margin="{StaticResource SectionMargin}"
                        Style="{StaticResource TitleTextBlock}"

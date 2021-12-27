@@ -46,6 +46,11 @@ namespace AudioBand.Models
         public double YPopupOffset { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the Popup is horizontal.
+        /// </summary>
+        public bool IsHorizontal { get; set; }
+
+        /// <summary>
         /// Gets or sets the button with no volume.
         /// </summary>
         public ButtonContent NoVolumeContent { get; set; } = new ButtonContent

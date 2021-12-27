@@ -411,7 +411,8 @@
                 PlacementTarget="{Binding ElementName=VolumeButton}"
                 DataContext="{Binding ViewModels.VolumeButtonViewModel}"
                 HorizontalOffset="{Binding XPopupOffset}"
-                VerticalOffset="{Binding YPopupOffset}">
+                VerticalOffset="{Binding YPopupOffset}"
+                Style="{StaticResource VolumePopupStyle}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeave">
                     <i:InvokeCommandAction Command="{Binding MouseLeftCommand}" />

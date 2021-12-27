@@ -73,6 +73,7 @@
     <sys:String x:Key="PopupContentSectionText">Popup Content Settings</sys:String>
     <sys:String x:Key="VolumeBarForegroundLabelText">Volume Bar Foreground color</sys:String>
     <sys:String x:Key="VolumeBarBackgroundLabelText">Volume Bar Background color</sys:String>
+    <sys:String x:Key="PopupHorizontalLabelText">Is Popup Horizontal</sys:String>
     <sys:String x:Key="NoVolumeButtonContentSectionText">No Volume Button content</sys:String>
     <sys:String x:Key="LowVolumeButtonContentSectionText">Low Volume Button content</sys:String>
     <sys:String x:Key="MidVolumeButtonContentSectionText">Mid Volume Button content</sys:String>

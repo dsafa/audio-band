@@ -112,6 +112,16 @@ namespace AudioBand.UI
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the popup is vertical or horizontal.
+        /// </summary>
+        [TrackState]
+        public bool IsHorizontal
+        {
+            get => Model.IsHorizontal;
+            set => SetProperty(Model, nameof(Model.IsHorizontal), value);
+        }
+
+        /// <summary>
         /// Gets the view model for the button when there is no volume.
         /// </summary>
         public ButtonContentViewModel NoVolumeContent { get; }
