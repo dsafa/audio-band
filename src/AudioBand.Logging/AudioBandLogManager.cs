@@ -1,13 +1,13 @@
-﻿using NLog;
+﻿using System.IO;
+using System.Reflection;
+using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
-using System.IO;
-using System.Reflection;
 
 namespace AudioBand.Logging
 {
     /// <summary>
-    /// Log mangaer for audioband loggers.
+    /// Log manager for audioband loggers.
     /// </summary>
     public static class AudioBandLogManager
     {

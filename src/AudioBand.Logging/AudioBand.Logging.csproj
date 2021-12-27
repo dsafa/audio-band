@@ -85,9 +85,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Ben.Demystifier">
-      <Version>0.1.4</Version>
-    </PackageReference>
     <PackageReference Include="NLog">
       <Version>4.6.5</Version>
     </PackageReference>

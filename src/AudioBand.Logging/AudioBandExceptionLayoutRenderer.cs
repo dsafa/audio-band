@@ -1,7 +1,6 @@
-﻿using NLog.LayoutRenderers;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Text;
+using NLog.LayoutRenderers;
 
 namespace AudioBand.Logging
 {
@@ -22,13 +21,9 @@ namespace AudioBand.Logging
                 return;
             }
 
-            sb.AppendLine();
             sb.AppendLine("---START OF EXCEPTION---");
-            sb.AppendLine(ex.ToStringDemystified());
-            sb.AppendLine("---END OF EXCEPTION---");
-            sb.AppendLine("---ORIGINAL EXCEPTION---");
             sb.AppendLine(ex.ToString());
-            sb.AppendLine("---END OF ORIGINAL EXCEPTION");
+            sb.AppendLine("---END OF EXCEPTION");
         }
     }
 }
