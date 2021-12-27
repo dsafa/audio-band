@@ -21,7 +21,7 @@ namespace AudioBand.Models
             PopupWidth = 190;
             PopupHeight = 36;
 
-            XPopupOffset = -86;
+            XPopupOffset = 24.5;
             YPopupOffset = -11;
         }
 
