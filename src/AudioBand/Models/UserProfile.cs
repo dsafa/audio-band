@@ -69,6 +69,11 @@ namespace AudioBand.Models
         public ShuffleModeButton ShuffleModeButton { get; set; }
 
         /// <summary>
+        /// Gets or sets the volume button model.
+        /// </summary>
+        public VolumeButton VolumeButton { get; set; }
+
+        /// <summary>
         /// Gets or sets the saved progress bar model.
         /// </summary>
         public ProgressBar ProgressBar { get; set; }
@@ -91,6 +96,7 @@ namespace AudioBand.Models
                 PreviousButton = new PreviousButton(),
                 RepeatModeButton = new RepeatModeButton(),
                 ShuffleModeButton = new ShuffleModeButton(),
+                VolumeButton = new VolumeButton(),
                 ProgressBar = new ProgressBar(),
                 CustomLabels = new List<CustomLabel>
                 {
@@ -121,7 +127,7 @@ namespace AudioBand.Models
                     new CustomLabel
                     {
                         Name = "Song Name",
-                        Width = 240,
+                        Width = 205,
                         Height = 20,
                         XPosition = 0,
                         YPosition = -2,
@@ -133,7 +139,7 @@ namespace AudioBand.Models
                     new CustomLabel
                     {
                         Name = "Artist",
-                        Width = 240,
+                        Width = 205,
                         Height = 20,
                         XPosition = 0,
                         YPosition = 13,
@@ -331,6 +337,10 @@ namespace AudioBand.Models
                         Text = ""
                     }
                 },
+                VolumeButton = new VolumeButton()
+                {
+                    IsVisible = false
+                },
                 ProgressBar = new ProgressBar()
                 {
                     IsVisible = true,
@@ -514,6 +524,10 @@ namespace AudioBand.Models
                 {
                     IsVisible = false
                 },
+                VolumeButton = new VolumeButton()
+                {
+                    IsVisible = false
+                },
                 ProgressBar = new ProgressBar()
                 {
                     IsVisible = true,
@@ -592,6 +606,10 @@ namespace AudioBand.Models
                     IsVisible = false
                 },
                 ShuffleModeButton = new ShuffleModeButton()
+                {
+                    IsVisible = false
+                },
+                VolumeButton = new VolumeButton()
                 {
                     IsVisible = false
                 },

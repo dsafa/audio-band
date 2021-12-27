@@ -41,6 +41,8 @@
     <sys:String x:Key="PositionAnchorDescription">Change the relative positioning of the control</sys:String>
     <sys:String x:Key="ToggleSwitchOnText">Enabled</sys:String>
     <sys:String x:Key="ToggleSwitchOffText">Disabled</sys:String>
+    <sys:String x:Key="XPopupOffsetLabelText">X Popup Offset</sys:String>
+    <sys:String x:Key="YPopupOffsetLabelText">Y Popup Offset</sys:String>
 
     <!--  Play/pause button settings  -->
     <sys:String x:Key="PlayButtonContentSectionText">Play button content</sys:String>
@@ -67,6 +69,16 @@
     <sys:String x:Key="ShuffleModeButtonOffContentSectionText">Shuffle off button content</sys:String>
     <sys:String x:Key="ShuffleModeButtonOnContentSectionText">Shuffle on button content</sys:String>
 
+    <!--  Volume button settings  -->
+    <sys:String x:Key="PopupContentSectionText">Popup Content Settings</sys:String>
+    <sys:String x:Key="VolumeBarForegroundLabelText">Volume Bar Foreground color</sys:String>
+    <sys:String x:Key="VolumeBarBackgroundLabelText">Volume Bar Background color</sys:String>
+    <sys:String x:Key="PopupHorizontalLabelText">Is Popup Horizontal</sys:String>
+    <sys:String x:Key="NoVolumeButtonContentSectionText">No Volume Button content</sys:String>
+    <sys:String x:Key="LowVolumeButtonContentSectionText">Low Volume Button content</sys:String>
+    <sys:String x:Key="MidVolumeButtonContentSectionText">Mid Volume Button content</sys:String>
+    <sys:String x:Key="HighVolumeButtonContentSectionText">High Volume Button content</sys:String>
+
     <!--  Custom text label settings  -->
     <sys:String x:Key="CustomLabelNameSectionText">Label name</sys:String>
     <sys:String x:Key="CustomLabelNameDescription">Choose a name for the label</sys:String>
@@ -92,7 +104,8 @@ Placeholders will be substituted with their corresponding values. Placeholders a
 &#8226; album - Album name for the current song
 &#8226; time - Current playback time for the current song
 &#8226; length - Total length of the current song
-&#8226; remaining - The remaining time left in current song</sys:String>
+&#8226; remaining - The remaining time left in current song
+&#8226; volume - The current volume as a percentage</sys:String>
     <sys:String x:Key="CustomLabelFormatHelpTextStyles" xml:space="preserve">&#8226; * - Bolds the placeholder
 &#8226; &amp; - Italicizes the placeholder
 &#8226; _ - Underlines the placeholder</sys:String>
@@ -114,6 +127,7 @@ Using style and color : {*artist:#a9a9a9}</sys:String>
     <sys:String x:Key="NextButtonTab">Next Track Button</sys:String>
     <sys:String x:Key="RepeatModeButtonTab">Repeat Mode Button</sys:String>
     <sys:String x:Key="ShuffleModeButtonTab">Shuffle Mode Button</sys:String>
+    <sys:String x:Key="VolumeButtonTab">Volume Button</sys:String>
     <sys:String x:Key="ProgressBarTab">Progress Bar</sys:String>
     <sys:String x:Key="CustomLabelsTab">Text Labels</sys:String>
     <sys:String x:Key="AlbumArtTab">Album Art</sys:String>

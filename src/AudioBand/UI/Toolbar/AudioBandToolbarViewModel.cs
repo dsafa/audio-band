@@ -1,16 +1,16 @@
-﻿using AudioBand.AudioSource;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Logging;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
 using NLog;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Windows.UI.Xaml;
 
 namespace AudioBand.UI
@@ -58,17 +58,17 @@ namespace AudioBand.UI
         }
 
         /// <summary>
-        /// A list of all the ViewModels.
+        /// Gets a list of all the ViewModels.
         /// </summary>
         public IViewModelContainer ViewModels { get; }
 
         /// <summary>
-        /// A collection of all available AudioSources.
+        /// Gets a collection of all available AudioSources.
         /// </summary>
         public ObservableCollection<IInternalAudioSource> AudioSources { get; private set; }
 
         /// <summary>
-        /// A collection of all possible UserProfiles.
+        /// Gets a collection of all possible UserProfiles.
         /// </summary>
         public ObservableCollection<UserProfile> Profiles { get; private set; }
 

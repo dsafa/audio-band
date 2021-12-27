@@ -315,4 +315,29 @@
         <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}" />
         <Setter Property="Content" Value="x" />
     </Style>
+    <Style x:Key="ToolbarVolumeButtonStyle" TargetType="{x:Type Button}">
+        <d:Style.DataContext>
+            <x:Type Type="audioband:VolumeButtonViewModel" />
+        </d:Style.DataContext>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template" Value="{StaticResource ToolbarButtonControlTemplate}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding CurrentVolumeState}" Value="{x:Static audioSource:VolumeState.Off}">
+                <Setter Property="Content" Value="{Binding NoVolumeContent}" />
+                <Setter Property="audioband:Fallback.FallbackImageSource" Value="{StaticResource NoVolumeDefault}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CurrentVolumeState}" Value="{x:Static audioSource:VolumeState.Low}">
+                <Setter Property="Content" Value="{Binding LowVolumeContent}" />
+                <Setter Property="audioband:Fallback.FallbackImageSource" Value="{StaticResource LowVolumeDefault}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CurrentVolumeState}" Value="{x:Static audioSource:VolumeState.Mid}">
+                <Setter Property="Content" Value="{Binding MidVolumeContent}" />
+                <Setter Property="audioband:Fallback.FallbackImageSource" Value="{StaticResource LowVolumeDefault}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CurrentVolumeState}" Value="{x:Static audioSource:VolumeState.High}">
+                <Setter Property="Content" Value="{Binding HighVolumeContent}" />
+                <Setter Property="audioband:Fallback.FallbackImageSource" Value="{StaticResource HighVolumeDefault}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

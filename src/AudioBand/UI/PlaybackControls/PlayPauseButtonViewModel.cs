@@ -1,12 +1,12 @@
-﻿using AudioBand.AudioSource;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using AudioBand.AudioSource;
 using AudioBand.Commands;
 using AudioBand.Messages;
 using AudioBand.Models;
 using AudioBand.Settings;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace AudioBand.UI
 {

@@ -47,7 +47,7 @@ namespace Win10AudioSource
         public event EventHandler<TimeSpan> TrackProgressChanged;
 
         /// <inheritdoc />
-        public event EventHandler<float> VolumeChanged
+        public event EventHandler<int> VolumeChanged
         {
             add { }
             remove { }
@@ -140,7 +140,7 @@ namespace Win10AudioSource
         }
 
         /// <inheritdoc />
-        public Task SetVolumeAsync(float newVolume)
+        public Task SetVolumeAsync(int newVolume)
         {
             return Task.CompletedTask;
         }

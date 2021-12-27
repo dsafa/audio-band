@@ -204,6 +204,19 @@ namespace AudioBand.Test
         }
 
         [Fact]
+        public void Parse_VolumePlaceholder_SubstitutesText()
+        {
+            var format = "{volume}";
+            var volume = 60;
+            var mock = new Mock<IAudioSession>();
+            mock.SetupGet(m => m.Volume).Returns(volume);
+            var segments = FormattedTextParser.ParseFormattedString(format, Colors.Black, mock.Object).ToList();
+
+            Assert.Single(segments);
+            Assert.Equal("60", segments[0].Text);
+        }
+
+        [Fact]
         public void Parse_LengthPlaceholder_SubstitutesText()
         {
             var format = "{length}";

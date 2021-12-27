@@ -391,6 +391,52 @@
                 DataContext="{Binding ViewModels.ShuffleModeButtonViewModel}"
                 Style="{StaticResource ToolbarShuffleModeButtonStyle}"
                 Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}" />
+        <Button x:Name="VolumeButton"
+                Width="{Binding Width}"
+                Height="{Binding Height}"
+                audioband:CanvasPositioning.Anchor="{Binding Anchor}"
+                audioband:CanvasPositioning.AnchorXDistance="{Binding XPosition}"
+                audioband:CanvasPositioning.AnchorYDistance="{Binding YPosition}"
+                Command="{Binding VolumePopupCommand}"
+                DataContext="{Binding ViewModels.VolumeButtonViewModel}"
+                Style="{StaticResource ToolbarVolumeButtonStyle}"
+                Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
+        </Button>
+        <fluentWpf:AcrylicPopup
+                x:Name="VolumePopup"
+                Placement="Top"
+                Width="{Binding PopupWidth}"
+                Height="{Binding PopupHeight}"
+                IsOpen="{Binding IsVolumePopupOpen}"
+                PlacementTarget="{Binding ElementName=VolumeButton}"
+                DataContext="{Binding ViewModels.VolumeButtonViewModel}"
+                HorizontalOffset="{Binding XPopupOffset}"
+                VerticalOffset="{Binding YPopupOffset}"
+                Style="{StaticResource VolumePopupStyle}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeave">
+                    <i:InvokeCommandAction Command="{Binding MouseLeftCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Border Background="{audioband:ThemeResource SystemAccentColor}">
+                <Slider x:Name="VolumeSlider"
+                        HorizontalAlignment="Center"
+                        Orientation="Vertical"
+                        Minimum="0"
+                        Maximum="100"
+                        Padding="5,5,0,0"
+                        TickFrequency="1"
+                        TickPlacement="None"
+                        IsSnapToTickEnabled="True"
+                        Style="{StaticResource VolumeSliderStyle}"
+                        Visibility="{Binding IsVisible, Converter={x:Static audioband:Converters.BoolToVisibility}}">
+                    <i:Interaction.Behaviors>
+                        <audioband:SliderThrottle FinalValue="{Binding Volume, Mode=TwoWay}" />
+                        <audioband:SliderClickAndDrag />
+                    </i:Interaction.Behaviors>
+                </Slider>
+            </Border>
+        </fluentWpf:AcrylicPopup>
         <Slider x:Name="ProgressBar"
                 Width="{Binding Width}"
                 Height="{Binding Height}"
