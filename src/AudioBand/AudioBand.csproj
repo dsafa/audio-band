@@ -503,7 +503,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper">
-      <Version>8.1.1</Version>
+      <Version>16.1.1</Version>
     </PackageReference>
     <PackageReference Include="Dsafa.WpfColorPicker">
       <Version>1.2.0</Version>
